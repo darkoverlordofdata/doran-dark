@@ -37,18 +37,20 @@ class (Object)
     char* (*ToString)(Object const);
     bool (*Equals)(Object const, Object const);
     int (*GetHashCode)(Object const);
+    void (*Dispose)(Object const);
 } ;
 
 /**
  * Object API
  */
 Object Object_AddRef(Object const);
-void Object_Release(Object const);
+Object Object_Release(Object const);
 bool Object_ReferenceEquals(Object const objA, Object const objB);
 bool Object_InstanceEquals(Object const objA, Object const objB);
 const char* Object_ToString(Object const);
 bool Object_Equals(Object const, Object const that);
 int Object_GetHashCode(Object const);
+void Object_Dispose(Object const);
 Object Object_New();
 
 #endif _OBJECT_H_ 

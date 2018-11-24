@@ -13,7 +13,7 @@ list ( APPEND CSOURCE .lib/dark/src/Hashmap.c )
 list ( APPEND CSOURCE .lib/dark/src/List.c )
 list ( APPEND CSOURCE .lib/dark/src/Vector.c )
 
-# list ( APPEND VAPI .lib/dark/vapis/dark.vapi )
+list ( APPEND VAPI .lib/dark/vapis/dark.vapi )
 
 ## Export to the parent scope:
 

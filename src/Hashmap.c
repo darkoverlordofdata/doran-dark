@@ -336,7 +336,6 @@ int Hashmap_Remove(Hashmap const this, char* key)
 void Hashmap_Dispose(Hashmap const this)
 {
 	free(this->data);
-	free(this);
 }
 
 /* Return the length of the hashmap */

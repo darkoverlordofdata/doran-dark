@@ -23,6 +23,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
+#include <stdarg.h>
 #include <dark/Vector.h>
 /**
  * Generic Vector implementation
@@ -141,7 +142,7 @@ const char* Vector_ToString(Vector const this)
 /**
  * Initialize a new Vector
  */
-Vector Vector_Ctor(Vector const this)
+Vector Vector_Ctor(Vector const this, int capacity)
 {
     Object_Ctor(this);
 
@@ -155,14 +156,45 @@ Vector Vector_Ctor(Vector const this)
     this->Dispose       = &Vector_Dispose;
     this->Clear         = &Vector_Clear;
 
-    this->capacity = VECTOR_INIT_CAPACITY;
+    this->capacity = capacity == 0 ? VECTOR_INIT_CAPACITY : capacity;
     this->count = 0;
     this->data = calloc(this->capacity, sizeof(Any));
 
     return this;
 }
 
-Vector Vector_New()
+/**
+ * new Vector
+ * 
+ * allocates room for capacity, sets used to 0
+ * 
+ * @param capacity initial max size of vector
+ * 
+ */
+Vector Vector_New(int capacity)
 {
-    return Vector_Ctor(new(Vector));
+    return Vector_Ctor(new(Vector), capacity);
 }
+
+/**
+ * new Vector
+ * 
+ * allocate a vector the size of the param list
+ * and then fill values from params.
+ * 
+ * @param count number of initial values
+ * @param ... list of initial values
+ * 
+ */
+Vector Vector_Variadic(int count, ...)
+{
+    Vector v = Vector_Ctor(new(Vector), count);
+    va_list args;
+    va_start(args, count);
+    for (int i=0; i<count; i++)
+        v->data[i] = va_arg(args, Any);
+    va_end(args);
+    v->count = count;
+    return v;
+}
+

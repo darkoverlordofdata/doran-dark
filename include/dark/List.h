@@ -43,12 +43,10 @@ class (List)
             char*       (*ToString)(Object const);
             bool        (*Equals)(Object const, Object const);
             int         (*GetHashCode)(Object const);
+            void        (*Dispose) (Object const);
         };
     };
     ListNode head;
-
-    /* List_free: Free a linked list */
-    void (*Dispose) (List const);
 
     /* List_add_inorder: Add to sorted linked list */
     int (*Add) (List const, Any data, int (*comp)(Any, Any));
@@ -67,12 +65,12 @@ class (List)
 /**
  * List API
  */
-int List_Add(List const this, Any data, int (*comp)(Any, Any));
-void List_Push(List const this, Any data);
-Any List_Pop(List const this);
-void List_Iterate(List const this, void (*iter)(Any));
-void List_Dispose(List const this);
-const char* List_ToString(List const this);
+int List_Add(List const, Any data, int (*comp)(Any, Any));
+void List_Push(List const, Any data);
+Any List_Pop(List const);
+void List_Iterate(List const, void (*iter)(Any));
+void List_Dispose(List const);
+const char* List_ToString(List const);
 List List_New();
 
 

@@ -56,10 +56,11 @@ typedef void* Any;
 /**
  * _Bool - Really?
  */
+#ifndef __cplusplus
 #ifndef bool
 typedef enum { false, true } bool;
 #endif 
-
+#endif
 /**
  *  STOP YELLING AT YOUR COMPUTER
  */

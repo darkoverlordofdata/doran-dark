@@ -41,6 +41,7 @@ class (Vector)
             char*       (*ToString)(Object const);
             bool        (*Equals)(Object const, Object const);
             int         (*GetHashCode)(Object const);
+            void        (*Dispose) (Object const);
         };
     };
     void **data;
@@ -53,22 +54,44 @@ class (Vector)
     void    (*Set)          (Vector const, int, Any);
     Any     (*Get)          (Vector const, int);
     void    (*Delete)       (Vector const, int);
-    void    (*Dispose)      (Vector const);
     void    (*Clear)        (Vector const);
 };
 
 /**
  * Vector API
  */
-int Vector_Count(Vector const this);
-void Vector_Resize(Vector const this, int capacity);
-void Vector_Add(Vector const this, Any item);
-void Vector_Set(Vector const this, int index, Any item);
-Any Vector_Get(Vector const this, int index);
-void Vector_Delete(Vector const this, int index);
-void Vector_Dispose(Vector const this);
-void Vector_Clear(Vector const this);
-const char* Vector_ToString(Vector const this);
-Vector Vector_New();
+int Vector_Count(Vector const);
+void Vector_Resize(Vector const, int capacity);
+void Vector_Add(Vector const, Any item);
+void Vector_Set(Vector const, int index, Any item);
+Any Vector_Get(Vector const, int index);
+void Vector_Delete(Vector const, int index);
+void Vector_Dispose(Vector const);
+void Vector_Clear(Vector const);
+const char* Vector_ToString(Vector const);
+Vector Vector_New(int capacity);
+Vector Vector_Variadic(int count, ...);
+
+/**
+ *  Vector v = Vector_From(1, 2, 4, 8);
+ * 
+ *      expands to:
+ *          Vector_Variadic(4, 1, 2, 4, 8);
+ *  
+ */
+#define Vector_From(...) Vector_Variadic(PP_NARG(__VA_ARGS__), __VA_ARGS__)
+
+/**
+ * Vala vararg is broken... it passes the args as is followed by a null.
+ * So you can't pass 0 or null as an argument.
+ * So we count the args, and forget about the extra null.
+ * 
+ *  Vector v = Vector_Vala(1, 2, 4, 8, NULL);
+ * 
+ *      expands to:
+ *          Vector_Variadic(4, 1, 2, 4, 8, NULL);
+ *  
+ */
+#define Vector_Vala(...) Vector_Variadic(PP_NARG(__VA_ARGS__)-1, __VA_ARGS__)
 
 #endif _VECTOR_H_

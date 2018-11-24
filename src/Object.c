@@ -40,12 +40,15 @@ Object Object_AddRef(Object this)
 /**
  * Release
  */
-void Object_Release(Object this)
+Object Object_Release(Object this)
 {
     if (--(this->RefCount) == 0) 
     {
+        this->Dispose(this);
         free(this);
+        return nullptr;
     }
+    return this;
 }
 
 bool Object_ReferenceEquals(Object const objA, Object const objB)
@@ -66,6 +69,7 @@ bool Object_InstanceEquals(Object const objA, Object const objB)
     
 }
 
+void Object_Dispose(Object const this){}
 // Returns a String which represents the object instance.  The default
 // for an object is to return the fully qualified name of the class.
 // 
@@ -108,6 +112,7 @@ Object Object_Ctor(Object const this)
     this->ToString      = &Object_ToString;
     this->Equals        = &Object_Equals;
     this->GetHashCode   = &Object_GetHashCode;
+    this->Dispose       = &Object_Dispose;
     return this;
 }
 

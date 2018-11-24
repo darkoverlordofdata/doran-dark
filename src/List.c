@@ -127,12 +127,11 @@ void List_Dispose(List const this)
     ListNode next;
 
     while (curr != nullptr) {
+        free(curr->data);
         next = curr->next;
         free(curr);
         curr = next;
     }
-
-    free(this);
 }
 
 /**

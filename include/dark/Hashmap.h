@@ -70,6 +70,7 @@ class (Hashmap)
             char*       (*ToString)(Object const);
             bool        (*Equals)(Object const, Object const);
             int         (*GetHashCode)(Object const);
+            void        (*Dispose) (Object const);
         };
     };
 	int tableSize;
@@ -102,11 +103,6 @@ class (Hashmap)
     int (*Remove)   (Hashmap const, char* key);
 
     /*
-    * Free the hashmap
-    */
-    void (*Dispose) (Hashmap const);
-
-    /*
     * Get the current size of a hashmap
     */
     int (*Length)   (Hashmap const);
@@ -132,16 +128,16 @@ class (Hashmap)
 /**
  * Hashmap API
  */
-unsigned int Hashmap_HashInt(Hashmap const this, char* keystring);
-int Hashmap_Hash(Hashmap const this, char* key);
-int Hashmap_Rehash(Hashmap const this);
-int Hashmap_Put(Hashmap const this, char* key, Any value);
-Any Hashmap_Get(Hashmap const this, char* key);
-int Hashmap_Iterate(Hashmap const this, Iterator f, Any item);
-int Hashmap_Remove(Hashmap const this, char* key);
-void Hashmap_Dispose(Hashmap const this);
-int Hashmap_Length(Hashmap const this);
-char* Hashmap_ToString(Hashmap const this);
+unsigned int Hashmap_HashInt(Hashmap const, char* keystring);
+int Hashmap_Hash(Hashmap const, char* key);
+int Hashmap_Rehash(Hashmap const);
+int Hashmap_Put(Hashmap const, char* key, Any value);
+Any Hashmap_Get(Hashmap const, char* key);
+int Hashmap_Iterate(Hashmap const, Iterator f, Any item);
+int Hashmap_Remove(Hashmap const, char* key);
+void Hashmap_Dispose(Hashmap const);
+int Hashmap_Length(Hashmap const);
+char* Hashmap_ToString(Hashmap const);
 Hashmap Hashmap_New();
 
 #endif _HASHMAP_H_

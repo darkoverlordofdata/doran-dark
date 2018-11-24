@@ -5,12 +5,8 @@ namespace Dark
 	public const int MinorVersion;
 	public const int BuildVersion;
 
-	[SimpleType]
-	[CCode (cname = "Any")]
-	public Any { }
-
 	[Compact]
-	[CCode (cname = "Object", ref_function = "Object_AddRef", unref_function = "Object_Release")]
+	[CCode (cname = "Object_t", ref_function = "Object_AddRef", unref_function = "Object_Release")]
 	public class DKObject
 	{
 		[CCode (cname = "Object_New")]
@@ -27,50 +23,77 @@ namespace Dark
 		public static bool InstanceEquals(DKObject? objA, DKObject? objB);
 	}
 
-	public delegate Compare int(Any item1, Any item2);
+	[CCode (has_target = false)]
+	public delegate int Compare<G>(G item1, G item2);
 
-	public delegate ListIterator void(Any item);
+	[CCode (has_target = false)]
+	public delegate void ListIterator<G>(G item);
 
-	[Compact]
-	[CCode (cname = "List", ref_function = "Object_AddRef", unref_function = "Object_Release")]
-	public class List : DKObject
+	[CCode (cname ="ListNode_t")]
+	public struct ListNode<G> 
 	{
+		public G data;
+		public ListNode<G>* next;
+	}
+	/**
+	 * Generic List
+	 */
+	[Compact]
+	[CCode (cname = "List_t", ref_function = "Object_AddRef", unref_function = "Object_Release")]
+	public class List<G> : DKObject
+	{
+		public ListNode<G>* head;
 		[CCode (cname = "List_New")]
 		public List();
 		[CCode (cname = "List_Add")]
-		int Add(Any data, Compare f);
+		public int Insert(owned G data, Compare func);
 		[CCode (cname = "List_Push")]
-		void Push(Any data);
+		public void Add(owned G data);
 		[CCode (cname = "List_Pop")]
-		Any Pop();
+		public G Remove();
 		[CCode (cname = "List_Iterate")]
-		void Iterate(ListIterator f);
+		public void Iterate(ListIterator<G> f);
 		[CCode (cname = "List_Dispose")]
-		void Dispose();
+		public void Dispose();
 		[CCode (cname = "List_ToString")]
-		string ToString();
+		public string ToString();
 	}
 
-	public delegate MapIterator int(Any p1, Any p2);
+	[CCode (has_target = false)]
+	public delegate int MapIterator<G>(G p1, G p2);
 
-	[Compact]
-	[CCode (cname = "Hashmap", ref_function = "Object_AddRef", unref_function = "Object_Release")]
-	public class Hashmap : DKObject
+	[CCode (cname ="HashmapNode_t")]
+	public struct HashmapNode<G> 
 	{
+		public string key;
+		public int inUse;
+		public G data;
+	}
+
+	/**
+	 * Generic Hashmap
+	 */
+	[Compact]
+	[CCode (cname = "Hashmap_t", ref_function = "Object_AddRef", unref_function = "Object_Release")]
+	public class Hashmap<G> : DKObject
+	{
+		public int tableSize;
+		public int size;
+		public HashmapNode* data;
 		[CCode (cname = "Hashmap_New")]
 		public Hashmap();
 		[CCode (cname = "Hashmap_HashInt")]
-		public HashInt(string keystring);
+		public uint HashInt(string keystring);
 		[CCode (cname = "Hashmap_Hash")]
 		public int Hash(string key);
 		[CCode (cname = "Hashmap_Rehash")]
 		public int Rehash();
 		[CCode (cname = "Hashmap_Put")]
-		public int Put(string key, Any value);
+		public void set(string key, G value);
 		[CCode (cname = "Hashmap_Get")]
-		public Any Get(string key);
+		public G get(string key);
 		[CCode (cname = "Hashmap_Get")]
-		public int Hashmap_Iterate(MapIterator f, Any item);
+		public int Hashmap_Iterate(MapIterator f, G item);
 		[CCode (cname = "Hashmap_Remove")]
 		public int Remove(string key);
 		[CCode (cname = "Hashmap_Dispose")]
@@ -81,22 +104,30 @@ namespace Dark
 		public string ToString();
 	}
 	
+	/**
+	 * Generic Vector
+	 */
 	[Compact]
-	[CCode (cname = "Vector", ref_function = "Object_AddRef", unref_function = "Object_Release")]
-	public class Vector : DKObject
+	[CCode (cname = "Vector_t", ref_function = "Object_AddRef", unref_function = "Object_Release")]
+	public class Vector<G> : DKObject
 	{
+		public void **data;
+		public int capacity;
+		public int count;
 		[CCode (cname = "Vector_New")]
-		public Vector();
+		public Vector(int capacity = 0);
+		[CCode (cname = "Vector_Vala")]
+		public Vector.From(owned G first, ...);
 		[CCode (cname = "Vector_Count")]
 		public int Count();
 		[CCode (cname = "Vector_Resize")]
 		public void Resize(int capacity);
 		[CCode (cname = "Vector_Add")]
-		public void Add(Any item);
+		public void Add(owned G item);
 		[CCode (cname = "Vector_Set")]
-		public void Set(int index, Any item);
+		public void set(int index, owned G item);
 		[CCode (cname = "Vector_Get")]
-		public Any Get(int index);
+		public G get(int index);
 		[CCode (cname = "Vector_Delete")]
 		public void Delete(int index);
 		[CCode (cname = "Vector_Dispose")]
