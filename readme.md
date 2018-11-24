@@ -88,9 +88,4 @@ if (s1->vptr->_._.Equals(s2)) { ... }
 ```
 
 ## Why?
-
-Why oop in c? Why not just use cpp? I really don't like cpp. I think it's noisy and cluttered. Code get's hard to read, and harder to reason about. Example - stream operators are awkward, they seem to me a gimmick ceated to show what overrides can do. Often the cpp demo's I've tried can be converted to c by simply renaming the extension and refactoring the streaming operators. Until you get to the standard library, I see little advantage to cpp. The cpp standard library is more like a framework. C frameworks are fragmented, and many lack documentation 
-
-I really like Vala, and GLib is probably the closest thing to a c framework. But GLib is not very portable and has a lot of baggage, and both are GPL, and Gnome stewardship has been less than desirable.
-
 > "C makes it easy to shoot yourself in the foot; C++ makes it harder, but when you do it blows your whole leg off" -- Bjarne Stroustrup
