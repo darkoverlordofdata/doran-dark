@@ -7,12 +7,13 @@ cmake_minimum_required ( VERSION 3.1 )
 project ( dark VERSION 0.1.0 )
 
 
-list ( APPEND CSOURCE .lib/dark/src/Dark/Object.c )
-list ( APPEND CSOURCE .lib/dark/src/Dark/Shape.c )
-list ( APPEND CSOURCE .lib/dark/src/Dark/Rect.c )
-list ( APPEND CSOURCE .lib/dark/src/Dark/Circle.c )
+list ( APPEND CSOURCE .lib/dark/src/string.c )
+list ( APPEND CSOURCE .lib/dark/src/Object.c )
+list ( APPEND CSOURCE .lib/dark/src/Hashmap.c )
+list ( APPEND CSOURCE .lib/dark/src/List.c )
+list ( APPEND CSOURCE .lib/dark/src/Vector.c )
 
-list ( APPEND VAPI .lib/dark/vapis/dark.vapi )
+# list ( APPEND VAPI .lib/dark/vapis/dark.vapi )
 
 ## Export to the parent scope:
 

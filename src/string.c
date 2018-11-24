@@ -23,32 +23,29 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#ifndef _OBJECT_H_
-#define _OBJECT_H_
-#include "core.h"
+#include <stdarg.h>
+#include <dark/core.h>
 
-/**
- * Object class
- */
-class (Object) 
+
+char* STR_JOIN(int count, ...)
 {
-    int RefCount;
+    int size = 0;
+    va_list args1;
+    va_start(args1, count);
+    va_list args2;
+    va_copy(args2, args1);  
 
-    char* (*ToString)(Object const);
-    bool (*Equals)(Object const, Object const);
-    int (*GetHashCode)(Object const);
-} ;
+    for (int i = 0; i < count; ++i) {
+        char* str = va_arg(args1, char*);
+        size += strlen(str);
+    }
+    va_end(args1);
+    char* result = calloc(size+1, sizeof(char));
 
-/**
- * Object API
- */
-Object Object_AddRef(Object const);
-void Object_Release(Object const);
-bool Object_ReferenceEquals(Object const objA, Object const objB);
-bool Object_InstanceEquals(Object const objA, Object const objB);
-const char* Object_ToString(Object const);
-bool Object_Equals(Object const, Object const that);
-int Object_GetHashCode(Object const);
-Object Object_New();
-
-#endif _OBJECT_H_ 
+    for (int i = 0; i < count; ++i) {
+        char* str = va_arg(args2, char*);
+        strcat(result, str);
+    }
+    va_end(args2);
+    return result;
+}

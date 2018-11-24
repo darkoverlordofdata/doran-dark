@@ -1,17 +1,17 @@
 /**
  *
  *     
- *     ____   ____       __           ________                       
- *     \   \ /   /____  |  | _____   /  _____/_____    _____   ____  
- *      \   Y   /\__  \ |  | \__  \ /   \  ___\__  \  /     \_/ __ \ 
- *       \     /  / __ \|  |__/ __ \\    \_\  \/ __ \|  Y Y  \  ___/ 
- *        \___/  (____  /____(____  /\______  (____  /__|_|  /\___  >
- *                    \/          \/        \/     \/      \/     \/ 
+ *
+ *        ________                __   _______________  ___
+ *        \______ \ _____ _______|  | _\_   _____/\   \/  /
+ *        |    |  \\__  \\_  __ \  |/ /|    __)   \     / 
+ *        |    `   \/ __ \|  | \/    < |     \    /     \ 
+ *        /_______  (____  /__|  |__|_ \\___  /   /___/\  \
+ *                \/     \/           \/    \/          \_/
  * 
+ *            DarkFX Copyright 2018 MIT Dark Overlord of Data         
  * 
- *            DarkGame Copyright 2018 MIT Dark Overlord of Data         
- * 
- *              A sort of port of MonoGame to c & Dark        
+ *                        oop framework for c        
  */
 /* ******************************************************************************
  * MIT License
@@ -37,19 +37,17 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ****************************************************************************** */
-#ifndef _VALAGAME_H_
-#define _VALAGAME_H_
+#ifndef _DARKFX_H_
+#define _DARKFX_H_
 
-// this is a test to see how QuantumLeaps oop pattern works
-//  my first impression is it's a good fit with vala
+static const int MajorVersion = 0; 
+static const int MinorVersion = 0;
+static const int BuildVersion = 1;
 
-const int MajorVersion = 0; 
-const int MinorVersion = 0;
-const int BuildVersion = 1;
-
-#include <Dark/Object.h>
-#include <Dark/Shape.h>
-#include <Dark/Rect.h>
-#include <Dark/Circle.h>
+#include "core.h"
+#include "Object.h"
+#include "Vector.h"
+#include "Hashmap.h"
+#include "List.h"
  
-#endif /* _VALAGAME_H_ */
+#endif _DARKFX_H_
