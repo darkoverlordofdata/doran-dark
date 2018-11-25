@@ -39,8 +39,8 @@ class (Comparable)
             int         (*GetHashCode)(DObject const);
             void        (*Dispose) (DObject const);
         };
-        int             (*CompareTo) (DObject const, DObject other);
     };
+    int                 (*CompareTo) (Comparable const, Comparable other);
 };
 
 #endif _COMPARABLE_H_

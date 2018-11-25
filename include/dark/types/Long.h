@@ -27,6 +27,14 @@ SOFTWARE.
 #define _LONG_H_
 #include "../DObject.h"
 
+#define LONG_MIN_VALUE  (-0x80000000)
+#define LONG_MAX_VALUE  (0x7fffffff)
+#define LONG_SIZE       (sizeof(long))
+#define LONG_BYTES      (LONG_SIZE / 8)
+#define LONG_TYPE       (TYPE_LONG)
+
+
+
 class (Long)
 {
     union {
@@ -46,8 +54,8 @@ class (Long)
             char        (*CharValue) (Long const);
             short       (*ShortValue) (Long const);
         };
-        long            value;
     };
+    long                value;
 };
 
 int Long_CompareTo(Long const, Long other);

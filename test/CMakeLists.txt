@@ -99,6 +99,9 @@ vala_precompile (
 #   compile ccode & link executable
 #
 add_executable ( ${PROJECT_NAME} ${VALA_C} ${C_SOURCES} ${RESOURCES} )
+add_custom_command(TARGET ${PROJECT_NAME} 
+                   POST_BUILD COMMAND 
+                   ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}> .. )
 
 target_link_libraries ( ${PROJECT_NAME} m  )
 install (TARGETS ${PROJECT_NAME} RUNTIME DESTINATION . )

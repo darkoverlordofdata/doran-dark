@@ -7,16 +7,18 @@ namespace Dark
 
 	[Compact]
 	[CCode (cname = "DObject_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
-	public class DObject
+	public abstract class DObject
 	{
 		[CCode (cname = "DObject_New")]
 		public DObject();
 		[CCode (cname = "DObject_ToString")]
-		public unowned string ToString();
+		public abstract unowned string ToString();
+		[CCode (cname = "DObject_Dispose")]
+		public abstract void Dispose();
 		[CCode (cname = "DObject_GetHashCode")]
-		public int GetHashCode();
+		public abstract int GetHashCode();
 		[CCode (cname = "DObject_Equals")]
-		public bool Equals(DObject? other);
+		public abstract bool Equals(DObject? other);
 		[CCode (cname = "DObject_ReferenceEquals")]
 		public static bool ReferenceEquals(DObject? objA, DObject? objB);
 		[CCode (cname = "DObject_InstanceEquals")]
@@ -34,11 +36,17 @@ namespace Dark
 	[CCode (cname = "Number_t")]
 	public abstract class Number : Compareable
 	{
+		[CCode (cname = "Number_IntValue")]
         public abstract int IntValue();
+		[CCode (cname = "Number_LongValue")]
         public abstract long LongValue();
+		[CCode (cname = "Number_FloatValue")]
         public abstract float FloatValue();
+		[CCode (cname = "Number_DoubleValue")]
         public abstract double DoubleValue();
+		[CCode (cname = "Number_CharValue")]
         public abstract char CharValue();
+		[CCode (cname = "Number_ShortValue")]
         public abstract short ShortValue();
 	}
 	
@@ -50,19 +58,22 @@ namespace Dark
 		[CCode (cname = "Long_New")]
 		public Long(long value);
 		[CCode (cname = "Long_CompareTo")]
-		public int CompareTo(Compareable other);
+		public override int CompareTo(Compareable other);
 		[CCode (cname = "Long_IntValue")]
-        public int IntValue();
+        public override int IntValue();
 		[CCode (cname = "Long_LongValue")]
-        public long LongValue();
+        public override long LongValue();
 		[CCode (cname = "Long_FloatValue")]
-        public float FloatValue();
+        public override float FloatValue();
 		[CCode (cname = "Long_DoubleValue")]
-        public double DoubleValue();
+        public override double DoubleValue();
 		[CCode (cname = "Long_CharValue")]
-        public char CharValue();
+        public override char CharValue();
 		[CCode (cname = "Long_ShortValue")]
-        public short ShortValue();
+        public override short ShortValue();
+		[CCode (cname = "Long_ToString")]
+		public override unowned string ToString();
+
 
 	}
 

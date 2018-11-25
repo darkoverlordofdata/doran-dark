@@ -41,14 +41,13 @@ class (Number)
             void        (*Dispose) (DObject const);
             int         (*CompareTo) (Comparable const, DObject other);
         };
-        int             (*IntValue) (Number const);
-        long            (*LongValue) (Number const);
-        float           (*FloatValue) (Number const);
-        double          (*DoubleValue) (Number const);
-        char            (*CharValue) (Number const);
-        short           (*ShortValue) (Number const);
-
     };
+    int             (*IntValue) (Number const);
+    long            (*LongValue) (Number const);
+    float           (*FloatValue) (Number const);
+    double          (*DoubleValue) (Number const);
+    char            (*CharValue) (Number const);
+    short           (*ShortValue) (Number const);
 };
 
 #endif _NUMBER_H_

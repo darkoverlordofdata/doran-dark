@@ -12,6 +12,17 @@ public void TestOne()
     Dark.Long L = new Dark.Long(420);
     h_Long["longValue"] = L;
 
+    DObject d = L;
+    print("DObject = %s\n", d.ToString());
+
+    Dark.Number N = L;
+    print("Number = %s\n", N.ToString());
+    
+    // var z = N.LongValue();
+    // print("Value = %d\n", (int)z);
+
+    print("Long to string = %s\n", L.ToString());
+
 
     Describe("Hashmap", () => {
 

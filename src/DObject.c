@@ -69,11 +69,25 @@ bool DObject_InstanceEquals(DObject const objA, DObject const objB)
     
 }
 
-void DObject_Dispose(DObject const this){}
+void DObject_Dispose(DObject const this){
+    return this->Dispose(this);
+}
+/**
+ * Overrideable base method
+ */
+static void abstract_Dispose(DObject const this){}
+
 // Returns a String which represents the DObject instance.  The default
 // for an DObject is to return the fully qualified name of the class.
 // 
 const char* DObject_ToString(DObject const this)
+{
+    return this->ToString(this);
+}
+/**
+ * Overrideable base method
+ */
+static const char *abstract_ToString(DObject const this)
 {
     return "Dark.DObject";
 }
@@ -86,9 +100,15 @@ const char* DObject_ToString(DObject const this)
 //     
 bool DObject_Equals(DObject const this, DObject const that)
 {
+    return this->Equals(this, that);
+}
+/**
+ * Overrideable base method
+ */
+static bool abstract_Equals(DObject const this, DObject const that)
+{
     return this == that;
 }
-
 // GetHashCode is intended to serve as a hash function for this DObject.
 // Based on the contents of the DObject, the hash function will return a suitable
 // value with a relatively random distribution over the various inputs.
@@ -100,19 +120,25 @@ bool DObject_Equals(DObject const this, DObject const that)
 // 
 int DObject_GetHashCode(DObject const this)
 {
+    return this->GetHashCode(this);
+}
+/**
+ * Overrideable base method
+ */
+static int abstract_GetHashCode(DObject const this)
+{
     return (int)this;
 }
-
 /**
  * Magic methods...
  */
 DObject DObject_Ctor(DObject const this)
 {
     this->RefCount      = 1;
-    this->ToString      = &DObject_ToString;
-    this->Equals        = &DObject_Equals;
-    this->GetHashCode   = &DObject_GetHashCode;
-    this->Dispose       = &DObject_Dispose;
+    this->ToString      = &abstract_ToString;
+    this->Equals        = &abstract_Equals;
+    this->GetHashCode   = &abstract_GetHashCode;
+    this->Dispose       = &abstract_Dispose;
     return this;
 }
 

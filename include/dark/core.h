@@ -56,17 +56,30 @@ typedef void* Any;
 /**
  * _Bool - Really?
  */
-#ifndef __cplusplus
 #ifndef bool
 typedef enum { false, true } bool;
 #endif 
-#endif
+
 /**
  *  STOP YELLING AT YOUR COMPUTER
  */
 #ifndef nullptr
 #define nullptr NULL
 #endif
+
+typedef enum 
+{
+    TYPE_CHAR,
+    TYPE_INT,
+    TYPE_LONG,
+    TYPE_SHORT,
+    TYPE_FLOAT,
+    TYPE_DOUBLE,
+    TYPE_STRING,
+    TYPE_ARRAY,
+    TYPE_OBJECT
+
+} TYPES;
 
 /**
  * Count the number of arguments

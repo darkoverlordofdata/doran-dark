@@ -46,8 +46,8 @@ class (Float)
             char        (*CharValue) (Float const);
             short       (*ShortValue) (Float const);
         };
-        float            value;
     };
+    float            value;
 };
 
 #endif _FLOAT_H_

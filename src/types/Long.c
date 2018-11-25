@@ -75,6 +75,8 @@ int Long_IntValue(Long const this) {
  * {@code long} value.
  */
 long Long_LongValue(Long const this) {
+    printf("implementation_LongValue\n");
+
     return (long)this->value;
 }
 
@@ -111,14 +113,21 @@ short Long_ShortValue(Long const this) {
 }
 
 
+char* Long_ToString(Long const this)
+{
+    static char str[20];
+    sprintf(str, "%d", this->value);
+    return str;
+}
+
 /**
  * Initialize a new Long
  */
 Long Long_Ctor(Long const this, long value)
 {
-    DObject_Ctor(this);
+    Number_Ctor(this);
 
-    // this->ToString      = &Long_ToString;
+    this->ToString      = &Long_ToString;
     this->CompareTo     = &Long_CompareTo;
     this->IntValue      = &Long_IntValue; 
     this->LongValue     = &Long_LongValue; 

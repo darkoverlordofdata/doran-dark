@@ -46,8 +46,8 @@ class (Char)
             char        (*CharValue) (Char const);
             short       (*ShortValue) (Char const);
         };
-        char            value;
     };
+    char            value;
 };
 
 #endif _CHAR_H_

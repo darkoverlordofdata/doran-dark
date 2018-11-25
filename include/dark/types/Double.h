@@ -46,8 +46,8 @@ class (Double)
             char        (*CharValue) (Double const);
             short       (*ShortValue) (Double const);
         };
-        double            value;
     };
+    double            value;
 };
 
 #endif _DOUBLE_H_

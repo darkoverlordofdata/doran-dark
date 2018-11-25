@@ -46,8 +46,8 @@ class (Integer)
             char        (*CharValue) (Integer const);
             short       (*ShortValue) (Integer const);
         };
-        int            value;
     };
+    int            value;
 };
 
 #endif _INTEGER_H_

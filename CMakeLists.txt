@@ -8,10 +8,12 @@ project ( dark VERSION 0.1.0 )
 
 
 list ( APPEND CSOURCE .lib/dark/src/string.c )
+list ( APPEND CSOURCE .lib/dark/src/Comparable.c )
 list ( APPEND CSOURCE .lib/dark/src/DObject.c )
 list ( APPEND CSOURCE .lib/dark/src/collections/Hashmap.c )
 list ( APPEND CSOURCE .lib/dark/src/collections/List.c )
 list ( APPEND CSOURCE .lib/dark/src/collections/Vector.c )
+list ( APPEND CSOURCE .lib/dark/src/types/Number.c )
 list ( APPEND CSOURCE .lib/dark/src/types/Long.c )
 
 list ( APPEND VAPI .lib/dark/vapis/dark.vapi )
