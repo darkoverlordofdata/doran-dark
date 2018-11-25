@@ -1,0 +1,35 @@
+{
+  "!": "doran package manager v0.0.3",
+  "name": "unit",
+  "template": "default",
+  "version": "0.0.1",
+  "vala": "0.26",
+  "authors": [],
+  "description": "unit tests for doran-dark",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "dark": "git://github.com/darkoverlordofdata/doran-dark",
+    "jasmine": "git://github.com/darkoverlordofdata/doran-jasmine",
+    "system": "git://github.com/darkoverlordofdata/doran-system"
+  },
+  "source": "src",
+  "files": [
+    "src/basic.vala",
+    "src/unit.vala"
+  ],
+  "packages": [],
+  "includes": null,
+  "libraries": [
+    "m"
+  ],
+  "options": {
+    "VERSION": "0.0.1",
+    "RELEASE_NAME": "darkly"
+  },
+  "definitions": [],
+  "symbols": [],
+  "copy": null,
+  "vapidir": "/src/vapis",
+  "console": false
+}

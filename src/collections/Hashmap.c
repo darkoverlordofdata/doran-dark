@@ -23,7 +23,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include <dark/Hashmap.h>
+#include <dark/collections/Hashmap.h>
 /* 
  * Generic Hashmap implementation
  */
@@ -353,7 +353,7 @@ char* Hashmap_ToString(Hashmap const this)
  */
 Hashmap Hashmap_Ctor(Hashmap const this)
 {
-    Object_Ctor(this);
+    DObject_Ctor(this);
 
     this->ToString      = &Hashmap_ToString; // override
     this->Iterate       = &Hashmap_Iterate;

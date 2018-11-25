@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <stdarg.h>
-#include <dark/Vector.h>
+#include <dark/collections/Vector.h>
 /**
  * Generic Vector implementation
  */
@@ -144,7 +144,7 @@ const char* Vector_ToString(Vector const this)
  */
 Vector Vector_Ctor(Vector const this, int capacity)
 {
-    Object_Ctor(this);
+    DObject_Ctor(this);
 
     this->ToString      = &Vector_ToString;
     this->Count         = &Vector_Count;

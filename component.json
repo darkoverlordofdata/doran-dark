@@ -3,7 +3,7 @@
   "authors": [
     "Bruce Davidson <darkoverlordofdata@gmail.com>"
   ],
-  "description": "Dark Xna.Framework",
+  "description": "Dark Framework",
   "main": "CMakeLists.txt",
   "license": "MIT",
   "dependencies": {},

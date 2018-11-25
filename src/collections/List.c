@@ -23,7 +23,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include <dark/List.h>
+#include <dark/collections/List.h>
 /* 
  * Generic Linked List implementation
  */
@@ -146,7 +146,7 @@ const char* List_ToString(List const this)
  */
 List List_Ctor(List const this)
 {
-    Object_Ctor(this);
+    DObject_Ctor(this);
 
     this->ToString      = &List_ToString;
     this->Iterate       = &List_Iterate;

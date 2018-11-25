@@ -23,55 +23,32 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#ifndef _LIST_H_
-#define _LIST_H_
-#include "Object.h"
+#ifndef _NUMBER_H_
+#define _NUMBER_H_
+#include "../DObject.h"
+#include "../Comparable.h"
 
-class (ListNode)
-{
-    Any data;
-    ListNode next;
-};
-
-class (List)
+class (Number)
 {
     union {
-        Object_t _;
+        Comparable_t _;
         struct 
         {
             int         RefCount;
-            char*       (*ToString)(Object const);
-            bool        (*Equals)(Object const, Object const);
-            int         (*GetHashCode)(Object const);
-            void        (*Dispose) (Object const);
+            char*       (*ToString)(DObject const);
+            bool        (*Equals)(DObject const, DObject const);
+            int         (*GetHashCode)(DObject const);
+            void        (*Dispose) (DObject const);
+            int         (*CompareTo) (Comparable const, DObject other);
         };
+        int             (*IntValue) (Number const);
+        long            (*LongValue) (Number const);
+        float           (*FloatValue) (Number const);
+        double          (*DoubleValue) (Number const);
+        char            (*CharValue) (Number const);
+        short           (*ShortValue) (Number const);
+
     };
-    ListNode head;
-
-    /* List_add_inorder: Add to sorted linked list */
-    int (*Add) (List const, Any data, int (*comp)(Any, Any));
-
-    /* List_push: Add to head of list */
-    void (*Push) (List const, Any data);
-
-    /* List_pop: remove and return head of linked list */
-    void (*Pop) (List const);
-
-    /* List_print: print linked list */
-    void (*Iterate) (List const, void (*iter)(Any data));
 };
 
-
-/**
- * List API
- */
-int List_Add(List const, Any data, int (*comp)(Any, Any));
-void List_Push(List const, Any data);
-Any List_Pop(List const);
-void List_Iterate(List const, void (*iter)(Any));
-void List_Dispose(List const);
-const char* List_ToString(List const);
-List List_New();
-
-
-#endif _LIST_H_ 
+#endif _NUMBER_H_

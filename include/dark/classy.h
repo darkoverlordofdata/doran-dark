@@ -70,7 +70,7 @@ SOFTWARE.
  * use inside of class or singleton definition:
  * 
  * class (Shader) {
- *   extends(Object);
+ *   extends(DObject);
  *   ...
  */
 #define extends(class) class##_t _
@@ -110,7 +110,7 @@ SOFTWARE.
  * define a class in the header file: 
  * 
  *      class (MyClass) { 
- *          extends(Object);
+ *          extends(DObject);
  *          int x, y;
  *          ... 
  *      }
@@ -119,7 +119,7 @@ SOFTWARE.
  * 
  *      MyClass MyClass_Ctor(MyClass this, int x, int y) 
  *      {
- *	        base(Object, this);
+ *	        base(DObject, this);
  *          this.x = x;
  *          this.y = y;
  *          return this;

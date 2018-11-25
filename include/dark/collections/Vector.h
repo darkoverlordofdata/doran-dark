@@ -25,7 +25,7 @@ SOFTWARE.
 ******************************************************************/
 #ifndef _VECTOR_H_
 #define _VECTOR_H_
-#include "Object.h"
+#include "../DObject.h"
 /**
  * @see https://eddmann.com/posts/implementing-a-dynamic-vector-array-in-c/
  */
@@ -34,14 +34,14 @@ SOFTWARE.
 class (Vector)
 {
     union {
-        Object_t _;
+        DObject_t _;
         struct 
         {
             int         RefCount;
-            char*       (*ToString)(Object const);
-            bool        (*Equals)(Object const, Object const);
-            int         (*GetHashCode)(Object const);
-            void        (*Dispose) (Object const);
+            char*       (*ToString)(DObject const);
+            bool        (*Equals)(DObject const, DObject const);
+            int         (*GetHashCode)(DObject const);
+            void        (*Dispose) (DObject const);
         };
     };
     void **data;

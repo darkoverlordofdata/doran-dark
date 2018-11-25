@@ -36,7 +36,7 @@ SOFTWARE.
  */
 #ifndef _HASHMAP_H_
 #define _HASHMAP_H_
-#include "Object.h"
+#include "../DObject.h"
 
 #define MAP_MISSING -3  /* No such element */
 #define MAP_FULL -2 	/* Hashmap is full */
@@ -63,14 +63,14 @@ class (HashmapNode)
 class (Hashmap)
 {
     union {
-        Object_t _;
+        DObject_t _;
         struct 
         {
             int         RefCount;
-            char*       (*ToString)(Object const);
-            bool        (*Equals)(Object const, Object const);
-            int         (*GetHashCode)(Object const);
-            void        (*Dispose) (Object const);
+            char*       (*ToString)(DObject const);
+            bool        (*Equals)(DObject const, DObject const);
+            int         (*GetHashCode)(DObject const);
+            void        (*Dispose) (DObject const);
         };
     };
 	int tableSize;

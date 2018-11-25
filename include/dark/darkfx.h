@@ -45,9 +45,17 @@ static const int MinorVersion = 0;
 static const int BuildVersion = 1;
 
 #include "core.h"
-#include "Object.h"
-#include "Vector.h"
-#include "Hashmap.h"
-#include "List.h"
- 
+#include "DObject.h"
+#include "Comparable.h"
+#include "collections/Vector.h"
+#include "collections/Hashmap.h"
+#include "collections/List.h"
+#include "types/Number.h"
+#include "types/Char.h"
+#include "types/Double.h"
+#include "types/Float.h"
+#include "types/Integer.h"
+#include "types/Long.h"
+#include "types/Short.h"
+
 #endif _DARKFX_H_

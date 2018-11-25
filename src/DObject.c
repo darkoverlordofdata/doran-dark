@@ -23,15 +23,15 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include <dark/Object.h>
+#include <dark/DObject.h>
 
-static bool Equals(Object const , Object const that);
-bool Object_Equals(Object const, Object const that);
+static bool Equals(DObject const , DObject const that);
+bool DObject_Equals(DObject const, DObject const that);
 
 /**
  * AddRef
  */
-Object Object_AddRef(Object this)
+DObject DObject_AddRef(DObject this)
 {
     this->RefCount += 1;
     return this;
@@ -40,7 +40,7 @@ Object Object_AddRef(Object this)
 /**
  * Release
  */
-Object Object_Release(Object this)
+DObject DObject_Release(DObject this)
 {
     if (--(this->RefCount) == 0) 
     {
@@ -51,13 +51,13 @@ Object Object_Release(Object this)
     return this;
 }
 
-bool Object_ReferenceEquals(Object const objA, Object const objB)
+bool DObject_ReferenceEquals(DObject const objA, DObject const objB)
 {
     return objA == objB;
 }
 
 
-bool Object_InstanceEquals(Object const objA, Object const objB)
+bool DObject_InstanceEquals(DObject const objA, DObject const objB)
 {
         if (objA == objB) {
             return true;
@@ -65,40 +65,40 @@ bool Object_InstanceEquals(Object const objA, Object const objB)
         if (objA == nullptr || objB == nullptr) {
             return false;
         }
-        return Object_Equals(objA, objB);
+        return DObject_Equals(objA, objB);
     
 }
 
-void Object_Dispose(Object const this){}
-// Returns a String which represents the object instance.  The default
-// for an object is to return the fully qualified name of the class.
+void DObject_Dispose(DObject const this){}
+// Returns a String which represents the DObject instance.  The default
+// for an DObject is to return the fully qualified name of the class.
 // 
-const char* Object_ToString(Object const this)
+const char* DObject_ToString(DObject const this)
 {
-    return "Dark.Object";
+    return "Dark.DObject";
 }
 
 
-// Returns a boolean indicating if the passed in object obj is 
-// Equal to this.  Equality is defined as object equality for reference
+// Returns a boolean indicating if the passed in DObject obj is 
+// Equal to this.  Equality is defined as DObject equality for reference
 // types and bitwise equality for value types using a loader trick to
 // replace Equals with EqualsValue for value types).
 //     
-bool Object_Equals(Object const this, Object const that)
+bool DObject_Equals(DObject const this, DObject const that)
 {
     return this == that;
 }
 
-// GetHashCode is intended to serve as a hash function for this object.
-// Based on the contents of the object, the hash function will return a suitable
+// GetHashCode is intended to serve as a hash function for this DObject.
+// Based on the contents of the DObject, the hash function will return a suitable
 // value with a relatively random distribution over the various inputs.
 //
 // The default implementation returns the address for this instance.
-// Calling it on the same object multiple times will return the same value, so
+// Calling it on the same DObject multiple times will return the same value, so
 // it will technically meet the needs of a hash function, but it's less than ideal.
-// Objects (& especially value classes) should override this method.
+// DObjects (& especially value classes) should override this method.
 // 
-int Object_GetHashCode(Object const this)
+int DObject_GetHashCode(DObject const this)
 {
     return (int)this;
 }
@@ -106,18 +106,18 @@ int Object_GetHashCode(Object const this)
 /**
  * Magic methods...
  */
-Object Object_Ctor(Object const this)
+DObject DObject_Ctor(DObject const this)
 {
     this->RefCount      = 1;
-    this->ToString      = &Object_ToString;
-    this->Equals        = &Object_Equals;
-    this->GetHashCode   = &Object_GetHashCode;
-    this->Dispose       = &Object_Dispose;
+    this->ToString      = &DObject_ToString;
+    this->Equals        = &DObject_Equals;
+    this->GetHashCode   = &DObject_GetHashCode;
+    this->Dispose       = &DObject_Dispose;
     return this;
 }
 
-Object Object_New()
+DObject DObject_New()
 {
-    return Object_Ctor(new(Object));
+    return DObject_Ctor(new(DObject));
 }
 

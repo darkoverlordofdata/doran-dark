@@ -23,34 +23,55 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#ifndef _OBJECT_H_
-#define _OBJECT_H_
-#include "core.h"
+#ifndef _LIST_H_
+#define _LIST_H_
+#include "../DObject.h"
 
-/**
- * Object class
- */
-class (Object) 
+class (ListNode)
 {
-    int RefCount;
+    Any data;
+    ListNode next;
+};
 
-    char* (*ToString)(Object const);
-    bool (*Equals)(Object const, Object const);
-    int (*GetHashCode)(Object const);
-    void (*Dispose)(Object const);
-} ;
+class (List)
+{
+    union {
+        DObject_t _;
+        struct 
+        {
+            int         RefCount;
+            char*       (*ToString)(DObject const);
+            bool        (*Equals)(DObject const, DObject const);
+            int         (*GetHashCode)(DObject const);
+            void        (*Dispose) (DObject const);
+        };
+    };
+    ListNode head;
+
+    /* List_add_inorder: Add to sorted linked list */
+    int (*Add) (List const, Any data, int (*comp)(Any, Any));
+
+    /* List_push: Add to head of list */
+    void (*Push) (List const, Any data);
+
+    /* List_pop: remove and return head of linked list */
+    void (*Pop) (List const);
+
+    /* List_print: print linked list */
+    void (*Iterate) (List const, void (*iter)(Any data));
+};
+
 
 /**
- * Object API
+ * List API
  */
-Object Object_AddRef(Object const);
-Object Object_Release(Object const);
-bool Object_ReferenceEquals(Object const objA, Object const objB);
-bool Object_InstanceEquals(Object const objA, Object const objB);
-const char* Object_ToString(Object const);
-bool Object_Equals(Object const, Object const that);
-int Object_GetHashCode(Object const);
-void Object_Dispose(Object const);
-Object Object_New();
+int List_Add(List const, Any data, int (*comp)(Any, Any));
+void List_Push(List const, Any data);
+Any List_Pop(List const);
+void List_Iterate(List const, void (*iter)(Any));
+void List_Dispose(List const);
+const char* List_ToString(List const);
+List List_New();
 
-#endif _OBJECT_H_ 
+
+#endif _LIST_H_ 
