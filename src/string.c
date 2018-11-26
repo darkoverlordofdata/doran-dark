@@ -35,6 +35,9 @@ char* STR_JOIN(int count, ...)
     va_list args2;
     va_copy(args2, args1);  
 
+    /**
+     * Caclulate length of the result string
+     */
     for (int i = 0; i < count; ++i) {
         char* str = va_arg(args1, char*);
         size += strlen(str);
@@ -42,6 +45,9 @@ char* STR_JOIN(int count, ...)
     va_end(args1);
     char* result = calloc(size+1, sizeof(char));
 
+    /**
+     * Now build the result string
+     */
     for (int i = 0; i < count; ++i) {
         char* str = va_arg(args2, char*);
         strcat(result, str);

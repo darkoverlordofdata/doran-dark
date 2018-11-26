@@ -1,10 +1,8 @@
 # dark framework
 
-    DObject
-    Collections:
-        List
-        Vector
-        Hashmap
+a java/dotnet mashup inspired framework in c.
+
+designed to be called directly from c or vala.
 
 
 ### testing

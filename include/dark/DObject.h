@@ -27,6 +27,8 @@ SOFTWARE.
 #define _OBJECT_H_
 #include "core.h"
 
+#define OBJECT_TYPE       (TYPE_OBJECT)
+
 /**
  * DObject class
  */

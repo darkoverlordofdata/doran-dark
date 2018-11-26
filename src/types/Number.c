@@ -24,11 +24,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/Number.h>
+
 /* 
  * Abstract Number
  */
 
 
+/**
+ * Compares two Number objects.
+ *
+ * @param   other  Short to be compared
+ * @return  0 this == other
+ *         +1 this < other
+ *         -1 this > other
+ */
 int Number_CompareTo(Number this, Number other) {
     return this->CompareTo(this, other);
 }
@@ -38,69 +47,62 @@ static short abstract_CompareTo(Number const this, Number other) {
 }
 
 /**
- * Returns the value of this {@code Number} as an {@code int} after
- * a narrowing primitive conversion.
+ * Returns the value of this value cast as an int
  */
 int Number_IntValue(Number const this) {
     return this->IntValue(this);
 }
-static short abstract_IntValue(Number const this) {
+static int abstract_IntValue(Number const this) {
     printf("abstract_IntValue\n");
     return 0;
 }
 
 /**
- * Returns the value of this {@code Long} as a
- * {@code long} value.
+ * Returns the value of this value cast as an long
  */
 long Number_LongValue(Number const this) {
-    printf("virtual_LongValue\n");
     return this->LongValue(this);
 }
-static short abstract_LongValue(Number const this) {
+static long abstract_LongValue(Number const this) {
     printf("abstract_LongValue\n");
     return 0;
 }
 
 /**
- * Returns the value of this {@code Number} as a {@code float} after
- * a widening primitive conversion.
+ * Returns the value of this value cast as an float
  */
 float Number_FloatValue(Number const this) {
     return this->FloatValue(this);
 }
-static short abstract_FloatValue(Number const this) {
+static float abstract_FloatValue(Number const this) {
     printf("abstract_FloatValue\n");
     return 0;
 }
 
 /**
- * Returns the value of this {@code Number} as a {@code double}
- * after a widening primitive conversion.
+ * Returns the value of this value cast as an double
  */
 double Number_DoubleValue(Number const this) {
     return this->DoubleValue(this);
 }
-static short abstract_DoubleValue(Number const this) {
+static double abstract_DoubleValue(Number const this) {
     printf("abstract_DoubleValue\n");
     return 0;
 }
 
 /**
- * Returns the value of this {@code Number} as a {@code byte} after
- * a narrowing primitive conversion.
+ * Returns the value of this value cast as an char
  */
 char Number_CharValue(Number const this) {
     return this->CharValue(this);
 }
-static short abstract_CharValue(Number const this) {
+static char abstract_CharValue(Number const this) {
     printf("abstract_CharValue\n");
     return 0;
 }
 
 /**
- * Returns the value of this {@code Number} as a {@code short} after
- * a narrowing primitive conversion.
+ * Returns the value of this value cast as an short
  */
 short Number_ShortValue(Number const this) {
     return this->ShortValue(this);
@@ -125,15 +127,51 @@ Number Number_Ctor(Number const this)
 {
     Comparable_Ctor(this);
 
-    this->ToString      = &abstract_ToString;
-    this->CompareTo     = &abstract_CompareTo;
-    this->IntValue      = &abstract_IntValue; 
-    this->LongValue     = &abstract_LongValue; 
-    this->FloatValue    = &abstract_FloatValue; 
-    this->DoubleValue   = &abstract_DoubleValue; 
-    this->CharValue     = &abstract_CharValue; 
-    this->ShortValue    = &abstract_ShortValue; 
+    this->ToString      = abstract_ToString;
+    this->CompareTo     = abstract_CompareTo;
+    this->IntValue      = abstract_IntValue; 
+    this->LongValue     = abstract_LongValue; 
+    this->FloatValue    = abstract_FloatValue; 
+    this->DoubleValue   = abstract_DoubleValue; 
+    this->CharValue     = abstract_CharValue; 
+    this->ShortValue    = abstract_ShortValue; 
 
     return this;
+}
+
+// Exception(NumberFormat);
+
+// __attribute__((__format__ (__printf__, 1, 2)))
+// long NumberFormatException(const char* msg, ...)
+// {
+//     va_list args;
+//     va_start(args, msg);
+//     fprintf(stderr, "NumberFormatException: ");
+//     vfprintf(stderr, msg, args);
+//     fprintf(stderr, "\n");
+//     va_end(args);
+//     return 0;
+// }
+
+
+
+int Number_Digit(char ch, int radix) 
+{
+    static const char Digits [] = 
+    {
+        '0' , '1' , '2' , '3' , '4' , '5' ,
+        '6' , '7' , '8' , '9' , 'a' , 'b' ,
+        'c' , 'd' , 'e' , 'f' , 'g' , 'h' ,
+        'i' , 'j' , 'k' , 'l' , 'm' , 'n' ,
+        'o' , 'p' , 'q' , 'r' , 's' , 't' ,
+        'u' , 'v' , 'w' , 'x' , 'y' , 'z'
+    };
+    
+    for (int i=0; i<radix; i++)
+    {
+        if (ch == Digits[i])
+            return i;
+    }
+    return -1;
 }
 

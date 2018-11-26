@@ -25,8 +25,14 @@ SOFTWARE.
 ******************************************************************/
 #ifndef _NUMBER_H_
 #define _NUMBER_H_
+#include <limits.h>
+#include <float.h>
+#include <math.h>
 #include "../DObject.h"
 #include "../Comparable.h"
+
+#define NUMBER_MIN_RADIX 2
+#define NUMBER_MAX_RADIX 36
 
 class (Number)
 {
@@ -49,5 +55,18 @@ class (Number)
     char            (*CharValue) (Number const);
     short           (*ShortValue) (Number const);
 };
+
+
+int Number_CompareTo(Number const, Number other);
+int Number_IntValue(Number const);
+long Number_LongValue(Number const);
+float Number_FloatValue(Number const);
+double Number_DoubleValue(Number const);
+char Number_CharValue(Number const);
+short Number_ShortValue(Number const);
+
+int Number_Digit(char ch, int radix);
+// __attribute__((__format__ (__printf__, 1, 2)))
+// long NumberFormatException(const char* msg, ...);
 
 #endif _NUMBER_H_

@@ -25,7 +25,13 @@ SOFTWARE.
 ******************************************************************/
 #ifndef _DOUBLE_H_
 #define _DOUBLE_H_
-#include "../DObject.h"
+#include "Number.h"
+
+#define DOUBLE_MIN_VALUE  DBL_MIN
+#define DOUBLE_MAX_VALUE  DBL_MAX
+#define DOUBLE_BYTES      (sizeof(double))
+#define DOUBLE_SIZE       (DOUBLE_BYTES * CHAR_BIT)
+#define DOUBLE_TYPE       (TYPE_DOUBLE)
 
 class (Double)
 {
@@ -49,5 +55,14 @@ class (Double)
     };
     double            value;
 };
+
+int Double_CompareTo(Double const, Double other);
+int Double_IntValue(Double const);
+long Double_LongValue(Double const);
+float Double_FloatValue(Double const);
+double Double_DoubleValue(Double const);
+char Double_CharValue(Double const);
+short Double_ShortValue(Double const);
+Double Double_New(double value);
 
 #endif _DOUBLE_H_

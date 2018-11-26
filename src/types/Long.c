@@ -23,90 +23,92 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include <dark/types/Number.h>
 #include <dark/types/Long.h>
 /* 
  * Long implementation
  */
+static Exception(NumberFormat);
+
 
 /**
- * Compares two {@code long} values numerically.
- * The value returned is identical to what would be returned by:
- * <pre>
- *    Long.valueOf(x).compareTo(Long.valueOf(y))
- * </pre>
- *
- * @param  x the first {@code long} to compare
- * @param  y the second {@code long} to compare
- * @return the value {@code 0} if {@code x == y};
- *         a value less than {@code 0} if {@code x < y}; and
- *         a value greater than {@code 0} if {@code x > y}
+ * Returns a primitive long value parsed from input string. 
+ */
+long Long_ParseLong(char* s, int radix)
+{
+    errno = 0;
+    char* endptr;
+    long result = strtol(s, endptr, radix);
+
+    if (errno != 0)
+        return NumberFormatException(
+            "Invalid input. Value:\"%s\" Radix: %d", s, radix);
+
+    if (s == endptr || *endptr != '\0')
+        return NumberFormatException(
+            "Invalid input. Value:\"%s\" Radix: %d", s, radix);
+
+    return result;
+}
+
+/**
+ * Compare two long primitives.
+ * @param  x long to compare
+ * @param  y long to compare
+ * @return  0 x == y
+ *         +1 x < y
+ *         -1 x > y
  */
 int Long_Compare(long x, long y) {
     return (x < y) ? -1 : (( x == y ) ? 0 : 1);
 }
 
 /**
- * Compares two {@code Long} objects numerically.
+ * Compares two Long objects.
  *
- * @param   anotherLong   the {@code Long} to be compared.
- * @return  the value {@code 0} if this {@code Long} is
- *          equal to the argument {@code Long}; a value less than
- *          {@code 0} if this {@code Long} is numerically less
- *          than the argument {@code Long}; and a value greater
- *          than {@code 0} if this {@code Long} is numerically
- *           greater than the argument {@code Long} (signed
- *           comparison).
+ * @param   other  Long to be compared
+ * @return same as Long_Compare
  */
 int Long_CompareTo(Long this, Long other) {
     return Long_Compare(this->value, other->value);
 }
 
 /**
- * Returns the value of this {@code Long} as an {@code int} after
- * a narrowing primitive conversion.
+ * Returns the value of this value cast as an int
  */
 int Long_IntValue(Long const this) {
     return (int)this->value;
 }
 
 /**
- * Returns the value of this {@code Long} as a
- * {@code long} value.
+ * Returns the value of this value cast as a long
  */
 long Long_LongValue(Long const this) {
-    printf("implementation_LongValue\n");
-
     return (long)this->value;
 }
 
 /**
- * Returns the value of this {@code Long} as a {@code float} after
- * a widening primitive conversion.
+ * Returns the value of this value cast as a float
  */
 float Long_FloatValue(Long const this) {
     return (float)this->value;
 }
 
 /**
- * Returns the value of this {@code Long} as a {@code double}
- * after a widening primitive conversion.
+ * Returns the value of this value cast as a double
  */
 double Long_DoubleValue(Long const this) {
     return (double)this->value;
 }
 
 /**
- * Returns the value of this {@code Long} as a {@code byte} after
- * a narrowing primitive conversion.
+ * Returns the value of this value cast as a char
  */
 char Long_CharValue(Long const this) {
     return (char)this->value;
 }
 
 /**
- * Returns the value of this {@code Long} as a {@code short} after
- * a narrowing primitive conversion.
+ * Returns the value of this value cast as a short
  */
 short Long_ShortValue(Long const this) {
     return (short)this->value;
@@ -127,14 +129,14 @@ Long Long_Ctor(Long const this, long value)
 {
     Number_Ctor(this);
 
-    this->ToString      = &Long_ToString;
-    this->CompareTo     = &Long_CompareTo;
-    this->IntValue      = &Long_IntValue; 
-    this->LongValue     = &Long_LongValue; 
-    this->FloatValue    = &Long_FloatValue; 
-    this->DoubleValue   = &Long_DoubleValue; 
-    this->CharValue     = &Long_CharValue; 
-    this->ShortValue    = &Long_ShortValue; 
+    this->ToString      = Long_ToString;
+    this->CompareTo     = Long_CompareTo;
+    this->IntValue      = Long_IntValue; 
+    this->LongValue     = Long_LongValue; 
+    this->FloatValue    = Long_FloatValue; 
+    this->DoubleValue   = Long_DoubleValue; 
+    this->CharValue     = Long_CharValue; 
+    this->ShortValue    = Long_ShortValue; 
 
     this->value = value;
     return this;
@@ -143,7 +145,7 @@ Long Long_Ctor(Long const this, long value)
 /**
  * new Long
  * 
- * create a new long
+ * create a new Long
  * 
  * @param value of long
  * 

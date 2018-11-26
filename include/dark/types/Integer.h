@@ -25,7 +25,14 @@ SOFTWARE.
 ******************************************************************/
 #ifndef _INTEGER_H_
 #define _INTEGER_H_
-#include "../DObject.h"
+#include "Number.h"
+
+
+#define INTEGER_MIN_VALUE  INT_MIN
+#define INTEGER_MAX_VALUE  INT_MAX
+#define INTEGER_BYTES      (sizeof(int))
+#define INTEGER_SIZE       (INTEGER_BYTES * CHAR_BIT)
+#define INTEGER_TYPE       (TYPE_LONG)
 
 class (Integer)
 {
@@ -49,5 +56,15 @@ class (Integer)
     };
     int            value;
 };
+
+int Integer_ParseInt(char* s, int radix);
+int Integer_CompareTo(Integer const, Integer other);
+int Integer_IntValue(Integer const);
+long Integer_LongValue(Integer const);
+float Integer_FloatValue(Integer const);
+double Integer_DoubleValue(Integer const);
+char Integer_CharValue(Integer const);
+short Integer_ShortValue(Integer const);
+Integer Integer_New(int value);
 
 #endif _INTEGER_H_

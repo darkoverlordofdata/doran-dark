@@ -51,8 +51,8 @@ Comparable Comparable_Ctor(Comparable const this)
 {
     DObject_Ctor(this);
 
-    this->ToString      = &abstract_ToString;
-    this->CompareTo     = &abstract_CompareTo;
+    this->ToString      = abstract_ToString;
+    this->CompareTo     = abstract_CompareTo;
 
     return this;
 }

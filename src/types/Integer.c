@@ -23,90 +23,81 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include <dark/types/Number.h>
 #include <dark/types/Integer.h>
 /* 
  * Integer implementation
  */
 
 /**
- * Compares two {@code int} values numerically.
- * The value returned is identical to what would be returned by:
- * <pre>
- *    Integer.valueOf(x).compareTo(Integer.valueOf(y))
- * </pre>
- *
- * @param  x the first {@code int} to compare
- * @param  y the second {@code int} to compare
- * @return the value {@code 0} if {@code x == y};
- *         a value less than {@code 0} if {@code x < y}; and
- *         a value greater than {@code 0} if {@code x > y}
+ * Returns a primitive integer value parsed from input string. 
+ */
+int Integer_ParseInt(char* s, int radix) {
+    long i = Long_ParseLong(s, radix);
+    if (i < INTEGER_MIN_VALUE || i > INTEGER_MAX_VALUE)
+        return NumberFormatException(
+            "Value out of range. Value:\"%s\" Radix: %d", s, radix);
+    return (int)i;
+}
+
+/**
+ * Compare two int primitives.
+ * @param  x int to compare
+ * @param  y int to compare
+ * @return  0 x == y
+ *         +1 x < y
+ *         -1 x > y
  */
 int Integer_Compare(int x, int y) {
     return (x < y) ? -1 : (( x == y ) ? 0 : 1);
 }
 
 /**
- * Compares two {@code Integer} objects numerically.
+ * Compares two Integer objects.
  *
- * @param   anotherInteger   the {@code Integer} to be compared.
- * @return  the value {@code 0} if this {@code Integer} is
- *          equal to the argument {@code Integer}; a value less than
- *          {@code 0} if this {@code Integer} is numerically less
- *          than the argument {@code Integer}; and a value greater
- *          than {@code 0} if this {@code Integer} is numerically
- *           greater than the argument {@code Integer} (signed
- *           comparison).
+ * @param   other  Integer to be compared
+ * @return same as Integer_Compare
  */
 int Integer_CompareTo(Integer this, Integer other) {
     return Integer_Compare(this->value, other->value);
 }
 
 /**
- * Returns the value of this {@code Integer} as an {@code int} after
- * a narrowing primitive conversion.
+ * Returns the value of this value cast as an int
  */
 int Integer_IntValue(Integer const this) {
     return (int)this->value;
 }
 
 /**
- * Returns the value of this {@code Integer} as a
- * {@code int} value.
+ * Returns the value of this value cast as a long
  */
 long Integer_LongValue(Integer const this) {
-    printf("implementation_IntegerValue\n");
-
     return (int)this->value;
 }
 
 /**
- * Returns the value of this {@code Integer} as a {@code float} after
- * a widening primitive conversion.
+ * Returns the value of this value cast as a float
  */
 float Integer_FloatValue(Integer const this) {
     return (float)this->value;
 }
 
 /**
- * Returns the value of this {@code Integer} as a {@code double}
- * after a widening primitive conversion.
+ * Returns the value of this value cast as a double
  */
 double Integer_DoubleValue(Integer const this) {
     return (double)this->value;
 }
 
 /**
- * Returns the value of this {@code Integer} as a {@code byte} after
- * a narrowing primitive conversion.
+ * Returns the value of this value cast as a char
  */
 char Integer_CharValue(Integer const this) {
     return (char)this->value;
 }
 
 /**
- * Returns the value of this {@code Integer} as a {@code short} after
- * a narrowing primitive conversion.
+ * Returns the value of this value cast as a short
  */
 short Integer_ShortValue(Integer const this) {
     return (short)this->value;
@@ -127,14 +118,14 @@ Integer Integer_Ctor(Integer const this, int value)
 {
     Number_Ctor(this);
 
-    this->ToString      = &Integer_ToString;
-    this->CompareTo     = &Integer_CompareTo;
-    this->IntValue      = &Integer_IntValue; 
-    this->LongValue     = &Integer_LongValue; 
-    this->FloatValue    = &Integer_FloatValue; 
-    this->DoubleValue   = &Integer_DoubleValue; 
-    this->CharValue     = &Integer_CharValue; 
-    this->ShortValue    = &Integer_ShortValue; 
+    this->ToString      = Integer_ToString;
+    this->CompareTo     = Integer_CompareTo;
+    this->IntValue      = Integer_IntValue; 
+    this->LongValue     = Integer_LongValue; 
+    this->FloatValue    = Integer_FloatValue; 
+    this->DoubleValue   = Integer_DoubleValue; 
+    this->CharValue     = Integer_CharValue; 
+    this->ShortValue    = Integer_ShortValue; 
 
     this->value = value;
     return this;
@@ -143,7 +134,7 @@ Integer Integer_Ctor(Integer const this, int value)
 /**
  * new Integer
  * 
- * create a new int
+ * create a new Integer
  * 
  * @param value of int
  * 

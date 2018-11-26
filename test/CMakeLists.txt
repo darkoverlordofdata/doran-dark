@@ -43,8 +43,8 @@ file (RELATIVE_PATH CONFIG_VALA ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR}/src/Conf
 #   application source
 #
 list ( APPEND VALA_SOURCES ${CONFIG_VALA} )
-list ( APPEND VALA_SOURCES src/basic.vala )
 list ( APPEND VALA_SOURCES src/unit.vala )
+list ( APPEND VALA_SOURCES src/TestTypes.vala )
 #
 #   application includes
 #

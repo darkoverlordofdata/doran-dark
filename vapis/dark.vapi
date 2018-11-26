@@ -26,15 +26,15 @@ namespace Dark
 	}
 
 	[Compact]
-	[CCode (cname = "Compareable_t")]
-	public abstract class Compareable : DObject
+	[CCode (cname = "Comparable_t")]
+	public abstract class Comparable : DObject
 	{
-		public abstract int CompareTo(Compareable other);
+		public abstract int CompareTo(Comparable other);
 	}
 	
 	[Compact]
 	[CCode (cname = "Number_t")]
-	public abstract class Number : Compareable
+	public abstract class Number : Comparable
 	{
 		[CCode (cname = "Number_IntValue")]
         public abstract int IntValue();
@@ -54,11 +54,25 @@ namespace Dark
 	[CCode (cname = "Long_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
 	public class Long : Number
 	{
+		[CCode (cname = "LONG_MIN_VALUE")]
+		public const int Min;
+		[CCode (cname = "LONG_MAX_VALUE")]
+		public const int Max;
+		[CCode (cname = "LONG_SIZE")]
+		public const int Size;
+		[CCode (cname = "LONG_BYTES")]
+		public const int Bytes;
+		[CCode (cname = "LONG_TYPE")]
+		public const int Type;
+
+		[CCode (cname = "Long_ParseLong")]
+		public static long ParseLong(string s, int radix = 10);
+
 		public long value;
 		[CCode (cname = "Long_New")]
 		public Long(long value);
 		[CCode (cname = "Long_CompareTo")]
-		public override int CompareTo(Compareable other);
+		public override int CompareTo(Comparable other);
 		[CCode (cname = "Long_IntValue")]
         public override int IntValue();
 		[CCode (cname = "Long_LongValue")]
@@ -73,8 +87,247 @@ namespace Dark
         public override short ShortValue();
 		[CCode (cname = "Long_ToString")]
 		public override unowned string ToString();
+	}
 
+	[Compact]
+	[CCode (cname = "Short_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
+	public class Short : Number
+	{
+		[CCode (cname = "SHORT_MIN_VALUE")]
+		public const int Min;
+		[CCode (cname = "SHORT_MAX_VALUE")]
+		public const int Max;
+		[CCode (cname = "SHORT_SIZE")]
+		public const int Size;
+		[CCode (cname = "SHORT_BYTES")]
+		public const int Bytes;
+		[CCode (cname = "SHORT_TYPE")]
+		public const int Type;
 
+		[CCode (cname = "Short_ParseLong")]
+		public static short ParseShort(string s, int radix = 10);
+
+		public long value;
+		[CCode (cname = "Short_New")]
+		public Short(short value);
+		[CCode (cname = "Short_CompareTo")]
+		public override int CompareTo(Comparable other);
+		[CCode (cname = "Short_IntValue")]
+        public override int IntValue();
+		[CCode (cname = "Short_LongValue")]
+        public override long LongValue();
+		[CCode (cname = "Short_FloatValue")]
+        public override float FloatValue();
+		[CCode (cname = "Short_DoubleValue")]
+        public override double DoubleValue();
+		[CCode (cname = "Short_CharValue")]
+        public override char CharValue();
+		[CCode (cname = "Short_ShortValue")]
+        public override short ShortValue();
+		[CCode (cname = "Short_ToString")]
+		public override unowned string ToString();
+	}
+
+	[Compact]
+	[CCode (cname = "Integer_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
+	public class Integer : Number
+	{
+		[CCode (cname = "INTEGER_MIN_VALUE")]
+		public const int Min;
+		[CCode (cname = "INTEGER_MAX_VALUE")]
+		public const int Max;
+		[CCode (cname = "INTEGER_SIZE")]
+		public const int Size;
+		[CCode (cname = "INTEGER_BYTES")]
+		public const int Bytes;
+		[CCode (cname = "INTEGER_TYPE")]
+		public const int Type;
+
+		[CCode (cname = "Integer_ParseInt")]
+		public static int ParseInt(string s, int radix = 10);
+
+		public int value;
+		[CCode (cname = "Integer_New")]
+		public Integer(int value);
+		[CCode (cname = "Integer_CompareTo")]
+		public override int CompareTo(Comparable other);
+		[CCode (cname = "Integer_IntValue")]
+        public override int IntValue();
+		[CCode (cname = "Integer_LongValue")]
+        public override long LongValue();
+		[CCode (cname = "Integer_FloatValue")]
+        public override float FloatValue();
+		[CCode (cname = "Integer_DoubleValue")]
+        public override double DoubleValue();
+		[CCode (cname = "Integer_CharValue")]
+        public override char CharValue();
+		[CCode (cname = "Integer_ShortValue")]
+        public override short ShortValue();
+		[CCode (cname = "Integer_ToString")]
+		public override unowned string ToString();
+	}
+
+	[Compact]
+	[CCode (cname = "Char_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
+	public class Char : Number
+	{
+		[CCode (cname = "CHAR_MIN_VALUE")]
+		public const int Min;
+		[CCode (cname = "CHAR_MAX_VALUE")]
+		public const int Max;
+		[CCode (cname = "CHAR_SIZE")]
+		public const int Size;
+		[CCode (cname = "CHAR_BYTES")]
+		public const int Bytes;
+		[CCode (cname = "CHAR_TYPE")]
+		public const int Type;
+
+		public int value;
+		[CCode (cname = "Char_New")]
+		public Char(char value);
+		[CCode (cname = "Char_CompareTo")]
+		public override int CompareTo(Comparable other);
+		[CCode (cname = "Char_IntValue")]
+        public override int IntValue();
+		[CCode (cname = "Char_LongValue")]
+        public override long LongValue();
+		[CCode (cname = "Char_FloatValue")]
+        public override float FloatValue();
+		[CCode (cname = "Char_DoubleValue")]
+        public override double DoubleValue();
+		[CCode (cname = "Char_CharValue")]
+        public override char CharValue();
+		[CCode (cname = "Char_ShortValue")]
+        public override short ShortValue();
+		[CCode (cname = "Char_ToString")]
+		public override unowned string ToString();
+	}
+
+	[Compact]
+	[CCode (cname = "Float_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
+	public class Float : Number
+	{
+		[CCode (cname = "FLOAT_MIN_VALUE")]
+		public const int Min;
+		[CCode (cname = "FLOAT_MAX_VALUE")]
+		public const int Max;
+		[CCode (cname = "FLOAT_SIZE")]
+		public const int Size;
+		[CCode (cname = "FLOAT_BYTES")]
+		public const int Bytes;
+		[CCode (cname = "FLOAT_TYPE")]
+		public const int Type;
+
+		[CCode (cname = "Float_ParseFloat")]
+		public static float ParseFloat(string s);
+
+		public int value;
+		[CCode (cname = "Float_New")]
+		public Float(float value);
+		[CCode (cname = "Float_CompareTo")]
+		public override int CompareTo(Comparable other);
+		[CCode (cname = "Float_IntValue")]
+        public override int IntValue();
+		[CCode (cname = "Float_LongValue")]
+        public override long LongValue();
+		[CCode (cname = "Float_FloatValue")]
+        public override float FloatValue();
+		[CCode (cname = "Float_DoubleValue")]
+        public override double DoubleValue();
+		[CCode (cname = "Float_CharValue")]
+        public override char CharValue();
+		[CCode (cname = "Float_ShortValue")]
+        public override short ShortValue();
+		[CCode (cname = "Float_ToString")]
+		public override unowned string ToString();
+	}
+
+	[Compact]
+	[CCode (cname = "Double_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
+	public class Double : Number
+	{
+		[CCode (cname = "DOUBLE_MIN_VALUE")]
+		public const int Min;
+		[CCode (cname = "DOUBLE_MAX_VALUE")]
+		public const int Max;
+		[CCode (cname = "DOUBLE_SIZE")]
+		public const int Size;
+		[CCode (cname = "DOUBLE_BYTES")]
+		public const int Bytes;
+		[CCode (cname = "DOUBLE_TYPE")]
+		public const int Type;
+
+		[CCode (cname = "Double_ParseDouble")]
+		public static double ParseDouble(string s);
+
+		public int value;
+		[CCode (cname = "Double_New")]
+		public Double(double value);
+		[CCode (cname = "Double_CompareTo")]
+		public override int CompareTo(Comparable other);
+		[CCode (cname = "Double_IntValue")]
+        public override int IntValue();
+		[CCode (cname = "Double_LongValue")]
+        public override long LongValue();
+		[CCode (cname = "Double_FloatValue")]
+        public override float FloatValue();
+		[CCode (cname = "Double_DoubleValue")]
+        public override double DoubleValue();
+		[CCode (cname = "Double_CharValue")]
+        public override char CharValue();
+		[CCode (cname = "Double_ShortValue")]
+        public override short ShortValue();
+		[CCode (cname = "Double_ToString")]
+		public override unowned string ToString();
+	}
+
+	[Compact]
+	[CCode (cname = "Boolean_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
+	public class Boolean : Comparable
+	{
+		[CCode (cname = "LONG_SIZE")]
+		public const int Size;
+		[CCode (cname = "LONG_BYTES")]
+		public const int Bytes;
+		[CCode (cname = "LONG_TYPE")]
+		public const int Type;
+		[CCode (cname = "Boolean_ParseBool")]
+		public static bool ParseBool(string s);
+
+		public bool value;
+
+		[CCode (cname = "Boolean_New")]
+		public Boolean(long value);
+		[CCode (cname = "Boolean_CompareTo")]
+		public override int CompareTo(Comparable other);
+		[CCode (cname = "Boolean_BoolValue")]
+		public bool BoolValue();
+		[CCode (cname = "Boolean_ToString")]
+		public override unowned string ToString();
+	}
+
+	[Compact]
+	[CCode (cname = "String_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
+	public class String : Comparable
+	{
+		[CCode (cname = "LONG_TYPE")]
+		public const int Type;
+
+		public char* value;
+		public int length;
+
+		[CCode (cname = "String_New")]
+		public String(char* value);
+		[CCode (cname = "String_CompareTo")]
+		public override int CompareTo(Comparable other);
+		[CCode (cname = "String_Length")]
+		public int Length();
+		[CCode (cname = "String_IsEmpty")]
+		public bool IsEmpty();
+		[CCode (cname = "String_CharAt")]
+		public int CharAt(int index);	
+		[CCode (cname = "String_ToString")]
+		public override unowned string ToString();
 	}
 
 	namespace Collections

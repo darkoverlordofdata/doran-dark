@@ -25,7 +25,13 @@ SOFTWARE.
 ******************************************************************/
 #ifndef _CHAR_H_
 #define _CHAR_H_
-#include "../DObject.h"
+#include "Number.h"
+
+#define CHAR_MIN_VALUE  CHAR_MIN
+#define CHAR_MAX_VALUE  CHAR_MAX
+#define CHAR_BYTES      (sizeof(char))
+#define CHAR_SIZE       (CHAR_BYTES * CHAR_BIT)
+#define CHAR_TYPE       (TYPE_CHAR)
 
 class (Char)
 {
@@ -49,5 +55,14 @@ class (Char)
     };
     char            value;
 };
+
+int Char_CompareTo(Char const, Char other);
+int Char_IntValue(Char const);
+long Char_LongValue(Char const);
+float Char_FloatValue(Char const);
+double Char_DoubleValue(Char const);
+char Char_CharValue(Char const);
+short Char_ShortValue(Char const);
+Char Char_New(char value);
 
 #endif _CHAR_H_

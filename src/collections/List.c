@@ -139,7 +139,7 @@ void List_Dispose(List const this)
  */
 const char* List_ToString(List const this)
 {
-    return "Dark.List";
+    return "dark.collections.List";
 }
 /**
  * Constructor
@@ -148,12 +148,12 @@ List List_Ctor(List const this)
 {
     DObject_Ctor(this);
 
-    this->ToString      = &List_ToString;
-    this->Iterate       = &List_Iterate;
-    this->Add           = &List_Add;
-    this->Push          = &List_Push;
-    this->Pop           = &List_Pop;
-    this->Dispose       = &List_Dispose;
+    this->ToString      = List_ToString;
+    this->Iterate       = List_Iterate;
+    this->Add           = List_Add;
+    this->Push          = List_Push;
+    this->Pop           = List_Pop;
+    this->Dispose       = List_Dispose;
 
     this->head = nullptr;
 

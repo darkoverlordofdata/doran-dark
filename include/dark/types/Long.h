@@ -25,12 +25,12 @@ SOFTWARE.
 ******************************************************************/
 #ifndef _LONG_H_
 #define _LONG_H_
-#include "../DObject.h"
+#include "Number.h"
 
-#define LONG_MIN_VALUE  (-0x80000000)
-#define LONG_MAX_VALUE  (0x7fffffff)
-#define LONG_SIZE       (sizeof(long))
-#define LONG_BYTES      (LONG_SIZE / 8)
+#define LONG_MIN_VALUE  LONG_MIN
+#define LONG_MAX_VALUE  LONG_MAX
+#define LONG_BYTES      (sizeof(long))
+#define LONG_SIZE       (LONG_BYTES * CHAR_BIT)
 #define LONG_TYPE       (TYPE_LONG)
 
 
@@ -58,13 +58,14 @@ class (Long)
     long                value;
 };
 
+long Long_ParseLong(char* s, int radix);
 int Long_CompareTo(Long const, Long other);
 int Long_IntValue(Long const);
 long Long_LongValue(Long const);
-float FloatValue(Long const);
-double DoubleValue(Long const);
-char CharValue(Long const);
-short ShortValue(Long const);
+float Long_FloatValue(Long const);
+double Long_DoubleValue(Long const);
+char Long_CharValue(Long const);
+short Long_ShortValue(Long const);
 Long Long_New(long value);
 
 #endif _LONG_H_

@@ -25,7 +25,13 @@ SOFTWARE.
 ******************************************************************/
 #ifndef _FLOAT_H_
 #define _FLOAT_H_
-#include "../DObject.h"
+#include "Number.h"
+
+#define FLOAT_MIN_VALUE  FLT_MIN
+#define FLOAT_MAX_VALUE  FLT_MAX
+#define FLOAT_BYTES      (sizeof(float))
+#define FLOAT_SIZE       (FLOAT_BYTES * CHAR_BIT)
+#define FLOAT_TYPE       (TYPE_FLOAT)
 
 class (Float)
 {
@@ -49,5 +55,14 @@ class (Float)
     };
     float            value;
 };
+
+int Float_CompareTo(Float const, Float other);
+int Float_IntValue(Float const);
+long Float_LongValue(Float const);
+float Float_FloatValue(Float const);
+double Float_DoubleValue(Float const);
+char Float_CharValue(Float const);
+short Float_ShortValue(Float const);
+Float Float_New(float value);
 
 #endif _FLOAT_H_

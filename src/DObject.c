@@ -77,9 +77,10 @@ void DObject_Dispose(DObject const this){
  */
 static void abstract_Dispose(DObject const this){}
 
-// Returns a String which represents the DObject instance.  The default
-// for an DObject is to return the fully qualified name of the class.
-// 
+/**
+ * Returns the string value of this DObject. The default for 
+ * a DObject is to return the fully qualified name of the class.
+ */
 const char* DObject_ToString(DObject const this)
 {
     return this->ToString(this);
@@ -89,15 +90,12 @@ const char* DObject_ToString(DObject const this)
  */
 static const char *abstract_ToString(DObject const this)
 {
-    return "Dark.DObject";
+    return "dark.DObject";
 }
 
-
-// Returns a boolean indicating if the passed in DObject obj is 
-// Equal to this.  Equality is defined as DObject equality for reference
-// types and bitwise equality for value types using a loader trick to
-// replace Equals with EqualsValue for value types).
-//     
+/**
+ * Compare to another object
+ */
 bool DObject_Equals(DObject const this, DObject const that)
 {
     return this->Equals(this, that);
@@ -109,15 +107,10 @@ static bool abstract_Equals(DObject const this, DObject const that)
 {
     return this == that;
 }
-// GetHashCode is intended to serve as a hash function for this DObject.
-// Based on the contents of the DObject, the hash function will return a suitable
-// value with a relatively random distribution over the various inputs.
-//
-// The default implementation returns the address for this instance.
-// Calling it on the same DObject multiple times will return the same value, so
-// it will technically meet the needs of a hash function, but it's less than ideal.
-// DObjects (& especially value classes) should override this method.
-// 
+
+/**
+ * Get's the hashcode for this object. Default is the obhect's address in memory,
+ */
 int DObject_GetHashCode(DObject const this)
 {
     return this->GetHashCode(this);
@@ -135,10 +128,10 @@ static int abstract_GetHashCode(DObject const this)
 DObject DObject_Ctor(DObject const this)
 {
     this->RefCount      = 1;
-    this->ToString      = &abstract_ToString;
-    this->Equals        = &abstract_Equals;
-    this->GetHashCode   = &abstract_GetHashCode;
-    this->Dispose       = &abstract_Dispose;
+    this->ToString      = abstract_ToString;
+    this->Equals        = abstract_Equals;
+    this->GetHashCode   = abstract_GetHashCode;
+    this->Dispose       = abstract_Dispose;
     return this;
 }
 

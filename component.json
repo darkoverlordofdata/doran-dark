@@ -1,18 +1,47 @@
 {
+  "!": "doran package manager v0.0.3",
   "name": "dark",
+  "template": "package",
+  "version": "0.0.1",
+  "vala": "0.26",
   "authors": [
     "Bruce Davidson <darkoverlordofdata@gmail.com>"
   ],
+  "homepage": "https://github.com/darkoverlordofdata/doran-dark",
   "description": "Dark Framework",
-  "main": "CMakeLists.txt",
   "license": "MIT",
+  "private": false,
   "dependencies": {},
-  "homepage": "",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ]
+  "main": "CMakeLists.txt",
+  "source": "src",
+  "files": [
+    "src/string.c", 
+    "src/Comparable.c", 
+    "src/DObject.c", 
+    "src/collections/Hashmap.c", 
+    "src/collections/List.c", 
+    "src/collections/Vector.c", 
+    "src/io/FileSystem.c", 
+    "src/types/Boolean.c", 
+    "src/types/Char.c",
+    "src/types/Double.c",
+    "src/types/Float.c",
+    "src/types/Integer.c", 
+    "src/types/Long.c",
+    "src/types/Number.c", 
+    "src/types/Short.c",
+    "src/types/String.c"
+  ],
+  "packages": null,
+  "includes": [],
+  "libraries": null,
+  "options": {
+    "VERSION": "0.0.1",
+    "RELEASE_NAME": "dark"
+  },
+  "definitions": [],
+  "copy": null,
+  "vapidir": "vapis",
+  "console": false
+
 }

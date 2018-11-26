@@ -51,11 +51,14 @@ static const int BuildVersion = 1;
 #include "collections/Hashmap.h"
 #include "collections/List.h"
 #include "types/Number.h"
+#include "types/Boolean.h"
+#include "types/String.h"
 #include "types/Char.h"
 #include "types/Double.h"
 #include "types/Float.h"
 #include "types/Integer.h"
 #include "types/Long.h"
 #include "types/Short.h"
+#include "io/FileSystem.h"
 
 #endif _DARKFX_H_

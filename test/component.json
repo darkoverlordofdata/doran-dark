@@ -15,7 +15,7 @@
   },
   "source": "src",
   "files": [
-    "src/basic.vala",
+    "src/TestTypes.vala",
     "src/unit.vala"
   ],
   "packages": [],

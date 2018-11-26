@@ -31,6 +31,7 @@ SOFTWARE.
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <stdarg.h>
 #include "classy.h"
 /**
  * Friendlier type names
@@ -111,6 +112,24 @@ typedef enum
 char* STR_JOIN(int count, ...);
 #define join(...) STR_JOIN(PP_NARG(__VA_ARGS__), __VA_ARGS__)
 
+
+/**
+ * Pseudo Exception
+ * this just prints the message on the stderr
+ * and then returns 0/NULL
+ */
+#define Exception(name) __attribute__((__format__ (__printf__, 1, 2))) \
+long name##Exception(const char* msg, ...) \
+{ \
+    va_list args; \
+    va_start(args, msg); \
+    fprintf(stderr, #name); \
+    fprintf(stderr, "Exception: "); \
+    vfprintf(stderr, msg, args); \
+    fprintf(stderr, "\n"); \
+    va_end(args); \
+    return 0; \
+}
 
 
 #endif _CORE_H

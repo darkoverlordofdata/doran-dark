@@ -25,7 +25,13 @@ SOFTWARE.
 ******************************************************************/
 #ifndef _SHORT_H_
 #define _SHORT_H_
-#include "../DObject.h"
+#include "Number.h"
+
+#define SHORT_MIN_VALUE  SHRT_MIN
+#define SHORT_MAX_VALUE  SHRT_MAX
+#define SHORT_BYTES      (sizeof(short))
+#define SHORT_SIZE       (SHORT_BYTES * CHAR_BIT)
+#define SHORT_TYPE       (TYPE_SHORT)
 
 class (Short)
 {
@@ -49,5 +55,15 @@ class (Short)
     };
     short            value;
 };
+
+short Short_ParseShort(char* s, int radix);
+int Short_CompareTo(Short const, Short other);
+int Short_IntValue(Short const);
+long Short_LongValue(Short const);
+float Short_FloatValue(Short const);
+double Short_DoubleValue(Short const);
+char Short_CharValue(Short const);
+short Short_ShortValue(Short const);
+Short Short_New(short value);
 
 #endif _SHORT_H_
