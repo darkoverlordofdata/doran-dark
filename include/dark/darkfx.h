@@ -53,6 +53,7 @@ static const int BuildVersion = 1;
 #include "types/Number.h"
 #include "types/Boolean.h"
 #include "types/String.h"
+#include "types/StringBuilder.h"
 #include "types/Char.h"
 #include "types/Double.h"
 #include "types/Float.h"

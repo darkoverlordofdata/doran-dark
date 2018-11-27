@@ -30,7 +30,8 @@
     "src/types/Long.c",
     "src/types/Number.c", 
     "src/types/Short.c",
-    "src/types/String.c"
+    "src/types/String.c",
+    "src/types/StringBuilder.c"
   ],
   "packages": null,
   "includes": [],

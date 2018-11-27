@@ -23,6 +23,7 @@ list ( APPEND CSOURCE .lib/dark/src/types/Integer.c )
 list ( APPEND CSOURCE .lib/dark/src/types/Long.c )
 list ( APPEND CSOURCE .lib/dark/src/types/Short.c )
 list ( APPEND CSOURCE .lib/dark/src/types/String.c )
+list ( APPEND CSOURCE .lib/dark/src/types/StringBuilder.c )
 
 list ( APPEND VAPI .lib/dark/vapis/dark.vapi )
 

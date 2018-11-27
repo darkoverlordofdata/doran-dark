@@ -26,6 +26,47 @@ SOFTWARE.
 #include <stdarg.h>
 #include <dark/core.h>
 
+/**
+ * strrstr - Returns a pointer to the first occurrence of str2 
+ * in str1, or a null pointer if str2 is not part of str1.
+ * 
+ * @param str string to search in
+ * @param find string to search for
+ * @return ptr to the substring
+ */
+char * strrstr(char *str, char *find)
+{
+  char *result;
+  size_t slen = strlen(str);
+  size_t flen = strlen(find);
+  if (flen > slen) return nullptr;
+
+
+  for (result = str + slen - flen; result >= str; result--)
+  {
+    if (strncmp(result, find, flen) == 0)
+        return result;
+  }
+  return nullptr;
+}
+
+/**
+ * strndup - Returns a pointer to a null-terminated byte string, which 
+ * is a duplicate of the string pointed to by str1. The returned pointer 
+ * must be passed to free to avoid a memory leak.
+ * 
+ * @param str string to duplicate
+ * @param size of the new string
+ * @return ptr to the new string
+ */
+char * strndup (const char *str, size_t size)
+{
+  char *result;
+  size_t len = strlen(str);
+  len = size < len ? size : len;
+  result = calloc (len + 1, sizeof(char));
+  return strncpy(result, str, len);
+}
 
 char* STR_JOIN(int count, ...)
 {

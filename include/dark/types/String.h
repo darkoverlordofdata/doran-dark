@@ -25,6 +25,7 @@ SOFTWARE.
 ******************************************************************/
 #ifndef _STRING_H_
 #define _STRING_H_
+#include <string.h>
 #include "../Comparable.h"
 
 #define STRING_TYPE       (TYPE_STRING)
@@ -48,6 +49,19 @@ class (String)
     int                 (*Length) (String const);
     bool                (*IsEmpty) (String const);
     char                (*CharAt) (String const, int index);
+    int                 (*CompareToIgnoreCase) (String const, String other);
+    String              (*Concat) (String const, String str);
+    bool                (*Contains) (String const, String str);
+    String              (*CopyOf) (String const);
+    bool                (*EndsWith) (String const, String suffix);
+    bool                (*StartsWith) (String const, String prefix, int offset);
+    char*               (*GetBytes) (String const);
+    int                 (*IndexOf) (String const, String str, int fromIndex);
+    int                 (*LastIndexOf) (String const, String str, int fromIndex);
+    String              (*ToUpperCase) (String const);
+    String              (*ToLowerCase) (String const);
+    String              (*Trim) (String const);
+
 
 };
 
@@ -55,14 +69,13 @@ int String_Compare(char* x, char* y);
 int String_CompareTo(String this, String other);
 int String_CompareToIgnoreCase(String this, String other);
 String String_Concat(String this, String str);
-bool String_Contains(char* s);
-String String_CopyOf(String this, String other);
+bool String_Contains(String this, String str);
+String String_CopyOf(String this);
 bool String_EndsWith(String this, String suffix);
-bool String_StartsWith(String this, String prefix);
-String String_Format(String this, String format, ...);
+bool String_StartsWith(String this, String prefix, int offset);
 char* String_GetBytes(String this);
-int String_IndexOf(String this, int fromIndex);
-int String_LastIndexOf(String this, int fromIndex);
+int String_IndexOf(String this, String str, int fromIndex);
+int String_LastIndexOf(String this, String str, int fromIndex);
 String String_ToUpperCase(String this);
 String String_ToLowerCase(String this);
 String String_Trim(String this);
@@ -71,5 +84,8 @@ bool String_IsEmpty(String const this);
 char String_CharAt(String const this, int index);
 char* String_ToString(String const this);
 String String_New(char* value);
+
+__attribute__((__format__ (__printf__, 1, 2)))
+String String_Format(char* format, ...);
 
 #endif _STRING_H_

@@ -24,7 +24,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/String.h>
-#include <string.h>
 /* 
  * String implementation
  */
@@ -60,55 +59,74 @@ int String_CompareTo(String this, String other) {
 }
 
 int String_CompareToIgnoreCase(String this, String str) {
-    return strcmpi(this->value, other->value);
+    return strcmpi(this->value, str->value);
 }
 
 String String_Concat(String this, String other) {
+    if (other->length == 0)
+        return this;
 
+    int len = this->length;
+    char* str = calloc(len+other->length+1, sizeof(char));
+    strncpy(str, this->value, len);
+    strncpy(str+other->length, other->value, other->length);
+    String result = String_New(str);
+    free(str);
+    return result;
 }
 
-bool String_Contains(char* s) {
-
+bool String_Contains(String this, String s) {
+    return this->IndexOf(this, s, 0) > -1;
 }
 
-String String_CopyOf(String this, String other) {
-
+String String_CopyOf(String this) {
+    return String_New(this->value);
 }
 
 bool String_EndsWith(String this, String suffix) {
-
+    char* offset = this->value + this->length - suffix->length;
+    return !strcmp(offset, suffix);
 }
 
-bool String_StartsWith(String this, String prefix) {
-
-}
-// sprintf...
-String String_Format(String this, String format, ...) {
-
+bool String_StartsWith(String this, String prefix, int offset) {
+    char* c = strstr(this->value+offset, prefix->value);
+    return c == (this->value+offset) ? true : false;
 }
 
 char* String_GetBytes(String this) {
-
+    return strdup(this->value);
 }
 
-int String_IndexOf(String this, int fromIndex) {
-
+int String_IndexOf(String this, String str, int offset) {
+    char* c = strstr(this->value+offset, str->value);
+    return c == nullptr ? 0 : c - this->value;
 }
 
-int String_LastIndexOf(String this, int fromIndex) {
-
+int String_LastIndexOf(String this, String str, int offset) {
+    char* c = strrstr(this->value+offset, str->value);
+    return c == nullptr ? 0 : c - this->value;
 }
 
 String String_ToUpperCase(String this) {
-
+    return String_New(strupr(this->value));
 }
 
 String String_ToLowerCase(String this) {
-
+    return String_New(strlwr(this->value));
 }
 
 String String_Trim(String this) {
-
+    int len = this->length;
+    int start = 0;
+    while ((start < len) && (this->value[start] <= ' ')) {
+        start++;
+    }
+    while ((start < len) && (this->value[len - 1] <= ' ')) {
+        len--;
+    }
+    return ((start > 0) || (len < this->length)) 
+        ? String_New(strndup(this->value+start, len-start))
+        : this;    
 }
 
 int String_Length(String const this) 
@@ -146,11 +164,24 @@ String String_Ctor(String const this, char* value)
     this->Length        = String_Length;
     this->IsEmpty       = String_IsEmpty;
     this->CharAt        = String_CharAt;
+    this->CompareToIgnoreCase = String_CompareToIgnoreCase;
+    this->Concat        = String_Concat;
+    this->Contains      = String_Contains;
+    this->CopyOf        = String_CopyOf;
+    this->EndsWith      = String_EndsWith;
+    this->StartsWith    = String_StartsWith;
+    this->GetBytes      = String_GetBytes;
+    this->IndexOf       = String_IndexOf;
+    this->LastIndexOf   = String_LastIndexOf;
+    this->ToLowerCase   = String_ToLowerCase;
+    this->ToUpperCase   = String_ToUpperCase;
+    this->Trim          = String_Trim;
 
     this->value = strdup(value);
     this->length = strlen(value);
     return this;
 }
+
 
 /**
  * new String
@@ -163,4 +194,21 @@ String String_Ctor(String const this, char* value)
 String String_New(char* value)
 {
     return String_Ctor(new(String), value);
+}
+
+__attribute__((__format__ (__printf__, 1, 2)))
+String String_Format(char* format, ...) {
+    va_list args1;
+    va_list args2;
+    
+    va_start(args1, format);
+    va_copy(args2, args1);  
+
+    int len = vsnprintf(nullptr, 0, format, args1);
+    va_end(args1);
+    if (len == 0) return String_New("");
+    char* str = calloc(len+1, sizeof(char));
+    len = vsnprintf(str, len+1, format, args2);
+    va_end(args2);
+    return String_New(str);
 }

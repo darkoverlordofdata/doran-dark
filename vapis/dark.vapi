@@ -5,6 +5,10 @@ namespace Dark
 	public const int MinorVersion;
 	public const int BuildVersion;
 
+	public String _ (string value) {
+		return new String(value);
+	}
+
 	[Compact]
 	[CCode (cname = "DObject_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
 	public abstract class DObject
@@ -312,9 +316,15 @@ namespace Dark
 	{
 		[CCode (cname = "LONG_TYPE")]
 		public const int Type;
+		[CCode (cname = "String_Format")]
+		public static String Format(string format, ...);
 
 		public char* value;
 		public int length;
+
+		public string to_string() {
+			return (string)this.value;
+		}
 
 		[CCode (cname = "String_New")]
 		public String(char* value);
@@ -328,8 +338,53 @@ namespace Dark
 		public int CharAt(int index);	
 		[CCode (cname = "String_ToString")]
 		public override unowned string ToString();
+		[CCode (cname = "String_CompareToIgnoreCase")]
+		public int CompareToIgnoreCase(String other);
+		[CCode (cname = "String_Concat")]
+		public String Concat(String str);
+		[CCode (cname = "String_Contains")]
+		public bool Contains(String s);
+		[CCode (cname = "String_CopyOf")]
+		public String CopyOf(String other);
+		[CCode (cname = "String_EndsWith")]
+		public bool EndsWith(String suffix);
+		[CCode (cname = "String_StartsWith")]
+		public bool StartsWith(String prefix, int offset = 0);
+		[PrintfFormat]
+		[CCode (cname = "String_GetBytes")]
+		public char* GetBytes();
+		[CCode (cname = "String_IndexOf")]
+		public int IndexOf(char* str, int fromIndex = 0);
+		[CCode (cname = "String_LastIndexOf")]
+		public int LastIndexOf(char* str, int fromIndex = 0);
+		[CCode (cname = "String_ToUpperCase")]
+		public String ToUpperCase();
+		[CCode (cname = "String_ToLowerCase")]
+		public String ToLowerCase();
+		[CCode (cname = "String_Trim")]
+		public String Trim();
+		
 	}
 
+	[Compact]
+	[CCode (cname = "StringBuilder_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
+	public class StringBuilder : DObject
+	{
+		[CCode (cname = "StringBulder_New")]
+		public StringBuilder();
+		[CCode (cname = "StringBulder_Empty")]
+		public int Empty();
+		[CCode (cname = "StringBulder_Append")]
+		public int Append(char* str);
+		[PrintfFormat]
+		[CCode (cname = "StringBulder_Appendf")]
+		public int Appendf(string format, ...);
+		[CCode (cname = "StringBulder_Concat")]
+		public char* Concat();
+		[CCode (cname = "StringBulder_Reset")]
+		public void Reset();
+	}	
+	
 	namespace Collections
 	{
 
