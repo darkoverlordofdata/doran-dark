@@ -1,12 +1,17 @@
 cmake_minimum_required ( VERSION 3.1 )
 #########################################################################################
 #
-#   Library: Microsoft.Xna.Framework
+#   Library: Dark.Framework
 #
 #########################################################################################
 project ( dark VERSION 0.1.0 )
 
+# Includes: 
+list ( APPEND INCLUDE .lib/dark/include )
+list ( APPEND INCLUDE .lib/dark/vendor/tgc )
 
+
+# C Sources:
 list ( APPEND CSOURCE .lib/dark/vendor/tgc/tgc.c )
 list ( APPEND CSOURCE .lib/dark/src/gc.c )
 list ( APPEND CSOURCE .lib/dark/src/string.c )
@@ -28,12 +33,19 @@ list ( APPEND CSOURCE .lib/dark/src/types/Short.c )
 list ( APPEND CSOURCE .lib/dark/src/types/String.c )
 list ( APPEND CSOURCE .lib/dark/src/types/StringBuilder.c )
 
-list ( APPEND VAPI .lib/dark/vapis/dark.vapi )
-list ( APPEND INC ${CMAKE_SOURCE_DIR}/.lib/dark/include )
-list ( APPEND INC ${CMAKE_SOURCE_DIR}/.lib/dark/vendor/tgc )
+# Vala Sources:
+
+# Vapis:
+list ( APPEND VAPI .lib/dark/src/dark.vapi )
+
+# Vapidir:
 
 ## Export to the parent scope:
-
+set ( DARK true PARENT_SCOPE )
+set ( INCLUDES "${INCLUDES}; ${INCLUDE}" PARENT_SCOPE )
 set ( C_SOURCES "${C_SOURCES};${CSOURCE}" PARENT_SCOPE )
-set ( INCLUDES "${INCLUDES}; ${INC}" PARENT_SCOPE )
+
 set ( CUSTOM_VAPIS "${CUSTOM_VAPIS};${VAPI}" PARENT_SCOPE )
+
+
+

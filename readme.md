@@ -21,4 +21,5 @@ designed to be called directly from c or vala.
 ## Lifetime
 
 DarkFx uses either gc or ref counting. If the object is created using the 'new' kwyword
-in vala, then reference counting is used. If the object is not created from Vala, then it is garbage collected. In this case, object->refCount is set to -1. This will cause it to be skipped if passed to the vala unref function.
+in vala, then reference counting is used. If the object is not created from Vala, then it is garbage collected. In that case, object->refCount is set to -1, and this will cause the vala unref function to not process it.
+As a result - DObject_AddRef & DObject_Release should not be used in c.

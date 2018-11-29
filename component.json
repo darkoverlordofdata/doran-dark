@@ -15,6 +15,7 @@
   "main": "CMakeLists.txt",
   "source": "src",
   "files": [
+    "src/dark.vapi",
     "src/string.c", 
     "src/Comparable.c", 
     "src/DObject.c", 
@@ -35,7 +36,10 @@
     "src/types/StringBuilder.c"
   ],
   "packages": null,
-  "includes": [],
+  "includes": [
+    ".lib/dark/include",
+    ".lib/dark/vendor/tgc"
+  ],
   "libraries": null,
   "options": {
     "VERSION": "0.0.1",
@@ -43,7 +47,7 @@
   },
   "definitions": [],
   "copy": null,
-  "vapidir": "vapis",
+  "vapidir": null,
   "console": false
 
 }
