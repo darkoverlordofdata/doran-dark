@@ -29,6 +29,15 @@ static bool Equals(DObject const , DObject const that);
 bool DObject_Equals(DObject const, DObject const that);
 
 /**
+ * Mark this object as gc'd so that it
+ * does not get processed if passed to Release
+ */
+DObject DObject_gc(DObject this)
+{
+    this->RefCount = -1;
+    return this;
+}
+/**
  * AddRef
  */
 DObject DObject_AddRef(DObject this)
@@ -40,10 +49,23 @@ DObject DObject_AddRef(DObject this)
 /**
  * Release
  */
+DObject DObject_Dtor(DObject this)
+{
+    printf("DTOR\n");
+    this->Dispose(this);
+    tgc_free(&dark_gc, this);
+    return nullptr;
+}
+/**
+ * Release
+ */
 DObject DObject_Release(DObject this)
 {
+    if (this->RefCount < 0) return this;
+
     if (--(this->RefCount) == 0) 
     {
+        printf("Released\n");
         this->Dispose(this);
         free(this);
         return nullptr;
@@ -70,7 +92,7 @@ bool DObject_InstanceEquals(DObject const objA, DObject const objB)
 }
 
 void DObject_Dispose(DObject const this){
-    return this->Dispose(this);
+    this->Dispose(this);
 }
 /**
  * Overrideable base method
@@ -137,6 +159,10 @@ DObject DObject_Ctor(DObject const this)
 
 DObject DObject_New()
 {
-    return DObject_Ctor(new(DObject));
+    return DObject_gc(DObject_Ctor(new(DObject)));
 }
 
+DObject DObject_rcNew()
+{
+    return DObject_Ctor(rc_new(DObject));
+}

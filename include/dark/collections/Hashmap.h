@@ -139,5 +139,6 @@ void Hashmap_Dispose(Hashmap const);
 int Hashmap_Length(Hashmap const);
 char* Hashmap_ToString(Hashmap const);
 Hashmap Hashmap_New();
+Hashmap Hashmap_rcNew();
 
 #endif _HASHMAP_H_

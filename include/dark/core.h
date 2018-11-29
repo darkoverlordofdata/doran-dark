@@ -26,6 +26,7 @@ SOFTWARE.
 #ifndef _CORE_H
 #define _CORE_H
 
+#include <tgc.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -131,5 +132,9 @@ long name##Exception(const char* msg, ...) \
     return 0; \
 }
 
+/**
+ * Global GC object for tgc
+ */
+extern tgc_t dark_gc;
 
 #endif _CORE_H

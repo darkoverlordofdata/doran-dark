@@ -152,5 +152,10 @@ Double Double_Ctor(Double const this, double value)
  */
 Double Double_New(double value)
 {
-    return Double_Ctor(new(Double), value);
+    return DObject_gc(Double_Ctor(new(Double), value));
+}
+
+Double Double_rcNew(double value)
+{
+    return Double_Ctor(rc_new(Double), value);
 }

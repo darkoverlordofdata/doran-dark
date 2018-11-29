@@ -66,5 +66,6 @@ double Integer_DoubleValue(Integer const);
 char Integer_CharValue(Integer const);
 short Integer_ShortValue(Integer const);
 Integer Integer_New(int value);
+Integer Integer_rcNew(int value);
 
 #endif _INTEGER_H_

@@ -51,6 +51,7 @@ class (String)
     char                (*CharAt) (String const, int index);
     int                 (*CompareToIgnoreCase) (String const, String other);
     String              (*Concat) (String const, String str);
+    String              (*Concatc) (String const, char* str);
     bool                (*Contains) (String const, String str);
     String              (*CopyOf) (String const);
     bool                (*EndsWith) (String const, String suffix);
@@ -69,6 +70,7 @@ int String_Compare(char* x, char* y);
 int String_CompareTo(String this, String other);
 int String_CompareToIgnoreCase(String this, String other);
 String String_Concat(String this, String str);
+String String_Concatc(String this, char* str);
 bool String_Contains(String this, String str);
 String String_CopyOf(String this);
 bool String_EndsWith(String this, String suffix);
@@ -84,6 +86,7 @@ bool String_IsEmpty(String const this);
 char String_CharAt(String const this, int index);
 char* String_ToString(String const this);
 String String_New(char* value);
+String String_rcNew(char* value);
 
 __attribute__((__format__ (__printf__, 1, 2)))
 String String_Format(char* format, ...);

@@ -51,6 +51,10 @@ SOFTWARE.
     typedef name##_t* name;\
     typedef struct name##_t
 
+#define cyclic_reference(name) \
+    typedef struct name##_t name##_t;\
+    typedef name##_t* name;
+    
 /** 
  * singleton definition
  * defines a global extern class
@@ -91,17 +95,22 @@ SOFTWARE.
     static const name##_t * name##_auto(name##_t * const this)
 
 /** 
- * Create a class instance 
- * 
+ * Create a new gc'd class instance 
  * allocates memory for 1 object
- */
-#define new(class) calloc (1, sizeof(class##_t))
-/** 
- * creates an array of class 
  * 
- * allocates memory for n objects
  */
-#define allocate(class, n) calloc (n, sizeof(class##_t))
+#define new(class) tgc_calloc_opt (&dark_gc, 1, sizeof(class##_t), 0, DObject_Dtor)
+/** 
+ * Create a new rc'd class instance 
+ * 
+ */
+#define rc_new(class) calloc (1, sizeof(class##_t))
+/** 
+ * creates an array of structs
+ * 
+ * allocates memory for array of struct objects
+ */
+#define allocate(class, n) tgc_calloc (&dark_gc, n, sizeof(class##_t))
 
 
 /**

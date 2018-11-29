@@ -25,6 +25,7 @@ SOFTWARE.
 ******************************************************************/
 #ifndef _OBJECT_H_
 #define _OBJECT_H_
+// #include "darkfx.h"
 #include "core.h"
 
 #define OBJECT_TYPE       (TYPE_OBJECT)
@@ -54,5 +55,7 @@ bool DObject_Equals(DObject const, DObject const that);
 int DObject_GetHashCode(DObject const);
 void DObject_Dispose(DObject const);
 DObject DObject_New();
+DObject DObject_Dtor();
+DObject DObject_gc();
 
 #endif _OBJECT_H_ 

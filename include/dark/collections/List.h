@@ -72,6 +72,7 @@ void List_Iterate(List const, void (*iter)(Any));
 void List_Dispose(List const);
 const char* List_ToString(List const);
 List List_New();
+List List_rcNew();
 
 
 #endif _LIST_H_ 

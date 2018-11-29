@@ -51,5 +51,6 @@ class (Boolean)
 
 int Boolean_CompareTo(Boolean const, Boolean other);
 Boolean Boolean_New(bool value);
+Boolean Boolean_rcNew(bool value);
 
 #endif _BOOLEAN_H_

@@ -144,5 +144,10 @@ Float Float_Ctor(Float const this, float value)
  */
 Float Float_New(float value)
 {
-    return Float_Ctor(new(Float), value);
+    return DObject_gc(Float_Ctor(new(Float), value));
+}
+
+Float Float_rcNew(float value)
+{
+    return Float_Ctor(rc_new(Float), value);
 }

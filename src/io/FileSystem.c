@@ -27,14 +27,8 @@ SOFTWARE.
 /* 
  * FileSystem implementation
  */
+static Exception(InternalIOError);
 
-static const char slash = '/';
-static const char semicolon = ';';
-static const char altSlash = (slash == '\\') ? '/' : '\\';
-
-static const char* slashString = { slash, nullptr };
-static const char* semicolonString = { semicolon, nullptr };
-static const char* altSlashString = { altSlash, nullptr };
 
 static bool isSlash(char c) {
     return (c == '\\') || (c == '/');
@@ -47,14 +41,347 @@ static bool isLetter(char c) {
 /**
  * prepend a shash onto a string
  */
-static char* slashify(char* p) {
-    if ((strlen(p) > 0) && (p[0] != slash)) return join(slashString, p);
+String FileSystem_Slashify(FileSystem const this, String p) {
+    if ((p->Length(p)>0) && p->CharAt(p, 0) != this->slash) 
+        return p->Concatc(p, this->slashString);    
     else return p;
 }
 
-char* FileSystem_ToString(FileSystem const this)
-{
+String FileSystem_GetUserPath(FileSystem const this) {
+    String user = String_New(".");
+    String result = this->Normalize(this, user);
+    DObject_Release(user);
+    return result;
+}
+
+String FileSystem_GetDrive(FileSystem const this, String path) {
+    int p1 = this->PrefixLength(this, path);
+    return (p1 == 3) ? String_New(strndup(path->value, 2)) : nullptr;
+}
+
+int FileSystem_DriveIndex(FileSystem const this, char d) {
+    if ((d >= 'a') && (d <= 'z')) return d - 'a';
+    if ((d >= 'A') && (d <= 'Z')) return d - 'A';
+    return -1;
+}
+
+String FileSystem_GetDriveDirectory(FileSystem const this, char drive) {
+    int i = this->DriveIndex(this, drive);
+    if (i < 0) return nullptr;
+    return nullptr;
+    // string s = driveDirCache[i];
+    // if (s != null) return s;
+    // // s = getDriveDirectory(i + 1);
+    // // driveDirCache[i] = s;
+    // return s;
+}
+
+char* FileSystem_ToString(FileSystem const this){
     return "dark.io.FileSystem";
+}
+
+
+char FileSystem_GetSeparator(FileSystem const this) {
+    return this->slash;
+}
+
+char FileSystem_GetPathSeparator(FileSystem const this) {
+    return this->semicolon;
+}
+
+static int NormalizePrefix(FileSystem const this, String path, int len, StringBuilder sb) {
+    int src = 0;
+    while ((src < len) && isSlash(path->value[src])) src++;
+    char c = 0;
+    if ((len - src >= 2)
+        && isLetter(c = path->value[src])
+        && path->value[src+1] == ':') {
+            sb->Appendc(sb, c);
+            sb->Appendc(sb, ':');
+            src += 2;
+    } else {
+        src = 0;
+        if ((len >= 2)
+            && isSlash(path->value[0])
+            && isSlash(path->value[1])) {
+            src = 1;
+            sb->Appendc(sb, c);
+        }
+    }
+    return src;
+}
+
+
+/**
+ * Normalize a chunk of the pathname
+ */
+static String Normalize2(FileSystem const this, String path, int len, int off) {
+    if (len == 0) return path;
+    if (off < 3) off = 0;
+    int src;
+    // char slash = this->slash;
+    String tmp;
+    StringBuilder sb = StringBuilder_New();
+
+    if (off == 0) {
+        src = NormalizePrefix(this, path, len, sb);
+    } else {
+        src = off;
+        sb->Append(sb, strndup(path->value, off));
+
+    }
+    while (src < len) {
+        char c = path->value[src++];
+        if (isSlash(c)) {
+            while ((src < len) && isSlash(path->value[src])) src++;
+            if (src == len) {
+                tmp = sb->Concat(sb);
+                int sn = sb->length;
+                if ((sn == 2) && (tmp->value[1] == ':')) {
+                    sb->Appendc(sb, this->slash);
+                    break;
+                }
+                if (sn == 0) {
+                    sb->Appendc(sb, this->slash);
+                    break;
+                }
+                if ((sn == 1) && (isSlash(tmp->value[0]))) {
+                    sb->Appendc(sb, this->slash);
+                    break;
+                }
+                break;
+            } else {
+                sb->Appendc(sb, this->slash);
+            }
+        } else {
+            sb->Appendc(sb, c);
+        }
+    }
+    String result = sb->Concat(sb);
+    DObject_Release(sb);
+    DObject_Release(tmp);
+    return result;
+}
+
+/**
+ * Normalize path
+ */
+String FileSystem_Normalize(FileSystem const this, String path) {
+    int n = path->length;
+    char slash = this->slash;
+    char altSlash = this->altSlash;
+    char prev = 0;
+
+    for (int i = 0; i < n; i++) {
+        char c = path->CharAt(path, i);
+        if (c == altSlash) 
+            return Normalize2(this, path, n, (prev == slash) ? i - 1 : i);
+        if ((c == slash) && (prev == slash) && i > 1)
+            return Normalize2(this, path, n, i - 1);
+        if ((c == ':') && (i > 1))
+            return Normalize2(this, path, n, 0);
+        prev = c;
+    }
+    if (prev == slash) return Normalize2(this, path, n, n - 1);
+    return path;
+}
+
+int FileSystem_PrefixLength(FileSystem const this, String path) {
+    char slash = this->slash;
+    int n = path->length;
+    if (n == 0) return 0;
+    char c0 = path->value[0];
+    char c1 = (n > 1) ? path->value[1] : 0;
+    if (c0 == slash) {
+        if (c1 == slash) return 2;
+        return 1;
+    }
+    if (isLetter(c0) && (c1 == ':')) {
+        if ((n > 2) && (path->value[2] == slash))
+            return 3;
+        return 2;
+    }
+    return 0;
+}
+
+String FileSystem_Resolve(FileSystem const this, String parent, String child) {
+    int pn = parent->length;
+    if (pn == 0) return child;
+    int cn = child->length;
+    if (cn == 0) return parent;
+
+    char slash = this->slash;
+
+    String c = child;
+    int childStart = 0;
+    int parentEnd = pn;
+
+    if ((cn > 1) && (c->value[0] == slash)) {
+        if (c->value[1] == slash) {
+            childStart = 2;
+        } else {
+            childStart = 1;
+        }
+        if (cn == childStart) {
+            if (parent->value[pn - 1] == slash)
+                return String_New(strndup(parent->value, pn-1));
+            return parent;
+        }
+    }
+
+    if (parent->value[pn - 1] == slash)
+        parentEnd--;
+
+    int len = parentEnd - cn - childStart;
+    char* theChars = nullptr;
+    if (child->value[childStart] == slash) {
+        theChars = calloc(len, sizeof(char));
+        memcpy(theChars, parent->value, parentEnd);
+        memcpy(theChars+parentEnd, child->value+childStart, cn);
+    } else {
+        theChars = calloc(len+1, sizeof(char));
+        memcpy(theChars, parent->value, parentEnd);
+        theChars[parentEnd] = slash;
+        memcpy(theChars+parentEnd+1, child->value+childStart, cn);
+    }
+    return String_New(theChars);
+}
+
+String FileSystem_GetDefaultParent(FileSystem const this) {
+    return String_New(this->slashString);
+}
+
+String FileSystem_FromURIPath(FileSystem const this, String path) {
+    int length = path->length;
+    char* p, z = strndup(path->value, length);
+    if ((length > 2) && (p[2] == ':')) {
+        p++;
+        length--;
+        if ((length > 3) && (p[length - 1] == '/'))
+            length--;
+    } else if ((length > 1) &&  (p[length - 1] == '/')) {
+        length--;
+    }
+    p[length-1] = 0;
+    String result = String_New(p);
+    free(z);
+    return result;
+}
+
+bool FileSystem_IsAbsolute(FileSystem const this, File f) {
+    int p1 = f->GetPrefixLength(f);
+    return  (((p1 == 2) && (f->GetPath(f)->value[0] == this->slash))
+            || p1 == 3);
+}
+
+String FileSystem_ResolveFile(FileSystem const this, File f) {
+    String path = f->GetPath(f);
+    int p1 = f->GetPrefixLength(f);
+    if ((p1 == 2) && path->value[0] == this->slash)
+        return path;
+    if (p1 == 3)
+        return path;
+    if (p1 == 0) {
+        String temp = this->GetUserPath(this);
+        String dir = this->Slashify(this, path);
+        String result = temp->Concat(this, dir);
+        DObject_Release(path);
+        DObject_Release(temp);
+        DObject_Release(dir);
+        return result;
+    }
+    if (p1 == 1) {
+        String up = this->GetUserPath(this);
+        String ud = this->GetDrive(this, up);
+        if (ud != nullptr) {
+            String result = ud->Concat(ud, path);
+            DObject_Release(path);
+            DObject_Release(up);
+            DObject_Release(ud);
+            return result;
+        }
+    }
+    if (p1 == 2) {
+        String up = this->GetUserPath(this);
+        String ud = this->GetDrive(this, up);
+        if ((ud != nullptr) && path->StartsWith(path, ud, 0)) {
+            String temp = String_New(strndup(path->value, 2));
+            String dir = this->Slashify(this, temp);
+            String result = up->Concat(up, dir);
+            DObject_Release(path);
+            DObject_Release(temp);
+            DObject_Release(dir);
+            DObject_Release(up);
+            DObject_Release(ud);
+            return result;
+        }
+        char drive = path->value[0];
+        String dir = this->GetDriveDirectory(this, drive);
+        String temp = String_New(strndup(path->value, 2));
+        StringBuilder p = StringBuilder_New();
+        p->Appendc(p, drive);
+        p->Appendc(p, ':');
+        p->Append(p, dir);
+        p->Append(p, temp);
+        String result = p->Concat(p);
+        DObject_Release(path);
+        DObject_Release(temp);
+        DObject_Release(dir);
+        DObject_Release(up);
+        DObject_Release(ud);
+        DObject_Release(p);
+        return result;
+    }
+    return InternalIOErrorException("Unresolvable path: %s", path->value);
+}
+
+String FileSystem_Canonicalize(FileSystem const this, String path) {
+
+}
+int FileSystem_GetBooleanAttributes(FileSystem const this, File f) {
+
+}
+bool FileSystem_CheckAccess(FileSystem const this, File f, int access) {
+
+}
+bool FileSystem_SetPermission(FileSystem const this, File f, int access, bool enable, bool owneronly) {
+
+}
+long FileSystem_GetLastModifiedTime(FileSystem const this, File f) {
+
+}
+long FileSystem_GetLength(FileSystem const this, File f) {
+
+}
+bool FileSystem_CreateFileExclusively(FileSystem const this, String path) {
+
+}
+bool FileSystem_Delete(FileSystem const this, File f) {
+
+}
+String* FileSystem_List(FileSystem const this, File f) {
+
+}
+bool FileSystem_CreateDirectory(FileSystem const this, File f) {
+
+}
+bool FileSystem_Rename(FileSystem const this, File f1, File f2) {
+
+}
+bool FileSystem_SetLastModifiedTime(FileSystem const this, File f, long time) {
+
+}
+String* FileSystem_SetReadOnly(FileSystem const this, File f) {
+
+}
+File* FileSystem_ListRoots(FileSystem const this) {
+
+}
+int FileSystem_Compare(FileSystem const this, File f1, File f2) {
+
+}
+int FileSystem_HashCode(FileSystem const this, File f) {
+
 }
 
 /**
@@ -62,9 +389,21 @@ char* FileSystem_ToString(FileSystem const this)
  */
 FileSystem FileSystem_Ctor(FileSystem const this)
 {
-    Number_Ctor(this);
+    DObject_Ctor(this);
 
-    this->ToString      = FileSystem_ToString;
+    this->ToString = FileSystem_ToString;
+
+    this->slash = '/';
+    this->semicolon = ';';
+    this->altSlash = (this->slash == '\\') ? '/' : '\\';
+
+    char slash_string[2] = { this->slash, 0 };
+    char semi_colon_string[2] = { this->semicolon, 0 };
+    char alt_slash_string[2] = { this->altSlash, 0 };
+    
+    this->slashString = strdup(slash_string);
+    this->semicolonString = strdup(semi_colon_string);
+    this->altSlashString = strdup(alt_slash_string);
 
     return this;
 }

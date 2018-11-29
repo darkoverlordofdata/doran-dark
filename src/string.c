@@ -26,25 +26,27 @@ SOFTWARE.
 #include <stdarg.h>
 #include <dark/core.h>
 
+//  some string related functions that should be in the stdlib
+
 /**
  * strrstr - Returns a pointer to the first occurrence of str2 
  * in str1, or a null pointer if str2 is not part of str1.
  * 
  * @param str string to search in
- * @param find string to search for
+ * @param str2 string to search for
  * @return ptr to the substring
  */
-char * strrstr(char *str, char *find)
+char * strrstr(char *str1, char *str2)
 {
   char *result;
-  size_t slen = strlen(str);
-  size_t flen = strlen(find);
+  size_t slen = strlen(str1);
+  size_t flen = strlen(str2);
   if (flen > slen) return nullptr;
 
 
-  for (result = str + slen - flen; result >= str; result--)
+  for (result = str1 + slen - flen; result >= str1; result--)
   {
-    if (strncmp(result, find, flen) == 0)
+    if (strncmp(result, str2, flen) == 0)
         return result;
   }
   return nullptr;
@@ -68,6 +70,13 @@ char * strndup (const char *str, size_t size)
   return strncpy(result, str, len);
 }
 
+/**
+ * join strings
+ * 
+ * @param count of strings
+ * @param ... list of char*'s
+ * @returns all strings concantenated together.
+ */
 char* STR_JOIN(int count, ...)
 {
     int size = 0;

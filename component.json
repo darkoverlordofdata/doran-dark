@@ -22,6 +22,7 @@
     "src/collections/List.c", 
     "src/collections/Vector.c", 
     "src/io/FileSystem.c", 
+    "src/io/File.c", 
     "src/types/Boolean.c", 
     "src/types/Char.c",
     "src/types/Double.c",

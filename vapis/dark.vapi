@@ -1,19 +1,25 @@
 [CCode (cprefix = "", lower_case_cprefix = "", cheader_filename = "dark/darkfx.h")]
 namespace Dark 
 {
+
+	//  [CCode (cname = "tgc_t")]
+	//  public struct tgc_t {}
+	//  [CCode (cname = "tgc_start")]
+	//  public void tgc_start(tgc_t* gc, void* stk);
+	//  [CCode (cname = "tgc_stop")]
+	//  public void tgc_stop(tgc_t* gc);
+	//  [CCode (cname = "tgc_run")]
+	//  void tgc_run(tgc_t *gc);
+
 	public const int MajorVersion;
 	public const int MinorVersion;
 	public const int BuildVersion;
-
-	public String _ (string value) {
-		return new String(value);
-	}
 
 	[Compact]
 	[CCode (cname = "DObject_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
 	public abstract class DObject
 	{
-		[CCode (cname = "DObject_New")]
+		[CCode (cname = "DObject_rcNew")]
 		public DObject();
 		[CCode (cname = "DObject_ToString")]
 		public abstract unowned string ToString();
@@ -73,7 +79,7 @@ namespace Dark
 		public static long ParseLong(string s, int radix = 10);
 
 		public long value;
-		[CCode (cname = "Long_New")]
+		[CCode (cname = "Long_rcNew")]
 		public Long(long value);
 		[CCode (cname = "Long_CompareTo")]
 		public override int CompareTo(Comparable other);
@@ -112,7 +118,7 @@ namespace Dark
 		public static short ParseShort(string s, int radix = 10);
 
 		public long value;
-		[CCode (cname = "Short_New")]
+		[CCode (cname = "Short_rcNew")]
 		public Short(short value);
 		[CCode (cname = "Short_CompareTo")]
 		public override int CompareTo(Comparable other);
@@ -151,7 +157,7 @@ namespace Dark
 		public static int ParseInt(string s, int radix = 10);
 
 		public int value;
-		[CCode (cname = "Integer_New")]
+		[CCode (cname = "Integer_rcNew")]
 		public Integer(int value);
 		[CCode (cname = "Integer_CompareTo")]
 		public override int CompareTo(Comparable other);
@@ -187,7 +193,7 @@ namespace Dark
 		public const int Type;
 
 		public int value;
-		[CCode (cname = "Char_New")]
+		[CCode (cname = "Char_rcNew")]
 		public Char(char value);
 		[CCode (cname = "Char_CompareTo")]
 		public override int CompareTo(Comparable other);
@@ -226,7 +232,7 @@ namespace Dark
 		public static float ParseFloat(string s);
 
 		public int value;
-		[CCode (cname = "Float_New")]
+		[CCode (cname = "Float_rcNew")]
 		public Float(float value);
 		[CCode (cname = "Float_CompareTo")]
 		public override int CompareTo(Comparable other);
@@ -265,7 +271,7 @@ namespace Dark
 		public static double ParseDouble(string s);
 
 		public int value;
-		[CCode (cname = "Double_New")]
+		[CCode (cname = "Double_rcNew")]
 		public Double(double value);
 		[CCode (cname = "Double_CompareTo")]
 		public override int CompareTo(Comparable other);
@@ -300,7 +306,7 @@ namespace Dark
 
 		public bool value;
 
-		[CCode (cname = "Boolean_New")]
+		[CCode (cname = "Boolean_rcNew")]
 		public Boolean(long value);
 		[CCode (cname = "Boolean_CompareTo")]
 		public override int CompareTo(Comparable other);
@@ -326,7 +332,7 @@ namespace Dark
 			return (string)this.value;
 		}
 
-		[CCode (cname = "String_New")]
+		[CCode (cname = "String_rcNew")]
 		public String(char* value);
 		[CCode (cname = "String_CompareTo")]
 		public override int CompareTo(Comparable other);
@@ -370,18 +376,18 @@ namespace Dark
 	[CCode (cname = "StringBuilder_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
 	public class StringBuilder : DObject
 	{
-		[CCode (cname = "StringBulder_New")]
+		[CCode (cname = "StringBuilder_rcNew")]
 		public StringBuilder();
-		[CCode (cname = "StringBulder_Empty")]
+		[CCode (cname = "StringBuilder_Empty")]
 		public int Empty();
-		[CCode (cname = "StringBulder_Append")]
+		[CCode (cname = "StringBuilder_Append")]
 		public int Append(char* str);
 		[PrintfFormat]
-		[CCode (cname = "StringBulder_Appendf")]
+		[CCode (cname = "StringBuilder_Appendf")]
 		public int Appendf(string format, ...);
-		[CCode (cname = "StringBulder_Concat")]
-		public char* Concat();
-		[CCode (cname = "StringBulder_Reset")]
+		[CCode (cname = "StringBuilder_Concat")]
+		public String Concat();
+		[CCode (cname = "StringBuilder_Reset")]
 		public void Reset();
 	}	
 	
@@ -408,7 +414,7 @@ namespace Dark
 		public class List<G> : DObject
 		{
 			public ListNode<G>* head;
-			[CCode (cname = "List_New")]
+			[CCode (cname = "List_rcNew")]
 			public List();
 			[CCode (cname = "List_Add")]
 			public int Insert(owned G data, Compare func);
@@ -445,7 +451,7 @@ namespace Dark
 			public int tableSize;
 			public int size;
 			public HashmapNode* data;
-			[CCode (cname = "Hashmap_New")]
+			[CCode (cname = "Hashmap_rcNew")]
 			public Hashmap();
 			[CCode (cname = "Hashmap_HashInt")]
 			public uint HashInt(string keystring);
@@ -479,7 +485,7 @@ namespace Dark
 			public void **data;
 			public int capacity;
 			public int count;
-			[CCode (cname = "Vector_New")]
+			[CCode (cname = "Vector_rcNew")]
 			public Vector(int capacity = 0);
 			[CCode (cname = "Vector_Vala")]
 			public Vector.From(owned G first, ...);

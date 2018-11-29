@@ -55,10 +55,8 @@ SOFTWARE.
 #ifndef _STRING_BUILDER_H_
 #define _STRING_BUILDER_H_
 #include <string.h>
-#include "../DObject.h"
-
-#define SB_FAILURE				-1
-#define SB_MAX_FRAG_LENGTH		4096
+// #include "../DObject.h"
+#include "String.h"
 
 class (StringFragment)
 {
@@ -81,8 +79,9 @@ class (StringBuilder)
             void        (*Dispose) (DObject const);
             int         (*Empty) (StringBuilder const);
             int         (*Append) (StringBuilder const, char* str);
+            int         (*Appendc) (StringBuilder const, char c);
             int         (*Appendf) (StringBuilder const, char* str, ...);
-            char        (*Concat) (StringBuilder const);
+            String      (*Concat) (StringBuilder const);
             void        (*Reset) (StringBuilder const);
 
         };
@@ -93,11 +92,13 @@ class (StringBuilder)
 };
 
 StringBuilder StringBuilder_New();
+StringBuilder StringBuilder_rcNew();
 int StringBuilder_Empty(StringBuilder sb);
+int StringBuilder_Appendc(StringBuilder sb, const char c);
 int StringBuilder_Append(StringBuilder sb, const char *str);
 __attribute__((__format__ (__printf__, 2, 3)))
 int StringBuilder_Appendf(StringBuilder sb, const char *format, ...);
-char StringBuilder_Concat(StringBuilder sb);
+String StringBuilder_Concat(StringBuilder sb);
 void StringBuilder_Reset(StringBuilder sb);
 
 #endif _STRING_BUILDER_H_

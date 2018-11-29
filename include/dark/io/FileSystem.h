@@ -27,6 +27,26 @@ SOFTWARE.
 #define _FILE_SYSTEM_H_
 #include <stdio.h>
 #include "../DObject.h"
+#include "../types/StringBuilder.h"
+#include "File.h"
+
+cyclic_reference(File);
+
+#define BA_EXISTS    0xffff
+#define BA_FIFO      0x1000
+#define BA_CHAR      0x2000
+#define BA_BLOCK     0x3000
+#define BA_DIRECTORY 0x4000
+#define BA_REGULAR   0x8000
+
+#define ACCESS_READ    0400
+#define ACCESS_WRITE   0200
+#define ACCESS_EXECUTE 0100
+
+#define SPACE_TOTAL  0
+#define SPACE_FREE   1
+#define SPACE_USABLE 2
+
 
 class (FileSystem)
 {
@@ -41,6 +61,44 @@ class (FileSystem)
             void        (*Dispose) (DObject const);
         };
     };
+
+    char                slash;
+    char                semicolon;
+    char                altSlash;
+    char*               slashString;
+    char*               semicolonString;
+    char*               altSlashString;
+    String              (*Slashify) (FileSystem const, String path);
+    String              (*GetUserPath) (FileSystem const);
+    String              (*GetDrive) (FileSystem const, String path);
+    int                 (*DriveIndex) (FileSystem const, char drive);
+    String              (*GetDriveDirectory) (FileSystem const, char drive);
+    char                (*GetSeparator) (FileSystem const);
+    char                (*GetPathSeparator) (FileSystem const);
+    String              (*Normalize) (FileSystem const, String path);
+    int                 (*PrefixLength) (FileSystem const, String path);
+    String              (*Resolve) (FileSystem const, String parent, String child);
+    String              (*GetDefaultParent) (FileSystem const);
+    String              (*FromURIPath) (FileSystem const, String path);
+    bool                (*IsAbsolute) (FileSystem const, File f);
+    String              (*ResolveFile) (FileSystem const, File f);
+    String              (*Canonicalize) (FileSystem const, String path);
+    int                 (*GetBooleanAttributes) (FileSystem const, File f);
+    bool                (*CheckAccess) (FileSystem const, File f, int access);
+    bool                (*SetPermission) (FileSystem const, File f, int access, bool enable, bool owneronly);
+    long                (*GetLastModifiedTime) (FileSystem const, File f);
+    long                (*GetLength) (FileSystem const, File f);
+    bool                (*CreateFileExclusively) (FileSystem const, String path);
+    bool                (*Delete) (FileSystem const, File f);
+    String*             (*List) (FileSystem const, File f);
+    bool                (*CreateDirectory) (FileSystem const, File f);
+    bool                (*Rename) (FileSystem const, File f1, File f2);
+    bool                (*SetLastModifiedTime) (FileSystem const, File f, long time);
+    String*             (*SetReadOnly) (FileSystem const, File const);
+    File*               (*ListRoots) (FileSystem const);
+    int                 (*Compare) (FileSystem const, File f1, File f2);
+    int                 (*HashCode) (FileSystem const, File f);
+
 
 };
 

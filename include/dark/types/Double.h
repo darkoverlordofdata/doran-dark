@@ -64,5 +64,6 @@ double Double_DoubleValue(Double const);
 char Double_CharValue(Double const);
 short Double_ShortValue(Double const);
 Double Double_New(double value);
+Double Double_rcNew(double value);
 
 #endif _DOUBLE_H_

@@ -162,6 +162,10 @@ List List_Ctor(List const this)
 
 List List_New()
 {
-    return List_Ctor(new(List));
+    return DObject_gc(List_Ctor(new(List)));
 }
 
+List List_rcNew()
+{
+    return List_Ctor(rc_new(List));
+}

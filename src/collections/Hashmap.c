@@ -375,5 +375,11 @@ Hashmap Hashmap_Ctor(Hashmap const this)
 
 Hashmap Hashmap_New()
 {
-    return Hashmap_Ctor(new(Hashmap));
+    return DObject_gc(Hashmap_Ctor(new(Hashmap)));
 }
+
+Hashmap Hashmap_rcNew()
+{
+    return Hashmap_Ctor(rc_new(Hashmap));
+}
+

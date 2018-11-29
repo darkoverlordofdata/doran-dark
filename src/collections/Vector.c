@@ -120,6 +120,7 @@ void Vector_Delete(Vector const this, int index)
  */
 void Vector_Dispose(Vector const this)
 {
+    printf("Vector_Dispose %d\n", this->RefCount);
     free(this->data);
 }
 
@@ -173,7 +174,12 @@ Vector Vector_Ctor(Vector const this, int capacity)
  */
 Vector Vector_New(int capacity)
 {
-    return Vector_Ctor(new(Vector), capacity);
+    return DObject_gc(Vector_Ctor(new(Vector), capacity));
+}
+
+Vector Vector_rcNew(int capacity)
+{
+    return Vector_Ctor(rc_new(Vector), capacity);
 }
 
 /**

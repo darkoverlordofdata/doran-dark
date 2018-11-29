@@ -64,5 +64,6 @@ double Float_DoubleValue(Float const);
 char Float_CharValue(Float const);
 short Float_ShortValue(Float const);
 Float Float_New(float value);
+Float Float_rcNew(float value);
 
 #endif _FLOAT_H_

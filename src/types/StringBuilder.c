@@ -57,7 +57,7 @@ SOFTWARE.
  * StringBuilder implementation
  */
 
-static Exception(IndexOutOfBounds);
+static Exception(OutOfMemory);
 
 /*
  * sb_empty returns non-zero if the given StringBuilder is empty.
@@ -67,6 +67,14 @@ int StringBuilder_Empty(StringBuilder this)
 	return (this->root == nullptr);
 }
 
+
+int StringBuilder_Appendc(StringBuilder this, const char c)
+{
+	char str[2] = { c, 0 };
+	return this->Appendc(this, str);
+
+
+}
 /*
  * sb_append adds a copy of the given string to a StringBuilder.
  */
@@ -79,13 +87,13 @@ int StringBuilder_Append(StringBuilder this, const char *str)
 		return this->length;
 
 	length = strlen(str);
-	frag = (StringFragment) malloc(sizeof(StringFragment_t) + (sizeof(char) * length));
+	frag = (StringFragment) calloc(1, sizeof(StringFragment_t));
 	if (nullptr == frag)
-		return SB_FAILURE;
+		return OutOfMemoryException("StringBuilder::Append");
 
 	frag->next = nullptr;
 	frag->length = length;
-	memcpy((void*) &frag->str, (const void*) str, sizeof(char) * (length + 1));
+	frag->str = strdup(str);
 
 	this->length += length;
 	if (nullptr == this->root)
@@ -94,10 +102,8 @@ int StringBuilder_Append(StringBuilder this, const char *str)
 		this->trunk->next = frag;
 
 	this->trunk = frag;
-
 	return this->length;
 }
-
 
 /*
  * sb_appendf adds a copy of the given formatted string to a StringBuilder.
@@ -105,16 +111,17 @@ int StringBuilder_Append(StringBuilder this, const char *str)
 __attribute__((__format__ (__printf__, 2, 3)))
 int StringBuilder_Appendf(StringBuilder this, const char *format, ...)
 {
-	int rc = 0;
-	char buf[SB_MAX_FRAG_LENGTH];
+	const int MAX_FRAG_LENGTH = 4096;
+	int len = 0;
+	char buf[MAX_FRAG_LENGTH];
 	va_list args;
 
-	va_start (args, format);
-	rc = vsnprintf(&buf[0], SB_MAX_FRAG_LENGTH, format, args);
+	va_start(args, format);
+	len = vsnprintf(&buf[0], MAX_FRAG_LENGTH, format, args);
 	va_end(args);
 
-	if (0 > rc)
-		return SB_FAILURE;
+	if (0 > len)
+		return OutOfMemoryException("StringBuilder::Append");
 
 	return StringBuilder_Append(this, buf);
 }
@@ -127,13 +134,13 @@ int StringBuilder_Appendf(StringBuilder this, const char *format, ...)
  * The StringBuilder is not modified by this function and can therefore continue
  * to be used.
  */
-char StringBuilder_Concat(StringBuilder this)
+String StringBuilder_Concat(StringBuilder this)
 {
 	char *buf = nullptr;
 	char *c = nullptr;
 	StringFragment	frag = nullptr;
 
-	buf = (char *) malloc((this->length + 1) * sizeof(char));
+	buf = calloc(this->length + 1, sizeof(char));
 	if (nullptr == buf)
 		return nullptr;
 
@@ -144,7 +151,8 @@ char StringBuilder_Concat(StringBuilder this)
 	}
 
 	*c = '\0';
-	return buf;
+	return String_New(buf);
+	// return buf;
 }
 
 /*
@@ -159,6 +167,7 @@ void StringBuilder_Reset(StringBuilder this)
 	frag = this->root;
 	while(frag) {
 		next = frag->next;
+		free(frag->str);
 		free(frag);
 		frag = next;
 	}
@@ -188,6 +197,7 @@ StringBuilder StringBuilder_Ctor(StringBuilder const this)
     DObject_Ctor(this);
 
     this->Append    = StringBuilder_Append;
+	this->Appendc 	= StringBuilder_Appendc;
     this->Appendf   = StringBuilder_Appendf;
     this->Concat    = StringBuilder_Concat;
     this->Dispose   = StringBuilder_Dispose;
@@ -199,5 +209,10 @@ StringBuilder StringBuilder_Ctor(StringBuilder const this)
 
 StringBuilder StringBuilder_New()
 {
-    return StringBuilder_Ctor(new(StringBuilder));
+    return DObject_gc(StringBuilder_Ctor(new(StringBuilder)));
+}
+
+StringBuilder StringBuilder_rcNew()
+{
+    return StringBuilder_Ctor(rc_new(StringBuilder));
 }

@@ -7,6 +7,8 @@ cmake_minimum_required ( VERSION 3.1 )
 project ( dark VERSION 0.1.0 )
 
 
+list ( APPEND CSOURCE .lib/dark/vendor/tgc/tgc.c )
+list ( APPEND CSOURCE .lib/dark/src/gc.c )
 list ( APPEND CSOURCE .lib/dark/src/string.c )
 list ( APPEND CSOURCE .lib/dark/src/Comparable.c )
 list ( APPEND CSOURCE .lib/dark/src/DObject.c )
@@ -14,6 +16,7 @@ list ( APPEND CSOURCE .lib/dark/src/collections/Hashmap.c )
 list ( APPEND CSOURCE .lib/dark/src/collections/List.c )
 list ( APPEND CSOURCE .lib/dark/src/collections/Vector.c )
 list ( APPEND CSOURCE .lib/dark/src/io/FileSystem.c )
+list ( APPEND CSOURCE .lib/dark/src/io/File.c )
 list ( APPEND CSOURCE .lib/dark/src/types/Boolean.c )
 list ( APPEND CSOURCE .lib/dark/src/types/Number.c )
 list ( APPEND CSOURCE .lib/dark/src/types/Char.c )
@@ -26,9 +29,11 @@ list ( APPEND CSOURCE .lib/dark/src/types/String.c )
 list ( APPEND CSOURCE .lib/dark/src/types/StringBuilder.c )
 
 list ( APPEND VAPI .lib/dark/vapis/dark.vapi )
+list ( APPEND INC ${CMAKE_SOURCE_DIR}/.lib/dark/include )
+list ( APPEND INC ${CMAKE_SOURCE_DIR}/.lib/dark/vendor/tgc )
 
 ## Export to the parent scope:
 
 set ( C_SOURCES "${C_SOURCES};${CSOURCE}" PARENT_SCOPE )
-set ( INCLUDES "${INCLUDES}; ${CMAKE_SOURCE_DIR}/.lib/dark/include" PARENT_SCOPE )
+set ( INCLUDES "${INCLUDES}; ${INC}" PARENT_SCOPE )
 set ( CUSTOM_VAPIS "${CUSTOM_VAPIS};${VAPI}" PARENT_SCOPE )

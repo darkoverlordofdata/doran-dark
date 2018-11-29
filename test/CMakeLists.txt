@@ -21,10 +21,10 @@ find_package (Vala REQUIRED)
 #
 #   libraries - sources & packages
 #
-add_subdirectory ( .lib/dark )
 add_subdirectory ( .lib/jasmine )
 add_subdirectory ( .lib/system )
 add_subdirectory ( .lib/zerog )
+add_subdirectory ( .lib/dark )
 if (EXISTS ${CMAKE_SOURCE_DIR}/data AND NOT DEFINED ZEROG )
     add_subdirectory (data)
     list ( APPEND RESOURCES ${resources_gresource_xml_C_FILE} )
@@ -43,8 +43,8 @@ file (RELATIVE_PATH CONFIG_VALA ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR}/src/Conf
 #   application source
 #
 list ( APPEND VALA_SOURCES ${CONFIG_VALA} )
-list ( APPEND VALA_SOURCES src/unit.vala )
 list ( APPEND VALA_SOURCES src/TestTypes.vala )
+list ( APPEND VALA_SOURCES src/unit.vala )
 #
 #   application includes
 #
@@ -54,8 +54,6 @@ list ( APPEND VALA_SOURCES src/TestTypes.vala )
 #
 
 #
-
-
 add_definitions ( ${DEPS_CFLAGS} )
 link_libraries ( ${DEPS_LIBRARIES} )
 link_directories ( ${DEPS_LIBRARY_DIRS} )
@@ -102,7 +100,6 @@ add_executable ( ${PROJECT_NAME} ${VALA_C} ${C_SOURCES} ${RESOURCES} )
 add_custom_command(TARGET ${PROJECT_NAME} 
                    POST_BUILD COMMAND 
                    ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}> .. )
-
 target_link_libraries ( ${PROJECT_NAME} m  )
 install (TARGETS ${PROJECT_NAME} RUNTIME DESTINATION . )
 

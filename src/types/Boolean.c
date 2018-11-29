@@ -100,5 +100,10 @@ Boolean Boolean_Ctor(Boolean const this, bool value)
  */
 Boolean Boolean_New(bool value)
 {
-    return Boolean_Ctor(new(Boolean), value);
+    return DObject_gc(Boolean_Ctor(new(Boolean), value));
+}
+
+Boolean Boolean_rcNew(bool value)
+{
+    return Boolean_Ctor(rc_new(Boolean), value);
 }

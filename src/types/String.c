@@ -62,6 +62,19 @@ int String_CompareToIgnoreCase(String this, String str) {
     return strcmpi(this->value, str->value);
 }
 
+String String_Concatc(String this, char* other) {
+    int length = strlen(other);
+    if (length == 0) return this;
+    int len = this->length;
+    char* str = calloc(len+length+1, sizeof(char));
+    strncpy(str, this->value, len);
+    strncpy(str+len, other, length);
+    String result = String_New(str);
+    free(str);
+    return result;
+
+}
+
 String String_Concat(String this, String other) {
     if (other->length == 0)
         return this;
@@ -69,7 +82,7 @@ String String_Concat(String this, String other) {
     int len = this->length;
     char* str = calloc(len+other->length+1, sizeof(char));
     strncpy(str, this->value, len);
-    strncpy(str+other->length, other->value, other->length);
+    strncpy(str+len, other->value, other->length);
     String result = String_New(str);
     free(str);
     return result;
@@ -166,6 +179,7 @@ String String_Ctor(String const this, char* value)
     this->CharAt        = String_CharAt;
     this->CompareToIgnoreCase = String_CompareToIgnoreCase;
     this->Concat        = String_Concat;
+    this->Concatc       = String_Concatc;
     this->Contains      = String_Contains;
     this->CopyOf        = String_CopyOf;
     this->EndsWith      = String_EndsWith;
@@ -193,7 +207,12 @@ String String_Ctor(String const this, char* value)
  */
 String String_New(char* value)
 {
-    return String_Ctor(new(String), value);
+    return DObject_gc(String_Ctor(new(String), value));
+}
+
+String String_rcNew(char* value)
+{
+    return String_Ctor(rc_new(String), value);
 }
 
 __attribute__((__format__ (__printf__, 1, 2)))
