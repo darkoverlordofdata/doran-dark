@@ -41,7 +41,6 @@ SOFTWARE.
  * MyClass_dtor     singleton destructor
  */
 
-// use in header:
 /** 
  * class definition
  * 
@@ -78,6 +77,16 @@ SOFTWARE.
  *   ...
  */
 #define extends(class) class##_t _
+/**
+ * RefCount is the first data item in an object
+ * ... if we are using ARC that is.
+ */
+#ifdef __ARC__
+#define REFCOUNT int         RefCount;
+#else
+#define REFCOUNT
+#endif
+
 
 /** 
  * register singleton 
@@ -95,23 +104,36 @@ SOFTWARE.
     static const name##_t * name##_auto(name##_t * const this)
 
 /** 
- * Create a new gc'd class instance 
+ * Create a new class instance 
  * allocates memory for 1 object
  * 
  */
+#ifdef __ARC__
+#define new(class) calloc (1, sizeof(class##_t))
+#else
 #define new(class) tgc_calloc_opt (&dark_gc, 1, sizeof(class##_t), 0, DObject_Dtor)
+#endif
 /** 
- * Create a new rc'd class instance 
+ * Delete an object created with new 
+ * deallocates the memory for 1 object
  * 
  */
-#define rc_new(class) calloc (1, sizeof(class##_t))
+#ifdef __ARC__
+#define delete(x) free(x)
+#else
+define delete(x) tgc_free(&dark_gc, x);
+#endif
+/** 
 /** 
  * creates an array of structs
  * 
  * allocates memory for array of struct objects
  */
+#ifdef __ARC__
+#define allocate(class, n) calloc (n, sizeof(class##_t))
+#else
 #define allocate(class, n) tgc_calloc (&dark_gc, n, sizeof(class##_t))
-
+#endif
 
 /**
  * A class is a pointer to a struct class_t.

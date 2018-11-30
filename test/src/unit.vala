@@ -21,8 +21,8 @@ public class Unit {
 
     // public static void unittest() {
     static int main (string[] args) {
-        print("Dark Framework Test Suite\n");
-        print("=========================\n");
+        print("Dark Framework %d.%d.%d Test Suite\n", Dark.MajorVersion, Dark.MinorVersion, Dark.BuildVersion);
+        print("================================================================\n\n");
         TestTypes();
 
         var m = new String("this quick brown fox");
@@ -38,13 +38,13 @@ public class Unit {
         Dark.String s = sb.Concat();
         print(@"concat = $s\n");
 
-        // var x = new Dark.StringBuilder();
-        // x.Append("Old record speeds: ");
-        // x.Appendf("%f %d", 33.3, 45);
-        // print(@"$(x.Concat())\n");
+        var x = new Dark.StringBuilder();
+        x.Append("Old record speeds: ");
+        x.Appendf("%f %d", 33.3, 45);
+        print(@"$(x.Concat())\n");
 
-        // var v = new Dark.Collections.Vector<int>();
-        // v.Add(1);
+        var v = new Dark.Collections.Vector<int>();
+        v.Add(1);
 
 
         print("bye\n");

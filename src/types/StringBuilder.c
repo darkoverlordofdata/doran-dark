@@ -183,7 +183,6 @@ void StringBuilder_Reset(StringBuilder this)
 void StringBuilder_Dispose(StringBuilder this)
 {
 	StringBuilder_Reset(this);
-	free(this);
 }
 
 
@@ -209,10 +208,6 @@ StringBuilder StringBuilder_Ctor(StringBuilder const this)
 
 StringBuilder StringBuilder_New()
 {
-    return DObject_gc(StringBuilder_Ctor(new(StringBuilder)));
+    return StringBuilder_Ctor(new(StringBuilder));
 }
 
-StringBuilder StringBuilder_rcNew()
-{
-    return StringBuilder_Ctor(rc_new(StringBuilder));
-}

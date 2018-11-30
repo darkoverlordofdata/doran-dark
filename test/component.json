@@ -27,8 +27,12 @@
     "VERSION": "0.0.1",
     "RELEASE_NAME": "darkly"
   },
-  "definitions": [],
-  "symbols": [],
+  "definitions": [
+    "__TGC__"
+  ],
+  "symbols": [
+    "__TGC__"
+  ],
   "copy": "..",
   "vapidir": "/src/vapis",
   "console": false

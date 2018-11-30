@@ -28,20 +28,21 @@ SOFTWARE.
  * Abstract Comparable
  */
 
+static Exception(AbstractMethod);
+
 
 int Comparable_CompareTo(Comparable this, Comparable other) {
     return this->CompareTo(this, other);
 }
 static short abstract_CompareTo(Comparable const this, Comparable other) {
-    printf("abstract_CompareTo\n");
-    return 0;
+    return AbstractMethodException("Comparable_CompareTo");
 }
 
 char* Comparable_ToString(Comparable const this) {
     return this->ToString(this);
 }
-static char* abstract_ToString(Comparable const this) {
-    return "Dark.Comparable";
+static char* virtual_ToString(Comparable const this) {
+    return "dark.Comparable";
 }
 
 /**
@@ -51,7 +52,7 @@ Comparable Comparable_Ctor(Comparable const this)
 {
     DObject_Ctor(this);
 
-    this->ToString      = abstract_ToString;
+    this->ToString      = virtual_ToString;
     this->CompareTo     = abstract_CompareTo;
 
     return this;

@@ -133,10 +133,6 @@ Char Char_Ctor(Char const this, char value)
  */
 Char Char_New(char value)
 {
-    return DObject_gc(Char_Ctor(new(Char), value));
+    return Char_Ctor(new(Char), value);
 }
 
-Char Char_rcNew(char value)
-{
-    return Char_Ctor(rc_new(Char), value);
-}

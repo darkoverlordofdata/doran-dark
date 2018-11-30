@@ -144,10 +144,6 @@ Short Short_Ctor(Short const this, short value)
  */
 Short Short_New(short value)
 {
-    return DObject_gc(Short_Ctor(new(Short), value));
+    return Short_Ctor(new(Short), value);
 }
 
-Short Short_rcNew(short value)
-{
-    return Short_Ctor(rc_new(Short), value);
-}

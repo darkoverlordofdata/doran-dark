@@ -101,7 +101,7 @@ Any List_Pop(List const this)
     Any popped_data = head->data;
     this->head = head->next;
 
-    free(head);
+    delete(head);
 
     return popped_data;
 }
@@ -127,9 +127,9 @@ void List_Dispose(List const this)
     ListNode next;
 
     while (curr != nullptr) {
-        free(curr->data);
+        delete(curr->data);
         next = curr->next;
-        free(curr);
+        delete(curr);
         curr = next;
     }
 }
@@ -162,10 +162,6 @@ List List_Ctor(List const this)
 
 List List_New()
 {
-    return DObject_gc(List_Ctor(new(List)));
+    return List_Ctor(new(List));
 }
 
-List List_rcNew()
-{
-    return List_Ctor(rc_new(List));
-}

@@ -35,8 +35,7 @@ SOFTWARE.
  */
 class (DObject) 
 {
-    int RefCount;
-
+    REFCOUNT
     char* (*ToString)(DObject const);
     bool (*Equals)(DObject const, DObject const);
     int (*GetHashCode)(DObject const);
@@ -46,8 +45,10 @@ class (DObject)
 /**
  * DObject API
  */
+#ifdef __ARC__
 DObject DObject_AddRef(DObject const);
 DObject DObject_Release(DObject const);
+#endif
 bool DObject_ReferenceEquals(DObject const objA, DObject const objB);
 bool DObject_InstanceEquals(DObject const objA, DObject const objB);
 const char* DObject_ToString(DObject const);
@@ -56,6 +57,5 @@ int DObject_GetHashCode(DObject const);
 void DObject_Dispose(DObject const);
 DObject DObject_New();
 DObject DObject_Dtor();
-DObject DObject_gc();
 
 #endif _OBJECT_H_ 

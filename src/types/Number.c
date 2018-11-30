@@ -28,6 +28,7 @@ SOFTWARE.
 /* 
  * Abstract Number
  */
+static Exception(AbstractMethod);
 
 
 /**
@@ -42,8 +43,7 @@ int Number_CompareTo(Number this, Number other) {
     return this->CompareTo(this, other);
 }
 static short abstract_CompareTo(Number const this, Number other) {
-    printf("abstract_CompareTo\n");
-    return 0;
+    return AbstractMethodException("Number_CompareTo");
 }
 
 /**
@@ -53,8 +53,7 @@ int Number_IntValue(Number const this) {
     return this->IntValue(this);
 }
 static int abstract_IntValue(Number const this) {
-    printf("abstract_IntValue\n");
-    return 0;
+    return AbstractMethodException("Number_IntValue");
 }
 
 /**
@@ -64,8 +63,7 @@ long Number_LongValue(Number const this) {
     return this->LongValue(this);
 }
 static long abstract_LongValue(Number const this) {
-    printf("abstract_LongValue\n");
-    return 0;
+    return AbstractMethodException("Number_LongValue");
 }
 
 /**
@@ -75,8 +73,7 @@ float Number_FloatValue(Number const this) {
     return this->FloatValue(this);
 }
 static float abstract_FloatValue(Number const this) {
-    printf("abstract_FloatValue\n");
-    return 0;
+    return AbstractMethodException("Number_FloatValue");
 }
 
 /**
@@ -86,8 +83,7 @@ double Number_DoubleValue(Number const this) {
     return this->DoubleValue(this);
 }
 static double abstract_DoubleValue(Number const this) {
-    printf("abstract_DoubleValue\n");
-    return 0;
+    return AbstractMethodException("Number_DoubleValue");
 }
 
 /**
@@ -97,8 +93,7 @@ char Number_CharValue(Number const this) {
     return this->CharValue(this);
 }
 static char abstract_CharValue(Number const this) {
-    printf("abstract_CharValue\n");
-    return 0;
+    return AbstractMethodException("Number_CharValue");
 }
 
 /**
@@ -108,16 +103,15 @@ short Number_ShortValue(Number const this) {
     return this->ShortValue(this);
 }
 static short abstract_ShortValue(Number const this) {
-    printf("abstract_ShortValue\n");
-    return 0;
+    return AbstractMethodException("Number_ShortValue");
 }
 
 
 char* Number_ToString(Number const this) {
     return this->ToString(this);
 }
-static char* abstract_ToString(Number const this) {
-    return "Dark.Number";
+static char* virtual_ToString(Number const this) {
+    return "dark.Number";
 }
 
 /**
@@ -127,7 +121,7 @@ Number Number_Ctor(Number const this)
 {
     Comparable_Ctor(this);
 
-    this->ToString      = abstract_ToString;
+    this->ToString      = virtual_ToString;
     this->CompareTo     = abstract_CompareTo;
     this->IntValue      = abstract_IntValue; 
     this->LongValue     = abstract_LongValue; 
@@ -139,22 +133,9 @@ Number Number_Ctor(Number const this)
     return this;
 }
 
-// Exception(NumberFormat);
-
-// __attribute__((__format__ (__printf__, 1, 2)))
-// long NumberFormatException(const char* msg, ...)
-// {
-//     va_list args;
-//     va_start(args, msg);
-//     fprintf(stderr, "NumberFormatException: ");
-//     vfprintf(stderr, msg, args);
-//     fprintf(stderr, "\n");
-//     va_end(args);
-//     return 0;
-// }
-
-
-
+/**
+ * char table for radix up to 36
+ */
 int Number_Digit(char ch, int radix) 
 {
     static const char Digits [] = 
@@ -168,10 +149,9 @@ int Number_Digit(char ch, int radix)
     };
     
     for (int i=0; i<radix; i++)
-    {
         if (ch == Digits[i])
             return i;
-    }
+            
     return -1;
 }
 

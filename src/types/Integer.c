@@ -141,10 +141,6 @@ Integer Integer_Ctor(Integer const this, int value)
  */
 Integer Integer_New(int value)
 {
-    return DObject_gc(Integer_Ctor(new(Integer), value));
+    return Integer_Ctor(new(Integer), value);
 }
 
-Integer Integer_rcNew(int value)
-{
-    return Integer_Ctor(rc_new(Integer), value);
-}

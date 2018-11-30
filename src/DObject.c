@@ -18,59 +18,61 @@ copies or substantial portions of the Software.
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+AUTHORS OR COPYRIGHT HOLDERS BE LI  ABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/DObject.h>
+#ifdef __ARC__ 
+#ifdef GOBJECT_COMPILATION
+#include <glib.h>
+#include <glib-object.h>
+#endif
 
-static bool Equals(DObject const , DObject const that);
-bool DObject_Equals(DObject const, DObject const that);
 
-/**
- * Mark this object as gc'd so that it
- * does not get processed if passed to Release
- */
-DObject DObject_gc(DObject this)
-{
-    this->RefCount = -1;
-    return this;
-}
 /**
  * AddRef
  */
 DObject DObject_AddRef(DObject this)
 {
+    #ifdef GOBJECT_COMPILATION
+    g_atomic_int_inc(&this->RefCount);
+    #else
     this->RefCount += 1;
+    #endif
     return this;
-}
-
-/**
- * Release
- */
-DObject DObject_Dtor(DObject this)
-{
-    printf("DTOR\n");
-    this->Dispose(this);
-    tgc_free(&dark_gc, this);
-    return nullptr;
 }
 /**
  * Release
  */
 DObject DObject_Release(DObject this)
 {
-    if (this->RefCount < 0) return this;
-
+    #ifdef GOBJECT_COMPILATION
+    if (g_atomic_int_dec_and_test(&this->RefCount))
+    #else
     if (--(this->RefCount) == 0) 
+    #endif
     {
-        printf("Released\n");
         this->Dispose(this);
         free(this);
         return nullptr;
     }
     return this;
+}
+#endif
+
+static bool Equals(DObject const , DObject const that);
+bool DObject_Equals(DObject const, DObject const that);
+
+/**
+ * Destructor
+ */
+DObject DObject_Dtor(DObject this)
+{
+    this->Dispose(this);
+    delete(this);
+    return nullptr;
 }
 
 bool DObject_ReferenceEquals(DObject const objA, DObject const objB)
@@ -97,7 +99,7 @@ void DObject_Dispose(DObject const this){
 /**
  * Overrideable base method
  */
-static void abstract_Dispose(DObject const this){}
+static void virtual_Dispose(DObject const this){}
 
 /**
  * Returns the string value of this DObject. The default for 
@@ -110,7 +112,7 @@ const char* DObject_ToString(DObject const this)
 /**
  * Overrideable base method
  */
-static const char *abstract_ToString(DObject const this)
+static const char *virtual_ToString(DObject const this)
 {
     return "dark.DObject";
 }
@@ -125,7 +127,7 @@ bool DObject_Equals(DObject const this, DObject const that)
 /**
  * Overrideable base method
  */
-static bool abstract_Equals(DObject const this, DObject const that)
+static bool virtual_Equals(DObject const this, DObject const that)
 {
     return this == that;
 }
@@ -140,7 +142,7 @@ int DObject_GetHashCode(DObject const this)
 /**
  * Overrideable base method
  */
-static int abstract_GetHashCode(DObject const this)
+static int virtual_GetHashCode(DObject const this)
 {
     return (int)this;
 }
@@ -149,20 +151,18 @@ static int abstract_GetHashCode(DObject const this)
  */
 DObject DObject_Ctor(DObject const this)
 {
+    #ifdef __ARC__ 
     this->RefCount      = 1;
-    this->ToString      = abstract_ToString;
-    this->Equals        = abstract_Equals;
-    this->GetHashCode   = abstract_GetHashCode;
-    this->Dispose       = abstract_Dispose;
+    #endif
+    this->ToString      = virtual_ToString;
+    this->Equals        = virtual_Equals;
+    this->GetHashCode   = virtual_GetHashCode;
+    this->Dispose       = virtual_Dispose;
     return this;
 }
 
 DObject DObject_New()
 {
-    return DObject_gc(DObject_Ctor(new(DObject)));
+    return DObject_Ctor(new(DObject));
 }
 
-DObject DObject_rcNew()
-{
-    return DObject_Ctor(rc_new(DObject));
-}

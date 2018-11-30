@@ -152,10 +152,6 @@ Long Long_Ctor(Long const this, long value)
  */
 Long Long_New(long value)
 {
-    return DObject_gc(Long_Ctor(new(Long), value));
+    return Long_Ctor(new(Long), value);
 }
 
-Long Long_rcNew(long value)
-{
-    return Long_Ctor(rc_new(Long), value);
-}

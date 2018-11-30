@@ -63,12 +63,15 @@ link_directories ( ${DEPS_LIBRARY_DIRS} )
 #
 list ( APPEND VALAC_OPTIONS --disable-warnings --enable-experimental )
 list ( APPEND VALAC_OPTIONS --vapidir=${CMAKE_SOURCE_DIR}/src/vapis)
+list ( APPEND VALAC_OPTIONS --define __ARC__ )
 
 # Vapis: 
 # Libs: 
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lm" )
 
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w -std=c99 -O3" )
+set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D__ARC__" )
+
 
 # definitions 
 add_definitions( -DGLIB_COMPILATION ) 

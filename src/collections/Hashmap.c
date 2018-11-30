@@ -216,7 +216,7 @@ int Hashmap_Rehash(Hashmap const this)
 		if (status != MAP_OK)
 			return status;
 	}
-	free(curr);
+	delete(curr);
 	return MAP_OK;
 }
 
@@ -335,7 +335,7 @@ int Hashmap_Remove(Hashmap const this, char* key)
 /* Deallocate the hashmap */
 void Hashmap_Dispose(Hashmap const this)
 {
-	free(this->data);
+	delete(this->data);
 }
 
 /* Return the length of the hashmap */
@@ -375,11 +375,7 @@ Hashmap Hashmap_Ctor(Hashmap const this)
 
 Hashmap Hashmap_New()
 {
-    return DObject_gc(Hashmap_Ctor(new(Hashmap)));
+    return Hashmap_Ctor(new(Hashmap));
 }
 
-Hashmap Hashmap_rcNew()
-{
-    return Hashmap_Ctor(rc_new(Hashmap));
-}
 

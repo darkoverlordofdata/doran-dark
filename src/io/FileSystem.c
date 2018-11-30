@@ -50,7 +50,6 @@ String FileSystem_Slashify(FileSystem const this, String p) {
 String FileSystem_GetUserPath(FileSystem const this) {
     String user = String_New(".");
     String result = this->Normalize(this, user);
-    DObject_Release(user);
     return result;
 }
 
@@ -158,8 +157,6 @@ static String Normalize2(FileSystem const this, String path, int len, int off) {
         }
     }
     String result = sb->Concat(sb);
-    DObject_Release(sb);
-    DObject_Release(tmp);
     return result;
 }
 
@@ -285,9 +282,11 @@ String FileSystem_ResolveFile(FileSystem const this, File f) {
         String temp = this->GetUserPath(this);
         String dir = this->Slashify(this, path);
         String result = temp->Concat(this, dir);
+        #ifdef __ARC__
         DObject_Release(path);
         DObject_Release(temp);
         DObject_Release(dir);
+        #endif
         return result;
     }
     if (p1 == 1) {
@@ -295,9 +294,11 @@ String FileSystem_ResolveFile(FileSystem const this, File f) {
         String ud = this->GetDrive(this, up);
         if (ud != nullptr) {
             String result = ud->Concat(ud, path);
+            #ifdef __ARC__
             DObject_Release(path);
             DObject_Release(up);
             DObject_Release(ud);
+            #endif
             return result;
         }
     }
@@ -308,11 +309,13 @@ String FileSystem_ResolveFile(FileSystem const this, File f) {
             String temp = String_New(strndup(path->value, 2));
             String dir = this->Slashify(this, temp);
             String result = up->Concat(up, dir);
+            #ifdef __ARC__
             DObject_Release(path);
             DObject_Release(temp);
             DObject_Release(dir);
             DObject_Release(up);
             DObject_Release(ud);
+            #endif
             return result;
         }
         char drive = path->value[0];
@@ -324,12 +327,14 @@ String FileSystem_ResolveFile(FileSystem const this, File f) {
         p->Append(p, dir);
         p->Append(p, temp);
         String result = p->Concat(p);
+        #ifdef __ARC__
         DObject_Release(path);
         DObject_Release(temp);
         DObject_Release(dir);
         DObject_Release(up);
         DObject_Release(ud);
         DObject_Release(p);
+        #endif
         return result;
     }
     return InternalIOErrorException("Unresolvable path: %s", path->value);

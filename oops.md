@@ -8,11 +8,14 @@ In the c world there are also many ways to implement oop. This is my own, and I'
    A class is a pointer to a struct class_t.
    Macros hide class_t, you only see class.
 
+   Uses tgc (Tiny Garbage Collector). The new macro allocates memory
+   with tgc_calloc, and registers the object destructor.
+
 ### define a class in the header file: 
 
 ```c
     class (MyClass) { 
-        extends(Object);
+        Object_t base;
         int x, y;
         ... 
     }
@@ -22,10 +25,10 @@ In the c world there are also many ways to implement oop. This is my own, and I'
 
 ```c
     MyClass MyClass_Ctor(MyClass this, int x, int y) {
-        base(Object, this);
-        this->Equals        = &_.Equals;
-        this->GetHashCode   = &_.GetHashCode;
-        this->ToString      = &MyClass_ToString;
+        Object_Ctor(Object, this);
+        this->Equals        = base.Equals;
+        this->GetHashCode   = base.GetHashCode;
+        this->ToString      = MyClass_ToString;
         ...
         this.x = x;
         this.y = y;

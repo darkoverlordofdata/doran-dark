@@ -118,7 +118,7 @@ short Double_ShortValue(Double const this) {
 char* Double_ToString(Double const this)
 {
     static char str[20];
-    sprintf(str, "%d", this->value);
+    sprintf(str, "%f", this->value);
     return str;
 }
 
@@ -152,10 +152,6 @@ Double Double_Ctor(Double const this, double value)
  */
 Double Double_New(double value)
 {
-    return DObject_gc(Double_Ctor(new(Double), value));
+    return Double_Ctor(new(Double), value);
 }
 
-Double Double_rcNew(double value)
-{
-    return Double_Ctor(rc_new(Double), value);
-}

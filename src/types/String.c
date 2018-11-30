@@ -207,12 +207,7 @@ String String_Ctor(String const this, char* value)
  */
 String String_New(char* value)
 {
-    return DObject_gc(String_Ctor(new(String), value));
-}
-
-String String_rcNew(char* value)
-{
-    return String_Ctor(rc_new(String), value);
+    return String_Ctor(new(String), value);
 }
 
 __attribute__((__format__ (__printf__, 1, 2)))

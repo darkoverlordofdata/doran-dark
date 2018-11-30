@@ -110,7 +110,7 @@ short Float_ShortValue(Float const this) {
 char* Float_ToString(Float const this)
 {
     static char str[20];
-    sprintf(str, "%d", this->value);
+    sprintf(str, "%f", this->value);
     return str;
 }
 
@@ -144,10 +144,6 @@ Float Float_Ctor(Float const this, float value)
  */
 Float Float_New(float value)
 {
-    return DObject_gc(Float_Ctor(new(Float), value));
+    return Float_Ctor(new(Float), value);
 }
 
-Float Float_rcNew(float value)
-{
-    return Float_Ctor(rc_new(Float), value);
-}

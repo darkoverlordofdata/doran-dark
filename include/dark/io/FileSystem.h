@@ -54,7 +54,7 @@ class (FileSystem)
         DObject_t _;
         struct 
         {
-            int         RefCount;
+            REFCOUNT
             char*       (*ToString)(DObject const);
             bool        (*Equals)(DObject const, DObject const);
             int         (*GetHashCode)(DObject const);

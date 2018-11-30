@@ -1,26 +1,20 @@
 [CCode (cprefix = "", lower_case_cprefix = "", cheader_filename = "dark/darkfx.h")]
 namespace Dark 
 {
-
-	//  [CCode (cname = "tgc_t")]
-	//  public struct tgc_t {}
-	//  [CCode (cname = "tgc_start")]
-	//  public void tgc_start(tgc_t* gc, void* stk);
-	//  [CCode (cname = "tgc_stop")]
-	//  public void tgc_stop(tgc_t* gc);
-	//  [CCode (cname = "tgc_run")]
-	//  void tgc_run(tgc_t *gc);
-
 	public const int MajorVersion;
 	public const int MinorVersion;
 	public const int BuildVersion;
 
 	[Compact]
+	#if (__ARC__)
 	[CCode (cname = "DObject_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
+	#else
+	[CCode (cname = "DObject_t", ref_function = "", unref_function = "")]
+	#endif
 	public abstract class DObject
 	{
-		[CCode (cname = "DObject_rcNew")]
-		public DObject();
+		//  [CCode (cname = "DObject_New")]
+		//  public DObject();
 		[CCode (cname = "DObject_ToString")]
 		public abstract unowned string ToString();
 		[CCode (cname = "DObject_Dispose")]
@@ -36,14 +30,22 @@ namespace Dark
 	}
 
 	[Compact]
-	[CCode (cname = "Comparable_t")]
+	#if (__ARC__)
+	[CCode (cname = "Comparable_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
+	#else
+	[CCode (cname = "Comparable_t", ref_function = "", unref_function = "")]
+	#endif
 	public abstract class Comparable : DObject
 	{
 		public abstract int CompareTo(Comparable other);
 	}
 	
 	[Compact]
-	[CCode (cname = "Number_t")]
+	#if (__ARC__)
+	[CCode (cname = "Number_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
+	#else
+	[CCode (cname = "Number_t", ref_function = "", unref_function = "")]
+	#endif
 	public abstract class Number : Comparable
 	{
 		[CCode (cname = "Number_IntValue")]
@@ -61,7 +63,11 @@ namespace Dark
 	}
 	
 	[Compact]
+	#if (__ARC__)
 	[CCode (cname = "Long_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
+	#else
+	[CCode (cname = "Long_t", ref_function = "", unref_function = "")]
+	#endif
 	public class Long : Number
 	{
 		[CCode (cname = "LONG_MIN_VALUE")]
@@ -79,7 +85,7 @@ namespace Dark
 		public static long ParseLong(string s, int radix = 10);
 
 		public long value;
-		[CCode (cname = "Long_rcNew")]
+		[CCode (cname = "Long_New")]
 		public Long(long value);
 		[CCode (cname = "Long_CompareTo")]
 		public override int CompareTo(Comparable other);
@@ -100,7 +106,11 @@ namespace Dark
 	}
 
 	[Compact]
+	#if (__ARC__)
 	[CCode (cname = "Short_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
+	#else
+	[CCode (cname = "Short_t", ref_function = "", unref_function = "")]
+	#endif
 	public class Short : Number
 	{
 		[CCode (cname = "SHORT_MIN_VALUE")]
@@ -118,7 +128,7 @@ namespace Dark
 		public static short ParseShort(string s, int radix = 10);
 
 		public long value;
-		[CCode (cname = "Short_rcNew")]
+		[CCode (cname = "Short_New")]
 		public Short(short value);
 		[CCode (cname = "Short_CompareTo")]
 		public override int CompareTo(Comparable other);
@@ -139,7 +149,11 @@ namespace Dark
 	}
 
 	[Compact]
+	#if (__ARC__)
 	[CCode (cname = "Integer_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
+	#else
+	[CCode (cname = "Integer_t", ref_function = "", unref_function = "")]
+	#endif
 	public class Integer : Number
 	{
 		[CCode (cname = "INTEGER_MIN_VALUE")]
@@ -157,7 +171,7 @@ namespace Dark
 		public static int ParseInt(string s, int radix = 10);
 
 		public int value;
-		[CCode (cname = "Integer_rcNew")]
+		[CCode (cname = "Integer_New")]
 		public Integer(int value);
 		[CCode (cname = "Integer_CompareTo")]
 		public override int CompareTo(Comparable other);
@@ -178,7 +192,11 @@ namespace Dark
 	}
 
 	[Compact]
+	#if (__ARC__)
 	[CCode (cname = "Char_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
+	#else
+	[CCode (cname = "Char_t", ref_function = "", unref_function = "")]
+	#endif
 	public class Char : Number
 	{
 		[CCode (cname = "CHAR_MIN_VALUE")]
@@ -193,7 +211,7 @@ namespace Dark
 		public const int Type;
 
 		public int value;
-		[CCode (cname = "Char_rcNew")]
+		[CCode (cname = "Char_New")]
 		public Char(char value);
 		[CCode (cname = "Char_CompareTo")]
 		public override int CompareTo(Comparable other);
@@ -214,7 +232,11 @@ namespace Dark
 	}
 
 	[Compact]
+	#if (__ARC__)
 	[CCode (cname = "Float_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
+	#else
+	[CCode (cname = "Float_t", ref_function = "", unref_function = "")]
+	#endif
 	public class Float : Number
 	{
 		[CCode (cname = "FLOAT_MIN_VALUE")]
@@ -232,7 +254,7 @@ namespace Dark
 		public static float ParseFloat(string s);
 
 		public int value;
-		[CCode (cname = "Float_rcNew")]
+		[CCode (cname = "Float_New")]
 		public Float(float value);
 		[CCode (cname = "Float_CompareTo")]
 		public override int CompareTo(Comparable other);
@@ -253,7 +275,11 @@ namespace Dark
 	}
 
 	[Compact]
+	#if (__ARC__)
 	[CCode (cname = "Double_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
+	#else
+	[CCode (cname = "Double_t", ref_function = "", unref_function = "")]
+	#endif
 	public class Double : Number
 	{
 		[CCode (cname = "DOUBLE_MIN_VALUE")]
@@ -271,7 +297,7 @@ namespace Dark
 		public static double ParseDouble(string s);
 
 		public int value;
-		[CCode (cname = "Double_rcNew")]
+		[CCode (cname = "Double_New")]
 		public Double(double value);
 		[CCode (cname = "Double_CompareTo")]
 		public override int CompareTo(Comparable other);
@@ -292,7 +318,11 @@ namespace Dark
 	}
 
 	[Compact]
+	#if (__ARC__)
 	[CCode (cname = "Boolean_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
+	#else
+	[CCode (cname = "Boolean_t", ref_function = "", unref_function = "")]
+	#endif
 	public class Boolean : Comparable
 	{
 		[CCode (cname = "LONG_SIZE")]
@@ -306,7 +336,7 @@ namespace Dark
 
 		public bool value;
 
-		[CCode (cname = "Boolean_rcNew")]
+		[CCode (cname = "Boolean_New")]
 		public Boolean(long value);
 		[CCode (cname = "Boolean_CompareTo")]
 		public override int CompareTo(Comparable other);
@@ -317,7 +347,11 @@ namespace Dark
 	}
 
 	[Compact]
+	#if (__ARC__)
 	[CCode (cname = "String_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
+	#else
+	[CCode (cname = "String_t", ref_function = "", unref_function = "")]
+	#endif
 	public class String : Comparable
 	{
 		[CCode (cname = "LONG_TYPE")]
@@ -332,7 +366,7 @@ namespace Dark
 			return (string)this.value;
 		}
 
-		[CCode (cname = "String_rcNew")]
+		[CCode (cname = "String_New")]
 		public String(char* value);
 		[CCode (cname = "String_CompareTo")]
 		public override int CompareTo(Comparable other);
@@ -373,10 +407,14 @@ namespace Dark
 	}
 
 	[Compact]
+	#if (__ARC__)
 	[CCode (cname = "StringBuilder_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
+	#else
+	[CCode (cname = "StringBuilder_t", ref_function = "", unref_function = "")]
+	#endif
 	public class StringBuilder : DObject
 	{
-		[CCode (cname = "StringBuilder_rcNew")]
+		[CCode (cname = "StringBuilder_New")]
 		public StringBuilder();
 		[CCode (cname = "StringBuilder_Empty")]
 		public int Empty();
@@ -410,11 +448,15 @@ namespace Dark
 		 * Generic List
 		 */
 		[Compact]
+		#if (__ARC__)
 		[CCode (cname = "List_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
+		#else
+		[CCode (cname = "List_t", ref_function = "", unref_function = "")]
+		#endif
 		public class List<G> : DObject
 		{
 			public ListNode<G>* head;
-			[CCode (cname = "List_rcNew")]
+			[CCode (cname = "List_New")]
 			public List();
 			[CCode (cname = "List_Add")]
 			public int Insert(owned G data, Compare func);
@@ -445,13 +487,17 @@ namespace Dark
 		 * Generic Hashmap
 		 */
 		[Compact]
+		#if (__ARC__)
 		[CCode (cname = "Hashmap_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
+		#else
+		[CCode (cname = "Hashmap_t", ref_function = "", unref_function = "")]
+		#endif
 		public class Hashmap<G> : DObject
 		{
 			public int tableSize;
 			public int size;
 			public HashmapNode* data;
-			[CCode (cname = "Hashmap_rcNew")]
+			[CCode (cname = "Hashmap_New")]
 			public Hashmap();
 			[CCode (cname = "Hashmap_HashInt")]
 			public uint HashInt(string keystring);
@@ -479,13 +525,17 @@ namespace Dark
 		 * Generic Vector
 		 */
 		[Compact]
+		#if (__ARC__)
 		[CCode (cname = "Vector_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
+		#else
+		[CCode (cname = "Vector_t", ref_function = "", unref_function = "")]
+		#endif
 		public class Vector<G> : DObject
 		{
 			public void **data;
 			public int capacity;
 			public int count;
-			[CCode (cname = "Vector_rcNew")]
+			[CCode (cname = "Vector_New")]
 			public Vector(int capacity = 0);
 			[CCode (cname = "Vector_Vala")]
 			public Vector.From(owned G first, ...);
