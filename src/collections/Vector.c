@@ -146,15 +146,15 @@ Vector Vector_Ctor(Vector const this, int capacity)
 {
     DObject_Ctor(this);
 
-    this->ToString      = Vector_ToString;
-    this->Count         = Vector_Count;
-    this->Resize        = Vector_Resize;
-    this->Add           = Vector_Add;
-    this->Set           = Vector_Set;
-    this->Get           = Vector_Get;
-    this->Delete        = Vector_Delete;
-    this->Dispose       = Vector_Dispose;
-    this->Clear         = Vector_Clear;
+    this->ToString      = &Vector_ToString;
+    this->Count         = &Vector_Count;
+    this->Resize        = &Vector_Resize;
+    this->Add           = &Vector_Add;
+    this->Set           = &Vector_Set;
+    this->Get           = &Vector_Get;
+    this->Delete        = &Vector_Delete;
+    this->Dispose       = &Vector_Dispose;
+    this->Clear         = &Vector_Clear;
 
     this->capacity = capacity == 0 ? VECTOR_INIT_CAPACITY : capacity;
     this->count = 0;

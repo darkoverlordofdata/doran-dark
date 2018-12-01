@@ -40,7 +40,7 @@ class (Number)
         Comparable_t _;
         struct 
         {
-            REFCOUNT
+            retained
             char*       (*ToString)(DObject const);
             bool        (*Equals)(DObject const, DObject const);
             int         (*GetHashCode)(DObject const);
@@ -64,9 +64,6 @@ float Number_FloatValue(Number const);
 double Number_DoubleValue(Number const);
 char Number_CharValue(Number const);
 short Number_ShortValue(Number const);
-
 int Number_Digit(char ch, int radix);
-// __attribute__((__format__ (__printf__, 1, 2)))
-// long NumberFormatException(const char* msg, ...);
 
 #endif _NUMBER_H_

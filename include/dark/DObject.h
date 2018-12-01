@@ -25,7 +25,6 @@ SOFTWARE.
 ******************************************************************/
 #ifndef _OBJECT_H_
 #define _OBJECT_H_
-// #include "darkfx.h"
 #include "core.h"
 
 #define OBJECT_TYPE       (TYPE_OBJECT)
@@ -35,7 +34,7 @@ SOFTWARE.
  */
 class (DObject) 
 {
-    REFCOUNT
+    retained    // Contains RefCount if __ARC__ set
     char* (*ToString)(DObject const);
     bool (*Equals)(DObject const, DObject const);
     int (*GetHashCode)(DObject const);
@@ -45,10 +44,10 @@ class (DObject)
 /**
  * DObject API
  */
-#ifdef __ARC__
+
 DObject DObject_AddRef(DObject const);
 DObject DObject_Release(DObject const);
-#endif
+
 bool DObject_ReferenceEquals(DObject const objA, DObject const objB);
 bool DObject_InstanceEquals(DObject const objA, DObject const objB);
 const char* DObject_ToString(DObject const);

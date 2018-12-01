@@ -42,7 +42,7 @@ static Exception(AbstractMethod);
 int Number_CompareTo(Number this, Number other) {
     return this->CompareTo(this, other);
 }
-static short abstract_CompareTo(Number const this, Number other) {
+static short Abstract_CompareTo(Number const this, Number other) {
     return AbstractMethodException("Number_CompareTo");
 }
 
@@ -52,7 +52,7 @@ static short abstract_CompareTo(Number const this, Number other) {
 int Number_IntValue(Number const this) {
     return this->IntValue(this);
 }
-static int abstract_IntValue(Number const this) {
+static int Abstract_IntValue(Number const this) {
     return AbstractMethodException("Number_IntValue");
 }
 
@@ -62,7 +62,7 @@ static int abstract_IntValue(Number const this) {
 long Number_LongValue(Number const this) {
     return this->LongValue(this);
 }
-static long abstract_LongValue(Number const this) {
+static long Abstract_LongValue(Number const this) {
     return AbstractMethodException("Number_LongValue");
 }
 
@@ -72,7 +72,7 @@ static long abstract_LongValue(Number const this) {
 float Number_FloatValue(Number const this) {
     return this->FloatValue(this);
 }
-static float abstract_FloatValue(Number const this) {
+static float Abstract_FloatValue(Number const this) {
     return AbstractMethodException("Number_FloatValue");
 }
 
@@ -82,7 +82,7 @@ static float abstract_FloatValue(Number const this) {
 double Number_DoubleValue(Number const this) {
     return this->DoubleValue(this);
 }
-static double abstract_DoubleValue(Number const this) {
+static double Abstract_DoubleValue(Number const this) {
     return AbstractMethodException("Number_DoubleValue");
 }
 
@@ -92,7 +92,7 @@ static double abstract_DoubleValue(Number const this) {
 char Number_CharValue(Number const this) {
     return this->CharValue(this);
 }
-static char abstract_CharValue(Number const this) {
+static char Abstract_CharValue(Number const this) {
     return AbstractMethodException("Number_CharValue");
 }
 
@@ -102,7 +102,7 @@ static char abstract_CharValue(Number const this) {
 short Number_ShortValue(Number const this) {
     return this->ShortValue(this);
 }
-static short abstract_ShortValue(Number const this) {
+static short Abstract_ShortValue(Number const this) {
     return AbstractMethodException("Number_ShortValue");
 }
 
@@ -110,7 +110,7 @@ static short abstract_ShortValue(Number const this) {
 char* Number_ToString(Number const this) {
     return this->ToString(this);
 }
-static char* virtual_ToString(Number const this) {
+static char* Virtual_ToString(Number const this) {
     return "dark.Number";
 }
 
@@ -121,14 +121,14 @@ Number Number_Ctor(Number const this)
 {
     Comparable_Ctor(this);
 
-    this->ToString      = virtual_ToString;
-    this->CompareTo     = abstract_CompareTo;
-    this->IntValue      = abstract_IntValue; 
-    this->LongValue     = abstract_LongValue; 
-    this->FloatValue    = abstract_FloatValue; 
-    this->DoubleValue   = abstract_DoubleValue; 
-    this->CharValue     = abstract_CharValue; 
-    this->ShortValue    = abstract_ShortValue; 
+    this->ToString      = &Virtual_ToString;
+    this->CompareTo     = &Abstract_CompareTo;
+    this->IntValue      = &Abstract_IntValue; 
+    this->LongValue     = &Abstract_LongValue; 
+    this->FloatValue    = &Abstract_FloatValue; 
+    this->DoubleValue   = &Abstract_DoubleValue; 
+    this->CharValue     = &Abstract_CharValue; 
+    this->ShortValue    = &Abstract_ShortValue; 
 
     return this;
 }

@@ -40,7 +40,7 @@ class (Integer)
         Number_t _;
         struct 
         {
-            REFCOUNT
+            retained
             char*       (*ToString)(DObject const);
             bool        (*Equals)(DObject const, DObject const);
             int         (*GetHashCode)(DObject const);
@@ -66,6 +66,5 @@ double Integer_DoubleValue(Integer const);
 char Integer_CharValue(Integer const);
 short Integer_ShortValue(Integer const);
 Integer Integer_New(int value);
-Integer Integer_rcNew(int value);
 
 #endif _INTEGER_H_

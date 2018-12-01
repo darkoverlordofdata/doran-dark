@@ -37,7 +37,7 @@ class (Boolean)
         Comparable_t _;
         struct 
         {
-            REFCOUNT
+            retained
             char*       (*ToString) (DObject const);
             bool        (*Equals) (DObject const, DObject const);
             int         (*GetHashCode) (DObject const);
@@ -51,6 +51,5 @@ class (Boolean)
 
 int Boolean_CompareTo(Boolean const, Boolean other);
 Boolean Boolean_New(bool value);
-Boolean Boolean_rcNew(bool value);
 
 #endif _BOOLEAN_H_

@@ -138,7 +138,7 @@ String StringBuilder_Concat(StringBuilder this)
 {
 	char *buf = nullptr;
 	char *c = nullptr;
-	StringFragment	frag = nullptr;
+	StringFragment frag = nullptr;
 
 	buf = calloc(this->length + 1, sizeof(char));
 	if (nullptr == buf)
@@ -152,7 +152,6 @@ String StringBuilder_Concat(StringBuilder this)
 
 	*c = '\0';
 	return String_New(buf);
-	// return buf;
 }
 
 /*
@@ -195,13 +194,13 @@ StringBuilder StringBuilder_Ctor(StringBuilder const this)
 {
     DObject_Ctor(this);
 
-    this->Append    = StringBuilder_Append;
-	this->Appendc 	= StringBuilder_Appendc;
-    this->Appendf   = StringBuilder_Appendf;
-    this->Concat    = StringBuilder_Concat;
-    this->Dispose   = StringBuilder_Dispose;
-    this->Empty     = StringBuilder_Empty;
-    this->Reset     = StringBuilder_Reset;
+    this->Append    = &StringBuilder_Append;
+	this->Appendc 	= &StringBuilder_Appendc;
+    this->Appendf   = &StringBuilder_Appendf;
+    this->Concat    = &StringBuilder_Concat;
+    this->Dispose   = &StringBuilder_Dispose;
+    this->Empty     = &StringBuilder_Empty;
+    this->Reset     = &StringBuilder_Reset;
 
     return this;
 }

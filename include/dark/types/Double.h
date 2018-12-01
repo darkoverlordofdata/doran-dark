@@ -39,7 +39,7 @@ class (Double)
         Number_t _;
         struct 
         {
-            REFCOUNT
+            retained
             char*       (*ToString) (DObject const);
             bool        (*Equals) (DObject const, DObject const);
             int         (*GetHashCode) (DObject const);
@@ -64,6 +64,5 @@ double Double_DoubleValue(Double const);
 char Double_CharValue(Double const);
 short Double_ShortValue(Double const);
 Double Double_New(double value);
-Double Double_rcNew(double value);
 
 #endif _DOUBLE_H_

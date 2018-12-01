@@ -17,8 +17,7 @@ designed to be called directly from c or vala.
 > "C makes it easy to shoot yourself in the foot; C++ makes it harder, but when you do it blows your whole leg off" -- Bjarne Stroustrup
 
 
-### dependancies
-DarkFx uses garbage collection. I am using https://github.com/orangeduck/tgc
-because it leaves vala created objects alone.
+### gc
+DObjects created in Vala are unreachable by the gc. This requires duplicates of some functions for both managed and unmanaged memory. That doesn't scale well.
 
-To use reference counting, compile with -D__ARC__. This will enable vala style reference counting, and define arc hooks in the vapi.
+So, for vala interop, define the __ARC__ symbol for both valac and c compilers. If all c code, you can leave __ARC__ out and use gc. This will use only 1 memory at a time. 

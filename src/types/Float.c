@@ -121,14 +121,14 @@ Float Float_Ctor(Float const this, float value)
 {
     Number_Ctor(this);
 
-    this->ToString      = Float_ToString;
-    this->CompareTo     = Float_CompareTo;
-    this->IntValue      = Float_IntValue; 
-    this->LongValue     = Float_LongValue; 
-    this->FloatValue    = Float_FloatValue; 
-    this->DoubleValue   = Float_DoubleValue; 
-    this->CharValue     = Float_CharValue; 
-    this->ShortValue    = Float_ShortValue; 
+    this->ToString      = &Float_ToString;
+    this->CompareTo     = &Float_CompareTo;
+    this->IntValue      = &Float_IntValue; 
+    this->LongValue     = &Float_LongValue; 
+    this->FloatValue    = &Float_FloatValue; 
+    this->DoubleValue   = &Float_DoubleValue; 
+    this->CharValue     = &Float_CharValue; 
+    this->ShortValue    = &Float_ShortValue; 
 
     this->value = value;
     return this;

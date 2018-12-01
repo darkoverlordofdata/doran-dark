@@ -118,14 +118,14 @@ Integer Integer_Ctor(Integer const this, int value)
 {
     Number_Ctor(this);
 
-    this->ToString      = Integer_ToString;
-    this->CompareTo     = Integer_CompareTo;
-    this->IntValue      = Integer_IntValue; 
-    this->LongValue     = Integer_LongValue; 
-    this->FloatValue    = Integer_FloatValue; 
-    this->DoubleValue   = Integer_DoubleValue; 
-    this->CharValue     = Integer_CharValue; 
-    this->ShortValue    = Integer_ShortValue; 
+    this->ToString      = &Integer_ToString;
+    this->CompareTo     = &Integer_CompareTo;
+    this->IntValue      = &Integer_IntValue; 
+    this->LongValue     = &Integer_LongValue; 
+    this->FloatValue    = &Integer_FloatValue; 
+    this->DoubleValue   = &Integer_DoubleValue; 
+    this->CharValue     = &Integer_CharValue; 
+    this->ShortValue    = &Integer_ShortValue; 
 
     this->value = value;
     return this;

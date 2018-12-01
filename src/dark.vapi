@@ -6,15 +6,9 @@ namespace Dark
 	public const int BuildVersion;
 
 	[Compact]
-	#if (__ARC__)
 	[CCode (cname = "DObject_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
-	#else
-	[CCode (cname = "DObject_t", ref_function = "", unref_function = "")]
-	#endif
 	public abstract class DObject
 	{
-		//  [CCode (cname = "DObject_New")]
-		//  public DObject();
 		[CCode (cname = "DObject_ToString")]
 		public abstract unowned string ToString();
 		[CCode (cname = "DObject_Dispose")]
@@ -30,22 +24,14 @@ namespace Dark
 	}
 
 	[Compact]
-	#if (__ARC__)
 	[CCode (cname = "Comparable_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
-	#else
-	[CCode (cname = "Comparable_t", ref_function = "", unref_function = "")]
-	#endif
 	public abstract class Comparable : DObject
 	{
 		public abstract int CompareTo(Comparable other);
 	}
 	
 	[Compact]
-	#if (__ARC__)
 	[CCode (cname = "Number_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
-	#else
-	[CCode (cname = "Number_t", ref_function = "", unref_function = "")]
-	#endif
 	public abstract class Number : Comparable
 	{
 		[CCode (cname = "Number_IntValue")]
@@ -63,11 +49,7 @@ namespace Dark
 	}
 	
 	[Compact]
-	#if (__ARC__)
 	[CCode (cname = "Long_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
-	#else
-	[CCode (cname = "Long_t", ref_function = "", unref_function = "")]
-	#endif
 	public class Long : Number
 	{
 		[CCode (cname = "LONG_MIN_VALUE")]
@@ -106,11 +88,7 @@ namespace Dark
 	}
 
 	[Compact]
-	#if (__ARC__)
 	[CCode (cname = "Short_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
-	#else
-	[CCode (cname = "Short_t", ref_function = "", unref_function = "")]
-	#endif
 	public class Short : Number
 	{
 		[CCode (cname = "SHORT_MIN_VALUE")]
@@ -149,11 +127,7 @@ namespace Dark
 	}
 
 	[Compact]
-	#if (__ARC__)
 	[CCode (cname = "Integer_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
-	#else
-	[CCode (cname = "Integer_t", ref_function = "", unref_function = "")]
-	#endif
 	public class Integer : Number
 	{
 		[CCode (cname = "INTEGER_MIN_VALUE")]
@@ -192,11 +166,7 @@ namespace Dark
 	}
 
 	[Compact]
-	#if (__ARC__)
 	[CCode (cname = "Char_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
-	#else
-	[CCode (cname = "Char_t", ref_function = "", unref_function = "")]
-	#endif
 	public class Char : Number
 	{
 		[CCode (cname = "CHAR_MIN_VALUE")]
@@ -232,11 +202,7 @@ namespace Dark
 	}
 
 	[Compact]
-	#if (__ARC__)
 	[CCode (cname = "Float_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
-	#else
-	[CCode (cname = "Float_t", ref_function = "", unref_function = "")]
-	#endif
 	public class Float : Number
 	{
 		[CCode (cname = "FLOAT_MIN_VALUE")]
@@ -275,11 +241,7 @@ namespace Dark
 	}
 
 	[Compact]
-	#if (__ARC__)
 	[CCode (cname = "Double_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
-	#else
-	[CCode (cname = "Double_t", ref_function = "", unref_function = "")]
-	#endif
 	public class Double : Number
 	{
 		[CCode (cname = "DOUBLE_MIN_VALUE")]
@@ -318,11 +280,7 @@ namespace Dark
 	}
 
 	[Compact]
-	#if (__ARC__)
 	[CCode (cname = "Boolean_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
-	#else
-	[CCode (cname = "Boolean_t", ref_function = "", unref_function = "")]
-	#endif
 	public class Boolean : Comparable
 	{
 		[CCode (cname = "LONG_SIZE")]
@@ -347,11 +305,7 @@ namespace Dark
 	}
 
 	[Compact]
-	#if (__ARC__)
 	[CCode (cname = "String_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
-	#else
-	[CCode (cname = "String_t", ref_function = "", unref_function = "")]
-	#endif
 	public class String : Comparable
 	{
 		[CCode (cname = "LONG_TYPE")]
@@ -407,11 +361,7 @@ namespace Dark
 	}
 
 	[Compact]
-	#if (__ARC__)
 	[CCode (cname = "StringBuilder_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
-	#else
-	[CCode (cname = "StringBuilder_t", ref_function = "", unref_function = "")]
-	#endif
 	public class StringBuilder : DObject
 	{
 		[CCode (cname = "StringBuilder_New")]
@@ -448,11 +398,7 @@ namespace Dark
 		 * Generic List
 		 */
 		[Compact]
-		#if (__ARC__)
 		[CCode (cname = "List_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
-		#else
-		[CCode (cname = "List_t", ref_function = "", unref_function = "")]
-		#endif
 		public class List<G> : DObject
 		{
 			public ListNode<G>* head;
@@ -487,11 +433,7 @@ namespace Dark
 		 * Generic Hashmap
 		 */
 		[Compact]
-		#if (__ARC__)
 		[CCode (cname = "Hashmap_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
-		#else
-		[CCode (cname = "Hashmap_t", ref_function = "", unref_function = "")]
-		#endif
 		public class Hashmap<G> : DObject
 		{
 			public int tableSize;
@@ -525,11 +467,7 @@ namespace Dark
 		 * Generic Vector
 		 */
 		[Compact]
-		#if (__ARC__)
 		[CCode (cname = "Vector_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
-		#else
-		[CCode (cname = "Vector_t", ref_function = "", unref_function = "")]
-		#endif
 		public class Vector<G> : DObject
 		{
 			public void **data;
@@ -537,7 +475,7 @@ namespace Dark
 			public int count;
 			[CCode (cname = "Vector_New")]
 			public Vector(int capacity = 0);
-			[CCode (cname = "Vector_Vala")]
+			[CCode (cname = "Vector_Variadic")]
 			public Vector.From(owned G first, ...);
 			[CCode (cname = "Vector_Count")]
 			public int Count();

@@ -24,13 +24,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/DObject.h>
-#ifdef __ARC__ 
+
 #ifdef GOBJECT_COMPILATION
 #include <glib.h>
 #include <glib-object.h>
 #endif
 
-
+#ifdef __ARC__
 /**
  * AddRef
  */
@@ -54,15 +54,13 @@ DObject DObject_Release(DObject this)
     if (--(this->RefCount) == 0) 
     #endif
     {
-        this->Dispose(this);
-        free(this);
-        return nullptr;
+        return DObject_Dtor(this);
     }
     return this;
 }
 #endif
 
-static bool Equals(DObject const , DObject const that);
+static bool Equals(DObject const, DObject const that);
 bool DObject_Equals(DObject const, DObject const that);
 
 /**
@@ -97,9 +95,10 @@ void DObject_Dispose(DObject const this){
     this->Dispose(this);
 }
 /**
- * Overrideable base method
+ * virtual Dispose method
  */
-static void virtual_Dispose(DObject const this){}
+static void Dispose(DObject const this){
+}
 
 /**
  * Returns the string value of this DObject. The default for 
@@ -110,9 +109,9 @@ const char* DObject_ToString(DObject const this)
     return this->ToString(this);
 }
 /**
- * Overrideable base method
+ * virtual ToString method
  */
-static const char *virtual_ToString(DObject const this)
+static const char *ToString(DObject const this)
 {
     return "dark.DObject";
 }
@@ -125,39 +124,37 @@ bool DObject_Equals(DObject const this, DObject const that)
     return this->Equals(this, that);
 }
 /**
- * Overrideable base method
+ * virtual Equals method
  */
-static bool virtual_Equals(DObject const this, DObject const that)
+static bool Equals(DObject const this, DObject const that)
 {
     return this == that;
 }
 
 /**
- * Get's the hashcode for this object. Default is the obhect's address in memory,
+ * Get's the hashcode for this object. Default is the object's address in memory,
  */
 int DObject_GetHashCode(DObject const this)
 {
     return this->GetHashCode(this);
 }
 /**
- * Overrideable base method
+ * virtual GetHashCode method
  */
-static int virtual_GetHashCode(DObject const this)
+static int GetHashCode(DObject const this)
 {
     return (int)this;
 }
+
 /**
- * Magic methods...
  */
 DObject DObject_Ctor(DObject const this)
 {
-    #ifdef __ARC__ 
     this->RefCount      = 1;
-    #endif
-    this->ToString      = virtual_ToString;
-    this->Equals        = virtual_Equals;
-    this->GetHashCode   = virtual_GetHashCode;
-    this->Dispose       = virtual_Dispose;
+    this->ToString      = &ToString;
+    this->Equals        = &Equals;
+    this->GetHashCode   = &GetHashCode;
+    this->Dispose       = &Dispose;
     return this;
 }
 

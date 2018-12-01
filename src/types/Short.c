@@ -121,14 +121,14 @@ Short Short_Ctor(Short const this, short value)
 {
     Number_Ctor(this);
 
-    this->ToString      = Short_ToString;
-    this->CompareTo     = Short_CompareTo;
-    this->IntValue      = Short_IntValue; 
-    this->LongValue     = Short_LongValue; 
-    this->FloatValue    = Short_FloatValue; 
-    this->DoubleValue   = Short_DoubleValue; 
-    this->CharValue     = Short_CharValue; 
-    this->ShortValue    = Short_ShortValue; 
+    this->ToString      = &Short_ToString;
+    this->CompareTo     = &Short_CompareTo;
+    this->IntValue      = &Short_IntValue; 
+    this->LongValue     = &Short_LongValue; 
+    this->FloatValue    = &Short_FloatValue; 
+    this->DoubleValue   = &Short_DoubleValue; 
+    this->CharValue     = &Short_CharValue; 
+    this->ShortValue    = &Short_ShortValue; 
 
     this->value = value;
     return this;

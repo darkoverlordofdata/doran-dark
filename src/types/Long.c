@@ -129,14 +129,14 @@ Long Long_Ctor(Long const this, long value)
 {
     Number_Ctor(this);
 
-    this->ToString      = Long_ToString;
-    this->CompareTo     = Long_CompareTo;
-    this->IntValue      = Long_IntValue; 
-    this->LongValue     = Long_LongValue; 
-    this->FloatValue    = Long_FloatValue; 
-    this->DoubleValue   = Long_DoubleValue; 
-    this->CharValue     = Long_CharValue; 
-    this->ShortValue    = Long_ShortValue; 
+    this->ToString      = &Long_ToString;
+    this->CompareTo     = &Long_CompareTo;
+    this->IntValue      = &Long_IntValue; 
+    this->LongValue     = &Long_LongValue; 
+    this->FloatValue    = &Long_FloatValue; 
+    this->DoubleValue   = &Long_DoubleValue; 
+    this->CharValue     = &Long_CharValue; 
+    this->ShortValue    = &Long_ShortValue; 
 
     this->value = value;
     return this;

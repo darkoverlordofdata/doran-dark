@@ -34,14 +34,14 @@ static Exception(AbstractMethod);
 int Comparable_CompareTo(Comparable this, Comparable other) {
     return this->CompareTo(this, other);
 }
-static short abstract_CompareTo(Comparable const this, Comparable other) {
+static short Abstract_CompareTo(Comparable const this, Comparable other) {
     return AbstractMethodException("Comparable_CompareTo");
 }
 
 char* Comparable_ToString(Comparable const this) {
     return this->ToString(this);
 }
-static char* virtual_ToString(Comparable const this) {
+static char* Virtual_ToString(Comparable const this) {
     return "dark.Comparable";
 }
 
@@ -52,8 +52,8 @@ Comparable Comparable_Ctor(Comparable const this)
 {
     DObject_Ctor(this);
 
-    this->ToString      = virtual_ToString;
-    this->CompareTo     = abstract_CompareTo;
+    this->ToString      = &Virtual_ToString;
+    this->CompareTo     = &Abstract_CompareTo;
 
     return this;
 }

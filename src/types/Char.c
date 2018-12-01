@@ -110,14 +110,14 @@ Char Char_Ctor(Char const this, char value)
 {
     Number_Ctor(this);
 
-    this->ToString      = Char_ToString;
-    this->CompareTo     = Char_CompareTo;
-    this->IntValue      = Char_IntValue; 
-    this->LongValue     = Char_LongValue; 
-    this->FloatValue    = Char_FloatValue; 
-    this->DoubleValue   = Char_DoubleValue; 
-    this->CharValue     = Char_CharValue; 
-    this->ShortValue    = Char_ShortValue; 
+    this->ToString      = &Char_ToString;
+    this->CompareTo     = &Char_CompareTo;
+    this->IntValue      = &Char_IntValue; 
+    this->LongValue     = &Char_LongValue; 
+    this->FloatValue    = &Char_FloatValue; 
+    this->DoubleValue   = &Char_DoubleValue; 
+    this->CharValue     = &Char_CharValue; 
+    this->ShortValue    = &Char_ShortValue; 
 
     this->value = value;
     return this;

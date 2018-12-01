@@ -154,6 +154,7 @@ bool String_IsEmpty(String const this)
 
 char String_CharAt(String const this, int index)
 {
+    printf("string %d,%d %s\n", index, this->length, this->value);
     if (index < 0 || index >= this->length)
         return IndexOutOfBoundsException("at index %d", index);
     return this->value[index];
@@ -165,6 +166,10 @@ char* String_ToString(String const this)
     return this->value;
 }
 
+void String_Dispose(String const this)
+{
+    free(this->value);
+}
 /**
  * Initialize a new String
  */
@@ -172,24 +177,25 @@ String String_Ctor(String const this, char* value)
 {
     Comparable_Ctor(this);
 
-    this->ToString      = String_ToString;
-    this->CompareTo     = String_CompareTo;
-    this->Length        = String_Length;
-    this->IsEmpty       = String_IsEmpty;
-    this->CharAt        = String_CharAt;
-    this->CompareToIgnoreCase = String_CompareToIgnoreCase;
-    this->Concat        = String_Concat;
-    this->Concatc       = String_Concatc;
-    this->Contains      = String_Contains;
-    this->CopyOf        = String_CopyOf;
-    this->EndsWith      = String_EndsWith;
-    this->StartsWith    = String_StartsWith;
-    this->GetBytes      = String_GetBytes;
-    this->IndexOf       = String_IndexOf;
-    this->LastIndexOf   = String_LastIndexOf;
-    this->ToLowerCase   = String_ToLowerCase;
-    this->ToUpperCase   = String_ToUpperCase;
-    this->Trim          = String_Trim;
+    this->ToString      = &String_ToString;
+    this->Dispose       = &String_Dispose;
+    this->CompareTo     = &String_CompareTo;
+    this->Length        = &String_Length;
+    this->IsEmpty       = &String_IsEmpty;
+    this->CharAt        = &String_CharAt;
+    this->CompareToIgnoreCase = &String_CompareToIgnoreCase;
+    this->Concat        = &String_Concat;
+    this->Concatc       = &String_Concatc;
+    this->Contains      = &String_Contains;
+    this->CopyOf        = &String_CopyOf;
+    this->EndsWith      = &String_EndsWith;
+    this->StartsWith    = &String_StartsWith;
+    this->GetBytes      = &String_GetBytes;
+    this->IndexOf       = &String_IndexOf;
+    this->LastIndexOf   = &String_LastIndexOf;
+    this->ToLowerCase   = &String_ToLowerCase;
+    this->ToUpperCase   = &String_ToUpperCase;
+    this->Trim          = &String_Trim;
 
     this->value = strdup(value);
     this->length = strlen(value);

@@ -37,7 +37,7 @@ class (Vector)
         DObject_t _;
         struct 
         {
-            REFCOUNT
+            retained
             char*       (*ToString)(DObject const);
             bool        (*Equals)(DObject const, DObject const);
             int         (*GetHashCode)(DObject const);
@@ -70,7 +70,6 @@ void Vector_Dispose(Vector const);
 void Vector_Clear(Vector const);
 const char* Vector_ToString(Vector const);
 Vector Vector_New(int capacity);
-Vector Vector_rcNew(int capacity);
 Vector Vector_Variadic(int count, ...);
 
 /**

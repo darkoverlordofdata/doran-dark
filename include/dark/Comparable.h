@@ -33,7 +33,7 @@ class (Comparable)
         DObject_t _;
         struct 
         {
-            REFCOUNT
+            int         RefCount;
             char*       (*ToString)(DObject const);
             bool        (*Equals)(DObject const, DObject const);
             int         (*GetHashCode)(DObject const);

@@ -25,6 +25,7 @@ SOFTWARE.
 ******************************************************************/
 #include <dark/core.h>
 #include <stdlib.h>
+#ifndef __ARC__
 tgc_t dark_gc;
 
 /**
@@ -32,7 +33,7 @@ tgc_t dark_gc;
  */
 void __attribute__((constructor)) dark_gc_ctor()
 {
-    int local;
+    int local= 0;
 	tgc_start (&dark_gc, &local);
 }
 
@@ -44,3 +45,4 @@ void __attribute__((destructor)) dark_gc_dtor()
     tgc_stop (&dark_gc);
 }
 
+#endif

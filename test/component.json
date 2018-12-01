@@ -5,7 +5,7 @@
   "version": "0.0.1",
   "vala": "0.26",
   "authors": [],
-  "description": "unit tests for doran-dark",
+  "description": "doran-dark tdd",
   "license": "MIT",
   "private": true,
   "dependencies": {
@@ -28,12 +28,12 @@
     "RELEASE_NAME": "darkly"
   },
   "definitions": [
-    "__TGC__"
+    "__ARC__"
   ],
   "symbols": [
-    "__TGC__"
+    "__ARC__"
   ],
   "copy": "..",
-  "vapidir": "/src/vapis",
+  "vapidir": null,
   "console": false
 }

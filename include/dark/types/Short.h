@@ -39,7 +39,7 @@ class (Short)
         Number_t _;
         struct 
         {
-            REFCOUNT
+            retained
             char*       (*ToString) (DObject const);
             bool        (*Equals) (DObject const, DObject const);
             int         (*GetHashCode) (DObject const);
@@ -65,6 +65,5 @@ double Short_DoubleValue(Short const);
 char Short_CharValue(Short const);
 short Short_ShortValue(Short const);
 Short Short_New(short value);
-Short Short_rcNew(short value);
 
 #endif _SHORT_H_

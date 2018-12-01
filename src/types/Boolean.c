@@ -82,9 +82,9 @@ Boolean Boolean_Ctor(Boolean const this, bool value)
 {
     Comparable_Ctor(this);
 
-    this->ToString      = Boolean_ToString;
-    this->CompareTo     = Boolean_CompareTo;
-    this->BoolValue     = Boolean_BoolValue; 
+    this->ToString      = &Boolean_ToString;
+    this->CompareTo     = &Boolean_CompareTo;
+    this->BoolValue     = &Boolean_BoolValue; 
 
     this->value = value;
     return this;

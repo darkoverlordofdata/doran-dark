@@ -250,7 +250,7 @@ String FileSystem_GetDefaultParent(FileSystem const this) {
 
 String FileSystem_FromURIPath(FileSystem const this, String path) {
     int length = path->length;
-    char* p, z = strndup(path->value, length);
+    char* p, buf = strndup(path->value, length);
     if ((length > 2) && (p[2] == ':')) {
         p++;
         length--;
@@ -261,7 +261,7 @@ String FileSystem_FromURIPath(FileSystem const this, String path) {
     }
     p[length-1] = 0;
     String result = String_New(p);
-    free(z);
+    free(buf);
     return result;
 }
 
@@ -321,19 +321,19 @@ String FileSystem_ResolveFile(FileSystem const this, File f) {
         char drive = path->value[0];
         String dir = this->GetDriveDirectory(this, drive);
         String temp = String_New(strndup(path->value, 2));
-        StringBuilder p = StringBuilder_New();
-        p->Appendc(p, drive);
-        p->Appendc(p, ':');
-        p->Append(p, dir);
-        p->Append(p, temp);
-        String result = p->Concat(p);
+        StringBuilder sb = StringBuilder_New();
+        sb->Appendc(sb, drive);
+        sb->Appendc(sb, ':');
+        sb->Append(sb, dir);
+        sb->Append(sb, temp);
+        String result = sb->Concat(sb);
         #ifdef __ARC__
         DObject_Release(path);
         DObject_Release(temp);
         DObject_Release(dir);
         DObject_Release(up);
         DObject_Release(ud);
-        DObject_Release(p);
+        DObject_Release(sb);
         #endif
         return result;
     }
@@ -422,3 +422,4 @@ FileSystem FileSystem_New()
 {
     return FileSystem_Ctor(new(FileSystem));
 }
+

@@ -41,6 +41,9 @@ SOFTWARE.
  * MyClass_dtor     singleton destructor
  */
 
+#ifdef __ARC__
+#define retained int RefCount;
+#endif
 /** 
  * class definition
  * 
@@ -77,15 +80,6 @@ SOFTWARE.
  *   ...
  */
 #define extends(class) class##_t _
-/**
- * RefCount is the first data item in an object
- * ... if we are using ARC that is.
- */
-#ifdef __ARC__
-#define REFCOUNT int         RefCount;
-#else
-#define REFCOUNT
-#endif
 
 
 /** 
@@ -121,7 +115,7 @@ SOFTWARE.
 #ifdef __ARC__
 #define delete(x) free(x)
 #else
-define delete(x) tgc_free(&dark_gc, x);
+#define delete(x) tgc_free(&dark_gc, x);
 #endif
 /** 
 /** 

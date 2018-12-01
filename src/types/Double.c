@@ -129,14 +129,14 @@ Double Double_Ctor(Double const this, double value)
 {
     Number_Ctor(this);
 
-    this->ToString      = Double_ToString;
-    this->CompareTo     = Double_CompareTo;
-    this->IntValue      = Double_IntValue; 
-    this->LongValue     = Double_LongValue; 
-    this->FloatValue    = Double_FloatValue; 
-    this->DoubleValue   = Double_DoubleValue; 
-    this->CharValue     = Double_CharValue; 
-    this->ShortValue    = Double_ShortValue; 
+    this->ToString      = &Double_ToString;
+    this->CompareTo     = &Double_CompareTo;
+    this->IntValue      = &Double_IntValue; 
+    this->LongValue     = &Double_LongValue; 
+    this->FloatValue    = &Double_FloatValue; 
+    this->DoubleValue   = &Double_DoubleValue; 
+    this->CharValue     = &Double_CharValue; 
+    this->ShortValue    = &Double_ShortValue; 
 
     this->value = value;
     return this;

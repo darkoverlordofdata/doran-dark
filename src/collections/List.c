@@ -148,12 +148,12 @@ List List_Ctor(List const this)
 {
     DObject_Ctor(this);
 
-    this->ToString      = List_ToString;
-    this->Iterate       = List_Iterate;
-    this->Add           = List_Add;
-    this->Push          = List_Push;
-    this->Pop           = List_Pop;
-    this->Dispose       = List_Dispose;
+    this->ToString      = &List_ToString;
+    this->Iterate       = &List_Iterate;
+    this->Add           = &List_Add;
+    this->Push          = &List_Push;
+    this->Pop           = &List_Pop;
+    this->Dispose       = &List_Dispose;
 
     this->head = nullptr;
 

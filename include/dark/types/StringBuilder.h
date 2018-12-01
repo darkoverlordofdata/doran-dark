@@ -72,7 +72,7 @@ class (StringBuilder)
         DObject_t _;
         struct 
         {
-            REFCOUNT
+            retained
             char*       (*ToString)(DObject const);
             bool        (*Equals)(DObject const, DObject const);
             int         (*GetHashCode)(DObject const);
@@ -92,7 +92,6 @@ class (StringBuilder)
 };
 
 StringBuilder StringBuilder_New();
-StringBuilder StringBuilder_rcNew();
 int StringBuilder_Empty(StringBuilder sb);
 int StringBuilder_Appendc(StringBuilder sb, const char c);
 int StringBuilder_Append(StringBuilder sb, const char *str);

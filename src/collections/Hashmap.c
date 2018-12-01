@@ -355,16 +355,16 @@ Hashmap Hashmap_Ctor(Hashmap const this)
 {
     DObject_Ctor(this);
 
-    this->ToString      = Hashmap_ToString; // override
-    this->Iterate       = Hashmap_Iterate;
-    this->Put           = Hashmap_Put;
-    this->Get           = Hashmap_Get;
-    this->Remove        = Hashmap_Remove;
-    this->Dispose       = Hashmap_Dispose;
-    this->Length        = Hashmap_Length;
-    this->HashInt       = Hashmap_HashInt;
-    this->Hash          = Hashmap_Hash;
-    this->Rehash        = Hashmap_Rehash;
+    this->ToString      = &Hashmap_ToString; // override
+    this->Iterate       = &Hashmap_Iterate;
+    this->Put           = &Hashmap_Put;
+    this->Get           = &Hashmap_Get;
+    this->Remove        = &Hashmap_Remove;
+    this->Dispose       = &Hashmap_Dispose;
+    this->Length        = &Hashmap_Length;
+    this->HashInt       = &Hashmap_HashInt;
+    this->Hash          = &Hashmap_Hash;
+    this->Rehash        = &Hashmap_Rehash;
 
     this->data = allocate(HashmapNode, INITIAL_SIZE);
 	this->tableSize = INITIAL_SIZE;
@@ -377,5 +377,7 @@ Hashmap Hashmap_New()
 {
     return Hashmap_Ctor(new(Hashmap));
 }
+
+
 
 

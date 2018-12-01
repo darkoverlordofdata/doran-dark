@@ -21,9 +21,9 @@ find_package (Vala REQUIRED)
 #
 #   libraries - sources & packages
 #
-add_subdirectory ( .lib/jasmine )
 add_subdirectory ( .lib/system )
 add_subdirectory ( .lib/zerog )
+add_subdirectory ( .lib/jasmine )
 add_subdirectory ( .lib/dark )
 if (EXISTS ${CMAKE_SOURCE_DIR}/data AND NOT DEFINED ZEROG )
     add_subdirectory (data)
@@ -62,7 +62,7 @@ link_directories ( ${DEPS_LIBRARY_DIRS} )
 #   compiler options
 #
 list ( APPEND VALAC_OPTIONS --disable-warnings --enable-experimental )
-list ( APPEND VALAC_OPTIONS --vapidir=${CMAKE_SOURCE_DIR}/src/vapis)
+list ( APPEND VALAC_OPTIONS --vapidir=${CMAKE_SOURCE_DIR})
 list ( APPEND VALAC_OPTIONS --define __ARC__ )
 
 # Vapis: 
@@ -70,10 +70,9 @@ list ( APPEND VALAC_OPTIONS --define __ARC__ )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lm" )
 
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w -std=c99 -O3" )
-set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D__ARC__" )
-
 
 # definitions 
+add_definitions( -D__ARC__ ) 
 add_definitions( -DGLIB_COMPILATION ) 
 add_definitions( -DG_DISABLE_CHECKS ) 
 add_definitions( -DGOBJECT_COMPILATION ) 

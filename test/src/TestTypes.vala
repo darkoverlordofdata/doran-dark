@@ -6,16 +6,17 @@ using Dark.Collections;
 public void TestTypes()
 {
     // must be declared in outer scope so lifetime is valid during test
-    var lVal = new Dark.Long(420);
     var iVal = new Dark.Integer(420);
+    var lVal = new Dark.Long(420);
+    var mVal = new Dark.Long(421);
+    var nVal = new Dark.Long(422);
     var cVal = new Dark.Char(126);
     var sVal = new Dark.Short(420);
     var fVal = new Dark.Float(420f);
     var dVal = new Dark.Double(420.0);
     var xVal = new Dark.String("Frodo");
-        // print("Char = %c\n", s.CharAt(3));
-        // return 0;
-
+    var yVal = new Dark.String("Bilbo");
+    var zVal = new Dark.String("Gandalf");
 
     Describe("Type Integer", () => {
         It("Bytes should be 4", () => Expect<int>(4).ToBe<int>(Dark.Integer.Bytes));
@@ -27,6 +28,18 @@ public void TestTypes()
         It("Bytes should be 4", () => Expect<int>(4).ToBe<int>(Dark.Long.Bytes));
         It("Size should be 32", () => Expect<int>(32).ToBe<int>(Dark.Long.Size));
         It("Value should be 420", () => Expect<long>(420).ToBe<long>(lVal.LongValue()));
+    });
+
+    Describe("Type Long", () => {
+        It("Bytes should be 4", () => Expect<int>(4).ToBe<int>(Dark.Long.Bytes));
+        It("Size should be 32", () => Expect<int>(32).ToBe<int>(Dark.Long.Size));
+        It("Value should be 420", () => Expect<long>(421).ToBe<long>(mVal.LongValue()));
+    });
+
+    Describe("Type Long", () => {
+        It("Bytes should be 4", () => Expect<int>(4).ToBe<int>(Dark.Long.Bytes));
+        It("Size should be 32", () => Expect<int>(32).ToBe<int>(Dark.Long.Size));
+        It("Value should be 420", () => Expect<long>(422).ToBe<long>(nVal.LongValue()));
     });
 
     Describe("Type Short", () => {
@@ -58,9 +71,22 @@ public void TestTypes()
 
     });
 
+    Describe("Type String", () => {
+        It("CharAt 3 should be 'b'", () => Expect<char>('b').ToBe<int>(yVal.CharAt(3)));
+
+    });
+
+    Describe("Type String", () => {
+        It("CharAt 3 should be 'd'", () => Expect<char>('d').ToBe<int>(zVal.CharAt(3)));
+
+    });
+
     var env = Jasmine.GetEnv();
     env.AddReporter(new Jasmine.ConsoleReporter());
     env.Execute();
+
+
+
 }
 
 
