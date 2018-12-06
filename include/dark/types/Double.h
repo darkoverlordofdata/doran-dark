@@ -33,28 +33,47 @@ SOFTWARE.
 #define DOUBLE_SIZE       (DOUBLE_BYTES * CHAR_BIT)
 #define DOUBLE_TYPE       (TYPE_DOUBLE)
 
-class (Double)
+typedef struct DoubleClass_t DoubleClass_t;
+extern DoubleClass_t DoubleClass;
+
+/**
+ * Object class
+ */
+class (Double) 
+{
+    DoubleClass_t* isa;
+    double        value;
+};
+
+/**
+ * Object metaclass
+ */
+typedef struct DoubleClass_t
 {
     union {
-        Number_t _;
+        NumberClass_t base;
         struct 
         {
-            retained
-            char*       (*ToString) (DObject const);
-            bool        (*Equals) (DObject const, DObject const);
-            int         (*GetHashCode) (DObject const);
-            void        (*Dispose) (DObject const);
-            int         (*CompareTo) (Double const, Double other);
-            int         (*IntValue) (Double const);
-            long        (*LongValue) (Double const);
-            float       (*FloatValue) (Double const);
-            double      (*DoubleValue) (Double const);
-            char        (*CharValue) (Double const);
-            short       (*ShortValue) (Double const);
+            Class isa;
+            Class superclass;
+            char* name;
+            char*   (*ToString) (Object const);
+            bool    (*Equals) (Object const, Object const);
+            int     (*GetHashCode) (Object const);
+            void    (*Dispose) (Object const);
+            bool    (*ReferenceEquals) (Object const objA, Object const objB);
+            bool    (*InstanceEquals) (Object const objA, Object const objB);
+            int     (*CompareTo) (Comparable const, Comparable other);
+            int     (*IntValue) (Double const);
+            long    (*LongValue) (Double const);
+            float   (*FloatValue) (Double const);
+            double  (*DoubleValue) (Double const);
+            char    (*CharValue) (Double const);
+            short   (*ShortValue) (Double const);
         };
     };
-    double            value;
 };
+
 
 int Double_CompareTo(Double const, Double other);
 int Double_IntValue(Double const);

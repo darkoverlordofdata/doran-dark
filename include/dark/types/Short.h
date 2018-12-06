@@ -33,27 +33,45 @@ SOFTWARE.
 #define SHORT_SIZE       (SHORT_BYTES * CHAR_BIT)
 #define SHORT_TYPE       (TYPE_SHORT)
 
-class (Short)
+typedef struct ShortClass_t ShortClass_t;
+extern ShortClass_t ShortClass;
+
+/**
+ * Object class
+ */
+class (Short) 
+{
+    ShortClass_t* isa;
+    short        value;
+};
+
+/**
+ * Object metaclass
+ */
+typedef struct ShortClass_t
 {
     union {
-        Number_t _;
+        NumberClass_t base;
         struct 
         {
-            retained
-            char*       (*ToString) (DObject const);
-            bool        (*Equals) (DObject const, DObject const);
-            int         (*GetHashCode) (DObject const);
-            void        (*Dispose) (DObject const);
-            int         (*CompareTo) (Short const, Short other);
-            int         (*IntValue) (Short const);
-            long        (*LongValue) (Short const);
-            float       (*FloatValue) (Short const);
-            double      (*DoubleValue) (Short const);
-            char        (*CharValue) (Short const);
-            short       (*ShortValue) (Short const);
+            Class isa;
+            Class superclass;
+            char* name;
+            char*   (*ToString) (Object const);
+            bool    (*Equals) (Object const, Object const);
+            int     (*GetHashCode) (Object const);
+            void    (*Dispose) (Object const);
+            bool    (*ReferenceEquals) (Object const objA, Object const objB);
+            bool    (*InstanceEquals) (Object const objA, Object const objB);
+            int     (*CompareTo) (Comparable const, Comparable other);
+            int     (*IntValue) (Short const);
+            long    (*LongValue) (Short const);
+            float   (*FloatValue) (Short const);
+            double  (*DoubleValue) (Short const);
+            char    (*CharValue) (Short const);
+            short   (*ShortValue) (Short const);
         };
     };
-    short            value;
 };
 
 short Short_ParseShort(char* s, int radix);

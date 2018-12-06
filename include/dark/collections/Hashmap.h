@@ -36,7 +36,7 @@ SOFTWARE.
  */
 #ifndef _HASHMAP_H_
 #define _HASHMAP_H_
-#include "../DObject.h"
+#include "../Object.h"
 
 #define MAP_MISSING -3  /* No such element */
 #define MAP_FULL -2 	/* Hashmap is full */
@@ -48,7 +48,7 @@ SOFTWARE.
  * Iterator is a pointer to a function that can take two Any arguments
  * and return an integer. Returns status code..
  */
-typedef int (*Iterator)(Any, Any);
+typedef int (*Hashmap_Iterator)(Any, Any);
 
 /* We need to keep keys and values */
 class (HashmapNode)
@@ -66,11 +66,12 @@ class (Hashmap)
         DObject_t _;
         struct 
         {
+            Class isa;
             retained
-            char*       (*ToString)(DObject const);
-            bool        (*Equals)(DObject const, DObject const);
-            int         (*GetHashCode)(DObject const);
-            void        (*Dispose) (DObject const);
+            char*       (*ToString)(Object const);
+            bool        (*Equals)(Object const, Object const);
+            int         (*GetHashCode)(Object const);
+            void        (*Dispose) (Object const);
         };
     };
 	int tableSize;
@@ -84,7 +85,7 @@ class (Hashmap)
     * than MAP_OK the traversal is terminated. f must
     * not reenter any hashmap functions, or deadlock may arise.
     */
-    int (*Iterate)  (Hashmap const, Iterator func, Any item);
+    int (*Iterate)  (Hashmap const, Hashmap_Iterator func, Any item);
 
     /*
     * Add an element to the hashmap. Return MAP_OK or MAP_OMEM.
@@ -133,12 +134,11 @@ int Hashmap_Hash(Hashmap const, char* key);
 int Hashmap_Rehash(Hashmap const);
 int Hashmap_Put(Hashmap const, char* key, Any value);
 Any Hashmap_Get(Hashmap const, char* key);
-int Hashmap_Iterate(Hashmap const, Iterator f, Any item);
+int Hashmap_Iterate(Hashmap const, Hashmap_Iterator f, Any item);
 int Hashmap_Remove(Hashmap const, char* key);
 void Hashmap_Dispose(Hashmap const);
 int Hashmap_Length(Hashmap const);
 char* Hashmap_ToString(Hashmap const);
 Hashmap Hashmap_New();
-Hashmap Hashmap_rcNew();
 
 #endif _HASHMAP_H_

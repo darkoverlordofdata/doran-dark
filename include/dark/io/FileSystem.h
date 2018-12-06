@@ -26,7 +26,7 @@ SOFTWARE.
 #ifndef _FILE_SYSTEM_H_
 #define _FILE_SYSTEM_H_
 #include <stdio.h>
-#include "../DObject.h"
+#include "../Object.h"
 #include "../types/StringBuilder.h"
 #include "File.h"
 
@@ -54,11 +54,12 @@ class (FileSystem)
         DObject_t _;
         struct 
         {
+            Class isa;
             retained
-            char*       (*ToString)(DObject const);
-            bool        (*Equals)(DObject const, DObject const);
-            int         (*GetHashCode)(DObject const);
-            void        (*Dispose) (DObject const);
+            char*       (*ToString)(Object const);
+            bool        (*Equals)(Object const, Object const);
+            int         (*GetHashCode)(Object const);
+            void        (*Dispose) (Object const);
         };
     };
 

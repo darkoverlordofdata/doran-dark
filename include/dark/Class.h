@@ -23,26 +23,16 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include <dark/core.h>
-#include <stdlib.h>
-#ifndef __ARC__
-tgc_t gc;
+#ifndef _CLASS_H_
+#define _CLASS_H_
+#include "core.h"
 
-/**
- *  start the garbage collector
- */
-void __attribute__((constructor)) dark_gc_ctor()
+class (Class)
 {
-    int local= 0;
-	tgc_start (&gc, &local);
-}
+    Class isa;
+    Class superclass;
+    char* name;
+};
 
-/**
- *  stop the garbage collector
- */
-void __attribute__((destructor)) dark_gc_dtor()
-{
-    tgc_stop (&gc);
-}
 
-#endif
+#endif _CLASS_H_ 

@@ -24,25 +24,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <stdarg.h>
-#include <dark/collections/Vector.h>
+#include <dark/collections/Array.h>
 /**
- * Generic Vector implementation
+ * Generic Array implementation
  */
+ArrayClass_t ArrayClass;
 
-/**
- * Number of items in vector
- */
-int Vector_Count(Vector const this)
+
+int overload Length(Array const this)
 {
-    return this->count;
+    return this->length;
 }
-
 /**
  * Resize the vector
  * 
  * @param capacity the new size
  */
-void Vector_Resize(Vector const this, int capacity)
+void Resize(Array const this, int capacity)
 {
     #ifdef DEBUG_ON
     printf("vector_resize: %d to %d\n", this->capacity, capacity);
@@ -60,12 +58,11 @@ void Vector_Resize(Vector const this, int capacity)
  * 
  * @param item the data to add
  */
-// void Add(Vector const this, Any item)
-void Vector_Add(Vector const this, Any item)
+void overload Add(Array const this, Any item)
 {
-    if (this->capacity == this->count)
-        this->Resize(this, this->capacity * 2);
-    this->data[this->count++] = item;
+    if (this->capacity == this->length)
+        this->isa->Resize(this, this->capacity * 2);
+    this->data[this->length++] = item;
 }
 
 /**
@@ -74,9 +71,9 @@ void Vector_Add(Vector const this, Any item)
  * @param index to add at
  * @param item the data to add
  */
-void Vector_Set(Vector const this, int index, Any item)
+void Set(Array const this, int index, Any item)
 {
-    if (index >= 0 && index < this->count)
+    if (index >= 0 && index < this->length)
         this->data[index] = item;
 }
 
@@ -85,9 +82,9 @@ void Vector_Set(Vector const this, int index, Any item)
  * 
  * @param index to get
  */
-Any Vector_Get(Vector const this, int index)
+Any Get(Array const this, int index)
 {
-    if (index >= 0 && index < this->count)
+    if (index >= 0 && index < this->length)
         return this->data[index];
     return nullptr;
 }
@@ -97,88 +94,105 @@ Any Vector_Get(Vector const this, int index)
  * 
  * @param index to delete
  */
-void Vector_Delete(Vector const this, int index)
+void overload Remove(Array const this, int index)
 {
-    if (index < 0 || index >= this->count)
+    if (index < 0 || index >= this->length)
         return;
 
     this->data[index] = nullptr;
 
-    for (int i = index; i < this->count - 1; i++) {
+    for (int i = index; i < this->length - 1; i++) {
         this->data[i] = this->data[i + 1];
         this->data[i + 1] = nullptr;
     }
 
-    this->count--;
+    this->length--;
 
-    if (this->count > 0 && this->count == this->capacity / 4)
-        this->Resize(this, this->capacity / 2);
+    if (this->length > 0 && this->length == this->capacity / 4)
+        this->isa->Resize(this, this->capacity / 2);
 }
 
 /**
  * Free the vector
  */
-void Vector_Dispose(Vector const this)
+void overload Dispose(Array const this)
 {
     delete(this->data);
 }
 
-void Vector_Clear(Vector const this)
+void overload Clear(Array const this)
 {
-    for (int i=0; i < this->count; i++)
+    for (int i=0; i < this->length; i++)
         this->data[i] = nullptr;
-    this->count = 0;
+    this->length = 0;
 }
 
 
 /**
  * ToString
  */
-const char* Vector_ToString(Vector const this)
+const char* overload ToString(Array const this)
 {
-    return "dark.collections.Vector";
+    return "dark.collections.Array";
 }
 
 /**
- * Initialize a new Vector
+ * Array Class Metadata
  */
-Vector Vector_Ctor(Vector const this, int capacity)
+void Array_Init()
 {
-    DObject_Ctor(this);
+    if (ArrayClass.isa == nullptr) {
+        ArrayClass = (ArrayClass_t) {
+            .isa            = &ArrayClass,
+            .superclass     = &CollectionClass,
+            .name           = "Array",
+            .Equals         = ObjectClass.Equals,
+            .GetHashCode    = ObjectClass.GetHashCode,
+            .ReferenceEquals= ObjectClass.ReferenceEquals,
+            .InstanceEquals = ObjectClass.InstanceEquals,
+            .ToString       = ToString,
+            .Dispose        = Dispose,
+            .Length         = Length,
+            .Add            = Add,
+            .Remove         = Remove,
+        };
+    }
+}
 
-    this->ToString      = &Vector_ToString;
-    this->Count         = &Vector_Count;
-    this->Resize        = &Vector_Resize;
-    this->Add           = &Vector_Add;
-    this->Set           = &Vector_Set;
-    this->Get           = &Vector_Get;
-    this->Delete        = &Vector_Delete;
-    this->Dispose       = &Vector_Dispose;
-    this->Clear         = &Vector_Clear;
-
-    this->capacity = capacity == 0 ? VECTOR_INIT_CAPACITY : capacity;
-    this->count = 0;
+/**
+ * Initialize a new Array
+ */
+Array Array_Ctor(Array const this, int capacity)
+{
+    Collection_Ctor(this);
+    this->isa = &ArrayClass;
+    this->capacity = capacity == 0 ? ARRAY_INIT_CAPACITY : capacity;
+    this->length = 0;
     this->data = calloc(this->capacity, sizeof(Any));
 
     return this;
 }
 
 /**
- * new Vector
+ * new Array
  * 
  * allocates room for capacity, sets used to 0
  * 
  * @param capacity initial max size of vector
  * 
  */
-Vector Vector_New(int capacity)
+Array overload Array_New(int capacity)
 {
-    return Vector_Ctor(new(Vector), capacity);
+    return Array_Ctor(new(Array), capacity);
 }
 
+Array overload Array_New(void)
+{
+    return Array_Ctor(new(Array), 4);
+}
 
 /**
- * new Vector
+ * new Array
  * 
  * allocate a vector the size of the param list
  * and then fill values from params.
@@ -187,15 +201,15 @@ Vector Vector_New(int capacity)
  * @param ... list of initial values
  * 
  */
-Vector Vector_Variadic(int count, ...)
+Array Array_Variadic(int count, ...)
 {
-    Vector v = Vector_Ctor(new(Vector), count);
+    Array v = Array_Ctor(new(Array), count);
     va_list args;
     va_start(args, count);
     for (int i=0; i<count; i++)
         v->data[i] = va_arg(args, Any);
     va_end(args);
-    v->count = count;
+    v->length = count;
     return v;
 }
 

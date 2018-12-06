@@ -29,6 +29,7 @@ SOFTWARE.
  */
 static Exception(NumberFormat);
 
+ShortClass_t ShortClass;
 
 /**
  * Returns a primitive short value parsed from input string. 
@@ -115,21 +116,39 @@ char* Short_ToString(Short const this)
 }
 
 /**
+ * Short Class Metadata
+ */
+void Short_Init()
+{
+    if (ShortClass.isa == nullptr) {
+        ShortClass = (ShortClass_t) {
+            .isa            = &ShortClass,
+            .superclass     = &NumberClass,
+            .name           = "Short",
+            .Equals         = ObjectClass.Equals,
+            .GetHashCode    = ObjectClass.GetHashCode,
+            .Dispose        = ObjectClass.Dispose,
+            .ReferenceEquals= ObjectClass.ReferenceEquals,
+            .InstanceEquals = ObjectClass.InstanceEquals,
+            .ToString       = Short_ToString,
+            .CompareTo      = Short_CompareTo,
+            .IntValue       = Short_IntValue, 
+            .LongValue      = Short_LongValue, 
+            .FloatValue     = Short_FloatValue, 
+            .DoubleValue    = Short_DoubleValue, 
+            .CharValue      = Short_CharValue, 
+            .ShortValue     = Short_ShortValue, 
+        };
+    }
+}
+
+/**
  * Initialize a new Short
  */
 Short Short_Ctor(Short const this, short value)
 {
     Number_Ctor(this);
-
-    this->ToString      = &Short_ToString;
-    this->CompareTo     = &Short_CompareTo;
-    this->IntValue      = &Short_IntValue; 
-    this->LongValue     = &Short_LongValue; 
-    this->FloatValue    = &Short_FloatValue; 
-    this->DoubleValue   = &Short_DoubleValue; 
-    this->CharValue     = &Short_CharValue; 
-    this->ShortValue    = &Short_ShortValue; 
-
+    this->isa = &ShortClass;
     this->value = value;
     return this;
 }

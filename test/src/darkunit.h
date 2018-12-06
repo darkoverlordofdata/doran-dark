@@ -23,38 +23,54 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#ifndef _OBJECT_H_
-#define _OBJECT_H_
-#include "core.h"
-
-#define OBJECT_TYPE       (TYPE_OBJECT)
-
+#ifndef _DARKUNIT_H_
+#define _DARKUNIT_H_
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <signal.h>
+#include <Block.h>
 /**
- * DObject class
+ * Inspired by [MinUnit](http://www.jera.com/techinfo/jtns/jtn002.html)
+ * 
+ * Compiler/linker flags needed to enable c99 lambda's:
+ * 
+ *  -LC:/msys64/mingw64/bin
+ *  -lBlocksRuntime -fblocks
+ * 
  */
-class (DObject) 
-{
-    retained    // Contains RefCount if __ARC__ set
-    char* (*ToString)(DObject const);
-    bool (*Equals)(DObject const, DObject const);
-    int (*GetHashCode)(DObject const);
-    void (*Dispose)(DObject const);
-} ;
+typedef struct test_stats {
+    int total;
+    int failed;
+    int passed;
+} test_stats;
+test_stats tests;
 
-/**
- * DObject API
- */
+void Describe(char* desc, void (^lambda)());
 
-DObject DObject_AddRef(DObject const);
-DObject DObject_Release(DObject const);
+#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 
-bool DObject_ReferenceEquals(DObject const objA, DObject const objB);
-bool DObject_InstanceEquals(DObject const objA, DObject const objB);
-const char* DObject_ToString(DObject const);
-bool DObject_Equals(DObject const, DObject const that);
-int DObject_GetHashCode(DObject const);
-void DObject_Dispose(DObject const);
-DObject DObject_New();
-DObject DObject_Dtor();
+#define error(MSG, ...) { \
+    printf("[ERROR] (%s:%s:%i) ", __FILENAME__, __func__, __LINE__); \
+    printf(MSG, ##__VA_ARGS__); }
 
-#endif _OBJECT_H_ 
+#define It(desc, test) do { \
+    printf("%s - ", desc); \
+    int r=test(); \
+    tests.total++; \
+    if (r) tests.failed++; \
+    else tests.passed++; \
+} while(0)
+
+#define Expect(test) do { \
+    if (!(test)) { \
+        printf(" failed (%s:%i)\n", __FILENAME__, __LINE__); \
+        return 1; \
+    } else { \
+        printf(" passed \n"); \
+        return 0; \
+    } \
+} while(0)
+
+
+#endif _DARKUNIT_H_

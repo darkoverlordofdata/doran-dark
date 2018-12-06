@@ -277,7 +277,7 @@ Any Hashmap_Get(Hashmap const this, char* key)
  * additional Any argument is passed to the function as its first
  * argument and the hashmap element is the second.
  */
-int Hashmap_Iterate(Hashmap const this, Iterator f, Any item) 
+int Hashmap_Iterate(Hashmap const this, Hashmap_Iterator f, Any item) 
 {
 	/* On empty hashmap, return immediately */
 	if (this->Length(this) <= 0)
@@ -354,17 +354,18 @@ char* Hashmap_ToString(Hashmap const this)
 Hashmap Hashmap_Ctor(Hashmap const this)
 {
     DObject_Ctor(this);
+    this->isa = RegisterClass(HashmapID, DObjectID, "Hashmap");
 
-    this->ToString      = &Hashmap_ToString; // override
-    this->Iterate       = &Hashmap_Iterate;
-    this->Put           = &Hashmap_Put;
-    this->Get           = &Hashmap_Get;
-    this->Remove        = &Hashmap_Remove;
-    this->Dispose       = &Hashmap_Dispose;
-    this->Length        = &Hashmap_Length;
-    this->HashInt       = &Hashmap_HashInt;
-    this->Hash          = &Hashmap_Hash;
-    this->Rehash        = &Hashmap_Rehash;
+    this->ToString      = Hashmap_ToString; // override
+    this->Iterate       = Hashmap_Iterate;
+    this->Put           = Hashmap_Put;
+    this->Get           = Hashmap_Get;
+    this->Remove        = Hashmap_Remove;
+    this->Dispose       = Hashmap_Dispose;
+    this->Length        = Hashmap_Length;
+    this->HashInt       = Hashmap_HashInt;
+    this->Hash          = Hashmap_Hash;
+    this->Rehash        = Hashmap_Rehash;
 
     this->data = allocate(HashmapNode, INITIAL_SIZE);
 	this->tableSize = INITIAL_SIZE;

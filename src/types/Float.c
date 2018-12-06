@@ -29,6 +29,7 @@ SOFTWARE.
  */
 static Exception(NumberFormat);
 
+FloatClass_t FloatClass;
 /**
  * Returns a primitive float value parsed from input string. 
  */
@@ -115,21 +116,40 @@ char* Float_ToString(Float const this)
 }
 
 /**
+ * Float Class Metadata
+ */
+void Float_Init()
+{
+    if (FloatClass.isa == nullptr) {
+        FloatClass = (FloatClass_t) {
+            .isa            = &FloatClass,
+            .superclass     = &NumberClass,
+            .name           = "Float",
+            .Equals         = ObjectClass.Equals,
+            .GetHashCode    = ObjectClass.GetHashCode,
+            .Dispose        = ObjectClass.Dispose,
+            .ReferenceEquals= ObjectClass.ReferenceEquals,
+            .InstanceEquals = ObjectClass.InstanceEquals,
+            .ToString       = Float_ToString,
+            .CompareTo      = Float_CompareTo,
+            .IntValue       = Float_IntValue, 
+            .LongValue      = Float_LongValue, 
+            .FloatValue     = Float_FloatValue, 
+            .DoubleValue    = Float_DoubleValue, 
+            .CharValue      = Float_CharValue, 
+            .ShortValue     = Float_ShortValue, 
+        };
+    }
+}
+
+
+/**
  * Initialize a new Float
  */
 Float Float_Ctor(Float const this, float value)
 {
     Number_Ctor(this);
-
-    this->ToString      = &Float_ToString;
-    this->CompareTo     = &Float_CompareTo;
-    this->IntValue      = &Float_IntValue; 
-    this->LongValue     = &Float_LongValue; 
-    this->FloatValue    = &Float_FloatValue; 
-    this->DoubleValue   = &Float_DoubleValue; 
-    this->CharValue     = &Float_CharValue; 
-    this->ShortValue    = &Float_ShortValue; 
-
+    this->isa = &FloatClass;
     this->value = value;
     return this;
 }

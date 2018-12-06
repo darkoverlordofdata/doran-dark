@@ -30,6 +30,8 @@ SOFTWARE.
 
 static Exception(IndexOutOfBounds);
 
+StringClass_t StringClass;
+
 
 void String_GetChars(String this, char* dst, int dstBegin) {
     memcpy(dst+dstBegin, this->value, this->length);
@@ -89,7 +91,7 @@ String String_Concat(String this, String other) {
 }
 
 bool String_Contains(String this, String s) {
-    return this->IndexOf(this, s, 0) > -1;
+    return this->isa->IndexOf(this, s, 0) > -1;
 }
 
 String String_CopyOf(String this) {
@@ -142,7 +144,7 @@ String String_Trim(String this) {
         : this;    
 }
 
-int String_Length(String const this) 
+int overload Length(String const this) 
 {
     return this->length;
 }
@@ -170,33 +172,52 @@ void String_Dispose(String const this)
 {
     free(this->value);
 }
+
+/**
+ * String Class Metadata
+ */
+void String_Init()
+{
+    if (StringClass.isa == nullptr) {
+        StringClass = (StringClass_t) {
+            .isa            = &StringClass,
+            .superclass     = &ComparableClass,
+            .name           = "String",
+            .Equals         = ObjectClass.Equals,
+            .GetHashCode    = ObjectClass.GetHashCode,
+            .Dispose        = ObjectClass.Dispose,
+            .ReferenceEquals= ObjectClass.ReferenceEquals,
+            .InstanceEquals = ObjectClass.InstanceEquals,
+            .ToString       = String_ToString,
+            .Dispose        = String_Dispose,
+            .CompareTo      = String_CompareTo,
+            .Length         = Length,
+            .IsEmpty        = String_IsEmpty,
+            .CharAt         = String_CharAt,
+            .CompareToIgnoreCase = String_CompareToIgnoreCase,
+            .Concat         = String_Concat,
+            .Concatc        = String_Concatc,
+            .Contains       = String_Contains,
+            .CopyOf         = String_CopyOf,
+            .EndsWith       = String_EndsWith,
+            .StartsWith     = String_StartsWith,
+            .GetBytes       = String_GetBytes,
+            .IndexOf        = String_IndexOf,
+            .LastIndexOf    = String_LastIndexOf,
+            .ToLowerCase    = String_ToLowerCase,
+            .ToUpperCase    = String_ToUpperCase,
+            .Trim           = String_Trim,
+        };
+    }
+}
+
 /**
  * Initialize a new String
  */
 String String_Ctor(String const this, char* value)
 {
     Comparable_Ctor(this);
-
-    this->ToString      = &String_ToString;
-    this->Dispose       = &String_Dispose;
-    this->CompareTo     = &String_CompareTo;
-    this->Length        = &String_Length;
-    this->IsEmpty       = &String_IsEmpty;
-    this->CharAt        = &String_CharAt;
-    this->CompareToIgnoreCase = &String_CompareToIgnoreCase;
-    this->Concat        = &String_Concat;
-    this->Concatc       = &String_Concatc;
-    this->Contains      = &String_Contains;
-    this->CopyOf        = &String_CopyOf;
-    this->EndsWith      = &String_EndsWith;
-    this->StartsWith    = &String_StartsWith;
-    this->GetBytes      = &String_GetBytes;
-    this->IndexOf       = &String_IndexOf;
-    this->LastIndexOf   = &String_LastIndexOf;
-    this->ToLowerCase   = &String_ToLowerCase;
-    this->ToUpperCase   = &String_ToUpperCase;
-    this->Trim          = &String_Trim;
-
+    this->isa = &StringClass;
     this->value = strdup(value);
     this->length = strlen(value);
     return this;

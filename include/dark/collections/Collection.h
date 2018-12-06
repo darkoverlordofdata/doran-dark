@@ -23,65 +23,58 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#ifndef _FLOAT_H_
-#define _FLOAT_H_
-#include "Number.h"
-
-#define FLOAT_MIN_VALUE  FLT_MIN
-#define FLOAT_MAX_VALUE  FLT_MAX
-#define FLOAT_BYTES      (sizeof(float))
-#define FLOAT_SIZE       (FLOAT_BYTES * CHAR_BIT)
-#define FLOAT_TYPE       (TYPE_FLOAT)
-
-typedef struct FloatClass_t FloatClass_t;
-extern FloatClass_t FloatClass;
-
+#ifndef _COLLECTION_H_
+#define _COLLECTION_H_
+#include "../Object.h"
 /**
- * Object class
+ * Base collection interface for sequential collections such as list and array
  */
-class (Float) 
+typedef struct CollectionClass_t CollectionClass_t;
+extern CollectionClass_t CollectionClass;
+
+class (Collection)
 {
-    FloatClass_t* isa;
-    float        value;
+    CollectionClass_t* isa;
 };
+
 
 /**
  * Object metaclass
  */
-typedef struct FloatClass_t
+typedef struct CollectionClass_t
 {
     union {
-        NumberClass_t base;
+        Object_t base;
         struct 
         {
-            Class isa;
-            Class superclass;
-            char* name;
+            Class   isa;
+            Class   superclass;
+            char*   name;
             char*   (*ToString) (Object const);
             bool    (*Equals) (Object const, Object const);
             int     (*GetHashCode) (Object const);
             void    (*Dispose) (Object const);
             bool    (*ReferenceEquals) (Object const objA, Object const objB);
             bool    (*InstanceEquals) (Object const objA, Object const objB);
-            int     (*CompareTo) (Comparable const, Comparable other);
-            int     (*IntValue) (Float const);
-            long    (*LongValue) (Float const);
-            float   (*FloatValue) (Float const);
-            double  (*DoubleValue) (Float const);
-            char    (*CharValue) (Float const);
-            short   (*ShortValue) (Float const);
         };
     };
+    int     (*Length) (Collection const);
+    bool    (*IsEmpty) (Collection const);
+    bool    (*Contains) (Collection const, Any value);
+    void    (*Clear) (Collection const);
+    bool    (*Add) (Collection const, Any value);
+    bool    (*Remove) (Collection const, Any value);
 };
 
 
-int Float_CompareTo(Float const, Float other);
-int Float_IntValue(Float const);
-long Float_LongValue(Float const);
-float Float_FloatValue(Float const);
-float Float_FloatValue(Float const);
-char Float_CharValue(Float const);
-short Float_ShortValue(Float const);
-Float Float_New(float value);
+/**
+ * Collection API
+ */
+int overload Length(Collection const);
+void overload Add(Collection const, Any item);
 
-#endif _FLOAT_H_
+/**
+ * AddAll
+ * ToArray
+*/
+#endif _COLLECTION_H_

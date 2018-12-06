@@ -28,6 +28,8 @@ SOFTWARE.
  * Integer implementation
  */
 
+IntegerClass_t IntegerClass;
+
 /**
  * Returns a primitive integer value parsed from input string. 
  */
@@ -112,21 +114,39 @@ char* Integer_ToString(Integer const this)
 }
 
 /**
+ * Integer Class Metadata
+ */
+void Integer_Init()
+{
+    if (IntegerClass.isa == nullptr) {
+        IntegerClass = (IntegerClass_t) {
+            .isa            = &IntegerClass,
+            .superclass     = &NumberClass,
+            .name           = "Integer",
+            .Equals         = ObjectClass.Equals,
+            .GetHashCode    = ObjectClass.GetHashCode,
+            .Dispose        = ObjectClass.Dispose,
+            .ReferenceEquals= ObjectClass.ReferenceEquals,
+            .InstanceEquals = ObjectClass.InstanceEquals,
+            .ToString       = Integer_ToString,
+            .CompareTo      = Integer_CompareTo,
+            .IntValue       = Integer_IntValue, 
+            .LongValue      = Integer_LongValue, 
+            .FloatValue     = Integer_FloatValue, 
+            .DoubleValue    = Integer_DoubleValue, 
+            .CharValue      = Integer_CharValue, 
+            .ShortValue     = Integer_ShortValue, 
+        };
+    }
+}
+
+/**
  * Initialize a new Integer
  */
 Integer Integer_Ctor(Integer const this, int value)
 {
     Number_Ctor(this);
-
-    this->ToString      = &Integer_ToString;
-    this->CompareTo     = &Integer_CompareTo;
-    this->IntValue      = &Integer_IntValue; 
-    this->LongValue     = &Integer_LongValue; 
-    this->FloatValue    = &Integer_FloatValue; 
-    this->DoubleValue   = &Integer_DoubleValue; 
-    this->CharValue     = &Integer_CharValue; 
-    this->ShortValue    = &Integer_ShortValue; 
-
+    this->isa = &IntegerClass;
     this->value = value;
     return this;
 }

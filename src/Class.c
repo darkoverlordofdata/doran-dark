@@ -18,31 +18,36 @@ copies or substantial portions of the Software.
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+AUTHORS OR COPYRIGHT HOLDERS BE LI  ABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include <dark/core.h>
-#include <stdlib.h>
-#ifndef __ARC__
-tgc_t gc;
+#include <dark/Class.h>
+#include <dark/darkfx.h>
 
 /**
- *  start the garbage collector
+ * Boot the class runtime
+ * 
+ * This initializes the framework classes so
+ * that static methods and variables are available
  */
-void __attribute__((constructor)) dark_gc_ctor()
+void __attribute__((constructor(101))) Class_Boot() 
 {
-    int local= 0;
-	tgc_start (&gc, &local);
-}
+    Object_Init();
+    Comparable_Init();
+    Collection_Init();
+    Array_Init();
+    List_Init();
+    Boolean_Init();
+    Number_Init();
+    Char_Init();
+    Double_Init();
+    Float_Init();
+    Integer_Init();
+    Long_Init();
+    Short_Init();
+    String_Init();
+    StringBuilder_Init();
 
-/**
- *  stop the garbage collector
- */
-void __attribute__((destructor)) dark_gc_dtor()
-{
-    tgc_stop (&gc);
 }
-
-#endif

@@ -71,6 +71,7 @@ typedef enum { false, true } bool;
 
 typedef enum 
 {
+    TYPE_BOOLEAN,
     TYPE_CHAR,
     TYPE_INT,
     TYPE_LONG,
@@ -135,6 +136,6 @@ long name##Exception(const char* msg, ...) \
 /**
  * Global GC object for tgc
  */
-extern tgc_t dark_gc;
+extern tgc_t gc;
 
 #endif _CORE_H

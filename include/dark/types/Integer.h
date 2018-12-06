@@ -34,34 +34,52 @@ SOFTWARE.
 #define INTEGER_SIZE       (INTEGER_BYTES * CHAR_BIT)
 #define INTEGER_TYPE       (TYPE_LONG)
 
-class (Integer)
+typedef struct IntegerClass_t IntegerClass_t;
+extern IntegerClass_t IntegerClass;
+
+/**
+ * Object class
+ */
+class (Integer) 
+{
+    IntegerClass_t* isa;
+    int        value;
+};
+
+/**
+ * Object metaclass
+ */
+typedef struct IntegerClass_t
 {
     union {
-        Number_t _;
+        NumberClass_t base;
         struct 
         {
-            retained
-            char*       (*ToString)(DObject const);
-            bool        (*Equals)(DObject const, DObject const);
-            int         (*GetHashCode)(DObject const);
-            void        (*Dispose) (DObject const);
-            int         (*CompareTo) (Integer const, Integer other);
-            int         (*IntValue) (Integer const);
-            long        (*LongValue) (Integer const);
-            float       (*FloatValue) (Integer const);
-            double      (*DoubleValue) (Integer const);
-            char        (*CharValue) (Integer const);
-            short       (*ShortValue) (Integer const);
+            Class isa;
+            Class superclass;
+            char* name;
+            char*   (*ToString) (Object const);
+            bool    (*Equals) (Object const, Object const);
+            int     (*GetHashCode) (Object const);
+            void    (*Dispose) (Object const);
+            bool    (*ReferenceEquals) (Object const objA, Object const objB);
+            bool    (*InstanceEquals) (Object const objA, Object const objB);
+            int     (*CompareTo) (Comparable const, Comparable other);
+            int     (*IntValue) (Integer const);
+            long    (*LongValue) (Integer const);
+            float   (*FloatValue) (Integer const);
+            double  (*DoubleValue) (Integer const);
+            char    (*CharValue) (Integer const);
+            short   (*ShortValue) (Integer const);
         };
     };
-    int            value;
 };
 
 int Integer_ParseInt(char* s, int radix);
 int Integer_CompareTo(Integer const, Integer other);
 int Integer_IntValue(Integer const);
 long Integer_LongValue(Integer const);
-float Integer_FloatValue(Integer const);
+int Integer_IntegerValue(Integer const);
 double Integer_DoubleValue(Integer const);
 char Integer_CharValue(Integer const);
 short Integer_ShortValue(Integer const);

@@ -23,57 +23,64 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include <dark/Comparable.h>
-/* 
- * Abstract Comparable
+#include <stdarg.h>
+#include <dark/collections/Collection.h>
+/**
+ * Generic Collection implementation
  */
-
 static Exception(AbstractMethod);
-ComparableClass_t ComparableClass;
 
+CollectionClass_t CollectionClass;
 
-int __attribute__((overloadable)) CompareTo(Comparable this, Comparable other) {
-    return this->isa->CompareTo(this, other);
+/**
+ * Number of items in collection
+ */
+int overload Length(Collection const this)
+{
+    return this->isa->Length(this);
 }
-static short Abstract_CompareTo(Comparable const this, Comparable other) {
-    return AbstractMethodException("Comparable_CompareTo");
+static int Abstract_Length(Collection const this)
+{
+    return AbstractMethodException("Collection_Length");
 }
 
-char* Comparable_ToString(Comparable const this) {
-    return this->isa->ToString(this);
+void Collection_Add(Collection const this, Any data)
+{
+    this->isa->Add(this, data);
 }
-static char* Virtual_ToString(Comparable const this) {
-    return "dark.Comparable";
+static void Abstract_Add(Collection const this, Any data)
+{
+    AbstractMethodException("Collection_Add");
 }
 
 /**
- * Comparable Class Metadata
+ * Collection Class Metadata
  */
-void Comparable_Init()
+void Collection_Init()
 {
-    if (ComparableClass.isa == nullptr) {
-        ComparableClass = (ComparableClass_t) {
-            .isa             = &ComparableClass,
-            .superclass      = &ObjectClass,
-            .name            = "Comparable",
-            .ToString        = Virtual_ToString,
-            .CompareTo       = Abstract_CompareTo,
-            .Equals          = ObjectClass.Equals,
-            .GetHashCode     = ObjectClass.GetHashCode,
-            .Dispose         = ObjectClass.Dispose,
-            .ReferenceEquals = ObjectClass.ReferenceEquals,
-            .InstanceEquals  = ObjectClass.InstanceEquals,
+    if (CollectionClass.isa == nullptr) {
+        CollectionClass = (CollectionClass_t) {
+            .isa            = &CollectionClass,
+            .superclass     = &ObjectClass,
+            .name           = "Collection",
+            .Equals         = ObjectClass.Equals,
+            .GetHashCode    = ObjectClass.GetHashCode,
+            .Dispose        = ObjectClass.Dispose,
+            .ReferenceEquals= ObjectClass.ReferenceEquals,
+            .InstanceEquals = ObjectClass.InstanceEquals,
+            .Length         = Abstract_Length,
+            .Add            = Abstract_Add,
         };
     }
 }
 
 /**
- * Initialize a new Comparable
+ * Initialize a new Array
  */
-Comparable Comparable_Ctor(Comparable const this)
+Collection Collection_Ctor(Collection const this)
 {
     Object_Ctor(this);
-    this->isa = &ComparableClass;
+    this->isa = &CollectionClass;
     return this;
 }
 

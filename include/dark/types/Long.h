@@ -33,29 +33,45 @@ SOFTWARE.
 #define LONG_SIZE       (LONG_BYTES * CHAR_BIT)
 #define LONG_TYPE       (TYPE_LONG)
 
+typedef struct LongClass_t LongClass_t;
+extern LongClass_t LongClass;
 
+/**
+ * Object class
+ */
+class (Long) 
+{
+    LongClass_t* isa;
+    long        value;
+};
 
-class (Long)
+/**
+ * Object metaclass
+ */
+typedef struct LongClass_t
 {
     union {
-        Number_t _;
+        NumberClass_t base;
         struct 
         {
-            retained
-            char*       (*ToString) (DObject const);
-            bool        (*Equals) (DObject const, DObject const);
-            int         (*GetHashCode) (DObject const);
-            void        (*Dispose) (DObject const);
-            int         (*CompareTo) (Long const, Long other);
-            int         (*IntValue) (Long const);
-            long        (*LongValue) (Long const);
-            float       (*FloatValue) (Long const);
-            double      (*DoubleValue) (Long const);
-            char        (*CharValue) (Long const);
-            short       (*ShortValue) (Long const);
+            Class isa;
+            Class superclass;
+            char* name;
+            char*   (*ToString) (Object const);
+            bool    (*Equals) (Object const, Object const);
+            int     (*GetHashCode) (Object const);
+            void    (*Dispose) (Object const);
+            bool    (*ReferenceEquals) (Object const objA, Object const objB);
+            bool    (*InstanceEquals) (Object const objA, Object const objB);
+            int     (*CompareTo) (Comparable const, Comparable other);
+            int     (*IntValue) (Long const);
+            long    (*LongValue) (Long const);
+            float   (*FloatValue) (Long const);
+            double  (*DoubleValue) (Long const);
+            char    (*CharValue) (Long const);
+            short   (*ShortValue) (Long const);
         };
     };
-    long                value;
 };
 
 long Long_ParseLong(char* s, int radix);

@@ -23,65 +23,62 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#ifndef _CHAR_H_
-#define _CHAR_H_
-#include "Number.h"
+#ifndef _OBJECT_H_
+#define _OBJECT_H_
+#include "Class.h"
 
-#define CHAR_MIN_VALUE  CHAR_MIN
-#define CHAR_MAX_VALUE  CHAR_MAX
-#define CHAR_BYTES      (sizeof(char))
-#define CHAR_SIZE       (CHAR_BYTES * CHAR_BIT)
-#define CHAR_TYPE       (TYPE_CHAR)
+#define OBJECT_TYPE       (TYPE_OBJECT)
 
-typedef struct CharClass_t CharClass_t;
-extern CharClass_t CharClass;
+typedef struct ObjectClass_t ObjectClass_t;
+extern ObjectClass_t ObjectClass;
 
 /**
  * Object class
  */
-class (Char) 
+// typedef struct Object_t 
+class (Object)
 {
-    CharClass_t* isa;
-    char        value;
+    ObjectClass_t* isa;
 };
+
 
 /**
  * Object metaclass
  */
-typedef struct CharClass_t
+typedef struct ObjectClass_t
 {
     union {
-        NumberClass_t base;
+        Class_t base;
         struct 
         {
             Class isa;
             Class superclass;
             char* name;
-            char*   (*ToString) (Object const);
-            bool    (*Equals) (Object const, Object const);
-            int     (*GetHashCode) (Object const);
-            void    (*Dispose) (Object const);
-            bool    (*ReferenceEquals) (Object const objA, Object const objB);
-            bool    (*InstanceEquals) (Object const objA, Object const objB);
-            int     (*CompareTo) (Comparable const, Comparable other);
-            int     (*IntValue) (Char const);
-            long    (*LongValue) (Char const);
-            float   (*FloatValue) (Char const);
-            double  (*DoubleValue) (Char const);
-            char    (*CharValue) (Char const);
-            short   (*ShortValue) (Char const);
         };
     };
+    char*   (*ToString) (Object const);
+    bool    (*Equals) (Object const, Object const);
+    int     (*GetHashCode) (Object const);
+    void    (*Dispose) (Object const);
+    bool    (*ReferenceEquals) (Object const objA, Object const objB);
+    bool    (*InstanceEquals) (Object const objA, Object const objB);
+
 };
 
+/**
+ * Object API
+ */
+Class GetClass(Object const);
+char* GetClassName(Object const);
+bool ReferenceEquals(Object const objA, Object const objB);
+bool InstanceEquals(Object const objA, Object const objB);
 
-int Char_CompareTo(Char const, Char other);
-int Char_IntValue(Char const);
-long Char_LongValue(Char const);
-float Char_FloatValue(Char const);
-double Char_DoubleValue(Char const);
-char Char_CharValue(Char const);
-short Char_ShortValue(Char const);
-Char Char_New(char value);
+const char* __attribute__((overloadable)) ToString(Object const);
+bool __attribute__((overloadable)) Equals(Object const, Object const that);
+int __attribute__((overloadable)) GetHashCode(Object const);
+void __attribute__((overloadable)) Dispose(Object const);
 
-#endif _CHAR_H_
+Object Object_New();
+Object Object_Dtor();
+
+#endif _OBJECT_H_ 

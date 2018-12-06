@@ -55,41 +55,57 @@ SOFTWARE.
 #ifndef _STRING_BUILDER_H_
 #define _STRING_BUILDER_H_
 #include <string.h>
-// #include "../DObject.h"
 #include "String.h"
+
+typedef struct StringBuilderClass_t StringBuilderClass_t;
+extern StringBuilderClass_t StringBuilderClass;
 
 class (StringFragment)
 {
 	StringFragment	next;
 	int	            length;
 	char*			str;
-
 };
 
-class (StringBuilder)
+/**
+ * Object class
+ */
+class (StringBuilder) 
 {
-    union {
-        DObject_t _;
-        struct 
-        {
-            retained
-            char*       (*ToString)(DObject const);
-            bool        (*Equals)(DObject const, DObject const);
-            int         (*GetHashCode)(DObject const);
-            void        (*Dispose) (DObject const);
-            int         (*Empty) (StringBuilder const);
-            int         (*Append) (StringBuilder const, char* str);
-            int         (*Appendc) (StringBuilder const, char c);
-            int         (*Appendf) (StringBuilder const, char* str, ...);
-            String      (*Concat) (StringBuilder const);
-            void        (*Reset) (StringBuilder const);
-
-        };
-    };
+    StringBuilderClass_t* isa;
 	StringFragment	    root;
 	StringFragment	    trunk;
 	int					length;
 };
+
+/**
+ * Object metaclass
+ */
+typedef struct StringBuilderClass_t
+{
+    union {
+        ObjectClass_t base;
+        struct 
+        {
+            Class   isa;
+            Class   superclass;
+            char*   name;
+            char*   (*ToString) (Object const);
+            bool    (*Equals) (Object const, Object const);
+            int     (*GetHashCode) (Object const);
+            void    (*Dispose) (Object const);
+            bool    (*ReferenceEquals) (Object const objA, Object const objB);
+            bool    (*InstanceEquals) (Object const objA, Object const objB);
+            int     (*Empty) (StringBuilder const);
+            int     (*Append) (StringBuilder const, char* str);
+            int     (*Appendc) (StringBuilder const, char c);
+            int     (*Appendf) (StringBuilder const, char* str, ...);
+            String  (*Concat) (StringBuilder const);
+            void    (*Reset) (StringBuilder const);
+        };
+    };
+};
+
 
 StringBuilder StringBuilder_New();
 int StringBuilder_Empty(StringBuilder sb);

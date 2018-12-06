@@ -23,26 +23,46 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include <dark/core.h>
-#include <stdlib.h>
-#ifndef __ARC__
-tgc_t gc;
+#include "darkunit.h"
+
+test_stats tests;
 
 /**
- *  start the garbage collector
+ * print a section title
  */
-void __attribute__((constructor)) dark_gc_ctor()
+void Describe(char* desc, void (^lambda)())
 {
-    int local= 0;
-	tgc_start (&gc, &local);
+	printf("%s\n======================================\n\n", desc);
+	lambda();
 }
 
 /**
- *  stop the garbage collector
+ * Handle fatal errors
  */
-void __attribute__((destructor)) dark_gc_dtor()
+static void sighandler(int signum) {
+	switch(signum) {
+		case SIGABRT: error("Program Aborted");	break;
+		case SIGFPE: error("Division by Zero");	break;
+		case SIGILL: error("Illegal Instruction"); break;
+		case SIGINT: error("Program Interrupted"); break;
+		case SIGSEGV: error("Segmentation fault"); break;
+		case SIGTERM: error("Program Terminated"); break;
+	}
+	/* generate core dump */
+	signal(signum, SIG_DFL);
+	// kill(getpid(), signum);
+}
+/**
+ * Set some fatal error traps
+ */
+void __attribute__((constructor)) DarkUnit()
 {
-    tgc_stop (&gc);
+	signal(SIGABRT, sighandler);
+	signal(SIGFPE, sighandler);
+	signal(SIGILL, sighandler);
+	signal(SIGINT, sighandler);
+	signal(SIGSEGV, sighandler);
+	signal(SIGTERM, sighandler);
+
 }
 
-#endif

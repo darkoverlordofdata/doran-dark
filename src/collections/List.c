@@ -27,6 +27,7 @@ SOFTWARE.
 /* 
  * Generic Linked List implementation
  */
+ListClass_t ListClass;
 
 /**
  * Create new ListNode
@@ -54,7 +55,7 @@ ListNode ListNode_New(Any data, ListNode next)
  * @param comp function to compare for insertion
  * 
  */
-int List_Add(List const this, Any data, int (*comp)(Any, Any))
+int Insert(List const this, Any data, int (*comp)(Any, Any))
 {
     if (this->head == nullptr) {
         this->head = ListNode_New(data, nullptr);
@@ -74,6 +75,7 @@ int List_Add(List const this, Any data, int (*comp)(Any, Any))
     else 
         prev->next = ListNode_New(data, curr);
 
+    this->length++;
     return 1;
 }
 
@@ -83,18 +85,21 @@ int List_Add(List const this, Any data, int (*comp)(Any, Any))
  * @param data to insert
  * 
  */
-void List_Push(List const this, Any data)
+void overload Add(List const this, Any data)
 {
-    if (this->head == nullptr)
-       this->head = ListNode_New(data, nullptr);
-    else 
-       this->head = ListNode_New(data, this->head);
+    if (this->head == nullptr) {
+        // this->head = ListNode_New(data, nullptr);
+    }
+    else { 
+    //    this->head = ListNode_New(data, this->head);
+    }
+    this->length++;
 }
 
 /**
  * Remove item at end of list
  */
-Any List_Pop(List const this)
+Any overload Remove(List const this)
 {
     ListNode head = this->head;
 
@@ -102,7 +107,7 @@ Any List_Pop(List const this)
     this->head = head->next;
 
     delete(head);
-
+    this->length--;
     return popped_data;
 }
 
@@ -112,7 +117,7 @@ Any List_Pop(List const this)
  * @param iter function to call for each iteration
  * 
  */
-void List_Iterate(List const this, void (*iter)(Any))
+void Iterate(List const this, void (*iter)(Any))
 {
     for (ListNode curr = this->head; curr != nullptr; curr = curr->next)
         iter(curr->data);
@@ -121,40 +126,69 @@ void List_Iterate(List const this, void (*iter)(Any))
 /**
  * Free list
  */
-void List_Dispose(List const this)
+void overload Dispose(List const this)
 {
-    ListNode curr = this->head;
-    ListNode next;
+    // ListNode curr = this->head;
+    // ListNode next;
 
-    while (curr != nullptr) {
-        delete(curr->data);
-        next = curr->next;
-        delete(curr);
-        curr = next;
-    }
+    // while (curr != nullptr) {
+    //     delete(curr->data);
+    //     next = curr->next;
+    //     delete(curr);
+    //     curr = next;
+    // }
 }
+
+/**
+ * Number of items in vector
+ */
+int overload Length(List const this)
+{
+    return this->length;
+}
+
 
 /**
  * ToString
  */
-const char* List_ToString(List const this)
+const char* overload ToString(List const this)
 {
     return "dark.collections.List";
 }
+
+/**
+ * List Class Metadata
+ */
+void List_Init()
+{
+    if (ListClass.isa == nullptr) {
+        ListClass = (ListClass_t) {
+            .isa            = &ListClass,
+            .superclass     = &CollectionClass,
+            .name           = "List",
+            .Equals         = ObjectClass.Equals,
+            .GetHashCode    = ObjectClass.GetHashCode,
+            .ReferenceEquals= ObjectClass.ReferenceEquals,
+            .InstanceEquals = ObjectClass.InstanceEquals,
+            .ToString       = ToString,
+            .Dispose        = Dispose,
+            .Length         = Length,
+            .Iterate        = Iterate,
+            .Insert         = Insert,
+            .Add            = Add,
+            .Remove         = Remove,
+        };
+    }
+}
+
+
 /**
  * Constructor
  */
 List List_Ctor(List const this)
 {
-    DObject_Ctor(this);
-
-    this->ToString      = &List_ToString;
-    this->Iterate       = &List_Iterate;
-    this->Add           = &List_Add;
-    this->Push          = &List_Push;
-    this->Pop           = &List_Pop;
-    this->Dispose       = &List_Dispose;
-
+    Collection_Ctor(this);
+    this->isa = &ListClass;
     this->head = nullptr;
 
     return this;

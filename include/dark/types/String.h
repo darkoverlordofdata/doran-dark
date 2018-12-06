@@ -30,41 +30,58 @@ SOFTWARE.
 
 #define STRING_TYPE       (TYPE_STRING)
 
-class (String)
+typedef struct StringClass_t StringClass_t;
+extern StringClass_t StringClass;
+
+/**
+ * Object class
+ */
+class (String) 
+{
+    StringClass_t* isa;
+    const char*     value;
+    int             length;
+};
+
+/**
+ * Object metaclass
+ */
+typedef struct StringClass_t
 {
     union {
-        Comparable_t _;
+        ComparableClass_t base;
         struct 
         {
-            retained
-            char*       (*ToString) (DObject const);
-            bool        (*Equals) (DObject const, DObject const);
-            int         (*GetHashCode) (DObject const);
-            void        (*Dispose) (DObject const);
-            int         (*CompareTo) (String const, String other);
+            Class isa;
+            Class superclass;
+            char* name;
+            char*   (*ToString) (Object const);
+            bool    (*Equals) (Object const, Object const);
+            int     (*GetHashCode) (Object const);
+            void    (*Dispose) (Object const);
+            bool    (*ReferenceEquals) (Object const objA, Object const objB);
+            bool    (*InstanceEquals) (Object const objA, Object const objB);
+            int     (*CompareTo) (Comparable const, Comparable other);
+            int     (*Length) (String const);
+            bool    (*IsEmpty) (String const);
+            char    (*CharAt) (String const, int index);
+            int     (*CompareToIgnoreCase) (String const, String other);
+            String  (*Concat) (String const, String str);
+            String  (*Concatc) (String const, char* str);
+            bool    (*Contains) (String const, String str);
+            String  (*CopyOf) (String const);
+            bool    (*EndsWith) (String const, String suffix);
+            bool    (*StartsWith) (String const, String prefix, int offset);
+            char*   (*GetBytes) (String const);
+            int     (*IndexOf) (String const, String str, int fromIndex);
+            int     (*LastIndexOf) (String const, String str, int fromIndex);
+            String  (*ToUpperCase) (String const);
+            String  (*ToLowerCase) (String const);
+            String  (*Trim) (String const);
         };
     };
-    const char*         value;
-    int                 length;
-    int                 (*Length) (String const);
-    bool                (*IsEmpty) (String const);
-    char                (*CharAt) (String const, int index);
-    int                 (*CompareToIgnoreCase) (String const, String other);
-    String              (*Concat) (String const, String str);
-    String              (*Concatc) (String const, char* str);
-    bool                (*Contains) (String const, String str);
-    String              (*CopyOf) (String const);
-    bool                (*EndsWith) (String const, String suffix);
-    bool                (*StartsWith) (String const, String prefix, int offset);
-    char*               (*GetBytes) (String const);
-    int                 (*IndexOf) (String const, String str, int fromIndex);
-    int                 (*LastIndexOf) (String const, String str, int fromIndex);
-    String              (*ToUpperCase) (String const);
-    String              (*ToLowerCase) (String const);
-    String              (*Trim) (String const);
-
-
 };
+
 
 int String_Compare(char* x, char* y);
 int String_CompareTo(String this, String other);
@@ -81,7 +98,7 @@ int String_LastIndexOf(String this, String str, int fromIndex);
 String String_ToUpperCase(String this);
 String String_ToLowerCase(String this);
 String String_Trim(String this);
-int String_Length(String const this);
+int overload Length(String const);
 bool String_IsEmpty(String const this);
 char String_CharAt(String const this, int index);
 char* String_ToString(String const this);

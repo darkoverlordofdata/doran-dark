@@ -27,8 +27,9 @@ SOFTWARE.
 /* 
  * Boolean implementation
  */
+BooleanClass_t BooleanClass;
 
-bool Boolean_ParseBool(char* s)
+bool ParseBool(char* s)
 {
     if (!strcmpi("y", s) 
     ||  !strcmpi("yes", s) 
@@ -46,7 +47,7 @@ bool Boolean_ParseBool(char* s)
  *         +1 x is true
  *         -1 y is true
  */
-int Boolean_Compare(bool x, bool y) {
+int overload Compare(bool x, bool y) {
     return (x == y) ? 0 : ( x ? 1 : -1 );
 }
 
@@ -56,23 +57,59 @@ int Boolean_Compare(bool x, bool y) {
  * @param   other  Boolean to be compared
  * @return same as Boolean_Compare
  */
-int Boolean_CompareTo(Boolean this, Boolean other) {
-    return Boolean_Compare(this->value, other->value);
+int overload CompareTo(Boolean this, Boolean other) {
+    return Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-bool Boolean_BoolValue(Boolean const this) {
+bool BoolValue(Boolean const this) {
     return (bool)this->value;
 }
 
 /**
  * Returns the string value of this Boolean
  */
-char* Boolean_ToString(Boolean const this)
+char* overload ToString(Boolean const this)
 {
     return this->value ? "true" : "false";
+}
+
+/**
+ * Boolean Class Metadata
+ */
+void Boolean_Init()
+{
+    static const Boolean_t True = {
+        .isa  = &BooleanClass,
+        .value = true
+    };
+    static const Boolean_t False = {
+        .isa  = &BooleanClass,
+        .value = false
+    };
+
+    if (BooleanClass.isa == nullptr) {
+        BooleanClass = (BooleanClass_t) {
+            .isa            = &BooleanClass,
+            .superclass     = &ComparableClass,
+            .name           = "Boolean",
+            .ToString       = ToString,
+            .CompareTo      = CompareTo,
+            .Equals         = ObjectClass.Equals,
+            .GetHashCode    = ObjectClass.GetHashCode,
+            .Dispose        = ObjectClass.Dispose,
+            .ReferenceEquals= ObjectClass.ReferenceEquals,
+            .InstanceEquals = ObjectClass.InstanceEquals,
+            .BoolValue      = BoolValue,
+            .Bytes          = BOOLEAN_BYTES,
+            .Size           = BOOLEAN_SIZE,
+            .Type           = BOOLEAN_TYPE,
+            .True           = &True,
+            .False          = &False,
+        };
+    }
 }
 
 /**
@@ -81,11 +118,7 @@ char* Boolean_ToString(Boolean const this)
 Boolean Boolean_Ctor(Boolean const this, bool value)
 {
     Comparable_Ctor(this);
-
-    this->ToString      = &Boolean_ToString;
-    this->CompareTo     = &Boolean_CompareTo;
-    this->BoolValue     = &Boolean_BoolValue; 
-
+    this->isa = &BooleanClass;
     this->value = value;
     return this;
 }

@@ -59,6 +59,8 @@ SOFTWARE.
 
 static Exception(OutOfMemory);
 
+StringBuilderClass_t StringBuilderClass;
+
 /*
  * sb_empty returns non-zero if the given StringBuilder is empty.
  */
@@ -71,9 +73,7 @@ int StringBuilder_Empty(StringBuilder this)
 int StringBuilder_Appendc(StringBuilder this, const char c)
 {
 	char str[2] = { c, 0 };
-	return this->Appendc(this, str);
-
-
+	return this->isa->Append(this, str);
 }
 /*
  * sb_append adds a copy of the given string to a StringBuilder.
@@ -190,19 +190,37 @@ char* StringBuilder_ToString(StringBuilder this)
     return "dark.StringBuilder";
 }
 
+/**
+ * StringBuilder Class Metadata
+ */
+void StringBuilder_Init()
+{
+	if (StringBuilderClass.isa == nullptr) {
+		StringBuilderClass = (StringBuilderClass_t) {
+			.isa            = &StringBuilderClass,
+			.superclass     = &ComparableClass,
+			.name           = "StringBuilder",
+			.Equals         = ObjectClass.Equals,
+			.GetHashCode    = ObjectClass.GetHashCode,
+			.Dispose        = ObjectClass.Dispose,
+			.ReferenceEquals= ObjectClass.ReferenceEquals,
+			.InstanceEquals = ObjectClass.InstanceEquals,
+			.Append    		= StringBuilder_Append,
+			.Appendc 		= StringBuilder_Appendc,
+			.Appendf   		= StringBuilder_Appendf,
+			.Concat    		= StringBuilder_Concat,
+			.Dispose   		= StringBuilder_Dispose,
+			.Empty     		= StringBuilder_Empty,
+			.Reset     		= StringBuilder_Reset,
+		};
+	}
+}
+
 StringBuilder StringBuilder_Ctor(StringBuilder const this)
 {
-    DObject_Ctor(this);
-
-    this->Append    = &StringBuilder_Append;
-	this->Appendc 	= &StringBuilder_Appendc;
-    this->Appendf   = &StringBuilder_Appendf;
-    this->Concat    = &StringBuilder_Concat;
-    this->Dispose   = &StringBuilder_Dispose;
-    this->Empty     = &StringBuilder_Empty;
-    this->Reset     = &StringBuilder_Reset;
-
-    return this;
+    Object_Ctor(this);
+    this->isa = &StringBuilderClass;
+	return this;
 }
 
 StringBuilder StringBuilder_New()

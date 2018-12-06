@@ -29,6 +29,7 @@ SOFTWARE.
  */
 static Exception(NumberFormat);
 
+DoubleClass_t DoubleClass;
 
 /**
  * Returns a primitive double value parsed from input string. 
@@ -123,21 +124,39 @@ char* Double_ToString(Double const this)
 }
 
 /**
+ * Double Class Metadata
+ */
+void Double_Init()
+{
+    if (DoubleClass.isa == nullptr) {
+        DoubleClass = (DoubleClass_t) {
+            .isa            = &DoubleClass,
+            .superclass     = &NumberClass,
+            .name           = "Double",
+            .Equals         = ObjectClass.Equals,
+            .GetHashCode    = ObjectClass.GetHashCode,
+            .Dispose        = ObjectClass.Dispose,
+            .ReferenceEquals= ObjectClass.ReferenceEquals,
+            .InstanceEquals = ObjectClass.InstanceEquals,
+            .ToString       = Double_ToString,
+            .CompareTo      = Double_CompareTo,
+            .IntValue       = Double_IntValue, 
+            .LongValue      = Double_LongValue, 
+            .FloatValue     = Double_FloatValue, 
+            .DoubleValue    = Double_DoubleValue, 
+            .CharValue      = Double_CharValue, 
+            .ShortValue     = Double_ShortValue, 
+        };
+    }
+}
+
+/**
  * Initialize a new Double
  */
 Double Double_Ctor(Double const this, double value)
 {
     Number_Ctor(this);
-
-    this->ToString      = &Double_ToString;
-    this->CompareTo     = &Double_CompareTo;
-    this->IntValue      = &Double_IntValue; 
-    this->LongValue     = &Double_LongValue; 
-    this->FloatValue    = &Double_FloatValue; 
-    this->DoubleValue   = &Double_DoubleValue; 
-    this->CharValue     = &Double_CharValue; 
-    this->ShortValue    = &Double_ShortValue; 
-
+    this->isa = &DoubleClass;
     this->value = value;
     return this;
 }

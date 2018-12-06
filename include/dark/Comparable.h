@@ -25,22 +25,43 @@ SOFTWARE.
 ******************************************************************/
 #ifndef _COMPARABLE_H_
 #define _COMPARABLE_H_
-#include "DObject.h"
+#include "Object.h"
 
+typedef struct ComparableClass_t ComparableClass_t;
+extern ComparableClass_t ComparableClass;
+
+/**
+ * Comparable Class
+ */
 class (Comparable)
 {
+    ComparableClass_t* isa;
+};
+
+
+/**
+ * Comparable MetaClass
+ */
+typedef struct ComparableClass_t
+{
     union {
-        DObject_t _;
+        ObjectClass_t base;
         struct 
         {
-            int         RefCount;
-            char*       (*ToString)(DObject const);
-            bool        (*Equals)(DObject const, DObject const);
-            int         (*GetHashCode)(DObject const);
-            void        (*Dispose) (DObject const);
+            Class   isa;
+            Class   superclass;
+            char*   name;
+            char*   (*ToString) (Comparable const);
+            bool    (*Equals) (Object const, Object const);
+            int     (*GetHashCode) (Object const);
+            void    (*Dispose) (Object const);
+            bool    (*ReferenceEquals) (Object const objA, Object const objB);
+            bool    (*InstanceEquals) (Object const objA, Object const objB);
         };
     };
-    int                 (*CompareTo) (Comparable const, Comparable other);
+    int     (*CompareTo) (Comparable const, Comparable other);
 };
+
+int __attribute__((overloadable)) CompareTo(Comparable const, Comparable other);
 
 #endif _COMPARABLE_H_

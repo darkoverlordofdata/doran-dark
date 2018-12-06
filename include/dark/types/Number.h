@@ -28,38 +28,59 @@ SOFTWARE.
 #include <limits.h>
 #include <float.h>
 #include <math.h>
-#include "../DObject.h"
+#include "../Object.h"
 #include "../Comparable.h"
 
 #define NUMBER_MIN_RADIX 2
 #define NUMBER_MAX_RADIX 36
 
-class (Number)
+typedef struct NumberClass_t NumberClass_t;
+extern NumberClass_t NumberClass;
+
+
+/**
+ * Object class
+ */
+class (Number) 
+{
+    NumberClass_t* isa;
+};
+
+
+/**
+ * Object metaclass
+ */
+typedef struct NumberClass_t
 {
     union {
-        Comparable_t _;
+        ObjectClass_t base;
         struct 
         {
-            retained
-            char*       (*ToString)(DObject const);
-            bool        (*Equals)(DObject const, DObject const);
-            int         (*GetHashCode)(DObject const);
-            void        (*Dispose) (DObject const);
-            int         (*CompareTo) (Comparable const, DObject other);
+            Class isa;
+            Class superclass;
+            char* name;
+            char*   (*ToString) (Object const);
+            bool    (*Equals) (Object const, Object const);
+            int     (*GetHashCode) (Object const);
+            void    (*Dispose) (Object const);
+            bool    (*ReferenceEquals) (Object const objA, Object const objB);
+            bool    (*InstanceEquals) (Object const objA, Object const objB);
+            int     (*CompareTo) (Comparable const, Comparable other);
         };
     };
-    int             (*IntValue) (Number const);
-    long            (*LongValue) (Number const);
-    float           (*FloatValue) (Number const);
-    double          (*DoubleValue) (Number const);
-    char            (*CharValue) (Number const);
-    short           (*ShortValue) (Number const);
+    int     (*IntValue) (Number const);
+    long    (*LongValue) (Number const);
+    float   (*FloatValue) (Number const);
+    double  (*DoubleValue) (Number const);
+    char    (*CharValue) (Number const);
+    short   (*ShortValue) (Number const);
 };
 
 
 int Number_CompareTo(Number const, Number other);
+bool Number_Equals(Number const, Number other);
 int Number_IntValue(Number const);
-long Number_LongValue(Number const);
+long LongValue(Number const);
 float Number_FloatValue(Number const);
 double Number_DoubleValue(Number const);
 char Number_CharValue(Number const);

@@ -25,7 +25,14 @@ SOFTWARE.
 ******************************************************************/
 #ifndef _LIST_H_
 #define _LIST_H_
-#include "../DObject.h"
+#include "Collection.h"
+
+typedef int (*List_Compare) (Any, Any);
+typedef void (*List_Interator) (Any);
+
+
+typedef struct ListClass_t ListClass_t;
+extern ListClass_t ListClass;
 
 class (ListNode)
 {
@@ -35,42 +42,53 @@ class (ListNode)
 
 class (List)
 {
+    Class isa;
+    int length;
+    ListNode head;
+};
+
+typedef struct ListClass_t
+{
     union {
-        DObject_t _;
-        struct 
-        {
-            retained
-            char*       (*ToString)(DObject const);
-            bool        (*Equals)(DObject const, DObject const);
-            int         (*GetHashCode)(DObject const);
-            void        (*Dispose) (DObject const);
+        Collection_t base;
+        struct {
+            Class       isa;
+            Class       superclass;
+            char*       name;
+            const char* (*ToString)     (List const);
+            bool        (*Equals)       (Object const, Object const);
+            int         (*GetHashCode)  (Object const);
+            void        (*Dispose)      (List const);
+            bool        (*ReferenceEquals) (Object const objA, Object const objB);
+            bool        (*InstanceEquals) (Object const objA, Object const objB);
+            int         (*Length)       (List const);
+            bool        (*IsEmpty)      (List const);
+            bool        (*Contains)     (List const, Any value);
+            void        (*Clear)        (List const);
+            void        (*Add)          (List const, Any value);
+            Any         (*Remove)       (List const);
+
         };
     };
-    ListNode head;
-
-    /* List_add_inorder: Add to sorted linked list */
-    int (*Add) (List const, Any data, int (*comp)(Any, Any));
-
-    /* List_push: Add to head of list */
-    void (*Push) (List const, Any data);
-
-    /* List_pop: remove and return head of linked list */
-    void (*Pop) (List const);
-
-    /* List_print: print linked list */
-    void (*Iterate) (List const, void (*iter)(Any data));
+    int (*Insert) (List const, Any data, List_Compare func);
+    void (*Iterate) (List const, List_Interator func);
 };
 
 
 /**
  * List API
  */
-int List_Add(List const, Any data, int (*comp)(Any, Any));
-void List_Push(List const, Any data);
-Any List_Pop(List const);
-void List_Iterate(List const, void (*iter)(Any));
-void List_Dispose(List const);
-const char* List_ToString(List const);
+const char* overload ToString(List const);
+void overload Dispose(List const);
+int overload Length(List const);
+bool overload IsEmpty(List const);
+bool overload Contains(List const);
+void overload Clear(List const);
+void overload Add(List const, Any data);
+Any overload Remove(List const);
+
+int Insert(List const, Any data, List_Compare func);
+void Iterate(List const, List_Interator func);
 List List_New();
 
 #endif _LIST_H_ 

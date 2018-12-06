@@ -30,6 +30,7 @@ SOFTWARE.
  */
 static Exception(AbstractMethod);
 
+NumberClass_t NumberClass;
 
 /**
  * Compares two Number objects.
@@ -40,7 +41,7 @@ static Exception(AbstractMethod);
  *         -1 this > other
  */
 int Number_CompareTo(Number this, Number other) {
-    return this->CompareTo(this, other);
+    return this->isa->CompareTo(this, other);
 }
 static short Abstract_CompareTo(Number const this, Number other) {
     return AbstractMethodException("Number_CompareTo");
@@ -49,8 +50,8 @@ static short Abstract_CompareTo(Number const this, Number other) {
 /**
  * Returns the value of this value cast as an int
  */
-int Number_IntValue(Number const this) {
-    return this->IntValue(this);
+int overload IntValue(Number const this) {
+    return this->isa->IntValue(this);
 }
 static int Abstract_IntValue(Number const this) {
     return AbstractMethodException("Number_IntValue");
@@ -59,8 +60,8 @@ static int Abstract_IntValue(Number const this) {
 /**
  * Returns the value of this value cast as an long
  */
-long Number_LongValue(Number const this) {
-    return this->LongValue(this);
+long LongValue(Number const this) {
+    return this->isa->LongValue(this);
 }
 static long Abstract_LongValue(Number const this) {
     return AbstractMethodException("Number_LongValue");
@@ -69,8 +70,8 @@ static long Abstract_LongValue(Number const this) {
 /**
  * Returns the value of this value cast as an float
  */
-float Number_FloatValue(Number const this) {
-    return this->FloatValue(this);
+float overload FloatValue(Number const this) {
+    return this->isa->FloatValue(this);
 }
 static float Abstract_FloatValue(Number const this) {
     return AbstractMethodException("Number_FloatValue");
@@ -79,8 +80,8 @@ static float Abstract_FloatValue(Number const this) {
 /**
  * Returns the value of this value cast as an double
  */
-double Number_DoubleValue(Number const this) {
-    return this->DoubleValue(this);
+double overload DoubleValue(Number const this) {
+    return this->isa->DoubleValue(this);
 }
 static double Abstract_DoubleValue(Number const this) {
     return AbstractMethodException("Number_DoubleValue");
@@ -89,8 +90,8 @@ static double Abstract_DoubleValue(Number const this) {
 /**
  * Returns the value of this value cast as an char
  */
-char Number_CharValue(Number const this) {
-    return this->CharValue(this);
+char overload CharValue(Number const this) {
+    return this->isa->CharValue(this);
 }
 static char Abstract_CharValue(Number const this) {
     return AbstractMethodException("Number_CharValue");
@@ -99,19 +100,55 @@ static char Abstract_CharValue(Number const this) {
 /**
  * Returns the value of this value cast as an short
  */
-short Number_ShortValue(Number const this) {
-    return this->ShortValue(this);
+short overload ShortValue(Number const this) {
+    return this->isa->ShortValue(this);
 }
 static short Abstract_ShortValue(Number const this) {
     return AbstractMethodException("Number_ShortValue");
 }
 
 
-char* Number_ToString(Number const this) {
-    return this->ToString(this);
+char* overload ToString(Number const this) {
+    return this->isa->ToString(this);
 }
 static char* Virtual_ToString(Number const this) {
     return "dark.Number";
+}
+
+bool Number_Equals(Number const this, Number const other) {
+    return this->isa->Equals(this, other);
+}
+static char* Virtual_Equals(Number const this, Number const other) {
+    return true;
+}
+
+/**
+ * Number Class Metadata
+ */
+void Number_Init()
+{
+    if (NumberClass.isa == nullptr) {
+        NumberClass = (NumberClass_t) {
+            .isa            = &NumberClass,
+            .superclass     = &ComparableClass,
+            .name           = "Number",
+            .Equals         = ObjectClass.Equals,
+            .GetHashCode    = ObjectClass.GetHashCode,
+            .Dispose        = ObjectClass.Dispose,
+            .ReferenceEquals= ObjectClass.ReferenceEquals,
+            .InstanceEquals = ObjectClass.InstanceEquals,
+            .CompareTo      = Number_CompareTo,
+            .ToString       = Virtual_ToString,
+            .Equals         = Virtual_Equals,
+            .CompareTo      = Abstract_CompareTo,
+            .IntValue       = Abstract_IntValue, 
+            .LongValue      = Abstract_LongValue, 
+            .FloatValue     = Abstract_FloatValue, 
+            .DoubleValue    = Abstract_DoubleValue, 
+            .CharValue      = Abstract_CharValue, 
+            .ShortValue     = Abstract_ShortValue 
+        };
+    }
 }
 
 /**
@@ -120,16 +157,7 @@ static char* Virtual_ToString(Number const this) {
 Number Number_Ctor(Number const this)
 {
     Comparable_Ctor(this);
-
-    this->ToString      = &Virtual_ToString;
-    this->CompareTo     = &Abstract_CompareTo;
-    this->IntValue      = &Abstract_IntValue; 
-    this->LongValue     = &Abstract_LongValue; 
-    this->FloatValue    = &Abstract_FloatValue; 
-    this->DoubleValue   = &Abstract_DoubleValue; 
-    this->CharValue     = &Abstract_CharValue; 
-    this->ShortValue    = &Abstract_ShortValue; 
-
+    this->isa = &NumberClass;
     return this;
 }
 

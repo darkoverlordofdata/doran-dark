@@ -7,7 +7,7 @@ namespace Dark
 
 	[Compact]
 	[CCode (cname = "DObject_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
-	public abstract class DObject
+	public abstract class Object
 	{
 		[CCode (cname = "DObject_ToString")]
 		public abstract unowned string ToString();
@@ -16,16 +16,16 @@ namespace Dark
 		[CCode (cname = "DObject_GetHashCode")]
 		public abstract int GetHashCode();
 		[CCode (cname = "DObject_Equals")]
-		public abstract bool Equals(DObject? other);
+		public abstract bool Equals(Object? other);
 		[CCode (cname = "DObject_ReferenceEquals")]
-		public static bool ReferenceEquals(DObject? objA, DObject? objB);
+		public static bool ReferenceEquals(Object? objA, Object? objB);
 		[CCode (cname = "DObject_InstanceEquals")]
-		public static bool InstanceEquals(DObject? objA, DObject? objB);
+		public static bool InstanceEquals(Object? objA, Object? objB);
 	}
 
 	[Compact]
 	[CCode (cname = "Comparable_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
-	public abstract class Comparable : DObject
+	public abstract class Comparable : Object
 	{
 		public abstract int CompareTo(Comparable other);
 	}
@@ -362,7 +362,7 @@ namespace Dark
 
 	[Compact]
 	[CCode (cname = "StringBuilder_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
-	public class StringBuilder : DObject
+	public class StringBuilder : Object
 	{
 		[CCode (cname = "StringBuilder_New")]
 		public StringBuilder();
@@ -399,7 +399,7 @@ namespace Dark
 		 */
 		[Compact]
 		[CCode (cname = "List_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
-		public class List<G> : DObject
+		public class List<G> : Object
 		{
 			public ListNode<G>* head;
 			[CCode (cname = "List_New")]
@@ -434,7 +434,7 @@ namespace Dark
 		 */
 		[Compact]
 		[CCode (cname = "Hashmap_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
-		public class Hashmap<G> : DObject
+		public class Hashmap<G> : Object
 		{
 			public int tableSize;
 			public int size;
@@ -468,7 +468,7 @@ namespace Dark
 		 */
 		[Compact]
 		[CCode (cname = "Vector_t", ref_function = "DObject_AddRef", unref_function = "DObject_Release")]
-		public class Vector<G> : DObject
+		public class Vector<G> : Object
 		{
 			public void **data;
 			public int capacity;

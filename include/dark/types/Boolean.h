@@ -28,28 +28,61 @@ SOFTWARE.
 #include "../Comparable.h"
 
 #define BOOLEAN_BYTES      (sizeof(char))
-#define BOOLEAN_SIZE       (BOOLEAN_BYTES * BOOLEAN_BIT)
+#define BOOLEAN_SIZE       (BOOLEAN_BYTES * CHAR_BIT)
 #define BOOLEAN_TYPE       (TYPE_BOOLEAN)
 
+typedef struct BooleanClass_t BooleanClass_t;
+extern BooleanClass_t BooleanClass;
+
+
+/**
+ * Object class
+ */
 class (Boolean)
 {
-    union {
-        Comparable_t _;
-        struct 
-        {
-            retained
-            char*       (*ToString) (DObject const);
-            bool        (*Equals) (DObject const, DObject const);
-            int         (*GetHashCode) (DObject const);
-            void        (*Dispose) (DObject const);
-            int         (*CompareTo) (Boolean const, Boolean other);
-        };
-    };
-    bool                value;
-    bool                (*BoolValue) (Boolean const);
+    BooleanClass_t* isa;
+    bool value;
 };
 
-int Boolean_CompareTo(Boolean const, Boolean other);
+
+/**
+ * Object metaclass
+ */
+typedef struct BooleanClass_t
+{
+    union {
+        ObjectClass_t base;
+        struct 
+        {
+            Class isa;
+            Class superclass;
+            char* name;
+            char*   (*ToString) (Boolean const);
+            bool    (*Equals) (Object const, Object const);
+            int     (*GetHashCode) (Object const);
+            void    (*Dispose) (Object const);
+            bool    (*ReferenceEquals) (Object const objA, Object const objB);
+            bool    (*InstanceEquals) (Object const objA, Object const objB);
+            int     (*CompareTo) (Boolean const, Boolean other);
+        };
+    };
+    bool    (*BoolValue) (Boolean const);
+    int     (*Compare) (bool x, bool y);
+    bool    (*ParseBool) (char* s);
+
+    int const Bytes;
+    int const Size;
+    int const Type;
+    Boolean True;
+    Boolean False;
+};
+
+bool BoolValue(Boolean const);
+bool ParseBool(char* s);
+
+int overload Compare(bool x, bool y);
+char* overload ToString(Boolean const this);
+int overload CompareTo(Boolean const, Boolean other);
 Boolean Boolean_New(bool value);
 
 #endif _BOOLEAN_H_

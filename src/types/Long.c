@@ -27,8 +27,9 @@ SOFTWARE.
 /* 
  * Long implementation
  */
-static Exception(NumberFormat);
+static Exception(LongFormat);
 
+LongClass_t LongClass;
 
 /**
  * Returns a primitive long value parsed from input string. 
@@ -40,11 +41,11 @@ long Long_ParseLong(char* s, int radix)
     long result = strtol(s, endptr, radix);
 
     if (errno != 0)
-        return NumberFormatException(
+        return LongFormatException(
             "Invalid input. Value:\"%s\" Radix: %d", s, radix);
 
     if (s == endptr || *endptr != '\0')
-        return NumberFormatException(
+        return LongFormatException(
             "Invalid input. Value:\"%s\" Radix: %d", s, radix);
 
     return result;
@@ -114,6 +115,10 @@ short Long_ShortValue(Long const this) {
     return (short)this->value;
 }
 
+bool Long_Equals(Long const this, Long const other)
+{
+    return this->value == other->value;
+}
 
 char* Long_ToString(Long const this)
 {
@@ -123,21 +128,40 @@ char* Long_ToString(Long const this)
 }
 
 /**
+ * Long Class Metadata
+ */
+void Long_Init()
+{
+    if (LongClass.isa == nullptr) {
+        LongClass = (LongClass_t) {
+            .isa            = &LongClass,
+            .superclass     = &NumberClass,
+            .name           = "Long",
+            .Equals         = ObjectClass.Equals,
+            .GetHashCode    = ObjectClass.GetHashCode,
+            .Dispose        = ObjectClass.Dispose,
+            .ReferenceEquals= ObjectClass.ReferenceEquals,
+            .InstanceEquals = ObjectClass.InstanceEquals,
+            .Equals         = Long_Equals,
+            .ToString       = Long_ToString,
+            .CompareTo      = Long_CompareTo,
+            .IntValue       = Long_IntValue, 
+            .LongValue      = Long_LongValue, 
+            .FloatValue     = Long_FloatValue, 
+            .DoubleValue    = Long_DoubleValue, 
+            .CharValue      = Long_CharValue, 
+            .ShortValue     = Long_ShortValue, 
+        };
+    }
+}
+
+/**
  * Initialize a new Long
  */
 Long Long_Ctor(Long const this, long value)
 {
     Number_Ctor(this);
-
-    this->ToString      = &Long_ToString;
-    this->CompareTo     = &Long_CompareTo;
-    this->IntValue      = &Long_IntValue; 
-    this->LongValue     = &Long_LongValue; 
-    this->FloatValue    = &Long_FloatValue; 
-    this->DoubleValue   = &Long_DoubleValue; 
-    this->CharValue     = &Long_CharValue; 
-    this->ShortValue    = &Long_ShortValue; 
-
+    this->isa = &LongClass;
     this->value = value;
     return this;
 }

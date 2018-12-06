@@ -40,11 +40,12 @@ class (File)
         Comparable_t _;
         struct 
         {
+            Class isa;
             retained
-            char*       (*ToString)(DObject const);
-            bool        (*Equals)(DObject const, DObject const);
-            int         (*GetHashCode)(DObject const);
-            void        (*Dispose) (DObject const);
+            char*       (*ToString)(Object const);
+            bool        (*Equals)(Object const, Object const);
+            int         (*GetHashCode)(Object const);
+            void        (*Dispose) (Object const);
             int         (*CompareTo) (Comparable const, Comparable other);
         };
     };

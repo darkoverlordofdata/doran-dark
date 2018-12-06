@@ -18,7 +18,7 @@
     "src/dark.vapi",
     "src/string.c", 
     "src/Comparable.c", 
-    "src/DObject.c", 
+    "src/Object.c", 
     "src/collections/Hashmap.c", 
     "src/collections/List.c", 
     "src/collections/Vector.c", 

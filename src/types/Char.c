@@ -28,6 +28,8 @@ SOFTWARE.
  * Char implementation
  */
 
+CharClass_t CharClass;
+
 /**
  * Compare two char primitives.
  * @param  x char to compare
@@ -104,21 +106,40 @@ char* Char_ToString(Char const this)
 }
 
 /**
+ * Char Class Metadata
+ */
+void Char_Init()
+{
+    if (CharClass.isa == nullptr) {
+        CharClass = (CharClass_t) {
+            .isa            = &CharClass,
+            .superclass     = &NumberClass,
+            .name           = "Char",
+            .Equals         = ObjectClass.Equals,
+            .GetHashCode    = ObjectClass.GetHashCode,
+            .Dispose        = ObjectClass.Dispose,
+            .ReferenceEquals= ObjectClass.ReferenceEquals,
+            .InstanceEquals = ObjectClass.InstanceEquals,
+            .ToString       = Char_ToString,
+            .CompareTo      = Char_CompareTo,
+            .IntValue       = Char_IntValue, 
+            .LongValue      = Char_LongValue, 
+            .FloatValue     = Char_FloatValue, 
+            .DoubleValue    = Char_DoubleValue, 
+            .CharValue      = Char_CharValue, 
+            .ShortValue     = Char_ShortValue, 
+        };
+    }
+}
+
+
+/**
  * Initialize a new Char
  */
 Char Char_Ctor(Char const this, char value)
 {
     Number_Ctor(this);
-
-    this->ToString      = &Char_ToString;
-    this->CompareTo     = &Char_CompareTo;
-    this->IntValue      = &Char_IntValue; 
-    this->LongValue     = &Char_LongValue; 
-    this->FloatValue    = &Char_FloatValue; 
-    this->DoubleValue   = &Char_DoubleValue; 
-    this->CharValue     = &Char_CharValue; 
-    this->ShortValue    = &Char_ShortValue; 
-
+    this->isa = &CharClass;
     this->value = value;
     return this;
 }

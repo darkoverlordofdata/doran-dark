@@ -1,7 +1,7 @@
 {
   "!": "doran package manager v0.0.3",
   "name": "unit",
-  "template": "default",
+  "template": "c",
   "version": "0.0.1",
   "vala": "0.26",
   "authors": [],
@@ -21,14 +21,17 @@
   "packages": [],
   "includes": null,
   "libraries": [
-    "m"
+    "m",
+    "BlocksRuntime"
   ],
   "options": {
     "VERSION": "0.0.1",
-    "RELEASE_NAME": "darkly"
+    "RELEASE_NAME": "unit"
   },
   "definitions": [
-    "__ARC__"
+    "__ARC__",
+    "-fblocks",
+    "-LC:/msys64/mingw64/bin"
   ],
   "symbols": [
     "__ARC__"
