@@ -28,8 +28,6 @@ SOFTWARE.
  * Integer implementation
  */
 
-IntegerClass_t IntegerClass;
-
 /**
  * Returns a primitive integer value parsed from input string. 
  */
@@ -116,7 +114,7 @@ char* Integer_ToString(Integer const this)
 /**
  * Integer Class Metadata
  */
-void Integer_Init()
+register (Integer)
 {
     if (IntegerClass.isa == nullptr) {
         IntegerClass = (IntegerClass_t) {
@@ -138,6 +136,7 @@ void Integer_Init()
             .ShortValue     = Integer_ShortValue, 
         };
     }
+    return &IntegerClass;
 }
 
 /**
@@ -146,7 +145,7 @@ void Integer_Init()
 Integer Integer_Ctor(Integer const this, int value)
 {
     Number_Ctor(this);
-    this->isa = &IntegerClass;
+    this->isa = isa(Integer);
     this->value = value;
     return this;
 }

@@ -57,9 +57,6 @@ SOFTWARE.
 #include <string.h>
 #include "String.h"
 
-typedef struct StringBuilderClass_t StringBuilderClass_t;
-extern StringBuilderClass_t StringBuilderClass;
-
 class (StringFragment)
 {
 	StringFragment	next;

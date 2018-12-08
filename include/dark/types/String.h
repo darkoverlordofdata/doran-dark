@@ -30,9 +30,6 @@ SOFTWARE.
 
 #define STRING_TYPE       (TYPE_STRING)
 
-typedef struct StringClass_t StringClass_t;
-extern StringClass_t StringClass;
-
 /**
  * Object class
  */

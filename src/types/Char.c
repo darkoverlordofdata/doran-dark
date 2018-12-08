@@ -28,8 +28,6 @@ SOFTWARE.
  * Char implementation
  */
 
-CharClass_t CharClass;
-
 /**
  * Compare two char primitives.
  * @param  x char to compare
@@ -108,7 +106,7 @@ char* Char_ToString(Char const this)
 /**
  * Char Class Metadata
  */
-void Char_Init()
+register (Char)
 {
     if (CharClass.isa == nullptr) {
         CharClass = (CharClass_t) {
@@ -130,6 +128,7 @@ void Char_Init()
             .ShortValue     = Char_ShortValue, 
         };
     }
+    return &CharClass;
 }
 
 
@@ -139,7 +138,7 @@ void Char_Init()
 Char Char_Ctor(Char const this, char value)
 {
     Number_Ctor(this);
-    this->isa = &CharClass;
+    this->isa = isa(Char);
     this->value = value;
     return this;
 }

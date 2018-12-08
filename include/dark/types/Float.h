@@ -33,9 +33,6 @@ SOFTWARE.
 #define FLOAT_SIZE       (FLOAT_BYTES * CHAR_BIT)
 #define FLOAT_TYPE       (TYPE_FLOAT)
 
-typedef struct FloatClass_t FloatClass_t;
-extern FloatClass_t FloatClass;
-
 /**
  * Object class
  */

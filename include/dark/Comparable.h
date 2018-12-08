@@ -27,9 +27,6 @@ SOFTWARE.
 #define _COMPARABLE_H_
 #include "Object.h"
 
-typedef struct ComparableClass_t ComparableClass_t;
-extern ComparableClass_t ComparableClass;
-
 /**
  * Comparable Class
  */
@@ -62,6 +59,6 @@ typedef struct ComparableClass_t
     int     (*CompareTo) (Comparable const, Comparable other);
 };
 
-int __attribute__((overloadable)) CompareTo(Comparable const, Comparable other);
+int overload CompareTo(Comparable const, Comparable other);
 
 #endif _COMPARABLE_H_

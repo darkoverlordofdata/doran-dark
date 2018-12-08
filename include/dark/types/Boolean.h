@@ -31,10 +31,6 @@ SOFTWARE.
 #define BOOLEAN_SIZE       (BOOLEAN_BYTES * CHAR_BIT)
 #define BOOLEAN_TYPE       (TYPE_BOOLEAN)
 
-typedef struct BooleanClass_t BooleanClass_t;
-extern BooleanClass_t BooleanClass;
-
-
 /**
  * Object class
  */
@@ -70,9 +66,9 @@ typedef struct BooleanClass_t
     int     (*Compare) (bool x, bool y);
     bool    (*ParseBool) (char* s);
 
-    int const Bytes;
-    int const Size;
-    int const Type;
+    int  Bytes;
+    int  Size;
+    int  Type;
     Boolean True;
     Boolean False;
 };

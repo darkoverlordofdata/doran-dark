@@ -32,9 +32,6 @@ SOFTWARE.
  */
 #define ARRAY_INIT_CAPACITY 4
 
-typedef struct ArrayClass_t ArrayClass_t;
-extern ArrayClass_t ArrayClass;
-
 class (Array)
 {
     ArrayClass_t* isa;

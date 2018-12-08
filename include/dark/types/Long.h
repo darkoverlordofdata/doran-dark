@@ -33,9 +33,6 @@ SOFTWARE.
 #define LONG_SIZE       (LONG_BYTES * CHAR_BIT)
 #define LONG_TYPE       (TYPE_LONG)
 
-typedef struct LongClass_t LongClass_t;
-extern LongClass_t LongClass;
-
 /**
  * Object class
  */

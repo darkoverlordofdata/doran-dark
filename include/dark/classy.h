@@ -25,6 +25,8 @@ SOFTWARE.
 ******************************************************************/
 #ifndef _CLASSY_H
 #define _CLASSY_H
+#include <gc.h>
+
 /**
  * Classy-C
  * 
@@ -44,85 +46,59 @@ SOFTWARE.
 
 #define overload __attribute__((overloadable))
 
-#define boot(boot_order) __attribute__((constructor(100+boot_order)))
 /** 
- * class definition
+ * class definition:
+ *      My
+ *      My_t
+ *      MyClass_t
+ *      extern MyClass
  * 
  */
 #define class(name) \
+    typedef struct name##Class_t name##Class_t; \
+    extern name##Class_t name##Class; \
     typedef struct name##_t name##_t;\
     typedef name##_t* name;\
-    typedef struct name##_t
-
-#define cyclic_reference(name) \
-    typedef struct name##_t name##_t;\
-    typedef name##_t* name;
-
-#define virtual(name) \
-    typedef struct name##_v name##_v; \
-    typedef struct name##_v
-
-/** 
- * singleton definition
- * defines a global extern class
- * 
- * use in header *.h files
- * ** don't do this at home **
- */
-#define singleton(name) \
-    typedef struct name##_t name##_t;\
-    extern name##_t name;\
+    name##Class_t* Isa##name(); \
     typedef struct name##_t
 
 /** 
- * declare superclass 
- * for loosely coupled superclass
- * use inside of class or singleton definition:
- * 
- * class (Shader) {
- *   extends(Object);
- *   ...
- */
-#define extends(class) class##_t _
-
-
-/** 
- * register singleton 
- * Registers a singleton to auto initialize
- * Registers a singleton to auto destruct
- * 
- * use in implementation *.c files
+ * register class name
  */
 #define register(name) \
-    name##_t name;\
-    void __attribute__((constructor)) name##_ctor();\
-    void __attribute__((destructor)) name##_dtor();\
-    static const name##_t * name##_auto(name##_t * const this);\
-    void name##_ctor(){ name##_auto(&name); }\
-    void name##_dtor(){  }\
-    static const name##_t * name##_auto(name##_t * const this)
+    name##Class_t name##Class; \
+    name##Class_t* Isa##name() 
 
-    // void name##_dtor(){ name.Dispose(); }\
+/**
+ *  returns a reference to the class name 
+ */
+#define isa(name) Isa##name()
+
+
 
 /** 
  * Create a new class instance 
  * allocates memory for 1 object
  * 
  */
-#define new(class) tgc_calloc_opt (&gc, 1, sizeof(class##_t), 0, Object_Dtor)
+// #define new(class) tgc_calloc_opt (&gc, 1, sizeof(class##_t), 0, Object_Dtor)
+// #define new(class) tgc_calloc (&gc, 1, sizeof(class##_t))
+#define new(class) dark_malloc (sizeof(class##_t))
 /** 
  * Delete an object created with new 
  * deallocates the memory for 1 object
  * 
  */
-#define delete(x) tgc_free(&gc, x);
+// #define delete(x) tgc_free(&gc, x);
+// #define delete(x) GC_FREE(x);
 /** 
 /** 
  * creates an array of structs
  * 
  * allocates memory for array of struct objects
  */
-#define allocate(class, n) tgc_calloc (&gc, n, sizeof(class##_t))
+// #define allocate(class, n) tgc_calloc (&gc, n, sizeof(class##_t))
+#define allocate(class, n) dark_malloc (n * sizeof(class##_t))
 
 /**
  * A class is a pointer to a struct class_t.

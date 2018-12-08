@@ -25,17 +25,15 @@ SOFTWARE.
 ******************************************************************/
 #include <dark/Object.h>
 
-bool __attribute__((overloadable)) Equals(Object const, Object const that);
+bool overload Equals(Object const, Object const that);
 static bool Virtual_Equals(Object const, Object const that);
 
-ObjectClass_t ObjectClass;
 /**
  * Destructor
  */
 Object Object_Dtor(Object this)
 {
     this->isa->Dispose(this);
-    tgc_free(&gc, this);
     return nullptr;
 }
 
@@ -56,20 +54,19 @@ bool InstanceEquals(Object const objA, Object const objB)
     return Virtual_Equals(objA, objB);    
 }
 
-void __attribute__((overloadable)) Dispose(Object const this){
+void overload Dispose(Object const this){
     this->isa->Dispose(this);
 }
 /**
  * virtual Dispose method
  */
-static void Virtual_Dispose(Object const this){
-}
+static void Virtual_Dispose(Object const this){}
 
 /**
  * Returns the string value of this Object. The default for 
  * a Object is to return the fully qualified name of the class.
  */
-const char* __attribute__((overloadable)) ToString(Object const this)
+const char* overload ToString(Object const this)
 {
     return this->isa->ToString(this);
 }
@@ -84,7 +81,7 @@ static const char *Virtual_ToString(Object const this)
 /**
  * Compare to another object
  */
-bool __attribute__((overloadable)) Equals(Object const this, Object const that)
+bool overload Equals(Object const this, Object const that)
 {
     return this->isa->Equals(this, that);
 }
@@ -99,7 +96,7 @@ static bool Virtual_Equals(Object const this, Object const that)
 /**
  * Get's the hashcode for this object. Default is the object's address in memory,
  */
-int __attribute__((overloadable)) GetHashCode(Object const this)
+int overload GetHashCode(Object const this)
 {
     return this->isa->GetHashCode(this);
 }
@@ -123,7 +120,7 @@ char* GetClassName(Object const this)
 /**
  * Object Class Metadata
  */
-void Object_Init()
+register (Object)
 {
     if (ObjectClass.isa == nullptr) {
         ObjectClass = (ObjectClass_t) {
@@ -139,13 +136,14 @@ void Object_Init()
             .InstanceEquals = InstanceEquals,
         };
     }
+    return &ObjectClass;
 }
 
 /**
  */
 Object Object_Ctor(Object const this)
 {
-    this->isa = &ObjectClass;
+    this->isa = isa(Object);
     return this;
 }
 

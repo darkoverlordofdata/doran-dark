@@ -9,32 +9,28 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "dark": "git://github.com/darkoverlordofdata/doran-dark",
-    "jasmine": "git://github.com/darkoverlordofdata/doran-jasmine",
-    "system": "git://github.com/darkoverlordofdata/doran-system"
+    "dark": "git://github.com/darkoverlordofdata/doran-dark"
   },
   "source": "src",
   "files": [
-    "src/TestTypes.vala",
-    "src/unit.vala"
+    "src/darkunit.c",
+    "src/main.c",
   ],
   "packages": [],
   "includes": null,
   "libraries": [
     "m",
-    "BlocksRuntime"
+    "BlocksRuntime",
+    "-fblocks",
+    "-LC:/msys64/mingw64/bin"
   ],
   "options": {
     "VERSION": "0.0.1",
     "RELEASE_NAME": "unit"
   },
   "definitions": [
-    "__ARC__",
-    "-fblocks",
-    "-LC:/msys64/mingw64/bin"
   ],
   "symbols": [
-    "__ARC__"
   ],
   "copy": "..",
   "vapidir": null,

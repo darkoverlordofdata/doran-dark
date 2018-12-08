@@ -29,9 +29,6 @@ SOFTWARE.
 /**
  * Base collection interface for sequential collections such as list and array
  */
-typedef struct CollectionClass_t CollectionClass_t;
-extern CollectionClass_t CollectionClass;
-
 class (Collection)
 {
     CollectionClass_t* isa;

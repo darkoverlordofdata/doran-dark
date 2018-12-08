@@ -27,7 +27,6 @@ SOFTWARE.
 /* 
  * Generic Linked List implementation
  */
-ListClass_t ListClass;
 
 /**
  * Create new ListNode
@@ -106,7 +105,7 @@ Any overload Remove(List const this)
     Any popped_data = head->data;
     this->head = head->next;
 
-    delete(head);
+    // delete(head);
     this->length--;
     return popped_data;
 }
@@ -159,7 +158,7 @@ const char* overload ToString(List const this)
 /**
  * List Class Metadata
  */
-void List_Init()
+register (List)
 {
     if (ListClass.isa == nullptr) {
         ListClass = (ListClass_t) {
@@ -179,6 +178,7 @@ void List_Init()
             .Remove         = Remove,
         };
     }
+    return &ListClass;
 }
 
 
@@ -188,7 +188,7 @@ void List_Init()
 List List_Ctor(List const this)
 {
     Collection_Ctor(this);
-    this->isa = &ListClass;
+    this->isa = isa(List);
     this->head = nullptr;
 
     return this;

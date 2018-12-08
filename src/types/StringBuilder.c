@@ -59,7 +59,6 @@ SOFTWARE.
 
 static Exception(OutOfMemory);
 
-StringBuilderClass_t StringBuilderClass;
 
 /*
  * sb_empty returns non-zero if the given StringBuilder is empty.
@@ -87,7 +86,7 @@ int StringBuilder_Append(StringBuilder this, const char *str)
 		return this->length;
 
 	length = strlen(str);
-	frag = (StringFragment) calloc(1, sizeof(StringFragment_t));
+	frag = (StringFragment) dark_malloc (sizeof(StringFragment_t));
 	if (nullptr == frag)
 		return OutOfMemoryException("StringBuilder::Append");
 
@@ -140,7 +139,7 @@ String StringBuilder_Concat(StringBuilder this)
 	char *c = nullptr;
 	StringFragment frag = nullptr;
 
-	buf = calloc(this->length + 1, sizeof(char));
+	buf = dark_malloc ((this->length + 1) * sizeof(char));
 	if (nullptr == buf)
 		return nullptr;
 
@@ -163,13 +162,6 @@ void StringBuilder_Reset(StringBuilder this)
 	StringFragment frag = nullptr;
 	StringFragment next = nullptr;
 
-	frag = this->root;
-	while(frag) {
-		next = frag->next;
-		free(frag->str);
-		free(frag);
-		frag = next;
-	}
 
 	this->root = nullptr;
 	this->trunk = nullptr;
@@ -193,7 +185,7 @@ char* StringBuilder_ToString(StringBuilder this)
 /**
  * StringBuilder Class Metadata
  */
-void StringBuilder_Init()
+register (StringBuilder)
 {
 	if (StringBuilderClass.isa == nullptr) {
 		StringBuilderClass = (StringBuilderClass_t) {
@@ -214,12 +206,13 @@ void StringBuilder_Init()
 			.Reset     		= StringBuilder_Reset,
 		};
 	}
+	return &StringBuilderClass;
 }
 
 StringBuilder StringBuilder_Ctor(StringBuilder const this)
 {
     Object_Ctor(this);
-    this->isa = &StringBuilderClass;
+    this->isa = isa(StringBuilder);
 	return this;
 }
 

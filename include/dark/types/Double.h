@@ -33,9 +33,6 @@ SOFTWARE.
 #define DOUBLE_SIZE       (DOUBLE_BYTES * CHAR_BIT)
 #define DOUBLE_TYPE       (TYPE_DOUBLE)
 
-typedef struct DoubleClass_t DoubleClass_t;
-extern DoubleClass_t DoubleClass;
-
 /**
  * Object class
  */

@@ -34,9 +34,6 @@ SOFTWARE.
 #define INTEGER_SIZE       (INTEGER_BYTES * CHAR_BIT)
 #define INTEGER_TYPE       (TYPE_LONG)
 
-typedef struct IntegerClass_t IntegerClass_t;
-extern IntegerClass_t IntegerClass;
-
 /**
  * Object class
  */

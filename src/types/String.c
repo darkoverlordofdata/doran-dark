@@ -30,9 +30,6 @@ SOFTWARE.
 
 static Exception(IndexOutOfBounds);
 
-StringClass_t StringClass;
-
-
 void String_GetChars(String this, char* dst, int dstBegin) {
     memcpy(dst+dstBegin, this->value, this->length);
 }
@@ -68,11 +65,10 @@ String String_Concatc(String this, char* other) {
     int length = strlen(other);
     if (length == 0) return this;
     int len = this->length;
-    char* str = calloc(len+length+1, sizeof(char));
+    char* str = dark_malloc ((len+length+1) * sizeof(char));
     strncpy(str, this->value, len);
     strncpy(str+len, other, length);
     String result = String_New(str);
-    free(str);
     return result;
 
 }
@@ -82,11 +78,10 @@ String String_Concat(String this, String other) {
         return this;
 
     int len = this->length;
-    char* str = calloc(len+other->length+1, sizeof(char));
+    char* str = dark_malloc ((len+other->length+1) * sizeof(char));
     strncpy(str, this->value, len);
     strncpy(str+len, other->value, other->length);
     String result = String_New(str);
-    free(str);
     return result;
 }
 
@@ -170,13 +165,12 @@ char* String_ToString(String const this)
 
 void String_Dispose(String const this)
 {
-    free(this->value);
 }
 
 /**
  * String Class Metadata
  */
-void String_Init()
+register (String)
 {
     if (StringClass.isa == nullptr) {
         StringClass = (StringClass_t) {
@@ -209,6 +203,7 @@ void String_Init()
             .Trim           = String_Trim,
         };
     }
+    return &StringClass;
 }
 
 /**
@@ -217,7 +212,7 @@ void String_Init()
 String String_Ctor(String const this, char* value)
 {
     Comparable_Ctor(this);
-    this->isa = &StringClass;
+    this->isa = isa(String);
     this->value = strdup(value);
     this->length = strlen(value);
     return this;
@@ -248,7 +243,7 @@ String String_Format(char* format, ...) {
     int len = vsnprintf(nullptr, 0, format, args1);
     va_end(args1);
     if (len == 0) return String_New("");
-    char* str = calloc(len+1, sizeof(char));
+    char* str = dark_malloc ((len+1) * sizeof(char));
     len = vsnprintf(str, len+1, format, args2);
     va_end(args2);
     return String_New(str);

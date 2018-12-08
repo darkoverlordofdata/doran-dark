@@ -142,7 +142,7 @@ static unsigned long crc32(const unsigned char *s, unsigned int len)
 /*
  * Hashing function for a string
  */
-unsigned int Hashmap_HashInt(Hashmap const this, char* keystring)
+unsigned int overload HashInt(Hashmap const this, char* keystring)
 {
     unsigned long key = crc32((unsigned char*)(keystring), strlen(keystring));
 
@@ -166,12 +166,12 @@ unsigned int Hashmap_HashInt(Hashmap const this, char* keystring)
  * Return the integer of the location in data
  * to store the point to the item, or MAP_FULL.
  */
-int Hashmap_Hash(Hashmap const this, char* key)
+int overload Hash(Hashmap const this, char* key)
 {
 	/* If full, return immediately */
 	if (this->size >= (this->tableSize/2)) return MAP_FULL;
 	/* Find the best index */
-	int curr = this->HashInt(this, key);
+	int curr = HashInt(this, key);
 	/* Linear probing */
 	for (int i = 0; i< MAX_CHAIN_LENGTH; i++)
     {
@@ -189,11 +189,9 @@ int Hashmap_Hash(Hashmap const this, char* key)
 /*
  * Doubles the size of the hashmap, and rehashes all the elements
  */
-int Hashmap_Rehash(Hashmap const this)
+int overload Rehash(Hashmap const this)
 {
-    // HashmapNode temp = allocate(HashmapNode, 2 * this->tableSize);
     HashmapNode temp = allocate(HashmapNode, 2 * this->tableSize);
-    // HashmapNode temp = calloc(2 * this->tableSize, sizeof(HashmapNode_t));
 
 	if (!temp) return MAP_OMEM;
 
@@ -212,28 +210,28 @@ int Hashmap_Rehash(Hashmap const this)
         if (curr[i].inUse == 0)
             continue;
             
-		int status = this->Put(this, curr[i].key, curr[i].data);
+		int status = Put(this, curr[i].key, curr[i].data);
 		if (status != MAP_OK)
 			return status;
 	}
-	delete(curr);
+	// delete(curr);
 	return MAP_OK;
 }
 
 /*
  * Add a pointer to the hashmap with some key
  */
-int Hashmap_Put(Hashmap const this, char* key, Any value)
+int overload Put(Hashmap const this, char* key, Any value)
 {
 	/* Find a place to put our value */
-	int index = this->Hash(this, key);
+	int index = Hash(this, key);
 	while (index == MAP_FULL)
     {
-		if (this->Rehash(this) == MAP_OMEM) 
+		if (Rehash(this) == MAP_OMEM) 
         {
 			return MAP_OMEM;
 		}
-		index = this->Hash(this, key);
+		index = Hash(this, key);
 	}
 
 	/* Set the data */
@@ -248,11 +246,11 @@ int Hashmap_Put(Hashmap const this, char* key, Any value)
 /*
  * Get your pointer out of the hashmap with a key
  */
-Any Hashmap_Get(Hashmap const this, char* key)
+Any overload Get(Hashmap const this, char* key)
 {
     Any result;
 	/* Find data location */
-	int curr = this->HashInt(this, key);
+	int curr = HashInt(this, key);
 
 	/* Linear probing, if necessary */
 	for (int i = 0; i<MAX_CHAIN_LENGTH; i++)
@@ -277,10 +275,10 @@ Any Hashmap_Get(Hashmap const this, char* key)
  * additional Any argument is passed to the function as its first
  * argument and the hashmap element is the second.
  */
-int Hashmap_Iterate(Hashmap const this, Hashmap_Iterator f, Any item) 
+int overload Iterate(Hashmap const this, Hashmap_Iterator f, Any item) 
 {
 	/* On empty hashmap, return immediately */
-	if (this->Length(this) <= 0)
+	if (Length(this) <= 0)
 		return MAP_MISSING;	
 
 	/* Linear probing */
@@ -302,10 +300,10 @@ int Hashmap_Iterate(Hashmap const this, Hashmap_Iterator f, Any item)
 /*
  * Remove an element with that key from the map
  */
-int Hashmap_Remove(Hashmap const this, char* key)
+int overload Remove(Hashmap const this, char* key)
 {
 	/* Find key */
-	int curr = this->HashInt(this, key);
+	int curr = HashInt(this, key);
 
 	/* Linear probing, if necessary */
 	for (int i = 0; i<MAX_CHAIN_LENGTH; i++)
@@ -333,39 +331,58 @@ int Hashmap_Remove(Hashmap const this, char* key)
 }
 
 /* Deallocate the hashmap */
-void Hashmap_Dispose(Hashmap const this)
+void overload Dispose(Hashmap const this)
 {
-	delete(this->data);
+	// delete(this->data);
 }
 
 /* Return the length of the hashmap */
-int Hashmap_Length(Hashmap const this)
+int overload Length(Hashmap const this)
 {
     return this->size;
 }
 
-char* Hashmap_ToString(Hashmap const this)
+const char* overload ToString(Hashmap const this)
 {
     return "dark.collections.Hashmap";
 }
+
+/**
+ * List Class Metadata
+ */
+register (Hashmap)
+{
+    if (HashmapClass.isa == nullptr) {
+        HashmapClass = (HashmapClass_t) {
+            .isa            = &HashmapClass,
+            .superclass     = &CollectionClass,
+            .name           = "Hashmap",
+            .Equals         = ObjectClass.Equals,
+            .GetHashCode    = ObjectClass.GetHashCode,
+            .ReferenceEquals= ObjectClass.ReferenceEquals,
+            .InstanceEquals = ObjectClass.InstanceEquals,
+            .ToString       = ToString,
+            .Iterate        = Iterate,
+            .Put            = Put,
+            .Get            = Get,
+            .Remove         = Remove,
+            .Dispose        = Dispose,
+            .Length         = Length,
+            .HashInt        = HashInt,
+            .Hash           = Hash,
+            .Rehash         = Rehash,
+        };
+    }
+    return &HashmapClass;
+}
+
 /**
  * Class Initializer
  */
 Hashmap Hashmap_Ctor(Hashmap const this)
 {
-    DObject_Ctor(this);
-    this->isa = RegisterClass(HashmapID, DObjectID, "Hashmap");
-
-    this->ToString      = Hashmap_ToString; // override
-    this->Iterate       = Hashmap_Iterate;
-    this->Put           = Hashmap_Put;
-    this->Get           = Hashmap_Get;
-    this->Remove        = Hashmap_Remove;
-    this->Dispose       = Hashmap_Dispose;
-    this->Length        = Hashmap_Length;
-    this->HashInt       = Hashmap_HashInt;
-    this->Hash          = Hashmap_Hash;
-    this->Rehash        = Hashmap_Rehash;
+    Object_Ctor(this);
+    this->isa = isa(Hashmap);
 
     this->data = allocate(HashmapNode, INITIAL_SIZE);
 	this->tableSize = INITIAL_SIZE;

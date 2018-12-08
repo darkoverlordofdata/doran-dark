@@ -29,9 +29,6 @@ SOFTWARE.
 
 #define OBJECT_TYPE       (TYPE_OBJECT)
 
-typedef struct ObjectClass_t ObjectClass_t;
-extern ObjectClass_t ObjectClass;
-
 /**
  * Object class
  */
@@ -73,10 +70,10 @@ char* GetClassName(Object const);
 bool ReferenceEquals(Object const objA, Object const objB);
 bool InstanceEquals(Object const objA, Object const objB);
 
-const char* __attribute__((overloadable)) ToString(Object const);
-bool __attribute__((overloadable)) Equals(Object const, Object const that);
-int __attribute__((overloadable)) GetHashCode(Object const);
-void __attribute__((overloadable)) Dispose(Object const);
+const char* overload ToString(Object const);
+bool overload Equals(Object const, Object const that);
+int overload GetHashCode(Object const);
+void overload Dispose(Object const);
 
 Object Object_New();
 Object Object_Dtor();

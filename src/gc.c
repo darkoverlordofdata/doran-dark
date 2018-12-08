@@ -25,24 +25,28 @@ SOFTWARE.
 ******************************************************************/
 #include <dark/core.h>
 #include <stdlib.h>
-#ifndef __ARC__
-tgc_t gc;
+#include "tgc.h"
+// #include <gc.h>
+static tgc_t gc;
+
+void* dark_malloc(size_t nbytes) {
+    return tgc_calloc(&gc, 1, nbytes);
+    // return calloc(1, nbytes);
+    // return GC_malloc(nbytes);
+}
 
 /**
  *  start the garbage collector
  */
 void __attribute__((constructor)) dark_gc_ctor()
 {
-    int local= 0;
-	tgc_start (&gc, &local);
+    int argc;
+    tgc_start(&gc, &argc);    
+    // GC_INIT();
 }
 
-/**
- *  stop the garbage collector
- */
 void __attribute__((destructor)) dark_gc_dtor()
 {
-    tgc_stop (&gc);
+    tgc_stop(&gc);    
 }
 
-#endif

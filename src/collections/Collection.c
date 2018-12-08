@@ -30,8 +30,6 @@ SOFTWARE.
  */
 static Exception(AbstractMethod);
 
-CollectionClass_t CollectionClass;
-
 /**
  * Number of items in collection
  */
@@ -56,7 +54,7 @@ static void Abstract_Add(Collection const this, Any data)
 /**
  * Collection Class Metadata
  */
-void Collection_Init()
+register (Collection)
 {
     if (CollectionClass.isa == nullptr) {
         CollectionClass = (CollectionClass_t) {
@@ -72,6 +70,7 @@ void Collection_Init()
             .Add            = Abstract_Add,
         };
     }
+    return &CollectionClass;
 }
 
 /**
@@ -80,7 +79,7 @@ void Collection_Init()
 Collection Collection_Ctor(Collection const this)
 {
     Object_Ctor(this);
-    this->isa = &CollectionClass;
+    this->isa = isa(Collection);
     return this;
 }
 

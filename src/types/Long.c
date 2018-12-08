@@ -29,8 +29,6 @@ SOFTWARE.
  */
 static Exception(LongFormat);
 
-LongClass_t LongClass;
-
 /**
  * Returns a primitive long value parsed from input string. 
  */
@@ -130,7 +128,7 @@ char* Long_ToString(Long const this)
 /**
  * Long Class Metadata
  */
-void Long_Init()
+register (Long)
 {
     if (LongClass.isa == nullptr) {
         LongClass = (LongClass_t) {
@@ -153,6 +151,7 @@ void Long_Init()
             .ShortValue     = Long_ShortValue, 
         };
     }
+    return &LongClass;
 }
 
 /**
@@ -161,7 +160,7 @@ void Long_Init()
 Long Long_Ctor(Long const this, long value)
 {
     Number_Ctor(this);
-    this->isa = &LongClass;
+    this->isa = isa(Long);
     this->value = value;
     return this;
 }

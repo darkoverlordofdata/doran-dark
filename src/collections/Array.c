@@ -28,8 +28,6 @@ SOFTWARE.
 /**
  * Generic Array implementation
  */
-ArrayClass_t ArrayClass;
-
 
 int overload Length(Array const this)
 {
@@ -60,8 +58,9 @@ void Resize(Array const this, int capacity)
  */
 void overload Add(Array const this, Any item)
 {
-    if (this->capacity == this->length)
+    if (this->capacity == this->length) {
         this->isa->Resize(this, this->capacity * 2);
+    }
     this->data[this->length++] = item;
 }
 
@@ -117,7 +116,7 @@ void overload Remove(Array const this, int index)
  */
 void overload Dispose(Array const this)
 {
-    delete(this->data);
+    // delete(this->data);
 }
 
 void overload Clear(Array const this)
@@ -139,7 +138,7 @@ const char* overload ToString(Array const this)
 /**
  * Array Class Metadata
  */
-void Array_Init()
+register (Array)
 {
     if (ArrayClass.isa == nullptr) {
         ArrayClass = (ArrayClass_t) {
@@ -155,8 +154,13 @@ void Array_Init()
             .Length         = Length,
             .Add            = Add,
             .Remove         = Remove,
+            .Resize         = Resize,
+            .Set            = Set,
+            .Get            = Get,
+            .Clear          = Clear,
         };
     }
+    return &ArrayClass;
 }
 
 /**
@@ -165,11 +169,10 @@ void Array_Init()
 Array Array_Ctor(Array const this, int capacity)
 {
     Collection_Ctor(this);
-    this->isa = &ArrayClass;
+    this->isa = isa(Array);
     this->capacity = capacity == 0 ? ARRAY_INIT_CAPACITY : capacity;
     this->length = 0;
-    this->data = calloc(this->capacity, sizeof(Any));
-
+    this->data = dark_malloc (this->capacity * sizeof(Any));
     return this;
 }
 

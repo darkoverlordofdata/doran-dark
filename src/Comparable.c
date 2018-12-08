@@ -29,10 +29,8 @@ SOFTWARE.
  */
 
 static Exception(AbstractMethod);
-ComparableClass_t ComparableClass;
 
-
-int __attribute__((overloadable)) CompareTo(Comparable this, Comparable other) {
+int overload CompareTo(Comparable this, Comparable other) {
     return this->isa->CompareTo(this, other);
 }
 static short Abstract_CompareTo(Comparable const this, Comparable other) {
@@ -49,7 +47,7 @@ static char* Virtual_ToString(Comparable const this) {
 /**
  * Comparable Class Metadata
  */
-void Comparable_Init()
+register (Comparable)
 {
     if (ComparableClass.isa == nullptr) {
         ComparableClass = (ComparableClass_t) {
@@ -65,6 +63,7 @@ void Comparable_Init()
             .InstanceEquals  = ObjectClass.InstanceEquals,
         };
     }
+    return &ComparableClass;
 }
 
 /**
@@ -73,7 +72,7 @@ void Comparable_Init()
 Comparable Comparable_Ctor(Comparable const this)
 {
     Object_Ctor(this);
-    this->isa = &ComparableClass;
+    this->isa = isa(Comparable);
     return this;
 }
 

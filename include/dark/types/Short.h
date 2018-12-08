@@ -33,9 +33,6 @@ SOFTWARE.
 #define SHORT_SIZE       (SHORT_BYTES * CHAR_BIT)
 #define SHORT_TYPE       (TYPE_SHORT)
 
-typedef struct ShortClass_t ShortClass_t;
-extern ShortClass_t ShortClass;
-
 /**
  * Object class
  */

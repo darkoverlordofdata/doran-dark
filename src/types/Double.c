@@ -29,8 +29,6 @@ SOFTWARE.
  */
 static Exception(NumberFormat);
 
-DoubleClass_t DoubleClass;
-
 /**
  * Returns a primitive double value parsed from input string. 
  */
@@ -126,7 +124,7 @@ char* Double_ToString(Double const this)
 /**
  * Double Class Metadata
  */
-void Double_Init()
+register (Double)
 {
     if (DoubleClass.isa == nullptr) {
         DoubleClass = (DoubleClass_t) {
@@ -148,6 +146,7 @@ void Double_Init()
             .ShortValue     = Double_ShortValue, 
         };
     }
+    return &DoubleClass;
 }
 
 /**
@@ -156,7 +155,7 @@ void Double_Init()
 Double Double_Ctor(Double const this, double value)
 {
     Number_Ctor(this);
-    this->isa = &DoubleClass;
+    this->isa = isa(Double);
     this->value = value;
     return this;
 }

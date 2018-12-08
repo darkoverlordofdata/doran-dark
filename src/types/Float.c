@@ -29,7 +29,6 @@ SOFTWARE.
  */
 static Exception(NumberFormat);
 
-FloatClass_t FloatClass;
 /**
  * Returns a primitive float value parsed from input string. 
  */
@@ -118,7 +117,7 @@ char* Float_ToString(Float const this)
 /**
  * Float Class Metadata
  */
-void Float_Init()
+register (Float)
 {
     if (FloatClass.isa == nullptr) {
         FloatClass = (FloatClass_t) {
@@ -140,6 +139,7 @@ void Float_Init()
             .ShortValue     = Float_ShortValue, 
         };
     }
+    return &FloatClass;
 }
 
 
@@ -149,7 +149,7 @@ void Float_Init()
 Float Float_Ctor(Float const this, float value)
 {
     Number_Ctor(this);
-    this->isa = &FloatClass;
+    this->isa = isa(Float);
     this->value = value;
     return this;
 }

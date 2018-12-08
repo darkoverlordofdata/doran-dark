@@ -12,7 +12,8 @@ static size_t tgc_probe(tgc_t* gc, size_t i, size_t h) {
 
 static tgc_ptr_t *tgc_get_ptr(tgc_t *gc, void *ptr) {
   size_t i, j, h;
-  i = tgc_hash(ptr) % gc->nslots; j = 0;
+  i = tgc_hash(ptr) % gc->nslots; 
+  j = 0;
   while (1) {
     h = gc->items[i].hash;
     if (h == 0 || j > tgc_probe(gc, i, h)) { return NULL; }
@@ -403,11 +404,13 @@ void *tgc_realloc(tgc_t *gc, void *ptr, size_t size) {
 void tgc_free(tgc_t *gc, void *ptr) {
   tgc_ptr_t *p  = tgc_get_ptr(gc, ptr);
   if (p) {
-    if (p->dtor) {
-      p->dtor(ptr);
-    }
-    free(ptr);
-    tgc_rem(gc, ptr);
+  ////
+    // if (p->dtor) {
+    //   p->dtor(ptr);
+    // }
+    // free(ptr);
+    // tgc_rem(gc, ptr);
+  ////
   }
 }
 
@@ -423,9 +426,11 @@ void *tgc_calloc_opt(
   tgc_t *gc, size_t num, size_t size, 
   int flags, void(*dtor)(void*)) {
   void *ptr = calloc(num, size);
-  if (ptr != NULL) {
-    ptr = tgc_add(gc, ptr, num * size, flags, dtor);
-  }
+  //////
+  // if (ptr != NULL) {
+  //   ptr = tgc_add(gc, ptr, num * size, flags, dtor);
+  // }
+  //////
   return ptr;
 }
 

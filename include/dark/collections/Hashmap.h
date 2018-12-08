@@ -36,7 +36,7 @@ SOFTWARE.
  */
 #ifndef _HASHMAP_H_
 #define _HASHMAP_H_
-#include "../Object.h"
+#include "Collection.h"
 
 #define MAP_MISSING -3  /* No such element */
 #define MAP_FULL -2 	/* Hashmap is full */
@@ -62,21 +62,42 @@ class (HashmapNode)
  * as well as the data to hold. */
 class (Hashmap)
 {
-    union {
-        DObject_t _;
-        struct 
-        {
-            Class isa;
-            retained
-            char*       (*ToString)(Object const);
-            bool        (*Equals)(Object const, Object const);
-            int         (*GetHashCode)(Object const);
-            void        (*Dispose) (Object const);
-        };
-    };
+    Class isa;
 	int tableSize;
 	int size;
 	HashmapNode data;
+};
+
+typedef struct HashmapClass_t
+{
+    union {
+        CollectionClass_t base;
+        struct 
+        {
+            Class       isa;
+            Class       superclass;
+            char*       name;
+            const char* (*ToString)     (Hashmap const);
+            bool        (*Equals)       (Object const, Object const);
+            int         (*GetHashCode)  (Object const);
+            void        (*Dispose)      (Hashmap const);
+            bool        (*ReferenceEquals) (Object const objA, Object const objB);
+            bool        (*InstanceEquals) (Object const objA, Object const objB);
+            /*
+             * Get the current size of a hashmap
+             */
+            int         (*Length)       (Hashmap const);
+            bool        (*IsEmpty)      (Hashmap const);
+            bool        (*Contains)     (Hashmap const, Any value);
+            void        (*Clear)        (Hashmap const);
+            void        (*Add)          (Hashmap const, Any value);
+            /*
+             * Remove an element from the hashmap. Return MAP_OK or MAP_MISSING.
+             */
+            Any         (*Remove)       (Hashmap const);
+
+        };
+    };
 
     /*
     * Iteratively call func with argument (item, data) for
@@ -99,16 +120,6 @@ class (Hashmap)
     Any (*Get)      (Hashmap const, char* key);
 
     /*
-    * Remove an element from the hashmap. Return MAP_OK or MAP_MISSING.
-    */
-    int (*Remove)   (Hashmap const, char* key);
-
-    /*
-    * Get the current size of a hashmap
-    */
-    int (*Length)   (Hashmap const);
-
-    /*
      * Hashing function for a string
      */
     UInt (*HashInt) (Hashmap const, char* keystring);
@@ -129,16 +140,16 @@ class (Hashmap)
 /**
  * Hashmap API
  */
-unsigned int Hashmap_HashInt(Hashmap const, char* keystring);
-int Hashmap_Hash(Hashmap const, char* key);
-int Hashmap_Rehash(Hashmap const);
-int Hashmap_Put(Hashmap const, char* key, Any value);
-Any Hashmap_Get(Hashmap const, char* key);
-int Hashmap_Iterate(Hashmap const, Hashmap_Iterator f, Any item);
-int Hashmap_Remove(Hashmap const, char* key);
-void Hashmap_Dispose(Hashmap const);
-int Hashmap_Length(Hashmap const);
-char* Hashmap_ToString(Hashmap const);
+unsigned int overload HashInt(Hashmap const, char* keystring);
+int overload Hash(Hashmap const, char* key);
+int overload Rehash(Hashmap const);
+int overload Put(Hashmap const, char* key, Any value);
+Any overload Get(Hashmap const, char* key);
+int overload Iterate(Hashmap const, Hashmap_Iterator f, Any item);
+int overload Remove(Hashmap const, char* key);
+void overload Dispose(Hashmap const);
+int overload Length(Hashmap const);
+const char* overload ToString(Hashmap const);
 Hashmap Hashmap_New();
 
 #endif _HASHMAP_H_

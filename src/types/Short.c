@@ -29,8 +29,6 @@ SOFTWARE.
  */
 static Exception(NumberFormat);
 
-ShortClass_t ShortClass;
-
 /**
  * Returns a primitive short value parsed from input string. 
  */
@@ -118,7 +116,7 @@ char* Short_ToString(Short const this)
 /**
  * Short Class Metadata
  */
-void Short_Init()
+register (Short)
 {
     if (ShortClass.isa == nullptr) {
         ShortClass = (ShortClass_t) {
@@ -140,6 +138,7 @@ void Short_Init()
             .ShortValue     = Short_ShortValue, 
         };
     }
+    return &ShortClass;
 }
 
 /**
@@ -148,7 +147,7 @@ void Short_Init()
 Short Short_Ctor(Short const this, short value)
 {
     Number_Ctor(this);
-    this->isa = &ShortClass;
+    this->isa = isa(Short);
     this->value = value;
     return this;
 }

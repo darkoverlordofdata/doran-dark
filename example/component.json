@@ -1,0 +1,48 @@
+{
+  "!": "doran package manager v0.0.3",
+  "name": "example",
+  "template": "c",
+  "version": "0.0.1",
+  "vala": "0.26",
+  "authors": [],
+  "description": "example",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "dark": "git://github.com/darkoverlordofdata/doran-dark"
+  },
+  "source": "src",
+  "files": [
+    "src/BallObject.c",
+    "src/Game.c",
+    "src/GameLevel.c",
+    "src/GameObject.c",
+    "src/main.c",
+    "src/ParticleGenerator.c",
+    "src/ResourceManager.c",
+    "src/Shader.c",
+    "src/SpriteRenderer.c",
+    "src/stb.c",
+    "src/Texture.c"
+  ],
+  "packages": null,
+  "includes": [
+    "./include",
+    "./vendor"
+  ],
+  "libraries": [
+    "glfw3",
+    "glew32",
+    "freetype",
+    "opengl32"
+  ],
+  "options": {
+    "VERSION": "0.0.1",
+    "RELEASE_NAME": "example"
+  },
+  "definitions": [],
+  "symbols": [],
+  "copy": "..",
+  "vapidir": "/src/vapis",
+  "console": false
+}

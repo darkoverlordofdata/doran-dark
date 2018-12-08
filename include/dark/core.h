@@ -134,8 +134,8 @@ long name##Exception(const char* msg, ...) \
 }
 
 /**
- * Global GC object for tgc
+ * GC
  */
-extern tgc_t gc;
+void* dark_malloc(size_t nbytes);
 
 #endif _CORE_H

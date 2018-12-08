@@ -33,9 +33,6 @@ SOFTWARE.
 #define CHAR_SIZE       (CHAR_BYTES * CHAR_BIT)
 #define CHAR_TYPE       (TYPE_CHAR)
 
-typedef struct CharClass_t CharClass_t;
-extern CharClass_t CharClass;
-
 /**
  * Object class
  */

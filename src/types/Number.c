@@ -30,8 +30,6 @@ SOFTWARE.
  */
 static Exception(AbstractMethod);
 
-NumberClass_t NumberClass;
-
 /**
  * Compares two Number objects.
  *
@@ -125,7 +123,7 @@ static char* Virtual_Equals(Number const this, Number const other) {
 /**
  * Number Class Metadata
  */
-void Number_Init()
+register (Number)
 {
     if (NumberClass.isa == nullptr) {
         NumberClass = (NumberClass_t) {
@@ -149,6 +147,7 @@ void Number_Init()
             .ShortValue     = Abstract_ShortValue 
         };
     }
+    return &NumberClass;
 }
 
 /**
@@ -157,7 +156,7 @@ void Number_Init()
 Number Number_Ctor(Number const this)
 {
     Comparable_Ctor(this);
-    this->isa = &NumberClass;
+    this->isa = isa(Number);
     return this;
 }
 

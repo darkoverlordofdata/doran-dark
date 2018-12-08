@@ -34,10 +34,6 @@ SOFTWARE.
 #define NUMBER_MIN_RADIX 2
 #define NUMBER_MAX_RADIX 36
 
-typedef struct NumberClass_t NumberClass_t;
-extern NumberClass_t NumberClass;
-
-
 /**
  * Object class
  */

@@ -34,20 +34,21 @@ SOFTWARE.
  */
 void __attribute__((constructor(101))) Class_Boot() 
 {
-    Object_Init();
-    Comparable_Init();
-    Collection_Init();
-    Array_Init();
-    List_Init();
-    Boolean_Init();
-    Number_Init();
-    Char_Init();
-    Double_Init();
-    Float_Init();
-    Integer_Init();
-    Long_Init();
-    Short_Init();
-    String_Init();
-    StringBuilder_Init();
+    IsaObject();
+    IsaComparable();
+    IsaCollection();
+    IsaArray();
+    IsaList();
+    IsaHashmap();
+    IsaBoolean();
+    IsaNumber();
+    IsaChar();
+    IsaDouble();
+    IsaFloat();
+    IsaInteger();
+    IsaLong();
+    IsaShort();
+    IsaString();
+    IsaStringBuilder();
 
 }

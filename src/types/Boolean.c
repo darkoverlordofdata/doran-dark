@@ -27,7 +27,6 @@ SOFTWARE.
 /* 
  * Boolean implementation
  */
-BooleanClass_t BooleanClass;
 
 bool ParseBool(char* s)
 {
@@ -79,12 +78,14 @@ char* overload ToString(Boolean const this)
 /**
  * Boolean Class Metadata
  */
-void Boolean_Init()
+register (Boolean)
 {
+    /** class constant: True */
     static const Boolean_t True = {
         .isa  = &BooleanClass,
         .value = true
     };
+    /** class constant: False */
     static const Boolean_t False = {
         .isa  = &BooleanClass,
         .value = false
@@ -95,13 +96,15 @@ void Boolean_Init()
             .isa            = &BooleanClass,
             .superclass     = &ComparableClass,
             .name           = "Boolean",
-            .ToString       = ToString,
-            .CompareTo      = CompareTo,
+            /** Instance members */
             .Equals         = ObjectClass.Equals,
             .GetHashCode    = ObjectClass.GetHashCode,
             .Dispose        = ObjectClass.Dispose,
             .ReferenceEquals= ObjectClass.ReferenceEquals,
             .InstanceEquals = ObjectClass.InstanceEquals,
+            .ToString       = ToString,
+            .CompareTo      = CompareTo,
+            /** Class members */
             .BoolValue      = BoolValue,
             .Bytes          = BOOLEAN_BYTES,
             .Size           = BOOLEAN_SIZE,
@@ -110,6 +113,7 @@ void Boolean_Init()
             .False          = &False,
         };
     }
+    return &BooleanClass;
 }
 
 /**
@@ -118,7 +122,7 @@ void Boolean_Init()
 Boolean Boolean_Ctor(Boolean const this, bool value)
 {
     Comparable_Ctor(this);
-    this->isa = &BooleanClass;
+    this->isa = isa(Boolean);
     this->value = value;
     return this;
 }

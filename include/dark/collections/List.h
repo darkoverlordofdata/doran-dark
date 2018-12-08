@@ -30,10 +30,6 @@ SOFTWARE.
 typedef int (*List_Compare) (Any, Any);
 typedef void (*List_Interator) (Any);
 
-
-typedef struct ListClass_t ListClass_t;
-extern ListClass_t ListClass;
-
 class (ListNode)
 {
     Any data;
