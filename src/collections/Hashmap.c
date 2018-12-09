@@ -142,7 +142,7 @@ static unsigned long crc32(const unsigned char *s, unsigned int len)
 /*
  * Hashing function for a string
  */
-unsigned int overload HashInt(Hashmap const this, char* keystring)
+unsigned int overload HashInt(THashmap const this, char* keystring)
 {
     unsigned long key = crc32((unsigned char*)(keystring), strlen(keystring));
 
@@ -165,11 +165,11 @@ unsigned int overload HashInt(Hashmap const this, char* keystring)
 /**
  * Default Constructor
  */
-Hashmap Hashmap_New() {
+THashmap Hashmap_New() {
     return Hashmap_Ctor(new(Hashmap));
 }
 
-Hashmap Hashmap_Ctor(Hashmap const this)
+THashmap Hashmap_Ctor(THashmap const this)
 {
     Object_Ctor(this);
     this->isa = isa(Hashmap);
@@ -187,7 +187,7 @@ Hashmap Hashmap_Ctor(Hashmap const this)
  * Return the integer of the location in data
  * to store the point to the item, or MAP_FULL.
  */
-int overload Hash(Hashmap const this, char* key)
+int overload Hash(THashmap const this, char* key)
 {
 	/* If full, return immediately */
 	if (this->size >= (this->tableSize/2)) return MAP_FULL;
@@ -210,14 +210,14 @@ int overload Hash(Hashmap const this, char* key)
 /*
  * Doubles the size of the hashmap, and rehashes all the elements
  */
-int overload Rehash(Hashmap const this)
+int overload Rehash(THashmap const this)
 {
-    HashmapNode temp = allocate(HashmapNode, 2 * this->tableSize);
+    THashmapNode temp = allocate(HashmapNode, 2 * this->tableSize);
 
 	if (!temp) return MAP_OMEM;
 
 	/* Update the array */
-	HashmapNode curr = this->data;
+	THashmapNode curr = this->data;
 	this->data = temp;
 
 	/* Update the size */
@@ -242,7 +242,7 @@ int overload Rehash(Hashmap const this)
 /*
  * Add a pointer to the hashmap with some key
  */
-int overload Put(Hashmap const this, char* key, Any value)
+int overload Put(THashmap const this, char* key, Any value)
 {
 	/* Find a place to put our value */
 	int index = Hash(this, key);
@@ -267,7 +267,7 @@ int overload Put(Hashmap const this, char* key, Any value)
 /*
  * Get your pointer out of the hashmap with a key
  */
-Any overload Get(Hashmap const this, char* key)
+Any overload Get(THashmap const this, char* key)
 {
     Any result;
 	/* Find data location */
@@ -296,7 +296,7 @@ Any overload Get(Hashmap const this, char* key)
  * additional Any argument is passed to the function as its first
  * argument and the hashmap element is the second.
  */
-int overload Iterate(Hashmap const this, Hashmap_Iterator f, Any item) 
+int overload Iterate(THashmap const this, Hashmap_Iterator f, Any item) 
 {
 	/* On empty hashmap, return immediately */
 	if (Length(this) <= 0)
@@ -321,7 +321,7 @@ int overload Iterate(Hashmap const this, Hashmap_Iterator f, Any item)
 /*
  * Remove an element with that key from the map
  */
-int overload Remove(Hashmap const this, char* key)
+int overload Remove(THashmap const this, char* key)
 {
 	/* Find key */
 	int curr = HashInt(this, key);
@@ -352,18 +352,18 @@ int overload Remove(Hashmap const this, char* key)
 }
 
 /* Deallocate the hashmap */
-void overload Dispose(Hashmap const this)
+void overload Dispose(THashmap const this)
 {
 	// delete(this->data);
 }
 
 /* Return the length of the hashmap */
-int overload Length(Hashmap const this)
+int overload Length(THashmap const this)
 {
     return this->size;
 }
 
-const char* overload ToString(Hashmap const this)
+char* overload ToString(THashmap const this)
 {
     return "dark.collections.Hashmap";
 }
@@ -373,15 +373,15 @@ const char* overload ToString(Hashmap const this)
  */
 register (Hashmap)
 {
-    if (HashmapClass.isa == nullptr) {
-        HashmapClass = (HashmapClass_t) {
-            .isa            = &HashmapClass,
-            .superclass     = &CollectionClass,
+    if (Hashmap.isa == nullptr) {
+        Hashmap = (struct HashmapClass) {
+            .isa            = &Hashmap,
+            .superclass     = &Collection,
             .name           = "Hashmap",
-            .Equals         = ObjectClass.Equals,
-            .GetHashCode    = ObjectClass.GetHashCode,
-            .ReferenceEquals= ObjectClass.ReferenceEquals,
-            .InstanceEquals = ObjectClass.InstanceEquals,
+            .Equals         = Object.Equals,
+            .GetHashCode    = Object.GetHashCode,
+            .ReferenceEquals= Object.ReferenceEquals,
+            .InstanceEquals = Object.InstanceEquals,
             .ToString       = ToString,
             .Iterate        = Iterate,
             .Put            = Put,
@@ -393,9 +393,9 @@ register (Hashmap)
             .Hash           = Hash,
             .Rehash         = Rehash,
         };
-        AddMetadata(Hashmap);
+        // AddMetadata(Hashmap);
     }
-    return &HashmapClass;
+    return &Hashmap;
 }
 
 

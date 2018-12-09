@@ -36,11 +36,11 @@ static Exception(NumberFormat);
  * @param value of int
  * 
  */
-Integer Integer_New(int value) {
+TInteger Integer_New(int value) {
     return Integer_Ctor(new(Integer), value);
 }
 
-Integer Integer_Ctor(Integer const this, int value)
+TInteger Integer_Ctor(TInteger const this, int value)
 {
     Number_Ctor(this);
     this->isa = isa(Integer);
@@ -78,54 +78,54 @@ int Integer_Compare(int x, int y) {
  * @param   other  Integer to be compared
  * @return same as Integer_Compare
  */
-int Integer_CompareTo(Integer this, Integer other) {
+int Integer_CompareTo(TInteger this, TInteger other) {
     return Integer_Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int Integer_IntValue(Integer const this) {
+int Integer_IntValue(TInteger const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-long Integer_LongValue(Integer const this) {
+long Integer_LongValue(TInteger const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-float Integer_FloatValue(Integer const this) {
+float Integer_FloatValue(TInteger const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-double Integer_DoubleValue(Integer const this) {
+double Integer_DoubleValue(TInteger const this) {
     return (double)this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-char Integer_CharValue(Integer const this) {
+char Integer_CharValue(TInteger const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-short Integer_ShortValue(Integer const this) {
+short Integer_ShortValue(TInteger const this) {
     return (short)this->value;
 }
 
 
-char* Integer_ToString(Integer const this)
+char* Integer_ToString(TInteger const this)
 {
     static char str[20];
     sprintf(str, "%d", this->value);
@@ -137,16 +137,16 @@ char* Integer_ToString(Integer const this)
  */
 register (Integer)
 {
-    if (IntegerClass.isa == nullptr) {
-        IntegerClass = (IntegerClass_t) {
-            .isa            = &IntegerClass,
-            .superclass     = &NumberClass,
+    if (Integer.isa == nullptr) {
+        Integer = (struct IntegerClass) {
+            .isa            = &Integer,
+            .superclass     = &Number,
             .name           = "Integer",
-            .Equals         = ObjectClass.Equals,
-            .GetHashCode    = ObjectClass.GetHashCode,
-            .Dispose        = ObjectClass.Dispose,
-            .ReferenceEquals= ObjectClass.ReferenceEquals,
-            .InstanceEquals = ObjectClass.InstanceEquals,
+            .Equals         = Object.Equals,
+            .GetHashCode    = Object.GetHashCode,
+            .Dispose        = Object.Dispose,
+            .ReferenceEquals= Object.ReferenceEquals,
+            .InstanceEquals = Object.InstanceEquals,
             .ToString       = Integer_ToString,
             .CompareTo      = Integer_CompareTo,
             .IntValue       = Integer_IntValue, 
@@ -156,8 +156,8 @@ register (Integer)
             .CharValue      = Integer_CharValue, 
             .ShortValue     = Integer_ShortValue, 
         };
-        AddMetadata(Integer);
+        // AddMetadata(Integer);
     }
-    return &IntegerClass;
+    return &Integer;
 }
 

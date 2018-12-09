@@ -8,9 +8,9 @@
 ******************************************************************/
 #include <ParticleGenerator.h>
 
-static void init(ParticleGenerator this);
-static GLuint firstUnusedParticle(ParticleGenerator this);
-static void respawnParticle(ParticleGenerator this, Particle particle, GameObject object, Vec2 offset);
+static void init(TParticleGenerator this);
+static GLuint firstUnusedParticle(TParticleGenerator this);
+static void respawnParticle(TParticleGenerator this, struct Particle particle, TGameObject object, Vec2 offset);
 
 /**
  * Constructor
@@ -20,11 +20,11 @@ static void respawnParticle(ParticleGenerator this, Particle particle, GameObjec
  * @param amount number of particles to generate
  * 
  */
-ParticleGenerator ParticleGenerator_New(Shader shader, Texture2D texture, int amount) {
+TParticleGenerator ParticleGenerator_New(TShader shader, TTexture2D texture, int amount) {
     return ParticleGenerator_Ctor(new(ParticleGenerator), shader, texture, amount);
 }
 
-ParticleGenerator ParticleGenerator_Ctor(ParticleGenerator const this, Shader shader, Texture2D texture, int amount)
+TParticleGenerator ParticleGenerator_Ctor(TParticleGenerator const this, TShader shader, TTexture2D texture, int amount)
 {
 	Object_Ctor(this);
     this->isa = isa(ParticleGenerator);
@@ -40,24 +40,24 @@ ParticleGenerator ParticleGenerator_Ctor(ParticleGenerator const this, Shader sh
  */
 register (ParticleGenerator)
 {
-    if (ParticleGeneratorClass.isa == nullptr) {
-        ParticleGeneratorClass = (ParticleGeneratorClass_t) {
-            .isa        = &ParticleGeneratorClass,
-            .superclass = &ObjectClass,
+    if (ParticleGenerator.isa == nullptr) {
+        ParticleGenerator = (struct ParticleGeneratorClass) {
+            .isa        = &ParticleGenerator,
+            .superclass = &Object,
             .name       = "ParticleGenerator",
             /** VTable */
             .ToString       = ToString,
-            .Equals         = ObjectClass.Equals,
-            .GetHashCode    = ObjectClass.GetHashCode,
-            .Dispose        = ObjectClass.Dispose,
-            .ReferenceEquals= ObjectClass.ReferenceEquals,
-            .InstanceEquals = ObjectClass.InstanceEquals,
+            .Equals         = Object.Equals,
+            .GetHashCode    = Object.GetHashCode,
+            .Dispose        = Object.Dispose,
+            .ReferenceEquals= Object.ReferenceEquals,
+            .InstanceEquals = Object.InstanceEquals,
             .Update         = Update,
             .Draw           = Draw,
         };
-        AddMetadata(ParticleGenerator);
+        // AddMetadata(ParticleGenerator);
     }
-    return &ParticleGeneratorClass;
+    return &ParticleGenerator;
 }
 
 /**
@@ -69,7 +69,7 @@ register (ParticleGenerator)
  * @param offset to display from
  * 
  */
-void overload Update(ParticleGenerator this, GLfloat dt, GameObject object, GLuint newParticles, Vec2 offset)
+void overload Update(TParticleGenerator this, GLfloat dt, TGameObject object, GLuint newParticles, Vec2 offset)
 {
     // Add new particles 
     for (GLuint i = 0; i < newParticles; ++i)
@@ -94,14 +94,14 @@ void overload Update(ParticleGenerator this, GLfloat dt, GameObject object, GLui
  * Render all particles
  * 
  */
-void overload Draw(ParticleGenerator this)
+void overload Draw(TParticleGenerator this)
 {
     // Use additive blending to give it a 'glow' effect
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     Use(this->shader);
     for (int i=0; i<this->amount; i++)
     {
-        Particle particle = this->particles[i];
+        struct Particle particle = this->particles[i];
         if (particle.Life > 0.0f)
         {
             SetArray2(this->shader, "offset", &particle.Position);
@@ -119,7 +119,7 @@ void overload Draw(ParticleGenerator this)
 /**
  * initialize generator
  */
-static void init(ParticleGenerator this)
+static void init(TParticleGenerator this)
 {
     // Set up mesh and attribute properties
     GLuint VBO;
@@ -148,7 +148,7 @@ static void init(ParticleGenerator this)
 
 // Stores the index of the last particle used (for quick access to next dead particle)
 GLuint lastUsedParticle = 0;
-static GLuint firstUnusedParticle(ParticleGenerator this)
+static GLuint firstUnusedParticle(TParticleGenerator this)
 {
     // First search from last used particle, this will usually return almost instantly
     for (GLuint i = lastUsedParticle; i < this->amount; ++i){
@@ -169,7 +169,7 @@ static GLuint firstUnusedParticle(ParticleGenerator this)
     return 0;
 }
 
-static void respawnParticle(ParticleGenerator this, Particle particle, GameObject object, Vec2 offset)
+static void respawnParticle(TParticleGenerator this, struct Particle particle, TGameObject object, Vec2 offset)
 {
     GLfloat random = ((rand() % 100) - 50) / 10.0f;
     GLfloat rColor = 0.5 + ((rand() % 100) / 100.0f);
@@ -182,7 +182,7 @@ static void respawnParticle(ParticleGenerator this, Particle particle, GameObjec
 /**
  * ToString
  */
-const char* overload ToString(ParticleGenerator const this)
+char* overload ToString(TParticleGenerator const this)
 {
     return "ParticleGenerator";
 }

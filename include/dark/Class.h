@@ -27,17 +27,17 @@ SOFTWARE.
 #define _CLASS_H_
 #include "core.h"
 
-class (Class)
-{
-    Class isa;
-    Class superclass;
-    char* name;
+struct Class {
+	struct Class * isa;
+	struct Class * super;
+	char* name;
 };
 
+typedef struct Class* TClass;
 
 struct Metadata {
     int count;
-    Class classes[100];
+    struct Class classes[100];
 };
 
 struct Metadata Metadata;

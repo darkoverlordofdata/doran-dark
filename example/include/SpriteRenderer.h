@@ -19,41 +19,40 @@
 
 class (SpriteRenderer)
 {
-    SpriteRendererClass_t* isa;
-    Shader shader; 
+    struct SpriteRendererClass * isa;
+    struct Shader * shader; 
     GLuint VAO;
 };
 
-
-typedef struct SpriteRendererClass_t
+struct SpriteRendererClass
 {
     union {
-        ObjectClass_t base;
+        struct ObjectClass base;
         struct 
         {
-            Class       isa;
-            Class       superclass;
-            char*       name;
-            const char* (*ToString)     (SpriteRenderer const);
-            bool        (*Equals)       (Object const, Object const);
-            int         (*GetHashCode)  (Object const);
-            void        (*Dispose)      (Object const);
-            bool        (*ReferenceEquals) (Object const objA, Object const objB);
-            bool        (*InstanceEquals) (Object const objA, Object const objB);
+            struct  Class * isa;
+            struct  Class * superclass;
+            char*   name;
+            char*   (*ToString) (TSpriteRenderer const);
+            bool    (*Equals) (TObject const, TObject const);
+            int     (*GetHashCode) (TObject const);
+            void    (*Dispose) (TObject const);
+            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
+            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
         };
     };
     // Renders a defined quad textured with given sprite
-    void (*DrawSprite)      (SpriteRenderer const, Texture2D *texture, Vec2 position, Vec2 size, GLfloat rotate, Vec3 color);
+    void (*DrawSprite)      (TSpriteRenderer const, TTexture2D *texture, Vec2 position, Vec2 size, GLfloat rotate, Vec3 color);
 };
 
 /**
  * SpriteRenderer API
  */
-void overload DrawSprite(SpriteRenderer, Texture2D texture, Vec2 position, Vec2 size, GLfloat rot, Vec3 color);
-void overload Dispose(SpriteRenderer);
-const char* overload ToString(SpriteRenderer const);
-SpriteRenderer SpriteRenderer_New(Shader shader);
-SpriteRenderer SpriteRenderer_Ctor(SpriteRenderer const this, Shader shader);
-static void initRenderData(SpriteRenderer this);
+void overload DrawSprite(TSpriteRenderer, TTexture2D texture, Vec2 position, Vec2 size, GLfloat rot, Vec3 color);
+void overload Dispose(TSpriteRenderer);
+char* overload ToString(TSpriteRenderer const);
+TSpriteRenderer SpriteRenderer_New(TShader shader);
+TSpriteRenderer SpriteRenderer_Ctor(TSpriteRenderer const this, TShader shader);
+static void initRenderData(TSpriteRenderer this);
 
 #endif SPRITE_RENDERER_H

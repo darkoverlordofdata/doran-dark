@@ -59,9 +59,9 @@ SOFTWARE.
 
 class (StringFragment)
 {
-	StringFragment	next;
-	int	            length;
-	char*			str;
+	struct StringFragment * next;
+	int length;
+	char* str;
 };
 
 /**
@@ -69,49 +69,49 @@ class (StringFragment)
  */
 class (StringBuilder) 
 {
-    StringBuilderClass_t* isa;
-	StringFragment	    root;
-	StringFragment	    trunk;
-	int					length;
+    struct StringBuilderClass * isa;
+	struct StringFragment * root;
+	struct StringFragment * trunk;
+	int length;
 };
 
 /**
  * Object metaclass
  */
-typedef struct StringBuilderClass_t
+struct StringBuilderClass
 {
     union {
-        ObjectClass_t base;
+        struct ObjectClass base;
         struct 
         {
-            Class   isa;
-            Class   superclass;
+            struct  Class * isa;
+            struct  Class * superclass;
             char*   name;
-            char*   (*ToString) (Object const);
-            bool    (*Equals) (Object const, Object const);
-            int     (*GetHashCode) (Object const);
-            void    (*Dispose) (Object const);
-            bool    (*ReferenceEquals) (Object const objA, Object const objB);
-            bool    (*InstanceEquals) (Object const objA, Object const objB);
-            int     (*Empty) (StringBuilder const);
-            int     (*Append) (StringBuilder const, char* str);
-            int     (*Appendc) (StringBuilder const, char c);
-            int     (*Appendf) (StringBuilder const, char* str, ...);
-            String  (*Concat) (StringBuilder const);
-            void    (*Reset) (StringBuilder const);
+            char*   (*ToString) (TStringBuilder const);
+            bool    (*Equals) (TObject const, TObject const);
+            int     (*GetHashCode) (TObject const);
+            void    (*Dispose) (TObject const);
+            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
+            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            int     (*Empty) (TStringBuilder const);
+            int     (*Append) (TStringBuilder const, char* str);
+            int     (*Appendc) (TStringBuilder const, char c);
+            int     (*Appendf) (TStringBuilder const, char* str, ...);
+            TString (*Concat) (TStringBuilder const);
+            void    (*Reset) (TStringBuilder const);
         };
     };
 };
 
 
-StringBuilder StringBuilder_New();
-int StringBuilder_Empty(StringBuilder sb);
-int StringBuilder_Appendc(StringBuilder sb, const char c);
-int StringBuilder_Append(StringBuilder sb, const char *str);
+TStringBuilder StringBuilder_New();
+int StringBuilder_Empty(TStringBuilder sb);
+int StringBuilder_Appendc(TStringBuilder sb, const char c);
+int StringBuilder_Append(TStringBuilder sb, const char *str);
 __attribute__((__format__ (__printf__, 2, 3)))
-int StringBuilder_Appendf(StringBuilder sb, const char *format, ...);
-String StringBuilder_Concat(StringBuilder sb);
-void StringBuilder_Reset(StringBuilder sb);
-StringBuilder StringBuilder_Ctor(StringBuilder const this);
+int StringBuilder_Appendf(TStringBuilder sb, const char *format, ...);
+TString StringBuilder_Concat(TStringBuilder sb);
+void StringBuilder_Reset(TStringBuilder sb);
+TStringBuilder StringBuilder_Ctor(TStringBuilder const this);
 
 #endif _STRING_BUILDER_H_

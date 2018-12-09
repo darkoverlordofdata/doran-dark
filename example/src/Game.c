@@ -16,10 +16,10 @@ const Vec2 ZERO = { 0, 0 };
 const Vec3 WHITE = { 1, 1, 1 };
 
 // Game-related State data
-SpriteRenderer  Renderer;
-GameObject      Player;
-BallObject      Ball;
-ResourceManager Resource;
+TSpriteRenderer  Renderer;
+TGameObject      Player;
+TBallObject      Ball;
+TResourceManager Resource;
 
 // Defines a Collision Result Tuple
 class (Collision) 
@@ -36,7 +36,7 @@ class (Collision)
  * @param dir direction from
  * @param Vec2 difference point
  */
-static const Collision Collision_Ctor(Collision this, bool isTrue, Direction dir, Vec2 vec)
+static const TCollision Collision_Ctor(TCollision this, bool isTrue, Direction dir, Vec2 vec)
 {
     this->first = isTrue;
     this->second = dir;
@@ -44,7 +44,7 @@ static const Collision Collision_Ctor(Collision this, bool isTrue, Direction dir
     return this;
 }
 
-Collision New_Collision(bool first, Direction second, Vec2 third)
+TCollision New_Collision(bool first, Direction second, Vec2 third)
 {
     return Collision_Ctor(new(Collision), first, second, third);
 }
@@ -56,11 +56,11 @@ Collision New_Collision(bool first, Direction second, Vec2 third)
  * @param Height of screen
  * 
  */
-Game Game_New(int Width, int Height) {
+TGame Game_New(int Width, int Height) {
     return Game_Ctor(new(Game), Width, Height);
 }
 
-Game Game_Ctor(Game const this, int Width, int Height)
+TGame Game_Ctor(TGame const this, int Width, int Height)
 {
 	Object_Ctor(this);
     this->isa = isa(Game);
@@ -78,18 +78,18 @@ Game Game_Ctor(Game const this, int Width, int Height)
  */
 register (Game)
 {
-    if (GameClass.isa == nullptr) {
-        GameClass = (GameClass_t) {
-            .isa        = &GameClass,
-            .superclass = &ObjectClass,
+    if (Game.isa == nullptr) {
+        Game = (struct GameClass) {
+            .isa        = &Game,
+            .superclass = &Object,
             .name       = "Game",
             /** VTable */
             .ToString       = ToString,
-            .Equals         = ObjectClass.Equals,
-            .GetHashCode    = ObjectClass.GetHashCode,
-            .Dispose        = ObjectClass.Dispose,
-            .ReferenceEquals= ObjectClass.ReferenceEquals,
-            .InstanceEquals = ObjectClass.InstanceEquals,
+            .Equals         = Object.Equals,
+            .GetHashCode    = Object.GetHashCode,
+            .Dispose        = Object.Dispose,
+            .ReferenceEquals= Object.ReferenceEquals,
+            .InstanceEquals = Object.InstanceEquals,
             .Start          = Start,
             .ProcessInput   = ProcessInput,
             .Update         = Update,
@@ -98,23 +98,23 @@ register (Game)
             .ResetLevel     = ResetLevel,
             .ResetPlayer    = ResetPlayer,
         };
-        AddMetadata(Game);
+        // AddMetadata(Game);
     }
-    return &GameClass;
+    return &Game;
 }
 
 
 /**
  * Start the game
  */
-void overload Start(Game this)
+void overload Start(TGame this)
 {
     Resource = ResourceManager_New();
     // Load shaders
     LoadShader(Resource, "shaders/sprite.vs", "shaders/sprite.frag", "sprite");
     // Configure shaders
     Mat projection = ortho(0, (GLfloat)this->Width, (GLfloat)this->Height, 0, -1, 1);
-    Shader shader = GetShader(Resource, "sprite");
+    TShader shader = GetShader(Resource, "sprite");
     Use(shader);
     SetInteger(shader, "sprite", 0);
     SetMatrix4(shader, "projection", &projection);
@@ -149,7 +149,7 @@ void overload Start(Game this)
  * 
  * @param dt deltat time
  */
-void overload Update(Game this, GLfloat dt)
+void overload Update(TGame this, GLfloat dt)
 {
     // Update objects
     Move(Ball, dt, this->Width);
@@ -170,7 +170,7 @@ void overload Update(Game this, GLfloat dt)
  * 
  * @param dt deltat time
  */
-void overload ProcessInput(Game this, GLfloat dt)
+void overload ProcessInput(TGame this, GLfloat dt)
 {
     if (this->State == GAME_ACTIVE)
     {
@@ -203,7 +203,7 @@ void overload ProcessInput(Game this, GLfloat dt)
  * Render
  * 
  */
-void overload Render(Game this)
+void overload Render(TGame this)
 {
     if (this->State == GAME_ACTIVE)
     {
@@ -211,12 +211,12 @@ void overload Render(Game this)
         Vec2 size = { this->Width, this->Height };
         DrawSprite(Renderer, GetTexture(Resource, "background"), ZERO, size, 0.0f, WHITE);
         // Draw level
-        GameLevel level = this->Levels->data[this->Level];
+        TGameLevel level = this->Levels->data[this->Level];
         Draw(level, Renderer);
         // Draw player
         Draw(Player, Renderer);
         // Draw ball
-        Draw((GameObject)Ball, Renderer);
+        Draw((TGameObject)Ball, Renderer);
     }
 }
 
@@ -224,25 +224,25 @@ void overload Render(Game this)
  * ResetLevel
  * 
  */
-void overload ResetLevel(Game this)
+void overload ResetLevel(TGame this)
 {
     if (this->Level == 0) {
-        GameLevel level = this->Levels->data[0];
+        TGameLevel level = this->Levels->data[0];
         Load(level, "levels/one.lvl", this->Width, this->Height * 0.5f);
     }
     else if (this->Level == 1)
     {
-        GameLevel level = this->Levels->data[1];
+        TGameLevel level = this->Levels->data[1];
         Load(level, "levels/two.lvl", this->Width, this->Height * 0.5f);
     }
     else if (this->Level == 2)
     {
-        GameLevel level = this->Levels->data[2];
+        TGameLevel level = this->Levels->data[2];
         Load(level, "levels/three.lvl", this->Width, this->Height * 0.5f);
     }
     else if (this->Level == 3)
     {
-        GameLevel level = this->Levels->data[3];
+        TGameLevel level = this->Levels->data[3];
         Load(level, "levels/four.lvl", this->Width, this->Height * 0.5f);
     }
 }
@@ -251,7 +251,7 @@ void overload ResetLevel(Game this)
  * ResetPlayer
  * 
  */
-void overload ResetPlayer(Game this)
+void overload ResetPlayer(TGame this)
 {
     Player->Size = PLAYER_SIZE;
     Player->Position = (Vec2){ this->Width / 2 - PLAYER_SIZE.x / 2, this->Height - PLAYER_SIZE.y };
@@ -261,7 +261,7 @@ void overload ResetPlayer(Game this)
 /**
  * Release game resources
  */
-void overload Dispose(Game this)
+void overload Dispose(TGame this)
 {
     // tgc_free(&gc, Renderer);
     // tgc_free(&gc, Player);
@@ -306,7 +306,7 @@ static Direction ArrayDirection(Vec2 target)
  * @param two second game object to check
  * 
  */
-static GLboolean CheckCollision2(Game this, GameObject one, GameObject two) // AABB - AABB collision
+static GLboolean CheckCollision2(TGame this, TGameObject one, TGameObject two) // AABB - AABB collision
 {
     // Collision x-axis?
     bool collisionX = one->Position.x + one->Size.x >= two->Position.x &&
@@ -325,7 +325,7 @@ static GLboolean CheckCollision2(Game this, GameObject one, GameObject two) // A
  * @param two second game object to check
  * 
  */
-static Collision CheckCollision(Game this, BallObject one, GameObject two) // AABB - Circle collision
+static TCollision CheckCollision(TGame this, TBallObject one, TGameObject two) // AABB - Circle collision
 {
     // Get center point circle first 
     Vec2 center = { one->Position + one->Radius };
@@ -353,18 +353,18 @@ static Collision CheckCollision(Game this, BallObject one, GameObject two) // AA
  * DoCollisions
  * 
  */
-void overload DoCollisions(Game this)
+void overload DoCollisions(TGame this)
 {
-    GameLevel level = *(this->Levels[this->Level].data);
-    Array bricks = level->Bricks;
+    TGameLevel level = *(this->Levels[this->Level].data);
+    TArray bricks = level->Bricks;
     
     for (int i=0; i<Length(bricks); i++)
     {
-        GameObject box = bricks->data[i];
+        TGameObject box = bricks->data[i];
 
         if (!box->Destroyed)
         {
-            Collision collision = CheckCollision(this, Ball, box);
+            TCollision collision = CheckCollision(this, Ball, box);
             if (collision->first) // If collision is true
             {
                 // Destroy block if not solid
@@ -398,7 +398,7 @@ void overload DoCollisions(Game this)
         }    
     }
     // Also check collisions for player pad (unless stuck)
-    Collision result = CheckCollision(this, Ball, Player);
+    TCollision result = CheckCollision(this, Ball, Player);
     if (!Ball->Stuck && result->first)
     {
         // Check where it hit the board, and change velocity based on where it hit the board
@@ -420,7 +420,7 @@ void overload DoCollisions(Game this)
 /**
  * ToString
  */
-const char* overload ToString(Game const this)
+char* overload ToString(TGame const this)
 {
     return "Game";
 }

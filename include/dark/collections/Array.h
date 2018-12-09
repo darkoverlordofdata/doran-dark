@@ -34,7 +34,7 @@ SOFTWARE.
 
 class (Array)
 {
-    ArrayClass_t* isa;
+    struct ArrayClass * isa;
     int length;
     void **data;
     int capacity;
@@ -43,32 +43,32 @@ class (Array)
 /**
  * Object metaclass
  */
-typedef struct ArrayClass_t
+struct ArrayClass
 {
     union {
-        Collection_t base;
+        struct Collection base;
         struct 
         {
-            Class   isa;
-            Class   superclass;
-            char*   name;
-            const char*   (*ToString)     (Array const);
-            bool    (*Equals)       (Object const, Object const);
-            int     (*GetHashCode)  (Object const);
-            void    (*Dispose)      (Array const);
-            bool    (*ReferenceEquals) (Object const objA, Object const objB);
-            bool    (*InstanceEquals) (Object const objA, Object const objB);
-            int     (*Length)       (Array const);
-            bool    (*IsEmpty)      (Array const);
-            bool    (*Contains)     (Array const, Any value);
-            void    (*Clear)        (Array const);
-            void    (*Add)          (Array const, Any value);
-            void    (*Remove)       (Array const, int index);
+            struct Class * isa;
+            struct Class * superclass;
+            char* name;
+            char*   (*ToString) (TArray const);
+            bool    (*Equals) (TObject const, TObject const);
+            int     (*GetHashCode) (TObject const);
+            void    (*Dispose) (TObject const);
+            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
+            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            int     (*Length)       (TArray const);
+            bool    (*IsEmpty)      (TArray const);
+            bool    (*Contains)     (TArray const, Any value);
+            void    (*Clear)        (TArray const);
+            void    (*Add)          (TArray const, Any value);
+            void    (*Remove)       (TArray const, int index);
         };
     };
-    void    (*Resize)       (Array const, int);
-    void    (*Set)          (Array const, int, Any);
-    Any     (*Get)          (Array const, int);
+    void    (*Resize)       (TArray const, int);
+    void    (*Set)          (TArray const, int, Any);
+    Any     (*Get)          (TArray const, int);
 };
 
 
@@ -76,22 +76,22 @@ typedef struct ArrayClass_t
 /**
  * Array API
  */
-Array overload Array_New(void);
-Array overload Array_New(int capacity);
+TArray overload Array_New(void);
+TArray overload Array_New(int capacity);
 
-const char* overload ToString(Array const);
-void overload Dispose(Array const);
-int overload Length(Array const);
-bool overload IsEmpty(Array const);
-bool overload Contains(Array const, Any item);
-void overload Clear(Array const);
-void overload Add(Array const, Any item);
-void overload Remove(Array const, int index);
-void Resize(Array const, int capacity);
-void Set(Array const, int index, Any item);
-Any Get(Array const, int index);
-Array Array_Ctor(Array const this, int capacity);
-Array Array_Variadic(int count, ...);
+char* overload ToString(TArray const);
+void overload Dispose(TArray const);
+int overload Length(TArray const);
+bool overload IsEmpty(TArray const);
+bool overload Contains(TArray const, Any item);
+void overload Clear(TArray const);
+void overload Add(TArray const, Any item);
+void overload Remove(TArray const, int index);
+void Resize(TArray const, int capacity);
+void Set(TArray const, int index, Any item);
+Any Get(TArray const, int index);
+TArray Array_Ctor(TArray const this, int capacity);
+TArray Array_Variadic(int count, ...);
 
 /**
  *  Array v = Array_From(1, 2, 4, 8);

@@ -38,48 +38,48 @@ SOFTWARE.
  */
 class (Short) 
 {
-    ShortClass_t* isa;
-    short        value;
+    struct ShortClass * isa;
+    short value;
 };
 
 /**
  * Object metaclass
  */
-typedef struct ShortClass_t
+struct ShortClass
 {
     union {
-        NumberClass_t base;
+        struct NumberClass base;
         struct 
         {
-            Class isa;
-            Class superclass;
-            char* name;
-            char*   (*ToString) (Object const);
-            bool    (*Equals) (Object const, Object const);
-            int     (*GetHashCode) (Object const);
-            void    (*Dispose) (Object const);
-            bool    (*ReferenceEquals) (Object const objA, Object const objB);
-            bool    (*InstanceEquals) (Object const objA, Object const objB);
-            int     (*CompareTo) (Comparable const, Comparable other);
-            int     (*IntValue) (Short const);
-            long    (*LongValue) (Short const);
-            float   (*FloatValue) (Short const);
-            double  (*DoubleValue) (Short const);
-            char    (*CharValue) (Short const);
-            short   (*ShortValue) (Short const);
+            struct  Class * isa;
+            struct  Class * superclass;
+            char*   name;
+            char*   (*ToString) (TShort const);
+            bool    (*Equals) (TObject const, TObject const);
+            int     (*GetHashCode) (TObject const);
+            void    (*Dispose) (TObject const);
+            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
+            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            int     (*CompareTo) (TComparable const, TComparable other);
+            int     (*IntValue) (TShort const);
+            long    (*LongValue) (TShort const);
+            float   (*FloatValue) (TShort const);
+            double  (*DoubleValue) (TShort const);
+            char    (*CharValue) (TShort const);
+            short   (*ShortValue) (TShort const);
         };
     };
 };
 
 short Short_ParseShort(char* s, int radix);
-int Short_CompareTo(Short const, Short other);
-int Short_IntValue(Short const);
-long Short_LongValue(Short const);
-float Short_FloatValue(Short const);
-double Short_DoubleValue(Short const);
-char Short_CharValue(Short const);
-short Short_ShortValue(Short const);
-Short Short_New(short value);
-Short Short_Ctor(Short const this, short value);
+int Short_CompareTo(TShort const, TShort other);
+int Short_IntValue(TShort const);
+long Short_LongValue(TShort const);
+float Short_FloatValue(TShort const);
+double Short_DoubleValue(TShort const);
+char Short_CharValue(TShort const);
+short Short_ShortValue(TShort const);
+TShort Short_New(short value);
+TShort Short_Ctor(TShort const this, short value);
 
 #endif _SHORT_H_

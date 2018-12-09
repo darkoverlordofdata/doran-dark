@@ -63,11 +63,11 @@ static Exception(OutOfMemory);
  * create a new StringBuilder
  * 
  */
-StringBuilder StringBuilder_New() {
+TStringBuilder StringBuilder_New() {
     return StringBuilder_Ctor(new(StringBuilder));
 }
 
-StringBuilder StringBuilder_Ctor(StringBuilder const this)
+TStringBuilder StringBuilder_Ctor(TStringBuilder const this)
 {
     Object_Ctor(this);
     this->isa = isa(StringBuilder);
@@ -78,13 +78,13 @@ StringBuilder StringBuilder_Ctor(StringBuilder const this)
 /*
  * sb_empty returns non-zero if the given StringBuilder is empty.
  */
-int StringBuilder_Empty(StringBuilder this)
+int StringBuilder_Empty(TStringBuilder this)
 {
 	return (this->root == nullptr);
 }
 
 
-int StringBuilder_Appendc(StringBuilder this, const char c)
+int StringBuilder_Appendc(TStringBuilder this, const char c)
 {
 	char str[2] = { c, 0 };
 	return this->isa->Append(this, str);
@@ -92,16 +92,16 @@ int StringBuilder_Appendc(StringBuilder this, const char c)
 /*
  * sb_append adds a copy of the given string to a StringBuilder.
  */
-int StringBuilder_Append(StringBuilder this, const char *str)
+int StringBuilder_Append(TStringBuilder this, const char *str)
 {
 	int	length = 0;
-	StringFragment frag = nullptr;
+	struct StringFragment * frag = nullptr;
 
 	if (nullptr == str || '\0' == *str)
 		return this->length;
 
 	length = strlen(str);
-	frag = (StringFragment) dark_calloc(1, sizeof(StringFragment_t));
+	frag = (TStringFragment) dark_calloc(1, sizeof(struct StringFragment));
 	if (nullptr == frag)
 		return OutOfMemoryException("StringBuilder::Append");
 
@@ -123,7 +123,7 @@ int StringBuilder_Append(StringBuilder this, const char *str)
  * sb_appendf adds a copy of the given formatted string to a StringBuilder.
  */
 __attribute__((__format__ (__printf__, 2, 3)))
-int StringBuilder_Appendf(StringBuilder this, const char *format, ...)
+int StringBuilder_Appendf(TStringBuilder this, const char *format, ...)
 {
 	const int MAX_FRAG_LENGTH = 4096;
 	int len = 0;
@@ -148,11 +148,11 @@ int StringBuilder_Appendf(StringBuilder this, const char *format, ...)
  * The StringBuilder is not modified by this function and can therefore continue
  * to be used.
  */
-String StringBuilder_Concat(StringBuilder this)
+TString StringBuilder_Concat(TStringBuilder this)
 {
 	char *buf = nullptr;
 	char *c = nullptr;
-	StringFragment frag = nullptr;
+	struct StringFragment * frag = nullptr;
 
 	buf = dark_calloc((this->length + 1), sizeof(char));
 	if (nullptr == buf)
@@ -172,10 +172,10 @@ String StringBuilder_Concat(StringBuilder this)
  * sb_reset resets the given StringBuilder, freeing all previously appended
  * strings.
  */
-void StringBuilder_Reset(StringBuilder this)
+void StringBuilder_Reset(TStringBuilder this)
 {
-	StringFragment frag = nullptr;
-	StringFragment next = nullptr;
+	struct StringFragment * frag = nullptr;
+	struct StringFragment * next = nullptr;
 
 
 	this->root = nullptr;
@@ -186,13 +186,13 @@ void StringBuilder_Reset(StringBuilder this)
 /*
  * sb_free frees the given StringBuilder and all of its appended strings.
  */
-void StringBuilder_Dispose(StringBuilder this)
+void StringBuilder_Dispose(TStringBuilder this)
 {
 	StringBuilder_Reset(this);
 }
 
 
-char* StringBuilder_ToString(StringBuilder this)
+char* StringBuilder_ToString(TStringBuilder this)
 {
     return "dark.StringBuilder";
 }
@@ -202,16 +202,16 @@ char* StringBuilder_ToString(StringBuilder this)
  */
 register (StringBuilder)
 {
-	if (StringBuilderClass.isa == nullptr) {
-		StringBuilderClass = (StringBuilderClass_t) {
-			.isa            = &StringBuilderClass,
-			.superclass     = &ComparableClass,
+	if (StringBuilder.isa == nullptr) {
+		StringBuilder = (struct StringBuilderClass) {
+			.isa            = &StringBuilder,
+			.superclass     = &Comparable,
 			.name           = "StringBuilder",
-			.Equals         = ObjectClass.Equals,
-			.GetHashCode    = ObjectClass.GetHashCode,
-			.Dispose        = ObjectClass.Dispose,
-			.ReferenceEquals= ObjectClass.ReferenceEquals,
-			.InstanceEquals = ObjectClass.InstanceEquals,
+			.Equals         = Object.Equals,
+			.GetHashCode    = Object.GetHashCode,
+			.Dispose        = Object.Dispose,
+			.ReferenceEquals= Object.ReferenceEquals,
+			.InstanceEquals = Object.InstanceEquals,
 			.Append    		= StringBuilder_Append,
 			.Appendc 		= StringBuilder_Appendc,
 			.Appendf   		= StringBuilder_Appendf,
@@ -220,8 +220,8 @@ register (StringBuilder)
 			.Empty     		= StringBuilder_Empty,
 			.Reset     		= StringBuilder_Reset,
 		};
-        AddMetadata(StringBuilder);
+        // AddMetadata(StringBuilder);
 	}
-	return &StringBuilderClass;
+	return &StringBuilder;
 }
 

@@ -25,15 +25,15 @@ SOFTWARE.
 ******************************************************************/
 #include <dark/Object.h>
 
-bool overload Equals(Object const, Object const that);
-static bool Virtual_Equals(Object const, Object const that);
+bool overload Equals(TObject const, TObject const that);
+static bool Virtual_Equals(TObject const, TObject const that);
 
-Object Object_New() {
+TObject Object_New() {
     return Object_Ctor(new(Object));
 }
 /**
  */
-Object Object_Ctor(Object const this)
+TObject Object_Ctor(TObject const this)
 {
     this->isa = isa(Object);
     return this;
@@ -42,19 +42,19 @@ Object Object_Ctor(Object const this)
 /**
  * Destructor
  */
-Object Object_Dtor(Object this)
+TObject Object_Dtor(TObject this)
 {
     this->isa->Dispose(this);
     return nullptr;
 }
 
-bool ReferenceEquals(Object const objA, Object const objB)
+bool ReferenceEquals(TObject const objA, TObject const objB)
 {
     return objA == objB;
 }
 
 
-bool InstanceEquals(Object const objA, Object const objB)
+bool InstanceEquals(TObject const objA, TObject const objB)
 {
     if (objA == objB) {
         return true;
@@ -65,26 +65,26 @@ bool InstanceEquals(Object const objA, Object const objB)
     return Virtual_Equals(objA, objB);    
 }
 
-void overload Dispose(Object const this){
+void overload Dispose(TObject const this){
     this->isa->Dispose(this);
 }
 /**
  * virtual Dispose method
  */
-static void Virtual_Dispose(Object const this){}
+static void Virtual_Dispose(TObject const this){}
 
 /**
  * Returns the string value of this Object. The default for 
  * a Object is to return the fully qualified name of the class.
  */
-const char* overload ToString(Object const this)
+const char* overload ToString(TObject const this)
 {
     return this->isa->ToString(this);
 }
 /**
  * virtual ToString method
  */
-static const char *Virtual_ToString(Object const this)
+static const char *Virtual_ToString(TObject const this)
 {
     return "dark.Object";
 }
@@ -92,14 +92,14 @@ static const char *Virtual_ToString(Object const this)
 /**
  * Compare to another object
  */
-bool overload Equals(Object const this, Object const that)
+bool overload Equals(TObject const this, TObject const that)
 {
     return this->isa->Equals(this, that);
 }
 /**
  * virtual Equals method
  */
-static bool Virtual_Equals(Object const this, Object const that)
+static bool Virtual_Equals(TObject const this, TObject const that)
 {
     return this == that;
 }
@@ -107,23 +107,23 @@ static bool Virtual_Equals(Object const this, Object const that)
 /**
  * Get's the hashcode for this object. Default is the object's address in memory,
  */
-int overload GetHashCode(Object const this)
+int overload GetHashCode(TObject const this)
 {
     return this->isa->GetHashCode(this);
 }
 /**
  * virtual GetHashCode method
  */
-static int Virtual_GetHashCode(Object const this)
+static int Virtual_GetHashCode(TObject const this)
 {
     return (int)this;
 }
 
-Class GetClass(Object const this)
+TClass GetClass(TObject const this)
 {
     return &this->isa;
 }
-char* GetClassName(Object const this)
+char* GetClassName(TObject const this)
 {
     return this->isa->base.name;
 }
@@ -131,24 +131,23 @@ char* GetClassName(Object const this)
 /**
  * Object Class Metadata
  */
-register (Object)
+register(Object)
 {
-    if (ObjectClass.isa == nullptr) {
-        ObjectClass = (ObjectClass_t) {
-            .isa         = &ObjectClass,
-            .superclass  = nullptr,
-            .name        = "Object",
-
-            .ToString    = Virtual_ToString,
-            .Equals      = Virtual_Equals,
-            .GetHashCode = Virtual_GetHashCode,
-            .Dispose     = Virtual_Dispose,
-            .ReferenceEquals = ReferenceEquals,
+    if (Object.isa == nullptr) {
+        Object = (struct ObjectClass) {
+            .isa            = &Object,
+            .superclass     = nullptr,
+            .name           = "Object",
+            /** Instance members */
+            .ToString       = Virtual_ToString,
+            .Equals         = Virtual_Equals,
+            .GetHashCode    = Virtual_GetHashCode,
+            .Dispose        = Virtual_Dispose,
+            .ReferenceEquals= ReferenceEquals,
             .InstanceEquals = InstanceEquals,
         };
-        AddMetadata(Object);
+        // AddMetadata(Object);
     }
-    return &ObjectClass;
-    // return metaclass(Object);
+    return &Object;
 }
 

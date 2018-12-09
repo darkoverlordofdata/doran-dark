@@ -27,7 +27,7 @@ static const Vec3 GAME_OBJECT_COLOR    = { 1.0f, 1.0f, 1.0f };
 // minimal of state as described within GameObject.
 class (GameObject)
 {
-    GameObjectClass_t* isa;
+    struct GameObjectClass * isa;
     Vec2        Position;
     Vec2        Size;
     Vec2        Velocity;
@@ -35,38 +35,38 @@ class (GameObject)
     GLfloat     Rotation;
     GLboolean   IsSolid;
     GLboolean   Destroyed;
-    Texture2D   Sprite;	
+    struct Texture2D *  Sprite;	
     char*       Name;
 
 };
 
-typedef struct GameObjectClass_t
+struct GameObjectClass
 {
         union {
-        ObjectClass_t base;
+        struct ObjectClass base;
         struct 
         {
-            Class       isa;
-            Class       superclass;
-            char*       name;
-            const char* (*ToString)     (GameObject const);
-            bool        (*Equals)       (Object const, Object const);
-            int         (*GetHashCode)  (Object const);
-            void        (*Dispose)      (Object const);
-            bool        (*ReferenceEquals) (Object const objA, Object const objB);
-            bool        (*InstanceEquals) (Object const objA, Object const objB);
+            struct  Class * isa;
+            struct  Class * superclass;
+            char*   name;
+            char*   (*ToString) (TGameObject const);
+            bool    (*Equals) (TObject const, TObject const);
+            int     (*GetHashCode) (TObject const);
+            void    (*Dispose) (TObject const);
+            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
+            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
         };
     };
     // Draw sprite
-    void        (*Draw)         (GameObject const, SpriteRenderer *renderer);
+    void        (*Draw)         (TGameObject const, TSpriteRenderer renderer);
 };
 
 /**
  * GameObject API
  */
-void overload Draw(GameObject, SpriteRenderer renderer);
-const char* overload ToString(GameObject);
-GameObject GameObject_New(char* name, Vec2 Position, Vec2 Size, Texture2D Sprite, Vec3 Color);
-GameObject GameObject_Ctor(GameObject const this, char* name, Vec2 Position, Vec2 Size, Texture2D Sprite, Vec3 Color);
+void overload Draw(TGameObject, TSpriteRenderer renderer);
+char* overload ToString(TGameObject);
+TGameObject GameObject_New(char* name, Vec2 Position, Vec2 Size, TTexture2D Sprite, Vec3 Color);
+TGameObject GameObject_Ctor(TGameObject const this, char* name, Vec2 Position, Vec2 Size, TTexture2D Sprite, Vec3 Color);
 
 #endif GAMEOBJECT_H

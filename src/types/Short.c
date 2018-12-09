@@ -36,11 +36,11 @@ static Exception(NumberFormat);
  * @param value of short
  * 
  */
-Short Short_New(short value) {
+TShort Short_New(short value) {
     return Short_Ctor(new(Short), value);
 }
 
-Short Short_Ctor(Short const this, short value)
+TShort Short_Ctor(TShort const this, short value)
 {
     Number_Ctor(this);
     this->isa = isa(Short);
@@ -78,54 +78,54 @@ short Short_Compare(short x, short y) {
  * @param   other  Short to be compared
  * @return same as Short_Compare
  */
-int Short_CompareTo(Short this, Short other) {
+int Short_CompareTo(TShort this, TShort other) {
     return Short_Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int Short_IntValue(Short const this) {
+int Short_IntValue(TShort const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-long Short_LongValue(Short const this) {
+long Short_LongValue(TShort const this) {
     return (long)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-float Short_FloatValue(Short const this) {
+float Short_FloatValue(TShort const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-double Short_DoubleValue(Short const this) {
+double Short_DoubleValue(TShort const this) {
     return (double)this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-char Short_CharValue(Short const this) {
+char Short_CharValue(TShort const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-short Short_ShortValue(Short const this) {
+short Short_ShortValue(TShort const this) {
     return (short)this->value;
 }
 
 
-char* Short_ToString(Short const this)
+char* Short_ToString(TShort const this)
 {
     static char str[20];
     sprintf(str, "%d", this->value);
@@ -137,16 +137,16 @@ char* Short_ToString(Short const this)
  */
 register (Short)
 {
-    if (ShortClass.isa == nullptr) {
-        ShortClass = (ShortClass_t) {
-            .isa            = &ShortClass,
-            .superclass     = &NumberClass,
+    if (Short.isa == nullptr) {
+        Short = (struct ShortClass) {
+            .isa            = &Short,
+            .superclass     = &Number,
             .name           = "Short",
-            .Equals         = ObjectClass.Equals,
-            .GetHashCode    = ObjectClass.GetHashCode,
-            .Dispose        = ObjectClass.Dispose,
-            .ReferenceEquals= ObjectClass.ReferenceEquals,
-            .InstanceEquals = ObjectClass.InstanceEquals,
+            .Equals         = Object.Equals,
+            .GetHashCode    = Object.GetHashCode,
+            .Dispose        = Object.Dispose,
+            .ReferenceEquals= Object.ReferenceEquals,
+            .InstanceEquals = Object.InstanceEquals,
             .ToString       = Short_ToString,
             .CompareTo      = Short_CompareTo,
             .IntValue       = Short_IntValue, 
@@ -156,8 +156,8 @@ register (Short)
             .CharValue      = Short_CharValue, 
             .ShortValue     = Short_ShortValue, 
         };
-        AddMetadata(Short);
+        // AddMetadata(Short);
     }
-    return &ShortClass;
+    return &Short;
 }
 

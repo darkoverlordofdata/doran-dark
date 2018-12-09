@@ -8,15 +8,14 @@
 
 int main(int argc, char **argv) {
 
+    __block struct Long* l = Long_New(420);
+    __block TLong m = Long_New(420);
+    __block TBoolean b = Boolean_New(true);
 
-    __block Long l = Long_New(420);
-    __block Long m = Long_New(420);
-    __block Boolean b = Boolean_New(true);
-
-    __block String s = String_New("Frodo");
-    __block Array a = Array_New();
-    __block List q = List_New();
-    __block Hashmap h = Hashmap_New();
+    __block TString s = String_New("Frodo");
+    __block TArray a = Array_New();
+    __block TList q = List_New();
+    __block THashmap h = Hashmap_New();
 
     char keys[12][5] = {
         "key1", "key2", "key3",
@@ -24,23 +23,23 @@ int main(int argc, char **argv) {
         "key7", "key8", "key9",
         "keyA", "keyB", "keyC",
     };
-
     for (int i=0; i<12; i++)
     {
         printf("%s\n", keys[i]);
         Put(h, keys[i], Long_New(i+420));
     }
+
     for (int i=0; i<12; i++)
     {
         printf("%d\n", LongValue(Get(h, keys[i])));
     }
 
-    __block Long l0 = Long_New(0);
-    __block Long l1 = Long_New(1);
-    __block Long l2 = Long_New(2);
-    __block Long l3 = Long_New(3);
-    __block Long l4 = Long_New(4);
-    __block Long l5 = Long_New(5);
+    __block TLong l0 = Long_New(0);
+    __block TLong l1 = Long_New(1);
+    __block TLong l2 = Long_New(2);
+    __block TLong l3 = Long_New(3);
+    __block TLong l4 = Long_New(4);
+    __block TLong l5 = Long_New(5);
 
     Add(a, l0);
     Add(a, l1);
@@ -61,29 +60,27 @@ int main(int argc, char **argv) {
         printf("%d) %d\n", i, LongValue(Get(a, i)));
     }
     printf("%s\n", ToString(q));
-    printf("Bytes = %d\n", BooleanClass.Bytes);
-    printf("Size = %d\n", BooleanClass.Size);
-    printf("Type = %d\n", BooleanClass.Type);
-    printf("TRUE = %s\n", ToString(BooleanClass.True));
-    printf("FALSE = %s\n", ToString(BooleanClass.False));
+    printf("Bytes = %d\n", Boolean.Bytes);
+    printf("Size = %d\n", Boolean.Size);
+    printf("Type = %d\n", Boolean.Type);
+    printf("TRUE = %s\n", ToString(Boolean.True));
+    printf("FALSE = %s\n", ToString(Boolean.False));
     printf("=============\n");
-    __block Collection c = q;
-
-
+    __block TCollection c = q;
 
 
     Describe("Run Tests", ^{
 
         It("True and True are the same", ^{
-            Expect(CompareTo(BooleanClass.True, BooleanClass.True) == 0);
+            Expect(CompareTo(Boolean.True, Boolean.True) == 0);
         });
         
         It("Should be 5", ^{
             Expect(Length(s) == 5);
         });
 
-        It("Should be 1", ^{
-            Expect(Length(a) == 1);
+        It("Should be 6", ^{
+            Expect(Length(a) == 6);
         });
 
         It("Should be 2", ^{
@@ -121,5 +118,9 @@ int main(int argc, char **argv) {
     printf("Tests passed: %d\n", tests.passed);
     printf("Tests failed: %d\n", tests.failed);
     return tests.failed;
+    printf("Hello World\n");
+
+    return 0;
 }
+
 

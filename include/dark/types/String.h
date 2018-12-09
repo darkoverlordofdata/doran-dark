@@ -35,74 +35,74 @@ SOFTWARE.
  */
 class (String) 
 {
-    StringClass_t* isa;
-    const char*     value;
-    int             length;
+    struct StringClass * isa;
+    const char* value;
+    int length;
 };
 
 /**
  * Object metaclass
  */
-typedef struct StringClass_t
+struct StringClass
 {
     union {
-        ComparableClass_t base;
+        struct ComparableClass base;
         struct 
         {
-            Class isa;
-            Class superclass;
-            char* name;
-            char*   (*ToString) (Object const);
-            bool    (*Equals) (Object const, Object const);
-            int     (*GetHashCode) (Object const);
-            void    (*Dispose) (Object const);
-            bool    (*ReferenceEquals) (Object const objA, Object const objB);
-            bool    (*InstanceEquals) (Object const objA, Object const objB);
-            int     (*CompareTo) (Comparable const, Comparable other);
-            int     (*Length) (String const);
-            bool    (*IsEmpty) (String const);
-            char    (*CharAt) (String const, int index);
-            int     (*CompareToIgnoreCase) (String const, String other);
-            String  (*Concat) (String const, String str);
-            String  (*Concatc) (String const, char* str);
-            bool    (*Contains) (String const, String str);
-            String  (*CopyOf) (String const);
-            bool    (*EndsWith) (String const, String suffix);
-            bool    (*StartsWith) (String const, String prefix, int offset);
-            char*   (*GetBytes) (String const);
-            int     (*IndexOf) (String const, String str, int fromIndex);
-            int     (*LastIndexOf) (String const, String str, int fromIndex);
-            String  (*ToUpperCase) (String const);
-            String  (*ToLowerCase) (String const);
-            String  (*Trim) (String const);
+            struct  Class * isa;
+            struct  Class * superclass;
+            char*   name;
+            char*   (*ToString) (TString const);
+            bool    (*Equals) (TObject const, TObject const);
+            int     (*GetHashCode) (TObject const);
+            void    (*Dispose) (TObject const);
+            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
+            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            int     (*CompareTo) (TComparable const, TComparable other);
+            int     (*Length) (TString const);
+            bool    (*IsEmpty) (TString const);
+            char    (*CharAt) (TString const, int index);
+            int     (*CompareToIgnoreCase) (TString const, TString other);
+            TString (*Concat) (TString const, TString str);
+            TString (*Concatc) (TString const, char* str);
+            bool    (*Contains) (TString const, TString str);
+            TString (*CopyOf) (TString const);
+            bool    (*EndsWith) (TString const, TString suffix);
+            bool    (*StartsWith) (TString const, TString prefix, int offset);
+            char*   (*GetBytes) (TString const);
+            int     (*IndexOf) (TString const, TString str, int fromIndex);
+            int     (*LastIndexOf) (TString const, TString str, int fromIndex);
+            TString (*ToUpperCase) (TString const);
+            TString (*ToLowerCase) (TString const);
+            TString (*Trim) (TString const);
         };
     };
 };
 
 
 int String_Compare(char* x, char* y);
-int String_CompareTo(String this, String other);
-int String_CompareToIgnoreCase(String this, String other);
-String String_Concat(String this, String str);
-String String_Concatc(String this, char* str);
-bool String_Contains(String this, String str);
-String String_CopyOf(String this);
-bool String_EndsWith(String this, String suffix);
-bool String_StartsWith(String this, String prefix, int offset);
-char* String_GetBytes(String this);
-int String_IndexOf(String this, String str, int fromIndex);
-int String_LastIndexOf(String this, String str, int fromIndex);
-String String_ToUpperCase(String this);
-String String_ToLowerCase(String this);
-String String_Trim(String this);
-int overload Length(String const);
-bool String_IsEmpty(String const this);
-char String_CharAt(String const this, int index);
-char* String_ToString(String const this);
-String String_New(char* value);
-String String_Ctor(String const this, char* value);
+int String_CompareTo(TString this, TString other);
+int String_CompareToIgnoreCase(TString this, TString other);
+TString String_Concat(TString this, TString str);
+TString String_Concatc(TString this, char* str);
+bool String_Contains(TString this, TString str);
+TString String_CopyOf(TString this);
+bool String_EndsWith(TString this, TString suffix);
+bool String_StartsWith(TString this, TString prefix, int offset);
+char* String_GetBytes(TString this);
+int String_IndexOf(TString this, TString str, int fromIndex);
+int String_LastIndexOf(TString this, TString str, int fromIndex);
+TString String_ToUpperCase(TString this);
+TString String_ToLowerCase(TString this);
+TString String_Trim(TString this);
+int overload Length(TString const);
+bool String_IsEmpty(TString const this);
+char String_CharAt(TString const this, int index);
+char* String_ToString(TString const this);
+TString String_New(char* value);
+TString String_Ctor(TString const this, char* value);
 
 __attribute__((__format__ (__printf__, 1, 2)))
-String String_Format(char* format, ...);
+TString String_Format(char* format, ...);
 
 #endif _STRING_H_

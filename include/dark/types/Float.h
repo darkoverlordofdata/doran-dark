@@ -38,48 +38,48 @@ SOFTWARE.
  */
 class (Float) 
 {
-    FloatClass_t* isa;
-    float        value;
+    struct FloatClass * isa;
+    float value;
 };
 
 /**
  * Object metaclass
  */
-typedef struct FloatClass_t
+struct FloatClass
 {
     union {
-        NumberClass_t base;
+        struct NumberClass base;
         struct 
         {
-            Class isa;
-            Class superclass;
-            char* name;
-            char*   (*ToString) (Object const);
-            bool    (*Equals) (Object const, Object const);
-            int     (*GetHashCode) (Object const);
-            void    (*Dispose) (Object const);
-            bool    (*ReferenceEquals) (Object const objA, Object const objB);
-            bool    (*InstanceEquals) (Object const objA, Object const objB);
-            int     (*CompareTo) (Comparable const, Comparable other);
-            int     (*IntValue) (Float const);
-            long    (*LongValue) (Float const);
-            float   (*FloatValue) (Float const);
-            double  (*DoubleValue) (Float const);
-            char    (*CharValue) (Float const);
-            short   (*ShortValue) (Float const);
+            struct  Class * isa;
+            struct  Class * superclass;
+            char*   name;
+            char*   (*ToString) (TFloat const);
+            bool    (*Equals) (TObject const, TObject const);
+            int     (*GetHashCode) (TObject const);
+            void    (*Dispose) (TObject const);
+            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
+            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            int     (*CompareTo) (TComparable const, TComparable other);
+            int     (*IntValue) (TFloat const);
+            long    (*LongValue) (TFloat const);
+            float   (*FloatValue) (TFloat const);
+            double  (*DoubleValue) (TFloat const);
+            char    (*CharValue) (TFloat const);
+            short   (*ShortValue) (TFloat const);
         };
     };
 };
 
 
-int Float_CompareTo(Float const, Float other);
-int Float_IntValue(Float const);
-long Float_LongValue(Float const);
-float Float_FloatValue(Float const);
-float Float_FloatValue(Float const);
-char Float_CharValue(Float const);
-short Float_ShortValue(Float const);
-Float Float_New(float value);
-Float Float_Ctor(Float const this, float value);
+int Float_CompareTo(TFloat const, TFloat other);
+int Float_IntValue(TFloat const);
+long Float_LongValue(TFloat const);
+float Float_FloatValue(TFloat const);
+float Float_FloatValue(TFloat const);
+char Float_CharValue(TFloat const);
+short Float_ShortValue(TFloat const);
+TFloat Float_New(float value);
+TFloat Float_Ctor(TFloat const this, float value);
 
 #endif _FLOAT_H_

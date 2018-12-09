@@ -34,52 +34,52 @@ SOFTWARE.
 #define DOUBLE_TYPE       (TYPE_DOUBLE)
 
 /**
- * Object class
+ * Double class
  */
 class (Double) 
 {
-    DoubleClass_t* isa;
-    double        value;
+    struct DoubleClass * isa;
+    double value;
 };
 
 /**
- * Object metaclass
+ * Double metaclass
  */
-typedef struct DoubleClass_t
+struct DoubleClass
 {
     union {
-        NumberClass_t base;
+        struct NumberClass base;
         struct 
         {
-            Class isa;
-            Class superclass;
-            char* name;
-            char*   (*ToString) (Object const);
-            bool    (*Equals) (Object const, Object const);
-            int     (*GetHashCode) (Object const);
-            void    (*Dispose) (Object const);
-            bool    (*ReferenceEquals) (Object const objA, Object const objB);
-            bool    (*InstanceEquals) (Object const objA, Object const objB);
-            int     (*CompareTo) (Comparable const, Comparable other);
-            int     (*IntValue) (Double const);
-            long    (*LongValue) (Double const);
-            float   (*FloatValue) (Double const);
-            double  (*DoubleValue) (Double const);
-            char    (*CharValue) (Double const);
-            short   (*ShortValue) (Double const);
+            struct  Class * isa;
+            struct  Class * superclass;
+            char*   name;
+            char*   (*ToString) (TDouble const);
+            bool    (*Equals) (TObject const, TObject const);
+            int     (*GetHashCode) (TObject const);
+            void    (*Dispose) (TObject const);
+            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
+            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            int     (*CompareTo) (TComparable const, TComparable other);
+            int     (*IntValue) (TDouble const);
+            long    (*LongValue) (TDouble const);
+            float   (*FloatValue) (TDouble const);
+            double  (*DoubleValue) (TDouble const);
+            char    (*CharValue) (TDouble const);
+            short   (*ShortValue) (TDouble const);
         };
     };
 };
 
 
-int Double_CompareTo(Double const, Double other);
-int Double_IntValue(Double const);
-long Double_LongValue(Double const);
-float Double_FloatValue(Double const);
-double Double_DoubleValue(Double const);
-char Double_CharValue(Double const);
-short Double_ShortValue(Double const);
-Double Double_New(double value);
-Double Double_Ctor(Double const this, double value);
+int Double_CompareTo(TDouble const, TDouble other);
+int Double_IntValue(TDouble const);
+long Double_LongValue(TDouble const);
+float Double_FloatValue(TDouble const);
+double Double_DoubleValue(TDouble const);
+char Double_CharValue(TDouble const);
+short Double_ShortValue(TDouble const);
+TDouble Double_New(double value);
+TDouble Double_Ctor(TDouble const this, double value);
 
 #endif _DOUBLE_H_

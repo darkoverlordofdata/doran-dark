@@ -33,7 +33,7 @@ static Exception(AbstractMethod);
 /**
  * Initialize a new Array
  */
-Collection Collection_Ctor(Collection const this)
+TCollection Collection_Ctor(TCollection const this)
 {
     Object_Ctor(this);
     this->isa = isa(Collection);
@@ -43,20 +43,20 @@ Collection Collection_Ctor(Collection const this)
 /**
  * Number of items in collection
  */
-int overload Length(Collection const this)
+int overload Length(TCollection const this)
 {
     return this->isa->Length(this);
 }
-static int Abstract_Length(Collection const this)
+static int Abstract_Length(TCollection const this)
 {
     return AbstractMethodException("Collection_Length");
 }
 
-void Collection_Add(Collection const this, Any data)
+void Collection_Add(TCollection const this, Any data)
 {
     this->isa->Add(this, data);
 }
-static void Abstract_Add(Collection const this, Any data)
+static void Abstract_Add(TCollection const this, Any data)
 {
     AbstractMethodException("Collection_Add");
 }
@@ -66,21 +66,21 @@ static void Abstract_Add(Collection const this, Any data)
  */
 register (Collection)
 {
-    if (CollectionClass.isa == nullptr) {
-        CollectionClass = (CollectionClass_t) {
-            .isa            = &CollectionClass,
-            .superclass     = &ObjectClass,
+    if (Collection.isa == nullptr) {
+        Collection = (struct CollectionClass) {
+            .isa            = &Collection,
+            .superclass     = &Object,
             .name           = "Collection",
-            .Equals         = ObjectClass.Equals,
-            .GetHashCode    = ObjectClass.GetHashCode,
-            .Dispose        = ObjectClass.Dispose,
-            .ReferenceEquals= ObjectClass.ReferenceEquals,
-            .InstanceEquals = ObjectClass.InstanceEquals,
+            .Equals         = Object.Equals,
+            .GetHashCode    = Object.GetHashCode,
+            .Dispose        = Object.Dispose,
+            .ReferenceEquals= Object.ReferenceEquals,
+            .InstanceEquals = Object.InstanceEquals,
             .Length         = Abstract_Length,
             .Add            = Abstract_Add,
         };
-        AddMetadata(Collection);
+        // AddMetadata(Collection);
     }
-    return &CollectionClass;
+    return &Collection;
 }
 

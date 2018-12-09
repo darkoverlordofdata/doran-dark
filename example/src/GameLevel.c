@@ -13,11 +13,11 @@
 /**
  * Constructor
  */
-GameLevel GameLevel_New(const GLchar *file, int levelWidth, int levelHeight) {
+TGameLevel GameLevel_New(const GLchar *file, int levelWidth, int levelHeight) {
     return GameLevel_Ctor(new(GameLevel), file, levelWidth, levelHeight);
 }
 
-GameLevel GameLevel_Ctor(GameLevel const this, const GLchar *file, int levelWidth, int levelHeight)
+TGameLevel GameLevel_Ctor(TGameLevel const this, const GLchar *file, int levelWidth, int levelHeight)
 {
 	Object_Ctor(this);
     this->isa = isa(GameLevel);
@@ -31,28 +31,28 @@ GameLevel GameLevel_Ctor(GameLevel const this, const GLchar *file, int levelWidt
  */
 register (GameLevel)
 {
-    if (GameLevelClass.isa == nullptr) {
-        GameLevelClass = (GameLevelClass_t) {
-            .isa        = &GameLevelClass,
-            .superclass = &ObjectClass,
+    if (GameLevel.isa == nullptr) {
+        GameLevel = (struct GameLevelClass) {
+            .isa        = &GameLevel,
+            .superclass = &Object,
             .name       = "GameLevel",
             /** VTable */
             .ToString       = ToString,
-            .Equals         = ObjectClass.Equals,
-            .GetHashCode    = ObjectClass.GetHashCode,
-            .Dispose        = ObjectClass.Dispose,
-            .ReferenceEquals= ObjectClass.ReferenceEquals,
-            .InstanceEquals = ObjectClass.InstanceEquals,
+            .Equals         = Object.Equals,
+            .GetHashCode    = Object.GetHashCode,
+            .Dispose        = Object.Dispose,
+            .ReferenceEquals= Object.ReferenceEquals,
+            .InstanceEquals = Object.InstanceEquals,
             .Load           = Load,
             .Draw           = Draw,
             .IsCompleted    = IsCompleted,
         };
-        AddMetadata(GameLevel);
+        // AddMetadata(GameLevel);
     }
-    return &GameLevelClass;
+    return &GameLevel;
 }
 
-static void init(GameLevel const this, Array tileData, GLuint levelWidth, GLuint levelHeight);
+static void init(TGameLevel const this, TArray tileData, GLuint levelWidth, GLuint levelHeight);
 /**
  * Load 
  * 
@@ -61,19 +61,19 @@ static void init(GameLevel const this, Array tileData, GLuint levelWidth, GLuint
  * @param levelHeight of level in tiles
  * 
  */
-GameLevel overload Load(GameLevel const this, const GLchar *file, int levelWidth, int levelHeight)
+TGameLevel overload Load(TGameLevel const this, const GLchar *file, int levelWidth, int levelHeight)
 {
     // Clear old data
     Clear(this->Bricks);
     // Load from file
     GLuint tileCode;
-    GameLevel level;
+    TGameLevel level;
    
     char* path = join("assets/", file);
     char* line;
     FILE* fstream = fopen(path, "r");
-    Array tileData = Array_New(20);
-    Array row = Array_New(20);
+    TArray tileData = Array_New(20);
+    TArray row = Array_New(20);
     int i;
     char c;
     if (fstream)
@@ -101,11 +101,11 @@ GameLevel overload Load(GameLevel const this, const GLchar *file, int levelWidth
  * @param renderer to use
  * 
  */
-void overload Draw(GameLevel const this, SpriteRenderer renderer)
+void overload Draw(TGameLevel const this, TSpriteRenderer renderer)
 {
     for (int i = 0; i < Length(this->Bricks); i++)
     {
-        GameObject tile = this->Bricks->data[i];
+        TGameObject tile = this->Bricks->data[i];
         if (!tile->Destroyed)
             Draw(tile, renderer);
     }
@@ -117,11 +117,11 @@ void overload Draw(GameLevel const this, SpriteRenderer renderer)
  * @returns true when complete
  * 
  */
-bool overload IsCompleted(GameLevel const this)
+bool overload IsCompleted(TGameLevel const this)
 {
     for (int i = 0; i < Length(this->Bricks); i++)
     {
-        GameObject tile = this->Bricks->data[i];
+        TGameObject tile = this->Bricks->data[i];
         if (tile->IsSolid && !tile->Destroyed)
             return false;
     }
@@ -137,11 +137,11 @@ bool overload IsCompleted(GameLevel const this)
  * @param levelHeight of level in tiles
  *  
  */
-static void init(GameLevel const this, Array tileData, GLuint levelWidth, GLuint levelHeight)
+static void init(TGameLevel const this, TArray tileData, GLuint levelWidth, GLuint levelHeight)
 {
     // Calculate dimensions
     GLuint height = Length(tileData);
-    Array row = tileData->data[0];
+    TArray row = tileData->data[0];
     GLuint width = Length(row); // Note we can index vector at [0] since this function is only called if height > 0
     GLfloat unit_width = levelWidth / (GLfloat)width, unit_height = levelHeight / height; 
     // Initialize level tiles based on tileData		
@@ -151,7 +151,7 @@ static void init(GameLevel const this, Array tileData, GLuint levelWidth, GLuint
         for (GLuint x = 0; x < width; ++x)
         {
             // Check block type from level data (2D level array)
-            Array row = tileData->data[y];
+            TArray row = tileData->data[y];
             int blockType = (int)(row->data[x]);
 
             Vec2 pos = { unit_width * x, unit_height * y };
@@ -169,15 +169,15 @@ static void init(GameLevel const this, Array tileData, GLuint levelWidth, GLuint
             
             if (blockType == 1) // Solid
             {
-                Texture2D tex = GetTexture(Resource, "block_solid");
-                GameObject obj = GameObject_New("tile", pos, size, tex, color);
+                TTexture2D tex = GetTexture(Resource, "block_solid");
+                TGameObject obj = GameObject_New("tile", pos, size, tex, color);
                 obj->IsSolid = true;
                 Add(this->Bricks, obj);
             }
             else if (blockType > 1)	// Non-solid; now determine its color based on level data
             {
-                Texture2D tex = GetTexture(Resource, "block");
-                GameObject obj = GameObject_New("tile", pos, size, tex, color);
+                TTexture2D tex = GetTexture(Resource, "block");
+                TGameObject obj = GameObject_New("tile", pos, size, tex, color);
                 Add(this->Bricks, obj);
             }
         }
@@ -187,7 +187,7 @@ static void init(GameLevel const this, Array tileData, GLuint levelWidth, GLuint
 /**
  * ToString
  */
-const char* overload ToString(GameLevel const this)
+char* overload ToString(TGameLevel const this)
 {
     return "GameLevel";
 }

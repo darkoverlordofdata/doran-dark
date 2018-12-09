@@ -15,11 +15,11 @@
  * @param ImageFormat for binding the image
  * 
  */
-Texture2D Texture2D_New(int InternalFormat, int ImageFormat, char* path) {
+TTexture2D Texture2D_New(int InternalFormat, int ImageFormat, char* path) {
     return Texture2D_Ctor(new(Texture2D), InternalFormat, ImageFormat, path);
 }
 
-Texture2D Texture2D_Ctor(Texture2D const this, int InternalFormat, int ImageFormat, char* path)
+TTexture2D Texture2D_Ctor(TTexture2D const this, int InternalFormat, int ImageFormat, char* path)
 {
 	Object_Ctor(this);
     this->isa = isa(Texture2D);
@@ -43,23 +43,24 @@ Texture2D Texture2D_Ctor(Texture2D const this, int InternalFormat, int ImageForm
  */
 register (Texture2D)
 {
-    if (Texture2DClass.isa == nullptr) {
-        Texture2DClass = (Texture2DClass_t) {
-            .isa        = &Texture2DClass,
-            .superclass = &ObjectClass,
+    if (Texture2D.isa == nullptr) {
+        Texture2D = (struct Texture2DClass) {
+            .isa        = &Texture2D,
+            .superclass = &Object,
             .name       = "Texture2D",
             /** VTable */
             .ToString       = ToString,
-            .Equals         = ObjectClass.Equals,
-            .GetHashCode    = ObjectClass.GetHashCode,
-            .Dispose        = ObjectClass.Dispose,
-            .ReferenceEquals= ObjectClass.ReferenceEquals,
-            .InstanceEquals = ObjectClass.InstanceEquals,
+            .Equals         = Object.Equals,
+            .GetHashCode    = Object.GetHashCode,
+            .Dispose        = Object.Dispose,
+            .ReferenceEquals= Object.ReferenceEquals,
+            .InstanceEquals = Object.InstanceEquals,
             .Generate       = Generate,
             .Bind           = Bind,
         };
-        AddMetadata(Texture2D);
+        // AddMetadata(Texture2D);
     }
+    return &Texture2D;
 }
 
 /**
@@ -70,7 +71,7 @@ register (Texture2D)
  * @param data bitmap data
  * 
  */
-void overload Generate(Texture2D this, GLuint width, GLuint height, unsigned char* data)
+void overload Generate(TTexture2D this, GLuint width, GLuint height, unsigned char* data)
 {
     this->Width = width;
     this->Height = height;
@@ -86,7 +87,7 @@ void overload Generate(Texture2D this, GLuint width, GLuint height, unsigned cha
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void overload Bind(Texture2D this)
+void overload Bind(TTexture2D this)
 {
     glBindTexture(GL_TEXTURE_2D, this->Id);
 }
@@ -94,7 +95,7 @@ void overload Bind(Texture2D this)
 /**
  * ToString
  */
-const char* overload ToString(Texture2D const this)
+char* overload ToString(TTexture2D const this)
 {
     return "Texture2D";
 }

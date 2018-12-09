@@ -33,7 +33,7 @@ static Exception(AbstractMethod);
 /**
  * Initialize a new Comparable
  */
-Comparable Comparable_Ctor(Comparable const this)
+TComparable Comparable_Ctor(TComparable const this)
 {
     Object_Ctor(this);
     this->isa = isa(Comparable);
@@ -41,17 +41,17 @@ Comparable Comparable_Ctor(Comparable const this)
 }
 
 
-int overload CompareTo(Comparable this, Comparable other) {
+int overload CompareTo(TComparable this, TComparable other) {
     return this->isa->CompareTo(this, other);
 }
-static short Abstract_CompareTo(Comparable const this, Comparable other) {
+static short Abstract_CompareTo(TComparable const this, TComparable other) {
     return AbstractMethodException("Comparable_CompareTo");
 }
 
-char* Comparable_ToString(Comparable const this) {
+char* Comparable_ToString(TComparable const this) {
     return this->isa->ToString(this);
 }
-static char* Virtual_ToString(Comparable const this) {
+static char* Virtual_ToString(TComparable const this) {
     return "dark.Comparable";
 }
 
@@ -60,21 +60,21 @@ static char* Virtual_ToString(Comparable const this) {
  */
 register (Comparable)
 {
-    if (ComparableClass.isa == nullptr) {
-        ComparableClass = (ComparableClass_t) {
-            .isa             = &ComparableClass,
-            .superclass      = &ObjectClass,
+    if (Comparable.isa == nullptr) {
+        Comparable = (struct ComparableClass) {
+            .isa             = &Comparable,
+            .superclass      = &Object,
             .name            = "Comparable",
             .ToString        = Virtual_ToString,
             .CompareTo       = Abstract_CompareTo,
-            .Equals          = ObjectClass.Equals,
-            .GetHashCode     = ObjectClass.GetHashCode,
-            .Dispose         = ObjectClass.Dispose,
-            .ReferenceEquals = ObjectClass.ReferenceEquals,
-            .InstanceEquals  = ObjectClass.InstanceEquals,
+            .Equals          = Object.Equals,
+            .GetHashCode     = Object.GetHashCode,
+            .Dispose         = Object.Dispose,
+            .ReferenceEquals = Object.ReferenceEquals,
+            .InstanceEquals  = Object.InstanceEquals,
         };
-        AddMetadata(Comparable);
+        // AddMetadata(Comparable);
     }
-    return &ComparableClass;
+    return &Comparable;
 }
 

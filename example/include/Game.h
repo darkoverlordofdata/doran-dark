@@ -47,58 +47,58 @@ static const GLfloat BALL_RADIUS = 12.5f;
 // easy access to each of the components and manageability.
 class (Game)
 {
-    GameClass_t* isa;
+    struct GameClass * isa;
     GameState   State;	
     GLboolean   Keys[1024];
     GLuint  Width;
     GLuint  Height;
-    Array   Levels; 
+    struct Array * Levels; 
     GLuint  Level;    
 };
 
 
-typedef struct GameClass_t
+struct GameClass
 {
     union {
-        ObjectClass_t base;
+        struct ObjectClass base;
         struct 
         {
-            Class       isa;
-            Class       superclass;
-            char*       name;
-            const char* (*ToString) (Game const);
-            bool        (*Equals) (Object const, Object const);
-            int         (*GetHashCode) (Object const);
-            void        (*Dispose) (Object const);
-            bool        (*ReferenceEquals) (Object const objA, Object const objB);
-            bool        (*InstanceEquals) (Object const objA, Object const objB);
+            struct  Class * isa;
+            struct  Class * superclass;
+            char*   name;
+            char*   (*ToString) (TGame const);
+            bool    (*Equals) (TObject const, TObject const);
+            int     (*GetHashCode) (TObject const);
+            void    (*Dispose) (TObject const);
+            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
+            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
         };
     };
     // Initialize game state (load all shaders/textures/levels)
-    void (*Start)           (Game const);
+    void (*Start)           (TGame const);
     // GameLoop
-    void (*ProcessInput)    (Game const, GLfloat dt);
-    void (*Update)          (Game const, GLfloat dt);
-    void (*Render)          (Game const);
-    void (*DoCollisions)    (Game const);
+    void (*ProcessInput)    (TGame const, GLfloat dt);
+    void (*Update)          (TGame const, GLfloat dt);
+    void (*Render)          (TGame const);
+    void (*DoCollisions)    (TGame const);
     // Reset
-    void (*ResetLevel)      (Game const);
-    void (*ResetPlayer)     (Game const);
+    void (*ResetLevel)      (TGame const);
+    void (*ResetPlayer)     (TGame const);
 };
 
 /**
  * Game API
  */
-void overload Start(Game);
-void overload Update(Game, GLfloat dt);
-void overload ProcessInput(Game, GLfloat dt);
-void overload Render(Game);
-void overload ResetLevel(Game);
-void overload ResetPlayer(Game);
-void overload Dispose(Game);
-void overload DoCollisions(Game);
-const char* overload ToString(Game const);
-Game Game_New(int Width, int Height);
-Game Game_Ctor(Game const this, int Width, int Height);
+void overload Start(TGame);
+void overload Update(TGame, GLfloat dt);
+void overload ProcessInput(TGame, GLfloat dt);
+void overload Render(TGame);
+void overload ResetLevel(TGame);
+void overload ResetPlayer(TGame);
+void overload Dispose(TGame);
+void overload DoCollisions(TGame);
+char* overload ToString(TGame const);
+TGame Game_New(int Width, int Height);
+TGame Game_Ctor(TGame const this, int Width, int Height);
 
 #endif GAME_H

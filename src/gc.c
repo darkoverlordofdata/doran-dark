@@ -30,7 +30,7 @@ SOFTWARE.
 
 // tgc_t gc;
 
-void dark_free(Class cls) 
+void dark_free(TClass cls) 
 {
     // if (cls != nullptr) {
     //     if (cls->isa != nullptr) {

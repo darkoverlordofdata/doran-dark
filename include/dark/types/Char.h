@@ -34,52 +34,52 @@ SOFTWARE.
 #define CHAR_TYPE       (TYPE_CHAR)
 
 /**
- * Object class
+ * Char class
  */
 class (Char) 
 {
-    CharClass_t* isa;
-    char        value;
+    struct CharClass * isa;
+    char value;
 };
 
 /**
- * Object metaclass
+ * Char metaclass
  */
-typedef struct CharClass_t
+struct CharClass
 {
     union {
-        NumberClass_t base;
+        struct NumberClass base;
         struct 
         {
-            Class isa;
-            Class superclass;
-            char* name;
-            char*   (*ToString) (Object const);
-            bool    (*Equals) (Object const, Object const);
-            int     (*GetHashCode) (Object const);
-            void    (*Dispose) (Object const);
-            bool    (*ReferenceEquals) (Object const objA, Object const objB);
-            bool    (*InstanceEquals) (Object const objA, Object const objB);
-            int     (*CompareTo) (Comparable const, Comparable other);
-            int     (*IntValue) (Char const);
-            long    (*LongValue) (Char const);
-            float   (*FloatValue) (Char const);
-            double  (*DoubleValue) (Char const);
-            char    (*CharValue) (Char const);
-            short   (*ShortValue) (Char const);
+            struct  Class * isa;
+            struct  Class * superclass;
+            char*   name;
+            char*   (*ToString) (TChar const);
+            bool    (*Equals) (TObject const, TObject const);
+            int     (*GetHashCode) (TObject const);
+            void    (*Dispose) (TObject const);
+            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
+            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            int     (*CompareTo) (TComparable const, TComparable other);
+            int     (*IntValue) (TChar const);
+            long    (*LongValue) (TChar const);
+            float   (*FloatValue) (TChar const);
+            double  (*DoubleValue) (TChar const);
+            char    (*CharValue) (TChar const);
+            short   (*ShortValue) (TChar const);
         };
     };
 };
 
 
-int Char_CompareTo(Char const, Char other);
-int Char_IntValue(Char const);
-long Char_LongValue(Char const);
-float Char_FloatValue(Char const);
-double Char_DoubleValue(Char const);
-char Char_CharValue(Char const);
-short Char_ShortValue(Char const);
-Char Char_New(char value);
-Char Char_Ctor(Char const this, char value);
+int Char_CompareTo(TChar const, TChar other);
+int Char_IntValue(TChar const);
+long Char_LongValue(TChar const);
+float Char_FloatValue(TChar const);
+double Char_DoubleValue(TChar const);
+char Char_CharValue(TChar const);
+short Char_ShortValue(TChar const);
+TChar Char_New(char value);
+TChar Char_Ctor(TChar const this, char value);
 
 #endif _CHAR_H_

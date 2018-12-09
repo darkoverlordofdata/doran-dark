@@ -31,14 +31,14 @@ SOFTWARE.
  * @param value of char
  * 
  */
-Char Char_New(char value) {
+TChar Char_New(char value) {
     return Char_Ctor(new(Char), value);
 }
 
 /**
  * Initialize a new Char
  */
-Char Char_Ctor(Char const this, char value)
+TChar Char_Ctor(TChar const this, char value)
 {
     Number_Ctor(this);
     this->isa = isa(Char);
@@ -64,49 +64,49 @@ int Char_Compare(char x, char y) {
  * @param   other  Char to be compared
  * @return same as Char_Compare
  */
-int Char_CompareTo(Char this, Char other) {
+int Char_CompareTo(TChar this, TChar other) {
     return Char_Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int Char_IntValue(Char const this) {
+int Char_IntValue(TChar const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-long Char_LongValue(Char const this) {
+long Char_LongValue(TChar const this) {
     return (long)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-float Char_FloatValue(Char const this) {
+float Char_FloatValue(TChar const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-double Char_DoubleValue(Char const this) {
+double Char_DoubleValue(TChar const this) {
     return (double)this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-char Char_CharValue(Char const this) {
+char Char_CharValue(TChar const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-short Char_ShortValue(Char const this) {
+short Char_ShortValue(TChar const this) {
     return (short)this->value;
 }
 
@@ -114,7 +114,7 @@ short Char_ShortValue(Char const this) {
 /**
  * Returns the string value of this Char
  */
-char* Char_ToString(Char const this)
+char* Char_ToString(TChar const this)
 {
     static char str[2];
     sprintf(str, "%c", this->value);
@@ -126,16 +126,16 @@ char* Char_ToString(Char const this)
  */
 register (Char)
 {
-    if (CharClass.isa == nullptr) {
-        CharClass = (CharClass_t) {
-            .isa            = &CharClass,
-            .superclass     = &NumberClass,
+    if (Char.isa == nullptr) {
+        Char = (struct CharClass) {
+            .isa            = &Char,
+            .superclass     = &Number,
             .name           = "Char",
-            .Equals         = ObjectClass.Equals,
-            .GetHashCode    = ObjectClass.GetHashCode,
-            .Dispose        = ObjectClass.Dispose,
-            .ReferenceEquals= ObjectClass.ReferenceEquals,
-            .InstanceEquals = ObjectClass.InstanceEquals,
+            .Equals         = Object.Equals,
+            .GetHashCode    = Object.GetHashCode,
+            .Dispose        = Object.Dispose,
+            .ReferenceEquals= Object.ReferenceEquals,
+            .InstanceEquals = Object.InstanceEquals,
             .ToString       = Char_ToString,
             .CompareTo      = Char_CompareTo,
             .IntValue       = Char_IntValue, 
@@ -145,9 +145,9 @@ register (Char)
             .CharValue      = Char_CharValue, 
             .ShortValue     = Char_ShortValue, 
         };
-        AddMetadata(Char);
+        // AddMetadata(Char);
     }
-    return &CharClass;
+    return &Char;
 }
 
 

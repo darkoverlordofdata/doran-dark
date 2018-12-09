@@ -19,7 +19,7 @@
 
 
 // Represents a single particle and its state
-typedef struct Particle
+struct Particle
 {
     Vec2 Position;
     Vec2 Velocity;
@@ -35,45 +35,45 @@ typedef struct Particle
 // them after a given amount of time.
 class (ParticleGenerator)
 {
-    ParticleGeneratorClass_t* isa;
-    Particle* particles;
+    struct ParticleGeneratorClass * isa;
+    struct Particle * particles;
     GLuint amount;
-    Shader shader;
-    Texture2D texture;
+    struct Shader * shader;
+    struct Texture2D * texture;
     GLuint VAO;
 };
 
-typedef struct ParticleGeneratorClass_t
+struct ParticleGeneratorClass
 {
     union {
-        ObjectClass_t base;
+        struct ObjectClass base;
         struct 
         {
-            Class       isa;
-            Class       superclass;
-            char*       name;
-            const char* (*ToString)     (ParticleGenerator const);
-            bool        (*Equals)       (Object const, Object const);
-            int         (*GetHashCode)  (Object const);
-            void        (*Dispose)      (Object const);
-            bool        (*ReferenceEquals) (Object const objA, Object const objB);
-            bool        (*InstanceEquals) (Object const objA, Object const objB);
+            struct  Class * isa;
+            struct  Class * superclass;
+            char*   name;
+            char*   (*ToString) (TParticleGenerator const);
+            bool    (*Equals) (TObject const, TObject const);
+            int     (*GetHashCode) (TObject const);
+            void    (*Dispose) (TObject const);
+            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
+            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
         };
     };
         
     // Update all particles
-    void    (*Update)               (ParticleGenerator const, GLfloat dt, GameObject object, GLuint newParticles, Vec2 offset);
+    void    (*Update)               (TParticleGenerator const, GLfloat dt, TGameObject object, GLuint newParticles, Vec2 offset);
     // Render all particles
-    void    (*Draw)                 (ParticleGenerator const);
+    void    (*Draw)                 (TParticleGenerator const);
     // Initializes buffer and vertex attributes
 };
 
 /**
  * ParticleGenerator API
  */
-void overload Update(ParticleGenerator, GLfloat dt, GameObject object, GLuint newParticles, Vec2 offset);
-void overload Draw(ParticleGenerator);
-const char* overload ToString(ParticleGenerator const);
-ParticleGenerator ParticleGenerator_Ctor(ParticleGenerator const, Shader shader, Texture2D texture, int amount);
+void overload Update(TParticleGenerator, GLfloat dt, TGameObject object, GLuint newParticles, Vec2 offset);
+void overload Draw(TParticleGenerator);
+char* overload ToString(TParticleGenerator const);
+TParticleGenerator ParticleGenerator_Ctor(TParticleGenerator const, TShader shader, TTexture2D texture, int amount);
 
 #endif PARTICLE_GENERATOR_H

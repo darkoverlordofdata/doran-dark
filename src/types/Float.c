@@ -36,7 +36,7 @@ static Exception(NumberFormat);
  * @param value of float
  * 
  */
-Float Float_New(float value) {
+TFloat Float_New(float value) {
     return Float_Ctor(new(Float), value);
 }
 
@@ -44,7 +44,7 @@ Float Float_New(float value) {
 /**
  * Initialize a new Float
  */
-Float Float_Ctor(Float const this, float value)
+TFloat Float_Ctor(TFloat const this, float value)
 {
     Number_Ctor(this);
     this->isa = isa(Float);
@@ -84,54 +84,54 @@ int Float_Compare(float x, float y) {
  * @param   other  Float to be compared
  * @return same as Float_Compare
  */
-int Float_CompareTo(Float this, Float other) {
+int Float_CompareTo(TFloat this, TFloat other) {
     return Float_Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int Float_IntValue(Float const this) {
+int Float_IntValue(TFloat const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-long Float_LongValue(Float const this) {
+long Float_LongValue(TFloat const this) {
     return (long)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-double Float_DoubleValue(Float const this) {
+double Float_DoubleValue(TFloat const this) {
     return (double)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-float Float_FloatValue(Float const this) {
+float Float_FloatValue(TFloat const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-char Float_CharValue(Float const this) {
+char Float_CharValue(TFloat const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-short Float_ShortValue(Float const this) {
+short Float_ShortValue(TFloat const this) {
     return (short)this->value;
 }
 
 
-char* Float_ToString(Float const this)
+char* Float_ToString(TFloat const this)
 {
     static char str[20];
     sprintf(str, "%f", this->value);
@@ -143,16 +143,16 @@ char* Float_ToString(Float const this)
  */
 register (Float)
 {
-    if (FloatClass.isa == nullptr) {
-        FloatClass = (FloatClass_t) {
-            .isa            = &FloatClass,
-            .superclass     = &NumberClass,
+    if (Float.isa == nullptr) {
+        Float = (struct FloatClass) {
+            .isa            = &Float,
+            .superclass     = &Number,
             .name           = "Float",
-            .Equals         = ObjectClass.Equals,
-            .GetHashCode    = ObjectClass.GetHashCode,
-            .Dispose        = ObjectClass.Dispose,
-            .ReferenceEquals= ObjectClass.ReferenceEquals,
-            .InstanceEquals = ObjectClass.InstanceEquals,
+            .Equals         = Object.Equals,
+            .GetHashCode    = Object.GetHashCode,
+            .Dispose        = Object.Dispose,
+            .ReferenceEquals= Object.ReferenceEquals,
+            .InstanceEquals = Object.InstanceEquals,
             .ToString       = Float_ToString,
             .CompareTo      = Float_CompareTo,
             .IntValue       = Float_IntValue, 
@@ -162,9 +162,9 @@ register (Float)
             .CharValue      = Float_CharValue, 
             .ShortValue     = Float_ShortValue, 
         };
-        AddMetadata(Float);
+        // AddMetadata(Float);
     }
-    return &FloatClass;
+    return &Float;
 }
 
 

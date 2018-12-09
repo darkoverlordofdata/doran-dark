@@ -22,7 +22,7 @@ const GLuint SCREEN_WIDTH = 800;
 const GLuint SCREEN_HEIGHT = 600;
 
 // Game Breakout(SCREEN_WIDTH, SCREEN_HEIGHT);
-Game Breakout;
+TGame Breakout;
 
 int main(int argc, char *argv[])
 {

@@ -36,50 +36,49 @@ SOFTWARE.
  */
 class (Boolean)
 {
-    BooleanClass_t* isa;
+    struct BooleanClass * isa;
     bool value;
 };
-
 
 /**
  * Object metaclass
  */
-typedef struct BooleanClass_t
+struct BooleanClass
 {
     union {
-        ObjectClass_t base;
+        struct ObjectClass base;
         struct 
         {
-            Class isa;
-            Class superclass;
-            char* name;
-            char*   (*ToString) (Boolean const);
-            bool    (*Equals) (Object const, Object const);
-            int     (*GetHashCode) (Object const);
-            void    (*Dispose) (Object const);
-            bool    (*ReferenceEquals) (Object const objA, Object const objB);
-            bool    (*InstanceEquals) (Object const objA, Object const objB);
-            int     (*CompareTo) (Boolean const, Boolean other);
+            struct  Class * isa;
+            struct  Class * superclass;
+            char*   name;
+            char*   (*ToString) (TBoolean const);
+            bool    (*Equals) (TObject const, TObject const);
+            int     (*GetHashCode) (TObject const);
+            void    (*Dispose) (TObject const);
+            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
+            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            int     (*CompareTo) (TBoolean const, TBoolean other);
         };
     };
-    bool    (*BoolValue) (Boolean const);
+    bool    (*BoolValue) (TBoolean const);
     int     (*Compare) (bool x, bool y);
     bool    (*ParseBool) (char* s);
 
     int  Bytes;
     int  Size;
     int  Type;
-    Boolean True;
-    Boolean False;
+    TBoolean True;
+    TBoolean False;
 };
 
-bool BoolValue(Boolean const);
+bool BoolValue(TBoolean const);
 bool ParseBool(char* s);
 
 int overload Compare(bool x, bool y);
-char* overload ToString(Boolean const this);
-int overload CompareTo(Boolean const, Boolean other);
-Boolean Boolean_New(bool value);
-Boolean Boolean_Ctor(Boolean const this, bool value);
+char* overload ToString(TBoolean const this);
+int overload CompareTo(TBoolean const, TBoolean other);
+TBoolean Boolean_New(bool value);
+TBoolean Boolean_Ctor(TBoolean const this, bool value);
 
 #endif _BOOLEAN_H_

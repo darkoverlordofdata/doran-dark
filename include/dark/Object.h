@@ -32,51 +32,48 @@ SOFTWARE.
 /**
  * Object class
  */
-// typedef struct Object_t 
-class (Object)
-{
-    ObjectClass_t* isa;
+class (Object) {
+	struct ObjectClass* isa;
 };
 
 
 /**
  * Object metaclass
  */
-typedef struct ObjectClass_t
-{
+struct ObjectClass {
     union {
-        Class_t base;
+        struct Class base;
         struct 
         {
-            Class isa;
-            Class superclass;
+            struct Class * isa;
+            struct Class * superclass;
             char* name;
         };
     };
-    char*   (*ToString) (Object const);
-    bool    (*Equals) (Object const, Object const);
-    int     (*GetHashCode) (Object const);
-    void    (*Dispose) (Object const);
-    bool    (*ReferenceEquals) (Object const objA, Object const objB);
-    bool    (*InstanceEquals) (Object const objA, Object const objB);
+    char*   (*ToString) (TObject const);
+    bool    (*Equals) (TObject const, TObject const);
+    int     (*GetHashCode) (TObject const);
+    void    (*Dispose) (TObject const);
+    bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
+    bool    (*InstanceEquals) (TObject const objA, TObject const objB);
 
 };
 
 /**
  * Object API
  */
-Class GetClass(Object const);
-char* GetClassName(Object const);
-bool ReferenceEquals(Object const objA, Object const objB);
-bool InstanceEquals(Object const objA, Object const objB);
+TClass GetClass(TObject const);
+char* GetClassName(TObject const);
+bool ReferenceEquals(TObject const objA, TObject const objB);
+bool InstanceEquals(TObject const objA, TObject const objB);
 
-const char* overload ToString(Object const);
-bool overload Equals(Object const, Object const that);
-int overload GetHashCode(Object const);
-void overload Dispose(Object const);
+const char* overload ToString(TObject const);
+bool overload Equals(TObject const, TObject const that);
+int overload GetHashCode(TObject const);
+void overload Dispose(TObject const);
 
-Object Object_New();
-Object Object_Ctor(Object const this);
-Object Object_Dtor();
+TObject Object_New();
+TObject Object_Ctor(TObject const this);
+TObject Object_Dtor();
 
 #endif _OBJECT_H_ 

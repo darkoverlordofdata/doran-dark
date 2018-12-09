@@ -27,7 +27,7 @@ SOFTWARE.
 /**
  * Default Constructor
  */
-Array overload Array_New(void) {
+TArray overload Array_New(void) {
     return Array_Ctor(new(Array), 4);
 }
 /**
@@ -38,7 +38,7 @@ Array overload Array_New(void) {
  * @param capacity initial max size of vector
  * 
  */
-Array overload Array_New(int capacity) {
+TArray overload Array_New(int capacity) {
     return Array_Ctor(new(Array), capacity);
 }
 
@@ -52,8 +52,8 @@ Array overload Array_New(int capacity) {
  * @param ... list of initial values
  * 
  */
-Array overload Array_New(int count, ...) {
-    Array v = Array_Ctor(new(Array), count);
+TArray overload Array_New(int count, ...) {
+    TArray v = Array_Ctor(new(Array), count);
     va_list args;
     va_start(args, count);
     for (int i=0; i<count; i++)
@@ -67,7 +67,7 @@ Array overload Array_New(int count, ...) {
 /**
  * Initialize a new Array
  */
-Array Array_Ctor(Array const this, int capacity)
+TArray Array_Ctor(TArray const this, int capacity)
 {
     Collection_Ctor(this);
     this->isa = isa(Array);
@@ -78,7 +78,7 @@ Array Array_Ctor(Array const this, int capacity)
 }
 
 
-int overload Length(Array const this)
+int overload Length(TArray const this)
 {
     return this->length;
 }
@@ -87,7 +87,7 @@ int overload Length(Array const this)
  * 
  * @param capacity the new size
  */
-void Resize(Array const this, int capacity)
+void Resize(TArray const this, int capacity)
 {
     #ifdef DEBUG_ON
     printf("vector_resize: %d to %d\n", this->capacity, capacity);
@@ -105,7 +105,7 @@ void Resize(Array const this, int capacity)
  * 
  * @param item the data to add
  */
-void overload Add(Array const this, Any item)
+void overload Add(TArray const this, Any item)
 {
     if (this->capacity == this->length) {
         this->isa->Resize(this, this->capacity * 2);
@@ -119,7 +119,7 @@ void overload Add(Array const this, Any item)
  * @param index to add at
  * @param item the data to add
  */
-void Set(Array const this, int index, Any item)
+void Set(TArray const this, int index, Any item)
 {
     if (index >= 0 && index < this->length)
         this->data[index] = item;
@@ -130,7 +130,7 @@ void Set(Array const this, int index, Any item)
  * 
  * @param index to get
  */
-Any Get(Array const this, int index)
+Any Get(TArray const this, int index)
 {
     if (index >= 0 && index < this->length)
         return this->data[index];
@@ -142,7 +142,7 @@ Any Get(Array const this, int index)
  * 
  * @param index to delete
  */
-void overload Remove(Array const this, int index)
+void overload Remove(TArray const this, int index)
 {
     if (index < 0 || index >= this->length)
         return;
@@ -163,12 +163,12 @@ void overload Remove(Array const this, int index)
 /**
  * Free the vector
  */
-void overload Dispose(Array const this)
+void overload Dispose(TArray const this)
 {
     // delete(this->data);
 }
 
-void overload Clear(Array const this)
+void overload Clear(TArray const this)
 {
     for (int i=0; i < this->length; i++)
         this->data[i] = nullptr;
@@ -179,7 +179,7 @@ void overload Clear(Array const this)
 /**
  * ToString
  */
-const char* overload ToString(Array const this)
+char* overload ToString(TArray const this)
 {
     return "dark.collections.Array";
 }
@@ -189,15 +189,15 @@ const char* overload ToString(Array const this)
  */
 register (Array)
 {
-    if (ArrayClass.isa == nullptr) {
-        ArrayClass = (ArrayClass_t) {
-            .isa            = &ArrayClass,
-            .superclass     = &CollectionClass,
+    if (Array.isa == nullptr) {
+        Array = (struct ArrayClass) {
+            .isa            = &Array,
+            .superclass     = &Collection,
             .name           = "Array",
-            .Equals         = ObjectClass.Equals,
-            .GetHashCode    = ObjectClass.GetHashCode,
-            .ReferenceEquals= ObjectClass.ReferenceEquals,
-            .InstanceEquals = ObjectClass.InstanceEquals,
+            .Equals         = Object.Equals,
+            .GetHashCode    = Object.GetHashCode,
+            .ReferenceEquals= Object.ReferenceEquals,
+            .InstanceEquals = Object.InstanceEquals,
             .ToString       = ToString,
             .Dispose        = Dispose,
             .Length         = Length,
@@ -208,9 +208,9 @@ register (Array)
             .Get            = Get,
             .Clear          = Clear,
         };
-        AddMetadata(Array);
+        // AddMetadata(Array);
     }
-    return &ArrayClass;
+    return &Array;
 }
 
 

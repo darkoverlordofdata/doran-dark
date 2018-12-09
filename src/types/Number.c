@@ -33,7 +33,7 @@ static Exception(AbstractMethod);
  * Abstract Number
  * Initialize a new Number
  */
-Number Number_Ctor(Number const this)
+TNumber Number_Ctor(TNumber const this)
 {
     Comparable_Ctor(this);
     this->isa = isa(Number);
@@ -49,85 +49,85 @@ Number Number_Ctor(Number const this)
  *         +1 this < other
  *         -1 this > other
  */
-int Number_CompareTo(Number this, Number other) {
+int Number_CompareTo(TNumber this, TNumber other) {
     return this->isa->CompareTo(this, other);
 }
-static short Abstract_CompareTo(Number const this, Number other) {
+static short Abstract_CompareTo(TNumber const this, TNumber other) {
     return AbstractMethodException("Number_CompareTo");
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int overload IntValue(Number const this) {
+int overload IntValue(TNumber const this) {
     return this->isa->IntValue(this);
 }
-static int Abstract_IntValue(Number const this) {
+static int Abstract_IntValue(TNumber const this) {
     return AbstractMethodException("Number_IntValue");
 }
 
 /**
  * Returns the value of this value cast as an long
  */
-long LongValue(Number const this) {
+long LongValue(TNumber const this) {
     return this->isa->LongValue(this);
 }
-static long Abstract_LongValue(Number const this) {
+static long Abstract_LongValue(TNumber const this) {
     return AbstractMethodException("Number_LongValue");
 }
 
 /**
  * Returns the value of this value cast as an float
  */
-float overload FloatValue(Number const this) {
+float overload FloatValue(TNumber const this) {
     return this->isa->FloatValue(this);
 }
-static float Abstract_FloatValue(Number const this) {
+static float Abstract_FloatValue(TNumber const this) {
     return AbstractMethodException("Number_FloatValue");
 }
 
 /**
  * Returns the value of this value cast as an double
  */
-double overload DoubleValue(Number const this) {
+double overload DoubleValue(TNumber const this) {
     return this->isa->DoubleValue(this);
 }
-static double Abstract_DoubleValue(Number const this) {
+static double Abstract_DoubleValue(TNumber const this) {
     return AbstractMethodException("Number_DoubleValue");
 }
 
 /**
  * Returns the value of this value cast as an char
  */
-char overload CharValue(Number const this) {
+char overload CharValue(TNumber const this) {
     return this->isa->CharValue(this);
 }
-static char Abstract_CharValue(Number const this) {
+static char Abstract_CharValue(TNumber const this) {
     return AbstractMethodException("Number_CharValue");
 }
 
 /**
  * Returns the value of this value cast as an short
  */
-short overload ShortValue(Number const this) {
+short overload ShortValue(TNumber const this) {
     return this->isa->ShortValue(this);
 }
-static short Abstract_ShortValue(Number const this) {
+static short Abstract_ShortValue(TNumber const this) {
     return AbstractMethodException("Number_ShortValue");
 }
 
 
-char* overload ToString(Number const this) {
+char* overload ToString(TNumber const this) {
     return this->isa->ToString(this);
 }
-static char* Virtual_ToString(Number const this) {
+static char* Virtual_ToString(TNumber const this) {
     return "dark.Number";
 }
 
-bool Number_Equals(Number const this, Number const other) {
+bool Number_Equals(TNumber const this, TNumber const other) {
     return this->isa->Equals(this, other);
 }
-static char* Virtual_Equals(Number const this, Number const other) {
+static char* Virtual_Equals(TNumber const this, TNumber const other) {
     return true;
 }
 
@@ -136,16 +136,16 @@ static char* Virtual_Equals(Number const this, Number const other) {
  */
 register (Number)
 {
-    if (NumberClass.isa == nullptr) {
-        NumberClass = (NumberClass_t) {
-            .isa            = &NumberClass,
-            .superclass     = &ComparableClass,
+    if (Number.isa == nullptr) {
+        Number = (struct NumberClass) {
+            .isa            = &Number,
+            .superclass     = &Comparable,
             .name           = "Number",
-            .Equals         = ObjectClass.Equals,
-            .GetHashCode    = ObjectClass.GetHashCode,
-            .Dispose        = ObjectClass.Dispose,
-            .ReferenceEquals= ObjectClass.ReferenceEquals,
-            .InstanceEquals = ObjectClass.InstanceEquals,
+            .Equals         = Object.Equals,
+            .GetHashCode    = Object.GetHashCode,
+            .Dispose        = Object.Dispose,
+            .ReferenceEquals= Object.ReferenceEquals,
+            .InstanceEquals = Object.InstanceEquals,
             .CompareTo      = Number_CompareTo,
             .ToString       = Virtual_ToString,
             .Equals         = Virtual_Equals,
@@ -157,9 +157,9 @@ register (Number)
             .CharValue      = Abstract_CharValue, 
             .ShortValue     = Abstract_ShortValue 
         };
-        AddMetadata(Number);
+        // AddMetadata(Number);
     }
-    return &NumberClass;
+    return &Number;
 }
 
 /**

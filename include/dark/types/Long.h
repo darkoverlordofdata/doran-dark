@@ -38,48 +38,48 @@ SOFTWARE.
  */
 class (Long) 
 {
-    LongClass_t* isa;
-    long        value;
+    struct LongClass * isa;
+    long value;
 };
 
 /**
  * Object metaclass
  */
-typedef struct LongClass_t
+struct LongClass
 {
     union {
-        NumberClass_t base;
+        struct NumberClass base;
         struct 
         {
-            Class isa;
-            Class superclass;
-            char* name;
-            char*   (*ToString) (Object const);
-            bool    (*Equals) (Object const, Object const);
-            int     (*GetHashCode) (Object const);
-            void    (*Dispose) (Object const);
-            bool    (*ReferenceEquals) (Object const objA, Object const objB);
-            bool    (*InstanceEquals) (Object const objA, Object const objB);
-            int     (*CompareTo) (Comparable const, Comparable other);
-            int     (*IntValue) (Long const);
-            long    (*LongValue) (Long const);
-            float   (*FloatValue) (Long const);
-            double  (*DoubleValue) (Long const);
-            char    (*CharValue) (Long const);
-            short   (*ShortValue) (Long const);
+            struct  Class * isa;
+            struct  Class * superclass;
+            char*   name;
+            char*   (*ToString) (TLong const);
+            bool    (*Equals) (TObject const, TObject const);
+            int     (*GetHashCode) (TObject const);
+            void    (*Dispose) (TObject const);
+            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
+            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            int     (*CompareTo) (TComparable const, TComparable other);
+            int     (*IntValue) (TLong const);
+            long    (*LongValue) (TLong const);
+            float   (*FloatValue) (TLong const);
+            double  (*DoubleValue) (TLong const);
+            char    (*CharValue) (TLong const);
+            short   (*ShortValue) (TLong const);
         };
     };
 };
 
 long Long_ParseLong(char* s, int radix);
-int Long_CompareTo(Long const, Long other);
-int Long_IntValue(Long const);
-long Long_LongValue(Long const);
-float Long_FloatValue(Long const);
-double Long_DoubleValue(Long const);
-char Long_CharValue(Long const);
-short Long_ShortValue(Long const);
-Long Long_New(long value);
-Long Long_Ctor(Long const this, long value);
+int Long_CompareTo(TLong const, TLong other);
+int Long_IntValue(TLong const);
+long Long_LongValue(TLong const);
+float Long_FloatValue(TLong const);
+double Long_DoubleValue(TLong const);
+char Long_CharValue(TLong const);
+short Long_ShortValue(TLong const);
+TLong Long_New(long value);
+TLong Long_Ctor(TLong const this, long value);
 
 #endif _LONG_H_

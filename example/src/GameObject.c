@@ -17,11 +17,11 @@
  * @param Sprite to display
  * @param Color tiniting color
  */
-GameObject GameObject_New(char* name, Vec2 Position, Vec2 Size, Texture2D Sprite, Vec3 Color) {
+TGameObject GameObject_New(char* name, Vec2 Position, Vec2 Size, TTexture2D Sprite, Vec3 Color) {
     return GameObject_Ctor(new(GameObject), name, Position, Size, Sprite, Color);
 }
 
-GameObject GameObject_Ctor(GameObject const this, char* name, Vec2 Position, Vec2 Size, Texture2D Sprite, Vec3 Color)
+TGameObject GameObject_Ctor(TGameObject const this, char* name, Vec2 Position, Vec2 Size, TTexture2D Sprite, Vec3 Color)
 {
 	Object_Ctor(this);
     this->isa = isa(GameObject);
@@ -41,23 +41,23 @@ GameObject GameObject_Ctor(GameObject const this, char* name, Vec2 Position, Vec
  */
 register (GameObject)
 {
-    if (GameObjectClass.isa == nullptr) {
-    GameObjectClass = (GameObjectClass_t) {
-            .isa        = &GameObjectClass,
-            .superclass = &ObjectClass,
+    if (GameObject.isa == nullptr) {
+        GameObject = (struct GameObjectClass) {
+            .isa        = &GameObject,
+            .superclass = &Object,
             .name       = "GameObject",
             /** VTable */
             .ToString       = ToString,
-            .Equals         = ObjectClass.Equals,
-            .GetHashCode    = ObjectClass.GetHashCode,
-            .Dispose        = ObjectClass.Dispose,
-            .ReferenceEquals= ObjectClass.ReferenceEquals,
-            .InstanceEquals = ObjectClass.InstanceEquals,
+            .Equals         = Object.Equals,
+            .GetHashCode    = Object.GetHashCode,
+            .Dispose        = Object.Dispose,
+            .ReferenceEquals= Object.ReferenceEquals,
+            .InstanceEquals = Object.InstanceEquals,
             .Draw           = Draw,
         };
-        AddMetadata(GameObject);
+        // AddMetadata(GameObject);
     }
-    return &GameObjectClass;
+    return &GameObject;
 }
 
 /**
@@ -65,7 +65,7 @@ register (GameObject)
  * 
  * @param renderer to draw sprite with
  */
-void overload Draw(GameObject const this, SpriteRenderer renderer)
+void overload Draw(TGameObject const this, TSpriteRenderer renderer)
 {
     DrawSprite(renderer, this->Sprite, this->Position, this->Size, this->Rotation, this->Color);
 }
@@ -73,7 +73,7 @@ void overload Draw(GameObject const this, SpriteRenderer renderer)
 /**
  * ToString
  */
-const char* overload ToString(GameObject const this)
+char* overload ToString(TGameObject const this)
 {
     return "GameObject";
 } 

@@ -62,39 +62,39 @@ class (HashmapNode)
  * as well as the data to hold. */
 class (Hashmap)
 {
-    Class isa;
+    struct HashmapClass * isa;
 	int tableSize;
 	int size;
-	HashmapNode data;
+	struct HashmapNode * data;
 };
 
-typedef struct HashmapClass_t
+struct HashmapClass
 {
     union {
-        CollectionClass_t base;
+        struct CollectionClass base;
         struct 
         {
-            Class       isa;
-            Class       superclass;
-            char*       name;
-            const char* (*ToString)     (Hashmap const);
-            bool        (*Equals)       (Object const, Object const);
-            int         (*GetHashCode)  (Object const);
-            void        (*Dispose)      (Hashmap const);
-            bool        (*ReferenceEquals) (Object const objA, Object const objB);
-            bool        (*InstanceEquals) (Object const objA, Object const objB);
+            struct Class * isa;
+            struct Class * superclass;
+            char* name;
+            char*   (*ToString) (THashmap const);
+            bool    (*Equals) (TObject const, TObject const);
+            int     (*GetHashCode) (TObject const);
+            void    (*Dispose) (TObject const);
+            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
+            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
             /*
              * Get the current size of a hashmap
              */
-            int         (*Length)       (Hashmap const);
-            bool        (*IsEmpty)      (Hashmap const);
-            bool        (*Contains)     (Hashmap const, Any value);
-            void        (*Clear)        (Hashmap const);
-            void        (*Add)          (Hashmap const, Any value);
+            int         (*Length)       (THashmap const);
+            bool        (*IsEmpty)      (THashmap const);
+            bool        (*Contains)     (THashmap const, Any value);
+            void        (*Clear)        (THashmap const);
+            void        (*Add)          (THashmap const, Any value);
             /*
              * Remove an element from the hashmap. Return MAP_OK or MAP_MISSING.
              */
-            Any         (*Remove)       (Hashmap const);
+            Any         (*Remove)       (THashmap const);
 
         };
     };
@@ -106,51 +106,51 @@ typedef struct HashmapClass_t
     * than MAP_OK the traversal is terminated. f must
     * not reenter any hashmap functions, or deadlock may arise.
     */
-    int (*Iterate)  (Hashmap const, Hashmap_Iterator func, Any item);
+    int (*Iterate)  (THashmap const, Hashmap_Iterator func, Any item);
 
     /*
     * Add an element to the hashmap. Return MAP_OK or MAP_OMEM.
     */
-    int (*Put)      (Hashmap const, char* key, Any value);
+    int (*Put)      (THashmap const, char* key, Any value);
 
     /*
     * Get an element from the hashmap. Return MAP_OK or MAP_MISSING.
     */
     // int (*Get)      (Hashmap * const, char* key, Any *arg);
-    Any (*Get)      (Hashmap const, char* key);
+    Any (*Get)      (THashmap const, char* key);
 
     /*
      * Hashing function for a string
      */
-    UInt (*HashInt) (Hashmap const, char* keystring);
+    UInt (*HashInt) (THashmap const, char* keystring);
     
     /*
      * Return the integer of the location in data
      * to store the point to the item, or MAP_FULL.
      */
-    int (*Hash)     (Hashmap const, char* key);
+    int (*Hash)     (THashmap const, char* key);
 
     /*
      * Doubles the size of the hashmap, and rehashes all the elements
      */
-    int (*Rehash)   (Hashmap const);
+    int (*Rehash)   (THashmap const);
 
 };
 
 /**
  * Hashmap API
  */
-unsigned int overload HashInt(Hashmap const, char* keystring);
-int overload Hash(Hashmap const, char* key);
-int overload Rehash(Hashmap const);
-int overload Put(Hashmap const, char* key, Any value);
-Any overload Get(Hashmap const, char* key);
-int overload Iterate(Hashmap const, Hashmap_Iterator f, Any item);
-int overload Remove(Hashmap const, char* key);
-void overload Dispose(Hashmap const);
-int overload Length(Hashmap const);
-const char* overload ToString(Hashmap const);
-Hashmap Hashmap_New();
-Hashmap Hashmap_Ctor(Hashmap const this);
+unsigned int overload HashInt(THashmap const, char* keystring);
+int overload Hash(THashmap const, char* key);
+int overload Rehash(THashmap const);
+int overload Put(THashmap const, char* key, Any value);
+Any overload Get(THashmap const, char* key);
+int overload Iterate(THashmap const, Hashmap_Iterator f, Any item);
+int overload Remove(THashmap const, char* key);
+void overload Dispose(THashmap const);
+int overload Length(THashmap const);
+char* overload ToString(THashmap const);
+THashmap Hashmap_New();
+THashmap Hashmap_Ctor(THashmap const this);
 
 #endif _HASHMAP_H_

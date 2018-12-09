@@ -16,7 +16,7 @@
 // It also hosts utility functions for easy management.
 class (Texture2D)
 {
-    Texture2DClass_t* isa;
+    struct Texture2DClass * isa;
     // Holds the Id of the texture object, used for all texture operations to reference to particlar texture
     GLuint Id;
     char* path;
@@ -33,37 +33,37 @@ class (Texture2D)
     GLuint FilterMag;       // Filtering mode if texture pixels > screen pixels
 };
 
-typedef struct Texture2DClass_t
+struct Texture2DClass
 {
     union {
-        ObjectClass_t base;
+        struct ObjectClass base;
         struct 
         {
-            Class       isa;
-            Class       superclass;
-            char*       name;
-            const char* (*ToString)     (Texture2D const);
-            bool        (*Equals)       (Object const, Object const);
-            int         (*GetHashCode)  (Object const);
-            void        (*Dispose)      (Object const);
-            bool        (*ReferenceEquals) (Object const objA, Object const objB);
-            bool        (*InstanceEquals) (Object const objA, Object const objB);
+            struct  Class * isa;
+            struct  Class * superclass;
+            char*   name;
+            char*   (*ToString) (TTexture2D const);
+            bool    (*Equals) (TObject const, TObject const);
+            int     (*GetHashCode) (TObject const);
+            void    (*Dispose) (TObject const);
+            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
+            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
         };
     };
 
     // Generates texture from image data
-    void    (*Generate)     (Texture2D const, GLuint width, GLuint height, unsigned char* data);
+    void    (*Generate)     (TTexture2D const, GLuint width, GLuint height, unsigned char* data);
     // Binds the texture as the current active GL_TEXTURE_2D texture object
-    void    (*Bind)         (Texture2D const);
+    void    (*Bind)         (TTexture2D const);
 };
 
 /**
  * Texture2D API
  */
-void overload Generate(Texture2D, GLuint width, GLuint height, unsigned char* data);
-void overload Bind(Texture2D);
-const char* overload ToString(Texture2D const);
-Texture2D Texture2D_New(int InternalFormat, int ImageFormat, char* path);
-Texture2D Texture2D_Ctor(Texture2D const this, int InternalFormat, int ImageFormat, char* path);
+void overload Generate(TTexture2D, GLuint width, GLuint height, unsigned char* data);
+void overload Bind(TTexture2D);
+char* overload ToString(TTexture2D const);
+TTexture2D Texture2D_New(int InternalFormat, int ImageFormat, char* path);
+TTexture2D Texture2D_Ctor(TTexture2D const this, int InternalFormat, int ImageFormat, char* path);
 
 #endif TEXTURE_H

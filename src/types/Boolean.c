@@ -31,14 +31,14 @@ SOFTWARE.
  * @param value of bool
  * 
  */
-Boolean Boolean_New(bool value) {
+TBoolean Boolean_New(bool value) {
     return Boolean_Ctor(new(Boolean), value);
 }
 
 /**
  * Initialize a new Boolean
  */
-Boolean Boolean_Ctor(Boolean const this, bool value)
+TBoolean Boolean_Ctor(TBoolean const this, bool value)
 {
     Comparable_Ctor(this);
     this->isa = isa(Boolean);
@@ -74,21 +74,21 @@ int overload Compare(bool x, bool y) {
  * @param   other  Boolean to be compared
  * @return same as Boolean_Compare
  */
-int overload CompareTo(Boolean this, Boolean other) {
+int overload CompareTo(TBoolean this, TBoolean other) {
     return Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-bool BoolValue(Boolean const this) {
+bool BoolValue(TBoolean const this) {
     return (bool)this->value;
 }
 
 /**
  * Returns the string value of this Boolean
  */
-char* overload ToString(Boolean const this)
+char* overload ToString(TBoolean const this)
 {
     return this->value ? "true" : "false";
 }
@@ -99,27 +99,27 @@ char* overload ToString(Boolean const this)
 register (Boolean)
 {
     /** class constant: True */
-    static const Boolean_t True = {
-        .isa  = &BooleanClass,
+    static const struct Boolean True = {
+        .isa  = &Boolean,
         .value = true
     };
     /** class constant: False */
-    static const Boolean_t False = {
-        .isa  = &BooleanClass,
+    static const struct Boolean False = {
+        .isa  = &Boolean,
         .value = false
     };
 
-    if (BooleanClass.isa == nullptr) {
-        BooleanClass = (BooleanClass_t) {
-            .isa            = &BooleanClass,
-            .superclass     = &ComparableClass,
+    if (Boolean.isa == nullptr) {
+        Boolean = (struct BooleanClass) {
+            .isa            = &Boolean,
+            .superclass     = &Comparable,
             .name           = "Boolean",
             /** Instance members */
-            .Equals         = ObjectClass.Equals,
-            .GetHashCode    = ObjectClass.GetHashCode,
-            .Dispose        = ObjectClass.Dispose,
-            .ReferenceEquals= ObjectClass.ReferenceEquals,
-            .InstanceEquals = ObjectClass.InstanceEquals,
+            .Equals         = Object.Equals,
+            .GetHashCode    = Object.GetHashCode,
+            .Dispose        = Object.Dispose,
+            .ReferenceEquals= Object.ReferenceEquals,
+            .InstanceEquals = Object.InstanceEquals,
             .ToString       = ToString,
             .CompareTo      = CompareTo,
             /** Class members */
@@ -130,8 +130,8 @@ register (Boolean)
             .True           = &True,
             .False          = &False,
         };
-        AddMetadata(Boolean);
+        // AddMetadata(Boolean);
     }
-    return &BooleanClass;
+    return &Boolean;
 }
 

@@ -32,33 +32,33 @@ SOFTWARE.
  */
 class (Comparable)
 {
-    ComparableClass_t* isa;
+    struct ComparableClass* isa;
 };
 
 
 /**
  * Comparable MetaClass
  */
-typedef struct ComparableClass_t
+struct ComparableClass
 {
     union {
-        ObjectClass_t base;
+        struct Object base;
         struct 
         {
-            Class   isa;
-            Class   superclass;
-            char*   name;
-            char*   (*ToString) (Comparable const);
-            bool    (*Equals) (Object const, Object const);
-            int     (*GetHashCode) (Object const);
-            void    (*Dispose) (Object const);
-            bool    (*ReferenceEquals) (Object const objA, Object const objB);
-            bool    (*InstanceEquals) (Object const objA, Object const objB);
+            struct Class * isa;
+            struct Class * superclass;
+            char* name;
+            char*   (*ToString) (TComparable const);
+            bool    (*Equals) (TObject const, TObject const);
+            int     (*GetHashCode) (TObject const);
+            void    (*Dispose) (TObject const);
+            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
+            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
         };
     };
-    int     (*CompareTo) (Comparable const, Comparable other);
+    int     (*CompareTo) (TComparable const, TComparable other);
 };
 
-int overload CompareTo(Comparable const, Comparable other);
+int overload CompareTo(TComparable const, TComparable other);
 
 #endif _COMPARABLE_H_

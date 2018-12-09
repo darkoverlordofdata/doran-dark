@@ -36,11 +36,11 @@ static Exception(IndexOutOfBounds);
  * @param value of long
  * 
  */
-String String_New(char* value) {
+TString String_New(char* value) {
     return String_Ctor(new(String), value);
 }
 
-String String_Ctor(String const this, char* value)
+TString String_Ctor(TString const this, char* value)
 {
     Comparable_Ctor(this);
     this->isa = isa(String);
@@ -49,7 +49,7 @@ String String_Ctor(String const this, char* value)
     return this;
 }
 
-void String_GetChars(String this, char* dst, int dstBegin) {
+void String_GetChars(TString this, char* dst, int dstBegin) {
     memcpy(dst+dstBegin, this->value, this->length);
 }
 
@@ -72,27 +72,27 @@ int String_Compare(char* x, char* y) {
  * @param   other  String to be compared
  * @return same as String_Compare
  */
-int String_CompareTo(String this, String other) {
+int String_CompareTo(TString this, TString other) {
     return String_Compare(this->value, other->value);
 }
 
-int String_CompareToIgnoreCase(String this, String str) {
+int String_CompareToIgnoreCase(TString this, TString str) {
     return strcmpi(this->value, str->value);
 }
 
-String String_Concatc(String this, char* other) {
+TString String_Concatc(TString this, char* other) {
     int length = strlen(other);
     if (length == 0) return this;
     int len = this->length;
     char* str = dark_calloc((len+length+1), sizeof(char));
     strncpy(str, this->value, len);
     strncpy(str+len, other, length);
-    String result = String_New(str);
+    TString result = String_New(str);
     return result;
 
 }
 
-String String_Concat(String this, String other) {
+TString String_Concat(TString this, TString other) {
     if (other->length == 0)
         return this;
 
@@ -100,51 +100,51 @@ String String_Concat(String this, String other) {
     char* str = dark_calloc((len+other->length+1), sizeof(char));
     strncpy(str, this->value, len);
     strncpy(str+len, other->value, other->length);
-    String result = String_New(str);
+    TString result = String_New(str);
     return result;
 }
 
-bool String_Contains(String this, String s) {
+bool String_Contains(TString this, TString s) {
     return this->isa->IndexOf(this, s, 0) > -1;
 }
 
-String String_CopyOf(String this) {
+TString String_CopyOf(TString this) {
     return String_New(this->value);
 }
 
-bool String_EndsWith(String this, String suffix) {
+bool String_EndsWith(TString this, TString suffix) {
     char* offset = this->value + this->length - suffix->length;
     return !strcmp(offset, suffix);
 }
 
-bool String_StartsWith(String this, String prefix, int offset) {
+bool String_StartsWith(TString this, TString prefix, int offset) {
     char* c = strstr(this->value+offset, prefix->value);
     return c == (this->value+offset) ? true : false;
 }
 
-char* String_GetBytes(String this) {
+char* String_GetBytes(TString this) {
     return strdup(this->value);
 }
 
-int String_IndexOf(String this, String str, int offset) {
+int String_IndexOf(TString this, TString str, int offset) {
     char* c = strstr(this->value+offset, str->value);
     return c == nullptr ? 0 : c - this->value;
 }
 
-int String_LastIndexOf(String this, String str, int offset) {
+int String_LastIndexOf(TString this, TString str, int offset) {
     char* c = strrstr(this->value+offset, str->value);
     return c == nullptr ? 0 : c - this->value;
 }
 
-String String_ToUpperCase(String this) {
+TString String_ToUpperCase(TString this) {
     return String_New(strupr(this->value));
 }
 
-String String_ToLowerCase(String this) {
+TString String_ToLowerCase(TString this) {
     return String_New(strlwr(this->value));
 }
 
-String String_Trim(String this) {
+TString String_Trim(TString this) {
     int len = this->length;
     int start = 0;
     while ((start < len) && (this->value[start] <= ' ')) {
@@ -158,17 +158,17 @@ String String_Trim(String this) {
         : this;    
 }
 
-int overload Length(String const this) 
+int overload Length(TString const this) 
 {
     return this->length;
 }
 
-bool String_IsEmpty(String const this)
+bool String_IsEmpty(TString const this)
 {
     return this->length == 0;
 }
 
-char String_CharAt(String const this, int index)
+char String_CharAt(TString const this, int index)
 {
     printf("string %d,%d %s\n", index, this->length, this->value);
     if (index < 0 || index >= this->length)
@@ -177,12 +177,12 @@ char String_CharAt(String const this, int index)
 }
  
 
-char* String_ToString(String const this)
+char* String_ToString(TString const this)
 {
     return this->value;
 }
 
-void String_Dispose(String const this)
+void String_Dispose(TString const this)
 {
 }
 
@@ -191,16 +191,16 @@ void String_Dispose(String const this)
  */
 register (String)
 {
-    if (StringClass.isa == nullptr) {
-        StringClass = (StringClass_t) {
-            .isa            = &StringClass,
-            .superclass     = &ComparableClass,
+    if (String.isa == nullptr) {
+        String = (struct StringClass) {
+            .isa            = &String,
+            .superclass     = &Comparable,
             .name           = "String",
-            .Equals         = ObjectClass.Equals,
-            .GetHashCode    = ObjectClass.GetHashCode,
-            .Dispose        = ObjectClass.Dispose,
-            .ReferenceEquals= ObjectClass.ReferenceEquals,
-            .InstanceEquals = ObjectClass.InstanceEquals,
+            .Equals         = Object.Equals,
+            .GetHashCode    = Object.GetHashCode,
+            .Dispose        = Object.Dispose,
+            .ReferenceEquals= Object.ReferenceEquals,
+            .InstanceEquals = Object.InstanceEquals,
             .ToString       = String_ToString,
             .Dispose        = String_Dispose,
             .CompareTo      = String_CompareTo,
@@ -221,13 +221,13 @@ register (String)
             .ToUpperCase    = String_ToUpperCase,
             .Trim           = String_Trim,
         };
-        AddMetadata(String);
+        // AddMetadata(String);
     }
-    return &StringClass;
+    return &String;
 }
 
 __attribute__((__format__ (__printf__, 1, 2)))
-String String_Format(char* format, ...) {
+TString String_Format(char* format, ...) {
     va_list args1;
     va_list args2;
     

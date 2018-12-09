@@ -36,14 +36,14 @@ static Exception(NumberFormat);
  * @param value of double
  * 
  */
-Double Double_New(double value) {
+TDouble Double_New(double value) {
     return Double_Ctor(new(Double), value);
 }
 
 /**
  * Initialize a new Double
  */
-Double Double_Ctor(Double const this, double value)
+TDouble Double_Ctor(TDouble const this, double value)
 {
     Number_Ctor(this);
     this->isa = isa(Double);
@@ -89,54 +89,54 @@ int Double_Compare(double x, double y) {
  * @param   other  Double to be compared
  * @return same as Double_Compare
  */
-int Double_CompareTo(Double this, Double other) {
+int Double_CompareTo(TDouble this, TDouble other) {
     return Double_Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int Double_IntValue(Double const this) {
+int Double_IntValue(TDouble const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-long Double_LongValue(Double const this) {
+long Double_LongValue(TDouble const this) {
     return (long)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-float Double_FloatValue(Double const this) {
+float Double_FloatValue(TDouble const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-double Double_DoubleValue(Double const this) {
+double Double_DoubleValue(TDouble const this) {
     return this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-char Double_CharValue(Double const this) {
+char Double_CharValue(TDouble const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-short Double_ShortValue(Double const this) {
+short Double_ShortValue(TDouble const this) {
     return (short)this->value;
 }
 
 
-char* Double_ToString(Double const this)
+char* Double_ToString(TDouble const this)
 {
     static char str[20];
     sprintf(str, "%f", this->value);
@@ -148,16 +148,16 @@ char* Double_ToString(Double const this)
  */
 register (Double)
 {
-    if (DoubleClass.isa == nullptr) {
-        DoubleClass = (DoubleClass_t) {
-            .isa            = &DoubleClass,
-            .superclass     = &NumberClass,
+    if (Double.isa == nullptr) {
+        Double = (struct DoubleClass) {
+            .isa            = &Double,
+            .superclass     = &Number,
             .name           = "Double",
-            .Equals         = ObjectClass.Equals,
-            .GetHashCode    = ObjectClass.GetHashCode,
-            .Dispose        = ObjectClass.Dispose,
-            .ReferenceEquals= ObjectClass.ReferenceEquals,
-            .InstanceEquals = ObjectClass.InstanceEquals,
+            .Equals         = Object.Equals,
+            .GetHashCode    = Object.GetHashCode,
+            .Dispose        = Object.Dispose,
+            .ReferenceEquals= Object.ReferenceEquals,
+            .InstanceEquals = Object.InstanceEquals,
             .ToString       = Double_ToString,
             .CompareTo      = Double_CompareTo,
             .IntValue       = Double_IntValue, 
@@ -167,8 +167,8 @@ register (Double)
             .CharValue      = Double_CharValue, 
             .ShortValue     = Double_ShortValue, 
         };
-        AddMetadata(Double);
+        // AddMetadata(Double);
     }
-    return &DoubleClass;
+    return &Double;
 }
 

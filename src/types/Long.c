@@ -36,11 +36,11 @@ static Exception(LongFormat);
  * @param value of long
  * 
  */
-Long Long_New(long value) {
+TLong Long_New(long value) {
     return Long_Ctor(new(Long), value);
 }
 
-Long Long_Ctor(Long const this, long value)
+TLong Long_Ctor(TLong const this, long value)
 {
     Number_Ctor(this);
     this->isa = isa(Long);
@@ -86,58 +86,58 @@ int Long_Compare(long x, long y) {
  * @param   other  Long to be compared
  * @return same as Long_Compare
  */
-int Long_CompareTo(Long this, Long other) {
+int Long_CompareTo(TLong this, TLong other) {
     return Long_Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int Long_IntValue(Long const this) {
+int Long_IntValue(TLong const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-long Long_LongValue(Long const this) {
+long Long_LongValue(TLong const this) {
     return (long)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-float Long_FloatValue(Long const this) {
+float Long_FloatValue(TLong const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-double Long_DoubleValue(Long const this) {
+double Long_DoubleValue(TLong const this) {
     return (double)this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-char Long_CharValue(Long const this) {
+char Long_CharValue(TLong const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-short Long_ShortValue(Long const this) {
+short Long_ShortValue(TLong const this) {
     return (short)this->value;
 }
 
-bool Long_Equals(Long const this, Long const other)
+bool Long_Equals(TLong const this, TLong const other)
 {
     return this->value == other->value;
 }
 
-char* Long_ToString(Long const this)
+char* Long_ToString(TLong const this)
 {
     static char str[20];
     sprintf(str, "%d", this->value);
@@ -149,16 +149,16 @@ char* Long_ToString(Long const this)
  */
 register (Long)
 {
-    if (LongClass.isa == nullptr) {
-        LongClass = (LongClass_t) {
-            .isa            = &LongClass,
-            .superclass     = &NumberClass,
+    if (Long.isa == nullptr) {
+        Long = (struct LongClass) {
+            .isa            = &Long,
+            .superclass     = &Number,
             .name           = "Long",
-            .Equals         = ObjectClass.Equals,
-            .GetHashCode    = ObjectClass.GetHashCode,
-            .Dispose        = ObjectClass.Dispose,
-            .ReferenceEquals= ObjectClass.ReferenceEquals,
-            .InstanceEquals = ObjectClass.InstanceEquals,
+            .Equals         = Object.Equals,
+            .GetHashCode    = Object.GetHashCode,
+            .Dispose        = Object.Dispose,
+            .ReferenceEquals= Object.ReferenceEquals,
+            .InstanceEquals = Object.InstanceEquals,
             .Equals         = Long_Equals,
             .ToString       = Long_ToString,
             .CompareTo      = Long_CompareTo,
@@ -169,8 +169,8 @@ register (Long)
             .CharValue      = Long_CharValue, 
             .ShortValue     = Long_ShortValue, 
         };
-        AddMetadata(Long);
+        // AddMetadata(Long);
     }
-    return &LongClass;
+    return &Long;
 }
 

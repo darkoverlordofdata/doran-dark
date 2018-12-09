@@ -27,11 +27,11 @@ SOFTWARE.
 /**
  * Constructor
  */
-List List_New() {
+TList List_New() {
     return List_Ctor(new(List));
 }
 
-List List_Ctor(List const this)
+TList List_Ctor(TList const this)
 {
     Collection_Ctor(this);
     this->isa = isa(List);
@@ -48,14 +48,14 @@ List List_Ctor(List const this)
  * @param next node in list
  * 
  */
-ListNode ListNode_Ctor(ListNode const this, Any data, ListNode next)
+TListNode ListNode_Ctor(TListNode const this, Any data, TListNode next)
 {
     this->data = data;
     this->next = next;
     return this;
 }
 
-ListNode ListNode_New(Any data, ListNode next)
+TListNode ListNode_New(Any data, TListNode next)
 {
     return ListNode_Ctor(new(List), data, next);
 }
@@ -67,7 +67,7 @@ ListNode ListNode_New(Any data, ListNode next)
  * @param comp function to compare for insertion
  * 
  */
-int Insert(List const this, Any data, int (*comp)(Any, Any))
+int Insert(TList const this, Any data, int (*comp)(Any, Any))
 {
     if (this->head == nullptr) {
         this->head = ListNode_New(data, nullptr);
@@ -75,8 +75,8 @@ int Insert(List const this, Any data, int (*comp)(Any, Any))
     }
 
     // Find spot in linked list to insert new node
-    ListNode prev = nullptr;
-    ListNode curr = this->head;
+    TListNode prev = nullptr;
+    TListNode curr = this->head;
     while (curr != nullptr && curr->data != nullptr && comp(curr->data, data) < 0) {
         prev = curr;
         curr = curr->next;
@@ -97,7 +97,7 @@ int Insert(List const this, Any data, int (*comp)(Any, Any))
  * @param data to insert
  * 
  */
-void overload Add(List const this, Any data)
+void overload Add(TList const this, Any data)
 {
     if (this->head == nullptr) {
         // this->head = ListNode_New(data, nullptr);
@@ -111,9 +111,9 @@ void overload Add(List const this, Any data)
 /**
  * Remove item at end of list
  */
-Any overload Remove(List const this)
+Any overload Remove(TList const this)
 {
-    ListNode head = this->head;
+    TListNode head = this->head;
 
     Any popped_data = head->data;
     this->head = head->next;
@@ -129,16 +129,16 @@ Any overload Remove(List const this)
  * @param iter function to call for each iteration
  * 
  */
-void Iterate(List const this, void (*iter)(Any))
+void Iterate(TList const this, void (*iter)(Any))
 {
-    for (ListNode curr = this->head; curr != nullptr; curr = curr->next)
+    for (TListNode curr = this->head; curr != nullptr; curr = curr->next)
         iter(curr->data);
 }
 
 /**
  * Free list
  */
-void overload Dispose(List const this)
+void overload Dispose(TList const this)
 {
     // ListNode curr = this->head;
     // ListNode next;
@@ -154,7 +154,7 @@ void overload Dispose(List const this)
 /**
  * Number of items in vector
  */
-int overload Length(List const this)
+int overload Length(TList const this)
 {
     return this->length;
 }
@@ -163,7 +163,7 @@ int overload Length(List const this)
 /**
  * ToString
  */
-const char* overload ToString(List const this)
+char* overload ToString(TList const this)
 {
     return "dark.collections.List";
 }
@@ -173,15 +173,15 @@ const char* overload ToString(List const this)
  */
 register (List)
 {
-    if (ListClass.isa == nullptr) {
-        ListClass = (ListClass_t) {
-            .isa            = &ListClass,
-            .superclass     = &CollectionClass,
+    if (List.isa == nullptr) {
+        List = (struct ListClass) {
+            .isa            = &List,
+            .superclass     = &Collection,
             .name           = "List",
-            .Equals         = ObjectClass.Equals,
-            .GetHashCode    = ObjectClass.GetHashCode,
-            .ReferenceEquals= ObjectClass.ReferenceEquals,
-            .InstanceEquals = ObjectClass.InstanceEquals,
+            .Equals         = Object.Equals,
+            .GetHashCode    = Object.GetHashCode,
+            .ReferenceEquals= Object.ReferenceEquals,
+            .InstanceEquals = Object.InstanceEquals,
             .ToString       = ToString,
             .Dispose        = Dispose,
             .Length         = Length,
@@ -190,9 +190,9 @@ register (List)
             .Add            = Add,
             .Remove         = Remove,
         };
-        AddMetadata(List);
+        // AddMetadata(List);
     }
-    return &ListClass;
+    return &List;
 }
 
 

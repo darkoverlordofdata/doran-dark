@@ -22,55 +22,55 @@
 
 class (ResourceManager)
 {
-    ResourceManagerClass_t* isa;
-    Hashmap Shaders;
-    Hashmap Textures;
+    struct ResourceManagerClass * isa;
+    struct Hashmap * Shaders;
+    struct Hashmap * Textures;
 };
 
-extern ResourceManager Resource;
+extern TResourceManager Resource;
 
-typedef struct ResourceManagerClass_t
+struct ResourceManagerClass
 {
     union {
-        ObjectClass_t base;
+        struct ObjectClass base;
         struct 
         {
-            Class       isa;
-            Class       superclass;
-            char*       name;
-            const char* (*ToString)     (ResourceManager const);
-            bool        (*Equals)       (Object const, Object const);
-            int         (*GetHashCode)  (Object const);
-            void        (*Dispose)      (Object const);
-            bool        (*ReferenceEquals) (Object const objA, Object const objB);
-            bool        (*InstanceEquals) (Object const objA, Object const objB);
+            struct  Class * isa;
+            struct  Class * superclass;
+            char*   name;
+            char*   (*ToString) (TResourceManager const);
+            bool    (*Equals) (TObject const, TObject const);
+            int     (*GetHashCode) (TObject const);
+            void    (*Dispose) (TObject const);
+            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
+            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
         };
     };
 
     // Loads (and generates) a shader program from file loading vertex, fragment (and geometry) shader's source code. If gShaderFile is not nullptr, it also loads a geometry shader
-    Shader      (*LoadShader)           (ResourceManager const, const GLchar *vShaderFile, const GLchar *fShaderFile, char* name);
+    TShader      (*LoadShader)           (TResourceManager const, const GLchar *vShaderFile, const GLchar *fShaderFile, char* name);
     // Retrieves a stored sader
-    Shader      (*GetShader)            (ResourceManager const, char* name);
+    TShader      (*GetShader)            (TResourceManager const, char* name);
     // Loads (and generates) a texture from file
-    Texture2D   (*LoadTexture)          (ResourceManager const, const GLchar *file, GLboolean alpha, char* name);
+    TTexture2D   (*LoadTexture)          (TResourceManager const, const GLchar *file, GLboolean alpha, char* name);
     // Retrieves a stored texture
-    Texture2D   (*GetTexture)           (ResourceManager const, char* name);
+    TTexture2D   (*GetTexture)           (TResourceManager const, char* name);
     // Properly de-allocates all loaded resources
-    void        (*Dtor)                 (ResourceManager const);
+    void        (*Dtor)                 (TResourceManager const);
     // Loads and generates a shader from file
-    Shader      (*loadShaderFromFile)   (ResourceManager const, const GLchar *vShaderFile, const GLchar *fShaderFile);
+    TShader      (*loadShaderFromFile)   (TResourceManager const, const GLchar *vShaderFile, const GLchar *fShaderFile);
     // Loads a single texture from file
-    Texture2D   (*loadTextureFromFile)  (ResourceManager const, const GLchar *file, GLboolean alpha);
+    TTexture2D   (*loadTextureFromFile)  (TResourceManager const, const GLchar *file, GLboolean alpha);
 };
 
-static Shader loadShaderFromFile(ResourceManager, const GLchar *vShaderFile, const GLchar *fShaderFile);
-static Texture2D loadTextureFromFile(ResourceManager, const GLchar *file, bool alpha);
-Shader LoadShader(ResourceManager, const GLchar *vShaderFile, const GLchar *fShaderFile, char* name);
-Shader GetShader(ResourceManager, char* name);
-Texture2D LoadTexture(ResourceManager, const GLchar *file, bool alpha, char* name);
-Texture2D GetTexture(ResourceManager, char* name);
-void Dtor(ResourceManager);
-ResourceManager ResourceManager_New();
+static TShader loadShaderFromFile(TResourceManager, const GLchar *vShaderFile, const GLchar *fShaderFile);
+static TTexture2D loadTextureFromFile(TResourceManager, const GLchar *file, bool alpha);
+TShader LoadShader(TResourceManager, const GLchar *vShaderFile, const GLchar *fShaderFile, char* name);
+TShader GetShader(TResourceManager, char* name);
+TTexture2D LoadTexture(TResourceManager, const GLchar *file, bool alpha, char* name);
+TTexture2D GetTexture(TResourceManager, char* name);
+void Dtor(TResourceManager);
+TResourceManager ResourceManager_New();
 static char* rdbuf(FILE* f);
 
 #endif RESOURCE_MANAGER_H

@@ -39,49 +39,48 @@ SOFTWARE.
  */
 class (Number) 
 {
-    NumberClass_t* isa;
+    struct NumberClass * isa;
 };
-
 
 /**
  * Object metaclass
  */
-typedef struct NumberClass_t
+struct NumberClass
 {
     union {
-        ObjectClass_t base;
+        struct ObjectClass base;
         struct 
         {
-            Class isa;
-            Class superclass;
-            char* name;
-            char*   (*ToString) (Object const);
-            bool    (*Equals) (Object const, Object const);
-            int     (*GetHashCode) (Object const);
-            void    (*Dispose) (Object const);
-            bool    (*ReferenceEquals) (Object const objA, Object const objB);
-            bool    (*InstanceEquals) (Object const objA, Object const objB);
-            int     (*CompareTo) (Comparable const, Comparable other);
+            struct  Class * isa;
+            struct  Class * superclass;
+            char*   name;
+            char*   (*ToString) (TNumber const);
+            bool    (*Equals) (TObject const, TObject const);
+            int     (*GetHashCode) (TObject const);
+            void    (*Dispose) (TObject const);
+            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
+            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            int     (*CompareTo) (TComparable const, TComparable other);
         };
     };
-    int     (*IntValue) (Number const);
-    long    (*LongValue) (Number const);
-    float   (*FloatValue) (Number const);
-    double  (*DoubleValue) (Number const);
-    char    (*CharValue) (Number const);
-    short   (*ShortValue) (Number const);
+    int     (*IntValue) (TNumber const);
+    long    (*LongValue) (TNumber const);
+    float   (*FloatValue) (TNumber const);
+    double  (*DoubleValue) (TNumber const);
+    char    (*CharValue) (TNumber const);
+    short   (*ShortValue) (TNumber const);
 };
 
 
-int Number_CompareTo(Number const, Number other);
-bool Number_Equals(Number const, Number other);
-int Number_IntValue(Number const);
-long LongValue(Number const);
-float Number_FloatValue(Number const);
-double Number_DoubleValue(Number const);
-char Number_CharValue(Number const);
-short Number_ShortValue(Number const);
+int Number_CompareTo(TNumber const, TNumber other);
+bool Number_Equals(TNumber const, TNumber other);
+int Number_IntValue(TNumber const);
+long LongValue(TNumber const);
+float Number_FloatValue(TNumber const);
+double Number_DoubleValue(TNumber const);
+char Number_CharValue(TNumber const);
+short Number_ShortValue(TNumber const);
 int Number_Digit(char ch, int radix);
-Number Number_Ctor(Number const this);
+TNumber Number_Ctor(TNumber const this);
 
 #endif _NUMBER_H_

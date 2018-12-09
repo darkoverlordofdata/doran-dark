@@ -46,12 +46,21 @@ extern tgc_t gc;
  * 
  */
 #define class(name) \
-    typedef struct name##Class_t name##Class_t; \
-    extern name##Class_t name##Class; \
-    typedef struct name##_t name##_t;\
-    typedef name##_t* name;\
-    name##Class_t* Isa##name(); \
-    typedef struct name##_t
+    struct name##Class; \
+    struct name; \
+    extern struct name##Class name; \
+    typedef struct name* T##name; \
+    struct Class* Isa##name(); \
+    struct name
+
+
+// #define class(name) \
+//     typedef struct name##Class_t name##Class_t; \
+//     extern name##Class_t name##Class; \
+//     typedef struct name##_t name##_t;\
+//     typedef name##_t* name;\
+//     name##Class_t* Isa##name(); \
+//     typedef struct name##_t
 
 /** 
  * register class
@@ -59,16 +68,20 @@ extern tgc_t gc;
  * declares the metaclass implementation
  * declares the Isa implementation
  */
+// #define register(name) \
+//     name##Class_t name##Class; \
+//     name##Class_t* Isa##name() 
+
 #define register(name) \
-    name##Class_t name##Class; \
-    name##Class_t* Isa##name() 
+    struct name##Class name; \
+    TClass Isa##name()
 
 /**
  *  returns a reference to the class name 
  */
 #define isa(name) Isa##name()
 
-#define AddMetadata(name) (Metadata.classes[Metadata.count++] = &name##Class)
+#define AddMetadata(name) (Metadata.classes[Metadata.count++] = &name)
 
 
 /** 
@@ -76,7 +89,8 @@ extern tgc_t gc;
  * allocates memory for 1 object
  * 
  */
-#define new(class) dark_malloc (sizeof(class##_t))
+#define new(class) dark_malloc (sizeof(struct class))
+
 // #define new(class) tgc_calloc_opt(&gc, 1, sizeof(class##_t), TGC_ROOT, Object_Dtor)
 // #define new(class) tgc_calloc(&gc, 1, sizeof(class##_t))
 
@@ -92,7 +106,7 @@ extern tgc_t gc;
  * 
  * allocates memory for array of struct objects
  */
-#define allocate(class, n) dark_malloc (n * sizeof(class##_t))
+#define allocate(class, n) dark_malloc (n * sizeof(struct class))
 // #define allocate(class, n) tgc_calloc_opt(&gc, n, sizeof(class##_t), TGC_ROOT, nullptr )
 
 

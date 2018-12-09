@@ -31,45 +31,45 @@ SOFTWARE.
  */
 class (Collection)
 {
-    CollectionClass_t* isa;
+    struct CollectionClass * isa;
 };
 
 
 /**
  * Object metaclass
  */
-typedef struct CollectionClass_t
+struct CollectionClass
 {
     union {
-        Object_t base;
+        struct Object base;
         struct 
         {
-            Class   isa;
-            Class   superclass;
-            char*   name;
-            char*   (*ToString) (Object const);
-            bool    (*Equals) (Object const, Object const);
-            int     (*GetHashCode) (Object const);
-            void    (*Dispose) (Object const);
-            bool    (*ReferenceEquals) (Object const objA, Object const objB);
-            bool    (*InstanceEquals) (Object const objA, Object const objB);
+            struct Class * isa;
+            struct Class * superclass;
+            char* name;
+            char*   (*ToString) (TCollection const);
+            bool    (*Equals) (TObject const, TObject const);
+            int     (*GetHashCode) (TObject const);
+            void    (*Dispose) (TObject const);
+            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
+            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
         };
     };
-    int     (*Length) (Collection const);
-    bool    (*IsEmpty) (Collection const);
-    bool    (*Contains) (Collection const, Any value);
-    void    (*Clear) (Collection const);
-    bool    (*Add) (Collection const, Any value);
-    bool    (*Remove) (Collection const, Any value);
+    int     (*Length) (TCollection const);
+    bool    (*IsEmpty) (TCollection const);
+    bool    (*Contains) (TCollection const, Any value);
+    void    (*Clear) (TCollection const);
+    bool    (*Add) (TCollection const, Any value);
+    bool    (*Remove) (TCollection const, Any value);
 };
 
 
 /**
  * Collection API
  */
-int overload Length(Collection const);
-void overload Add(Collection const, Any item);
-Collection Collection_Ctor(Collection const this);
+int overload Length(TCollection const);
+void overload Add(TCollection const, Any item);
+TCollection Collection_Ctor(TCollection const this);
 
 /**
  * AddAll

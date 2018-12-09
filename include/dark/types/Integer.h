@@ -39,48 +39,48 @@ SOFTWARE.
  */
 class (Integer) 
 {
-    IntegerClass_t* isa;
+    struct IntegerClass* isa;
     int        value;
 };
 
 /**
  * Object metaclass
  */
-typedef struct IntegerClass_t
+struct IntegerClass
 {
     union {
-        NumberClass_t base;
+        struct NumberClass base;
         struct 
         {
-            Class isa;
-            Class superclass;
-            char* name;
-            char*   (*ToString) (Object const);
-            bool    (*Equals) (Object const, Object const);
-            int     (*GetHashCode) (Object const);
-            void    (*Dispose) (Object const);
-            bool    (*ReferenceEquals) (Object const objA, Object const objB);
-            bool    (*InstanceEquals) (Object const objA, Object const objB);
-            int     (*CompareTo) (Comparable const, Comparable other);
-            int     (*IntValue) (Integer const);
-            long    (*LongValue) (Integer const);
-            float   (*FloatValue) (Integer const);
-            double  (*DoubleValue) (Integer const);
-            char    (*CharValue) (Integer const);
-            short   (*ShortValue) (Integer const);
+            struct  Class * isa;
+            struct  Class * superclass;
+            char*   name;
+            char*   (*ToString) (TInteger const);
+            bool    (*Equals) (TObject const, TObject const);
+            int     (*GetHashCode) (TObject const);
+            void    (*Dispose) (TObject const);
+            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
+            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            int     (*CompareTo) (TComparable const, TComparable other);
+            int     (*IntValue) (TInteger const);
+            long    (*LongValue) (TInteger const);
+            float   (*FloatValue) (TInteger const);
+            double  (*DoubleValue) (TInteger const);
+            char    (*CharValue) (TInteger const);
+            short   (*ShortValue) (TInteger const);
         };
     };
 };
 
 int Integer_ParseInt(char* s, int radix);
-int Integer_CompareTo(Integer const, Integer other);
-int Integer_IntValue(Integer const);
-long Integer_LongValue(Integer const);
-int Integer_IntegerValue(Integer const);
-double Integer_DoubleValue(Integer const);
-char Integer_CharValue(Integer const);
-short Integer_ShortValue(Integer const);
-Integer Integer_New(int value);
-Integer Integer_Ctor(Integer const this, int value);
+int Integer_CompareTo(TInteger const, TInteger other);
+int Integer_IntValue(TInteger const);
+long Integer_LongValue(TInteger const);
+int Integer_IntegerValue(TInteger const);
+double Integer_DoubleValue(TInteger const);
+char Integer_CharValue(TInteger const);
+short Integer_ShortValue(TInteger const);
+TInteger Integer_New(int value);
+TInteger Integer_Ctor(TInteger const this, int value);
 
 #endif _INTEGER_H_

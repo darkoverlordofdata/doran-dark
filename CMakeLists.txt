@@ -22,8 +22,10 @@ list ( APPEND CSOURCE .lib/dark/src/collections/Collection.c )
 list ( APPEND CSOURCE .lib/dark/src/collections/Array.c )
 list ( APPEND CSOURCE .lib/dark/src/collections/Hashmap.c )
 list ( APPEND CSOURCE .lib/dark/src/collections/List.c )
+
 # list ( APPEND CSOURCE .lib/dark/src/io/FileSystem.c )
 # list ( APPEND CSOURCE .lib/dark/src/io/File.c )
+
 list ( APPEND CSOURCE .lib/dark/src/types/Boolean.c )
 list ( APPEND CSOURCE .lib/dark/src/types/Number.c )
 list ( APPEND CSOURCE .lib/dark/src/types/Char.c )

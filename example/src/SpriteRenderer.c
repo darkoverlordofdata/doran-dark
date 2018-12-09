@@ -14,11 +14,11 @@
  * @param shader to use for rendering
  * 
  */
-SpriteRenderer SpriteRenderer_New(Shader shader) {
+TSpriteRenderer SpriteRenderer_New(TShader shader) {
     return SpriteRenderer_Ctor(new(SpriteRenderer), shader);
 }
 
-SpriteRenderer SpriteRenderer_Ctor(SpriteRenderer const this, Shader shader)
+TSpriteRenderer SpriteRenderer_Ctor(TSpriteRenderer const this, TShader shader)
 {
 	Object_Ctor(this);
     this->isa = isa(SpriteRenderer);
@@ -32,23 +32,24 @@ SpriteRenderer SpriteRenderer_Ctor(SpriteRenderer const this, Shader shader)
  */
 register (SpriteRenderer)
 {
-    if (SpriteRendererClass.isa == nullptr) {
-        SpriteRendererClass = (SpriteRendererClass_t) {
-            .isa        = &SpriteRendererClass,
-            .superclass = &ObjectClass,
+    if (SpriteRenderer.isa == nullptr) {
+        SpriteRenderer = (struct SpriteRendererClass) {
+            .isa        = &SpriteRenderer,
+            .superclass = &Object,
             .name       = "SpriteRenderer",
             /** VTable */
             .ToString           = ToString,
-            .Equals             = ObjectClass.Equals,
-            .GetHashCode        = ObjectClass.GetHashCode,
-            .Dispose            = ObjectClass.Dispose,
-            .ReferenceEquals    = ObjectClass.ReferenceEquals,
-            .InstanceEquals     = ObjectClass.InstanceEquals,
+            .Equals             = Object.Equals,
+            .GetHashCode        = Object.GetHashCode,
+            .Dispose            = Object.Dispose,
+            .ReferenceEquals    = Object.ReferenceEquals,
+            .InstanceEquals     = Object.InstanceEquals,
             .DrawSprite         = DrawSprite,
             .Dispose            = Dispose,
         };
-        AddMetadata(SpriteRenderer);
+        // AddMetadata(SpriteRenderer);
     }
+    return &SpriteRenderer;
 }
 
 /**
@@ -61,7 +62,7 @@ register (SpriteRenderer)
  * @param color to tint
  * 
  */
-void overload DrawSprite(SpriteRenderer this, Texture2D texture, Vec2 position, Vec2 size, GLfloat rot, Vec3 color)
+void overload DrawSprite(TSpriteRenderer this, TTexture2D texture, Vec2 position, Vec2 size, GLfloat rot, Vec3 color)
 {
     Use(this->shader);
 
@@ -86,13 +87,13 @@ void overload DrawSprite(SpriteRenderer this, Texture2D texture, Vec2 position, 
     glBindVertexArray(0);
 }
 
-void overload Dispose(SpriteRenderer this)
+void overload Dispose(TSpriteRenderer this)
 {
     glDeleteVertexArrays(1, this->VAO);
 }
 
 
-static void initRenderData(SpriteRenderer this)
+static void initRenderData(TSpriteRenderer this)
 {
     // Configure VAO/VBO
     GLuint VBO;
@@ -124,7 +125,7 @@ static void initRenderData(SpriteRenderer this)
 /**
  * ToString
  */
-const char* overload ToString(SpriteRenderer const this)
+char* overload ToString(TSpriteRenderer const this)
 {
     return "SpriteRenderer";
 }

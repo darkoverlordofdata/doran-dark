@@ -33,59 +33,59 @@ typedef void (*List_Interator) (Any);
 class (ListNode)
 {
     Any data;
-    ListNode next;
+    struct ListNode * next;
 };
 
 class (List)
 {
-    Class isa;
+    struct ListClass * isa;
     int length;
-    ListNode head;
+    struct ListNode * head;
 };
 
-typedef struct ListClass_t
+struct ListClass
 {
     union {
-        Collection_t base;
+        struct Collection base;
         struct {
-            Class       isa;
-            Class       superclass;
-            char*       name;
-            const char* (*ToString)     (List const);
-            bool        (*Equals)       (Object const, Object const);
-            int         (*GetHashCode)  (Object const);
-            void        (*Dispose)      (List const);
-            bool        (*ReferenceEquals) (Object const objA, Object const objB);
-            bool        (*InstanceEquals) (Object const objA, Object const objB);
-            int         (*Length)       (List const);
-            bool        (*IsEmpty)      (List const);
-            bool        (*Contains)     (List const, Any value);
-            void        (*Clear)        (List const);
-            void        (*Add)          (List const, Any value);
-            Any         (*Remove)       (List const);
+            struct Class * isa;
+            struct Class * superclass;
+            char* name;
+            char*   (*ToString) (TList const);
+            bool    (*Equals) (TObject const, TObject const);
+            int     (*GetHashCode) (TObject const);
+            void    (*Dispose) (TObject const);
+            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
+            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            int     (*Length)       (TList const);
+            bool    (*IsEmpty)      (TList const);
+            bool    (*Contains)     (TList const, Any value);
+            void    (*Clear)        (TList const);
+            void    (*Add)          (TList const, Any value);
+            Any     (*Remove)       (TList const);
 
         };
     };
-    int (*Insert) (List const, Any data, List_Compare func);
-    void (*Iterate) (List const, List_Interator func);
+    int (*Insert) (TList const, Any data, List_Compare func);
+    void (*Iterate) (TList const, List_Interator func);
 };
 
 
 /**
  * List API
  */
-const char* overload ToString(List const);
-void overload Dispose(List const);
-int overload Length(List const);
-bool overload IsEmpty(List const);
-bool overload Contains(List const);
-void overload Clear(List const);
-void overload Add(List const, Any data);
-Any overload Remove(List const);
+char* overload ToString(TList const);
+void overload Dispose(TList const);
+int overload Length(TList const);
+bool overload IsEmpty(TList const);
+bool overload Contains(TList const);
+void overload Clear(TList const);
+void overload Add(TList const, Any data);
+Any overload Remove(TList const);
 
-int Insert(List const, Any data, List_Compare func);
-void Iterate(List const, List_Interator func);
-List List_New();
-List List_Ctor(List const this);
+int Insert(TList const, Any data, List_Compare func);
+void Iterate(TList const, List_Interator func);
+TList List_New();
+TList List_Ctor(TList const this);
 
 #endif _LIST_H_ 
