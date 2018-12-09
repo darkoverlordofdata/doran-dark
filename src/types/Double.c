@@ -25,9 +25,31 @@ SOFTWARE.
 ******************************************************************/
 #include <dark/types/Double.h>
 /* 
- * Double implementation
+ * Throws NumberFormatException:
  */
 static Exception(NumberFormat);
+
+/**
+ * Constructor
+ * create a new Double
+ * 
+ * @param value of double
+ * 
+ */
+Double Double_New(double value) {
+    return Double_Ctor(new(Double), value);
+}
+
+/**
+ * Initialize a new Double
+ */
+Double Double_Ctor(Double const this, double value)
+{
+    Number_Ctor(this);
+    this->isa = isa(Double);
+    this->value = value;
+    return this;
+}
 
 /**
  * Returns a primitive double value parsed from input string. 
@@ -145,31 +167,8 @@ register (Double)
             .CharValue      = Double_CharValue, 
             .ShortValue     = Double_ShortValue, 
         };
+        AddMetadata(Double);
     }
     return &DoubleClass;
-}
-
-/**
- * Initialize a new Double
- */
-Double Double_Ctor(Double const this, double value)
-{
-    Number_Ctor(this);
-    this->isa = isa(Double);
-    this->value = value;
-    return this;
-}
-
-/**
- * new Double
- * 
- * create a new Double
- * 
- * @param value of double
- * 
- */
-Double Double_New(double value)
-{
-    return Double_Ctor(new(Double), value);
 }
 

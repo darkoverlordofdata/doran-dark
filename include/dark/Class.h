@@ -35,4 +35,12 @@ class (Class)
 };
 
 
+struct Metadata {
+    int count;
+    Class classes[100];
+};
+
+struct Metadata Metadata;
+
+
 #endif _CLASS_H_ 

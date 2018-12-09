@@ -80,5 +80,6 @@ double Long_DoubleValue(Long const);
 char Long_CharValue(Long const);
 short Long_ShortValue(Long const);
 Long Long_New(long value);
+Long Long_Ctor(Long const this, long value);
 
 #endif _LONG_H_

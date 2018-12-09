@@ -27,7 +27,7 @@ class (Collision)
     bool first;
     Direction second; 
     Vec2 third;
- }; 
+}; 
  
 /**
  * Collision Result Tuple
@@ -56,6 +56,10 @@ Collision New_Collision(bool first, Direction second, Vec2 third)
  * @param Height of screen
  * 
  */
+Game Game_New(int Width, int Height) {
+    return Game_Ctor(new(Game), Width, Height);
+}
+
 Game Game_Ctor(Game const this, int Width, int Height)
 {
 	Object_Ctor(this);
@@ -65,6 +69,7 @@ Game Game_Ctor(Game const this, int Width, int Height)
     this->State = GAME_ACTIVE;
     this->Width = Width;
     this->Height = Height;
+
     return this;
 }
 
@@ -93,6 +98,7 @@ register (Game)
             .ResetLevel     = ResetLevel,
             .ResetPlayer    = ResetPlayer,
         };
+        AddMetadata(Game);
     }
     return &GameClass;
 }
@@ -121,13 +127,10 @@ void overload Start(Game this)
     LoadTexture(Resource, "textures/awesomeface.png", true, "face");
     LoadTexture(Resource, "textures/paddle.png", true, "paddle");
     // Set render-specific controls
-    printf("create SpriteRenderer_New 0\n");
     Renderer = SpriteRenderer_New(GetShader(Resource, "sprite"));
-    printf("create SpriteRenderer_New 1\n");
     // Load levels
 
     Add(this->Levels, GameLevel_New("levels/one.lvl", this->Width, this->Height * 0.5));
-    printf("create SpriteRenderer_New 2\n");
     Add(this->Levels, GameLevel_New("levels/two.lvl", this->Width, this->Height * 0.5));
     Add(this->Levels, GameLevel_New("levels/three.lvl", this->Width, this->Height * 0.5));
     Add(this->Levels, GameLevel_New("levels/four.lvl", this->Width, this->Height * 0.5));
@@ -391,6 +394,7 @@ void overload DoCollisions(Game this)
                         Ball->Position.y += penetration; // Move ball back down
                 }
             }
+            delete(collision);
         }    
     }
     // Also check collisions for player pad (unless stuck)
@@ -410,6 +414,7 @@ void overload DoCollisions(Game this)
         // Fix sticky paddle
         Ball->Velocity.y = -1 * abs(Ball->Velocity.y);
     }
+    delete(result);
 }
 
 /**
@@ -420,7 +425,3 @@ const char* overload ToString(Game const this)
     return "Game";
 }
 
-Game Game_New(int Width, int Height)
-{
-    return Game_Ctor(new(Game), Width, Height);
-}

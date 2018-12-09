@@ -16,6 +16,10 @@
  * @param Velocity initial speed of ball
  * @param Sprite to display
  */
+BallObject BallObject_New(Vec2 Position, float Radius, Vec2 Velocity, Texture2D Sprite) {
+    return BallObject_Ctor(new(BallObject), Position, Radius, Velocity, Sprite);
+}
+
 const BallObject BallObject_Ctor(BallObject this, Vec2 Position, float Radius, Vec2 Velocity, Texture2D Sprite)
 {
     Radius = Radius != 0 ? Radius : 12.5f;
@@ -46,6 +50,7 @@ register (BallObject)
             .Move            = Move,
             .Reset           = Reset,
         };
+        AddMetadata(BallObject);
     }
     return &BallObjectClass;
 }
@@ -108,9 +113,5 @@ const char* overload ToString(BallObject const this)
     return "BallObject";
 }
 
-BallObject BallObject_New(Vec2 Position, float Radius, Vec2 Velocity, Texture2D Sprite)
-{
-    return BallObject_Ctor(new(BallObject), Position, Radius, Velocity, Sprite);
-}
 
 

@@ -64,5 +64,6 @@ void overload Generate(Texture2D, GLuint width, GLuint height, unsigned char* da
 void overload Bind(Texture2D);
 const char* overload ToString(Texture2D const);
 Texture2D Texture2D_New(int InternalFormat, int ImageFormat, char* path);
+Texture2D Texture2D_Ctor(Texture2D const this, int InternalFormat, int ImageFormat, char* path);
 
 #endif TEXTURE_H

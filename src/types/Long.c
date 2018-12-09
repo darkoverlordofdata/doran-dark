@@ -25,9 +25,28 @@ SOFTWARE.
 ******************************************************************/
 #include <dark/types/Long.h>
 /* 
- * Long implementation
+ * Throws LongFormatException:
  */
 static Exception(LongFormat);
+
+/**
+ * Constructor
+ * create a new Long
+ * 
+ * @param value of long
+ * 
+ */
+Long Long_New(long value) {
+    return Long_Ctor(new(Long), value);
+}
+
+Long Long_Ctor(Long const this, long value)
+{
+    Number_Ctor(this);
+    this->isa = isa(Long);
+    this->value = value;
+    return this;
+}
 
 /**
  * Returns a primitive long value parsed from input string. 
@@ -150,31 +169,8 @@ register (Long)
             .CharValue      = Long_CharValue, 
             .ShortValue     = Long_ShortValue, 
         };
+        AddMetadata(Long);
     }
     return &LongClass;
-}
-
-/**
- * Initialize a new Long
- */
-Long Long_Ctor(Long const this, long value)
-{
-    Number_Ctor(this);
-    this->isa = isa(Long);
-    this->value = value;
-    return this;
-}
-
-/**
- * new Long
- * 
- * create a new Long
- * 
- * @param value of long
- * 
- */
-Long Long_New(long value)
-{
-    return Long_Ctor(new(Long), value);
 }
 

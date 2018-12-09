@@ -162,6 +162,27 @@ unsigned int overload HashInt(Hashmap const this, char* keystring)
 	return key % this->tableSize;
 }
 
+/**
+ * Default Constructor
+ */
+Hashmap Hashmap_New() {
+    return Hashmap_Ctor(new(Hashmap));
+}
+
+Hashmap Hashmap_Ctor(Hashmap const this)
+{
+    Object_Ctor(this);
+    this->isa = isa(Hashmap);
+
+    this->data = allocate(HashmapNode, INITIAL_SIZE);
+	this->tableSize = INITIAL_SIZE;
+	this->size = 0;
+
+    return this;
+}
+
+
+
 /*
  * Return the integer of the location in data
  * to store the point to the item, or MAP_FULL.
@@ -372,28 +393,9 @@ register (Hashmap)
             .Hash           = Hash,
             .Rehash         = Rehash,
         };
+        AddMetadata(Hashmap);
     }
     return &HashmapClass;
-}
-
-/**
- * Class Initializer
- */
-Hashmap Hashmap_Ctor(Hashmap const this)
-{
-    Object_Ctor(this);
-    this->isa = isa(Hashmap);
-
-    this->data = allocate(HashmapNode, INITIAL_SIZE);
-	this->tableSize = INITIAL_SIZE;
-	this->size = 0;
-
-    return this;
-}
-
-Hashmap Hashmap_New()
-{
-    return Hashmap_Ctor(new(Hashmap));
 }
 
 

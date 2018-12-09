@@ -86,5 +86,6 @@ Any overload Remove(List const);
 int Insert(List const, Any data, List_Compare func);
 void Iterate(List const, List_Interator func);
 List List_New();
+List List_Ctor(List const this);
 
 #endif _LIST_H_ 

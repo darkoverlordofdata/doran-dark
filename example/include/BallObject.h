@@ -72,5 +72,5 @@ void overload Move(BallObject, GLfloat dt, GLuint window_width);
 void overload Reset(BallObject, Vec2 position, Vec2 velocity);
 const char* overload ToString(BallObject const this);
 BallObject BallObject_New(Vec2 Position, float Radius, Vec2 Velocity, Texture2D Sprite);
-
+const BallObject BallObject_Ctor(BallObject this, Vec2 Position, float Radius, Vec2 Velocity, Texture2D Sprite);
 #endif BALLOBJECT_H

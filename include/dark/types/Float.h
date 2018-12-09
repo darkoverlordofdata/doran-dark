@@ -80,5 +80,6 @@ float Float_FloatValue(Float const);
 char Float_CharValue(Float const);
 short Float_ShortValue(Float const);
 Float Float_New(float value);
+Float Float_Ctor(Float const this, float value);
 
 #endif _FLOAT_H_

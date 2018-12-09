@@ -26,29 +26,31 @@ SOFTWARE.
 #include <dark/Class.h>
 #include <dark/darkfx.h>
 
+
 /**
- * Boot the class runtime
+ * Boot the core framework
  * 
  * This initializes the framework classes so
  * that static methods and variables are available
  */
 void __attribute__((constructor(101))) Class_Boot() 
 {
-    IsaObject();
-    IsaComparable();
-    IsaCollection();
-    IsaArray();
-    IsaList();
-    IsaHashmap();
-    IsaBoolean();
-    IsaNumber();
-    IsaChar();
-    IsaDouble();
-    IsaFloat();
-    IsaInteger();
-    IsaLong();
-    IsaShort();
-    IsaString();
-    IsaStringBuilder();
+    // Metadata = (struct Metadata) { .count = 1, .classes = {IsaObject()} };
+
+    // IsaComparable();
+    // IsaCollection();
+    // IsaArray();
+    // IsaList();
+    // IsaHashmap();
+    // IsaBoolean();
+    // IsaNumber();
+    // IsaChar();
+    // IsaDouble();
+    // IsaFloat();
+    // IsaInteger();
+    // IsaLong();
+    // IsaShort();
+    // IsaString();
+    // IsaStringBuilder();
 
 }

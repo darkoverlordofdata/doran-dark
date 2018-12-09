@@ -82,5 +82,6 @@ double Number_DoubleValue(Number const);
 char Number_CharValue(Number const);
 short Number_ShortValue(Number const);
 int Number_Digit(char ch, int radix);
+Number Number_Ctor(Number const this);
 
 #endif _NUMBER_H_

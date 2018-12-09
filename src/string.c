@@ -66,7 +66,7 @@ char * strndup (const char *str, size_t size)
   char *result;
   size_t len = strlen(str);
   len = size < len ? size : len;
-  result = dark_malloc (len + 1 * sizeof(char));
+  result = dark_calloc(len + 1, sizeof(char));
   return strncpy(result, str, len);
 }
 
@@ -93,7 +93,7 @@ char* STR_JOIN(int count, ...)
         size += strlen(str);
     }
     va_end(args1);
-    char* result = dark_malloc ((size+1) * sizeof(char));
+    char* result = dark_calloc((size+1),  sizeof(char));
 
     /**
      * Now build the result string

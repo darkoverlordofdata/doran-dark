@@ -20,6 +20,10 @@ static void respawnParticle(ParticleGenerator this, Particle particle, GameObjec
  * @param amount number of particles to generate
  * 
  */
+ParticleGenerator ParticleGenerator_New(Shader shader, Texture2D texture, int amount) {
+    return ParticleGenerator_Ctor(new(ParticleGenerator), shader, texture, amount);
+}
+
 ParticleGenerator ParticleGenerator_Ctor(ParticleGenerator const this, Shader shader, Texture2D texture, int amount)
 {
 	Object_Ctor(this);
@@ -51,6 +55,7 @@ register (ParticleGenerator)
             .Update         = Update,
             .Draw           = Draw,
         };
+        AddMetadata(ParticleGenerator);
     }
     return &ParticleGeneratorClass;
 }
@@ -138,7 +143,7 @@ static void init(ParticleGenerator this)
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
     glBindVertexArray(0);
 
-    this->particles =  dark_malloc(this->amount * sizeof(Particle));
+    this->particles =  dark_calloc(this->amount, sizeof(Particle));
 }
 
 // Stores the index of the last particle used (for quick access to next dead particle)
@@ -182,7 +187,3 @@ const char* overload ToString(ParticleGenerator const this)
     return "ParticleGenerator";
 }
 
-ParticleGenerator ParticleGenerator_New(Shader shader, Texture2D texture, int amount)
-{
-    return ParticleGenerator_Ctor(new(ParticleGenerator), shader, texture, amount);
-}

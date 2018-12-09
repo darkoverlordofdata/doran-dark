@@ -25,9 +25,33 @@ SOFTWARE.
 ******************************************************************/
 #include <dark/types/Float.h>
 /* 
- * Float implementation
+ * Throws NumberFormatException:
  */
 static Exception(NumberFormat);
+
+/**
+ * Constructor
+ * create a new Float
+ * 
+ * @param value of float
+ * 
+ */
+Float Float_New(float value) {
+    return Float_Ctor(new(Float), value);
+}
+
+
+/**
+ * Initialize a new Float
+ */
+Float Float_Ctor(Float const this, float value)
+{
+    Number_Ctor(this);
+    this->isa = isa(Float);
+    this->value = value;
+    return this;
+}
+
 
 /**
  * Returns a primitive float value parsed from input string. 
@@ -138,32 +162,9 @@ register (Float)
             .CharValue      = Float_CharValue, 
             .ShortValue     = Float_ShortValue, 
         };
+        AddMetadata(Float);
     }
     return &FloatClass;
 }
 
-
-/**
- * Initialize a new Float
- */
-Float Float_Ctor(Float const this, float value)
-{
-    Number_Ctor(this);
-    this->isa = isa(Float);
-    this->value = value;
-    return this;
-}
-
-/**
- * new Float
- * 
- * create a new Float
- * 
- * @param value of float
- * 
- */
-Float Float_New(float value)
-{
-    return Float_Ctor(new(Float), value);
-}
 

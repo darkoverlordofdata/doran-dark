@@ -24,9 +24,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/Char.h>
-/* 
- * Char implementation
+/**
+ * Constructor
+ * create a new Char
+ * 
+ * @param value of char
+ * 
  */
+Char Char_New(char value) {
+    return Char_Ctor(new(Char), value);
+}
+
+/**
+ * Initialize a new Char
+ */
+Char Char_Ctor(Char const this, char value)
+{
+    Number_Ctor(this);
+    this->isa = isa(Char);
+    this->value = value;
+    return this;
+}
 
 /**
  * Compare two char primitives.
@@ -127,32 +145,9 @@ register (Char)
             .CharValue      = Char_CharValue, 
             .ShortValue     = Char_ShortValue, 
         };
+        AddMetadata(Char);
     }
     return &CharClass;
 }
 
-
-/**
- * Initialize a new Char
- */
-Char Char_Ctor(Char const this, char value)
-{
-    Number_Ctor(this);
-    this->isa = isa(Char);
-    this->value = value;
-    return this;
-}
-
-/**
- * new Char
- * 
- * create a new Char
- * 
- * @param value of char
- * 
- */
-Char Char_New(char value)
-{
-    return Char_Ctor(new(Char), value);
-}
 

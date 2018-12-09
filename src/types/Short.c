@@ -25,9 +25,28 @@ SOFTWARE.
 ******************************************************************/
 #include <dark/types/Short.h>
 /* 
- * Short implementation
+ * Throws NumberFormatException:
  */
 static Exception(NumberFormat);
+
+/**
+ * Constructor
+ * create a new Short
+ * 
+ * @param value of short
+ * 
+ */
+Short Short_New(short value) {
+    return Short_Ctor(new(Short), value);
+}
+
+Short Short_Ctor(Short const this, short value)
+{
+    Number_Ctor(this);
+    this->isa = isa(Short);
+    this->value = value;
+    return this;
+}
 
 /**
  * Returns a primitive short value parsed from input string. 
@@ -137,31 +156,8 @@ register (Short)
             .CharValue      = Short_CharValue, 
             .ShortValue     = Short_ShortValue, 
         };
+        AddMetadata(Short);
     }
     return &ShortClass;
-}
-
-/**
- * Initialize a new Short
- */
-Short Short_Ctor(Short const this, short value)
-{
-    Number_Ctor(this);
-    this->isa = isa(Short);
-    this->value = value;
-    return this;
-}
-
-/**
- * new Short
- * 
- * create a new Short
- * 
- * @param value of short
- * 
- */
-Short Short_New(short value)
-{
-    return Short_Ctor(new(Short), value);
 }
 

@@ -404,13 +404,13 @@ void *tgc_realloc(tgc_t *gc, void *ptr, size_t size) {
 void tgc_free(tgc_t *gc, void *ptr) {
   tgc_ptr_t *p  = tgc_get_ptr(gc, ptr);
   if (p) {
-  ////
-    // if (p->dtor) {
-    //   p->dtor(ptr);
-    // }
-    // free(ptr);
-    // tgc_rem(gc, ptr);
-  ////
+  //////
+    if (p->dtor) {
+      p->dtor(ptr);
+    }
+    free(ptr);
+    tgc_rem(gc, ptr);
+  //////
   }
 }
 
@@ -427,9 +427,9 @@ void *tgc_calloc_opt(
   int flags, void(*dtor)(void*)) {
   void *ptr = calloc(num, size);
   //////
-  // if (ptr != NULL) {
-  //   ptr = tgc_add(gc, ptr, num * size, flags, dtor);
-  // }
+  if (ptr != NULL) {
+    ptr = tgc_add(gc, ptr, num * size, flags, dtor);
+  }
   //////
   return ptr;
 }

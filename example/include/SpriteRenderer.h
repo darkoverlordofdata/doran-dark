@@ -53,6 +53,7 @@ void overload DrawSprite(SpriteRenderer, Texture2D texture, Vec2 position, Vec2 
 void overload Dispose(SpriteRenderer);
 const char* overload ToString(SpriteRenderer const);
 SpriteRenderer SpriteRenderer_New(Shader shader);
+SpriteRenderer SpriteRenderer_Ctor(SpriteRenderer const this, Shader shader);
 static void initRenderData(SpriteRenderer this);
 
 #endif SPRITE_RENDERER_H

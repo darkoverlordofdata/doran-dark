@@ -76,6 +76,7 @@ int overload GetHashCode(Object const);
 void overload Dispose(Object const);
 
 Object Object_New();
+Object Object_Ctor(Object const this);
 Object Object_Dtor();
 
 #endif _OBJECT_H_ 

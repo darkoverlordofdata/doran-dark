@@ -74,5 +74,6 @@ typedef struct ParticleGeneratorClass_t
 void overload Update(ParticleGenerator, GLfloat dt, GameObject object, GLuint newParticles, Vec2 offset);
 void overload Draw(ParticleGenerator);
 const char* overload ToString(ParticleGenerator const);
+ParticleGenerator ParticleGenerator_Ctor(ParticleGenerator const, Shader shader, Texture2D texture, int amount);
 
 #endif PARTICLE_GENERATOR_H

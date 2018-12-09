@@ -24,11 +24,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/Number.h>
-
 /* 
- * Abstract Number
+ * Throws AbstractMethodException:
  */
 static Exception(AbstractMethod);
+
+/**
+ * Abstract Number
+ * Initialize a new Number
+ */
+Number Number_Ctor(Number const this)
+{
+    Comparable_Ctor(this);
+    this->isa = isa(Number);
+    return this;
+}
+
 
 /**
  * Compares two Number objects.
@@ -146,18 +157,9 @@ register (Number)
             .CharValue      = Abstract_CharValue, 
             .ShortValue     = Abstract_ShortValue 
         };
+        AddMetadata(Number);
     }
     return &NumberClass;
-}
-
-/**
- * Initialize a new Number
- */
-Number Number_Ctor(Number const this)
-{
-    Comparable_Ctor(this);
-    this->isa = isa(Number);
-    return this;
 }
 
 /**

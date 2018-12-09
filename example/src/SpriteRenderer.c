@@ -14,6 +14,10 @@
  * @param shader to use for rendering
  * 
  */
+SpriteRenderer SpriteRenderer_New(Shader shader) {
+    return SpriteRenderer_Ctor(new(SpriteRenderer), shader);
+}
+
 SpriteRenderer SpriteRenderer_Ctor(SpriteRenderer const this, Shader shader)
 {
 	Object_Ctor(this);
@@ -43,6 +47,7 @@ register (SpriteRenderer)
             .DrawSprite         = DrawSprite,
             .Dispose            = Dispose,
         };
+        AddMetadata(SpriteRenderer);
     }
 }
 
@@ -124,7 +129,3 @@ const char* overload ToString(SpriteRenderer const this)
     return "SpriteRenderer";
 }
 
-SpriteRenderer SpriteRenderer_New(Shader shader)
-{
-    return SpriteRenderer_Ctor(new(SpriteRenderer), shader);
-}

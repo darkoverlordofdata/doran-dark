@@ -80,5 +80,6 @@ double Char_DoubleValue(Char const);
 char Char_CharValue(Char const);
 short Char_ShortValue(Char const);
 Char Char_New(char value);
+Char Char_Ctor(Char const this, char value);
 
 #endif _CHAR_H_

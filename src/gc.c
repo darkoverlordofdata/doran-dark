@@ -24,29 +24,54 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/core.h>
+#include <dark/Class.h>
 #include <stdlib.h>
-#include "tgc.h"
-// #include <gc.h>
-static tgc_t gc;
+// #include "tgc.h" 
 
-void* dark_malloc(size_t nbytes) {
-    return tgc_calloc(&gc, 1, nbytes);
-    // return calloc(1, nbytes);
-    // return GC_malloc(nbytes);
+// tgc_t gc;
+
+void dark_free(Class cls) 
+{
+    // if (cls != nullptr) {
+    //     if (cls->isa != nullptr) {
+    //         if (cls->isa > 1024) {
+    //         // if (cls->isa->isa != nullptr) {
+    //             printf("%x\n", cls->isa);
+    //         }
+    //     }
+    // }
+    // if (cls && cls->isa && (cls->isa == cls->isa->isa)) {
+    //     printf("delete Object\n");
+    //     printf("%x %x %x\n", cls, cls->isa, cls->isa->isa);
+    //     printf("%s\n", cls->isa->isa->name);
+    //     printf("delete Object\n");
+
+    // }
+
+    free(cls);
+}
+
+void* dark_malloc(size_t size)
+{
+    return calloc(1, size);
+}
+
+void* dark_calloc(size_t num, size_t size)
+{
+    return calloc(num, size);
 }
 
 /**
  *  start the garbage collector
  */
-void __attribute__((constructor)) dark_gc_ctor()
+void __attribute__((constructor(101))) dark_gc_ctor()
 {
-    int argc;
-    tgc_start(&gc, &argc);    
-    // GC_INIT();
+    // int argc;
+    // tgc_start(&gc, &argc);    
 }
 
 void __attribute__((destructor)) dark_gc_dtor()
 {
-    tgc_stop(&gc);    
+    // tgc_stop(&gc);    
 }
 

@@ -30,6 +30,17 @@ SOFTWARE.
 
 static Exception(AbstractMethod);
 
+/**
+ * Initialize a new Comparable
+ */
+Comparable Comparable_Ctor(Comparable const this)
+{
+    Object_Ctor(this);
+    this->isa = isa(Comparable);
+    return this;
+}
+
+
 int overload CompareTo(Comparable this, Comparable other) {
     return this->isa->CompareTo(this, other);
 }
@@ -62,17 +73,8 @@ register (Comparable)
             .ReferenceEquals = ObjectClass.ReferenceEquals,
             .InstanceEquals  = ObjectClass.InstanceEquals,
         };
+        AddMetadata(Comparable);
     }
     return &ComparableClass;
-}
-
-/**
- * Initialize a new Comparable
- */
-Comparable Comparable_Ctor(Comparable const this)
-{
-    Object_Ctor(this);
-    this->isa = isa(Comparable);
-    return this;
 }
 

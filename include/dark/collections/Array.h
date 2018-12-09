@@ -90,7 +90,7 @@ void overload Remove(Array const, int index);
 void Resize(Array const, int capacity);
 void Set(Array const, int index, Any item);
 Any Get(Array const, int index);
-
+Array Array_Ctor(Array const this, int capacity);
 Array Array_Variadic(int count, ...);
 
 /**

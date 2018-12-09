@@ -28,6 +28,17 @@ SOFTWARE.
 bool overload Equals(Object const, Object const that);
 static bool Virtual_Equals(Object const, Object const that);
 
+Object Object_New() {
+    return Object_Ctor(new(Object));
+}
+/**
+ */
+Object Object_Ctor(Object const this)
+{
+    this->isa = isa(Object);
+    return this;
+}
+
 /**
  * Destructor
  */
@@ -135,20 +146,9 @@ register (Object)
             .ReferenceEquals = ReferenceEquals,
             .InstanceEquals = InstanceEquals,
         };
+        AddMetadata(Object);
     }
     return &ObjectClass;
-}
-
-/**
- */
-Object Object_Ctor(Object const this)
-{
-    this->isa = isa(Object);
-    return this;
-}
-
-Object Object_New()
-{
-    return Object_Ctor(new(Object));
+    // return metaclass(Object);
 }
 

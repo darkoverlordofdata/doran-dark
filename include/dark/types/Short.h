@@ -80,5 +80,6 @@ double Short_DoubleValue(Short const);
 char Short_CharValue(Short const);
 short Short_ShortValue(Short const);
 Short Short_New(short value);
+Short Short_Ctor(Short const this, short value);
 
 #endif _SHORT_H_

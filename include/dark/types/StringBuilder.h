@@ -112,5 +112,6 @@ __attribute__((__format__ (__printf__, 2, 3)))
 int StringBuilder_Appendf(StringBuilder sb, const char *format, ...);
 String StringBuilder_Concat(StringBuilder sb);
 void StringBuilder_Reset(StringBuilder sb);
+StringBuilder StringBuilder_Ctor(StringBuilder const this);
 
 #endif _STRING_BUILDER_H_

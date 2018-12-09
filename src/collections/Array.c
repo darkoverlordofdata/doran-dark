@@ -23,11 +23,60 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include <stdarg.h>
 #include <dark/collections/Array.h>
 /**
- * Generic Array implementation
+ * Default Constructor
  */
+Array overload Array_New(void) {
+    return Array_Ctor(new(Array), 4);
+}
+/**
+ * new Array
+ * 
+ * allocates room for capacity, sets used to 0
+ * 
+ * @param capacity initial max size of vector
+ * 
+ */
+Array overload Array_New(int capacity) {
+    return Array_Ctor(new(Array), capacity);
+}
+
+/**
+ * new Array
+ * 
+ * allocate a vector the size of the param list
+ * and then fill values from params.
+ * 
+ * @param count number of initial values
+ * @param ... list of initial values
+ * 
+ */
+Array overload Array_New(int count, ...) {
+    Array v = Array_Ctor(new(Array), count);
+    va_list args;
+    va_start(args, count);
+    for (int i=0; i<count; i++)
+        v->data[i] = va_arg(args, Any);
+    va_end(args);
+    v->length = count;
+    return v;
+}
+
+
+/**
+ * Initialize a new Array
+ */
+Array Array_Ctor(Array const this, int capacity)
+{
+    Collection_Ctor(this);
+    this->isa = isa(Array);
+    this->capacity = capacity == 0 ? ARRAY_INIT_CAPACITY : capacity;
+    this->length = 0;
+    this->data = dark_calloc(this->capacity, sizeof(Any));
+    return this;
+}
+
 
 int overload Length(Array const this)
 {
@@ -159,60 +208,9 @@ register (Array)
             .Get            = Get,
             .Clear          = Clear,
         };
+        AddMetadata(Array);
     }
     return &ArrayClass;
 }
 
-/**
- * Initialize a new Array
- */
-Array Array_Ctor(Array const this, int capacity)
-{
-    Collection_Ctor(this);
-    this->isa = isa(Array);
-    this->capacity = capacity == 0 ? ARRAY_INIT_CAPACITY : capacity;
-    this->length = 0;
-    this->data = dark_malloc (this->capacity * sizeof(Any));
-    return this;
-}
-
-/**
- * new Array
- * 
- * allocates room for capacity, sets used to 0
- * 
- * @param capacity initial max size of vector
- * 
- */
-Array overload Array_New(int capacity)
-{
-    return Array_Ctor(new(Array), capacity);
-}
-
-Array overload Array_New(void)
-{
-    return Array_Ctor(new(Array), 4);
-}
-
-/**
- * new Array
- * 
- * allocate a vector the size of the param list
- * and then fill values from params.
- * 
- * @param count number of initial values
- * @param ... list of initial values
- * 
- */
-Array Array_Variadic(int count, ...)
-{
-    Array v = Array_Ctor(new(Array), count);
-    va_list args;
-    va_start(args, count);
-    for (int i=0; i<count; i++)
-        v->data[i] = va_arg(args, Any);
-    va_end(args);
-    v->length = count;
-    return v;
-}
 

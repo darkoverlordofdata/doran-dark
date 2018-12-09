@@ -13,6 +13,10 @@
 /**
  * Constructor
  */
+GameLevel GameLevel_New(const GLchar *file, int levelWidth, int levelHeight) {
+    return GameLevel_Ctor(new(GameLevel), file, levelWidth, levelHeight);
+}
+
 GameLevel GameLevel_Ctor(GameLevel const this, const GLchar *file, int levelWidth, int levelHeight)
 {
 	Object_Ctor(this);
@@ -43,6 +47,7 @@ register (GameLevel)
             .Draw           = Draw,
             .IsCompleted    = IsCompleted,
         };
+        AddMetadata(GameLevel);
     }
     return &GameLevelClass;
 }
@@ -140,11 +145,11 @@ static void init(GameLevel const this, Array tileData, GLuint levelWidth, GLuint
     GLuint width = Length(row); // Note we can index vector at [0] since this function is only called if height > 0
     GLfloat unit_width = levelWidth / (GLfloat)width, unit_height = levelHeight / height; 
     // Initialize level tiles based on tileData		
+    printf("(%d,%d)\n", height, width);
     for (GLuint y = 0; y < height; ++y)
     {
         for (GLuint x = 0; x < width; ++x)
         {
-
             // Check block type from level data (2D level array)
             Array row = tileData->data[y];
             int blockType = (int)(row->data[x]);
@@ -185,10 +190,5 @@ static void init(GameLevel const this, Array tileData, GLuint levelWidth, GLuint
 const char* overload ToString(GameLevel const this)
 {
     return "GameLevel";
-}
-
-GameLevel GameLevel_New(const GLchar *file, int levelWidth, int levelHeight)
-{
-    return GameLevel_Ctor(new(GameLevel), file, levelWidth, levelHeight);
 }
 

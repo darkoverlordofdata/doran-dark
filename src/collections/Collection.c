@@ -31,6 +31,16 @@ SOFTWARE.
 static Exception(AbstractMethod);
 
 /**
+ * Initialize a new Array
+ */
+Collection Collection_Ctor(Collection const this)
+{
+    Object_Ctor(this);
+    this->isa = isa(Collection);
+    return this;
+}
+
+/**
  * Number of items in collection
  */
 int overload Length(Collection const this)
@@ -69,17 +79,8 @@ register (Collection)
             .Length         = Abstract_Length,
             .Add            = Abstract_Add,
         };
+        AddMetadata(Collection);
     }
     return &CollectionClass;
-}
-
-/**
- * Initialize a new Array
- */
-Collection Collection_Ctor(Collection const this)
-{
-    Object_Ctor(this);
-    this->isa = isa(Collection);
-    return this;
 }
 

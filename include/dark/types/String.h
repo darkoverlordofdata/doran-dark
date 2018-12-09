@@ -100,6 +100,7 @@ bool String_IsEmpty(String const this);
 char String_CharAt(String const this, int index);
 char* String_ToString(String const this);
 String String_New(char* value);
+String String_Ctor(String const this, char* value);
 
 __attribute__((__format__ (__printf__, 1, 2)))
 String String_Format(char* format, ...);

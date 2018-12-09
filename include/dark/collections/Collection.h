@@ -69,6 +69,7 @@ typedef struct CollectionClass_t
  */
 int overload Length(Collection const);
 void overload Add(Collection const, Any item);
+Collection Collection_Ctor(Collection const this);
 
 /**
  * AddAll

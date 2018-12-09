@@ -26,7 +26,7 @@ SOFTWARE.
 #ifndef _CORE_H
 #define _CORE_H
 
-#include <tgc.h>
+// #include <tgc.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -132,10 +132,5 @@ long name##Exception(const char* msg, ...) \
     va_end(args); \
     return 0; \
 }
-
-/**
- * GC
- */
-void* dark_malloc(size_t nbytes);
 
 #endif _CORE_H

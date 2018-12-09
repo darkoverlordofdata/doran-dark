@@ -24,9 +24,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/Boolean.h>
-/* 
- * Boolean implementation
+/**
+ * Constructor
+ * create a new Boolean
+ * 
+ * @param value of bool
+ * 
  */
+Boolean Boolean_New(bool value) {
+    return Boolean_Ctor(new(Boolean), value);
+}
+
+/**
+ * Initialize a new Boolean
+ */
+Boolean Boolean_Ctor(Boolean const this, bool value)
+{
+    Comparable_Ctor(this);
+    this->isa = isa(Boolean);
+    this->value = value;
+    return this;
+}
 
 bool ParseBool(char* s)
 {
@@ -112,31 +130,8 @@ register (Boolean)
             .True           = &True,
             .False          = &False,
         };
+        AddMetadata(Boolean);
     }
     return &BooleanClass;
-}
-
-/**
- * Initialize a new Boolean
- */
-Boolean Boolean_Ctor(Boolean const this, bool value)
-{
-    Comparable_Ctor(this);
-    this->isa = isa(Boolean);
-    this->value = value;
-    return this;
-}
-
-/**
- * new Boolean
- * 
- * create a new Boolean
- * 
- * @param value of bool
- * 
- */
-Boolean Boolean_New(bool value)
-{
-    return Boolean_Ctor(new(Boolean), value);
 }
 

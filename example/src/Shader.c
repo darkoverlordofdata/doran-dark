@@ -19,6 +19,10 @@ const char* HEADER = "#\n"
 /**
  * Constructor
  */
+Shader Shader_New() {
+    return Shader_Ctor(new(Shader));
+}
+
 Shader Shader_Ctor(Shader const this)
 {
 	Object_Ctor(this);
@@ -57,6 +61,7 @@ register (Shader)
             .SetArray4      = SetArray4,
             .SetMatrix4     = SetMatrix4,
         };
+        AddMetadata(Shader);
     }
     return &ShaderClass;
 }
@@ -201,7 +206,3 @@ const char* overload ToString(Shader const this)
     return "Shader";
 }
 
-Shader Shader_New()
-{
-    return Shader_Ctor(new(Shader));
-}

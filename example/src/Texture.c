@@ -15,6 +15,10 @@
  * @param ImageFormat for binding the image
  * 
  */
+Texture2D Texture2D_New(int InternalFormat, int ImageFormat, char* path) {
+    return Texture2D_Ctor(new(Texture2D), InternalFormat, ImageFormat, path);
+}
+
 Texture2D Texture2D_Ctor(Texture2D const this, int InternalFormat, int ImageFormat, char* path)
 {
 	Object_Ctor(this);
@@ -54,6 +58,7 @@ register (Texture2D)
             .Generate       = Generate,
             .Bind           = Bind,
         };
+        AddMetadata(Texture2D);
     }
 }
 
@@ -94,8 +99,4 @@ const char* overload ToString(Texture2D const this)
     return "Texture2D";
 }
 
-Texture2D Texture2D_New(int InternalFormat, int ImageFormat, char* path)
-{
-    return Texture2D_Ctor(new(Texture2D), InternalFormat, ImageFormat, path);
-}
 

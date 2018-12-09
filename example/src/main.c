@@ -6,11 +6,9 @@
 ** Creative Commons, either version 4 of the License, or (at your
 ** option) any later version.
 ******************************************************************/
-// #define GLEW_STATIC
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <dark/darkfx.h>
-
 #include <Game.h>
 #include <ResourceManager.h>
 
@@ -28,7 +26,6 @@ Game Breakout;
 
 int main(int argc, char *argv[])
 {
-
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -60,6 +57,10 @@ int main(int argc, char *argv[])
 
     // Start Game within Menu State
     Breakout->State = GAME_ACTIVE;
+
+    // for (int i=0; Metadata.classes[i] != nullptr; i++) {
+    //     printf("loaded class %x %s\n", Metadata.classes[i], Metadata.classes[i]->name);
+    // }
 
     while (!glfwWindowShouldClose(window))
     {

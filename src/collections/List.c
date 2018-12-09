@@ -24,9 +24,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/collections/List.h>
-/* 
- * Generic Linked List implementation
+/**
+ * Constructor
  */
+List List_New() {
+    return List_Ctor(new(List));
+}
+
+List List_Ctor(List const this)
+{
+    Collection_Ctor(this);
+    this->isa = isa(List);
+    this->head = nullptr;
+
+    return this;
+}
+
 
 /**
  * Create new ListNode
@@ -177,25 +190,9 @@ register (List)
             .Add            = Add,
             .Remove         = Remove,
         };
+        AddMetadata(List);
     }
     return &ListClass;
 }
 
-
-/**
- * Constructor
- */
-List List_Ctor(List const this)
-{
-    Collection_Ctor(this);
-    this->isa = isa(List);
-    this->head = nullptr;
-
-    return this;
-}
-
-List List_New()
-{
-    return List_Ctor(new(List));
-}
 

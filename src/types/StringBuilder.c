@@ -54,10 +54,25 @@ SOFTWARE.
 ******************************************************************/
 #include <dark/types/StringBuilder.h>
 /* 
- * StringBuilder implementation
+ * Throws OutOfMemoryException:
  */
-
 static Exception(OutOfMemory);
+
+/* 
+ * Constructor
+ * create a new StringBuilder
+ * 
+ */
+StringBuilder StringBuilder_New() {
+    return StringBuilder_Ctor(new(StringBuilder));
+}
+
+StringBuilder StringBuilder_Ctor(StringBuilder const this)
+{
+    Object_Ctor(this);
+    this->isa = isa(StringBuilder);
+	return this;
+}
 
 
 /*
@@ -86,7 +101,7 @@ int StringBuilder_Append(StringBuilder this, const char *str)
 		return this->length;
 
 	length = strlen(str);
-	frag = (StringFragment) dark_malloc (sizeof(StringFragment_t));
+	frag = (StringFragment) dark_calloc(1, sizeof(StringFragment_t));
 	if (nullptr == frag)
 		return OutOfMemoryException("StringBuilder::Append");
 
@@ -139,7 +154,7 @@ String StringBuilder_Concat(StringBuilder this)
 	char *c = nullptr;
 	StringFragment frag = nullptr;
 
-	buf = dark_malloc ((this->length + 1) * sizeof(char));
+	buf = dark_calloc((this->length + 1), sizeof(char));
 	if (nullptr == buf)
 		return nullptr;
 
@@ -205,19 +220,8 @@ register (StringBuilder)
 			.Empty     		= StringBuilder_Empty,
 			.Reset     		= StringBuilder_Reset,
 		};
+        AddMetadata(StringBuilder);
 	}
 	return &StringBuilderClass;
-}
-
-StringBuilder StringBuilder_Ctor(StringBuilder const this)
-{
-    Object_Ctor(this);
-    this->isa = isa(StringBuilder);
-	return this;
-}
-
-StringBuilder StringBuilder_New()
-{
-    return StringBuilder_Ctor(new(StringBuilder));
 }
 

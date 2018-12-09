@@ -99,5 +99,6 @@ void overload Dispose(Game);
 void overload DoCollisions(Game);
 const char* overload ToString(Game const);
 Game Game_New(int Width, int Height);
+Game Game_Ctor(Game const this, int Width, int Height);
 
 #endif GAME_H

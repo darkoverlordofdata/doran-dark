@@ -25,8 +25,29 @@ SOFTWARE.
 ******************************************************************/
 #include <dark/types/Integer.h>
 /* 
- * Integer implementation
+ * Throws: NumberFormatException
  */
+static Exception(NumberFormat);
+
+/* 
+ * Constructor
+ * create a new Integer
+ * 
+ * @param value of int
+ * 
+ */
+Integer Integer_New(int value) {
+    return Integer_Ctor(new(Integer), value);
+}
+
+Integer Integer_Ctor(Integer const this, int value)
+{
+    Number_Ctor(this);
+    this->isa = isa(Integer);
+    this->value = value;
+    return this;
+}
+
 
 /**
  * Returns a primitive integer value parsed from input string. 
@@ -135,31 +156,8 @@ register (Integer)
             .CharValue      = Integer_CharValue, 
             .ShortValue     = Integer_ShortValue, 
         };
+        AddMetadata(Integer);
     }
     return &IntegerClass;
-}
-
-/**
- * Initialize a new Integer
- */
-Integer Integer_Ctor(Integer const this, int value)
-{
-    Number_Ctor(this);
-    this->isa = isa(Integer);
-    this->value = value;
-    return this;
-}
-
-/**
- * new Integer
- * 
- * create a new Integer
- * 
- * @param value of int
- * 
- */
-Integer Integer_New(int value)
-{
-    return Integer_Ctor(new(Integer), value);
 }
 

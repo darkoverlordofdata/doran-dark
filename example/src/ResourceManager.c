@@ -45,6 +45,7 @@ register (ResourceManager)
             .loadShaderFromFile = loadShaderFromFile,
             .loadTextureFromFile= loadTextureFromFile,
         };
+        AddMetadata(ResourceManager);
     }
     return &ResourceManagerClass;
 }
@@ -203,7 +204,7 @@ static char* rdbuf(FILE* f)
     fseek(f, 0L, SEEK_END);
     long s = ftell(f);
     rewind(f);
-    char* buf = dark_malloc(s+1);
+    char* buf = dark_calloc(1, s+1);
     buf[s] = '\0';
 
     if (buf != nullptr)

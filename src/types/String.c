@@ -25,10 +25,29 @@ SOFTWARE.
 ******************************************************************/
 #include <dark/types/String.h>
 /* 
- * String implementation
+ * Throws IndexOutOfBoundsException:
  */
-
 static Exception(IndexOutOfBounds);
+
+/**
+ * Constructor
+ * create a new long
+ * 
+ * @param value of long
+ * 
+ */
+String String_New(char* value) {
+    return String_Ctor(new(String), value);
+}
+
+String String_Ctor(String const this, char* value)
+{
+    Comparable_Ctor(this);
+    this->isa = isa(String);
+    this->value = strdup(value);
+    this->length = strlen(value);
+    return this;
+}
 
 void String_GetChars(String this, char* dst, int dstBegin) {
     memcpy(dst+dstBegin, this->value, this->length);
@@ -65,7 +84,7 @@ String String_Concatc(String this, char* other) {
     int length = strlen(other);
     if (length == 0) return this;
     int len = this->length;
-    char* str = dark_malloc ((len+length+1) * sizeof(char));
+    char* str = dark_calloc((len+length+1), sizeof(char));
     strncpy(str, this->value, len);
     strncpy(str+len, other, length);
     String result = String_New(str);
@@ -78,7 +97,7 @@ String String_Concat(String this, String other) {
         return this;
 
     int len = this->length;
-    char* str = dark_malloc ((len+other->length+1) * sizeof(char));
+    char* str = dark_calloc((len+other->length+1), sizeof(char));
     strncpy(str, this->value, len);
     strncpy(str+len, other->value, other->length);
     String result = String_New(str);
@@ -202,34 +221,9 @@ register (String)
             .ToUpperCase    = String_ToUpperCase,
             .Trim           = String_Trim,
         };
+        AddMetadata(String);
     }
     return &StringClass;
-}
-
-/**
- * Initialize a new String
- */
-String String_Ctor(String const this, char* value)
-{
-    Comparable_Ctor(this);
-    this->isa = isa(String);
-    this->value = strdup(value);
-    this->length = strlen(value);
-    return this;
-}
-
-
-/**
- * new String
- * 
- * create a new long
- * 
- * @param value of long
- * 
- */
-String String_New(char* value)
-{
-    return String_Ctor(new(String), value);
 }
 
 __attribute__((__format__ (__printf__, 1, 2)))
@@ -243,7 +237,7 @@ String String_Format(char* format, ...) {
     int len = vsnprintf(nullptr, 0, format, args1);
     va_end(args1);
     if (len == 0) return String_New("");
-    char* str = dark_malloc ((len+1) * sizeof(char));
+    char* str = dark_calloc((len+1), sizeof(char));
     len = vsnprintf(str, len+1, format, args2);
     va_end(args2);
     return String_New(str);

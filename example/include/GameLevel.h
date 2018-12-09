@@ -71,4 +71,6 @@ void overload Draw(GameLevel const, SpriteRenderer renderer);
 bool overload IsCompleted(GameLevel);
 const char* overload ToString(GameLevel);
 GameLevel GameLevel_New(const GLchar *file, int levelWidth, int levelHeight);
+GameLevel GameLevel_Ctor(GameLevel const this, const GLchar *file, int levelWidth, int levelHeight);
+
 #endif GAMELEVEL_H

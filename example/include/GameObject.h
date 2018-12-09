@@ -67,5 +67,6 @@ typedef struct GameObjectClass_t
 void overload Draw(GameObject, SpriteRenderer renderer);
 const char* overload ToString(GameObject);
 GameObject GameObject_New(char* name, Vec2 Position, Vec2 Size, Texture2D Sprite, Vec3 Color);
+GameObject GameObject_Ctor(GameObject const this, char* name, Vec2 Position, Vec2 Size, Texture2D Sprite, Vec3 Color);
 
 #endif GAMEOBJECT_H

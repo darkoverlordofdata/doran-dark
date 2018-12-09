@@ -74,5 +74,6 @@ Shader overload SetMatrix(Shader, const GLchar *name,  GLfloat * matrix);
 Shader overload SetMatrix4(Shader, const GLchar *name,  GLfloat* matrix);
 const char* overload ToString(Shader const);
 Shader Shader_New();
+Shader Shader_Ctor(Shader const this);
 
 #endif SHADER_H

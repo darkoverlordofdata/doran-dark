@@ -80,5 +80,6 @@ int overload Compare(bool x, bool y);
 char* overload ToString(Boolean const this);
 int overload CompareTo(Boolean const, Boolean other);
 Boolean Boolean_New(bool value);
+Boolean Boolean_Ctor(Boolean const this, bool value);
 
 #endif _BOOLEAN_H_

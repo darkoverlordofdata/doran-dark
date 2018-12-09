@@ -151,5 +151,6 @@ void overload Dispose(Hashmap const);
 int overload Length(Hashmap const);
 const char* overload ToString(Hashmap const);
 Hashmap Hashmap_New();
+Hashmap Hashmap_Ctor(Hashmap const this);
 
 #endif _HASHMAP_H_
