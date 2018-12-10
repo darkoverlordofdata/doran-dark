@@ -18,47 +18,37 @@ copies or substantial portions of the Software.
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+AUTHORS OR COPYRIGHT HOLDERS BE LI  ABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#ifndef _CLASS_H_
-#define _CLASS_H_
-#include "core.h"
+#include <dark/Class.h>
+#include <dark/darkfx.h>
 
-struct Class {
-	struct Class * isa;
-	struct Class * superclass;
-	char* name;
-};
-
-typedef struct Class* TClass;
-
-struct Metadata {
-    int count;
-    struct Class * classes[100];
-};
-
-struct Metadata Metadata;
 
 /**
- * based on this Objective-C core pattern:
+ * Boot the app framework
  * 
- 
-typedef struct objc_class *Class;
+ * This initializes the application classes so
+ * that static methods and variables are available
+ */
+void __attribute__((constructor)) App_Boot() 
+{
+    IsaBallObject();
+    IsaGame();
+    IsaGameLevel();
+    IsaGameObject();
+    IsaParticleGenerator();
+    IsaResourceManager();
+    IsaShader();
+    IsaSpriteRenderer();
+    IsaTexture2D();
 
-struct objc_class {
-    Class isa;
-    Class super_class;
-    // followed by runtime specific details...
-};
 
-typedef struct objc_object {
-    Class isa;
-    // ... 
-} *id;
+    for (int i=0; Metadata.classes[i] != nullptr; i++) {
+    // for (int i=0; i < Metadata.count; i++) {
+        printf("%s\n", Metadata.classes[i]->isa->name);
+    }
 
-*/
-
-#endif _CLASS_H_ 
+}

@@ -29,6 +29,9 @@ static const Vec3 COLOR3 = { 0.8f, 0.8f, 0.4f };
 static const Vec3 COLOR4 = { 1.0f, 0.5f, 0.0f };
 static const Vec3 COLOR5 = { 1.0f, 1.0f, 1.0f };
 
+#define IsGameLevel(x) (x->isa == &GameLevel)
+#define AsGameLevel(x) (IsGameLevel(x) ? (struct GameLevel *)x : nullptr)
+
 
 /// GameLevel holds all Tiles as part of a Breakout level and 
 /// hosts functionality to Load/render levels from the harddisk.
@@ -53,6 +56,7 @@ struct GameLevelClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            TGameLevel  (*Create) (const GLchar *file, int levelWidth, int levelHeight);
         };
     };
     // Loads level from file
@@ -74,3 +78,4 @@ TGameLevel GameLevel_New(const GLchar *file, int levelWidth, int levelHeight);
 TGameLevel GameLevel_Ctor(TGameLevel const this, const GLchar *file, int levelWidth, int levelHeight);
 
 #endif GAMELEVEL_H
+

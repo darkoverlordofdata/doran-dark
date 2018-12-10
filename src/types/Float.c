@@ -161,8 +161,9 @@ register (Float)
             .DoubleValue    = Float_DoubleValue, 
             .CharValue      = Float_CharValue, 
             .ShortValue     = Float_ShortValue, 
+            .Create         = Float_New,
         };
-        // AddMetadata(Float);
+        AddMetadata(Float);
     }
     return &Float;
 }

@@ -166,8 +166,9 @@ register (Double)
             .DoubleValue    = Double_DoubleValue, 
             .CharValue      = Double_CharValue, 
             .ShortValue     = Double_ShortValue, 
+            .Create         = Double_New,
         };
-        // AddMetadata(Double);
+        AddMetadata(Double);
     }
     return &Double;
 }

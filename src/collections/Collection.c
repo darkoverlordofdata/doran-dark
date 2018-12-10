@@ -79,7 +79,7 @@ register (Collection)
             .Length         = Abstract_Length,
             .Add            = Abstract_Add,
         };
-        // AddMetadata(Collection);
+        AddMetadata(Collection);
     }
     return &Collection;
 }

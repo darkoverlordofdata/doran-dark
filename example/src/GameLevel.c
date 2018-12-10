@@ -21,7 +21,7 @@ TGameLevel GameLevel_Ctor(TGameLevel const this, const GLchar *file, int levelWi
 {
 	Object_Ctor(this);
     this->isa = isa(GameLevel);
-    this->Bricks = Array_New(200);
+    this->Bricks = Array.Create(200);
     Load(this, file, levelWidth, levelHeight);
     return this;
 }
@@ -33,9 +33,9 @@ register (GameLevel)
 {
     if (GameLevel.isa == nullptr) {
         GameLevel = (struct GameLevelClass) {
-            .isa        = &GameLevel,
-            .superclass = &Object,
-            .name       = "GameLevel",
+            .isa            = &GameLevel,
+            .superclass     = &Object,
+            .name           = "GameLevel",
             /** VTable */
             .ToString       = ToString,
             .Equals         = Object.Equals,
@@ -46,8 +46,9 @@ register (GameLevel)
             .Load           = Load,
             .Draw           = Draw,
             .IsCompleted    = IsCompleted,
+            .Create         = GameLevel_New,
         };
-        // AddMetadata(GameLevel);
+        AddMetadata(GameLevel);
     }
     return &GameLevel;
 }
@@ -72,8 +73,8 @@ TGameLevel overload Load(TGameLevel const this, const GLchar *file, int levelWid
     char* path = join("assets/", file);
     char* line;
     FILE* fstream = fopen(path, "r");
-    TArray tileData = Array_New(20);
-    TArray row = Array_New(20);
+    TArray tileData = Array.Create(20);
+    TArray row = Array.Create(20);
     int i;
     char c;
     if (fstream)
@@ -84,7 +85,7 @@ TGameLevel overload Load(TGameLevel const this, const GLchar *file, int levelWid
             if (c == '\n')
             {
                 Add(tileData, (Any)row);
-                row = Array_New(20);
+                row = Array.Create(20);
             }
         }
 
@@ -169,15 +170,15 @@ static void init(TGameLevel const this, TArray tileData, GLuint levelWidth, GLui
             
             if (blockType == 1) // Solid
             {
-                TTexture2D tex = GetTexture(Resource, "block_solid");
-                TGameObject obj = GameObject_New("tile", pos, size, tex, color);
+                TTexture2D tex = ResourceManager.GetTexture("block_solid");
+                TGameObject obj = GameObject.Create("tile", pos, size, tex, color);
                 obj->IsSolid = true;
                 Add(this->Bricks, obj);
             }
             else if (blockType > 1)	// Non-solid; now determine its color based on level data
             {
-                TTexture2D tex = GetTexture(Resource, "block");
-                TGameObject obj = GameObject_New("tile", pos, size, tex, color);
+                TTexture2D tex = ResourceManager.GetTexture("block");
+                TGameObject obj = GameObject.Create("tile", pos, size, tex, color);
                 Add(this->Bricks, obj);
             }
         }

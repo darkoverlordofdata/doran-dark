@@ -296,7 +296,7 @@ Any overload Get(THashmap const this, char* key)
  * additional Any argument is passed to the function as its first
  * argument and the hashmap element is the second.
  */
-int overload Iterate(THashmap const this, Hashmap_Iterator f, Any item) 
+int overload ForEach(THashmap const this, Hashmap_Iterator f, Any item) 
 {
 	/* On empty hashmap, return immediately */
 	if (Length(this) <= 0)
@@ -383,7 +383,7 @@ register (Hashmap)
             .ReferenceEquals= Object.ReferenceEquals,
             .InstanceEquals = Object.InstanceEquals,
             .ToString       = ToString,
-            .Iterate        = Iterate,
+            .ForEach        = ForEach,
             .Put            = Put,
             .Get            = Get,
             .Remove         = Remove,
@@ -392,8 +392,9 @@ register (Hashmap)
             .HashInt        = HashInt,
             .Hash           = Hash,
             .Rehash         = Rehash,
+            .Create         = Hashmap_New,
         };
-        // AddMetadata(Hashmap);
+        AddMetadata(Hashmap);
     }
     return &Hashmap;
 }

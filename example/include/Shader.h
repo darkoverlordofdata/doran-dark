@@ -13,6 +13,9 @@
 #include <glm/glm.h>
 #include <dark/darkfx.h>
 
+#define IsShader(x) (x->isa == &Shader)
+#define AsShader(x) (IsShader(x) ? (struct Shader *)x : nullptr)
+
 // General purpsoe shader object. Compiles from file, generates
 // compile/link-time error messages and hosts several utility 
 // functions for easy management.
@@ -37,6 +40,7 @@ struct ShaderClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            TShader (*Create) (void);
         };
     };
 

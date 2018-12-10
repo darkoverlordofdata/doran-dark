@@ -57,8 +57,9 @@ register (Texture2D)
             .InstanceEquals = Object.InstanceEquals,
             .Generate       = Generate,
             .Bind           = Bind,
+            .Create         = Texture2D_New,
         };
-        // AddMetadata(Texture2D);
+        AddMetadata(Texture2D);
     }
     return &Texture2D;
 }

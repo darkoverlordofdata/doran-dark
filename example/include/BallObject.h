@@ -15,6 +15,10 @@
 
 #include "GameObject.h"
 
+#define IsBallObject(x) (x->isa == &BallObject)
+#define AsBallObject(x) (IsBallObject(x) ? (struct BallObject *)x : nullptr)
+
+
 // BallObject holds the state of the Ball object inheriting
 // relevant state data from GameObject. Contains some extra
 // functionality specific to Breakout's ball object that
@@ -56,6 +60,7 @@ struct BallObjectClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            TBallObject  (*Create) (Vec2 Position, float Radius, Vec2 Velocity, TTexture2D Sprite);
             void    (*Draw) (TBallObject const, TSpriteRenderer renderer);
         };
     };
@@ -74,3 +79,4 @@ char* overload ToString(TBallObject const this);
 TBallObject BallObject_New(Vec2 Position, float Radius, Vec2 Velocity, TTexture2D Sprite);
 TBallObject BallObject_Ctor(TBallObject this, Vec2 Position, float Radius, Vec2 Velocity, TTexture2D Sprite);
 #endif BALLOBJECT_H
+

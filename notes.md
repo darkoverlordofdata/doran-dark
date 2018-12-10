@@ -1,50 +1,25 @@
-## gc
+## C Overloaded
 
-Uses [tgc](https://github.com/orangeduck/tgc)
+combine clang overload attribute and polymorphic patterns into a 'generic c'.
 
-Why not [Boehme](https://github.com/ivmai/bdwgc)? 
-I can't get a good build.
-many of the build instructions don't match the content
-the main makefile for windows, MAKEFILE_NT has syntax errors
-I finally fot a cmake build to work, but it gives me 
-a wierd ntdll runtime error when I link to it.
+runtime influences: objective-c, glib, t-pascal, quantumleaps (http://www.state-machine.com/doc/an#Patterns)
 
-### alternate syntax
+framework influnces: java, csharp
 
+both early and late binding may be invoked:
 
-```c
-struct Class {
-	struct Class * isa;
-	struct Class * super;
-	char* name;
-};
+### early bindng (overload name mangling):
+    In this case, there are 2 different 'Add' functions
 
-struct ObjectClass;
-struct Object {
-	struct ObjectClass* isa;
-};
-typedef struct Object* TObject;
+    TArray a = Array_New();
+    TList b = List_New();
+    Add(a, "frodo"); // adds "Frodo" to array a
+    Add(b, "frodo"); // appends "Frodo" to list b
 
 
-struct ObjectClass {
-	struct Class * isa;
-	const char* ToString(struct Object*);
-	const char* ToString(TObject);
-};
+### late binding (vtable polymorphism):
+    int hsi case, there is 1 function that dispatches by base type.
 
-ObjectClass Object;
-
-struct BooleanClass;
-struct Boolean {
-	struct BooleanClass* isa;
-	bool value;
-}
-
-struct BooleanClass {
-	struct Class * isa;
-	const char* ToString(struct Object*);
-};
-
-BooleanClass Boolean;
-
-```
+    TLong a = Long_New(20);
+    TInteger b  = Integer_ New(20);
+    float x = FloatValue(a) + FloatValue(b);

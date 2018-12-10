@@ -64,6 +64,10 @@ class (StringFragment)
 	char* str;
 };
 
+#define IsStringBuilder(x) (x->isa == &StringBuilder)
+#define AsStringBuilder(x) (IsStringBuilder(x) ? (struct StringBuilder *)x : nullptr)
+
+
 /**
  * Object class
  */
@@ -93,6 +97,7 @@ struct StringBuilderClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            TStringBuilder(*Create) ();
             int     (*Empty) (TStringBuilder const);
             int     (*Append) (TStringBuilder const, char* str);
             int     (*Appendc) (TStringBuilder const, char c);

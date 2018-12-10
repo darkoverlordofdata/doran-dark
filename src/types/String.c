@@ -220,8 +220,9 @@ register (String)
             .ToLowerCase    = String_ToLowerCase,
             .ToUpperCase    = String_ToUpperCase,
             .Trim           = String_Trim,
+            .Create         = String_New,
         };
-        // AddMetadata(String);
+        AddMetadata(String);
     }
     return &String;
 }

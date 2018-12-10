@@ -16,6 +16,9 @@
 #include "Texture.h"
 #include "SpriteRenderer.h"
 
+#define IsGameObject(x) (x->isa == &GameObject)
+#define AsGameObject(x) (IsGameObject(x) ? (struct GameObject *)x : nullptr)
+
 /** Default values */
 static const Vec2 GAME_OBJECT_POSITION = { 0.0f, 0.0f };
 static const Vec2 GAME_OBJECT_SIZE     = { 1.0f, 1.0f };
@@ -55,6 +58,7 @@ struct GameObjectClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            TGameObject  (*Create) (char* name, Vec2 Position, Vec2 Size, TTexture2D Sprite, Vec3 Color);
         };
     };
     // Draw sprite
@@ -70,3 +74,4 @@ TGameObject GameObject_New(char* name, Vec2 Position, Vec2 Size, TTexture2D Spri
 TGameObject GameObject_Ctor(TGameObject const this, char* name, Vec2 Position, Vec2 Size, TTexture2D Sprite, Vec3 Color);
 
 #endif GAMEOBJECT_H
+

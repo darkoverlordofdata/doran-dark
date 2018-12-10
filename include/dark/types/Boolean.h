@@ -31,6 +31,9 @@ SOFTWARE.
 #define BOOLEAN_SIZE       (BOOLEAN_BYTES * CHAR_BIT)
 #define BOOLEAN_TYPE       (TYPE_BOOLEAN)
 
+#define IsBoolean(x) (x->isa == &Boolean)
+#define AsBoolean(x) (IsBoolean(x) ? (struct Boolean *)x : nullptr)
+
 /**
  * Object class
  */
@@ -58,6 +61,7 @@ struct BooleanClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            TBoolean (*Create) (bool value);
             int     (*CompareTo) (TBoolean const, TBoolean other);
         };
     };

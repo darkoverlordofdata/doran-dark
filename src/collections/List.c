@@ -100,10 +100,10 @@ int Insert(TList const this, Any data, int (*comp)(Any, Any))
 void overload Add(TList const this, Any data)
 {
     if (this->head == nullptr) {
-        // this->head = ListNode_New(data, nullptr);
+        this->head = ListNode_New(data, nullptr);
     }
     else { 
-    //    this->head = ListNode_New(data, this->head);
+       this->head = ListNode_New(data, this->head);
     }
     this->length++;
 }
@@ -129,10 +129,11 @@ Any overload Remove(TList const this)
  * @param iter function to call for each iteration
  * 
  */
-void Iterate(TList const this, void (*iter)(Any))
+void overload ForEach(TList const this, void (^iter)(Any))
 {
-    for (TListNode curr = this->head; curr != nullptr; curr = curr->next)
+    for (TListNode curr = this->head; curr != nullptr; curr = curr->next) {
         iter(curr->data);
+    }
 }
 
 /**
@@ -185,12 +186,13 @@ register (List)
             .ToString       = ToString,
             .Dispose        = Dispose,
             .Length         = Length,
-            .Iterate        = Iterate,
+            .Iterate        = ForEach,
             .Insert         = Insert,
             .Add            = Add,
             .Remove         = Remove,
+            .Create         = List_New,
         };
-        // AddMetadata(List);
+        AddMetadata(List);
     }
     return &List;
 }

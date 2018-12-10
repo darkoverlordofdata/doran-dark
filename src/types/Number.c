@@ -157,7 +157,7 @@ register (Number)
             .CharValue      = Abstract_CharValue, 
             .ShortValue     = Abstract_ShortValue 
         };
-        // AddMetadata(Number);
+        AddMetadata(Number);
     }
     return &Number;
 }

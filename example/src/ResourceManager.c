@@ -15,8 +15,6 @@ TResourceManager ResourceManager_Ctor(TResourceManager this)
 {
     Object_Ctor(this); 
     this->isa = isa(ResourceManager);
-    this->Shaders = Hashmap_New();
-    this->Textures = Hashmap_New();
     return this;
 }
 
@@ -37,6 +35,7 @@ register (ResourceManager)
             .Dispose            = Object.Dispose,
             .ReferenceEquals    = Object.ReferenceEquals,
             .InstanceEquals     = Object.InstanceEquals,
+            .Create             = ResourceManager_New,
             .LoadShader         = LoadShader,
             .GetShader          = GetShader,
             .LoadTexture        = LoadTexture,
@@ -44,8 +43,11 @@ register (ResourceManager)
             .Dtor               = Dtor,
             .loadShaderFromFile = loadShaderFromFile,
             .loadTextureFromFile= loadTextureFromFile,
+            .Shaders            = Hashmap.Create(),
+            .Textures           = Hashmap.Create(),
+
         };
-        // AddMetadata(ResourceManager);
+        AddMetadata(ResourceManager);
     }
     return &ResourceManager;
 }
@@ -58,7 +60,7 @@ register (ResourceManager)
  * @returns loaded, compiled and linked shader program
  * 
  */
-static TShader loadShaderFromFile(TResourceManager this, const GLchar *vShaderFile, const GLchar *fShaderFile)
+static TShader loadShaderFromFile(const GLchar *vShaderFile, const GLchar *fShaderFile)
 {
     // 1. Retrieve the vertex/fragment source code from filePath
     // char* vertexCode;
@@ -81,7 +83,7 @@ static TShader loadShaderFromFile(TResourceManager this, const GLchar *vShaderFi
     fclose(fragmentShaderFile);
 
     // 2. Now create shader object from source code
-    TShader shader = Shader_New();
+    TShader shader = Shader.Create();
     Compile(shader, vShaderCode, fShaderCode);
     return shader;
 }
@@ -94,13 +96,13 @@ static TShader loadShaderFromFile(TResourceManager this, const GLchar *vShaderFi
  * @returns Texture
  * 
  */
-static TTexture2D loadTextureFromFile(TResourceManager this, const GLchar *file, bool alpha)
+static TTexture2D loadTextureFromFile(const GLchar *file, bool alpha)
 {
     // Create Texture object
     int format = alpha ? GL_RGBA : GL_RGB;
     char* path = join("assets/", file);
     int width, height, channels;
-    TTexture2D texture = Texture2D_New(format, format, path);
+    TTexture2D texture = Texture2D.Create(format, format, path);
     // Load image
     unsigned char* image = stbi_load(path, &width, &height, &channels, 0); //texture->ImageFormat == GL_RGBA ? 4 : 3);
     // Now generate texture
@@ -119,10 +121,10 @@ static TTexture2D loadTextureFromFile(TResourceManager this, const GLchar *file,
  * @param name to cache as
  * @returns loaded, compiled and linked shader program
  */
-TShader LoadShader(TResourceManager this, const GLchar *vShaderFile, const GLchar *fShaderFile, char* name)
+TShader LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, char* name)
 {
-    Put(this->Shaders, name, loadShaderFromFile(this, vShaderFile, fShaderFile));
-    return Get(this->Shaders, name);
+    Put(ResourceManager.Shaders, name, loadShaderFromFile(vShaderFile, fShaderFile));
+    return Get(ResourceManager.Shaders, name);
     // return s;
 }
 
@@ -133,9 +135,9 @@ TShader LoadShader(TResourceManager this, const GLchar *vShaderFile, const GLcha
  * @returns loaded, compiled and linked shader program
  * 
  */
-TShader GetShader(TResourceManager this, char* name)
+TShader GetShader(char* name)
 {
-    return Get(this->Shaders, name);
+    return Get(ResourceManager.Shaders, name);
 }
 
 /**
@@ -147,10 +149,10 @@ TShader GetShader(TResourceManager this, char* name)
  * @returns Texture
  * 
  */
-TTexture2D LoadTexture(TResourceManager this, const GLchar *file, bool alpha, char* name)
+TTexture2D LoadTexture(const GLchar *file, bool alpha, char* name)
 {
-    TTexture2D tex = loadTextureFromFile(this, file, alpha);
-    Put(this->Textures, name, tex);
+    TTexture2D tex = loadTextureFromFile(file, alpha);
+    Put(ResourceManager.Textures, name, tex);
     return tex;
 }
 
@@ -161,9 +163,9 @@ TTexture2D LoadTexture(TResourceManager this, const GLchar *file, bool alpha, ch
  * @returns Texture
  * 
  */
-TTexture2D GetTexture(TResourceManager this, char* name)
+TTexture2D GetTexture(char* name)
 {
-    TTexture2D tex = Get(this->Textures, name);
+    TTexture2D tex = Get(ResourceManager.Textures, name);
     return tex;
 }
 
@@ -182,9 +184,9 @@ Clear2(Any item, Any data)
 void Dtor(TResourceManager this)
 {
     // (Properly) delete all shaders	
-    Iterate(this->Shaders, Clear1, nullptr);
+    // Iterate(ResourceManager.Shaders, Clear1, nullptr);
     // (Properly) delete all textures
-    Iterate(this->Textures, Clear2, nullptr);
+    // Iterate(ResourceManager.Textures, Clear2, nullptr);
 }
 
 TResourceManager ResourceManager_New()

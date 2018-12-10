@@ -34,7 +34,11 @@
     "glfw3",
     "glew32",
     "freetype",
-    "opengl32"
+    "opengl32",
+    "m",
+    "BlocksRuntime",
+    "-fblocks",
+    "-LC:/msys64/mingw64/bin"
   ],
   "options": {
     "VERSION": "0.0.1",

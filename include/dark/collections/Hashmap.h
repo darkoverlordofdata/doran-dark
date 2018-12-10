@@ -43,12 +43,14 @@ SOFTWARE.
 #define MAP_OMEM -1 	/* Out of Memory */
 #define MAP_OK 0 	    /* OK */
 
+#define IsHashmap(x) (x->isa == &Hashmap)
+#define AsHashmap(x) (IsHashmap(x) ? (struct Hashmap *)x : nullptr)
 
 /*
  * Iterator is a pointer to a function that can take two Any arguments
  * and return an integer. Returns status code..
  */
-typedef int (*Hashmap_Iterator)(Any, Any);
+typedef int (^Hashmap_Iterator)(Any, Any);
 
 /* We need to keep keys and values */
 class (HashmapNode)
@@ -83,6 +85,7 @@ struct HashmapClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            THashmap(*Create) ();
             /*
              * Get the current size of a hashmap
              */
@@ -106,7 +109,7 @@ struct HashmapClass
     * than MAP_OK the traversal is terminated. f must
     * not reenter any hashmap functions, or deadlock may arise.
     */
-    int (*Iterate)  (THashmap const, Hashmap_Iterator func, Any item);
+    int (*ForEach)  (THashmap const, Hashmap_Iterator func, Any item);
 
     /*
     * Add an element to the hashmap. Return MAP_OK or MAP_OMEM.
@@ -145,7 +148,7 @@ int overload Hash(THashmap const, char* key);
 int overload Rehash(THashmap const);
 int overload Put(THashmap const, char* key, Any value);
 Any overload Get(THashmap const, char* key);
-int overload Iterate(THashmap const, Hashmap_Iterator f, Any item);
+int overload ForEach(THashmap const, Hashmap_Iterator f, Any item);
 int overload Remove(THashmap const, char* key);
 void overload Dispose(THashmap const);
 int overload Length(THashmap const);

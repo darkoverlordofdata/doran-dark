@@ -73,7 +73,7 @@ register (Comparable)
             .ReferenceEquals = Object.ReferenceEquals,
             .InstanceEquals  = Object.InstanceEquals,
         };
-        // AddMetadata(Comparable);
+        AddMetadata(Comparable);
     }
     return &Comparable;
 }

@@ -33,6 +33,9 @@ SOFTWARE.
 #define SHORT_SIZE       (SHORT_BYTES * CHAR_BIT)
 #define SHORT_TYPE       (TYPE_SHORT)
 
+#define IsShort(x) (x->isa == &Short)
+#define AsShort(x) (IsShort(x) ? (struct Short *)x : nullptr)
+
 /**
  * Object class
  */
@@ -60,6 +63,7 @@ struct ShortClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            TShort  (*Create) (short value);
             int     (*CompareTo) (TComparable const, TComparable other);
             int     (*IntValue) (TShort const);
             long    (*LongValue) (TShort const);

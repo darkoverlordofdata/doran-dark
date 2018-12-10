@@ -219,8 +219,9 @@ register (StringBuilder)
 			.Dispose   		= StringBuilder_Dispose,
 			.Empty     		= StringBuilder_Empty,
 			.Reset     		= StringBuilder_Reset,
+            .Create         = StringBuilder_New,
 		};
-        // AddMetadata(StringBuilder);
+        AddMetadata(StringBuilder);
 	}
 	return &StringBuilder;
 }

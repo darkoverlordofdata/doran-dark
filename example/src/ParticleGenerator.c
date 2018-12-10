@@ -54,8 +54,9 @@ register (ParticleGenerator)
             .InstanceEquals = Object.InstanceEquals,
             .Update         = Update,
             .Draw           = Draw,
+            .Create         = ParticleGenerator_New,
         };
-        // AddMetadata(ParticleGenerator);
+        AddMetadata(ParticleGenerator);
     }
     return &ParticleGenerator;
 }

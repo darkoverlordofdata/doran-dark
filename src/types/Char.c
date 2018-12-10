@@ -144,8 +144,9 @@ register (Char)
             .DoubleValue    = Char_DoubleValue, 
             .CharValue      = Char_CharValue, 
             .ShortValue     = Char_ShortValue, 
+            .Create         = Char_New,
         };
-        // AddMetadata(Char);
+        AddMetadata(Char);
     }
     return &Char;
 }

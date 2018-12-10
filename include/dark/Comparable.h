@@ -54,6 +54,7 @@ struct ComparableClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            TComparable (*Create) ();
         };
     };
     int     (*CompareTo) (TComparable const, TComparable other);

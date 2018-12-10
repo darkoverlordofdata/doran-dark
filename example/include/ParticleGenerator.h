@@ -17,6 +17,9 @@
 #include "Texture.h"
 #include "GameObject.h"
 
+#define IsParticleGenerator(x) (x->isa == &ParticleGenerator)
+#define AsParticleGenerator(x) (IsParticleGenerator(x) ? (struct ParticleGenerator *)x : nullptr)
+
 
 // Represents a single particle and its state
 struct Particle
@@ -58,6 +61,7 @@ struct ParticleGeneratorClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            TParticleGenerator  (*Create) (TShader shader, TTexture2D texture, int amount);
         };
     };
         
@@ -77,3 +81,4 @@ char* overload ToString(TParticleGenerator const);
 TParticleGenerator ParticleGenerator_Ctor(TParticleGenerator const, TShader shader, TTexture2D texture, int amount);
 
 #endif PARTICLE_GENERATOR_H
+

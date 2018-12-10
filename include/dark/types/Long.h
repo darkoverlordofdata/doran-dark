@@ -33,6 +33,9 @@ SOFTWARE.
 #define LONG_SIZE       (LONG_BYTES * CHAR_BIT)
 #define LONG_TYPE       (TYPE_LONG)
 
+#define IsLong(x) (x->isa == &Long)
+#define AsLong(x) (IsLong(x) ? (struct Long *)x : nullptr)
+
 /**
  * Object class
  */
@@ -60,6 +63,7 @@ struct LongClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            TLong   (*Create) (long value);
             int     (*CompareTo) (TComparable const, TComparable other);
             int     (*IntValue) (TLong const);
             long    (*LongValue) (TLong const);

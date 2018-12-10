@@ -35,22 +35,27 @@ SOFTWARE.
  */
 void __attribute__((constructor(101))) Class_Boot() 
 {
-    // Metadata = (struct Metadata) { .count = 1, .classes = {IsaObject()} };
+    Metadata = (struct Metadata) { .count = 1, .classes = {IsaObject()} };
 
-    // IsaComparable();
-    // IsaCollection();
-    // IsaArray();
-    // IsaList();
-    // IsaHashmap();
-    // IsaBoolean();
-    // IsaNumber();
-    // IsaChar();
-    // IsaDouble();
-    // IsaFloat();
-    // IsaInteger();
-    // IsaLong();
-    // IsaShort();
-    // IsaString();
-    // IsaStringBuilder();
+    IsaComparable();
+    IsaCollection();
+    IsaArray();
+    IsaList();
+    IsaHashmap();
+    IsaBoolean();
+    IsaNumber();
+    IsaChar();
+    IsaDouble();
+    IsaFloat();
+    IsaInteger();
+    IsaLong();
+    IsaShort();
+    IsaString();
+    IsaStringBuilder();
+
+    // for (int i=0; Metadata.classes[i] != nullptr; i++) {
+    // // for (int i=0; i < Metadata.count; i++) {
+    //     printf("%s\n", Metadata.classes[i]->isa->name);
+    // }
 
 }

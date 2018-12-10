@@ -16,6 +16,8 @@
 #include "Texture.h"
 #include "Shader.h"
 
+#define IsSpriteRenderer(x) (x->isa == &SpriteRenderer)
+#define AsSpriteRenderer(x) (IsSpriteRenderer(x) ? (struct SpriteRenderer *)x : nullptr)
 
 class (SpriteRenderer)
 {
@@ -39,6 +41,7 @@ struct SpriteRendererClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            TSpriteRenderer  (*Create) (TShader shader);
         };
     };
     // Renders a defined quad textured with given sprite

@@ -19,7 +19,6 @@ const Vec3 WHITE = { 1, 1, 1 };
 TSpriteRenderer  Renderer;
 TGameObject      Player;
 TBallObject      Ball;
-TResourceManager Resource;
 
 // Defines a Collision Result Tuple
 class (Collision) 
@@ -64,7 +63,7 @@ TGame Game_Ctor(TGame const this, int Width, int Height)
 {
 	Object_Ctor(this);
     this->isa = isa(Game);
-    this->Levels = Array_New();
+    this->Levels = Array.Create(4);
     this->Level = 0;
     this->State = GAME_ACTIVE;
     this->Width = Width;
@@ -97,8 +96,9 @@ register (Game)
             .DoCollisions   = DoCollisions,
             .ResetLevel     = ResetLevel,
             .ResetPlayer    = ResetPlayer,
+            .Create         = Game_New,
         };
-        // AddMetadata(Game);
+        AddMetadata(Game);
     }
     return &Game;
 }
@@ -109,39 +109,41 @@ register (Game)
  */
 void overload Start(TGame this)
 {
-    Resource = ResourceManager_New();
+    if (ResourceManager.Shaders == nullptr) 
+        IsaResourceManager();
+        
     // Load shaders
-    LoadShader(Resource, "shaders/sprite.vs", "shaders/sprite.frag", "sprite");
+    ResourceManager.LoadShader("shaders/sprite.vs", "shaders/sprite.frag", "sprite");
     // Configure shaders
     Mat projection = ortho(0, (GLfloat)this->Width, (GLfloat)this->Height, 0, -1, 1);
-    TShader shader = GetShader(Resource, "sprite");
+    TShader shader = ResourceManager.GetShader("sprite");
     Use(shader);
     SetInteger(shader, "sprite", 0);
     SetMatrix4(shader, "projection", &projection);
  
     // Load textures
-    LoadTexture(Resource, "textures/block.png", false, "block");
-    LoadTexture(Resource, "textures/background.jpg", false, "background");
-    LoadTexture(Resource, "textures/block.png", false, "block");
-    LoadTexture(Resource, "textures/block_solid.png", false, "block_solid");
-    LoadTexture(Resource, "textures/awesomeface.png", true, "face");
-    LoadTexture(Resource, "textures/paddle.png", true, "paddle");
+    ResourceManager.LoadTexture("textures/block.png", false, "block");
+    ResourceManager.LoadTexture("textures/background.jpg", false, "background");
+    ResourceManager.LoadTexture("textures/block.png", false, "block");
+    ResourceManager.LoadTexture("textures/block_solid.png", false, "block_solid");
+    ResourceManager.LoadTexture("textures/awesomeface.png", true, "face");
+    ResourceManager.LoadTexture("textures/paddle.png", true, "paddle");
     // Set render-specific controls
-    Renderer = SpriteRenderer_New(GetShader(Resource, "sprite"));
+    Renderer = SpriteRenderer.Create(ResourceManager.GetShader("sprite"));
     // Load levels
 
-    Add(this->Levels, GameLevel_New("levels/one.lvl", this->Width, this->Height * 0.5));
-    Add(this->Levels, GameLevel_New("levels/two.lvl", this->Width, this->Height * 0.5));
-    Add(this->Levels, GameLevel_New("levels/three.lvl", this->Width, this->Height * 0.5));
-    Add(this->Levels, GameLevel_New("levels/four.lvl", this->Width, this->Height * 0.5));
+    Add(this->Levels, GameLevel.Create("levels/one.lvl", this->Width, this->Height * 0.5));
+    Add(this->Levels, GameLevel.Create("levels/two.lvl", this->Width, this->Height * 0.5));
+    Add(this->Levels, GameLevel.Create("levels/three.lvl", this->Width, this->Height * 0.5));
+    Add(this->Levels, GameLevel.Create("levels/four.lvl", this->Width, this->Height * 0.5));
     this->Level = 0;
 
 
     // Configure game objects
     Vec2 playerPos = (Vec2){ this->Width / 2 - PLAYER_SIZE.x / 2, this->Height - PLAYER_SIZE.y };
-    Player = GameObject_New("player", playerPos, PLAYER_SIZE, GetTexture(Resource, "paddle"), WHITE);
+    Player = GameObject.Create("player", playerPos, PLAYER_SIZE, ResourceManager.GetTexture("paddle"), WHITE);
     Vec2 ballPos = playerPos + (Vec2){ PLAYER_SIZE.x / 2 - BALL_RADIUS, -BALL_RADIUS * 2 };
-    Ball = BallObject_New(ballPos, BALL_RADIUS, INITIAL_BALL_VELOCITY, GetTexture(Resource, "face"));
+    Ball = BallObject.Create(ballPos, BALL_RADIUS, INITIAL_BALL_VELOCITY, ResourceManager.GetTexture("face"));
 }
 
 /**
@@ -209,7 +211,7 @@ void overload Render(TGame this)
     {
         // Draw background
         Vec2 size = { this->Width, this->Height };
-        DrawSprite(Renderer, GetTexture(Resource, "background"), ZERO, size, 0.0f, WHITE);
+        DrawSprite(Renderer, ResourceManager.GetTexture("background"), ZERO, size, 0.0f, WHITE);
         // Draw level
         TGameLevel level = this->Levels->data[this->Level];
         Draw(level, Renderer);

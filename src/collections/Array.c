@@ -207,8 +207,9 @@ register (Array)
             .Set            = Set,
             .Get            = Get,
             .Clear          = Clear,
+            .Create         = Array_New,
         };
-        // AddMetadata(Array);
+        AddMetadata(Array);
     }
     return &Array;
 }

@@ -155,8 +155,10 @@ register (Short)
             .DoubleValue    = Short_DoubleValue, 
             .CharValue      = Short_CharValue, 
             .ShortValue     = Short_ShortValue, 
+            .Create         = Short_New,
+
         };
-        // AddMetadata(Short);
+        AddMetadata(Short);
     }
     return &Short;
 }

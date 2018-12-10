@@ -32,10 +32,17 @@ SOFTWARE.
 /**
  * Object class
  */
-class (Object) {
+struct Object;
+struct ObjectClass;
+struct Class* IsaObject();
+typedef struct Object* TObject;
+extern struct ObjectClass Object;
+struct Object {
+// class (Object) {
 	struct ObjectClass* isa;
 };
 
+typedef struct Object* id;
 
 /**
  * Object metaclass
@@ -56,8 +63,13 @@ struct ObjectClass {
     void    (*Dispose) (TObject const);
     bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
     bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+    TObject (*Create) ();
 
 };
+
+static inline char* typename(id obj) { return obj->isa->name; }
+static inline int typeid(id obj) { return (int)obj->isa; }
+
 
 /**
  * Object API

@@ -145,6 +145,7 @@ register(Object)
             .Dispose        = Virtual_Dispose,
             .ReferenceEquals= ReferenceEquals,
             .InstanceEquals = InstanceEquals,
+            .Create         = Object_New,
         };
         // AddMetadata(Object);
     }

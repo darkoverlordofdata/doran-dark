@@ -168,8 +168,9 @@ register (Long)
             .DoubleValue    = Long_DoubleValue, 
             .CharValue      = Long_CharValue, 
             .ShortValue     = Long_ShortValue, 
+            .Create         = Long_New,
         };
-        // AddMetadata(Long);
+        AddMetadata(Long);
     }
     return &Long;
 }

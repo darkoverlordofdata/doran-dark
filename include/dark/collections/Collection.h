@@ -26,6 +26,10 @@ SOFTWARE.
 #ifndef _COLLECTION_H_
 #define _COLLECTION_H_
 #include "../Object.h"
+
+#define IsCollection(x) (x->isa == &Collection)
+#define AsCollection(x) (IsCollection(x) ? (struct Collision *)x : nullptr)
+
 /**
  * Base collection interface for sequential collections such as list and array
  */
@@ -53,6 +57,7 @@ struct CollectionClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            TCollection   (*Create) ();
         };
     };
     int     (*Length) (TCollection const);

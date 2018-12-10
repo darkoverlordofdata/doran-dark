@@ -34,6 +34,9 @@ SOFTWARE.
 #define NUMBER_MIN_RADIX 2
 #define NUMBER_MAX_RADIX 36
 
+#define IsNumber(x) (x->isa == &Number)
+#define AsNumber(x) (IsNumber(x) ? (struct Number *)x : nullptr)
+
 /**
  * Object class
  */
@@ -60,6 +63,7 @@ struct NumberClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            TNumber (*Create) ();
             int     (*CompareTo) (TComparable const, TComparable other);
         };
     };

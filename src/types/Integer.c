@@ -155,8 +155,9 @@ register (Integer)
             .DoubleValue    = Integer_DoubleValue, 
             .CharValue      = Integer_CharValue, 
             .ShortValue     = Integer_ShortValue, 
+            .Create         = Integer_New,
         };
-        // AddMetadata(Integer);
+        AddMetadata(Integer);
     }
     return &Integer;
 }

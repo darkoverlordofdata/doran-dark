@@ -60,8 +60,9 @@ register (Shader)
             .SetArray4f     = SetArray4f,
             .SetArray4      = SetArray4,
             .SetMatrix4     = SetMatrix4,
+            .Create         = Shader_New,
         };
-        // AddMetadata(Shader);
+        AddMetadata(Shader);
     }
     return &Shader;
 }

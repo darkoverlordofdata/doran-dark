@@ -12,6 +12,9 @@
 #include <GL/glew.h>
 #include <dark/darkfx.h>
 
+#define IsTexture2D(x) (x->isa == &Texture2D)
+#define AsTexture2D(x) (IsTexture2D(x) ? (struct Texture2D *)x : nullptr)
+
 // Texture2D is able to store and configure a texture in OpenGL.
 // It also hosts utility functions for easy management.
 class (Texture2D)
@@ -48,6 +51,7 @@ struct Texture2DClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            TTexture2D  (*Create) (int InternalFormat, int ImageFormat, char* path);
         };
     };
 

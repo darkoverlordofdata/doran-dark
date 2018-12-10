@@ -32,6 +32,9 @@ SOFTWARE.
  */
 #define ARRAY_INIT_CAPACITY 4
 
+#define IsArray(x) (x->isa == &Array)
+#define AsArray(x) (IsArray(x) ? (struct Array *)x : nullptr)
+
 class (Array)
 {
     struct ArrayClass * isa;
@@ -58,6 +61,7 @@ struct ArrayClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            TArray  (*Create) (int capacity);
             int     (*Length)       (TArray const);
             bool    (*IsEmpty)      (TArray const);
             bool    (*Contains)     (TArray const, Any value);

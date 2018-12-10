@@ -39,28 +39,21 @@ extern tgc_t gc;
 /** 
  * class
  * 
- * defines structs for class & metaclass: Name_t, NameClass_t
- * defines type for class: Name
- * defines metadata singleton: NameClass
+ * defines struct for class: Name
+ * defines struct metaclass: NameClass
  * defines metadata reference function: IsaName()
+ * defines type for class: TName
+ * defines metadata singleton: Name
+ * start class struct definition
  * 
  */
 #define class(name) \
-    struct name##Class; \
     struct name; \
-    extern struct name##Class name; \
-    typedef struct name* T##name; \
+    struct name##Class; \
     struct Class* Isa##name(); \
+    typedef struct name* T##name; \
+    extern struct name##Class name; \
     struct name
-
-
-// #define class(name) \
-//     typedef struct name##Class_t name##Class_t; \
-//     extern name##Class_t name##Class; \
-//     typedef struct name##_t name##_t;\
-//     typedef name##_t* name;\
-//     name##Class_t* Isa##name(); \
-//     typedef struct name##_t
 
 /** 
  * register class
@@ -68,10 +61,6 @@ extern tgc_t gc;
  * declares the metaclass implementation
  * declares the Isa implementation
  */
-// #define register(name) \
-//     name##Class_t name##Class; \
-//     name##Class_t* Isa##name() 
-
 #define register(name) \
     struct name##Class name; \
     TClass Isa##name()
@@ -91,23 +80,19 @@ extern tgc_t gc;
  */
 #define new(class) dark_malloc (sizeof(struct class))
 
-// #define new(class) tgc_calloc_opt(&gc, 1, sizeof(class##_t), TGC_ROOT, Object_Dtor)
-// #define new(class) tgc_calloc(&gc, 1, sizeof(class##_t))
-
 /** 
  * Delete an object created with new 
  * deallocates the memory for 1 object
  * 
  */
 #define delete(x) dark_free(x)
-/** 
+
 /** 
  * creates an array of structs
  * 
  * allocates memory for array of struct objects
  */
 #define allocate(class, n) dark_malloc (n * sizeof(struct class))
-// #define allocate(class, n) tgc_calloc_opt(&gc, n, sizeof(class##_t), TGC_ROOT, nullptr )
 
 
 #endif _CLASSY_H 

@@ -33,6 +33,9 @@ SOFTWARE.
 #define CHAR_SIZE       (CHAR_BYTES * CHAR_BIT)
 #define CHAR_TYPE       (TYPE_CHAR)
 
+#define IsChar(x) (x->isa == &Char)
+#define AsChar(x) (IsChar(x) ? (struct Char *)x : nullptr)
+
 /**
  * Char class
  */
@@ -60,6 +63,7 @@ struct CharClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            TChar   (*Create) (char value);
             int     (*CompareTo) (TComparable const, TComparable other);
             int     (*IntValue) (TChar const);
             long    (*LongValue) (TChar const);

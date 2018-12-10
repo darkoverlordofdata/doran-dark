@@ -33,6 +33,9 @@ SOFTWARE.
 #define DOUBLE_SIZE       (DOUBLE_BYTES * CHAR_BIT)
 #define DOUBLE_TYPE       (TYPE_DOUBLE)
 
+#define IsDouble(x) (x->isa == &Double)
+#define AsDouble(x) (IsDouble(x) ? (struct Double *)x : nullptr)
+
 /**
  * Double class
  */
@@ -60,6 +63,7 @@ struct DoubleClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            TDouble (*Create) (double value);
             int     (*CompareTo) (TComparable const, TComparable other);
             int     (*IntValue) (TDouble const);
             long    (*LongValue) (TDouble const);

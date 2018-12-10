@@ -33,6 +33,9 @@ SOFTWARE.
 #define FLOAT_SIZE       (FLOAT_BYTES * CHAR_BIT)
 #define FLOAT_TYPE       (TYPE_FLOAT)
 
+#define IsFloat(x) (x->isa == &Float)
+#define AsFloat(x) (IsFloat(x) ? (struct Float *)x : nullptr)
+
 /**
  * Object class
  */
@@ -60,6 +63,7 @@ struct FloatClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            TFloat  (*Create) (float value);
             int     (*CompareTo) (TComparable const, TComparable other);
             int     (*IntValue) (TFloat const);
             long    (*LongValue) (TFloat const);

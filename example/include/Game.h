@@ -17,6 +17,9 @@
 #include "GameLevel.h"
 #include "ResourceManager.h"
 
+#define IsGame(x) (x->isa == &Game)
+#define AsGame(x) (IsGame(x) ? (struct Game *)x : nullptr)
+
 // Represents the current state of the game
 typedef enum  {
     GAME_ACTIVE,
@@ -48,15 +51,18 @@ static const GLfloat BALL_RADIUS = 12.5f;
 class (Game)
 {
     struct GameClass * isa;
-    GameState   State;	
-    GLboolean   Keys[1024];
-    GLuint  Width;
-    GLuint  Height;
+    GameState State;	
+    bool Keys[1024];
+    GLuint Width;
+    GLuint Height;
     struct Array * Levels; 
-    GLuint  Level;    
+    GLuint Level;    
 };
 
-
+/**
+ * Metadata for the Game class:
+ * attributes, vtable, class members
+ */
 struct GameClass
 {
     union {
@@ -72,6 +78,7 @@ struct GameClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            TGame   (*Create) (int Width, int Height);
         };
     };
     // Initialize game state (load all shaders/textures/levels)

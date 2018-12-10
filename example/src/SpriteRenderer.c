@@ -46,8 +46,9 @@ register (SpriteRenderer)
             .InstanceEquals     = Object.InstanceEquals,
             .DrawSprite         = DrawSprite,
             .Dispose            = Dispose,
+            .Create             = SpriteRenderer_New,
         };
-        // AddMetadata(SpriteRenderer);
+        AddMetadata(SpriteRenderer);
     }
     return &SpriteRenderer;
 }

@@ -129,8 +129,9 @@ register (Boolean)
             .Type           = BOOLEAN_TYPE,
             .True           = &True,
             .False          = &False,
+            .Create         = Boolean_New,
         };
-        // AddMetadata(Boolean);
+        AddMetadata(Boolean);
     }
     return &Boolean;
 }

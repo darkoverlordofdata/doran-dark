@@ -54,8 +54,9 @@ register (GameObject)
             .ReferenceEquals= Object.ReferenceEquals,
             .InstanceEquals = Object.InstanceEquals,
             .Draw           = Draw,
+            .Create         = GameObject_New,
         };
-        // AddMetadata(GameObject);
+        AddMetadata(GameObject);
     }
     return &GameObject;
 }

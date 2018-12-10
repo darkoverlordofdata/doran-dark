@@ -30,6 +30,9 @@ SOFTWARE.
 
 #define STRING_TYPE       (TYPE_STRING)
 
+#define IsString(x) (x->isa == &String)
+#define AsString(x) (IsString(x) ? (struct String *)x : nullptr)
+
 /**
  * Object class
  */
@@ -58,6 +61,7 @@ struct StringClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            TString (*Create) (char* value);
             int     (*CompareTo) (TComparable const, TComparable other);
             int     (*Length) (TString const);
             bool    (*IsEmpty) (TString const);

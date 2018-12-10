@@ -27,8 +27,11 @@ SOFTWARE.
 #define _LIST_H_
 #include "Collection.h"
 
+#define IsList(x) (x->isa == &List)
+#define AsList(x) (IsList(x) ? (struct List *)x : nullptr)
+
 typedef int (*List_Compare) (Any, Any);
-typedef void (*List_Interator) (Any);
+typedef void (^List_Interator) (Any);
 
 class (ListNode)
 {
@@ -57,6 +60,7 @@ struct ListClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            TList   (*Create) ();
             int     (*Length)       (TList const);
             bool    (*IsEmpty)      (TList const);
             bool    (*Contains)     (TList const, Any value);
@@ -84,7 +88,7 @@ void overload Add(TList const, Any data);
 Any overload Remove(TList const);
 
 int Insert(TList const, Any data, List_Compare func);
-void Iterate(TList const, List_Interator func);
+void overload ForEach(TList const, List_Interator func);
 TList List_New();
 TList List_Ctor(TList const this);
 

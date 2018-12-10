@@ -28,6 +28,7 @@ endif ()
 #   application source
 #
 
+list ( APPEND C_SOURCES src/Boot.c )
 list ( APPEND C_SOURCES src/BallObject.c )
 list ( APPEND C_SOURCES src/Game.c )
 list ( APPEND C_SOURCES src/GameObject.c )
@@ -45,17 +46,18 @@ list ( APPEND C_SOURCES src/Texture.c )
 set ( INCLUDES "${INCLUDES};./include" )
 set ( INCLUDES "${INCLUDES};./vendor" )
 
-# set ( INCLUDES "${INCLUDES};C:/Users/darko/Documents/GitHub/bdwgc-8.0.0/include" )
 #
 #   compiler options
 #
 # Libs: 
-# set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lgc" )
+set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -LC:/msys64/mingw64/bin" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lglfw3" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lglew32" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lfreetype" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lopengl32" )
+set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lBlocksRuntime" )
 
+set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fblocks" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w -std=c99 -O3" )
 
 # definitions 
