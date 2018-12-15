@@ -51,7 +51,7 @@ struct Texture2DClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TTexture2D  (*Create) (int InternalFormat, int ImageFormat, char* path);
+            TTexture2D  (^Create) (int InternalFormat, int ImageFormat, char* path);
         };
     };
 
@@ -67,7 +67,5 @@ struct Texture2DClass
 void overload Generate(TTexture2D, GLuint width, GLuint height, unsigned char* data);
 void overload Bind(TTexture2D);
 char* overload ToString(TTexture2D const);
-TTexture2D Texture2D_New(int InternalFormat, int ImageFormat, char* path);
-TTexture2D Texture2D_Ctor(TTexture2D const this, int InternalFormat, int ImageFormat, char* path);
 
 #endif TEXTURE_H

@@ -1,5 +1,5 @@
 /*******************************************************************
-** This code is part of the Dark Framework.
+** This code is part of the Dark Overload Framework.
 **
 MIT License
 
@@ -24,13 +24,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 /**
+ * tglm is Tiny GLM for c99
+ *
  * opengl math helpers inspired by GLM.
- * uses clang vector extensions.
- * functions are overloaded.
+ * using clang vector extensions and function overload.
  * 
  */
-#ifndef _GLM_H
-#define _GLM_H
+#ifndef _TGLM_H
+#define _TGLM_H
 #include <math.h>
 /**
  *  OpenCL Vector definitions 
@@ -51,31 +52,36 @@ typedef float Mat   __attribute__((ext_vector_type(16)));
  * @returns clamped value
  * 
  */
-static inline float  __attribute__((overloadable)) clamp(float val, float minVal, float maxVal) {
+static inline float  __attribute__((overloadable)) glm_clamp(float val, float minVal, float maxVal) {
     float min = (val > minVal) ? val : minVal;
     return (min < maxVal) ? min : maxVal;
 }
-static inline Vec2  __attribute__((overloadable)) clamp(Vec2 v, float minVal, float maxVal) {
-    v.x = clamp(v.x, minVal, maxVal);
-    v.y = clamp(v.y, minVal, maxVal);
-    return v;
+static inline Vec2  __attribute__((overloadable)) glm_clamp(Vec2 v, float minVal, float maxVal) {
+    return (Vec2) { 
+        glm_clamp(v.x, minVal, maxVal),
+        glm_clamp(v.y, minVal, maxVal) 
+    };
 }
-static inline Vec2  __attribute__((overloadable)) clamp(Vec2 v, Vec2 minVal, Vec2 maxVal) {
-    return (Vec2) { clamp(v.x, minVal.x, maxVal.x),
-                    clamp(v.y, minVal.y, maxVal.y) };
+static inline Vec2  __attribute__((overloadable)) glm_clamp(Vec2 v, Vec2 minVal, Vec2 maxVal) {
+    return (Vec2) { 
+        glm_clamp(v.x, minVal.x, maxVal.x),
+        glm_clamp(v.y, minVal.y, maxVal.y) 
+    };
 }
-static inline Vec3  __attribute__((overloadable)) clamp(Vec3 v, float minVal, float maxVal) {
-    v.x = clamp(v.x, minVal, maxVal);
-    v.y = clamp(v.y, minVal, maxVal);
-    v.z = clamp(v.z, minVal, maxVal);
-    return v;
+static inline Vec3  __attribute__((overloadable)) glm_clamp(Vec3 v, float minVal, float maxVal) {
+    return (Vec3) {
+        glm_clamp(v.x, minVal, maxVal),
+        glm_clamp(v.y, minVal, maxVal),
+        glm_clamp(v.z, minVal, maxVal)
+    };
 }
-static inline Vec4  __attribute__((overloadable)) clamp(Vec4 v, float minVal, float maxVal) {
-    v.x = clamp(v.x, minVal, maxVal);
-    v.y = clamp(v.y, minVal, maxVal);
-    v.z = clamp(v.z, minVal, maxVal);
-    v.w = clamp(v.w, minVal, maxVal);
-    return v;
+static inline Vec4  __attribute__((overloadable)) glm_clamp(Vec4 v, float minVal, float maxVal) {
+    return (Vec4) {
+        glm_clamp(v.x, minVal, maxVal),
+        glm_clamp(v.y, minVal, maxVal),
+        glm_clamp(v.z, minVal, maxVal),
+        glm_clamp(v.w, minVal, maxVal)
+    };
 }
 
 /** 
@@ -86,7 +92,7 @@ static inline Vec4  __attribute__((overloadable)) clamp(Vec4 v, float minVal, fl
  * @returns translated matrix
  * 
  */
-static inline Mat translate(Mat m, Vec3 v) {
+static inline Mat glm_translate(Mat m, Vec3 v) {
     m.scdef = m.scdef + m.s0123 * v.x + m.s4567 * v.y + m.s89ab * v.z;
     return m;
 }
@@ -99,13 +105,13 @@ static inline Mat translate(Mat m, Vec3 v) {
  * @returns norm * norm
  * 
  */
-static inline float __attribute__((overloadable)) length(Vec2 v) {
+static inline float __attribute__((overloadable)) glm_length(Vec2 v) {
     return sqrtf(v.x * v.x + v.y * v.y);
 }
-static inline float __attribute__((overloadable)) length(Vec3 v) {
+static inline float __attribute__((overloadable)) glm_length(Vec3 v) {
     return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
 }
-static inline float __attribute__((overloadable)) length(Vec4 v) {
+static inline float __attribute__((overloadable)) glm_length(Vec4 v) {
     return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w);
 }
 
@@ -118,13 +124,13 @@ static inline float __attribute__((overloadable)) length(Vec4 v) {
  * @returns dot product
  * 
  */
-static inline float __attribute__((overloadable)) dot(Vec2 a, Vec2 b) {
+static inline float __attribute__((overloadable)) glm_dot(Vec2 a, Vec2 b) {
     return a.x * b.x + a.y * b.y;
 }
-static inline float __attribute__((overloadable)) dot(Vec3 a, Vec3 b) {
+static inline float __attribute__((overloadable)) glm_dot(Vec3 a, Vec3 b) {
     return a.x * b.x + a.y * b.y + a.z * b.z;
 }
-static inline float __attribute__((overloadable)) dot(Vec4 a, Vec4 b) {
+static inline float __attribute__((overloadable)) glm_dot(Vec4 a, Vec4 b) {
     return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
 
@@ -135,14 +141,14 @@ static inline float __attribute__((overloadable)) dot(Vec4 a, Vec4 b) {
  * @returns norm * norm
  * 
  */
-static inline float __attribute__((overloadable)) norm2(Vec2 v) {
-  return dot(v, v);
+static inline float __attribute__((overloadable)) glm_norm2(Vec2 v) {
+  return glm_dot(v, v);
 }
-static inline float __attribute__((overloadable)) norm2(Vec3 v) {
-  return dot(v, v);
+static inline float __attribute__((overloadable)) glm_norm2(Vec3 v) {
+  return glm_dot(v, v);
 }
-static inline float __attribute__((overloadable)) norm2(Vec4 v) {
-  return dot(v, v);
+static inline float __attribute__((overloadable)) glm_norm2(Vec4 v) {
+  return glm_dot(v, v);
 }
 
 /**
@@ -151,14 +157,14 @@ static inline float __attribute__((overloadable)) norm2(Vec4 v) {
  * @param vec vector
  * @returns norm
  */
-static inline float __attribute__((overloadable)) norm(Vec2 vec) {
-  return sqrtf(norm2(vec));
+static inline float __attribute__((overloadable)) glm_norm(Vec2 vec) {
+  return sqrtf(glm_norm2(vec));
 }
-static inline float __attribute__((overloadable)) norm(Vec3 vec) {
-  return sqrtf(norm2(vec));
+static inline float __attribute__((overloadable)) glm_norm(Vec3 vec) {
+  return sqrtf(glm_norm2(vec));
 }
-static inline float __attribute__((overloadable)) norm(Vec4 vec) {
-  return sqrtf(norm2(vec));
+static inline float __attribute__((overloadable)) glm_norm(Vec4 vec) {
+  return sqrtf(glm_norm2(vec));
 }
 
 
@@ -181,9 +187,9 @@ static inline Mat mat_identity()
  * @returns normalized vector
  * 
  */
-static inline Vec3 __attribute__((overloadable)) normalize(Vec3 v)
+static inline Vec3 __attribute__((overloadable)) glm_normalize(Vec3 v)
 {
-    float n = norm(v);
+    float n = glm_norm(v);
     if (n == 0.0f) {
         v.x = v.y = v.z = 0.0f;
         return v;
@@ -191,9 +197,9 @@ static inline Vec3 __attribute__((overloadable)) normalize(Vec3 v)
     v = v * 1.0f / n;
     return v;
 }
-static inline Vec2 __attribute__((overloadable)) normalize(Vec2 v)
+static inline Vec2 __attribute__((overloadable)) glm_normalize(Vec2 v)
 {
-    float n = norm(v);
+    float n = glm_norm(v);
     if (n == 0.0f) {
         v.x = v.y = 0.0f;
         return v;
@@ -211,7 +217,7 @@ static inline Vec2 __attribute__((overloadable)) normalize(Vec2 v)
  * @param  v  scale vector [x, y, z]
  * @returns scaled Vec3
  */
-static inline Mat scale(Mat m, Vec3 v) 
+static inline Mat glm_scale(Mat m, Vec3 v) 
 {
     m.s0123 = m.s0123 * v.x;
     m.s4567 = m.s4567 * v.y;
@@ -230,7 +236,7 @@ static inline Mat scale(Mat m, Vec3 v)
  * @param  farVal  nearer and farther depth clipping planes
  * @returns projection matrix
  */
-static inline Mat ortho(float left,
+static inline Mat glm_ortho(float left,
                     float right,
                     float bottom,
                     float top,
@@ -257,13 +263,13 @@ static inline Mat ortho(float left,
  * @param  angle  angle (radians)
  * @param  axis   axis
  */
-static inline Mat rotate(Mat m, float angle, Vec3 v) 
+static inline Mat glm_rotate(Mat m, float angle, Vec3 v) 
 {
     float a = angle;
     float c = cos(a);
     float s = sin(a);
     
-    Vec3 axis = normalize(v);
+    Vec3 axis = glm_normalize(v);
     Vec3 temp = (1-c) * axis;
 
     Mat rotate;
@@ -288,4 +294,4 @@ static inline Mat rotate(Mat m, float angle, Vec3 v)
     return result;
 }
 
-#endif _GLM_H
+#endif _TGLM_H

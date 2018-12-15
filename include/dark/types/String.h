@@ -61,7 +61,7 @@ struct StringClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TString (*Create) (char* value);
+            TString (^Create) (char* value);
             int     (*CompareTo) (TComparable const, TComparable other);
             int     (*Length) (TString const);
             bool    (*IsEmpty) (TString const);
@@ -84,6 +84,7 @@ struct StringClass
 };
 
 
+struct String * _(char* value);
 int String_Compare(char* x, char* y);
 int String_CompareTo(TString this, TString other);
 int String_CompareToIgnoreCase(TString this, TString other);
@@ -103,8 +104,6 @@ int overload Length(TString const);
 bool String_IsEmpty(TString const this);
 char String_CharAt(TString const this, int index);
 char* String_ToString(TString const this);
-TString String_New(char* value);
-TString String_Ctor(TString const this, char* value);
 
 __attribute__((__format__ (__printf__, 1, 2)))
 TString String_Format(char* format, ...);

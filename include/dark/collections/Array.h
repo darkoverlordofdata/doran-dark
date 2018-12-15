@@ -61,7 +61,7 @@ struct ArrayClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TArray  (*Create) (int capacity);
+            TArray  (^Create) (int capacity);
             int     (*Length)       (TArray const);
             bool    (*IsEmpty)      (TArray const);
             bool    (*Contains)     (TArray const, Any value);
@@ -94,7 +94,6 @@ void overload Remove(TArray const, int index);
 void Resize(TArray const, int capacity);
 void Set(TArray const, int index, Any item);
 Any Get(TArray const, int index);
-TArray Array_Ctor(TArray const this, int capacity);
 TArray Array_Variadic(int count, ...);
 
 /**

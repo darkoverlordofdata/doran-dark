@@ -28,12 +28,12 @@ SOFTWARE.
 
 
 /**
- * Boot the app framework
+ * Boot the application framework classes
  * 
  * This initializes the application classes so
  * that static methods and variables are available
  */
-void __attribute__((constructor)) App_Boot() 
+void __attribute__((constructor)) FrameworkBoot() 
 {
     IsaBallObject();
     IsaGame();
@@ -45,10 +45,8 @@ void __attribute__((constructor)) App_Boot()
     IsaSpriteRenderer();
     IsaTexture2D();
 
-
-    for (int i=0; Metadata.classes[i] != nullptr; i++) {
-    // for (int i=0; i < Metadata.count; i++) {
+    #ifdef DEBUG_ON
+    for (int i=0; Metadata.classes[i] != nullptr; i++) 
         printf("%s\n", Metadata.classes[i]->isa->name);
-    }
-
+    #endif
 }

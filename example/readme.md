@@ -21,10 +21,3 @@ from there, use cake tools in vscode, or
 
 
 
-### Compile Symbols
-use __ARC__ to enable automated reference counting.
-
-combine with GOBJECT_COMPILATION to use GLib g_atomic* functions for reference counting.
-
-
-set ( INCLUDES "${INCLUDES};C:/Users/darko/Documents/GitHub/bdwgc-8.0.0/include" )

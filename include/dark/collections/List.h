@@ -60,7 +60,7 @@ struct ListClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TList   (*Create) ();
+            TList   (^Create) ();
             int     (*Length)       (TList const);
             bool    (*IsEmpty)      (TList const);
             bool    (*Contains)     (TList const, Any value);
@@ -89,7 +89,5 @@ Any overload Remove(TList const);
 
 int Insert(TList const, Any data, List_Compare func);
 void overload ForEach(TList const, List_Interator func);
-TList List_New();
-TList List_Ctor(TList const this);
 
 #endif _LIST_H_ 

@@ -13,18 +13,14 @@ static GLuint firstUnusedParticle(TParticleGenerator this);
 static void respawnParticle(TParticleGenerator this, struct Particle particle, TGameObject object, Vec2 offset);
 
 /**
- * Constructor
+ * ParticleGenerator
  * 
  * @param shader to use
  * @param texture to source from
  * @param amount number of particles to generate
  * 
  */
-TParticleGenerator ParticleGenerator_New(TShader shader, TTexture2D texture, int amount) {
-    return ParticleGenerator_Ctor(new(ParticleGenerator), shader, texture, amount);
-}
-
-TParticleGenerator ParticleGenerator_Ctor(TParticleGenerator const this, TShader shader, TTexture2D texture, int amount)
+struct ParticleGenerator * ParticleGenerator_Ctor(TParticleGenerator const this, TShader shader, TTexture2D texture, int amount)
 {
 	Object_Ctor(this);
     this->isa = isa(ParticleGenerator);
@@ -33,32 +29,6 @@ TParticleGenerator ParticleGenerator_Ctor(TParticleGenerator const this, TShader
     this->amount = amount;
     init(this);
     return this;
-}
-
-/**
- * ParticleGenerator Class Metadata
- */
-register (ParticleGenerator)
-{
-    if (ParticleGenerator.isa == nullptr) {
-        ParticleGenerator = (struct ParticleGeneratorClass) {
-            .isa        = &ParticleGenerator,
-            .superclass = &Object,
-            .name       = "ParticleGenerator",
-            /** VTable */
-            .ToString       = ToString,
-            .Equals         = Object.Equals,
-            .GetHashCode    = Object.GetHashCode,
-            .Dispose        = Object.Dispose,
-            .ReferenceEquals= Object.ReferenceEquals,
-            .InstanceEquals = Object.InstanceEquals,
-            .Update         = Update,
-            .Draw           = Draw,
-            .Create         = ParticleGenerator_New,
-        };
-        AddMetadata(ParticleGenerator);
-    }
-    return &ParticleGenerator;
 }
 
 /**
@@ -186,5 +156,31 @@ static void respawnParticle(TParticleGenerator this, struct Particle particle, T
 char* overload ToString(TParticleGenerator const this)
 {
     return "ParticleGenerator";
+}
+
+/**
+ * ParticleGenerator Class Metadata
+ */
+register (ParticleGenerator)
+{
+    if (ParticleGenerator.isa == nullptr) {
+        ParticleGenerator = (struct ParticleGeneratorClass) {
+            .isa        = &ParticleGenerator,
+            .superclass = &Object,
+            .name       = "ParticleGenerator",
+            /** VTable */
+            .ToString       = ToString,
+            .Equals         = Object.Equals,
+            .GetHashCode    = Object.GetHashCode,
+            .Dispose        = Object.Dispose,
+            .ReferenceEquals= Object.ReferenceEquals,
+            .InstanceEquals = Object.InstanceEquals,
+            .Update         = Update,
+            .Draw           = Draw,
+            .Create         = ^(TShader shader, TTexture2D texture, int amount) { return ParticleGenerator_Ctor(new(ParticleGenerator), shader, texture, amount);},
+        };
+        AddMetadata(ParticleGenerator);
+    }
+    return &ParticleGenerator;
 }
 

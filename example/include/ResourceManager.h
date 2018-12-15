@@ -45,7 +45,7 @@ struct ResourceManagerClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TResourceManager  (*Create) ();
+            TResourceManager  (^Create) ();
         };
     };
 
@@ -74,7 +74,6 @@ TShader GetShader(char* name);
 TTexture2D LoadTexture(const GLchar *file, bool alpha, char* name);
 TTexture2D GetTexture(char* name);
 void Dtor(TResourceManager);
-TResourceManager ResourceManager_New();
 static char* rdbuf(FILE* f);
 
 #endif RESOURCE_MANAGER_H

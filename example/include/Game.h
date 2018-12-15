@@ -12,7 +12,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <dark/darkfx.h>
-#include <glm/glm.h>
+#include <tglm/tglm.h>
 
 #include "GameLevel.h"
 #include "ResourceManager.h"
@@ -78,7 +78,7 @@ struct GameClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TGame   (*Create) (int Width, int Height);
+            TGame   (^Create) (int Width, int Height);
         };
     };
     // Initialize game state (load all shaders/textures/levels)
@@ -91,11 +91,16 @@ struct GameClass
     // Reset
     void (*ResetLevel)      (TGame const);
     void (*ResetPlayer)     (TGame const);
+
+    void (*SetKey)          (TGame const, int key, bool value);
+    void (*SetState)        (TGame const, GameState state);
 };
 
 /**
  * Game API
  */
+void SetKey(TGame this, int key, bool value);
+void SetState(TGame this, GameState state);
 void overload Start(TGame);
 void overload Update(TGame, GLfloat dt);
 void overload ProcessInput(TGame, GLfloat dt);
@@ -105,7 +110,5 @@ void overload ResetPlayer(TGame);
 void overload Dispose(TGame);
 void overload DoCollisions(TGame);
 char* overload ToString(TGame const);
-TGame Game_New(int Width, int Height);
-TGame Game_Ctor(TGame const this, int Width, int Height);
 
 #endif GAME_H

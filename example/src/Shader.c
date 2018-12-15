@@ -17,54 +17,13 @@ const char* HEADER = "#\n"
                     "#endif\n";
 
 /**
- * Constructor
+ * Shader
  */
-TShader Shader_New() {
-    return Shader_Ctor(new(Shader));
-}
-
-TShader Shader_Ctor(TShader const this)
+struct Shader * Shader_Ctor(TShader const this)
 {
 	Object_Ctor(this);
     this->isa = isa(Shader);
     return this;
-}
-
-
-/**
- * Shader Class Metadata
- */
-register (Shader)
-{
-    if (Shader.isa == nullptr) {
-        Shader = (struct ShaderClass) {
-            .isa        = &Shader,
-            .superclass = &Object,
-            .name       = "Shader",
-            /** VTable */
-            .ToString       = ToString,
-            .Equals         = Object.Equals,
-            .GetHashCode    = Object.GetHashCode,
-            .Dispose        = Object.Dispose,
-            .ReferenceEquals= Object.ReferenceEquals,
-            .InstanceEquals = Object.InstanceEquals,
-            .ToString       = ToString,
-            .Use            = Use,
-            .Compile        = Compile,
-            .SetFloat       = SetFloat,
-            .SetInteger     = SetInteger,
-            .SetArray2f     = SetArray2f,
-            .SetArray2      = SetArray2,
-            .SetArray3f     = SetArray3f,
-            .SetArray3      = SetArray3,
-            .SetArray4f     = SetArray4f,
-            .SetArray4      = SetArray4,
-            .SetMatrix4     = SetMatrix4,
-            .Create         = Shader_New,
-        };
-        AddMetadata(Shader);
-    }
-    return &Shader;
 }
 
 /**
@@ -205,5 +164,41 @@ static void checkCompileErrors(TShader this, GLuint object, char* type)
 char* overload ToString(TShader const this)
 {
     return "Shader";
+}
+
+/**
+ * Shader Class Metadata
+ */
+register (Shader)
+{
+    if (Shader.isa == nullptr) {
+        Shader = (struct ShaderClass) {
+            .isa        = &Shader,
+            .superclass = &Object,
+            .name       = "Shader",
+            /** VTable */
+            .ToString       = ToString,
+            .Equals         = Object.Equals,
+            .GetHashCode    = Object.GetHashCode,
+            .Dispose        = Object.Dispose,
+            .ReferenceEquals= Object.ReferenceEquals,
+            .InstanceEquals = Object.InstanceEquals,
+            .ToString       = ToString,
+            .Use            = Use,
+            .Compile        = Compile,
+            .SetFloat       = SetFloat,
+            .SetInteger     = SetInteger,
+            .SetArray2f     = SetArray2f,
+            .SetArray2      = SetArray2,
+            .SetArray3f     = SetArray3f,
+            .SetArray3      = SetArray3,
+            .SetArray4f     = SetArray4f,
+            .SetArray4      = SetArray4,
+            .SetMatrix4     = SetMatrix4,
+            .Create         = ^() { return Shader_Ctor(new(Shader));},
+        };
+        AddMetadata(Shader);
+    }
+    return &Shader;
 }
 

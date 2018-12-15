@@ -10,7 +10,7 @@
 #define GAMEOBJECT_H
 
 #include <GL/glew.h>
-#include <glm/glm.h>
+#include <tglm/tglm.h>
 #include <dark/darkfx.h>
 
 #include "Texture.h"
@@ -58,7 +58,7 @@ struct GameObjectClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TGameObject  (*Create) (char* name, Vec2 Position, Vec2 Size, TTexture2D Sprite, Vec3 Color);
+            TGameObject  (^Create) (char* name, Vec2 Position, Vec2 Size, TTexture2D Sprite, Vec3 Color);
         };
     };
     // Draw sprite
@@ -70,8 +70,6 @@ struct GameObjectClass
  */
 void overload Draw(TGameObject, TSpriteRenderer renderer);
 char* overload ToString(TGameObject);
-TGameObject GameObject_New(char* name, Vec2 Position, Vec2 Size, TTexture2D Sprite, Vec3 Color);
-TGameObject GameObject_Ctor(TGameObject const this, char* name, Vec2 Position, Vec2 Size, TTexture2D Sprite, Vec3 Color);
 
 #endif GAMEOBJECT_H
 

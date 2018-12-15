@@ -7,26 +7,20 @@
 ** option) any later version.
 ******************************************************************/
 #include <BallObject.h>
-
 /**
- * Constructor
+ * BallObject
  * 
  * @param Position initial placement of ball 
  * @param Radius size of ball
  * @param Velocity initial speed of ball
  * @param Sprite to display
  */
-TBallObject BallObject_New(Vec2 Position, float Radius, Vec2 Velocity, TTexture2D Sprite) {
-    return BallObject_Ctor(new(BallObject), Position, Radius, Velocity, Sprite);
-}
-
-// TBallObject BallObject_Ctor(TBallObject this, Vec2 Position, float Radius, Vec2 Velocity, TTexture2D Sprite)
-TBallObject BallObject_Ctor(
-    struct BallObject * this, 
+struct BallObject *BallObject_Ctor(
+    struct BallObject *this, 
     Vec2 Position, 
     float Radius, 
     Vec2 Velocity, 
-    struct Texture2D * Sprite)
+    struct Texture2D *Sprite)
 {
     Radius = Radius != 0 ? Radius : 12.5f;
     GameObject_Ctor(this, "ball", Position, (Vec2){ Radius*2, Radius*2 }, Sprite, (Vec3){ 1, 1, 1 });
@@ -36,31 +30,17 @@ TBallObject BallObject_Ctor(
     return this;
 }
 
+
 /**
- * BallObject Class Metadata
+ * Draw
+ * 
+ * @param renderer to draw sprite with
  */
-register (BallObject)
+void overload Draw(struct BallObject * const this, TSpriteRenderer renderer)
 {
-    if (BallObject.isa == nullptr) {
-        BallObject = (struct BallObjectClass) {
-            .isa            = &BallObject,
-            .superclass     = &GameObject,
-            .name           = "BallObject",
-            /** VTable */
-            .ToString       = ToString,
-            .Equals         = Object.Equals,
-            .GetHashCode    = Object.GetHashCode,
-            .Dispose        = Object.Dispose,
-            .ReferenceEquals= Object.ReferenceEquals,
-            .InstanceEquals = Object.InstanceEquals,
-            .Move           = Move,
-            .Reset          = Reset,
-            .Create         = BallObject_New,
-        };
-        AddMetadata(BallObject);
-    }
-    return &BallObject;
+    DrawSprite(renderer, this->Sprite, this->Position, this->Size, this->Rotation, this->Color);
 }
+
 
 /**
  * Move
@@ -69,7 +49,7 @@ register (BallObject)
  * @param window_width
  * @returns Vec2 new position
  */
-void overload Move(TBallObject this, GLfloat dt, GLuint window_width)
+void overload Move(struct BallObject * this, GLfloat dt, GLuint window_width)
 {
     // If not stuck to player board
     if (!this->Stuck)
@@ -105,7 +85,7 @@ void overload Move(TBallObject this, GLfloat dt, GLuint window_width)
  * @param velocity to reset to
  * 
  */
-void overload Reset(TBallObject const this, Vec2 position, Vec2 velocity)
+void overload Reset(struct BallObject * const this, Vec2 position, Vec2 velocity)
 {
     this->Position = position;
     this->Velocity = velocity;
@@ -115,10 +95,35 @@ void overload Reset(TBallObject const this, Vec2 position, Vec2 velocity)
 /**
  * ToString
  */
-char* overload ToString(TBallObject const this)
+char* overload ToString(struct BallObject * const this)
 {
     return "BallObject";
 }
 
-
-
+/**
+ * BallObject Class Metadata
+ */
+register (BallObject)
+{
+    if (BallObject.isa == nullptr) {
+        BallObject = (struct BallObjectClass) {
+            .isa            = &BallObject,
+            .superclass     = &GameObject,
+            .name           = "BallObject",
+            /** VTable */
+            .ToString       = ToString,
+            .Equals         = Object.Equals,
+            .GetHashCode    = Object.GetHashCode,
+            .Dispose        = Object.Dispose,
+            .ReferenceEquals= Object.ReferenceEquals,
+            .InstanceEquals = Object.InstanceEquals,
+            .Move           = Move,
+            .Reset          = Reset,
+            .Draw           = Draw,
+            .Create         = ^(Vec2 Position, float Radius, Vec2 Velocity, TTexture2D Sprite) {
+                                return BallObject_Ctor(new(BallObject), Position, Radius, Velocity, Sprite); },
+        };
+        AddMetadata(BallObject);
+    }
+    return &BallObject;
+}

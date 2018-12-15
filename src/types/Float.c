@@ -36,14 +36,6 @@ static Exception(NumberFormat);
  * @param value of float
  * 
  */
-TFloat Float_New(float value) {
-    return Float_Ctor(new(Float), value);
-}
-
-
-/**
- * Initialize a new Float
- */
 TFloat Float_Ctor(TFloat const this, float value)
 {
     Number_Ctor(this);
@@ -161,7 +153,7 @@ register (Float)
             .DoubleValue    = Float_DoubleValue, 
             .CharValue      = Float_CharValue, 
             .ShortValue     = Float_ShortValue, 
-            .Create         = Float_New,
+            .Create         = ^(float value) { return Float_Ctor(new(Float), value); },
         };
         AddMetadata(Float);
     }

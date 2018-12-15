@@ -36,13 +36,6 @@ static Exception(NumberFormat);
  * @param value of double
  * 
  */
-TDouble Double_New(double value) {
-    return Double_Ctor(new(Double), value);
-}
-
-/**
- * Initialize a new Double
- */
 TDouble Double_Ctor(TDouble const this, double value)
 {
     Number_Ctor(this);
@@ -166,7 +159,7 @@ register (Double)
             .DoubleValue    = Double_DoubleValue, 
             .CharValue      = Double_CharValue, 
             .ShortValue     = Double_ShortValue, 
-            .Create         = Double_New,
+            .Create         = ^(double value) { return Double_Ctor(new(Double), value); },
         };
         AddMetadata(Double);
     }

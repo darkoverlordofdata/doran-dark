@@ -97,7 +97,7 @@ struct StringBuilderClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TStringBuilder(*Create) ();
+            TStringBuilder(^Create) ();
             int     (*Empty) (TStringBuilder const);
             int     (*Append) (TStringBuilder const, char* str);
             int     (*Appendc) (TStringBuilder const, char c);
@@ -108,15 +108,12 @@ struct StringBuilderClass
     };
 };
 
-
-TStringBuilder StringBuilder_New();
-int StringBuilder_Empty(TStringBuilder sb);
-int StringBuilder_Appendc(TStringBuilder sb, const char c);
-int StringBuilder_Append(TStringBuilder sb, const char *str);
 __attribute__((__format__ (__printf__, 2, 3)))
 int StringBuilder_Appendf(TStringBuilder sb, const char *format, ...);
+int StringBuilder_Appendc(TStringBuilder sb, const char c);
+int StringBuilder_Append(TStringBuilder sb, const char *str);
 TString StringBuilder_Concat(TStringBuilder sb);
 void StringBuilder_Reset(TStringBuilder sb);
-TStringBuilder StringBuilder_Ctor(TStringBuilder const this);
+int StringBuilder_Empty(TStringBuilder sb);
 
 #endif _STRING_BUILDER_H_

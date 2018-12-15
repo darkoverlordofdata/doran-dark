@@ -85,7 +85,7 @@ struct HashmapClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            THashmap(*Create) ();
+            THashmap(^Create) ();
             /*
              * Get the current size of a hashmap
              */
@@ -153,7 +153,5 @@ int overload Remove(THashmap const, char* key);
 void overload Dispose(THashmap const);
 int overload Length(THashmap const);
 char* overload ToString(THashmap const);
-THashmap Hashmap_New();
-THashmap Hashmap_Ctor(THashmap const this);
 
 #endif _HASHMAP_H_

@@ -9,17 +9,13 @@
 #include <Texture.h>
 
 /**
- * Constructor
+ * Texture2D
  * 
  * @param InternalFormat for binding the image
  * @param ImageFormat for binding the image
  * 
  */
-TTexture2D Texture2D_New(int InternalFormat, int ImageFormat, char* path) {
-    return Texture2D_Ctor(new(Texture2D), InternalFormat, ImageFormat, path);
-}
-
-TTexture2D Texture2D_Ctor(TTexture2D const this, int InternalFormat, int ImageFormat, char* path)
+struct Texture2D * Texture2D_Ctor(TTexture2D const this, int InternalFormat, int ImageFormat, char* path)
 {
 	Object_Ctor(this);
     this->isa = isa(Texture2D);
@@ -36,32 +32,6 @@ TTexture2D Texture2D_Ctor(TTexture2D const this, int InternalFormat, int ImageFo
     this->ImageFormat = ImageFormat;
     glGenTextures(1, &this->Id);
     return this;
-}
-
-/**
- * Texture2D Class Metadata
- */
-register (Texture2D)
-{
-    if (Texture2D.isa == nullptr) {
-        Texture2D = (struct Texture2DClass) {
-            .isa        = &Texture2D,
-            .superclass = &Object,
-            .name       = "Texture2D",
-            /** VTable */
-            .ToString       = ToString,
-            .Equals         = Object.Equals,
-            .GetHashCode    = Object.GetHashCode,
-            .Dispose        = Object.Dispose,
-            .ReferenceEquals= Object.ReferenceEquals,
-            .InstanceEquals = Object.InstanceEquals,
-            .Generate       = Generate,
-            .Bind           = Bind,
-            .Create         = Texture2D_New,
-        };
-        AddMetadata(Texture2D);
-    }
-    return &Texture2D;
 }
 
 /**
@@ -99,6 +69,32 @@ void overload Bind(TTexture2D this)
 char* overload ToString(TTexture2D const this)
 {
     return "Texture2D";
+}
+
+/**
+ * Texture2D Class Metadata
+ */
+register (Texture2D)
+{
+    if (Texture2D.isa == nullptr) {
+        Texture2D = (struct Texture2DClass) {
+            .isa            = &Texture2D,
+            .superclass     = &Object,
+            .name           = "Texture2D",
+            /** VTable */
+            .ToString       = ToString,
+            .Equals         = Object.Equals,
+            .GetHashCode    = Object.GetHashCode,
+            .Dispose        = Object.Dispose,
+            .ReferenceEquals= Object.ReferenceEquals,
+            .InstanceEquals = Object.InstanceEquals,
+            .Generate       = Generate,
+            .Bind           = Bind,
+            .Create         = ^(int InternalFormat, int ImageFormat, char* path) { return Texture2D_Ctor(new(Texture2D), InternalFormat, ImageFormat, path);},
+        };
+        AddMetadata(Texture2D);
+    }
+    return &Texture2D;
 }
 
 

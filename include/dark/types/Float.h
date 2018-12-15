@@ -63,7 +63,7 @@ struct FloatClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TFloat  (*Create) (float value);
+            TFloat  (^Create) (float value);
             int     (*CompareTo) (TComparable const, TComparable other);
             int     (*IntValue) (TFloat const);
             long    (*LongValue) (TFloat const);
@@ -83,7 +83,5 @@ float Float_FloatValue(TFloat const);
 float Float_FloatValue(TFloat const);
 char Float_CharValue(TFloat const);
 short Float_ShortValue(TFloat const);
-TFloat Float_New(float value);
-TFloat Float_Ctor(TFloat const this, float value);
 
 #endif _FLOAT_H_

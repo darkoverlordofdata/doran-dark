@@ -27,10 +27,6 @@ SOFTWARE.
 /**
  * Constructor
  */
-TList List_New() {
-    return List_Ctor(new(List));
-}
-
 TList List_Ctor(TList const this)
 {
     Collection_Ctor(this);
@@ -39,7 +35,6 @@ TList List_Ctor(TList const this)
 
     return this;
 }
-
 
 /**
  * Create new ListNode
@@ -190,7 +185,8 @@ register (List)
             .Insert         = Insert,
             .Add            = Add,
             .Remove         = Remove,
-            .Create         = List_New,
+            .Create         = ^() { return List_Ctor(new(List)); }
+
         };
         AddMetadata(List);
     }

@@ -63,10 +63,6 @@ static Exception(OutOfMemory);
  * create a new StringBuilder
  * 
  */
-TStringBuilder StringBuilder_New() {
-    return StringBuilder_Ctor(new(StringBuilder));
-}
-
 TStringBuilder StringBuilder_Ctor(TStringBuilder const this)
 {
     Object_Ctor(this);
@@ -165,7 +161,7 @@ TString StringBuilder_Concat(TStringBuilder this)
 	}
 
 	*c = '\0';
-	return String_New(buf);
+	return String.Create(buf);
 }
 
 /*
@@ -219,7 +215,7 @@ register (StringBuilder)
 			.Dispose   		= StringBuilder_Dispose,
 			.Empty     		= StringBuilder_Empty,
 			.Reset     		= StringBuilder_Reset,
-            .Create         = StringBuilder_New,
+            .Create         = ^() { return StringBuilder_Ctor(new(StringBuilder)); },
 		};
         AddMetadata(StringBuilder);
 	}

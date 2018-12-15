@@ -63,7 +63,7 @@ struct ShortClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TShort  (*Create) (short value);
+            TShort  (^Create) (short value);
             int     (*CompareTo) (TComparable const, TComparable other);
             int     (*IntValue) (TShort const);
             long    (*LongValue) (TShort const);
@@ -83,7 +83,5 @@ float Short_FloatValue(TShort const);
 double Short_DoubleValue(TShort const);
 char Short_CharValue(TShort const);
 short Short_ShortValue(TShort const);
-TShort Short_New(short value);
-TShort Short_Ctor(TShort const this, short value);
 
 #endif _SHORT_H_

@@ -36,10 +36,6 @@ static Exception(IndexOutOfBounds);
  * @param value of long
  * 
  */
-TString String_New(char* value) {
-    return String_Ctor(new(String), value);
-}
-
 TString String_Ctor(TString const this, char* value)
 {
     Comparable_Ctor(this);
@@ -48,6 +44,11 @@ TString String_Ctor(TString const this, char* value)
     this->length = strlen(value);
     return this;
 }
+
+
+// struct String * _(char* value) {
+//     return String_Ctor(new(String), value);
+// }
 
 void String_GetChars(TString this, char* dst, int dstBegin) {
     memcpy(dst+dstBegin, this->value, this->length);
@@ -87,7 +88,7 @@ TString String_Concatc(TString this, char* other) {
     char* str = dark_calloc((len+length+1), sizeof(char));
     strncpy(str, this->value, len);
     strncpy(str+len, other, length);
-    TString result = String_New(str);
+    TString result = String.Create(str);
     return result;
 
 }
@@ -100,7 +101,7 @@ TString String_Concat(TString this, TString other) {
     char* str = dark_calloc((len+other->length+1), sizeof(char));
     strncpy(str, this->value, len);
     strncpy(str+len, other->value, other->length);
-    TString result = String_New(str);
+    TString result = String.Create(str);
     return result;
 }
 
@@ -109,7 +110,7 @@ bool String_Contains(TString this, TString s) {
 }
 
 TString String_CopyOf(TString this) {
-    return String_New(this->value);
+    return String.Create(this->value);
 }
 
 bool String_EndsWith(TString this, TString suffix) {
@@ -137,11 +138,11 @@ int String_LastIndexOf(TString this, TString str, int offset) {
 }
 
 TString String_ToUpperCase(TString this) {
-    return String_New(strupr(this->value));
+    return String.Create(strupr(this->value));
 }
 
 TString String_ToLowerCase(TString this) {
-    return String_New(strlwr(this->value));
+    return String.Create(strlwr(this->value));
 }
 
 TString String_Trim(TString this) {
@@ -154,7 +155,7 @@ TString String_Trim(TString this) {
         len--;
     }
     return ((start > 0) || (len < this->length)) 
-        ? String_New(strndup(this->value+start, len-start))
+        ? String.Create(strndup(this->value+start, len-start))
         : this;    
 }
 
@@ -220,7 +221,7 @@ register (String)
             .ToLowerCase    = String_ToLowerCase,
             .ToUpperCase    = String_ToUpperCase,
             .Trim           = String_Trim,
-            .Create         = String_New,
+            .Create         = ^(char* value) { return String_Ctor(new(String), value); },
         };
         AddMetadata(String);
     }
@@ -237,9 +238,9 @@ TString String_Format(char* format, ...) {
 
     int len = vsnprintf(nullptr, 0, format, args1);
     va_end(args1);
-    if (len == 0) return String_New("");
+    if (len == 0) return String.Create("");
     char* str = dark_calloc((len+1), sizeof(char));
     len = vsnprintf(str, len+1, format, args2);
     va_end(args2);
-    return String_New(str);
+    return String.Create(str);
 }

@@ -36,10 +36,6 @@ static Exception(LongFormat);
  * @param value of long
  * 
  */
-TLong Long_New(long value) {
-    return Long_Ctor(new(Long), value);
-}
-
 TLong Long_Ctor(TLong const this, long value)
 {
     Number_Ctor(this);
@@ -168,7 +164,7 @@ register (Long)
             .DoubleValue    = Long_DoubleValue, 
             .CharValue      = Long_CharValue, 
             .ShortValue     = Long_ShortValue, 
-            .Create         = Long_New,
+            .Create         = ^(long value) { return Long_Ctor(new(Long), value); },
         };
         AddMetadata(Long);
     }

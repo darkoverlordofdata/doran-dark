@@ -30,34 +30,47 @@ SOFTWARE.
 
 // tgc_t gc;
 
+struct Node {
+    void * data;
+    struct Node * next;
+};
+
+static struct Node * root = nullptr;
+
+static void Push(struct Node **head, void* data)
+{
+    struct Node * newNode = (struct Node *)malloc(sizeof(struct Node));
+    newNode->next = (*head);
+    newNode->data = data;
+    (*head) = newNode;
+}
+
+static void Dump(struct Node *node, void(*func)(void*))
+{
+    while (node != nullptr)
+    {
+        (*func)(node->data);
+        node = node->next;
+    }
+}
 void dark_free(TClass cls) 
 {
-    // if (cls != nullptr) {
-    //     if (cls->isa != nullptr) {
-    //         if (cls->isa > 1024) {
-    //         // if (cls->isa->isa != nullptr) {
-    //             printf("%x\n", cls->isa);
-    //         }
-    //     }
-    // }
-    // if (cls && cls->isa && (cls->isa == cls->isa->isa)) {
-    //     printf("delete Object\n");
-    //     printf("%x %x %x\n", cls, cls->isa, cls->isa->isa);
-    //     printf("%s\n", cls->isa->isa->name);
-    //     printf("delete Object\n");
-
-    // }
-
     free(cls);
 }
 
 void* dark_malloc(size_t size)
 {
+    // void* ptr = calloc(1, size);
+    // Push(&root, &ptr);
+    // return ptr;
     return calloc(1, size);
 }
 
 void* dark_calloc(size_t num, size_t size)
 {
+    // void* ptr = calloc(num, size);
+    // Push(&root, &ptr);
+    // return ptr;
     return calloc(num, size);
 }
 

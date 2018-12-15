@@ -16,6 +16,8 @@ void overload ForEach(TList const this, void (^iter)(TString))
 // 
 int main(int argc, char **argv) {
 
+    printf("Hello World\n");
+
     id l = Long.Create(420);
     long v = LongValue(l);
     printf("v = %d\n", v);

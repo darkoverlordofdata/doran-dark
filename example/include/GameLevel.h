@@ -10,7 +10,7 @@
 #define GAMELEVEL_H
 
 #include <GL/glew.h>
-#include <glm/glm.h>
+#include <tglm/tglm.h>
 #include <dark/darkfx.h>
 
 #include "Game.h"
@@ -56,7 +56,7 @@ struct GameLevelClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TGameLevel  (*Create) (const GLchar *file, int levelWidth, int levelHeight);
+            TGameLevel  (^Create) (const GLchar *file, int levelWidth, int levelHeight);
         };
     };
     // Loads level from file
@@ -74,8 +74,6 @@ TGameLevel overload Load(TGameLevel, const GLchar *file, int levelWidth, int lev
 void overload Draw(TGameLevel const, TSpriteRenderer renderer);
 bool overload IsCompleted(TGameLevel);
 char* overload ToString(TGameLevel);
-TGameLevel GameLevel_New(const GLchar *file, int levelWidth, int levelHeight);
-TGameLevel GameLevel_Ctor(TGameLevel const this, const GLchar *file, int levelWidth, int levelHeight);
 
 #endif GAMELEVEL_H
 

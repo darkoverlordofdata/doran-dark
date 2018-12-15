@@ -63,7 +63,7 @@ struct NumberClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TNumber (*Create) ();
+            TNumber (^Create) ();
             int     (*CompareTo) (TComparable const, TComparable other);
         };
     };
@@ -85,6 +85,5 @@ double Number_DoubleValue(TNumber const);
 char Number_CharValue(TNumber const);
 short Number_ShortValue(TNumber const);
 int Number_Digit(char ch, int radix);
-TNumber Number_Ctor(TNumber const this);
 
 #endif _NUMBER_H_

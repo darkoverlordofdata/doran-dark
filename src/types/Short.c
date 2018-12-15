@@ -36,10 +36,6 @@ static Exception(NumberFormat);
  * @param value of short
  * 
  */
-TShort Short_New(short value) {
-    return Short_Ctor(new(Short), value);
-}
-
 TShort Short_Ctor(TShort const this, short value)
 {
     Number_Ctor(this);
@@ -155,7 +151,7 @@ register (Short)
             .DoubleValue    = Short_DoubleValue, 
             .CharValue      = Short_CharValue, 
             .ShortValue     = Short_ShortValue, 
-            .Create         = Short_New,
+            .Create         = ^(short value) { return Short_Ctor(new(Short), value); },
 
         };
         AddMetadata(Short);

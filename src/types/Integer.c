@@ -36,10 +36,6 @@ static Exception(NumberFormat);
  * @param value of int
  * 
  */
-TInteger Integer_New(int value) {
-    return Integer_Ctor(new(Integer), value);
-}
-
 TInteger Integer_Ctor(TInteger const this, int value)
 {
     Number_Ctor(this);
@@ -155,7 +151,7 @@ register (Integer)
             .DoubleValue    = Integer_DoubleValue, 
             .CharValue      = Integer_CharValue, 
             .ShortValue     = Integer_ShortValue, 
-            .Create         = Integer_New,
+            .Create         = ^(int value) { return Integer_Ctor(new(Integer), value); },
         };
         AddMetadata(Integer);
     }

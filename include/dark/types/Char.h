@@ -63,7 +63,7 @@ struct CharClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TChar   (*Create) (char value);
+            TChar   (^Create) (char value);
             int     (*CompareTo) (TComparable const, TComparable other);
             int     (*IntValue) (TChar const);
             long    (*LongValue) (TChar const);
@@ -83,7 +83,6 @@ float Char_FloatValue(TChar const);
 double Char_DoubleValue(TChar const);
 char Char_CharValue(TChar const);
 short Char_ShortValue(TChar const);
-TChar Char_New(char value);
-TChar Char_Ctor(TChar const this, char value);
+char* Char_ToString(TChar const);
 
 #endif _CHAR_H_

@@ -63,7 +63,7 @@ struct DoubleClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TDouble (*Create) (double value);
+            TDouble (^Create) (double value);
             int     (*CompareTo) (TComparable const, TComparable other);
             int     (*IntValue) (TDouble const);
             long    (*LongValue) (TDouble const);
@@ -83,7 +83,5 @@ float Double_FloatValue(TDouble const);
 double Double_DoubleValue(TDouble const);
 char Double_CharValue(TDouble const);
 short Double_ShortValue(TDouble const);
-TDouble Double_New(double value);
-TDouble Double_Ctor(TDouble const this, double value);
 
 #endif _DOUBLE_H_

@@ -61,7 +61,7 @@ struct BooleanClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TBoolean (*Create) (bool value);
+            TBoolean (^Create) (bool value);
             int     (*CompareTo) (TBoolean const, TBoolean other);
         };
     };
@@ -80,9 +80,7 @@ bool BoolValue(TBoolean const);
 bool ParseBool(char* s);
 
 int overload Compare(bool x, bool y);
-char* overload ToString(TBoolean const this);
 int overload CompareTo(TBoolean const, TBoolean other);
-TBoolean Boolean_New(bool value);
-TBoolean Boolean_Ctor(TBoolean const this, bool value);
+char* overload ToString(TBoolean const this);
 
 #endif _BOOLEAN_H_

@@ -10,7 +10,7 @@
 #define SPRITE_RENDERER_H
 
 #include <GL/glew.h>
-#include <glm/glm.h>
+#include <tglm/tglm.h>
 #include <dark/darkfx.h>
 
 #include "Texture.h"
@@ -41,7 +41,7 @@ struct SpriteRendererClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TSpriteRenderer  (*Create) (TShader shader);
+            TSpriteRenderer  (^Create) (TShader shader);
         };
     };
     // Renders a defined quad textured with given sprite
@@ -54,8 +54,6 @@ struct SpriteRendererClass
 void overload DrawSprite(TSpriteRenderer, TTexture2D texture, Vec2 position, Vec2 size, GLfloat rot, Vec3 color);
 void overload Dispose(TSpriteRenderer);
 char* overload ToString(TSpriteRenderer const);
-TSpriteRenderer SpriteRenderer_New(TShader shader);
-TSpriteRenderer SpriteRenderer_Ctor(TSpriteRenderer const this, TShader shader);
 static void initRenderData(TSpriteRenderer this);
 
 #endif SPRITE_RENDERER_H

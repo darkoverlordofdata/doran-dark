@@ -27,6 +27,17 @@ SOFTWARE.
 /**
  * Default Constructor
  */
+TArray Array_Ctor(TArray const this, int capacity)
+{
+    Collection_Ctor(this);
+    this->isa = isa(Array);
+    this->capacity = capacity == 0 ? ARRAY_INIT_CAPACITY : capacity;
+    this->length = 0;
+    this->data = dark_calloc(this->capacity, sizeof(Any));
+    return this;
+}
+
+
 TArray overload Array_New(void) {
     return Array_Ctor(new(Array), 4);
 }
@@ -63,19 +74,6 @@ TArray overload Array_New(int count, ...) {
     return v;
 }
 
-
-/**
- * Initialize a new Array
- */
-TArray Array_Ctor(TArray const this, int capacity)
-{
-    Collection_Ctor(this);
-    this->isa = isa(Array);
-    this->capacity = capacity == 0 ? ARRAY_INIT_CAPACITY : capacity;
-    this->length = 0;
-    this->data = dark_calloc(this->capacity, sizeof(Any));
-    return this;
-}
 
 
 int overload Length(TArray const this)
@@ -207,7 +205,7 @@ register (Array)
             .Set            = Set,
             .Get            = Get,
             .Clear          = Clear,
-            .Create         = Array_New,
+            .Create         = ^(int capacity) { return Array_Ctor(new(Array), capacity); }
         };
         AddMetadata(Array);
     }

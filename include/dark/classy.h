@@ -72,6 +72,8 @@ extern tgc_t gc;
 
 #define AddMetadata(name) (Metadata.classes[Metadata.count++] = &name)
 
+#define addMetadata(name) (Metadata.classes[Metadata.count++] = name)
+
 
 /** 
  * Create a new class instance 

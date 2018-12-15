@@ -9,47 +9,13 @@
 #include <ResourceManager.h>
 
 /**
- * Constructor
+ * ResourceManager
  */
-TResourceManager ResourceManager_Ctor(TResourceManager this)
+struct ResourceManager * ResourceManager_Ctor(TResourceManager this)
 {
     Object_Ctor(this); 
     this->isa = isa(ResourceManager);
     return this;
-}
-
-/**
- * ResourceManager Class Metadata
- */
-register (ResourceManager)
-{
-    if (ResourceManager.isa == nullptr) {
-        ResourceManager = (struct ResourceManagerClass) {
-            .isa        = &ResourceManager,
-            .superclass = &Object,
-            .name       = "ResourceManager",
-            /** VTable */
-            .ToString           = Object.ToString,
-            .Equals             = Object.Equals,
-            .GetHashCode        = Object.GetHashCode,
-            .Dispose            = Object.Dispose,
-            .ReferenceEquals    = Object.ReferenceEquals,
-            .InstanceEquals     = Object.InstanceEquals,
-            .Create             = ResourceManager_New,
-            .LoadShader         = LoadShader,
-            .GetShader          = GetShader,
-            .LoadTexture        = LoadTexture,
-            .GetTexture         = GetTexture,
-            .Dtor               = Dtor,
-            .loadShaderFromFile = loadShaderFromFile,
-            .loadTextureFromFile= loadTextureFromFile,
-            .Shaders            = Hashmap.Create(),
-            .Textures           = Hashmap.Create(),
-
-        };
-        AddMetadata(ResourceManager);
-    }
-    return &ResourceManager;
 }
 
 /**
@@ -189,11 +155,6 @@ void Dtor(TResourceManager this)
     // Iterate(ResourceManager.Textures, Clear2, nullptr);
 }
 
-TResourceManager ResourceManager_New()
-{
-    return ResourceManager_Ctor(new(ResourceManager));
-}
-
 /**
  * ReadTextFile
  * 
@@ -215,5 +176,39 @@ static char* rdbuf(FILE* f)
         return buf;
     }
     return buf;
+}
+
+/**
+ * ResourceManager Class Metadata
+ */
+register (ResourceManager)
+{
+    if (ResourceManager.isa == nullptr) {
+        ResourceManager = (struct ResourceManagerClass) {
+            .isa        = &ResourceManager,
+            .superclass = &Object,
+            .name       = "ResourceManager",
+            /** VTable */
+            .ToString           = Object.ToString,
+            .Equals             = Object.Equals,
+            .GetHashCode        = Object.GetHashCode,
+            .Dispose            = Object.Dispose,
+            .ReferenceEquals    = Object.ReferenceEquals,
+            .InstanceEquals     = Object.InstanceEquals,
+            .Create             = ^() { return ResourceManager_Ctor(new(ResourceManager));},
+            .LoadShader         = LoadShader,
+            .GetShader          = GetShader,
+            .LoadTexture        = LoadTexture,
+            .GetTexture         = GetTexture,
+            .Dtor               = Dtor,
+            .loadShaderFromFile = loadShaderFromFile,
+            .loadTextureFromFile= loadTextureFromFile,
+            .Shaders            = Hashmap.Create(),
+            .Textures           = Hashmap.Create(),
+
+        };
+        AddMetadata(ResourceManager);
+    }
+    return &ResourceManager;
 }
 

@@ -10,7 +10,7 @@
 #define PARTICLE_GENERATOR_H
 
 #include <GL/glew.h>
-#include <glm/glm.h>
+#include <tglm/tglm.h>
 #include <dark/darkfx.h>
 
 #include "Shader.h"
@@ -61,7 +61,7 @@ struct ParticleGeneratorClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TParticleGenerator  (*Create) (TShader shader, TTexture2D texture, int amount);
+            TParticleGenerator  (^Create) (TShader shader, TTexture2D texture, int amount);
         };
     };
         
@@ -78,7 +78,6 @@ struct ParticleGeneratorClass
 void overload Update(TParticleGenerator, GLfloat dt, TGameObject object, GLuint newParticles, Vec2 offset);
 void overload Draw(TParticleGenerator);
 char* overload ToString(TParticleGenerator const);
-TParticleGenerator ParticleGenerator_Ctor(TParticleGenerator const, TShader shader, TTexture2D texture, int amount);
 
 #endif PARTICLE_GENERATOR_H
 

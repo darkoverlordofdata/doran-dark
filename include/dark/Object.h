@@ -29,6 +29,8 @@ SOFTWARE.
 
 #define OBJECT_TYPE       (TYPE_OBJECT)
 
+
+
 /**
  * Object class
  */
@@ -63,7 +65,7 @@ struct ObjectClass {
     void    (*Dispose) (TObject const);
     bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
     bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-    TObject (*Create) ();
+    TObject (^Create) ();
 
 };
 

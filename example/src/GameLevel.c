@@ -11,46 +11,15 @@
 #include <GameLevel.h>
 
 /**
- * Constructor
+ * GameLevel
  */
-TGameLevel GameLevel_New(const GLchar *file, int levelWidth, int levelHeight) {
-    return GameLevel_Ctor(new(GameLevel), file, levelWidth, levelHeight);
-}
-
-TGameLevel GameLevel_Ctor(TGameLevel const this, const GLchar *file, int levelWidth, int levelHeight)
+struct GameLevel * GameLevel_Ctor(TGameLevel const this, const GLchar *file, int levelWidth, int levelHeight)
 {
 	Object_Ctor(this);
     this->isa = isa(GameLevel);
     this->Bricks = Array.Create(200);
     Load(this, file, levelWidth, levelHeight);
     return this;
-}
-
-/**
- * GameLevel Class Metadata
- */
-register (GameLevel)
-{
-    if (GameLevel.isa == nullptr) {
-        GameLevel = (struct GameLevelClass) {
-            .isa            = &GameLevel,
-            .superclass     = &Object,
-            .name           = "GameLevel",
-            /** VTable */
-            .ToString       = ToString,
-            .Equals         = Object.Equals,
-            .GetHashCode    = Object.GetHashCode,
-            .Dispose        = Object.Dispose,
-            .ReferenceEquals= Object.ReferenceEquals,
-            .InstanceEquals = Object.InstanceEquals,
-            .Load           = Load,
-            .Draw           = Draw,
-            .IsCompleted    = IsCompleted,
-            .Create         = GameLevel_New,
-        };
-        AddMetadata(GameLevel);
-    }
-    return &GameLevel;
 }
 
 static void init(TGameLevel const this, TArray tileData, GLuint levelWidth, GLuint levelHeight);
@@ -191,5 +160,32 @@ static void init(TGameLevel const this, TArray tileData, GLuint levelWidth, GLui
 char* overload ToString(TGameLevel const this)
 {
     return "GameLevel";
+}
+
+/**
+ * GameLevel Class Metadata
+ */
+register (GameLevel)
+{
+    if (GameLevel.isa == nullptr) {
+        GameLevel = (struct GameLevelClass) {
+            .isa            = &GameLevel,
+            .superclass     = &Object,
+            .name           = "GameLevel",
+            /** VTable */
+            .ToString       = ToString,
+            .Equals         = Object.Equals,
+            .GetHashCode    = Object.GetHashCode,
+            .Dispose        = Object.Dispose,
+            .ReferenceEquals= Object.ReferenceEquals,
+            .InstanceEquals = Object.InstanceEquals,
+            .Load           = Load,
+            .Draw           = Draw,
+            .IsCompleted    = IsCompleted,
+            .Create         = ^(const GLchar *file, int levelWidth, int levelHeight) { return GameLevel_Ctor(new(GameLevel), file, levelWidth, levelHeight); },
+        };
+        AddMetadata(GameLevel);
+    }
+    return &GameLevel;
 }
 

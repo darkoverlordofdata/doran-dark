@@ -17,10 +17,6 @@
  * @param Sprite to display
  * @param Color tiniting color
  */
-TGameObject GameObject_New(char* name, Vec2 Position, Vec2 Size, TTexture2D Sprite, Vec3 Color) {
-    return GameObject_Ctor(new(GameObject), name, Position, Size, Sprite, Color);
-}
-
 TGameObject GameObject_Ctor(TGameObject const this, char* name, Vec2 Position, Vec2 Size, TTexture2D Sprite, Vec3 Color)
 {
 	Object_Ctor(this);
@@ -54,7 +50,7 @@ register (GameObject)
             .ReferenceEquals= Object.ReferenceEquals,
             .InstanceEquals = Object.InstanceEquals,
             .Draw           = Draw,
-            .Create         = GameObject_New,
+            .Create         = ^(char* name, Vec2 Position, Vec2 Size, TTexture2D Sprite, Vec3 Color) { return GameObject_Ctor(new(GameObject), name, Position, Size, Sprite, Color);},
         };
         AddMetadata(GameObject);
     }

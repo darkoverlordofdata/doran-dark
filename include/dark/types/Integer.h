@@ -64,7 +64,7 @@ struct IntegerClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TInteger(*Create) (int value);
+            TInteger(^Create) (int value);
             int     (*CompareTo) (TComparable const, TComparable other);
             int     (*IntValue) (TInteger const);
             long    (*LongValue) (TInteger const);
@@ -84,7 +84,5 @@ int Integer_IntegerValue(TInteger const);
 double Integer_DoubleValue(TInteger const);
 char Integer_CharValue(TInteger const);
 short Integer_ShortValue(TInteger const);
-TInteger Integer_New(int value);
-TInteger Integer_Ctor(TInteger const this, int value);
 
 #endif _INTEGER_H_

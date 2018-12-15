@@ -63,7 +63,7 @@ struct LongClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TLong   (*Create) (long value);
+            TLong   (^Create) (long value);
             int     (*CompareTo) (TComparable const, TComparable other);
             int     (*IntValue) (TLong const);
             long    (*LongValue) (TLong const);
@@ -83,7 +83,5 @@ float Long_FloatValue(TLong const);
 double Long_DoubleValue(TLong const);
 char Long_CharValue(TLong const);
 short Long_ShortValue(TLong const);
-TLong Long_New(long value);
-TLong Long_Ctor(TLong const this, long value);
 
 #endif _LONG_H_

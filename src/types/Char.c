@@ -31,13 +31,6 @@ SOFTWARE.
  * @param value of char
  * 
  */
-TChar Char_New(char value) {
-    return Char_Ctor(new(Char), value);
-}
-
-/**
- * Initialize a new Char
- */
 TChar Char_Ctor(TChar const this, char value)
 {
     Number_Ctor(this);
@@ -45,6 +38,38 @@ TChar Char_Ctor(TChar const this, char value)
     this->value = value;
     return this;
 }
+
+/**
+ * Char Class Metadata
+ */
+register (Char)
+{
+    if (Char.isa == nullptr) {
+        Char = (struct CharClass) {
+            .isa            = &Char,
+            .superclass     = &Number,
+            .name           = "Char",
+            .Equals         = Object.Equals,
+            .GetHashCode    = Object.GetHashCode,
+            .Dispose        = Object.Dispose,
+            .ReferenceEquals= Object.ReferenceEquals,
+            .InstanceEquals = Object.InstanceEquals,
+            
+            .ToString       = Char_ToString,
+            .CompareTo      = Char_CompareTo,
+            .IntValue       = Char_IntValue, 
+            .LongValue      = Char_LongValue, 
+            .FloatValue     = Char_FloatValue, 
+            .DoubleValue    = Char_DoubleValue, 
+            .CharValue      = Char_CharValue, 
+            .ShortValue     = Char_ShortValue, 
+            .Create         = ^(char value) { return Char_Ctor(new(Char), value); },
+        };
+        AddMetadata(Char);
+    }
+    return &Char;
+}
+
 
 /**
  * Compare two char primitives.
@@ -119,36 +144,6 @@ char* Char_ToString(TChar const this)
     static char str[2];
     sprintf(str, "%c", this->value);
     return str;
-}
-
-/**
- * Char Class Metadata
- */
-register (Char)
-{
-    if (Char.isa == nullptr) {
-        Char = (struct CharClass) {
-            .isa            = &Char,
-            .superclass     = &Number,
-            .name           = "Char",
-            .Equals         = Object.Equals,
-            .GetHashCode    = Object.GetHashCode,
-            .Dispose        = Object.Dispose,
-            .ReferenceEquals= Object.ReferenceEquals,
-            .InstanceEquals = Object.InstanceEquals,
-            .ToString       = Char_ToString,
-            .CompareTo      = Char_CompareTo,
-            .IntValue       = Char_IntValue, 
-            .LongValue      = Char_LongValue, 
-            .FloatValue     = Char_FloatValue, 
-            .DoubleValue    = Char_DoubleValue, 
-            .CharValue      = Char_CharValue, 
-            .ShortValue     = Char_ShortValue, 
-            .Create         = Char_New,
-        };
-        AddMetadata(Char);
-    }
-    return &Char;
 }
 
 

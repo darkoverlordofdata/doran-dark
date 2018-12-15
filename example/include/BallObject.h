@@ -10,7 +10,7 @@
 #define BALLOBJECT_H
 
 #include <GL/glew.h>
-#include <glm/glm.h>
+#include <tglm/tglm.h>
 #include <dark/darkfx.h>
 
 #include "GameObject.h"
@@ -60,7 +60,7 @@ struct BallObjectClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TBallObject  (*Create) (Vec2 Position, float Radius, Vec2 Velocity, TTexture2D Sprite);
+            TBallObject  (^Create) (Vec2 Position, float Radius, Vec2 Velocity, TTexture2D Sprite);
             void    (*Draw) (TBallObject const, TSpriteRenderer renderer);
         };
     };
@@ -73,10 +73,10 @@ struct BallObjectClass
 /**
  * BallObject API
  */
+void overload Draw(TBallObject, TSpriteRenderer renderer);
 void overload Move(TBallObject, GLfloat dt, GLuint window_width);
 void overload Reset(TBallObject, Vec2 position, Vec2 velocity);
 char* overload ToString(TBallObject const this);
-TBallObject BallObject_New(Vec2 Position, float Radius, Vec2 Velocity, TTexture2D Sprite);
-TBallObject BallObject_Ctor(TBallObject this, Vec2 Position, float Radius, Vec2 Velocity, TTexture2D Sprite);
+
 #endif BALLOBJECT_H
 

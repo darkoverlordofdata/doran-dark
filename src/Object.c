@@ -28,12 +28,10 @@ SOFTWARE.
 bool overload Equals(TObject const, TObject const that);
 static bool Virtual_Equals(TObject const, TObject const that);
 
-TObject Object_New() {
-    return Object_Ctor(new(Object));
-}
+
 /**
  */
-TObject Object_Ctor(TObject const this)
+TObject Object_Ctor(struct Object *const this)
 {
     this->isa = isa(Object);
     return this;
@@ -42,7 +40,7 @@ TObject Object_Ctor(TObject const this)
 /**
  * Destructor
  */
-TObject Object_Dtor(TObject this)
+TObject Object_Dtor(struct Object *this)
 {
     this->isa->Dispose(this);
     return nullptr;
@@ -145,7 +143,7 @@ register(Object)
             .Dispose        = Virtual_Dispose,
             .ReferenceEquals= ReferenceEquals,
             .InstanceEquals = InstanceEquals,
-            .Create         = Object_New,
+            .Create         = ^() { return Object_Ctor(new(Object)); }
         };
         // AddMetadata(Object);
     }

@@ -10,7 +10,7 @@
 #define SHADER_H
 
 #include <GL/glew.h>
-#include <glm/glm.h>
+#include <tglm/tglm.h>
 #include <dark/darkfx.h>
 
 #define IsShader(x) (x->isa == &Shader)
@@ -40,7 +40,7 @@ struct ShaderClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TShader (*Create) (void);
+            TShader (^Create) (void);
         };
     };
 
@@ -77,7 +77,5 @@ TShader overload SetArray4(TShader, const GLchar *name, const GLfloat* value);
 TShader overload SetMatrix(TShader, const GLchar *name,  GLfloat * matrix);
 TShader overload SetMatrix4(TShader, const GLchar *name,  GLfloat* matrix);
 char* overload ToString(TShader const);
-TShader Shader_New();
-TShader Shader_Ctor(TShader const this);
 
 #endif SHADER_H

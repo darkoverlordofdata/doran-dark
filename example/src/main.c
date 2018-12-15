@@ -22,7 +22,7 @@ const GLuint SCREEN_WIDTH = 800;
 const GLuint SCREEN_HEIGHT = 600;
 
 // Game Breakout(SCREEN_WIDTH, SCREEN_HEIGHT);
-TGame Breakout;
+struct Game *Breakout;
 
 int main(int argc, char *argv[])
 {
@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Initialize game
-    Breakout = Game_New(SCREEN_WIDTH, SCREEN_HEIGHT);
+    Breakout = Game.Create(SCREEN_WIDTH, SCREEN_HEIGHT);
     Start(Breakout);
 
     // DeltaTime variables
@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
     GLfloat lastFrame = 0.0f;
 
     // Start Game within Menu State
-    Breakout->State = GAME_ACTIVE;
+    SetState(Breakout, GAME_ACTIVE);
 
     // for (int i=0; Metadata.classes[i] != nullptr; i++) {
     //     printf("loaded class %x %s\n", Metadata.classes[i], Metadata.classes[i]->name);
@@ -91,13 +91,13 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 {
     // When a user presses the escape key, we set the WindowShouldClose property to true, closing the application
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, GL_TRUE);
+        glfwSetWindowShouldClose(window, true);
     if (key >= 0 && key < 1024)
     {
         if (action == GLFW_PRESS)
-            Breakout->Keys[key] = true;
+            SetKey(Breakout, key, true);
         else if (action == GLFW_RELEASE)
-            Breakout->Keys[key] = false;
+            SetKey(Breakout, key, false);
     }
 }
 

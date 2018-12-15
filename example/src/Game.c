@@ -27,7 +27,7 @@ class (Collision)
     Direction second; 
     Vec2 third;
 }; 
- 
+
 /**
  * Collision Result Tuple
  * 
@@ -42,24 +42,20 @@ static const TCollision Collision_Ctor(TCollision this, bool isTrue, Direction d
     this->third = vec;
     return this;
 }
-
 TCollision New_Collision(bool first, Direction second, Vec2 third)
 {
     return Collision_Ctor(new(Collision), first, second, third);
 }
 
+
 /**
- * Constructor
+ * Game
  * 
  * @param Width of screen
  * @param Height of screen
  * 
  */
-TGame Game_New(int Width, int Height) {
-    return Game_Ctor(new(Game), Width, Height);
-}
-
-TGame Game_Ctor(TGame const this, int Width, int Height)
+struct Game * Game_Ctor(struct Game * const this, int Width, int Height)
 {
 	Object_Ctor(this);
     this->isa = isa(Game);
@@ -68,41 +64,18 @@ TGame Game_Ctor(TGame const this, int Width, int Height)
     this->State = GAME_ACTIVE;
     this->Width = Width;
     this->Height = Height;
-
     return this;
 }
 
-/**
- * Game Class Metadata
- */
-register (Game)
+void SetKey(TGame this, int key, bool value)
 {
-    if (Game.isa == nullptr) {
-        Game = (struct GameClass) {
-            .isa        = &Game,
-            .superclass = &Object,
-            .name       = "Game",
-            /** VTable */
-            .ToString       = ToString,
-            .Equals         = Object.Equals,
-            .GetHashCode    = Object.GetHashCode,
-            .Dispose        = Object.Dispose,
-            .ReferenceEquals= Object.ReferenceEquals,
-            .InstanceEquals = Object.InstanceEquals,
-            .Start          = Start,
-            .ProcessInput   = ProcessInput,
-            .Update         = Update,
-            .Render         = Render,
-            .DoCollisions   = DoCollisions,
-            .ResetLevel     = ResetLevel,
-            .ResetPlayer    = ResetPlayer,
-            .Create         = Game_New,
-        };
-        AddMetadata(Game);
-    }
-    return &Game;
+    this->Keys[key] = value;
 }
 
+void SetState(TGame this, GameState state)
+{
+    this->State = state;
+}
 
 /**
  * Start the game
@@ -115,7 +88,7 @@ void overload Start(TGame this)
     // Load shaders
     ResourceManager.LoadShader("shaders/sprite.vs", "shaders/sprite.frag", "sprite");
     // Configure shaders
-    Mat projection = ortho(0, (GLfloat)this->Width, (GLfloat)this->Height, 0, -1, 1);
+    Mat projection = glm_ortho(0, (GLfloat)this->Width, (GLfloat)this->Height, 0, -1, 1);
     TShader shader = ResourceManager.GetShader("sprite");
     Use(shader);
     SetInteger(shader, "sprite", 0);
@@ -212,13 +185,10 @@ void overload Render(TGame this)
         // Draw background
         Vec2 size = { this->Width, this->Height };
         DrawSprite(Renderer, ResourceManager.GetTexture("background"), ZERO, size, 0.0f, WHITE);
-        // Draw level
-        TGameLevel level = this->Levels->data[this->Level];
+        struct GameLevel * level = Get(this->Levels, this->Level);
         Draw(level, Renderer);
-        // Draw player
         Draw(Player, Renderer);
-        // Draw ball
-        Draw((TGameObject)Ball, Renderer);
+        Draw(Ball, Renderer);
     }
 }
 
@@ -288,10 +258,10 @@ static Direction ArrayDirection(Vec2 target)
     };
     GLfloat max = 0.0f;
     GLuint best_match = -1;
-    target = normalize(target);        
+    target = glm_normalize(target);        
     for (GLuint i = 0; i < 4; i++)
     {
-        GLfloat dot_product = dot(target, compass[i]);
+        GLfloat dot_product = glm_dot(target, compass[i]);
         if (dot_product > max)
         {
             max = dot_product;
@@ -337,14 +307,14 @@ static TCollision CheckCollision(TGame this, TBallObject one, TGameObject two) /
     // Get difference vector between both centers
     Vec2 difference = center - aabb_center;
 
-    Vec2 clamped = clamp(difference, -aabb_half_extents, aabb_half_extents);
+    Vec2 clamped = glm_clamp(difference, -aabb_half_extents, aabb_half_extents);
 
     // Now that we know the the clamped values, add this to AABB_center and we get the value of box closest to circle
     Vec2 closest = aabb_center + clamped;
     // Now retrieve vector between center circle and closest point AABB and check if length < radius
     difference = closest - center;
     
-    if (length(difference) < one->Radius) // not <= since in that case a collision also occurs when object one exactly touches object two, which they are at the end of each collision resolution stage.
+    if (glm_length(difference) < one->Radius) // not <= since in that case a collision also occurs when object one exactly touches object two, which they are at the end of each collision resolution stage.
         return New_Collision(true, ArrayDirection(difference), difference);
     else
         return New_Collision(false, UP, (Vec2){ 0, 0 });
@@ -355,14 +325,15 @@ static TCollision CheckCollision(TGame this, TBallObject one, TGameObject two) /
  * DoCollisions
  * 
  */
-void overload DoCollisions(TGame this)
+void overload DoCollisions(struct Game *this)
 {
-    TGameLevel level = *(this->Levels[this->Level].data);
-    TArray bricks = level->Bricks;
+    struct GameLevel *level = *(this->Levels[this->Level].data);
+    struct Array *bricks = level->Bricks;
     
     for (int i=0; i<Length(bricks); i++)
     {
-        TGameObject box = bricks->data[i];
+        struct GameObject *box = Get(bricks, i);
+        // TGameObject box = bricks->data[i];
 
         if (!box->Destroyed)
         {
@@ -412,7 +383,7 @@ void overload DoCollisions(TGame this)
         Vec2 oldVelocity = { Ball->Velocity.x, Ball->Velocity.y };
         Ball->Velocity.x = INITIAL_BALL_VELOCITY.x * percentage * strength; 
         //Ball->Velocity.y = -Ball->Velocity.y;
-        Ball->Velocity = normalize(Ball->Velocity) * length(oldVelocity); // Keep speed consistent over both axes (multiply by length of old velocity, so total strength is not changed)
+        Ball->Velocity = glm_normalize(Ball->Velocity) * glm_length(oldVelocity); // Keep speed consistent over both axes (multiply by length of old velocity, so total strength is not changed)
         // Fix sticky paddle
         Ball->Velocity.y = -1 * abs(Ball->Velocity.y);
     }
@@ -425,5 +396,37 @@ void overload DoCollisions(TGame this)
 char* overload ToString(TGame const this)
 {
     return "Game";
+}
+
+/**
+ * Game Class Metadata
+ */
+register (Game)
+{
+    if (Game.isa == nullptr) {
+        Game = (struct GameClass) {
+            .isa            = &Game,
+            .superclass     = &Object,
+            .name           = "Game",
+            /** VTable */
+            .ToString       = ToString,
+            .Equals         = Object.Equals,
+            .GetHashCode    = Object.GetHashCode,
+            .Dispose        = Object.Dispose,
+            .ReferenceEquals= Object.ReferenceEquals,
+            .InstanceEquals = Object.InstanceEquals,
+            .Start          = Start,
+            .ProcessInput   = ProcessInput,
+            .Update         = Update,
+            .Render         = Render,
+            .DoCollisions   = DoCollisions,
+            .ResetLevel     = ResetLevel,
+            .ResetPlayer    = ResetPlayer,
+            .SetKey         = SetKey,
+            .Create         = ^(int Width, int Height) { return Game_Ctor(new(Game), Width, Height); },
+        };
+        AddMetadata(Game);
+    }
+    return &Game;
 }
 

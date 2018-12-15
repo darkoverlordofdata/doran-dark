@@ -165,10 +165,6 @@ unsigned int overload HashInt(THashmap const this, char* keystring)
 /**
  * Default Constructor
  */
-THashmap Hashmap_New() {
-    return Hashmap_Ctor(new(Hashmap));
-}
-
 THashmap Hashmap_Ctor(THashmap const this)
 {
     Object_Ctor(this);
@@ -392,7 +388,7 @@ register (Hashmap)
             .HashInt        = HashInt,
             .Hash           = Hash,
             .Rehash         = Rehash,
-            .Create         = Hashmap_New,
+            .Create         = ^() { return Hashmap_Ctor(new(Hashmap)); },
         };
         AddMetadata(Hashmap);
     }

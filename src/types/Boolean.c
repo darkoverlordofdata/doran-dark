@@ -31,13 +31,6 @@ SOFTWARE.
  * @param value of bool
  * 
  */
-TBoolean Boolean_New(bool value) {
-    return Boolean_Ctor(new(Boolean), value);
-}
-
-/**
- * Initialize a new Boolean
- */
 TBoolean Boolean_Ctor(TBoolean const this, bool value)
 {
     Comparable_Ctor(this);
@@ -129,7 +122,7 @@ register (Boolean)
             .Type           = BOOLEAN_TYPE,
             .True           = &True,
             .False          = &False,
-            .Create         = Boolean_New,
+            .Create         = ^(bool value) { return Boolean_Ctor(new(Boolean), value); },
         };
         AddMetadata(Boolean);
     }
