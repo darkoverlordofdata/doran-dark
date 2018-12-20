@@ -6,9 +6,7 @@
 ** Creative Commons, either version 4 of the License, or (at your
 ** option) any later version.
 ******************************************************************/
-#ifndef GAMELEVEL_H
-#define GAMELEVEL_H
-
+#pragma once
 #include <GL/glew.h>
 #include <tglm/tglm.h>
 #include <dark/darkfx.h>
@@ -56,7 +54,7 @@ struct GameLevelClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TGameLevel  (^Create) (const GLchar *file, int levelWidth, int levelHeight);
+            TGameLevel  (*Create) (const GLchar *file, int levelWidth, int levelHeight);
         };
     };
     // Loads level from file
@@ -74,6 +72,6 @@ TGameLevel overload Load(TGameLevel, const GLchar *file, int levelWidth, int lev
 void overload Draw(TGameLevel const, TSpriteRenderer renderer);
 bool overload IsCompleted(TGameLevel);
 char* overload ToString(TGameLevel);
+static void init(struct GameLevel *const this, TArray tileData, GLuint levelWidth, GLuint levelHeight);
 
-#endif GAMELEVEL_H
 

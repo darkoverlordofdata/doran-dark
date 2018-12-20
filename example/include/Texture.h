@@ -6,9 +6,7 @@
 ** Creative Commons, either version 4 of the License, or (at your
 ** option) any later version.
 ******************************************************************/
-#ifndef TEXTURE_H
-#define TEXTURE_H
-
+#pragma once
 #include <GL/glew.h>
 #include <dark/darkfx.h>
 
@@ -42,8 +40,8 @@ struct Texture2DClass
         struct ObjectClass base;
         struct 
         {
-            struct  Class * isa;
-            struct  Class * superclass;
+            struct  Class *isa;
+            struct  Class *superclass;
             char*   name;
             char*   (*ToString) (TTexture2D const);
             bool    (*Equals) (TObject const, TObject const);
@@ -51,7 +49,7 @@ struct Texture2DClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TTexture2D  (^Create) (int InternalFormat, int ImageFormat, char* path);
+            TTexture2D  (*Create) (int InternalFormat, int ImageFormat, char* path);
         };
     };
 
@@ -68,4 +66,3 @@ void overload Generate(TTexture2D, GLuint width, GLuint height, unsigned char* d
 void overload Bind(TTexture2D);
 char* overload ToString(TTexture2D const);
 
-#endif TEXTURE_H

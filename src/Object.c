@@ -126,6 +126,10 @@ char* GetClassName(TObject const this)
     return this->isa->base.name;
 }
 
+static struct Object* Create() { 
+    return Object_Ctor(new(Object)); 
+}
+
 /**
  * Object Class Metadata
  */
@@ -143,7 +147,7 @@ register(Object)
             .Dispose        = Virtual_Dispose,
             .ReferenceEquals= ReferenceEquals,
             .InstanceEquals = InstanceEquals,
-            .Create         = ^() { return Object_Ctor(new(Object)); }
+            .Create         = Create
         };
         // AddMetadata(Object);
     }

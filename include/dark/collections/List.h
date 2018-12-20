@@ -23,8 +23,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#ifndef _LIST_H_
-#define _LIST_H_
+#pragma once
+#ifndef DARK_LIST_H_
+#define DARK_LIST_H_
 #include "Collection.h"
 
 #define IsList(x) (x->isa == &List)
@@ -60,7 +61,7 @@ struct ListClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TList   (^Create) ();
+            TList   (*Create) ();
             int     (*Length)       (TList const);
             bool    (*IsEmpty)      (TList const);
             bool    (*Contains)     (TList const, Any value);
@@ -90,4 +91,4 @@ Any overload Remove(TList const);
 int Insert(TList const, Any data, List_Compare func);
 void overload ForEach(TList const, List_Interator func);
 
-#endif _LIST_H_ 
+#endif DARK_LIST_H_ 

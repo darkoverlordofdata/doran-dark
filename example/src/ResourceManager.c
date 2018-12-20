@@ -11,7 +11,7 @@
 /**
  * ResourceManager
  */
-struct ResourceManager * ResourceManager_Ctor(TResourceManager this)
+struct ResourceManager * ResourceManager_Ctor(struct ResourceManager * this)
 {
     Object_Ctor(this); 
     this->isa = isa(ResourceManager);
@@ -26,7 +26,9 @@ struct ResourceManager * ResourceManager_Ctor(TResourceManager this)
  * @returns loaded, compiled and linked shader program
  * 
  */
-static TShader loadShaderFromFile(const GLchar *vShaderFile, const GLchar *fShaderFile)
+static struct Shader *loadShaderFromFile(
+    const GLchar *vShaderFile, 
+    const GLchar *fShaderFile)
 {
     // 1. Retrieve the vertex/fragment source code from filePath
     // char* vertexCode;
@@ -49,7 +51,7 @@ static TShader loadShaderFromFile(const GLchar *vShaderFile, const GLchar *fShad
     fclose(fragmentShaderFile);
 
     // 2. Now create shader object from source code
-    TShader shader = Shader.Create();
+    struct Shader *shader = Shader.Create();
     Compile(shader, vShaderCode, fShaderCode);
     return shader;
 }
@@ -62,19 +64,18 @@ static TShader loadShaderFromFile(const GLchar *vShaderFile, const GLchar *fShad
  * @returns Texture
  * 
  */
-static TTexture2D loadTextureFromFile(const GLchar *file, bool alpha)
+static struct Texture2D* loadTextureFromFile(const GLchar *file, bool alpha)
 {
     // Create Texture object
     int format = alpha ? GL_RGBA : GL_RGB;
     char* path = join("assets/", file);
     int width, height, channels;
-    TTexture2D texture = Texture2D.Create(format, format, path);
+    struct Texture2D *texture = Texture2D.Create(format, format, path);
     // Load image
     unsigned char* image = stbi_load(path, &width, &height, &channels, 0); //texture->ImageFormat == GL_RGBA ? 4 : 3);
-    // Now generate texture
+    // generate texture
     Generate(texture, width, height, image);
-    
-    // And finally free image data
+    // And then free image data
     stbi_image_free(image);
     return texture;
 }
@@ -87,7 +88,7 @@ static TTexture2D loadTextureFromFile(const GLchar *file, bool alpha)
  * @param name to cache as
  * @returns loaded, compiled and linked shader program
  */
-TShader LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, char* name)
+struct Shader *LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, char* name)
 {
     Put(ResourceManager.Shaders, name, loadShaderFromFile(vShaderFile, fShaderFile));
     return Get(ResourceManager.Shaders, name);
@@ -101,7 +102,7 @@ TShader LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, char* n
  * @returns loaded, compiled and linked shader program
  * 
  */
-TShader GetShader(char* name)
+struct Shader *GetShader(char* name)
 {
     return Get(ResourceManager.Shaders, name);
 }
@@ -115,9 +116,9 @@ TShader GetShader(char* name)
  * @returns Texture
  * 
  */
-TTexture2D LoadTexture(const GLchar *file, bool alpha, char* name)
+struct Texture2D *LoadTexture(const GLchar *file, bool alpha, char* name)
 {
-    TTexture2D tex = loadTextureFromFile(file, alpha);
+    struct Texture2D *tex = loadTextureFromFile(file, alpha);
     Put(ResourceManager.Textures, name, tex);
     return tex;
 }
@@ -129,25 +130,25 @@ TTexture2D LoadTexture(const GLchar *file, bool alpha, char* name)
  * @returns Texture
  * 
  */
-TTexture2D GetTexture(char* name)
+struct Texture2D *GetTexture(char* name)
 {
-    TTexture2D tex = Get(ResourceManager.Textures, name);
+    struct Texture2D *tex = Get(ResourceManager.Textures, name);
     return tex;
 }
 
 Clear1(Any item, Any data)
 {
-    TShader s = data;
+    struct Shader *s = data;
     glDeleteProgram(s->Id);
 }
 
 Clear2(Any item, Any data)
 {
-    TTexture2D t = data;
+    struct Texture2D *t = data;
     glDeleteTextures(1, &t->Id);
 }
 
-void Dtor(TResourceManager this)
+void Dtor(struct ResourceManager * this)
 {
     // (Properly) delete all shaders	
     // Iterate(ResourceManager.Shaders, Clear1, nullptr);
@@ -178,6 +179,10 @@ static char* rdbuf(FILE* f)
     return buf;
 }
 
+static struct ResourceManager* Create() { 
+    return ResourceManager_Ctor(new(ResourceManager));
+}
+
 /**
  * ResourceManager Class Metadata
  */
@@ -185,17 +190,15 @@ register (ResourceManager)
 {
     if (ResourceManager.isa == nullptr) {
         ResourceManager = (struct ResourceManagerClass) {
-            .isa        = &ResourceManager,
-            .superclass = &Object,
-            .name       = "ResourceManager",
-            /** VTable */
+            .isa                = &ResourceManager,
+            .superclass         = &Object,
+            .name               = "ResourceManager",
             .ToString           = Object.ToString,
             .Equals             = Object.Equals,
             .GetHashCode        = Object.GetHashCode,
             .Dispose            = Object.Dispose,
             .ReferenceEquals    = Object.ReferenceEquals,
             .InstanceEquals     = Object.InstanceEquals,
-            .Create             = ^() { return ResourceManager_Ctor(new(ResourceManager));},
             .LoadShader         = LoadShader,
             .GetShader          = GetShader,
             .LoadTexture        = LoadTexture,
@@ -205,6 +208,7 @@ register (ResourceManager)
             .loadTextureFromFile= loadTextureFromFile,
             .Shaders            = Hashmap.Create(),
             .Textures           = Hashmap.Create(),
+            .Create             = Create,
 
         };
         AddMetadata(ResourceManager);

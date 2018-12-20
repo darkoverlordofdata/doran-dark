@@ -6,9 +6,7 @@
 ** Creative Commons, either version 4 of the License, or (at your
 ** option) any later version.
 ******************************************************************/
-#ifndef GAME_H
-#define GAME_H
-
+#pragma once
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <dark/darkfx.h>
@@ -78,7 +76,7 @@ struct GameClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TGame   (^Create) (int Width, int Height);
+            TGame   (*Create) (int Width, int Height);
         };
     };
     // Initialize game state (load all shaders/textures/levels)
@@ -111,4 +109,3 @@ void overload Dispose(TGame);
 void overload DoCollisions(TGame);
 char* overload ToString(TGame const);
 
-#endif GAME_H

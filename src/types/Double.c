@@ -136,6 +136,11 @@ char* Double_ToString(TDouble const this)
     return str;
 }
 
+static struct Double* Create(double value) { 
+    return Double_Ctor(new(Double), value); 
+}
+
+
 /**
  * Double Class Metadata
  */
@@ -159,7 +164,7 @@ register (Double)
             .DoubleValue    = Double_DoubleValue, 
             .CharValue      = Double_CharValue, 
             .ShortValue     = Double_ShortValue, 
-            .Create         = ^(double value) { return Double_Ctor(new(Double), value); },
+            .Create         = Create,
         };
         AddMetadata(Double);
     }

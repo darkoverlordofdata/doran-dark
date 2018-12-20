@@ -13,7 +13,11 @@
 /**
  * GameLevel
  */
-struct GameLevel * GameLevel_Ctor(TGameLevel const this, const GLchar *file, int levelWidth, int levelHeight)
+struct GameLevel *GameLevel_Ctor(
+    struct GameLevel *const this, 
+    const GLchar *file, 
+    int levelWidth, 
+    int levelHeight)
 {
 	Object_Ctor(this);
     this->isa = isa(GameLevel);
@@ -22,7 +26,6 @@ struct GameLevel * GameLevel_Ctor(TGameLevel const this, const GLchar *file, int
     return this;
 }
 
-static void init(TGameLevel const this, TArray tileData, GLuint levelWidth, GLuint levelHeight);
 /**
  * Load 
  * 
@@ -31,13 +34,17 @@ static void init(TGameLevel const this, TArray tileData, GLuint levelWidth, GLui
  * @param levelHeight of level in tiles
  * 
  */
-TGameLevel overload Load(TGameLevel const this, const GLchar *file, int levelWidth, int levelHeight)
+struct GameLevel *overload Load(
+    struct GameLevel *const this, 
+    const GLchar *file, 
+    int levelWidth, 
+    int levelHeight)
 {
     // Clear old data
     Clear(this->Bricks);
     // Load from file
     GLuint tileCode;
-    TGameLevel level;
+    struct GameLevel *level;
    
     char* path = join("assets/", file);
     char* line;
@@ -71,11 +78,13 @@ TGameLevel overload Load(TGameLevel const this, const GLchar *file, int levelWid
  * @param renderer to use
  * 
  */
-void overload Draw(TGameLevel const this, TSpriteRenderer renderer)
+void overload Draw(
+    struct GameLevel *const this, 
+    struct SpriteRenderer *renderer)
 {
     for (int i = 0; i < Length(this->Bricks); i++)
     {
-        TGameObject tile = this->Bricks->data[i];
+        struct GameObject *tile = this->Bricks->data[i];
         if (!tile->Destroyed)
             Draw(tile, renderer);
     }
@@ -87,11 +96,11 @@ void overload Draw(TGameLevel const this, TSpriteRenderer renderer)
  * @returns true when complete
  * 
  */
-bool overload IsCompleted(TGameLevel const this)
+bool overload IsCompleted(struct GameLevel *const this)
 {
     for (int i = 0; i < Length(this->Bricks); i++)
     {
-        TGameObject tile = this->Bricks->data[i];
+        struct GameObject *tile = this->Bricks->data[i];
         if (tile->IsSolid && !tile->Destroyed)
             return false;
     }
@@ -107,11 +116,15 @@ bool overload IsCompleted(TGameLevel const this)
  * @param levelHeight of level in tiles
  *  
  */
-static void init(TGameLevel const this, TArray tileData, GLuint levelWidth, GLuint levelHeight)
+static void init(
+    struct GameLevel *const this, 
+    struct Array *tileData, 
+    GLuint levelWidth, 
+    GLuint levelHeight)
 {
     // Calculate dimensions
     GLuint height = Length(tileData);
-    TArray row = tileData->data[0];
+    struct Array *row = tileData->data[0];
     GLuint width = Length(row); // Note we can index vector at [0] since this function is only called if height > 0
     GLfloat unit_width = levelWidth / (GLfloat)width, unit_height = levelHeight / height; 
     // Initialize level tiles based on tileData		
@@ -121,7 +134,7 @@ static void init(TGameLevel const this, TArray tileData, GLuint levelWidth, GLui
         for (GLuint x = 0; x < width; ++x)
         {
             // Check block type from level data (2D level array)
-            TArray row = tileData->data[y];
+            struct Array *row = tileData->data[y];
             int blockType = (int)(row->data[x]);
 
             Vec2 pos = { unit_width * x, unit_height * y };
@@ -139,15 +152,15 @@ static void init(TGameLevel const this, TArray tileData, GLuint levelWidth, GLui
             
             if (blockType == 1) // Solid
             {
-                TTexture2D tex = ResourceManager.GetTexture("block_solid");
-                TGameObject obj = GameObject.Create("tile", pos, size, tex, color);
+                struct Texture2D *tex = ResourceManager.GetTexture("block_solid");
+                struct GameObject *obj = GameObject.Create("tile", pos, size, tex, color);
                 obj->IsSolid = true;
                 Add(this->Bricks, obj);
             }
             else if (blockType > 1)	// Non-solid; now determine its color based on level data
             {
-                TTexture2D tex = ResourceManager.GetTexture("block");
-                TGameObject obj = GameObject.Create("tile", pos, size, tex, color);
+                struct Texture2D *tex = ResourceManager.GetTexture("block");
+                struct GameObject *obj = GameObject.Create("tile", pos, size, tex, color);
                 Add(this->Bricks, obj);
             }
         }
@@ -157,13 +170,19 @@ static void init(TGameLevel const this, TArray tileData, GLuint levelWidth, GLui
 /**
  * ToString
  */
-char* overload ToString(TGameLevel const this)
+char* overload ToString(struct GameLevel *const this)
 {
     return "GameLevel";
 }
 
+static struct GameLevel* Create(
+    const GLchar *file, 
+    int levelWidth, 
+    int levelHeight) { 
+    return GameLevel_Ctor(new(GameLevel), file, levelWidth, levelHeight); 
+}
 /**
- * GameLevel Class Metadata
+ * Register the GameLevel Class runtime Metadata
  */
 register (GameLevel)
 {
@@ -172,7 +191,6 @@ register (GameLevel)
             .isa            = &GameLevel,
             .superclass     = &Object,
             .name           = "GameLevel",
-            /** VTable */
             .ToString       = ToString,
             .Equals         = Object.Equals,
             .GetHashCode    = Object.GetHashCode,
@@ -182,7 +200,7 @@ register (GameLevel)
             .Load           = Load,
             .Draw           = Draw,
             .IsCompleted    = IsCompleted,
-            .Create         = ^(const GLchar *file, int levelWidth, int levelHeight) { return GameLevel_Ctor(new(GameLevel), file, levelWidth, levelHeight); },
+            .Create         = Create,
         };
         AddMetadata(GameLevel);
     }

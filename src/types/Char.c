@@ -39,6 +39,10 @@ TChar Char_Ctor(TChar const this, char value)
     return this;
 }
 
+static struct Char* Create(char value) { 
+    return Char_Ctor(new(Char), value); 
+}
+
 /**
  * Char Class Metadata
  */
@@ -63,7 +67,7 @@ register (Char)
             .DoubleValue    = Char_DoubleValue, 
             .CharValue      = Char_CharValue, 
             .ShortValue     = Char_ShortValue, 
-            .Create         = ^(char value) { return Char_Ctor(new(Char), value); },
+            .Create         = Create,
         };
         AddMetadata(Char);
     }

@@ -7,7 +7,6 @@
 ** option) any later version.
 ******************************************************************/
 #include <Texture.h>
-
 /**
  * Texture2D
  * 
@@ -15,7 +14,11 @@
  * @param ImageFormat for binding the image
  * 
  */
-struct Texture2D * Texture2D_Ctor(TTexture2D const this, int InternalFormat, int ImageFormat, char* path)
+struct Texture2D *Texture2D_Ctor(
+    struct Texture2D *const this,
+    int InternalFormat,
+    int ImageFormat,
+    char* path)
 {
 	Object_Ctor(this);
     this->isa = isa(Texture2D);
@@ -42,7 +45,11 @@ struct Texture2D * Texture2D_Ctor(TTexture2D const this, int InternalFormat, int
  * @param data bitmap data
  * 
  */
-void overload Generate(TTexture2D this, GLuint width, GLuint height, unsigned char* data)
+void overload Generate(
+    struct Texture2D *this, 
+    GLuint width, 
+    GLuint height, 
+    unsigned char* data)
 {
     this->Width = width;
     this->Height = height;
@@ -58,7 +65,7 @@ void overload Generate(TTexture2D this, GLuint width, GLuint height, unsigned ch
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void overload Bind(TTexture2D this)
+void overload Bind(struct Texture2D * this)
 {
     glBindTexture(GL_TEXTURE_2D, this->Id);
 }
@@ -66,9 +73,16 @@ void overload Bind(TTexture2D this)
 /**
  * ToString
  */
-char* overload ToString(TTexture2D const this)
+char* overload ToString(struct Texture2D *const this)
 {
     return "Texture2D";
+}
+
+/**
+ * Creates a new instance
+ */
+static struct Texture2D *Create(int InternalFormat, int ImageFormat, char* path) { 
+    return Texture2D_Ctor(new(Texture2D), InternalFormat, ImageFormat, path);
 }
 
 /**
@@ -81,7 +95,6 @@ register (Texture2D)
             .isa            = &Texture2D,
             .superclass     = &Object,
             .name           = "Texture2D",
-            /** VTable */
             .ToString       = ToString,
             .Equals         = Object.Equals,
             .GetHashCode    = Object.GetHashCode,
@@ -90,10 +103,11 @@ register (Texture2D)
             .InstanceEquals = Object.InstanceEquals,
             .Generate       = Generate,
             .Bind           = Bind,
-            .Create         = ^(int InternalFormat, int ImageFormat, char* path) { return Texture2D_Ctor(new(Texture2D), InternalFormat, ImageFormat, path);},
+            .Create         = Create,
         };
         AddMetadata(Texture2D);
     }
+    
     return &Texture2D;
 }
 

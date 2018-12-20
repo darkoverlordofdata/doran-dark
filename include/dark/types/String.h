@@ -23,6 +23,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
+#pragma once
 #ifndef _STRING_H_
 #define _STRING_H_
 #include <string.h>
@@ -61,7 +62,7 @@ struct StringClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TString (^Create) (char* value);
+            TString (*Create) (char* value);
             int     (*CompareTo) (TComparable const, TComparable other);
             int     (*Length) (TString const);
             bool    (*IsEmpty) (TString const);

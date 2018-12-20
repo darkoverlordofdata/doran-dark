@@ -23,8 +23,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#ifndef _COLLECTION_H_
-#define _COLLECTION_H_
+#pragma once
+#ifndef DARK_COLLECTION_H_
+#define DARK_COLLECTION_H_
 #include "../Object.h"
 
 #define IsCollection(x) (x->isa == &Collection)
@@ -80,4 +81,4 @@ TCollection Collection_Ctor(TCollection const this);
  * AddAll
  * ToArray
 */
-#endif _COLLECTION_H_
+#endif DARK_COLLECTION_H_

@@ -23,6 +23,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
+#pragma once
 #ifndef _DOUBLE_H_
 #define _DOUBLE_H_
 #include "Number.h"
@@ -41,7 +42,7 @@ SOFTWARE.
  */
 class (Double) 
 {
-    struct DoubleClass * isa;
+    struct DoubleClass *isa;
     double value;
 };
 
@@ -54,8 +55,8 @@ struct DoubleClass
         struct NumberClass base;
         struct 
         {
-            struct  Class * isa;
-            struct  Class * superclass;
+            struct  Class *isa;
+            struct  Class *superclass;
             char*   name;
             char*   (*ToString) (TDouble const);
             bool    (*Equals) (TObject const, TObject const);
@@ -63,7 +64,7 @@ struct DoubleClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TDouble (^Create) (double value);
+            TDouble (*Create) (double value);
             int     (*CompareTo) (TComparable const, TComparable other);
             int     (*IntValue) (TDouble const);
             long    (*LongValue) (TDouble const);

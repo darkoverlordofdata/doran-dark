@@ -23,8 +23,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#ifndef _ARRAY_H_
-#define _ARRAY_H_
+#pragma once
+#ifndef DARK_ARRAY_H_
+#define DARK_ARRAY_H_
 #include "Collection.h"
 /**
  * An ArrayList based on:
@@ -61,7 +62,7 @@ struct ArrayClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TArray  (^Create) (int capacity);
+            TArray  (*Create) (int capacity);
             int     (*Length)       (TArray const);
             bool    (*IsEmpty)      (TArray const);
             bool    (*Contains)     (TArray const, Any value);
@@ -118,4 +119,4 @@ TArray Array_Variadic(int count, ...);
  */
 #define Array_Vala(...) Array_Variadic(PP_NARG(__VA_ARGS__)-1, __VA_ARGS__)
 
-#endif _ARRAY_H_
+#endif DARK_ARRAY_H_

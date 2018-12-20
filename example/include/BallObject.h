@@ -6,9 +6,7 @@
 ** Creative Commons, either version 4 of the License, or (at your
 ** option) any later version.
 ******************************************************************/
-#ifndef BALLOBJECT_H
-#define BALLOBJECT_H
-
+#pragma once
 #include <GL/glew.h>
 #include <tglm/tglm.h>
 #include <dark/darkfx.h>
@@ -60,7 +58,7 @@ struct BallObjectClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TBallObject  (^Create) (Vec2 Position, float Radius, Vec2 Velocity, TTexture2D Sprite);
+            TBallObject  (*Create) (Vec2 Position, float Radius, Vec2 Velocity, TTexture2D Sprite);
             void    (*Draw) (TBallObject const, TSpriteRenderer renderer);
         };
     };
@@ -78,5 +76,4 @@ void overload Move(TBallObject, GLfloat dt, GLuint window_width);
 void overload Reset(TBallObject, Vec2 position, Vec2 velocity);
 char* overload ToString(TBallObject const this);
 
-#endif BALLOBJECT_H
 

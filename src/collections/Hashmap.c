@@ -364,6 +364,10 @@ char* overload ToString(THashmap const this)
     return "dark.collections.Hashmap";
 }
 
+static struct Hashmap* Create() { 
+    return Hashmap_Ctor(new(Hashmap)); 
+}
+
 /**
  * List Class Metadata
  */
@@ -388,7 +392,7 @@ register (Hashmap)
             .HashInt        = HashInt,
             .Hash           = Hash,
             .Rehash         = Rehash,
-            .Create         = ^() { return Hashmap_Ctor(new(Hashmap)); },
+            .Create         = Create,
         };
         AddMetadata(Hashmap);
     }

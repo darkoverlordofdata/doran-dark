@@ -23,6 +23,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
+#pragma once
 #ifndef _FLOAT_H_
 #define _FLOAT_H_
 #include "Number.h"
@@ -63,7 +64,7 @@ struct FloatClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TFloat  (^Create) (float value);
+            TFloat  (*Create) (float value);
             int     (*CompareTo) (TComparable const, TComparable other);
             int     (*IntValue) (TFloat const);
             long    (*LongValue) (TFloat const);

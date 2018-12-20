@@ -130,6 +130,10 @@ char* Float_ToString(TFloat const this)
     return str;
 }
 
+static struct Float* Create(float value) { 
+    return Float_Ctor(new(Float), value); 
+}
+
 /**
  * Float Class Metadata
  */
@@ -153,7 +157,7 @@ register (Float)
             .DoubleValue    = Float_DoubleValue, 
             .CharValue      = Float_CharValue, 
             .ShortValue     = Float_ShortValue, 
-            .Create         = ^(float value) { return Float_Ctor(new(Float), value); },
+            .Create         = Create,
         };
         AddMetadata(Float);
     }

@@ -187,6 +187,10 @@ void String_Dispose(TString const this)
 {
 }
 
+static struct String* Create(char* value) { 
+    return String_Ctor(new(String), value); 
+}
+
 /**
  * String Class Metadata
  */
@@ -221,7 +225,7 @@ register (String)
             .ToLowerCase    = String_ToLowerCase,
             .ToUpperCase    = String_ToUpperCase,
             .Trim           = String_Trim,
-            .Create         = ^(char* value) { return String_Ctor(new(String), value); },
+            .Create         = Create,
         };
         AddMetadata(String);
     }

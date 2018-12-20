@@ -128,6 +128,10 @@ char* Integer_ToString(TInteger const this)
     return str;
 }
 
+static struct Integer* Create(int value) { 
+    return Integer_Ctor(new(Integer), value); 
+}
+
 /**
  * Integer Class Metadata
  */
@@ -151,7 +155,7 @@ register (Integer)
             .DoubleValue    = Integer_DoubleValue, 
             .CharValue      = Integer_CharValue, 
             .ShortValue     = Integer_ShortValue, 
-            .Create         = ^(int value) { return Integer_Ctor(new(Integer), value); },
+            .Create         = Create,
         };
         AddMetadata(Integer);
     }

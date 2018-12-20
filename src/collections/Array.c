@@ -182,6 +182,10 @@ char* overload ToString(TArray const this)
     return "dark.collections.Array";
 }
 
+static struct Array* Create(int capacity) { 
+    return Array_Ctor(new(Array), capacity); 
+}
+
 /**
  * Array Class Metadata
  */
@@ -205,7 +209,7 @@ register (Array)
             .Set            = Set,
             .Get            = Get,
             .Clear          = Clear,
-            .Create         = ^(int capacity) { return Array_Ctor(new(Array), capacity); }
+            .Create         = Create,
         };
         AddMetadata(Array);
     }

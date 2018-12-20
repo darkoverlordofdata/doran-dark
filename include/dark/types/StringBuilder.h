@@ -52,6 +52,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
+#pragma once
 #ifndef _STRING_BUILDER_H_
 #define _STRING_BUILDER_H_
 #include <string.h>
@@ -97,7 +98,7 @@ struct StringBuilderClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TStringBuilder(^Create) ();
+            TStringBuilder(*Create) ();
             int     (*Empty) (TStringBuilder const);
             int     (*Append) (TStringBuilder const, char* str);
             int     (*Appendc) (TStringBuilder const, char c);

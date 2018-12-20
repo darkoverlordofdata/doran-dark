@@ -6,9 +6,7 @@
 ** Creative Commons, either version 4 of the License, or (at your
 ** option) any later version.
 ******************************************************************/
-#ifndef SHADER_H
-#define SHADER_H
-
+#pragma once
 #include <GL/glew.h>
 #include <tglm/tglm.h>
 #include <dark/darkfx.h>
@@ -40,7 +38,7 @@ struct ShaderClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TShader (^Create) (void);
+            TShader (*Create) (void);
         };
     };
 
@@ -78,4 +76,3 @@ TShader overload SetMatrix(TShader, const GLchar *name,  GLfloat * matrix);
 TShader overload SetMatrix4(TShader, const GLchar *name,  GLfloat* matrix);
 char* overload ToString(TShader const);
 
-#endif SHADER_H

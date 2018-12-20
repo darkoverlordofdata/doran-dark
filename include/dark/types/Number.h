@@ -23,6 +23,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
+#pragma once
 #ifndef _NUMBER_H_
 #define _NUMBER_H_
 #include <limits.h>
@@ -54,8 +55,8 @@ struct NumberClass
         struct ObjectClass base;
         struct 
         {
-            struct  Class * isa;
-            struct  Class * superclass;
+            struct  Class *isa;
+            struct  Class *superclass;
             char*   name;
             char*   (*ToString) (TNumber const);
             bool    (*Equals) (TObject const, TObject const);
@@ -63,7 +64,7 @@ struct NumberClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TNumber (^Create) ();
+            TNumber (*Create) ();
             int     (*CompareTo) (TComparable const, TComparable other);
         };
     };

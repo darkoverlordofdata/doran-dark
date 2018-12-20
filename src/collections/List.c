@@ -155,13 +155,16 @@ int overload Length(TList const this)
     return this->length;
 }
 
-
 /**
  * ToString
  */
 char* overload ToString(TList const this)
 {
     return "dark.collections.List";
+}
+
+static struct List* Create() { 
+    return List_Ctor(new(List)); 
 }
 
 /**
@@ -185,7 +188,7 @@ register (List)
             .Insert         = Insert,
             .Add            = Add,
             .Remove         = Remove,
-            .Create         = ^() { return List_Ctor(new(List)); }
+            .Create         = Create
 
         };
         AddMetadata(List);

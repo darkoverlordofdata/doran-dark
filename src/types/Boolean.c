@@ -86,6 +86,11 @@ char* overload ToString(TBoolean const this)
     return this->value ? "true" : "false";
 }
 
+static struct Boolean* Create(bool value) { 
+    return Boolean_Ctor(new(Boolean), value); 
+}
+
+
 /**
  * Boolean Class Metadata
  */
@@ -122,7 +127,7 @@ register (Boolean)
             .Type           = BOOLEAN_TYPE,
             .True           = &True,
             .False          = &False,
-            .Create         = ^(bool value) { return Boolean_Ctor(new(Boolean), value); },
+            .Create         = Create,
         };
         AddMetadata(Boolean);
     }

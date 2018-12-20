@@ -8,7 +8,7 @@
 ******************************************************************/
 #include <Shader.h>
 
-static void checkCompileErrors(TShader this, GLuint object, char* type);
+static void checkCompileErrors(struct Shader *this, GLuint object, char* type);
 
 const char* VERSION = "#version 300 es\n";
 const char* HEADER = "#\n"
@@ -19,7 +19,7 @@ const char* HEADER = "#\n"
 /**
  * Shader
  */
-struct Shader * Shader_Ctor(TShader const this)
+struct Shader * Shader_Ctor(struct Shader *const this)
 {
 	Object_Ctor(this);
     this->isa = isa(Shader);
@@ -29,7 +29,7 @@ struct Shader * Shader_Ctor(TShader const this)
 /**
  * Use shader
  */
-TShader overload Use(TShader this)
+struct Shader *overload Use(struct Shader *this)
 {
     glUseProgram(this->Id);
     return this;
@@ -42,7 +42,10 @@ TShader overload Use(TShader this)
  * @param fragmentSource fragment shader source code
  * 
  */
-void overload Compile(TShader this, const GLchar* vertexSource, const GLchar* fragmentSource)
+void overload Compile(
+    struct Shader *this, 
+    const GLchar* vertexSource, 
+    const GLchar* fragmentSource)
 {
     GLuint sVertex, sFragment;
     // Vertex Shader
@@ -70,68 +73,96 @@ void overload Compile(TShader this, const GLchar* vertexSource, const GLchar* fr
     glDeleteShader(sFragment);
 }
 
-TShader overload SetFloat(TShader this, const GLchar *name, GLfloat value)
-{
+struct Shader *overload SetFloat(
+    struct Shader *this, 
+    const GLchar *name, 
+    GLfloat value) {
     glUniform1f(glGetUniformLocation(this->Id, name), value);
     return this;
 }
 
-TShader overload SetInteger(TShader this, const GLchar *name, GLint value)
-{
+struct Shader *overload SetInteger(
+    struct Shader *this, 
+    const GLchar *name, 
+    GLint value) {
     glUniform1i(glGetUniformLocation(this->Id, name), value);
     return this;
 }
 
-TShader overload SetArray2f(TShader this, const GLchar *name, GLfloat x, GLfloat y)
-{
+struct Shader *overload SetArray2f(
+    struct Shader *this, 
+    const GLchar *name, 
+    GLfloat x, 
+    GLfloat y) {
     glUniform2f(glGetUniformLocation(this->Id, name), x, y);
     return this;
 }
 
-TShader overload SetArray2(TShader this, const GLchar *name, const GLfloat* value)
-{
+struct Shader *overload SetArray2(
+    struct Shader *this, 
+    const GLchar *name, 
+    const GLfloat* value) {
     glUniform2f(glGetUniformLocation(this->Id, name), value[0], value[1]);
     return this;
 }
 
-TShader overload SetArray3f(TShader this, const GLchar *name, GLfloat x, GLfloat y, GLfloat z)
-{
+struct Shader *overload SetArray3f(
+    struct Shader *this, 
+    const GLchar *name, 
+    GLfloat x, 
+    GLfloat y, 
+    GLfloat z) {
     glUniform3f(glGetUniformLocation(this->Id, name), x, y, z);
     return this;
 }
 
-TShader overload SetArray3(TShader this, const GLchar *name, const GLfloat* value)
-{
+struct Shader *overload SetArray3(
+    struct Shader *this, 
+    const GLchar *name, 
+    const GLfloat* value) {
     glUniform3f(glGetUniformLocation(this->Id, name), value[0], value[1], value[2]);
     return this;
 }
 
-TShader overload SetArray4f(TShader this, const GLchar *name, GLfloat x, GLfloat y, GLfloat z, GLfloat w)
-{
+struct Shader *overload SetArray4f(
+    struct Shader *this, 
+    const GLchar *name, 
+    GLfloat x, 
+    GLfloat y, 
+    GLfloat z, 
+    GLfloat w) {
     glUniform4f(glGetUniformLocation(this->Id, name), x, y, z, w);
     return this;
 }
 
-TShader overload SetArray4(TShader this, const GLchar *name, const GLfloat* value)
-{
+struct Shader *overload SetArray4(
+    struct Shader *this, 
+    const GLchar *name, 
+    const GLfloat* value) {
     glUniform4f(glGetUniformLocation(this->Id, name), value[0], value[1], value[2], value[3]);
     return this;
 }
 
-TShader overload SetMatrix(TShader this, const GLchar *name,  GLfloat * matrix)
-{
+struct Shader *overload SetMatrix(
+    struct Shader *this, 
+    const GLchar *name,  
+    GLfloat * matrix) {
     glUniformMatrix4fv(glGetUniformLocation(this->Id, name), 1, GL_FALSE, matrix);
     return this;
 }
 
-TShader overload SetMatrix4(TShader this, const GLchar *name,  GLfloat* matrix)
-{
+struct Shader *overload SetMatrix4(
+    struct Shader *this, 
+    const GLchar *name,  
+    GLfloat* matrix) {
     glUniformMatrix4fv(glGetUniformLocation(this->Id, name), 1, GL_FALSE, matrix);
     return this;
 }
 
-static void checkCompileErrors(TShader this, GLuint object, char* type)
-{
+static void checkCompileErrors(
+    struct Shader *this, 
+    GLuint object, 
+    char* type) {
     GLint success;
     GLchar infoLog[1024];
     if (type != "PROGRAM")
@@ -161,9 +192,13 @@ static void checkCompileErrors(TShader this, GLuint object, char* type)
 /**
  * ToString
  */
-char* overload ToString(TShader const this)
+char* overload ToString(struct Shader *const this)
 {
     return "Shader";
+}
+
+static struct Shader* Create() { 
+    return Shader_Ctor(new(Shader));
 }
 
 /**
@@ -173,10 +208,9 @@ register (Shader)
 {
     if (Shader.isa == nullptr) {
         Shader = (struct ShaderClass) {
-            .isa        = &Shader,
-            .superclass = &Object,
-            .name       = "Shader",
-            /** VTable */
+            .isa            = &Shader,
+            .superclass     = &Object,
+            .name           = "Shader",
             .ToString       = ToString,
             .Equals         = Object.Equals,
             .GetHashCode    = Object.GetHashCode,
@@ -195,7 +229,7 @@ register (Shader)
             .SetArray4f     = SetArray4f,
             .SetArray4      = SetArray4,
             .SetMatrix4     = SetMatrix4,
-            .Create         = ^() { return Shader_Ctor(new(Shader));},
+            .Create         = Create,
         };
         AddMetadata(Shader);
     }

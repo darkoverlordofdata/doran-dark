@@ -47,20 +47,14 @@ int main(int argc, char *argv[])
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    // Initialize game
-    Breakout = Game.Create(SCREEN_WIDTH, SCREEN_HEIGHT);
-    Start(Breakout);
-
     // DeltaTime variables
     GLfloat deltaTime = 0.0f;
     GLfloat lastFrame = 0.0f;
 
-    // Start Game within Menu State
+    // Initialize game
+    Breakout = Game.Create(SCREEN_WIDTH, SCREEN_HEIGHT);
+    Start(Breakout);
     SetState(Breakout, GAME_ACTIVE);
-
-    // for (int i=0; Metadata.classes[i] != nullptr; i++) {
-    //     printf("loaded class %x %s\n", Metadata.classes[i], Metadata.classes[i]->name);
-    // }
 
     while (!glfwWindowShouldClose(window))
     {

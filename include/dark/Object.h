@@ -23,6 +23,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
+#pragma once
 #ifndef _OBJECT_H_
 #define _OBJECT_H_
 #include "Class.h"
@@ -65,7 +66,7 @@ struct ObjectClass {
     void    (*Dispose) (TObject const);
     bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
     bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-    TObject (^Create) ();
+    TObject (*Create) ();
 
 };
 

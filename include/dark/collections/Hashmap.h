@@ -34,8 +34,9 @@ SOFTWARE.
  * https://petewarden.com/2010/01/07/c-hashmap/
  *
  */
-#ifndef _HASHMAP_H_
-#define _HASHMAP_H_
+#pragma once
+#ifndef DARK_HASHMAP_H_
+#define DARK_HASHMAP_H_
 #include "Collection.h"
 
 #define MAP_MISSING -3  /* No such element */
@@ -85,7 +86,7 @@ struct HashmapClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            THashmap(^Create) ();
+            THashmap(*Create) ();
             /*
              * Get the current size of a hashmap
              */
@@ -154,4 +155,4 @@ void overload Dispose(THashmap const);
 int overload Length(THashmap const);
 char* overload ToString(THashmap const);
 
-#endif _HASHMAP_H_
+#endif DARK_HASHMAP_H_

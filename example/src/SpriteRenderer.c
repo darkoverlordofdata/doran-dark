@@ -14,7 +14,9 @@
  * @param shader to use for rendering
  * 
  */
-struct SpriteRenderer * SpriteRenderer_Ctor(TSpriteRenderer const this, TShader shader)
+struct SpriteRenderer * SpriteRenderer_Ctor(
+    struct SpriteRenderer *const this, 
+    struct Shader *shader)
 {
 	Object_Ctor(this);
     this->isa = isa(SpriteRenderer);
@@ -33,7 +35,13 @@ struct SpriteRenderer * SpriteRenderer_Ctor(TSpriteRenderer const this, TShader 
  * @param color to tint
  * 
  */
-void overload DrawSprite(TSpriteRenderer this, TTexture2D texture, Vec2 position, Vec2 size, GLfloat rot, Vec3 color)
+void overload DrawSprite(
+    struct SpriteRenderer *this, 
+    struct Texture2D *texture, 
+    Vec2 position, 
+    Vec2 size, 
+    GLfloat rot, 
+    Vec3 color)
 {
     Use(this->shader);
 
@@ -58,13 +66,13 @@ void overload DrawSprite(TSpriteRenderer this, TTexture2D texture, Vec2 position
     glBindVertexArray(0);
 }
 
-void overload Dispose(TSpriteRenderer this)
+void overload Dispose(struct SpriteRenderer *this)
 {
     glDeleteVertexArrays(1, this->VAO);
 }
 
 
-static void initRenderData(TSpriteRenderer this)
+static void initRenderData(struct SpriteRenderer *this)
 {
     // Configure VAO/VBO
     GLuint VBO;
@@ -96,9 +104,13 @@ static void initRenderData(TSpriteRenderer this)
 /**
  * ToString
  */
-char* overload ToString(TSpriteRenderer const this)
+char* overload ToString(struct SpriteRenderer *const this)
 {
     return "SpriteRenderer";
+}
+
+static struct SpriteRenderer* Create(TShader shader) { 
+    return SpriteRenderer_Ctor(new(SpriteRenderer), shader);
 }
 
 /**
@@ -108,10 +120,9 @@ register (SpriteRenderer)
 {
     if (SpriteRenderer.isa == nullptr) {
         SpriteRenderer = (struct SpriteRendererClass) {
-            .isa        = &SpriteRenderer,
-            .superclass = &Object,
-            .name       = "SpriteRenderer",
-            /** VTable */
+            .isa                = &SpriteRenderer,
+            .superclass         = &Object,
+            .name               = "SpriteRenderer",
             .ToString           = ToString,
             .Equals             = Object.Equals,
             .GetHashCode        = Object.GetHashCode,
@@ -120,7 +131,7 @@ register (SpriteRenderer)
             .InstanceEquals     = Object.InstanceEquals,
             .DrawSprite         = DrawSprite,
             .Dispose            = Dispose,
-            .Create             = ^(TShader shader) { return SpriteRenderer_Ctor(new(SpriteRenderer), shader);},
+            .Create             = Create,
         };
         AddMetadata(SpriteRenderer);
     }

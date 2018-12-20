@@ -17,7 +17,13 @@
  * @param Sprite to display
  * @param Color tiniting color
  */
-TGameObject GameObject_Ctor(TGameObject const this, char* name, Vec2 Position, Vec2 Size, TTexture2D Sprite, Vec3 Color)
+struct GameObject *GameObject_Ctor(
+    struct GameObject *const this, 
+    char* name, 
+    Vec2 Position, 
+    Vec2 Size, 
+    struct Texture2D* Sprite, 
+    Vec3 Color)
 {
 	Object_Ctor(this);
     this->isa = isa(GameObject);
@@ -32,29 +38,13 @@ TGameObject GameObject_Ctor(TGameObject const this, char* name, Vec2 Position, V
     return this;
 }
 
-/**
- * GameObject Class Metadata
- */
-register (GameObject)
-{
-    if (GameObject.isa == nullptr) {
-        GameObject = (struct GameObjectClass) {
-            .isa        = &GameObject,
-            .superclass = &Object,
-            .name       = "GameObject",
-            /** VTable */
-            .ToString       = ToString,
-            .Equals         = Object.Equals,
-            .GetHashCode    = Object.GetHashCode,
-            .Dispose        = Object.Dispose,
-            .ReferenceEquals= Object.ReferenceEquals,
-            .InstanceEquals = Object.InstanceEquals,
-            .Draw           = Draw,
-            .Create         = ^(char* name, Vec2 Position, Vec2 Size, TTexture2D Sprite, Vec3 Color) { return GameObject_Ctor(new(GameObject), name, Position, Size, Sprite, Color);},
-        };
-        AddMetadata(GameObject);
-    }
-    return &GameObject;
+static struct GameObject* Create(
+    char* name, 
+    Vec2 Position, 
+    Vec2 Size, 
+    struct Texture2D *Sprite, 
+    Vec3 Color) { 
+    return GameObject_Ctor(new(GameObject), name, Position, Size, Sprite, Color);
 }
 
 /**
@@ -62,7 +52,9 @@ register (GameObject)
  * 
  * @param renderer to draw sprite with
  */
-void overload Draw(TGameObject const this, TSpriteRenderer renderer)
+void overload Draw(
+    struct GameObject *const this, 
+    struct SpriteRenderer *renderer)
 {
     DrawSprite(renderer, this->Sprite, this->Position, this->Size, this->Rotation, this->Color);
 }
@@ -70,8 +62,33 @@ void overload Draw(TGameObject const this, TSpriteRenderer renderer)
 /**
  * ToString
  */
-char* overload ToString(TGameObject const this)
+char* overload ToString(struct GameObject *const this)
 {
     return "GameObject";
 } 
+
+
+/**
+ * GameObject Class Metadata
+ */
+register (GameObject)
+{
+    if (GameObject.isa == nullptr) {
+        GameObject = (struct GameObjectClass) {
+            .isa            = &GameObject,
+            .superclass     = &Object,
+            .name           = "GameObject",
+            .ToString       = ToString,
+            .Equals         = Object.Equals,
+            .GetHashCode    = Object.GetHashCode,
+            .Dispose        = Object.Dispose,
+            .ReferenceEquals= Object.ReferenceEquals,
+            .InstanceEquals = Object.InstanceEquals,
+            .Draw           = Draw,
+            .Create         = Create,
+        };
+        AddMetadata(GameObject);
+    }
+    return &GameObject;
+}
 

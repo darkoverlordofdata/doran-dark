@@ -128,6 +128,11 @@ char* Short_ToString(TShort const this)
     return str;
 }
 
+static struct Short* Create(short value) { 
+    return Short_Ctor(new(Short), value); 
+}
+
+
 /**
  * Short Class Metadata
  */
@@ -151,7 +156,7 @@ register (Short)
             .DoubleValue    = Short_DoubleValue, 
             .CharValue      = Short_CharValue, 
             .ShortValue     = Short_ShortValue, 
-            .Create         = ^(short value) { return Short_Ctor(new(Short), value); },
+            .Create         = Create,
 
         };
         AddMetadata(Short);

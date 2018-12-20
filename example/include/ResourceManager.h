@@ -6,9 +6,7 @@
 ** Creative Commons, either version 4 of the License, or (at your
 ** option) any later version.
 ******************************************************************/
-#ifndef RESOURCE_MANAGER_H
-#define RESOURCE_MANAGER_H
-
+#pragma once
 #include <GL/glew.h>
 #include <dark/darkfx.h>
 
@@ -45,7 +43,7 @@ struct ResourceManagerClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TResourceManager  (^Create) ();
+            TResourceManager  (*Create) ();
         };
     };
 
@@ -76,4 +74,3 @@ TTexture2D GetTexture(char* name);
 void Dtor(TResourceManager);
 static char* rdbuf(FILE* f);
 
-#endif RESOURCE_MANAGER_H

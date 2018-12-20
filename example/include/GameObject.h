@@ -6,9 +6,7 @@
 ** Creative Commons, either version 4 of the License, or (at your
 ** option) any later version.
 ******************************************************************/
-#ifndef GAMEOBJECT_H
-#define GAMEOBJECT_H
-
+#pragma once
 #include <GL/glew.h>
 #include <tglm/tglm.h>
 #include <dark/darkfx.h>
@@ -58,7 +56,7 @@ struct GameObjectClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TGameObject  (^Create) (char* name, Vec2 Position, Vec2 Size, TTexture2D Sprite, Vec3 Color);
+            TGameObject  (*Create) (char* name, Vec2 Position, Vec2 Size, TTexture2D Sprite, Vec3 Color);
         };
     };
     // Draw sprite
@@ -71,5 +69,4 @@ struct GameObjectClass
 void overload Draw(TGameObject, TSpriteRenderer renderer);
 char* overload ToString(TGameObject);
 
-#endif GAMEOBJECT_H
 

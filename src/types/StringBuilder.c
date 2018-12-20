@@ -193,6 +193,10 @@ char* StringBuilder_ToString(TStringBuilder this)
     return "dark.StringBuilder";
 }
 
+static struct StringBuilder* Create() { 
+	return StringBuilder_Ctor(new(StringBuilder)); 
+}
+
 /**
  * StringBuilder Class Metadata
  */
@@ -215,7 +219,7 @@ register (StringBuilder)
 			.Dispose   		= StringBuilder_Dispose,
 			.Empty     		= StringBuilder_Empty,
 			.Reset     		= StringBuilder_Reset,
-            .Create         = ^() { return StringBuilder_Ctor(new(StringBuilder)); },
+            .Create         = Create,
 		};
         AddMetadata(StringBuilder);
 	}

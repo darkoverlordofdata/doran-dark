@@ -23,6 +23,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
+#pragma once
 #ifndef _LONG_H_
 #define _LONG_H_
 #include "Number.h"
@@ -63,7 +64,7 @@ struct LongClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TLong   (^Create) (long value);
+            TLong   (*Create) (long value);
             int     (*CompareTo) (TComparable const, TComparable other);
             int     (*IntValue) (TLong const);
             long    (*LongValue) (TLong const);

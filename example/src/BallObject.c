@@ -56,8 +56,6 @@ void overload Move(struct BallObject * this, GLfloat dt, GLuint window_width)
     {
         // Move the ball
         this->Position += this->Velocity * dt;
-        // this->Position.x += this->Velocity.x * dt;
-        // this->Position.y += this->Velocity.y * dt;
         // Then check if outside window bounds and if so, reverse velocity and restore at correct position
         if (this->Position.x <= 0.0f)
         {
@@ -75,7 +73,6 @@ void overload Move(struct BallObject * this, GLfloat dt, GLuint window_width)
             this->Position.y = 0.0f;
         }
     }
-    // return &this->Position;
 }
 
 /**
@@ -101,6 +98,22 @@ char* overload ToString(struct BallObject * const this)
 }
 
 /**
+ * Create new instance
+ * 
+ * @param Position initial placement of ball 
+ * @param Radius size of ball
+ * @param Velocity initial speed of ball
+ * @param Sprite to display
+ */
+static struct BallObject* Create(
+    Vec2 Position, 
+    float Radius, 
+    Vec2 Velocity, 
+    struct Texture2D *Sprite) {
+    return BallObject_Ctor(new(BallObject), Position, Radius, Velocity, Sprite); 
+}
+
+/**
  * BallObject Class Metadata
  */
 register (BallObject)
@@ -110,7 +123,6 @@ register (BallObject)
             .isa            = &BallObject,
             .superclass     = &GameObject,
             .name           = "BallObject",
-            /** VTable */
             .ToString       = ToString,
             .Equals         = Object.Equals,
             .GetHashCode    = Object.GetHashCode,
@@ -120,8 +132,7 @@ register (BallObject)
             .Move           = Move,
             .Reset          = Reset,
             .Draw           = Draw,
-            .Create         = ^(Vec2 Position, float Radius, Vec2 Velocity, TTexture2D Sprite) {
-                                return BallObject_Ctor(new(BallObject), Position, Radius, Velocity, Sprite); },
+            .Create         = Create,
         };
         AddMetadata(BallObject);
     }

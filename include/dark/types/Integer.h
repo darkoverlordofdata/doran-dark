@@ -23,6 +23,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
+#pragma once
 #ifndef _INTEGER_H_
 #define _INTEGER_H_
 #include "Number.h"
@@ -64,7 +65,7 @@ struct IntegerClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TInteger(^Create) (int value);
+            TInteger(*Create) (int value);
             int     (*CompareTo) (TComparable const, TComparable other);
             int     (*IntValue) (TInteger const);
             long    (*LongValue) (TInteger const);

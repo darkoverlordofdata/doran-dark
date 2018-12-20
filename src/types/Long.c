@@ -140,6 +140,10 @@ char* Long_ToString(TLong const this)
     return str;
 }
 
+static struct Long* Create(long value) { 
+    return Long_Ctor(new(Long), value); 
+}
+
 /**
  * Long Class Metadata
  */
@@ -164,7 +168,7 @@ register (Long)
             .DoubleValue    = Long_DoubleValue, 
             .CharValue      = Long_CharValue, 
             .ShortValue     = Long_ShortValue, 
-            .Create         = ^(long value) { return Long_Ctor(new(Long), value); },
+            .Create         = Create,
         };
         AddMetadata(Long);
     }

@@ -6,9 +6,7 @@
 ** Creative Commons, either version 4 of the License, or (at your
 ** option) any later version.
 ******************************************************************/
-#ifndef PARTICLE_GENERATOR_H
-#define PARTICLE_GENERATOR_H
-
+#pragma once
 #include <GL/glew.h>
 #include <tglm/tglm.h>
 #include <dark/darkfx.h>
@@ -61,7 +59,7 @@ struct ParticleGeneratorClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TParticleGenerator  (^Create) (TShader shader, TTexture2D texture, int amount);
+            TParticleGenerator  (*Create) (TShader shader, TTexture2D texture, int amount);
         };
     };
         
@@ -79,5 +77,4 @@ void overload Update(TParticleGenerator, GLfloat dt, TGameObject object, GLuint 
 void overload Draw(TParticleGenerator);
 char* overload ToString(TParticleGenerator const);
 
-#endif PARTICLE_GENERATOR_H
 

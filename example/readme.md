@@ -2,7 +2,7 @@
 
 ## install
 
-after installing doran-dark, reopen the doran-dark/test folder in vdcode, or 
+after installing doran-dark, reopen the doran-dark/test folder in vscode, or 
 
     cd test
 

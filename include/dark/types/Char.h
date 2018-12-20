@@ -23,6 +23,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
+#pragma once
 #ifndef _CHAR_H_
 #define _CHAR_H_
 #include "Number.h"
@@ -41,7 +42,7 @@ SOFTWARE.
  */
 class (Char) 
 {
-    struct CharClass * isa;
+    struct CharClass *isa;
     char value;
 };
 
@@ -54,8 +55,8 @@ struct CharClass
         struct NumberClass base;
         struct 
         {
-            struct  Class * isa;
-            struct  Class * superclass;
+            struct  Class *isa;
+            struct  Class *superclass;
             char*   name;
             char*   (*ToString) (TChar const);
             bool    (*Equals) (TObject const, TObject const);
@@ -63,7 +64,7 @@ struct CharClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TChar   (^Create) (char value);
+            TChar   (*Create) (char value);
             int     (*CompareTo) (TComparable const, TComparable other);
             int     (*IntValue) (TChar const);
             long    (*LongValue) (TChar const);

@@ -6,9 +6,7 @@
 ** Creative Commons, either version 4 of the License, or (at your
 ** option) any later version.
 ******************************************************************/
-#ifndef SPRITE_RENDERER_H
-#define SPRITE_RENDERER_H
-
+#pragma once
 #include <GL/glew.h>
 #include <tglm/tglm.h>
 #include <dark/darkfx.h>
@@ -41,7 +39,7 @@ struct SpriteRendererClass
             void    (*Dispose) (TObject const);
             bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
             bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TSpriteRenderer  (^Create) (TShader shader);
+            TSpriteRenderer  (*Create) (TShader shader);
         };
     };
     // Renders a defined quad textured with given sprite
@@ -56,4 +54,3 @@ void overload Dispose(TSpriteRenderer);
 char* overload ToString(TSpriteRenderer const);
 static void initRenderData(TSpriteRenderer this);
 
-#endif SPRITE_RENDERER_H
