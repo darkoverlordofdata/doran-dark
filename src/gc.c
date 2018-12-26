@@ -26,52 +26,38 @@ SOFTWARE.
 #include <dark/core.h>
 #include <dark/Class.h>
 #include <stdlib.h>
+#include <gc.h>
 // #include "tgc.h" 
 
 // tgc_t gc;
 
-struct Node {
-    void * data;
-    struct Node * next;
-};
-
-static struct Node * root = nullptr;
-
-static void Push(struct Node **head, void* data)
-{
-    struct Node * newNode = (struct Node *)malloc(sizeof(struct Node));
-    newNode->next = (*head);
-    newNode->data = data;
-    (*head) = newNode;
-}
-
-static void Dump(struct Node *node, void(*func)(void*))
-{
-    while (node != nullptr)
-    {
-        (*func)(node->data);
-        node = node->next;
-    }
-}
 void dark_free(TClass cls) 
 {
+    // printf("GC_FREE(%x)\n", (void*)cls);
+    GC_FREE(cls);
     free(cls);
 }
 
 void* dark_malloc(size_t size)
 {
     // void* ptr = calloc(1, size);
-    // Push(&root, &ptr);
-    // return ptr;
-    return calloc(1, size);
+    void* ptr = GC_MALLOC(size);
+    // printf("GC_MALLOC(%d) = %x\n", size, ptr);
+    return ptr;
 }
 
+void* dark_realloc(void * old, size_t new_size)
+{
+    void* ptr = GC_REALLOC(old, new_size);
+    return ptr;
+
+}
 void* dark_calloc(size_t num, size_t size)
 {
     // void* ptr = calloc(num, size);
-    // Push(&root, &ptr);
-    // return ptr;
-    return calloc(num, size);
+    void* ptr = GC_MALLOC(num * size);
+    // printf("GC_MALLOC(%d * %d) = %x\n", num, size, ptr);
+    return ptr;
 }
 
 /**
@@ -79,12 +65,11 @@ void* dark_calloc(size_t num, size_t size)
  */
 void __attribute__((constructor(101))) dark_gc_ctor()
 {
-    // int argc;
-    // tgc_start(&gc, &argc);    
+    // printf("GC_INIT\n");
+    GC_INIT();
 }
 
 void __attribute__((destructor)) dark_gc_dtor()
 {
-    // tgc_stop(&gc);    
 }
 

@@ -71,7 +71,7 @@ add_executable ( ${PROJECT_NAME} ${C_SOURCES} ${RESOURCES} )
 add_custom_command(TARGET ${PROJECT_NAME} 
                    POST_BUILD COMMAND 
                    ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}> .. )
-target_link_libraries ( ${PROJECT_NAME} glfw3 glew32 freetype opengl32 )
+target_link_libraries ( ${PROJECT_NAME} glfw3 glew32 freetype opengl32 gc )
 install (TARGETS ${PROJECT_NAME} RUNTIME DESTINATION . )
 
 include (CPack)

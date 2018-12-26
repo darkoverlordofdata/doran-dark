@@ -379,7 +379,7 @@ void overload DoCollisions(struct Game *this)
                         Ball->Position.y += penetration; // Move ball back down
                 }
             }
-            delete(collision);
+            // delete(collision);
         }    
     }
     // Also check collisions for player pad (unless stuck)
@@ -399,7 +399,7 @@ void overload DoCollisions(struct Game *this)
         // Fix sticky paddle
         Ball->Velocity.y = -1 * abs(Ball->Velocity.y);
     }
-    delete(result);
+    // delete(result);
 }
 
 /**

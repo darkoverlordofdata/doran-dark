@@ -38,9 +38,11 @@
   "packages": null,
   "includes": [
     ".lib/dark/include",
-    ".lib/dark/vendor/tgc"
+    ".lib/dark/vendor/tgc",
   ],
-  "libraries": null,
+  "libraries": [
+    "gc",
+  ],
   "options": {
     "VERSION": "0.0.1",
     "RELEASE_NAME": "dark"

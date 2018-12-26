@@ -45,7 +45,6 @@ static const int MajorVersion = 0;
 static const int MinorVersion = 0;
 static const int BuildVersion = 1;
 
-#include <gc.h>
 #include "core.h"
 #include "Object.h"
 #include "Comparable.h"

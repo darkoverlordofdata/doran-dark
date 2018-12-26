@@ -1,6 +1,6 @@
 # dark overload
 
-generic function runtime inspired by objective-c, with a java/dotnet inspired framework mashup.
+generic function runtime inspired by objective-c, with a java/dotnet inspired framework mashup. Linked with boehm gc.
 
 clang c99 with extensions:
 * BlocksRuntime

@@ -12,7 +12,7 @@ list ( APPEND INCLUDE .lib/dark/vendor/tgc )
 
 
 # C Sources:
-list ( APPEND CSOURCE .lib/dark/vendor/tgc/tgc.c )
+# list ( APPEND CSOURCE .lib/dark/vendor/tgc/tgc.c )
 list ( APPEND CSOURCE .lib/dark/src/gc.c )
 list ( APPEND CSOURCE .lib/dark/src/string.c )
 list ( APPEND CSOURCE .lib/dark/src/Class.c )
@@ -48,6 +48,7 @@ list ( APPEND VAPI .lib/dark/src/dark.vapi )
 set ( DARK true PARENT_SCOPE )
 set ( INCLUDES "${INCLUDES}; ${INCLUDE}" PARENT_SCOPE )
 set ( C_SOURCES "${C_SOURCES};${CSOURCE}" PARENT_SCOPE )
+set ( DEPS_LIBRARIES "${DEPS_LIBRARIES};-lgc" PARENT_SCOPE)
 
 set ( CUSTOM_VAPIS "${CUSTOM_VAPIS};${VAPI}" PARENT_SCOPE )
 

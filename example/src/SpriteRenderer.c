@@ -43,19 +43,15 @@ void overload DrawSprite(
     GLfloat rot, 
     Vec3 color)
 {
-    Use(this->shader);
-
     Mat model = mat_identity();
     model = glm_translate(model, (Vec3){ position.x, position.y, 0.0f });  // First translate (transformations are: scale happens first, then rotation and then finall translation happens; reversed order)
-
     model = glm_translate(model, (Vec3){ 0.5f * size.x, 0.5f * size.y, 0.0f }); // Move origin of rotation to center of quad
     model = glm_rotate(model, rot, (Vec3){ 0.0f, 0.0f, 1.0f }); // Then rotate
     model = glm_translate(model, (Vec3){ -0.5f * size.x, -0.5f * size.y, 0.0f }); // Move origin back
-
     model = glm_scale(model, (Vec3){ size.x, size.y, 1.0f }); // Last scale
 
+    Use(this->shader);
     SetMatrix4(this->shader, "model", &model);
-    // Render textured quad
     SetArray3(this->shader, "spriteColor", &color);
     
     glActiveTexture(GL_TEXTURE0);

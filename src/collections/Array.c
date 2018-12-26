@@ -91,7 +91,7 @@ void Resize(TArray const this, int capacity)
     printf("vector_resize: %d to %d\n", this->capacity, capacity);
     #endif
 
-    void **data = realloc(this->data, sizeof(Any) * capacity);
+    void **data = dark_realloc(this->data, sizeof(Any) * capacity);
     if (data) {
         this->data = data;
         this->capacity = capacity;
