@@ -232,11 +232,11 @@ String FileSystem_Resolve(FileSystem const this, String parent, String child) {
     int len = parentEnd - cn - childStart;
     char* theChars = nullptr;
     if (child->value[childStart] == slash) {
-        theChars = dark_malloc (len * sizeof(char));
+        theChars = darko_malloc (len * sizeof(char));
         memcpy(theChars, parent->value, parentEnd);
         memcpy(theChars+parentEnd, child->value+childStart, cn);
     } else {
-        theChars = dark_malloc ((len+1) * sizeof(char));
+        theChars = darko_malloc ((len+1) * sizeof(char));
         memcpy(theChars, parent->value, parentEnd);
         theChars[parentEnd] = slash;
         memcpy(theChars+parentEnd+1, child->value+childStart, cn);

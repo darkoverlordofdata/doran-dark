@@ -26,9 +26,6 @@ SOFTWARE.
 #pragma once
 #ifndef _CLASSY_H
 #define _CLASSY_H
-#include <gc.h>
-#include <tgc.h>
-extern tgc_t gc;
 
 /**
  * overload
@@ -53,6 +50,7 @@ extern tgc_t gc;
     struct name##Class; \
     struct Class* Isa##name(); \
     typedef struct name* T##name; \
+    typedef struct name* $##name; \
     extern struct name##Class name; \
     struct name
 
@@ -81,21 +79,21 @@ extern tgc_t gc;
  * allocates memory for 1 object
  * 
  */
-#define new(class) dark_malloc (sizeof(struct class))
+#define new(class) darko_malloc (sizeof(struct class))
 
 /** 
  * Delete an object created with new 
  * deallocates the memory for 1 object
  * 
  */
-#define delete(x) dark_free(x)
+#define delete(x) darko_free(x)
 
 /** 
  * creates an array of structs
  * 
  * allocates memory for array of struct objects
  */
-#define allocate(class, n) dark_malloc (n * sizeof(struct class))
+#define allocate(class, n) darko_malloc (n * sizeof(struct class))
 
 
 #endif _CLASSY_H 

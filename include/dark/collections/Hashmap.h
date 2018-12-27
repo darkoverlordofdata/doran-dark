@@ -24,15 +24,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 /*
- * Generic hashmap manipulation functions
+ * Copyright (c) 2016-2018 David Leeds <davidesleeds@gmail.com>
  *
- * Originally by Elliot C Back - http://elliottback.com/wp/hashmap-implementation-in-c/
- *
- * Modified by Pete Warden to fix a serious performance problem, support strings as keys
- * and removed thread synchronization - http://petewarden.typepad.com
- * 
- * https://petewarden.com/2010/01/07/c-hashmap/
- *
+ * Hashmap is free software; you can redistribute it and/or modify
+ * it under the terms of the MIT license. See LICENSE for details.
  */
 #pragma once
 #ifndef DARK_HASHMAP_H_
@@ -80,25 +75,25 @@ struct HashmapClass
             struct Class * isa;
             struct Class * superclass;
             char* name;
-            char*   (*ToString) (THashmap const);
-            bool    (*Equals) (TObject const, TObject const);
-            int     (*GetHashCode) (TObject const);
-            void    (*Dispose) (TObject const);
-            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
-            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
+            char*   (*ToString) (struct Hashmap *const);
+            bool    (*Equals) (struct Object *const, struct Object *const);
+            int     (*GetHashCode) (struct Object *const);
+            void    (*Dispose) (struct Object *const);
+            bool    (*ReferenceEquals) (struct Object *const, struct Object *const);
+            bool    (*InstanceEquals) (struct Object *const, struct Object *const);
             THashmap(*Create) ();
             /*
              * Get the current size of a hashmap
              */
-            int         (*Length)       (THashmap const);
-            bool        (*IsEmpty)      (THashmap const);
-            bool        (*Contains)     (THashmap const, Any value);
-            void        (*Clear)        (THashmap const);
-            void        (*Add)          (THashmap const, Any value);
+            int         (*Length)       (struct Hashmap *const);
+            bool        (*IsEmpty)      (struct Hashmap *const);
+            bool        (*Contains)     (struct Hashmap *const, Any);
+            void        (*Clear)        (struct Hashmap *const);
+            void        (*Add)          (struct Hashmap *const, Any);
             /*
              * Remove an element from the hashmap. Return MAP_OK or MAP_MISSING.
              */
-            Any         (*Remove)       (THashmap const);
+            Any         (*Remove)       (struct Hashmap *const);
 
         };
     };
@@ -110,49 +105,49 @@ struct HashmapClass
     * than MAP_OK the traversal is terminated. f must
     * not reenter any hashmap functions, or deadlock may arise.
     */
-    int (*ForEach)  (THashmap const, Hashmap_Iterator func, Any item);
+    int (*ForEach)  (struct Hashmap *const, Hashmap_Iterator, Any);
 
     /*
     * Add an element to the hashmap. Return MAP_OK or MAP_OMEM.
     */
-    int (*Put)      (THashmap const, char* key, Any value);
+    int (*Put)      (struct Hashmap *const, char*, Any);
 
     /*
     * Get an element from the hashmap. Return MAP_OK or MAP_MISSING.
     */
     // int (*Get)      (Hashmap * const, char* key, Any *arg);
-    Any (*Get)      (THashmap const, char* key);
+    Any (*Get)      (struct Hashmap *const, char*);
 
     /*
      * Hashing function for a string
      */
-    UInt (*HashInt) (THashmap const, char* keystring);
+    UInt (*HashInt) (struct Hashmap *const, char*);
     
     /*
      * Return the integer of the location in data
      * to store the point to the item, or MAP_FULL.
      */
-    int (*Hash)     (THashmap const, char* key);
+    int (*Hash)     (struct Hashmap *const, char*);
 
     /*
      * Doubles the size of the hashmap, and rehashes all the elements
      */
-    int (*Rehash)   (THashmap const);
+    int (*Rehash)   (struct Hashmap *const);
 
 };
 
 /**
  * Hashmap API
  */
-unsigned int overload HashInt(THashmap const, char* keystring);
-int overload Hash(THashmap const, char* key);
-int overload Rehash(THashmap const);
-int overload Put(THashmap const, char* key, Any value);
-Any overload Get(THashmap const, char* key);
-int overload ForEach(THashmap const, Hashmap_Iterator f, Any item);
-int overload Remove(THashmap const, char* key);
-void overload Dispose(THashmap const);
-int overload Length(THashmap const);
-char* overload ToString(THashmap const);
+unsigned int overload HashInt(struct Hashmap *const, char*);
+int overload Hash(struct Hashmap *const, char*);
+int overload Rehash(struct Hashmap *const);
+int overload Put(struct Hashmap *const, char*, Any);
+Any overload Get(struct Hashmap *const, char*);
+int overload ForEach(struct Hashmap *const, Hashmap_Iterator, Any);
+int overload Remove(struct Hashmap *const, char*);
+void overload Dispose(struct Hashmap *const);
+int overload Length(struct Hashmap *const);
+char* overload ToString(struct Hashmap *const);
 
 #endif DARK_HASHMAP_H_

@@ -36,7 +36,7 @@ static Exception(NumberFormat);
  * @param value of double
  * 
  */
-TDouble Double_Ctor(TDouble const this, double value)
+struct Double *Double_Ctor(struct Double *const this, double value)
 {
     Number_Ctor(this);
     this->isa = isa(Double);
@@ -47,7 +47,7 @@ TDouble Double_Ctor(TDouble const this, double value)
 /**
  * Returns a primitive double value parsed from input string. 
  */
-double Double_ParseDouble(char* s)
+double Double_ParseDouble(char const *const s)
 {
     errno = 0;
     char* endptr;
@@ -82,55 +82,54 @@ int Double_Compare(double x, double y) {
  * @param   other  Double to be compared
  * @return same as Double_Compare
  */
-int Double_CompareTo(TDouble this, TDouble other) {
+int Double_CompareTo(struct Double *const this, struct Double *const other) {
     return Double_Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int Double_IntValue(TDouble const this) {
+int Double_IntValue(struct Double *const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-long Double_LongValue(TDouble const this) {
+long Double_LongValue(struct Double *const this) {
     return (long)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-float Double_FloatValue(TDouble const this) {
+float Double_FloatValue(struct Double *const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-double Double_DoubleValue(TDouble const this) {
+double Double_DoubleValue(struct Double *const this) {
     return this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-char Double_CharValue(TDouble const this) {
+char Double_CharValue(struct Double *const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-short Double_ShortValue(TDouble const this) {
+short Double_ShortValue(struct Double *const this) {
     return (short)this->value;
 }
 
 
-char* Double_ToString(TDouble const this)
-{
+char* Double_ToString(struct Double *const this) {
     static char str[20];
     sprintf(str, "%f", this->value);
     return str;

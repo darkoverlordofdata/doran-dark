@@ -123,7 +123,7 @@ static void init(struct ParticleGenerator *this)
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
     glBindVertexArray(0);
 
-    this->particles =  dark_calloc(this->amount, sizeof(Particle));
+    this->particles = allocate(Particle, this->amount);
 }
 
 // Stores the index of the last particle used (for quick access to next dead particle)

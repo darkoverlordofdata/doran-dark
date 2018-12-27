@@ -25,13 +25,13 @@ SOFTWARE.
 ******************************************************************/
 #include <dark/Object.h>
 
-bool overload Equals(TObject const, TObject const that);
-static bool Virtual_Equals(TObject const, TObject const that);
+bool overload Equals(struct Object *const, struct Object *const that);
+static bool Virtual_Equals(struct Object *const, struct Object *const that);
 
 
 /**
  */
-TObject Object_Ctor(struct Object *const this)
+struct Object *Object_Ctor(struct Object *const this)
 {
     this->isa = isa(Object);
     return this;
@@ -40,19 +40,19 @@ TObject Object_Ctor(struct Object *const this)
 /**
  * Destructor
  */
-TObject Object_Dtor(struct Object *this)
+struct Object *Object_Dtor(struct Object *this)
 {
     this->isa->Dispose(this);
     return nullptr;
 }
 
-bool ReferenceEquals(TObject const objA, TObject const objB)
+bool ReferenceEquals(const struct Object *const objA, const struct Object *const objB)
 {
     return objA == objB;
 }
 
 
-bool InstanceEquals(TObject const objA, TObject const objB)
+bool InstanceEquals(const struct Object *const objA, const struct Object *const objB)
 {
     if (objA == objB) {
         return true;
@@ -63,26 +63,26 @@ bool InstanceEquals(TObject const objA, TObject const objB)
     return Virtual_Equals(objA, objB);    
 }
 
-void overload Dispose(TObject const this){
+void overload Dispose(struct Object *const this){
     this->isa->Dispose(this);
 }
 /**
  * virtual Dispose method
  */
-static void Virtual_Dispose(TObject const this){}
+static void Virtual_Dispose(struct Object *const this){}
 
 /**
  * Returns the string value of this Object. The default for 
  * a Object is to return the fully qualified name of the class.
  */
-const char* overload ToString(TObject const this)
+const char* overload ToString(const struct Object *const this)
 {
     return this->isa->ToString(this);
 }
 /**
  * virtual ToString method
  */
-static const char *Virtual_ToString(TObject const this)
+static const char *Virtual_ToString(const struct Object *const this)
 {
     return "dark.Object";
 }
@@ -90,14 +90,14 @@ static const char *Virtual_ToString(TObject const this)
 /**
  * Compare to another object
  */
-bool overload Equals(TObject const this, TObject const that)
+bool overload Equals(const struct Object *const this, const struct Object *const that)
 {
     return this->isa->Equals(this, that);
 }
 /**
  * virtual Equals method
  */
-static bool Virtual_Equals(TObject const this, TObject const that)
+static bool Virtual_Equals(struct Object *const this, struct Object *const that)
 {
     return this == that;
 }
@@ -105,23 +105,23 @@ static bool Virtual_Equals(TObject const this, TObject const that)
 /**
  * Get's the hashcode for this object. Default is the object's address in memory,
  */
-int overload GetHashCode(TObject const this)
+int overload GetHashCode(const struct Object *const this)
 {
     return this->isa->GetHashCode(this);
 }
 /**
  * virtual GetHashCode method
  */
-static int Virtual_GetHashCode(TObject const this)
+static int Virtual_GetHashCode(const struct Object *const this)
 {
     return (int)this;
 }
 
-TClass GetClass(TObject const this)
+struct Class *GetClass(const struct Object *const this)
 {
     return &this->isa;
 }
-char* GetClassName(TObject const this)
+char* GetClassName(const struct Object *const this)
 {
     return this->isa->base.name;
 }
@@ -140,7 +140,6 @@ register(Object)
             .isa            = &Object,
             .superclass     = nullptr,
             .name           = "Object",
-            /** Instance members */
             .ToString       = Virtual_ToString,
             .Equals         = Virtual_Equals,
             .GetHashCode    = Virtual_GetHashCode,

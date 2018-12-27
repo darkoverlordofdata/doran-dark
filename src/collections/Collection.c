@@ -33,7 +33,7 @@ static Exception(AbstractMethod);
 /**
  * Initialize a new Array
  */
-TCollection Collection_Ctor(TCollection const this)
+struct Collection *Collection_Ctor(struct Collection *const this)
 {
     Object_Ctor(this);
     this->isa = isa(Collection);
@@ -43,20 +43,20 @@ TCollection Collection_Ctor(TCollection const this)
 /**
  * Number of items in collection
  */
-int overload Length(TCollection const this)
+int overload Length(struct Collection *const this)
 {
     return this->isa->Length(this);
 }
-static int Abstract_Length(TCollection const this)
+static int Abstract_Length(struct Collection *const this)
 {
     return AbstractMethodException("Collection_Length");
 }
 
-void Collection_Add(TCollection const this, Any data)
+void Collection_Add(struct Collection *const this, Any data)
 {
     this->isa->Add(this, data);
 }
-static void Abstract_Add(TCollection const this, Any data)
+static void Abstract_Add(struct Collection *const this, Any data)
 {
     AbstractMethodException("Collection_Add");
 }

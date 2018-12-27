@@ -52,30 +52,30 @@ struct CollectionClass
             struct Class * isa;
             struct Class * superclass;
             char* name;
-            char*   (*ToString) (TCollection const);
-            bool    (*Equals) (TObject const, TObject const);
-            int     (*GetHashCode) (TObject const);
-            void    (*Dispose) (TObject const);
-            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
-            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TCollection   (*Create) ();
+            char*   (*ToString) (struct Collection *const);
+            bool    (*Equals) (struct Object *const, struct Object *const);
+            int     (*GetHashCode) (struct Object *const);
+            void    (*Dispose) (struct Object *const);
+            bool    (*ReferenceEquals) (struct Object *const , struct Object *const);
+            bool    (*InstanceEquals) (struct Object *const, struct Object *const);
+            struct Collection * (*Create) ();
         };
     };
-    int     (*Length) (TCollection const);
-    bool    (*IsEmpty) (TCollection const);
-    bool    (*Contains) (TCollection const, Any value);
-    void    (*Clear) (TCollection const);
-    bool    (*Add) (TCollection const, Any value);
-    bool    (*Remove) (TCollection const, Any value);
+    int     (*Length) (struct Collection *const);
+    bool    (*IsEmpty) (struct Collection *const);
+    bool    (*Contains) (struct Collection *const, Any);
+    void    (*Clear) (struct Collection *const);
+    bool    (*Add) (struct Collection *const, Any);
+    bool    (*Remove) (struct Collection *const, Any);
 };
 
 
 /**
  * Collection API
  */
-int overload Length(TCollection const);
-void overload Add(TCollection const, Any item);
-TCollection Collection_Ctor(TCollection const this);
+int overload Length(struct Collection *const);
+void overload Add(struct Collection *const, Any);
+struct Collection *Collection_Ctor(struct Collection *const);
 
 /**
  * AddAll

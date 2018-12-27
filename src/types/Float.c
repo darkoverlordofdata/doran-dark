@@ -36,7 +36,7 @@ static Exception(NumberFormat);
  * @param value of float
  * 
  */
-TFloat Float_Ctor(TFloat const this, float value)
+struct Float *Float_Ctor(struct Float *const this, float value)
 {
     Number_Ctor(this);
     this->isa = isa(Float);
@@ -76,54 +76,54 @@ int Float_Compare(float x, float y) {
  * @param   other  Float to be compared
  * @return same as Float_Compare
  */
-int Float_CompareTo(TFloat this, TFloat other) {
+int Float_CompareTo(struct Float *this, struct Float *other) {
     return Float_Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int Float_IntValue(TFloat const this) {
+int Float_IntValue(struct Float *const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-long Float_LongValue(TFloat const this) {
+long Float_LongValue(struct Float *const this) {
     return (long)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-double Float_DoubleValue(TFloat const this) {
+double Float_DoubleValue(struct Float *const this) {
     return (double)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-float Float_FloatValue(TFloat const this) {
+float Float_FloatValue(struct Float *const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-char Float_CharValue(TFloat const this) {
+char Float_CharValue(struct Float *const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-short Float_ShortValue(TFloat const this) {
+short Float_ShortValue(struct Float *const this) {
     return (short)this->value;
 }
 
 
-char* Float_ToString(TFloat const this)
+char* Float_ToString(struct Float *const this)
 {
     static char str[20];
     sprintf(str, "%f", this->value);

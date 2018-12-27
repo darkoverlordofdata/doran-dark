@@ -58,32 +58,32 @@ struct CharClass
             struct  Class *isa;
             struct  Class *superclass;
             char*   name;
-            char*   (*ToString) (TChar const);
-            bool    (*Equals) (TObject const, TObject const);
-            int     (*GetHashCode) (TObject const);
-            void    (*Dispose) (TObject const);
-            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
-            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TChar   (*Create) (char value);
-            int     (*CompareTo) (TComparable const, TComparable other);
-            int     (*IntValue) (TChar const);
-            long    (*LongValue) (TChar const);
-            float   (*FloatValue) (TChar const);
-            double  (*DoubleValue) (TChar const);
-            char    (*CharValue) (TChar const);
-            short   (*ShortValue) (TChar const);
+            char*   (*ToString) (struct Char *const);
+            bool    (*Equals) (struct Object *const, struct Object *const);
+            int     (*GetHashCode) (struct Object *const);
+            void    (*Dispose) (struct Object *const);
+            bool    (*ReferenceEquals) (struct Object *const, struct Object *const);
+            bool    (*InstanceEquals) (struct Object *const, struct Object *const);
+            struct Char *  (*Create) (char value);
+            int     (*CompareTo) (struct Comparable *const, struct Comparable *const);
+            int     (*IntValue) (struct Char *const);
+            long    (*LongValue) (struct Char *const);
+            float   (*FloatValue) (struct Char *const);
+            double  (*DoubleValue) (struct Char *const);
+            char    (*CharValue) (struct Char *const);
+            short   (*ShortValue) (struct Char *const);
         };
     };
 };
 
 
-int Char_CompareTo(TChar const, TChar other);
-int Char_IntValue(TChar const);
-long Char_LongValue(TChar const);
-float Char_FloatValue(TChar const);
-double Char_DoubleValue(TChar const);
-char Char_CharValue(TChar const);
-short Char_ShortValue(TChar const);
-char* Char_ToString(TChar const);
+int Char_CompareTo(struct Char *const, struct Char *const);
+int Char_IntValue(struct Char *const);
+long Char_LongValue(struct Char *const);
+float Char_FloatValue(struct Char *const);
+double Char_DoubleValue(struct Char *const);
+char Char_CharValue(struct Char *const);
+short Char_ShortValue(struct Char *const);
+char* Char_ToString(struct Char *const);
 
 #endif _CHAR_H_

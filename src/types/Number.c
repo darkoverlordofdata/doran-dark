@@ -33,7 +33,7 @@ static Exception(AbstractMethod);
  * Abstract Number
  * Initialize a new Number
  */
-TNumber Number_Ctor(TNumber const this)
+struct Number * Number_Ctor(struct Number * const this)
 {
     Comparable_Ctor(this);
     this->isa = isa(Number);
@@ -49,85 +49,85 @@ TNumber Number_Ctor(TNumber const this)
  *         +1 this < other
  *         -1 this > other
  */
-int Number_CompareTo(TNumber this, TNumber other) {
+int Number_CompareTo(struct Number * this, struct Number * other) {
     return this->isa->CompareTo(this, other);
 }
-static short Abstract_CompareTo(TNumber const this, TNumber other) {
+static short Abstract_CompareTo(struct Number * const this, struct Number * other) {
     return AbstractMethodException("Number_CompareTo");
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int overload IntValue(TNumber const this) {
+int overload IntValue(struct Number * const this) {
     return this->isa->IntValue(this);
 }
-static int Abstract_IntValue(TNumber const this) {
+static int Abstract_IntValue(struct Number * const this) {
     return AbstractMethodException("Number_IntValue");
 }
 
 /**
  * Returns the value of this value cast as an long
  */
-long LongValue(TNumber const this) {
+long LongValue(struct Number * const this) {
     return this->isa->LongValue(this);
 }
-static long Abstract_LongValue(TNumber const this) {
+static long Abstract_LongValue(struct Number * const this) {
     return AbstractMethodException("Number_LongValue");
 }
 
 /**
  * Returns the value of this value cast as an float
  */
-float overload FloatValue(TNumber const this) {
+float overload FloatValue(struct Number * const this) {
     return this->isa->FloatValue(this);
 }
-static float Abstract_FloatValue(TNumber const this) {
+static float Abstract_FloatValue(struct Number * const this) {
     return AbstractMethodException("Number_FloatValue");
 }
 
 /**
  * Returns the value of this value cast as an double
  */
-double overload DoubleValue(TNumber const this) {
+double overload DoubleValue(struct Number * const this) {
     return this->isa->DoubleValue(this);
 }
-static double Abstract_DoubleValue(TNumber const this) {
+static double Abstract_DoubleValue(struct Number * const this) {
     return AbstractMethodException("Number_DoubleValue");
 }
 
 /**
  * Returns the value of this value cast as an char
  */
-char overload CharValue(TNumber const this) {
+char overload CharValue(struct Number * const this) {
     return this->isa->CharValue(this);
 }
-static char Abstract_CharValue(TNumber const this) {
+static char Abstract_CharValue(struct Number * const this) {
     return AbstractMethodException("Number_CharValue");
 }
 
 /**
  * Returns the value of this value cast as an short
  */
-short overload ShortValue(TNumber const this) {
+short overload ShortValue(struct Number * const this) {
     return this->isa->ShortValue(this);
 }
-static short Abstract_ShortValue(TNumber const this) {
+static short Abstract_ShortValue(struct Number * const this) {
     return AbstractMethodException("Number_ShortValue");
 }
 
 
-char* overload ToString(TNumber const this) {
+char* overload ToString(struct Number * const this) {
     return this->isa->ToString(this);
 }
-static char* Virtual_ToString(TNumber const this) {
+static char* Virtual_ToString(struct Number * const this) {
     return "dark.Number";
 }
 
-bool Number_Equals(TNumber const this, TNumber const other) {
+bool Number_Equals(struct Number * const this, struct Number * const other) {
     return this->isa->Equals(this, other);
 }
-static char* Virtual_Equals(TNumber const this, TNumber const other) {
+static char* Virtual_Equals(struct Number * const this, struct Number * const other) {
     return true;
 }
 

@@ -56,24 +56,24 @@ struct ArrayClass
             struct Class * isa;
             struct Class * superclass;
             char* name;
-            char*   (*ToString) (TArray const);
-            bool    (*Equals) (TObject const, TObject const);
-            int     (*GetHashCode) (TObject const);
-            void    (*Dispose) (TObject const);
-            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
-            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TArray  (*Create) (int capacity);
-            int     (*Length)       (TArray const);
-            bool    (*IsEmpty)      (TArray const);
-            bool    (*Contains)     (TArray const, Any value);
-            void    (*Clear)        (TArray const);
-            void    (*Add)          (TArray const, Any value);
-            void    (*Remove)       (TArray const, int index);
+            char*   (*ToString) (const struct Array *const);
+            bool    (*Equals) (const struct Object *const, struct Object  *const);
+            int     (*GetHashCode) (const struct Object *const);
+            void    (*Dispose) (struct Object *const);
+            bool    (*ReferenceEquals) (const struct Object *const, struct Object *const);
+            bool    (*InstanceEquals) (const struct Object *const, struct Object *const);
+            struct Array * (*Create) (int);
+            int     (*Length)       (const struct Array *const);
+            bool    (*IsEmpty)      (const struct Array *const);
+            bool    (*Contains)     (const struct Array *const, Any);
+            void    (*Clear)        (struct Array *const);
+            void    (*Add)          (struct Array *const, Any);
+            void    (*Remove)       (struct Array *const, int);
         };
     };
-    void    (*Resize)       (TArray const, int);
-    void    (*Set)          (TArray const, int, Any);
-    Any     (*Get)          (TArray const, int);
+    void    (*Resize)       (struct Array *const, int);
+    void    (*Set)          (struct Array *const, int, Any);
+    Any     (*Get)          (const struct Array *const, int);
 };
 
 
@@ -81,21 +81,21 @@ struct ArrayClass
 /**
  * Array API
  */
-TArray overload Array_New(void);
-TArray overload Array_New(int capacity);
+struct Array *overload Array_New(void);
+struct Array *overload Array_New(int);
 
-char* overload ToString(TArray const);
-void overload Dispose(TArray const);
-int overload Length(TArray const);
-bool overload IsEmpty(TArray const);
-bool overload Contains(TArray const, Any item);
-void overload Clear(TArray const);
-void overload Add(TArray const, Any item);
-void overload Remove(TArray const, int index);
-void Resize(TArray const, int capacity);
-void Set(TArray const, int index, Any item);
-Any Get(TArray const, int index);
-TArray Array_Variadic(int count, ...);
+char* overload ToString(const struct Array *const);
+void overload Dispose(struct Array *const);
+int overload Length(const struct Array *const);
+bool overload IsEmpty(const struct Array *const);
+bool overload Contains(const struct Array *const, Any);
+void overload Clear(struct Array *const);
+void overload Add(struct Array *const, Any);
+void overload Remove(struct Array *const, int);
+void Resize(struct Array *const, int);
+void Set(struct Array *const, int, const Any);
+Any Get(const struct Array *const, int);
+struct Array *Array_Variadic(int, ...);
 
 /**
  *  Array v = Array_From(1, 2, 4, 8);

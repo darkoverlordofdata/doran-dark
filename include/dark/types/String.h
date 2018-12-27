@@ -85,7 +85,7 @@ struct StringClass
 };
 
 
-struct String * _(char* value);
+$String $(const char* const value);
 int String_Compare(char* x, char* y);
 int String_CompareTo(TString this, TString other);
 int String_CompareToIgnoreCase(TString this, TString other);

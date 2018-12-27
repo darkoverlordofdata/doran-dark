@@ -31,7 +31,7 @@ SOFTWARE.
  * @param value of char
  * 
  */
-TChar Char_Ctor(TChar const this, char value)
+struct Char *Char_Ctor(struct Char *const this, char value)
 {
     Number_Ctor(this);
     this->isa = isa(Char);
@@ -93,49 +93,49 @@ int Char_Compare(char x, char y) {
  * @param   other  Char to be compared
  * @return same as Char_Compare
  */
-int Char_CompareTo(TChar this, TChar other) {
+int Char_CompareTo(struct Char *const this, struct Char *const other) {
     return Char_Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int Char_IntValue(TChar const this) {
+int Char_IntValue(struct Char *const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-long Char_LongValue(TChar const this) {
+long Char_LongValue(struct Char *const this) {
     return (long)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-float Char_FloatValue(TChar const this) {
+float Char_FloatValue(struct Char *const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-double Char_DoubleValue(TChar const this) {
+double Char_DoubleValue(struct Char *const this) {
     return (double)this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-char Char_CharValue(TChar const this) {
+char Char_CharValue(struct Char *const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-short Char_ShortValue(TChar const this) {
+short Char_ShortValue(struct Char *const this) {
     return (short)this->value;
 }
 
@@ -143,7 +143,7 @@ short Char_ShortValue(TChar const this) {
 /**
  * Returns the string value of this Char
  */
-char* Char_ToString(TChar const this)
+char* Char_ToString(struct Char *const this)
 {
     static char str[2];
     sprintf(str, "%c", this->value);

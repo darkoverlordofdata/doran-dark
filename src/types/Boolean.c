@@ -31,7 +31,7 @@ SOFTWARE.
  * @param value of bool
  * 
  */
-TBoolean Boolean_Ctor(TBoolean const this, bool value)
+struct Boolean *Boolean_Ctor(struct Boolean *const this, bool value)
 {
     Comparable_Ctor(this);
     this->isa = isa(Boolean);
@@ -39,7 +39,7 @@ TBoolean Boolean_Ctor(TBoolean const this, bool value)
     return this;
 }
 
-bool ParseBool(char* s)
+bool ParseBool(const char * const s)
 {
     if (!strcmpi("y", s) 
     ||  !strcmpi("yes", s) 
@@ -67,21 +67,21 @@ int overload Compare(bool x, bool y) {
  * @param   other  Boolean to be compared
  * @return same as Boolean_Compare
  */
-int overload CompareTo(TBoolean this, TBoolean other) {
+int overload CompareTo(const struct Boolean *const this, const struct Boolean *const other) {
     return Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-bool BoolValue(TBoolean const this) {
+bool BoolValue(const struct Boolean *const this) {
     return (bool)this->value;
 }
 
 /**
  * Returns the string value of this Boolean
  */
-char* overload ToString(TBoolean const this)
+char* overload ToString(const struct Boolean *const this)
 {
     return this->value ? "true" : "false";
 }

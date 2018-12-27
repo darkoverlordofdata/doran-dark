@@ -58,31 +58,31 @@ struct DoubleClass
             struct  Class *isa;
             struct  Class *superclass;
             char*   name;
-            char*   (*ToString) (TDouble const);
-            bool    (*Equals) (TObject const, TObject const);
-            int     (*GetHashCode) (TObject const);
-            void    (*Dispose) (TObject const);
-            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
-            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TDouble (*Create) (double value);
-            int     (*CompareTo) (TComparable const, TComparable other);
-            int     (*IntValue) (TDouble const);
-            long    (*LongValue) (TDouble const);
-            float   (*FloatValue) (TDouble const);
-            double  (*DoubleValue) (TDouble const);
-            char    (*CharValue) (TDouble const);
-            short   (*ShortValue) (TDouble const);
+            char*   (*ToString) (struct Double *const);
+            bool    (*Equals) (struct Object *const, struct Object *const);
+            int     (*GetHashCode) (struct Object *const);
+            void    (*Dispose) (struct Object *const);
+            bool    (*ReferenceEquals) (struct Object *const, struct Object *const);
+            bool    (*InstanceEquals) (struct Object *const, struct Object *const);
+            struct Double *(*Create) (double value);
+            int     (*CompareTo) (struct Comparable *const, struct Comparable *const);
+            int     (*IntValue) (struct Double *const);
+            long    (*LongValue) (struct Double *const);
+            float   (*FloatValue) (struct Double *const);
+            double  (*DoubleValue) (struct Double *const);
+            char    (*CharValue) (struct Double *const);
+            short   (*ShortValue) (struct Double *const);
         };
     };
 };
 
 
-int Double_CompareTo(TDouble const, TDouble other);
-int Double_IntValue(TDouble const);
-long Double_LongValue(TDouble const);
-float Double_FloatValue(TDouble const);
-double Double_DoubleValue(TDouble const);
-char Double_CharValue(TDouble const);
-short Double_ShortValue(TDouble const);
+int Double_CompareTo(struct Double *const, struct Double *const);
+int Double_IntValue(struct Double *const);
+long Double_LongValue(struct Double *const);
+float Double_FloatValue(struct Double *const);
+double Double_DoubleValue(struct Double *const);
+char Double_CharValue(struct Double *const);
+short Double_ShortValue(struct Double *const);
 
 #endif _DOUBLE_H_

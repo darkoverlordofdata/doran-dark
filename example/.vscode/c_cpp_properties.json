@@ -5,10 +5,14 @@
             "includePath": [
                 "${workspaceFolder}/include",
                 "${workspaceFolder}/vendor",
-                "${workspaceFolder}/.lib/dark/vendor/tgc",
                 "${workspaceFolder}/.lib/dark/include",
+                "${workspaceFolder}/.lib/dark/vendor",
                 "C:/msys64/mingw64/include"
             ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": false,
+                "databaseFilename": ""
+            },
             "defines": [
                 "_DEBUG",
                 "UNICODE",

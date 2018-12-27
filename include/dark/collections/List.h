@@ -55,40 +55,40 @@ struct ListClass
             struct Class * isa;
             struct Class * superclass;
             char* name;
-            char*   (*ToString) (TList const);
-            bool    (*Equals) (TObject const, TObject const);
-            int     (*GetHashCode) (TObject const);
-            void    (*Dispose) (TObject const);
-            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
-            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TList   (*Create) ();
-            int     (*Length)       (TList const);
-            bool    (*IsEmpty)      (TList const);
-            bool    (*Contains)     (TList const, Any value);
-            void    (*Clear)        (TList const);
-            void    (*Add)          (TList const, Any value);
-            Any     (*Remove)       (TList const);
+            char*   (*ToString) (struct List *const);
+            bool    (*Equals) (struct Object *const, struct Object *const);
+            int     (*GetHashCode) (struct Object *const);
+            void    (*Dispose) (struct Object *const);
+            bool    (*ReferenceEquals) (struct Object *const, struct Object *const);
+            bool    (*InstanceEquals) (struct Object *const, struct Object *const);
+            struct List *  (*Create) ();
+            int     (*Length)       (struct List *const);
+            bool    (*IsEmpty)      (struct List *const);
+            bool    (*Contains)     (struct List *const, Any);
+            void    (*Clear)        (struct List *const);
+            void    (*Add)          (struct List *const, Any);
+            Any     (*Remove)       (struct List *const);
 
         };
     };
-    int (*Insert) (TList const, Any data, List_Compare func);
-    void (*Iterate) (TList const, List_Interator func);
+    int (*Insert) (struct List *const, Any, List_Compare);
+    void (*Iterate) (struct List *const, List_Interator);
 };
 
 
 /**
  * List API
  */
-char* overload ToString(TList const);
-void overload Dispose(TList const);
-int overload Length(TList const);
-bool overload IsEmpty(TList const);
-bool overload Contains(TList const);
-void overload Clear(TList const);
-void overload Add(TList const, Any data);
-Any overload Remove(TList const);
+char* overload ToString(struct List *const);
+void overload Dispose(struct List *const);
+int overload Length(struct List *const);
+bool overload IsEmpty(struct List *const);
+bool overload Contains(struct List *const);
+void overload Clear(struct List *const);
+void overload Add(struct List *const, Any);
+Any overload Remove(struct List *const);
 
-int Insert(TList const, Any data, List_Compare func);
-void overload ForEach(TList const, List_Interator func);
+int Insert(struct List *const, Any, List_Compare);
+void overload ForEach(struct List *const, List_Interator);
 
 #endif DARK_LIST_H_ 

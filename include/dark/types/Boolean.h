@@ -56,32 +56,32 @@ struct BooleanClass
             struct  Class *isa;
             struct  Class *superclass;
             char*   name;
-            char*   (*ToString) (TBoolean const);
-            bool    (*Equals) (TObject const, TObject const);
-            int     (*GetHashCode) (TObject const);
-            void    (*Dispose) (TObject const);
-            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
-            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TBoolean (*Create) (bool value);
-            int     (*CompareTo) (TBoolean const, TBoolean other);
+            char*   (*ToString) (const struct Boolean *const);
+            bool    (*Equals) (struct Object *const, struct Object *const);
+            int     (*GetHashCode) (struct Object *const);
+            void    (*Dispose) (struct Object *const);
+            bool    (*ReferenceEquals) (struct Object *const, struct Object *const);
+            bool    (*InstanceEquals) (struct Object *const, struct Object *const);
+            struct Boolean *(*Create) (bool value);
+            int     (*CompareTo) (const struct Boolean *const, const struct Boolean *const);
         };
     };
-    bool    (*BoolValue) (TBoolean const);
-    int     (*Compare) (bool x, bool y);
-    bool    (*ParseBool) (char* s);
+    bool    (*BoolValue) (const struct Boolean *const);
+    int     (*Compare) (const bool, const bool);
+    bool    (*ParseBool) (char const*);
 
     int  Bytes;
     int  Size;
     int  Type;
-    TBoolean True;
-    TBoolean False;
+    struct Boolean *True;
+    struct Boolean *False;
 };
 
-bool BoolValue(TBoolean const);
-bool ParseBool(char* s);
+bool BoolValue(const struct Boolean *const);
+bool ParseBool(const char *const);
 
-int overload Compare(bool x, bool y);
-int overload CompareTo(TBoolean const, TBoolean other);
-char* overload ToString(TBoolean const this);
+int overload Compare(bool, bool);
+int overload CompareTo(const struct Boolean *const, const struct Boolean *const);
+char* overload ToString(const struct Boolean *const);
 
-#endif _BOOLEAN_H_
+#endif // _BOOLEAN_H_

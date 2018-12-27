@@ -27,7 +27,7 @@ SOFTWARE.
 /**
  * Constructor
  */
-TList List_Ctor(TList const this)
+struct List *List_Ctor(struct List *const this)
 {
     Collection_Ctor(this);
     this->isa = isa(List);
@@ -62,7 +62,7 @@ TListNode ListNode_New(Any data, TListNode next)
  * @param comp function to compare for insertion
  * 
  */
-int Insert(TList const this, Any data, int (*comp)(Any, Any))
+int Insert(struct List *const this, Any data, int (*comp)(Any, Any))
 {
     if (this->head == nullptr) {
         this->head = ListNode_New(data, nullptr);
@@ -92,7 +92,7 @@ int Insert(TList const this, Any data, int (*comp)(Any, Any))
  * @param data to insert
  * 
  */
-void overload Add(TList const this, Any data)
+void overload Add(struct List *const this, Any data)
 {
     if (this->head == nullptr) {
         this->head = ListNode_New(data, nullptr);
@@ -106,7 +106,7 @@ void overload Add(TList const this, Any data)
 /**
  * Remove item at end of list
  */
-Any overload Remove(TList const this)
+Any overload Remove(struct List *const this)
 {
     TListNode head = this->head;
 
@@ -124,7 +124,7 @@ Any overload Remove(TList const this)
  * @param iter function to call for each iteration
  * 
  */
-void overload ForEach(TList const this, void (^iter)(Any))
+void overload ForEach(struct List *const this, void (^iter)(Any))
 {
     for (TListNode curr = this->head; curr != nullptr; curr = curr->next) {
         iter(curr->data);
@@ -134,7 +134,7 @@ void overload ForEach(TList const this, void (^iter)(Any))
 /**
  * Free list
  */
-void overload Dispose(TList const this)
+void overload Dispose(struct List *const this)
 {
     // ListNode curr = this->head;
     // ListNode next;
@@ -150,7 +150,7 @@ void overload Dispose(TList const this)
 /**
  * Number of items in vector
  */
-int overload Length(TList const this)
+int overload Length(struct List *const this)
 {
     return this->length;
 }
@@ -158,7 +158,7 @@ int overload Length(TList const this)
 /**
  * ToString
  */
-char* overload ToString(TList const this)
+char* overload ToString(struct List *const this)
 {
     return "dark.collections.List";
 }

@@ -26,6 +26,12 @@ SOFTWARE.
 #include <dark/collections/Hashmap.h>
 /* 
  * Generic Hashmap implementation
+ * 
+ * based on https://petewarden.com/2010/01/07/c-hashmap/
+ * and shoehorned into the DarkOverload api
+ * 
+ * consider upgrade to https://github.com/DavidLeeds/hashmap
+ * 
  */
 
 #define INITIAL_SIZE (256)
@@ -142,7 +148,7 @@ static unsigned long crc32(const unsigned char *s, unsigned int len)
 /*
  * Hashing function for a string
  */
-unsigned int overload HashInt(THashmap const this, char* keystring)
+unsigned int overload HashInt(struct Hashmap *const this, char* keystring)
 {
     unsigned long key = crc32((unsigned char*)(keystring), strlen(keystring));
 
@@ -165,7 +171,7 @@ unsigned int overload HashInt(THashmap const this, char* keystring)
 /**
  * Default Constructor
  */
-THashmap Hashmap_Ctor(THashmap const this)
+struct Hashmap *Hashmap_Ctor(struct Hashmap *const this)
 {
     Object_Ctor(this);
     this->isa = isa(Hashmap);
@@ -183,7 +189,7 @@ THashmap Hashmap_Ctor(THashmap const this)
  * Return the integer of the location in data
  * to store the point to the item, or MAP_FULL.
  */
-int overload Hash(THashmap const this, char* key)
+int overload Hash(struct Hashmap *const this, char* key)
 {
 	/* If full, return immediately */
 	if (this->size >= (this->tableSize/2)) return MAP_FULL;
@@ -206,7 +212,7 @@ int overload Hash(THashmap const this, char* key)
 /*
  * Doubles the size of the hashmap, and rehashes all the elements
  */
-int overload Rehash(THashmap const this)
+int overload Rehash(struct Hashmap *const this)
 {
     THashmapNode temp = allocate(HashmapNode, 2 * this->tableSize);
 
@@ -238,7 +244,7 @@ int overload Rehash(THashmap const this)
 /*
  * Add a pointer to the hashmap with some key
  */
-int overload Put(THashmap const this, char* key, Any value)
+int overload Put(struct Hashmap *const this, char* key, Any value)
 {
 	/* Find a place to put our value */
 	int index = Hash(this, key);
@@ -263,7 +269,7 @@ int overload Put(THashmap const this, char* key, Any value)
 /*
  * Get your pointer out of the hashmap with a key
  */
-Any overload Get(THashmap const this, char* key)
+Any overload Get(struct Hashmap *const this, char* key)
 {
     Any result;
 	/* Find data location */
@@ -292,7 +298,7 @@ Any overload Get(THashmap const this, char* key)
  * additional Any argument is passed to the function as its first
  * argument and the hashmap element is the second.
  */
-int overload ForEach(THashmap const this, Hashmap_Iterator f, Any item) 
+int overload ForEach(struct Hashmap *const this, Hashmap_Iterator f, Any item) 
 {
 	/* On empty hashmap, return immediately */
 	if (Length(this) <= 0)
@@ -317,7 +323,7 @@ int overload ForEach(THashmap const this, Hashmap_Iterator f, Any item)
 /*
  * Remove an element with that key from the map
  */
-int overload Remove(THashmap const this, char* key)
+int overload Remove(struct Hashmap *const this, char* key)
 {
 	/* Find key */
 	int curr = HashInt(this, key);
@@ -348,18 +354,18 @@ int overload Remove(THashmap const this, char* key)
 }
 
 /* Deallocate the hashmap */
-void overload Dispose(THashmap const this)
+void overload Dispose(struct Hashmap *const this)
 {
 	// delete(this->data);
 }
 
 /* Return the length of the hashmap */
-int overload Length(THashmap const this)
+int overload Length(struct Hashmap *const this)
 {
     return this->size;
 }
 
-char* overload ToString(THashmap const this)
+char* overload ToString(struct Hashmap *const this)
 {
     return "dark.collections.Hashmap";
 }

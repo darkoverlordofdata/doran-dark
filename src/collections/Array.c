@@ -27,18 +27,18 @@ SOFTWARE.
 /**
  * Default Constructor
  */
-TArray Array_Ctor(TArray const this, int capacity)
+struct Array *Array_Ctor(struct Array *const this, int capacity)
 {
     Collection_Ctor(this);
     this->isa = isa(Array);
     this->capacity = capacity == 0 ? ARRAY_INIT_CAPACITY : capacity;
     this->length = 0;
-    this->data = dark_calloc(this->capacity, sizeof(Any));
+    this->data = darko_calloc(this->capacity, sizeof(Any));
     return this;
 }
 
 
-TArray overload Array_New(void) {
+struct Array overload *Array_New(void) {
     return Array_Ctor(new(Array), 4);
 }
 /**
@@ -49,7 +49,7 @@ TArray overload Array_New(void) {
  * @param capacity initial max size of vector
  * 
  */
-TArray overload Array_New(int capacity) {
+struct Array overload *Array_New(int capacity) {
     return Array_Ctor(new(Array), capacity);
 }
 
@@ -63,8 +63,8 @@ TArray overload Array_New(int capacity) {
  * @param ... list of initial values
  * 
  */
-TArray overload Array_New(int count, ...) {
-    TArray v = Array_Ctor(new(Array), count);
+struct Array overload *Array_New(int count, ...) {
+    struct Array *v = Array_Ctor(new(Array), count);
     va_list args;
     va_start(args, count);
     for (int i=0; i<count; i++)
@@ -76,7 +76,7 @@ TArray overload Array_New(int count, ...) {
 
 
 
-int overload Length(TArray const this)
+int overload Length(const struct Array *const this)
 {
     return this->length;
 }
@@ -85,13 +85,13 @@ int overload Length(TArray const this)
  * 
  * @param capacity the new size
  */
-void Resize(TArray const this, int capacity)
+void Resize(struct Array *const this, int capacity)
 {
     #ifdef DEBUG_ON
     printf("vector_resize: %d to %d\n", this->capacity, capacity);
     #endif
 
-    void **data = dark_realloc(this->data, sizeof(Any) * capacity);
+    void **data = darko_realloc(this->data, sizeof(Any) * capacity);
     if (data) {
         this->data = data;
         this->capacity = capacity;
@@ -103,7 +103,7 @@ void Resize(TArray const this, int capacity)
  * 
  * @param item the data to add
  */
-void overload Add(TArray const this, Any item)
+void overload Add(struct Array *const this, const Any item)
 {
     if (this->capacity == this->length) {
         this->isa->Resize(this, this->capacity * 2);
@@ -117,7 +117,7 @@ void overload Add(TArray const this, Any item)
  * @param index to add at
  * @param item the data to add
  */
-void Set(TArray const this, int index, Any item)
+void Set(struct Array *const this, int index, const Any item)
 {
     if (index >= 0 && index < this->length)
         this->data[index] = item;
@@ -128,7 +128,7 @@ void Set(TArray const this, int index, Any item)
  * 
  * @param index to get
  */
-Any Get(TArray const this, int index)
+Any Get(const struct Array *const this, int index)
 {
     if (index >= 0 && index < this->length)
         return this->data[index];
@@ -140,7 +140,7 @@ Any Get(TArray const this, int index)
  * 
  * @param index to delete
  */
-void overload Remove(TArray const this, int index)
+void overload Remove(struct Array *const this, int index)
 {
     if (index < 0 || index >= this->length)
         return;
@@ -161,23 +161,32 @@ void overload Remove(TArray const this, int index)
 /**
  * Free the vector
  */
-void overload Dispose(TArray const this)
+void overload Dispose(struct Array *const this)
 {
     // delete(this->data);
 }
 
-void overload Clear(TArray const this)
+void overload Clear(struct Array *const this)
 {
     for (int i=0; i < this->length; i++)
         this->data[i] = nullptr;
     this->length = 0;
+}
+bool overload IsEmpty(const struct Array *const this)
+{
+    return this->length <= 0;
+}
+
+bool overload Contains(const struct Array *const this, Any item)
+{
+    return false;   
 }
 
 
 /**
  * ToString
  */
-char* overload ToString(TArray const this)
+char* overload ToString(const struct Array *const this)
 {
     return "dark.collections.Array";
 }
@@ -203,6 +212,8 @@ register (Array)
             .ToString       = ToString,
             .Dispose        = Dispose,
             .Length         = Length,
+            .IsEmpty        = IsEmpty,
+            .Contains       = Contains,
             .Add            = Add,
             .Remove         = Remove,
             .Resize         = Resize,

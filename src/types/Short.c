@@ -36,7 +36,7 @@ static Exception(NumberFormat);
  * @param value of short
  * 
  */
-TShort Short_Ctor(TShort const this, short value)
+struct Short  *Short_Ctor(struct Short  *const this, short value)
 {
     Number_Ctor(this);
     this->isa = isa(Short);
@@ -47,7 +47,7 @@ TShort Short_Ctor(TShort const this, short value)
 /**
  * Returns a primitive short value parsed from input string. 
  */
-short Short_ParseShort(char* s, int radix)
+short Short_ParseShort(char const *const s, int radix)
 {
     long i = Long_ParseLong(s, radix);
     if (i < SHORT_MIN_VALUE || i > SHORT_MAX_VALUE)
@@ -74,54 +74,54 @@ short Short_Compare(short x, short y) {
  * @param   other  Short to be compared
  * @return same as Short_Compare
  */
-int Short_CompareTo(TShort this, TShort other) {
+int Short_CompareTo(struct Short  *this, struct Short  *other) {
     return Short_Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int Short_IntValue(TShort const this) {
+int Short_IntValue(struct Short  *const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-long Short_LongValue(TShort const this) {
+long Short_LongValue(struct Short  *const this) {
     return (long)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-float Short_FloatValue(TShort const this) {
+float Short_FloatValue(struct Short  *const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-double Short_DoubleValue(TShort const this) {
+double Short_DoubleValue(struct Short  *const this) {
     return (double)this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-char Short_CharValue(TShort const this) {
+char Short_CharValue(struct Short  *const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-short Short_ShortValue(TShort const this) {
+short Short_ShortValue(struct Short  *const this) {
     return (short)this->value;
 }
 
 
-char* Short_ToString(TShort const this)
+char* Short_ToString(struct Short  *const this)
 {
     static char str[20];
     sprintf(str, "%d", this->value);

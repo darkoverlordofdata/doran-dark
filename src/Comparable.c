@@ -33,7 +33,7 @@ static Exception(AbstractMethod);
 /**
  * Initialize a new Comparable
  */
-TComparable Comparable_Ctor(TComparable const this)
+struct Comparable *Comparable_Ctor(struct Comparable *const this)
 {
     Object_Ctor(this);
     this->isa = isa(Comparable);
@@ -41,17 +41,17 @@ TComparable Comparable_Ctor(TComparable const this)
 }
 
 
-int overload CompareTo(TComparable this, TComparable other) {
+int overload CompareTo(struct Comparable *this, struct Comparable *other) {
     return this->isa->CompareTo(this, other);
 }
-static short Abstract_CompareTo(TComparable const this, TComparable other) {
+static short Abstract_CompareTo(struct Comparable *const this, struct Comparable *other) {
     return AbstractMethodException("Comparable_CompareTo");
 }
 
-char* Comparable_ToString(TComparable const this) {
+char* Comparable_ToString(struct Comparable *const this) {
     return this->isa->ToString(this);
 }
-static char* Virtual_ToString(TComparable const this) {
+static char* Virtual_ToString(struct Comparable *const this) {
     return "dark.Comparable";
 }
 

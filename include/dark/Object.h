@@ -42,7 +42,7 @@ typedef struct Object* TObject;
 extern struct ObjectClass Object;
 struct Object {
 // class (Object) {
-	struct ObjectClass* isa;
+	const struct ObjectClass* isa;
 };
 
 typedef struct Object* id;
@@ -60,13 +60,13 @@ struct ObjectClass {
             char* name;
         };
     };
-    char*   (*ToString) (TObject const);
-    bool    (*Equals) (TObject const, TObject const);
-    int     (*GetHashCode) (TObject const);
-    void    (*Dispose) (TObject const);
-    bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
-    bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-    TObject (*Create) ();
+    char*   (*ToString) (const struct Object *const);
+    bool    (*Equals) (const struct Object *const, const struct Object *const);
+    int     (*GetHashCode) (const struct Object *const);
+    void    (*Dispose) (struct Object *const);
+    bool    (*ReferenceEquals) (const struct Object *const, const struct Object *const);
+    bool    (*InstanceEquals) (const struct Object *const, const struct Object *const);
+    struct Object *(*Create) ();
 
 };
 
@@ -77,18 +77,18 @@ static inline int typeid(id obj) { return (int)obj->isa; }
 /**
  * Object API
  */
-TClass GetClass(TObject const);
-char* GetClassName(TObject const);
-bool ReferenceEquals(TObject const objA, TObject const objB);
-bool InstanceEquals(TObject const objA, TObject const objB);
+TClass GetClass(const struct Object *const);
+char* GetClassName(const struct Object *const);
+bool ReferenceEquals(const struct Object *const, const struct Object *const);
+bool InstanceEquals(const struct Object *const, const struct Object *const);
 
-const char* overload ToString(TObject const);
-bool overload Equals(TObject const, TObject const that);
-int overload GetHashCode(TObject const);
-void overload Dispose(TObject const);
+const char* overload ToString(const struct Object *const);
+bool overload Equals(const struct Object *const, const struct Object *const that);
+int overload GetHashCode(const struct Object *const);
+void overload Dispose(struct Object *const);
 
-TObject Object_New();
-TObject Object_Ctor(TObject const this);
-TObject Object_Dtor();
+struct Object *Object_New();
+struct Object *Object_Ctor(struct Object *const this);
+struct Object *Object_Dtor();
 
 #endif _OBJECT_H_ 

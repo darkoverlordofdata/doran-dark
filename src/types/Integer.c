@@ -36,7 +36,7 @@ static Exception(NumberFormat);
  * @param value of int
  * 
  */
-TInteger Integer_Ctor(TInteger const this, int value)
+struct Integer * Integer_Ctor(struct Integer * const this, int value)
 {
     Number_Ctor(this);
     this->isa = isa(Integer);
@@ -48,7 +48,7 @@ TInteger Integer_Ctor(TInteger const this, int value)
 /**
  * Returns a primitive integer value parsed from input string. 
  */
-int Integer_ParseInt(char* s, int radix) {
+int Integer_ParseInt(char* const s, int radix) {
     long i = Long_ParseLong(s, radix);
     if (i < INTEGER_MIN_VALUE || i > INTEGER_MAX_VALUE)
         return NumberFormatException(
@@ -74,54 +74,54 @@ int Integer_Compare(int x, int y) {
  * @param   other  Integer to be compared
  * @return same as Integer_Compare
  */
-int Integer_CompareTo(TInteger this, TInteger other) {
+int Integer_CompareTo(struct Integer * this, struct Integer * other) {
     return Integer_Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int Integer_IntValue(TInteger const this) {
+int Integer_IntValue(struct Integer * const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-long Integer_LongValue(TInteger const this) {
+long Integer_LongValue(struct Integer * const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-float Integer_FloatValue(TInteger const this) {
+float Integer_FloatValue(struct Integer * const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-double Integer_DoubleValue(TInteger const this) {
+double Integer_DoubleValue(struct Integer * const this) {
     return (double)this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-char Integer_CharValue(TInteger const this) {
+char Integer_CharValue(struct Integer * const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-short Integer_ShortValue(TInteger const this) {
+short Integer_ShortValue(struct Integer * const this) {
     return (short)this->value;
 }
 
 
-char* Integer_ToString(TInteger const this)
+char* Integer_ToString(struct Integer * const this)
 {
     static char str[20];
     sprintf(str, "%d", this->value);

@@ -36,7 +36,7 @@ static Exception(LongFormat);
  * @param value of long
  * 
  */
-TLong Long_Ctor(TLong const this, long value)
+struct Long * Long_Ctor(struct Long * const this, long value)
 {
     Number_Ctor(this);
     this->isa = isa(Long);
@@ -47,7 +47,7 @@ TLong Long_Ctor(TLong const this, long value)
 /**
  * Returns a primitive long value parsed from input string. 
  */
-long Long_ParseLong(char* s, int radix)
+long Long_ParseLong(char* const s, int radix)
 {
     errno = 0;
     char* endptr;
@@ -82,58 +82,58 @@ int Long_Compare(long x, long y) {
  * @param   other  Long to be compared
  * @return same as Long_Compare
  */
-int Long_CompareTo(TLong this, TLong other) {
+int Long_CompareTo(struct Long * const this, struct Long * const other) {
     return Long_Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int Long_IntValue(TLong const this) {
+int Long_IntValue(struct Long * const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-long Long_LongValue(TLong const this) {
+long Long_LongValue(struct Long * const this) {
     return (long)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-float Long_FloatValue(TLong const this) {
+float Long_FloatValue(struct Long * const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-double Long_DoubleValue(TLong const this) {
+double Long_DoubleValue(struct Long * const this) {
     return (double)this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-char Long_CharValue(TLong const this) {
+char Long_CharValue(struct Long * const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-short Long_ShortValue(TLong const this) {
+short Long_ShortValue(struct Long * const this) {
     return (short)this->value;
 }
 
-bool Long_Equals(TLong const this, TLong const other)
+bool Long_Equals(struct Long * const this, struct Long * const other)
 {
     return this->value == other->value;
 }
 
-char* Long_ToString(TLong const this)
+char* Long_ToString(struct Long * const this)
 {
     static char str[20];
     sprintf(str, "%d", this->value);

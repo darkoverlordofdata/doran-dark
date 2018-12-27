@@ -36,7 +36,7 @@ static Exception(IndexOutOfBounds);
  * @param value of long
  * 
  */
-TString String_Ctor(TString const this, char* value)
+struct String * String_Ctor(struct String * const this, char* value)
 {
     Comparable_Ctor(this);
     this->isa = isa(String);
@@ -50,7 +50,7 @@ TString String_Ctor(TString const this, char* value)
 //     return String_Ctor(new(String), value);
 // }
 
-void String_GetChars(TString this, char* dst, int dstBegin) {
+void String_GetChars(struct String * this, char* dst, int dstBegin) {
     memcpy(dst+dstBegin, this->value, this->length);
 }
 
@@ -73,79 +73,79 @@ int String_Compare(char* x, char* y) {
  * @param   other  String to be compared
  * @return same as String_Compare
  */
-int String_CompareTo(TString this, TString other) {
+int String_CompareTo(struct String * this, struct String * other) {
     return String_Compare(this->value, other->value);
 }
 
-int String_CompareToIgnoreCase(TString this, TString str) {
+int String_CompareToIgnoreCase(struct String * this, struct String * str) {
     return strcmpi(this->value, str->value);
 }
 
-TString String_Concatc(TString this, char* other) {
+struct String * String_Concatc(struct String * this, char* other) {
     int length = strlen(other);
     if (length == 0) return this;
     int len = this->length;
-    char* str = dark_calloc((len+length+1), sizeof(char));
+    char* str = darko_calloc((len+length+1), sizeof(char));
     strncpy(str, this->value, len);
     strncpy(str+len, other, length);
-    TString result = String.Create(str);
+    struct String * result = String.Create(str);
     return result;
 
 }
 
-TString String_Concat(TString this, TString other) {
+struct String * String_Concat(struct String * this, struct String * other) {
     if (other->length == 0)
         return this;
 
     int len = this->length;
-    char* str = dark_calloc((len+other->length+1), sizeof(char));
+    char* str = darko_calloc((len+other->length+1), sizeof(char));
     strncpy(str, this->value, len);
     strncpy(str+len, other->value, other->length);
-    TString result = String.Create(str);
+    struct String * result = String.Create(str);
     return result;
 }
 
-bool String_Contains(TString this, TString s) {
+bool String_Contains(struct String * this, struct String * s) {
     return this->isa->IndexOf(this, s, 0) > -1;
 }
 
-TString String_CopyOf(TString this) {
+struct String * String_CopyOf(struct String * this) {
     return String.Create(this->value);
 }
 
-bool String_EndsWith(TString this, TString suffix) {
+bool String_EndsWith(struct String * this, struct String * suffix) {
     char* offset = this->value + this->length - suffix->length;
     return !strcmp(offset, suffix);
 }
 
-bool String_StartsWith(TString this, TString prefix, int offset) {
+bool String_StartsWith(struct String * this, struct String * prefix, int offset) {
     char* c = strstr(this->value+offset, prefix->value);
     return c == (this->value+offset) ? true : false;
 }
 
-char* String_GetBytes(TString this) {
+char* String_GetBytes(struct String * this) {
     return strdup(this->value);
 }
 
-int String_IndexOf(TString this, TString str, int offset) {
+int String_IndexOf(struct String * this, struct String * str, int offset) {
     char* c = strstr(this->value+offset, str->value);
     return c == nullptr ? 0 : c - this->value;
 }
 
-int String_LastIndexOf(TString this, TString str, int offset) {
+int String_LastIndexOf(struct String * this, struct String * str, int offset) {
     char* c = strrstr(this->value+offset, str->value);
     return c == nullptr ? 0 : c - this->value;
 }
 
-TString String_ToUpperCase(TString this) {
+struct String * String_ToUpperCase(struct String * this) {
     return String.Create(strupr(this->value));
 }
 
-TString String_ToLowerCase(TString this) {
+struct String * String_ToLowerCase(struct String * this) {
     return String.Create(strlwr(this->value));
 }
 
-TString String_Trim(TString this) {
+struct String * String_Trim(struct String * this) {
     int len = this->length;
     int start = 0;
     while ((start < len) && (this->value[start] <= ' ')) {
@@ -159,17 +159,17 @@ TString String_Trim(TString this) {
         : this;    
 }
 
-int overload Length(TString const this) 
+int overload Length(struct String * const this) 
 {
     return this->length;
 }
 
-bool String_IsEmpty(TString const this)
+bool String_IsEmpty(struct String * const this)
 {
     return this->length == 0;
 }
 
-char String_CharAt(TString const this, int index)
+char String_CharAt(struct String * const this, int index)
 {
     printf("string %d,%d %s\n", index, this->length, this->value);
     if (index < 0 || index >= this->length)
@@ -178,17 +178,24 @@ char String_CharAt(TString const this, int index)
 }
  
 
-char* String_ToString(TString const this)
+char* String_ToString(struct String * const this)
 {
     return this->value;
 }
 
-void String_Dispose(TString const this)
+void String_Dispose(struct String * const this)
 {
 }
 
 static struct String* Create(char* value) { 
     return String_Ctor(new(String), value); 
+}
+
+/*
+ * Shortcut for a new string object
+ */
+$String $(const char* const str) {
+    return String.Create(str);
 }
 
 /**
@@ -233,7 +240,7 @@ register (String)
 }
 
 __attribute__((__format__ (__printf__, 1, 2)))
-TString String_Format(char* format, ...) {
+struct String * String_Format(char* format, ...) {
     va_list args1;
     va_list args2;
     
@@ -243,7 +250,7 @@ TString String_Format(char* format, ...) {
     int len = vsnprintf(nullptr, 0, format, args1);
     va_end(args1);
     if (len == 0) return String.Create("");
-    char* str = dark_calloc((len+1), sizeof(char));
+    char* str = darko_calloc((len+1), sizeof(char));
     len = vsnprintf(str, len+1, format, args2);
     va_end(args2);
     return String.Create(str);

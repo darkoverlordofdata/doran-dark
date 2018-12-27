@@ -1,6 +1,6 @@
-# dark overload
+# darkstep
 
-generic function runtime inspired by objective-c, with a java/dotnet inspired framework mashup. Linked with boehm gc.
+generic function runtime inspired by nextstep object. Linked with boehm gc.
 
 clang c99 with extensions:
 * BlocksRuntime
@@ -29,12 +29,61 @@ a port of the breakout game from learnopengl.com
 ## example
 
 ```c
-    TList ls = List.Create();
-    Add(ls, String.Create("first"));
-    Add(ls, String.Create("second"));
+void overload ForEach(List const this, void (^iter)(String))
+{
+    for (ListNode curr = this->head; curr != nullptr; curr = curr->next) {
+        iter(curr->data);
+    }
+}
 
-    ForEach(ls, ^(TString s) {
+int main(int argc, char **argv) {
+    List ls = DSList.Create();
+    Add(ls, DSString.Create("first"));
+    Add(ls, DSString.Create("second"));
+
+
+    ForEach(ls, ^(String s) {
         printf("item = %d) %s\n", s->length, s->value);
     });
+    return 0;
+}
+
+    DSLog($("this string %f"), 20.0f);
+    List ls = DSList.Create();
+
+    String s = $$.Join($("string 1"), $("string 2"));
+    String ss[] = s.Split(" ");
+
+
+```
+
+```c
+
+void overload ForEach(List const this, void (^iter)(String))
+{
+    for (ListNode curr = this->head; curr != nullptr; curr = curr->next) {
+        iter(curr->data);
+    }
+}
+
+int main(int argc, char **argv) {
+    List ls = $List.Create();
+    Add(ls, $String.Create("first"));
+    Add(ls, $String.Create("second"));
+
+
+    ForEach(ls, ^(String s) {
+        printf("item = %d) %s\n", s->length, s->value);
+    });
+    return 0;
+}
+```
+
+```c
+    $Log($("this string %f"), 20.0f);
+    List ls = $List.Create();
+
+    String s = $$.Join($("string 1"), $("string 2"));
+    String ss[] = s.Split(" ");
 
 ```
