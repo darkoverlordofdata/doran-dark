@@ -8,7 +8,7 @@
 ******************************************************************/
 #include <Shader.h>
 
-static void checkCompileErrors(struct Shader *this, GLuint object, char* type);
+static void checkCompileErrors(Shader* this, GLuint object, char* type);
 
 const char* VERSION = "#version 300 es\n";
 const char* HEADER = "#\n"
@@ -19,9 +19,9 @@ const char* HEADER = "#\n"
 /**
  * Shader
  */
-struct Shader * Shader_Ctor(struct Shader *const this)
+Shader* Shader_Ctor(Shader* const this)
 {
-	Object_Ctor(this);
+	DSObject_Ctor(this);
     this->isa = isa(Shader);
     return this;
 }
@@ -29,7 +29,7 @@ struct Shader * Shader_Ctor(struct Shader *const this)
 /**
  * Use shader
  */
-struct Shader *overload Use(struct Shader *this)
+Shader* overload Use(Shader* this)
 {
     glUseProgram(this->Id);
     return this;
@@ -43,7 +43,7 @@ struct Shader *overload Use(struct Shader *this)
  * 
  */
 void overload Compile(
-    struct Shader *this, 
+    Shader* this, 
     const GLchar* vertexSource, 
     const GLchar* fragmentSource)
 {
@@ -73,24 +73,24 @@ void overload Compile(
     glDeleteShader(sFragment);
 }
 
-struct Shader *overload SetFloat(
-    struct Shader *this, 
+Shader* overload SetFloat(
+    Shader* this, 
     const GLchar *name, 
     GLfloat value) {
     glUniform1f(glGetUniformLocation(this->Id, name), value);
     return this;
 }
 
-struct Shader *overload SetInteger(
-    struct Shader *this, 
+Shader* overload SetInteger(
+    Shader* this, 
     const GLchar *name, 
     GLint value) {
     glUniform1i(glGetUniformLocation(this->Id, name), value);
     return this;
 }
 
-struct Shader *overload SetArray2f(
-    struct Shader *this, 
+Shader* overload SetArray2f(
+    Shader* this, 
     const GLchar *name, 
     GLfloat x, 
     GLfloat y) {
@@ -98,16 +98,16 @@ struct Shader *overload SetArray2f(
     return this;
 }
 
-struct Shader *overload SetArray2(
-    struct Shader *this, 
+Shader* overload SetArray2(
+    Shader* this, 
     const GLchar *name, 
     const GLfloat* value) {
     glUniform2f(glGetUniformLocation(this->Id, name), value[0], value[1]);
     return this;
 }
 
-struct Shader *overload SetArray3f(
-    struct Shader *this, 
+Shader* overload SetArray3f(
+    Shader* this, 
     const GLchar *name, 
     GLfloat x, 
     GLfloat y, 
@@ -116,16 +116,16 @@ struct Shader *overload SetArray3f(
     return this;
 }
 
-struct Shader *overload SetArray3(
-    struct Shader *this, 
+Shader* overload SetArray3(
+    Shader* this, 
     const GLchar *name, 
     const GLfloat* value) {
     glUniform3f(glGetUniformLocation(this->Id, name), value[0], value[1], value[2]);
     return this;
 }
 
-struct Shader *overload SetArray4f(
-    struct Shader *this, 
+Shader* overload SetArray4f(
+    Shader* this, 
     const GLchar *name, 
     GLfloat x, 
     GLfloat y, 
@@ -135,24 +135,24 @@ struct Shader *overload SetArray4f(
     return this;
 }
 
-struct Shader *overload SetArray4(
-    struct Shader *this, 
+Shader* overload SetArray4(
+    Shader* this, 
     const GLchar *name, 
     const GLfloat* value) {
     glUniform4f(glGetUniformLocation(this->Id, name), value[0], value[1], value[2], value[3]);
     return this;
 }
 
-struct Shader *overload SetMatrix(
-    struct Shader *this, 
+Shader* overload SetMatrix(
+    Shader* this, 
     const GLchar *name,  
     GLfloat * matrix) {
     glUniformMatrix4fv(glGetUniformLocation(this->Id, name), 1, GL_FALSE, matrix);
     return this;
 }
 
-struct Shader *overload SetMatrix4(
-    struct Shader *this, 
+Shader* overload SetMatrix4(
+    Shader* this, 
     const GLchar *name,  
     GLfloat* matrix) {
     glUniformMatrix4fv(glGetUniformLocation(this->Id, name), 1, GL_FALSE, matrix);
@@ -160,7 +160,7 @@ struct Shader *overload SetMatrix4(
 }
 
 static void checkCompileErrors(
-    struct Shader *this, 
+    Shader* this, 
     GLuint object, 
     char* type) {
     GLint success;
@@ -192,12 +192,12 @@ static void checkCompileErrors(
 /**
  * ToString
  */
-char* overload ToString(struct Shader *const this)
+char* overload ToString(Shader* const this)
 {
     return "Shader";
 }
 
-static struct Shader* Create() { 
+Shader* $Shader() { 
     return Shader_Ctor(new(Shader));
 }
 
@@ -206,17 +206,18 @@ static struct Shader* Create() {
  */
 register (Shader)
 {
-    if (Shader.isa == nullptr) {
-        Shader = (struct ShaderClass) {
-            .isa            = &Shader,
-            .superclass     = &Object,
+    if (ShaderClass.isa == nullptr) {
+        ShaderClass = (struct ShaderClass) {
+            .isa            = &ShaderClass,
+            .superclass     = &DSObjectClass,
             .name           = "Shader",
+            .Create         = $Shader,
             .ToString       = ToString,
-            .Equals         = Object.Equals,
-            .GetHashCode    = Object.GetHashCode,
-            .Dispose        = Object.Dispose,
-            .ReferenceEquals= Object.ReferenceEquals,
-            .InstanceEquals = Object.InstanceEquals,
+            .Equals         = DSObjectClass.Equals,
+            .GetHashCode    = DSObjectClass.GetHashCode,
+            .Dispose        = DSObjectClass.Dispose,
+            .ReferenceEquals= DSObjectClass.ReferenceEquals,
+            .InstanceEquals = DSObjectClass.InstanceEquals,
             .ToString       = ToString,
             .Use            = Use,
             .Compile        = Compile,
@@ -229,10 +230,9 @@ register (Shader)
             .SetArray4f     = SetArray4f,
             .SetArray4      = SetArray4,
             .SetMatrix4     = SetMatrix4,
-            .Create         = Create,
         };
-        AddMetadata(Shader);
+        AddMetadata(ShaderClass);
     }
-    return &Shader;
+    return &ShaderClass;
 }
 

@@ -66,7 +66,7 @@ char * strndup (const char *str, size_t size)
   char *result;
   size_t len = strlen(str);
   len = size < len ? size : len;
-  result = darko_calloc(len + 1, sizeof(char));
+  result = DSCalloc(len + 1, sizeof(char));
   return strncpy(result, str, len);
 }
 
@@ -93,7 +93,7 @@ char* STR_JOIN(int count, ...)
         size += strlen(str);
     }
     va_end(args1);
-    char* result = darko_calloc((size+1),  sizeof(char));
+    char* result = DSCalloc((size+1),  sizeof(char));
 
     /**
      * Now build the result string

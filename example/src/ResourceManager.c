@@ -11,9 +11,9 @@
 /**
  * ResourceManager
  */
-struct ResourceManager * ResourceManager_Ctor(struct ResourceManager * this)
+ResourceManager* ResourceManager_Ctor(ResourceManager* this)
 {
-    Object_Ctor(this); 
+    DSObject_Ctor(this); 
     this->isa = isa(ResourceManager);
     return this;
 }
@@ -26,7 +26,7 @@ struct ResourceManager * ResourceManager_Ctor(struct ResourceManager * this)
  * @returns loaded, compiled and linked shader program
  * 
  */
-static struct Shader *loadShaderFromFile(
+static Shader* loadShaderFromFile(
     const GLchar *vShaderFile, 
     const GLchar *fShaderFile)
 {
@@ -51,7 +51,7 @@ static struct Shader *loadShaderFromFile(
     fclose(fragmentShaderFile);
 
     // 2. Now create shader object from source code
-    struct Shader *shader = Shader.Create();
+    Shader* shader = $Shader();
     Compile(shader, vShaderCode, fShaderCode);
     return shader;
 }
@@ -64,13 +64,13 @@ static struct Shader *loadShaderFromFile(
  * @returns Texture
  * 
  */
-static struct Texture2D* loadTextureFromFile(const GLchar *file, bool alpha)
+static Texture2D* loadTextureFromFile(const GLchar *file, bool alpha)
 {
     // Create Texture object
     int format = alpha ? GL_RGBA : GL_RGB;
     char* path = join("assets/", file);
     int width, height, channels;
-    struct Texture2D *texture = Texture2D.Create(format, format, path);
+    Texture2D* texture = $Texture2D(format, format, path);
     // Load image
     unsigned char* image = stbi_load(path, &width, &height, &channels, 0); //texture->ImageFormat == GL_RGBA ? 4 : 3);
     // generate texture
@@ -88,10 +88,10 @@ static struct Texture2D* loadTextureFromFile(const GLchar *file, bool alpha)
  * @param name to cache as
  * @returns loaded, compiled and linked shader program
  */
-struct Shader *LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, char* name)
+Shader* LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, char* name)
 {
-    Put(ResourceManager.Shaders, name, loadShaderFromFile(vShaderFile, fShaderFile));
-    return Get(ResourceManager.Shaders, name);
+    Put(ResourceManagerClass.Shaders, name, loadShaderFromFile(vShaderFile, fShaderFile));
+    return Get(ResourceManagerClass.Shaders, name);
     // return s;
 }
 
@@ -102,9 +102,9 @@ struct Shader *LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, 
  * @returns loaded, compiled and linked shader program
  * 
  */
-struct Shader *GetShader(char* name)
+Shader* GetShader(char* name)
 {
-    return Get(ResourceManager.Shaders, name);
+    return Get(ResourceManagerClass.Shaders, name);
 }
 
 /**
@@ -116,10 +116,10 @@ struct Shader *GetShader(char* name)
  * @returns Texture
  * 
  */
-struct Texture2D *LoadTexture(const GLchar *file, bool alpha, char* name)
+Texture2D* LoadTexture(const GLchar *file, bool alpha, char* name)
 {
-    struct Texture2D *tex = loadTextureFromFile(file, alpha);
-    Put(ResourceManager.Textures, name, tex);
+    Texture2D* tex = loadTextureFromFile(file, alpha);
+    Put(ResourceManagerClass.Textures, name, tex);
     return tex;
 }
 
@@ -130,30 +130,30 @@ struct Texture2D *LoadTexture(const GLchar *file, bool alpha, char* name)
  * @returns Texture
  * 
  */
-struct Texture2D *GetTexture(char* name)
+Texture2D* GetTexture(char* name)
 {
-    struct Texture2D *tex = Get(ResourceManager.Textures, name);
+    Texture2D* tex = Get(ResourceManagerClass.Textures, name);
     return tex;
 }
 
 Clear1(Any item, Any data)
 {
-    struct Shader *s = data;
+    Shader* s = data;
     glDeleteProgram(s->Id);
 }
 
 Clear2(Any item, Any data)
 {
-    struct Texture2D *t = data;
+    Texture2D* t = data;
     glDeleteTextures(1, &t->Id);
 }
 
 void Dtor(struct ResourceManager * this)
 {
     // (Properly) delete all shaders	
-    // Iterate(ResourceManager.Shaders, Clear1, nullptr);
+    // Iterate(ResourceManagerClass.Shaders, Clear1, nullptr);
     // (Properly) delete all textures
-    // Iterate(ResourceManager.Textures, Clear2, nullptr);
+    // Iterate(ResourceManagerClass.Textures, Clear2, nullptr);
 }
 
 /**
@@ -168,7 +168,7 @@ static char* rdbuf(FILE* f)
     fseek(f, 0L, SEEK_END);
     long s = ftell(f);
     rewind(f);
-    char* buf = darko_calloc(1, s+1);
+    char* buf = DSCalloc(1, s+1);
     buf[s] = '\0';
 
     if (buf != nullptr)
@@ -179,7 +179,7 @@ static char* rdbuf(FILE* f)
     return buf;
 }
 
-static struct ResourceManager* Create() { 
+ResourceManager* $ResourceManager() { 
     return ResourceManager_Ctor(new(ResourceManager));
 }
 
@@ -188,17 +188,18 @@ static struct ResourceManager* Create() {
  */
 register (ResourceManager)
 {
-    if (ResourceManager.isa == nullptr) {
-        ResourceManager = (struct ResourceManagerClass) {
-            .isa                = &ResourceManager,
-            .superclass         = &Object,
+    if (ResourceManagerClass.isa == nullptr) {
+        ResourceManagerClass = (struct ResourceManagerClass) {
+            .isa                = &ResourceManagerClass,
+            .superclass         = &DSObjectClass,
             .name               = "ResourceManager",
-            .ToString           = Object.ToString,
-            .Equals             = Object.Equals,
-            .GetHashCode        = Object.GetHashCode,
-            .Dispose            = Object.Dispose,
-            .ReferenceEquals    = Object.ReferenceEquals,
-            .InstanceEquals     = Object.InstanceEquals,
+            .Create             = $ResourceManager,
+            .ToString           = DSObjectClass.ToString,
+            .Equals             = DSObjectClass.Equals,
+            .GetHashCode        = DSObjectClass.GetHashCode,
+            .Dispose            = DSObjectClass.Dispose,
+            .ReferenceEquals    = DSObjectClass.ReferenceEquals,
+            .InstanceEquals     = DSObjectClass.InstanceEquals,
             .LoadShader         = LoadShader,
             .GetShader          = GetShader,
             .LoadTexture        = LoadTexture,
@@ -206,13 +207,12 @@ register (ResourceManager)
             .Dtor               = Dtor,
             .loadShaderFromFile = loadShaderFromFile,
             .loadTextureFromFile= loadTextureFromFile,
-            .Shaders            = Hashmap.Create(),
-            .Textures           = Hashmap.Create(),
-            .Create             = Create,
+            .Shaders            = $DSHashmap(),
+            .Textures           = $DSHashmap(),
 
         };
-        AddMetadata(ResourceManager);
+        AddMetadata(ResourceManagerClass);
     }
-    return &ResourceManager;
+    return &ResourceManagerClass;
 }
 

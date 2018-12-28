@@ -16,9 +16,9 @@ const Vec2 ZERO = { 0, 0 };
 const Vec3 WHITE = { 1, 1, 1 };
 
 // Game-related State data
-struct SpriteRenderer  *Renderer;
-struct GameObject      *Player;
-struct BallObject      *Ball;
+SpriteRenderer * Renderer;
+GameObject* Player;
+BallObject* Ball;
 
 // Defines a Collision Result Tuple
 class (Collision) 
@@ -35,8 +35,8 @@ class (Collision)
  * @param dir direction from
  * @param Vec2 difference point
  */
-static const struct Collision *Collision_Ctor(
-    struct Collision *this, 
+static const Collision* Collision_Ctor(
+    Collision* this, 
     bool isTrue, 
     Direction dir, 
     Vec2 vec)
@@ -47,7 +47,7 @@ static const struct Collision *Collision_Ctor(
     return this;
 }
 
-struct Collision *New_Collision(bool first, Direction second, Vec2 third)
+Collision* New_Collision(bool first, Direction second, Vec2 third)
 {
     return Collision_Ctor(new(Collision), first, second, third);
 }
@@ -60,14 +60,14 @@ struct Collision *New_Collision(bool first, Direction second, Vec2 third)
  * @param Height of screen
  * 
  */
-struct Game * Game_Ctor(
-    struct Game * const this, 
+Game* Game_Ctor(
+    Game* const this, 
     int Width, 
     int Height)
 {
-	Object_Ctor(this);
+	DSObject_Ctor(this);
     this->isa = isa(Game);
-    this->Levels = Array.Create(4);
+    this->Levels = $DSArray(4);
     this->Level = 0;
     this->State = GAME_ACTIVE;
     this->Width = Width;
@@ -75,12 +75,12 @@ struct Game * Game_Ctor(
     return this;
 }
 
-void SetKey(struct Game * this, int key, bool value)
+void SetKey(Game* this, int key, bool value)
 {
     this->Keys[key] = value;
 }
 
-void SetState(struct Game * this, GameState state)
+void SetState(Game* this, GameState state)
 {
     this->State = state;
 }
@@ -88,44 +88,44 @@ void SetState(struct Game * this, GameState state)
 /**
  * Start the game
  */
-void overload Start(struct Game * this)
+void overload Start(Game* this)
 {
-    if (ResourceManager.Shaders == nullptr) 
+    if (ResourceManagerClass.Shaders == nullptr) 
         IsaResourceManager();
         
     // Load shaders
-    ResourceManager.LoadShader("shaders/sprite.vs", "shaders/sprite.frag", "sprite");
+    ResourceManagerClass.LoadShader("shaders/sprite.vs", "shaders/sprite.frag", "sprite");
     // Configure shaders
     Mat projection = glm_ortho(0, (GLfloat)this->Width, (GLfloat)this->Height, 0, -1, 1);
-    struct Shader *shader = ResourceManager.GetShader("sprite");
+    Shader* shader = ResourceManagerClass.GetShader("sprite");
     Use(shader);
     SetInteger(shader, "sprite", 0);
     SetMatrix4(shader, "projection", &projection);
  
     // Load textures
-    ResourceManager.LoadTexture("textures/block.png", false, "block");
-    ResourceManager.LoadTexture("textures/background.jpg", false, "background");
-    ResourceManager.LoadTexture("textures/block.png", false, "block");
-    ResourceManager.LoadTexture("textures/block_solid.png", false, "block_solid");
-    ResourceManager.LoadTexture("textures/awesomeface.png", true, "face");
-    ResourceManager.LoadTexture("textures/paddle.png", true, "paddle");
+    ResourceManagerClass.LoadTexture("textures/block.png", false, "block");
+    ResourceManagerClass.LoadTexture("textures/background.jpg", false, "background");
+    ResourceManagerClass.LoadTexture("textures/block.png", false, "block");
+    ResourceManagerClass.LoadTexture("textures/block_solid.png", false, "block_solid");
+    ResourceManagerClass.LoadTexture("textures/awesomeface.png", true, "face");
+    ResourceManagerClass.LoadTexture("textures/paddle.png", true, "paddle");
     // Set render-specific controls
-    Renderer = SpriteRenderer.Create(ResourceManager.GetShader("sprite"));
+    Renderer = $SpriteRenderer(ResourceManagerClass.GetShader("sprite"));
     // Load levels
 
-    Add(this->Levels, GameLevel.Create("levels/one.lvl", this->Width, this->Height * 0.5));
-    Add(this->Levels, GameLevel.Create("levels/two.lvl", this->Width, this->Height * 0.5));
-    Add(this->Levels, GameLevel.Create("levels/three.lvl", this->Width, this->Height * 0.5));
-    Add(this->Levels, GameLevel.Create("levels/four.lvl", this->Width, this->Height * 0.5));
+    Add(this->Levels, $GameLevel("levels/one.lvl", this->Width, this->Height * 0.5));
+    Add(this->Levels, $GameLevel("levels/two.lvl", this->Width, this->Height * 0.5));
+    Add(this->Levels, $GameLevel("levels/three.lvl", this->Width, this->Height * 0.5));
+    Add(this->Levels, $GameLevel("levels/four.lvl", this->Width, this->Height * 0.5));
     this->Level = 0;
         
 
 
     // Configure game objects
     Vec2 playerPos = (Vec2){ this->Width / 2 - PLAYER_SIZE.x / 2, this->Height - PLAYER_SIZE.y };
-    Player = GameObject.Create("player", playerPos, PLAYER_SIZE, ResourceManager.GetTexture("paddle"), WHITE);
+    Player = $GameObject("player", playerPos, PLAYER_SIZE, ResourceManagerClass.GetTexture("paddle"), WHITE);
     Vec2 ballPos = playerPos + (Vec2){ PLAYER_SIZE.x / 2 - BALL_RADIUS, -BALL_RADIUS * 2 };
-    Ball = BallObject.Create(ballPos, BALL_RADIUS, INITIAL_BALL_VELOCITY, ResourceManager.GetTexture("face"));
+    Ball = $BallObject(ballPos, BALL_RADIUS, INITIAL_BALL_VELOCITY, ResourceManagerClass.GetTexture("face"));
 }
 
 /**
@@ -133,7 +133,7 @@ void overload Start(struct Game * this)
  * 
  * @param dt deltat time
  */
-void overload Update(struct Game * this, GLfloat dt)
+void overload Update(Game* this, GLfloat dt)
 {
     // Update objects
     Move(Ball, dt, this->Width);
@@ -146,7 +146,7 @@ void overload Update(struct Game * this, GLfloat dt)
         ResetLevel(this);
         ResetPlayer(this);
     }
-    darko_gc();
+    DSCollect();
 }
 
 
@@ -155,7 +155,7 @@ void overload Update(struct Game * this, GLfloat dt)
  * 
  * @param dt deltat time
  */
-void overload ProcessInput(struct Game * this, GLfloat dt)
+void overload ProcessInput(Game* this, GLfloat dt)
 {
     if (this->State == GAME_ACTIVE)
     {
@@ -188,14 +188,14 @@ void overload ProcessInput(struct Game * this, GLfloat dt)
  * Render
  * 
  */
-void overload Render(struct Game * this)
+void overload Render(Game* this)
 {
     if (this->State == GAME_ACTIVE)
     {
         // Draw background
         Vec2 size = { this->Width, this->Height };
-        DrawSprite(Renderer, ResourceManager.GetTexture("background"), ZERO, size, 0.0f, WHITE);
-        struct GameLevel * level = Get(this->Levels, this->Level);
+        DrawSprite(Renderer, ResourceManagerClass.GetTexture("background"), ZERO, size, 0.0f, WHITE);
+        GameLevel* level = Get(this->Levels, this->Level);
         Draw(level, Renderer);
         Draw(Player, Renderer);
         Draw(Ball, Renderer);
@@ -206,25 +206,25 @@ void overload Render(struct Game * this)
  * ResetLevel
  * 
  */
-void overload ResetLevel(struct Game * this)
+void overload ResetLevel(Game* this)
 {
     if (this->Level == 0) {
-        struct GameLevel *level = this->Levels->data[0];
+        GameLevel* level = this->Levels->data[0];
         Load(level, "levels/one.lvl", this->Width, this->Height * 0.5f);
     }
     else if (this->Level == 1)
     {
-        struct GameLevel *level = this->Levels->data[1];
+        GameLevel* level = this->Levels->data[1];
         Load(level, "levels/two.lvl", this->Width, this->Height * 0.5f);
     }
     else if (this->Level == 2)
     {
-        struct GameLevel *level = this->Levels->data[2];
+        GameLevel* level = this->Levels->data[2];
         Load(level, "levels/three.lvl", this->Width, this->Height * 0.5f);
     }
     else if (this->Level == 3)
     {
-        struct GameLevel *level = this->Levels->data[3];
+        GameLevel* level = this->Levels->data[3];
         Load(level, "levels/four.lvl", this->Width, this->Height * 0.5f);
     }
 }
@@ -233,7 +233,7 @@ void overload ResetLevel(struct Game * this)
  * ResetPlayer
  * 
  */
-void overload ResetPlayer(struct Game * this)
+void overload ResetPlayer(Game* this)
 {
     Player->Size = PLAYER_SIZE;
     Player->Position = (Vec2){ this->Width / 2 - PLAYER_SIZE.x / 2, this->Height - PLAYER_SIZE.y };
@@ -243,7 +243,7 @@ void overload ResetPlayer(struct Game * this)
 /**
  * Release game resources
  */
-void overload Dispose(struct Game * this)
+void overload Dispose(Game* this)
 {
     // tgc_free(&gc, Renderer);
     // tgc_free(&gc, Player);
@@ -288,7 +288,7 @@ static Direction ArrayDirection(Vec2 target)
  * @param two second game object to check
  * 
  */
-static GLboolean CheckCollision2(struct Game * this, TGameObject one, TGameObject two) // AABB - AABB collision
+static GLboolean CheckCollision2(Game* this, GameObject* one, GameObject* two) // AABB - AABB collision
 {
     // Collision x-axis?
     bool collisionX = one->Position.x + one->Size.x >= two->Position.x &&
@@ -307,10 +307,10 @@ static GLboolean CheckCollision2(struct Game * this, TGameObject one, TGameObjec
  * @param two second game object to check
  * 
  */
-static struct Collision *CheckCollision(
-    struct Game *this, 
-    struct BallObject *one, 
-    struct GameObject *two) // AABB - Circle collision
+static Collision* CheckCollision(
+    Game* this, 
+    BallObject* one, 
+    GameObject* two) // AABB - Circle collision
 {
     // Get center point circle first 
     Vec2 center = { one->Position + one->Radius };
@@ -338,19 +338,19 @@ static struct Collision *CheckCollision(
  * DoCollisions
  * 
  */
-void overload DoCollisions(struct Game *this)
+void overload DoCollisions(Game* this)
 {
-    struct GameLevel *level = *(this->Levels[this->Level].data);
-    struct Array *bricks = level->Bricks;
+    GameLevel* level = *(this->Levels[this->Level].data);
+    DSArray* bricks = level->Bricks;
     
     for (int i=0; i<Length(bricks); i++)
     {
-        struct GameObject *box = Get(bricks, i);
+        GameObject* box = Get(bricks, i);
         // TGameObject box = bricks->data[i];
 
         if (!box->Destroyed)
         {
-            struct Collision *collision = CheckCollision(this, Ball, box);
+            Collision* collision = CheckCollision(this, Ball, box);
             if (collision->first) // If collision is true
             {
                 // Destroy block if not solid
@@ -380,11 +380,11 @@ void overload DoCollisions(struct Game *this)
                         Ball->Position.y += penetration; // Move ball back down
                 }
             }
-            delete(collision);
+            DSFree(collision);
         }    
     }
     // Also check collisions for player pad (unless stuck)
-    struct Collision *result = CheckCollision(this, Ball, Player);
+    Collision* result = CheckCollision(this, Ball, Player);
     if (!Ball->Stuck && result->first)
     {
         // Check where it hit the board, and change velocity based on where it hit the board
@@ -400,7 +400,7 @@ void overload DoCollisions(struct Game *this)
         // Fix sticky paddle
         Ball->Velocity.y = -1 * abs(Ball->Velocity.y);
     }
-    delete(result);
+    DSFree(result);
 }
 
 /**
@@ -418,7 +418,7 @@ char* overload ToString(struct Game* const this)
  * @param Height of screen
  * 
  */
-static struct Game* Create(int Width, int Height) { 
+Game* $Game(int Width, int Height) { 
     return Game_Ctor(new(Game), Width, Height); 
 }
 
@@ -427,17 +427,18 @@ static struct Game* Create(int Width, int Height) {
  */
 register (Game)
 {
-    if (Game.isa == nullptr) {
-        Game = (struct GameClass) {
-            .isa            = &Game,
-            .superclass     = &Object,
+    if (GameClass.isa == nullptr) {
+        GameClass = (struct GameClass) {
+            .isa            = &GameClass,
+            .superclass     = &DSObjectClass,
             .name           = "Game",
+            .Create         = $Game,
             .ToString       = ToString,
-            .Equals         = Object.Equals,
-            .GetHashCode    = Object.GetHashCode,
-            .Dispose        = Object.Dispose,
-            .ReferenceEquals= Object.ReferenceEquals,
-            .InstanceEquals = Object.InstanceEquals,
+            .Equals         = DSObjectClass.Equals,
+            .GetHashCode    = DSObjectClass.GetHashCode,
+            .Dispose        = DSObjectClass.Dispose,
+            .ReferenceEquals= DSObjectClass.ReferenceEquals,
+            .InstanceEquals = DSObjectClass.InstanceEquals,
             .Start          = Start,
             .ProcessInput   = ProcessInput,
             .Update         = Update,
@@ -446,10 +447,9 @@ register (Game)
             .ResetLevel     = ResetLevel,
             .ResetPlayer    = ResetPlayer,
             .SetKey         = SetKey,
-            .Create         = Create,
         };
-        AddMetadata(Game);
+        AddMetadata(GameClass);
     }
-    return &Game;
+    return &GameClass;
 }
 

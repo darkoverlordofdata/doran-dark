@@ -15,8 +15,8 @@
 #include "GameLevel.h"
 #include "ResourceManager.h"
 
-#define IsGame(x) (x->isa == &Game)
-#define AsGame(x) (IsGame(x) ? (struct Game *)x : nullptr)
+#define IsGame(x) (x->isa == &DSGame)
+#define AsGame(x) (IsGame(x) ? (Game*)x : nullptr)
 
 // Represents the current state of the game
 typedef enum  {
@@ -48,12 +48,12 @@ static const GLfloat BALL_RADIUS = 12.5f;
 // easy access to each of the components and manageability.
 class (Game)
 {
-    struct GameClass * isa;
+    struct GameClass* isa;
     GameState State;	
     bool Keys[1024];
     GLuint Width;
     GLuint Height;
-    struct Array * Levels; 
+    DSArray* Levels; 
     GLuint Level;    
 };
 
@@ -64,48 +64,48 @@ class (Game)
 struct GameClass
 {
     union {
-        struct ObjectClass base;
+        struct DSObjectClass base;
         struct 
         {
-            struct  Class * isa;
-            struct  Class * superclass;
+            Class*  isa;
+            Class*  superclass;
             char*   name;
-            char*   (*ToString) (TGame const);
-            bool    (*Equals) (TObject const, TObject const);
-            int     (*GetHashCode) (TObject const);
-            void    (*Dispose) (TObject const);
-            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
-            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TGame   (*Create) (int Width, int Height);
+            char*   (*ToString) (Game* const);
+            bool    (*Equals) (DSObject* const, DSObject* const);
+            int     (*GetHashCode) (DSObject* const);
+            void    (*Dispose) (DSObject* const);
+            bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
+            bool    (*InstanceEquals) (DSObject* const, DSObject* const);
+            Game*   (*Create) (int, int);
         };
     };
     // Initialize game state (load all shaders/textures/levels)
-    void (*Start)           (TGame const);
+    void (*Start)           (Game* const);
     // GameLoop
-    void (*ProcessInput)    (TGame const, GLfloat dt);
-    void (*Update)          (TGame const, GLfloat dt);
-    void (*Render)          (TGame const);
-    void (*DoCollisions)    (TGame const);
+    void (*ProcessInput)    (Game* const, GLfloat dt);
+    void (*Update)          (Game* const, GLfloat dt);
+    void (*Render)          (Game* const);
+    void (*DoCollisions)    (Game* const);
     // Reset
-    void (*ResetLevel)      (TGame const);
-    void (*ResetPlayer)     (TGame const);
+    void (*ResetLevel)      (Game* const);
+    void (*ResetPlayer)     (Game* const);
 
-    void (*SetKey)          (TGame const, int key, bool value);
-    void (*SetState)        (TGame const, GameState state);
-};
+    void (*SetKey)          (Game* const, int key, bool value);
+    void (*SetState)        (Game* const, GameState state);
+} GameClass;
 
 /**
  * Game API
  */
-void SetKey(TGame this, int key, bool value);
-void SetState(TGame this, GameState state);
-void overload Start(TGame);
-void overload Update(TGame, GLfloat dt);
-void overload ProcessInput(TGame, GLfloat dt);
-void overload Render(TGame);
-void overload ResetLevel(TGame);
-void overload ResetPlayer(TGame);
-void overload Dispose(TGame);
-void overload DoCollisions(TGame);
-char* overload ToString(TGame const);
+void SetKey(Game* this, int key, bool value);
+void SetState(Game* this, GameState state);
+void overload Start(Game*);
+void overload Update(Game*, GLfloat dt);
+void overload ProcessInput(Game*, GLfloat dt);
+void overload Render(Game*);
+void overload ResetLevel(Game*);
+void overload ResetPlayer(Game*);
+void overload Dispose(Game*);
+void overload DoCollisions(Game*);
+char* overload ToString(Game* const);
 

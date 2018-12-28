@@ -33,25 +33,25 @@ SOFTWARE.
  * This initializes the framework classes so
  * that static methods and variables are available
  */
-void __attribute__((constructor(101))) Class_Boot() 
-{
-    Metadata = (struct Metadata) { .count = 1, .classes = {IsaObject()} };
+void __attribute__((constructor(101))) DSClassBoot() 
+{    
+    DSClass = (struct DSClass) { .count = 1, .classes = {IsaDSObject()} };
 
-    IsaComparable();
-    IsaCollection();
-    IsaArray();
-    IsaList();
-    IsaHashmap();
-    IsaBoolean();
-    IsaNumber();
-    IsaChar();
-    IsaDouble();
-    IsaFloat();
-    IsaInteger();
-    IsaLong();
-    IsaShort();
-    IsaString();
-    IsaStringBuilder();
+    IsaDSComparable();
+    IsaDSCollection();
+    IsaDSArray();
+    IsaDSList();
+    IsaDSHashmap();
+    IsaDSBoolean();
+    IsaDSNumber();
+    IsaDSChar();
+    IsaDSDouble();
+    IsaDSFloat();
+    IsaDSInteger();
+    IsaDSLong();
+    IsaDSShort();
+    IsaDSString();
+    IsaDSStringBuilder();
 
     // for (int i=0; Metadata.classes[i] != nullptr; i++) {
     // // for (int i=0; i < Metadata.count; i++) {

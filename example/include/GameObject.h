@@ -14,8 +14,8 @@
 #include "Texture.h"
 #include "SpriteRenderer.h"
 
-#define IsGameObject(x) (x->isa == &GameObject)
-#define AsGameObject(x) (IsGameObject(x) ? (struct GameObject *)x : nullptr)
+#define IsGameObject(x) (x->isa == &GameObjectClass)
+#define AsGameObject(x) (IsGameObject(x) ? (GameObject*)x : nullptr)
 
 /** Default values */
 static const Vec2 GAME_OBJECT_POSITION = { 0.0f, 0.0f };
@@ -28,7 +28,7 @@ static const Vec3 GAME_OBJECT_COLOR    = { 1.0f, 1.0f, 1.0f };
 // minimal of state as described within GameObject.
 class (GameObject)
 {
-    struct GameObjectClass * isa;
+    struct GameObjectClass* isa;
     Vec2        Position;
     Vec2        Size;
     Vec2        Velocity;
@@ -36,7 +36,7 @@ class (GameObject)
     GLfloat     Rotation;
     GLboolean   IsSolid;
     GLboolean   Destroyed;
-    struct Texture2D *  Sprite;	
+    Texture2D*  Sprite;	
     char*       Name;
 
 };
@@ -44,29 +44,29 @@ class (GameObject)
 struct GameObjectClass
 {
         union {
-        struct ObjectClass base;
+        struct DSObjectClass base;
         struct 
         {
-            struct  Class * isa;
-            struct  Class * superclass;
+            Class*  isa;
+            Class*  superclass;
             char*   name;
-            char*   (*ToString) (TGameObject const);
-            bool    (*Equals) (TObject const, TObject const);
-            int     (*GetHashCode) (TObject const);
-            void    (*Dispose) (TObject const);
-            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
-            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TGameObject  (*Create) (char* name, Vec2 Position, Vec2 Size, TTexture2D Sprite, Vec3 Color);
+            char*   (*ToString) (GameObject* const);
+            bool    (*Equals) (DSObject* const, DSObject* const);
+            int     (*GetHashCode) (DSObject* const);
+            void    (*Dispose) (DSObject* const);
+            bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
+            bool    (*InstanceEquals) (DSObject* const, DSObject* const);
+            GameObject*  (*Create) (char* name, Vec2 Position, Vec2 Size, Texture2D* Sprite, Vec3 Color);
         };
     };
     // Draw sprite
-    void        (*Draw)         (TGameObject const, TSpriteRenderer renderer);
-};
+    void        (*Draw)         (GameObject* const, SpriteRenderer* renderer);
+} GameObjectClass;
 
 /**
  * GameObject API
  */
-void overload Draw(TGameObject, TSpriteRenderer renderer);
-char* overload ToString(TGameObject);
+void overload Draw(GameObject*, SpriteRenderer* renderer);
+char* overload ToString(GameObject*);
 
 

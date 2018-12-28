@@ -22,7 +22,7 @@ const GLuint SCREEN_WIDTH = 800;
 const GLuint SCREEN_HEIGHT = 600;
 
 // Game Breakout(SCREEN_WIDTH, SCREEN_HEIGHT);
-struct Game *Breakout;
+Game* Breakout;
 
 int main(int argc, char *argv[])
 {
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     GLfloat lastFrame = 0.0f;
 
     // Initialize game
-    Breakout = Game.Create(SCREEN_WIDTH, SCREEN_HEIGHT);
+    Breakout = $Game(SCREEN_WIDTH, SCREEN_HEIGHT);
     Start(Breakout);
     SetState(Breakout, GAME_ACTIVE);
 

@@ -2,7 +2,7 @@
 
 combine clang overload attribute and polymorphic patterns into a 'generic c'.
 
-runtime influences: objective-c, glib, t-pascal, quantumleaps (http://www.state-machine.com/doc/an#Patterns)
+runtime influences: objective-c, glib, nim, quantumleaps (http://www.state-machine.com/doc/an#Patterns)
 
 framework influnces: java, csharp
 
@@ -23,3 +23,7 @@ both early and late binding may be invoked:
     TLong a = Long_New(20);
     TInteger b  = Integer_ New(20);
     float x = FloatValue(a) + FloatValue(b);
+
+
+ISA_MASK 9 - 0x0000000ffffffff8UL
+ISA_MASK 8 - 0x00000001fffffff8UL

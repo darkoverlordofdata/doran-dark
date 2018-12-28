@@ -11,7 +11,8 @@
         "system_error": "cpp",
         "type_traits": "cpp",
         "array": "cpp",
-        "string_view": "cpp"
+        "string_view": "cpp",
+        "typeinfo": "cpp"
     },
     "C_Cpp.configurationWarnings": "Disabled"
 }

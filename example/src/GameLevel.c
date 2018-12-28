@@ -13,15 +13,15 @@
 /**
  * GameLevel
  */
-struct GameLevel *GameLevel_Ctor(
-    struct GameLevel *const this, 
+GameLevel* GameLevel_Ctor(
+    GameLevel* const this, 
     const GLchar *file, 
     int levelWidth, 
     int levelHeight)
 {
-	Object_Ctor(this);
+	DSObject_Ctor(this);
     this->isa = isa(GameLevel);
-    this->Bricks = Array.Create(200);
+    this->Bricks = $DSArray(200);
     Load(this, file, levelWidth, levelHeight);
     return this;
 }
@@ -34,8 +34,8 @@ struct GameLevel *GameLevel_Ctor(
  * @param levelHeight of level in tiles
  * 
  */
-struct GameLevel *overload Load(
-    struct GameLevel *const this, 
+GameLevel* overload Load(
+    GameLevel* const this, 
     const GLchar *file, 
     int levelWidth, 
     int levelHeight)
@@ -44,13 +44,13 @@ struct GameLevel *overload Load(
     Clear(this->Bricks);
     // Load from file
     GLuint tileCode;
-    struct GameLevel *level;
+    GameLevel* level;
    
     char* path = join("assets/", file);
     char* line;
     FILE* fstream = fopen(path, "r");
-    TArray tileData = Array.Create(20);
-    TArray row = Array.Create(20);
+    DSArray* tileData = $DSArray(20);
+    DSArray* row = $DSArray(20);
     int i;
     char c;
     if (fstream)
@@ -61,7 +61,7 @@ struct GameLevel *overload Load(
             if (c == '\n')
             {
                 Add(tileData, (Any)row);
-                row = Array.Create(20);
+                row = $DSArray(20);
             }
         }
 
@@ -79,12 +79,12 @@ struct GameLevel *overload Load(
  * 
  */
 void overload Draw(
-    struct GameLevel *const this, 
-    struct SpriteRenderer *renderer)
+    GameLevel* const this, 
+    SpriteRenderer* renderer)
 {
     for (int i = 0; i < Length(this->Bricks); i++)
     {
-        struct GameObject *tile = this->Bricks->data[i];
+        GameObject* tile = this->Bricks->data[i];
         if (!tile->Destroyed)
             Draw(tile, renderer);
     }
@@ -96,11 +96,11 @@ void overload Draw(
  * @returns true when complete
  * 
  */
-bool overload IsCompleted(struct GameLevel *const this)
+bool overload IsCompleted(GameLevel* const this)
 {
     for (int i = 0; i < Length(this->Bricks); i++)
     {
-        struct GameObject *tile = this->Bricks->data[i];
+        GameObject* tile = this->Bricks->data[i];
         if (tile->IsSolid && !tile->Destroyed)
             return false;
     }
@@ -117,14 +117,14 @@ bool overload IsCompleted(struct GameLevel *const this)
  *  
  */
 static void init(
-    struct GameLevel *const this, 
-    struct Array *tileData, 
+    GameLevel* const this, 
+    DSArray* tileData, 
     GLuint levelWidth, 
     GLuint levelHeight)
 {
     // Calculate dimensions
     GLuint height = Length(tileData);
-    struct Array *row = tileData->data[0];
+    DSArray* row = tileData->data[0];
     GLuint width = Length(row); // Note we can index vector at [0] since this function is only called if height > 0
     GLfloat unit_width = levelWidth / (GLfloat)width, unit_height = levelHeight / height; 
     // Initialize level tiles based on tileData		
@@ -134,7 +134,7 @@ static void init(
         for (GLuint x = 0; x < width; ++x)
         {
             // Check block type from level data (2D level array)
-            struct Array *row = tileData->data[y];
+            DSArray* row = tileData->data[y];
             int blockType = (int)(row->data[x]);
 
             Vec2 pos = { unit_width * x, unit_height * y };
@@ -152,15 +152,15 @@ static void init(
             
             if (blockType == 1) // Solid
             {
-                struct Texture2D *tex = ResourceManager.GetTexture("block_solid");
-                struct GameObject *obj = GameObject.Create("tile", pos, size, tex, color);
+                struct Texture2D *tex = ResourceManagerClass.GetTexture("block_solid");
+                GameObject* obj = $GameObject("tile", pos, size, tex, color);
                 obj->IsSolid = true;
                 Add(this->Bricks, obj);
             }
             else if (blockType > 1)	// Non-solid; now determine its color based on level data
             {
-                struct Texture2D *tex = ResourceManager.GetTexture("block");
-                struct GameObject *obj = GameObject.Create("tile", pos, size, tex, color);
+                struct Texture2D *tex = ResourceManagerClass.GetTexture("block");
+                GameObject* obj = $GameObject("tile", pos, size, tex, color);
                 Add(this->Bricks, obj);
             }
         }
@@ -170,12 +170,12 @@ static void init(
 /**
  * ToString
  */
-char* overload ToString(struct GameLevel *const this)
+char* overload ToString(GameLevel* const this)
 {
     return "GameLevel";
 }
 
-static struct GameLevel* Create(
+GameLevel* $GameLevel(
     const GLchar *file, 
     int levelWidth, 
     int levelHeight) { 
@@ -186,24 +186,24 @@ static struct GameLevel* Create(
  */
 register (GameLevel)
 {
-    if (GameLevel.isa == nullptr) {
-        GameLevel = (struct GameLevelClass) {
-            .isa            = &GameLevel,
-            .superclass     = &Object,
+    if (GameLevelClass.isa == nullptr) {
+        GameLevelClass = (struct GameLevelClass) {
+            .isa            = &GameLevelClass,
+            .superclass     = &DSObjectClass,
             .name           = "GameLevel",
+            .Create         = $GameLevel,
             .ToString       = ToString,
-            .Equals         = Object.Equals,
-            .GetHashCode    = Object.GetHashCode,
-            .Dispose        = Object.Dispose,
-            .ReferenceEquals= Object.ReferenceEquals,
-            .InstanceEquals = Object.InstanceEquals,
+            .Equals         = DSObjectClass.Equals,
+            .GetHashCode    = DSObjectClass.GetHashCode,
+            .Dispose        = DSObjectClass.Dispose,
+            .ReferenceEquals= DSObjectClass.ReferenceEquals,
+            .InstanceEquals = DSObjectClass.InstanceEquals,
             .Load           = Load,
             .Draw           = Draw,
             .IsCompleted    = IsCompleted,
-            .Create         = Create,
         };
-        AddMetadata(GameLevel);
+        AddMetadata(GameLevelClass);
     }
-    return &GameLevel;
+    return &GameLevelClass;
 }
 

@@ -17,15 +17,15 @@
  * @param Sprite to display
  * @param Color tiniting color
  */
-struct GameObject *GameObject_Ctor(
-    struct GameObject *const this, 
+GameObject* GameObject_Ctor(
+    GameObject* const this, 
     char* name, 
     Vec2 Position, 
     Vec2 Size, 
-    struct Texture2D* Sprite, 
+    Texture2D* Sprite, 
     Vec3 Color)
 {
-	Object_Ctor(this);
+	DSObject_Ctor(this);
     this->isa = isa(GameObject);
     this->IsSolid = false;
     this->Destroyed = false;
@@ -38,11 +38,11 @@ struct GameObject *GameObject_Ctor(
     return this;
 }
 
-static struct GameObject* Create(
+GameObject* $GameObject(
     char* name, 
     Vec2 Position, 
     Vec2 Size, 
-    struct Texture2D *Sprite, 
+    Texture2D* Sprite, 
     Vec3 Color) { 
     return GameObject_Ctor(new(GameObject), name, Position, Size, Sprite, Color);
 }
@@ -53,8 +53,8 @@ static struct GameObject* Create(
  * @param renderer to draw sprite with
  */
 void overload Draw(
-    struct GameObject *const this, 
-    struct SpriteRenderer *renderer)
+    GameObject* const this, 
+    SpriteRenderer* renderer)
 {
     DrawSprite(renderer, this->Sprite, this->Position, this->Size, this->Rotation, this->Color);
 }
@@ -62,7 +62,7 @@ void overload Draw(
 /**
  * ToString
  */
-char* overload ToString(struct GameObject *const this)
+char* overload ToString(GameObject* const this)
 {
     return "GameObject";
 } 
@@ -73,22 +73,22 @@ char* overload ToString(struct GameObject *const this)
  */
 register (GameObject)
 {
-    if (GameObject.isa == nullptr) {
-        GameObject = (struct GameObjectClass) {
-            .isa            = &GameObject,
-            .superclass     = &Object,
+    if (GameObjectClass.isa == nullptr) {
+        GameObjectClass = (struct GameObjectClass) {
+            .isa            = &GameObjectClass,
+            .superclass     = &DSObjectClass,
             .name           = "GameObject",
+            .Create         = $GameObject,
             .ToString       = ToString,
-            .Equals         = Object.Equals,
-            .GetHashCode    = Object.GetHashCode,
-            .Dispose        = Object.Dispose,
-            .ReferenceEquals= Object.ReferenceEquals,
-            .InstanceEquals = Object.InstanceEquals,
+            .Equals         = DSObjectClass.Equals,
+            .GetHashCode    = DSObjectClass.GetHashCode,
+            .Dispose        = DSObjectClass.Dispose,
+            .ReferenceEquals= DSObjectClass.ReferenceEquals,
+            .InstanceEquals = DSObjectClass.InstanceEquals,
             .Draw           = Draw,
-            .Create         = Create,
         };
-        AddMetadata(GameObject);
+        AddMetadata(GameObjectClass);
     }
-    return &GameObject;
+    return &GameObjectClass;
 }
 

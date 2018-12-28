@@ -34,24 +34,28 @@ SOFTWARE.
  */
 #define overload __attribute__((overloadable))
 
+
 /** 
- * class
+ * class (Name)
  * 
- * defines struct for class: Name
- * defines struct metaclass: NameClass
+ * defines type for class: DSName_t
+ * defines struct metaclass: DSName
  * defines metadata reference function: IsaName()
- * defines type for class: TName
- * defines metadata singleton: Name
- * start class struct definition
+ * defines metadata singleton: DSName
+ * start class struct definition: DSName_t
  * 
  */
+// #define class(name) \
+//     typedef struct name##_t* name; \
+//     struct DS##name; \
+//     Class Isa##name(); \
+//     extern struct DS##name DS##name; \
+//     struct name##_t 
 #define class(name) \
-    struct name; \
-    struct name##Class; \
-    struct Class* Isa##name(); \
-    typedef struct name* T##name; \
-    typedef struct name* $##name; \
-    extern struct name##Class name; \
+    struct DS##name; \
+    typedef struct name name; \
+    Class* Isa##name(); \
+    extern struct DS##name DS##name; \
     struct name
 
 /** 
@@ -61,17 +65,14 @@ SOFTWARE.
  * declares the Isa implementation
  */
 #define register(name) \
-    struct name##Class name; \
-    TClass Isa##name()
+    Class* Isa##name()
 
 /**
  *  returns a reference to the class name 
  */
 #define isa(name) Isa##name()
 
-#define AddMetadata(name) (Metadata.classes[Metadata.count++] = &name)
-
-#define addMetadata(name) (Metadata.classes[Metadata.count++] = name)
+#define AddMetadata(name) (DSClass.classes[DSClass.count++] = &name)
 
 
 /** 
@@ -79,21 +80,21 @@ SOFTWARE.
  * allocates memory for 1 object
  * 
  */
-#define new(class) darko_malloc (sizeof(struct class))
+#define new(class) DSMalloc (sizeof(class))
 
 /** 
  * Delete an object created with new 
  * deallocates the memory for 1 object
  * 
  */
-#define delete(x) darko_free(x)
+#define delete(x) DSFree(x)
 
 /** 
  * creates an array of structs
  * 
  * allocates memory for array of struct objects
  */
-#define allocate(class, n) darko_malloc (n * sizeof(struct class))
+#define allocate(class, n) DSMalloc (n * sizeof(struct class))
 
 
 #endif _CLASSY_H 

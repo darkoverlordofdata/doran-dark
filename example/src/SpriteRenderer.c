@@ -14,11 +14,11 @@
  * @param shader to use for rendering
  * 
  */
-struct SpriteRenderer * SpriteRenderer_Ctor(
-    struct SpriteRenderer *const this, 
-    struct Shader *shader)
+SpriteRenderer*  SpriteRenderer_Ctor(
+    SpriteRenderer* const this, 
+    Shader* shader)
 {
-	Object_Ctor(this);
+	DSObject_Ctor(this);
     this->isa = isa(SpriteRenderer);
     this->shader = shader;
     initRenderData(this);
@@ -36,8 +36,8 @@ struct SpriteRenderer * SpriteRenderer_Ctor(
  * 
  */
 void overload DrawSprite(
-    struct SpriteRenderer *this, 
-    struct Texture2D *texture, 
+    SpriteRenderer* this, 
+    Texture2D* texture, 
     Vec2 position, 
     Vec2 size, 
     GLfloat rot, 
@@ -62,13 +62,13 @@ void overload DrawSprite(
     glBindVertexArray(0);
 }
 
-void overload Dispose(struct SpriteRenderer *this)
+void overload Dispose(SpriteRenderer* this)
 {
     glDeleteVertexArrays(1, this->VAO);
 }
 
 
-static void initRenderData(struct SpriteRenderer *this)
+static void initRenderData(SpriteRenderer* this)
 {
     // Configure VAO/VBO
     GLuint VBO;
@@ -100,12 +100,12 @@ static void initRenderData(struct SpriteRenderer *this)
 /**
  * ToString
  */
-char* overload ToString(struct SpriteRenderer *const this)
+char* overload ToString(SpriteRenderer* const this)
 {
     return "SpriteRenderer";
 }
 
-static struct SpriteRenderer* Create(TShader shader) { 
+SpriteRenderer* $SpriteRenderer(Shader* shader) { 
     return SpriteRenderer_Ctor(new(SpriteRenderer), shader);
 }
 
@@ -114,23 +114,23 @@ static struct SpriteRenderer* Create(TShader shader) {
  */
 register (SpriteRenderer)
 {
-    if (SpriteRenderer.isa == nullptr) {
-        SpriteRenderer = (struct SpriteRendererClass) {
-            .isa                = &SpriteRenderer,
-            .superclass         = &Object,
+    if (SpriteRendererClass.isa == nullptr) {
+        SpriteRendererClass = (struct SpriteRendererClass) {
+            .isa                = &SpriteRendererClass,
+            .superclass         = &DSObjectClass,
             .name               = "SpriteRenderer",
+            .Create             = $SpriteRenderer,
             .ToString           = ToString,
-            .Equals             = Object.Equals,
-            .GetHashCode        = Object.GetHashCode,
-            .Dispose            = Object.Dispose,
-            .ReferenceEquals    = Object.ReferenceEquals,
-            .InstanceEquals     = Object.InstanceEquals,
+            .Equals             = DSObjectClass.Equals,
+            .GetHashCode        = DSObjectClass.GetHashCode,
+            .Dispose            = DSObjectClass.Dispose,
+            .ReferenceEquals    = DSObjectClass.ReferenceEquals,
+            .InstanceEquals     = DSObjectClass.InstanceEquals,
             .DrawSprite         = DrawSprite,
             .Dispose            = Dispose,
-            .Create             = Create,
         };
-        AddMetadata(SpriteRenderer);
+        AddMetadata(SpriteRendererClass);
     }
-    return &SpriteRenderer;
+    return &SpriteRendererClass;
 }
 

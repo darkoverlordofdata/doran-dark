@@ -14,43 +14,43 @@
 #include "Texture.h"
 #include "Shader.h"
 
-#define IsSpriteRenderer(x) (x->isa == &SpriteRenderer)
-#define AsSpriteRenderer(x) (IsSpriteRenderer(x) ? (struct SpriteRenderer *)x : nullptr)
+#define IsSpriteRenderer(x) (x->isa == &SpriteRendererClass)
+#define AsSpriteRenderer(x) (IsSpriteRenderer(x) ? (SpriteRenderer*)x : nullptr)
 
 class (SpriteRenderer)
 {
-    struct SpriteRendererClass * isa;
-    struct Shader * shader; 
+    struct SpriteRendererClass* isa;
+    Shader* shader; 
     GLuint VAO;
 };
 
 struct SpriteRendererClass
 {
     union {
-        struct ObjectClass base;
+        struct DSObjectClass base;
         struct 
         {
-            struct  Class * isa;
-            struct  Class * superclass;
+            Class*  isa;
+            Class*  superclass;
             char*   name;
-            char*   (*ToString) (TSpriteRenderer const);
-            bool    (*Equals) (TObject const, TObject const);
-            int     (*GetHashCode) (TObject const);
-            void    (*Dispose) (TObject const);
-            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
-            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TSpriteRenderer  (*Create) (TShader shader);
+            char*   (*ToString) (SpriteRenderer* const);
+            bool    (*Equals) (DSObject* const, DSObject* const);
+            int     (*GetHashCode) (DSObject* const);
+            void    (*Dispose) (DSObject* const);
+            bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
+            bool    (*InstanceEquals) (DSObject* const, DSObject* const);
+            SpriteRenderer*  (*Create) (Shader* shader);
         };
     };
     // Renders a defined quad textured with given sprite
-    void (*DrawSprite)      (TSpriteRenderer const, TTexture2D *texture, Vec2 position, Vec2 size, GLfloat rotate, Vec3 color);
-};
+    void (*DrawSprite)      (SpriteRenderer* const, Texture2D* *texture, Vec2 position, Vec2 size, GLfloat rotate, Vec3 color);
+} SpriteRendererClass;
 
 /**
  * SpriteRenderer API
  */
-void overload DrawSprite(TSpriteRenderer, TTexture2D texture, Vec2 position, Vec2 size, GLfloat rot, Vec3 color);
-void overload Dispose(TSpriteRenderer);
-char* overload ToString(TSpriteRenderer const);
-static void initRenderData(TSpriteRenderer this);
+void overload DrawSprite(SpriteRenderer*, Texture2D* texture, Vec2 position, Vec2 size, GLfloat rot, Vec3 color);
+void overload Dispose(SpriteRenderer*);
+char* overload ToString(SpriteRenderer* const);
+static void initRenderData(SpriteRenderer* this);
 

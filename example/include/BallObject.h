@@ -13,8 +13,8 @@
 
 #include "GameObject.h"
 
-#define IsBallObject(x) (x->isa == &BallObject)
-#define AsBallObject(x) (IsBallObject(x) ? (struct BallObject *)x : nullptr)
+#define IsBallObject(x) (x->isa == &BallObjectClass)
+#define AsBallObject(x) (IsBallObject(x) ? (BallObject*)x : nullptr)
 
 
 // BallObject holds the state of the Ball object inheriting
@@ -24,10 +24,10 @@
 class (BallObject) 
 {
     union {
-        struct GameObject  base;
+        struct GameObject base;
         struct 
         {
-            struct BallObjectClass * isa;
+            struct BallObjectClass* isa;
             Vec2        Position;
             Vec2        Size;
             Vec2        Velocity;
@@ -35,7 +35,7 @@ class (BallObject)
             GLfloat     Rotation;
             GLboolean   IsSolid;
             GLboolean   Destroyed;
-            TTexture2D  Sprite;	
+            Texture2D*  Sprite;	
             char*       Name;
         };
     };
@@ -43,37 +43,38 @@ class (BallObject)
     bool    Stuck;
 };
 
+
 struct BallObjectClass
 {
     union {
         struct GameObjectClass base; //  superclass
         struct 
         {
-            struct  Class * isa;
-            struct  Class * superclass;
+            Class*  isa;
+            Class*  superclass;
             char*   name;
-            char*   (*ToString) (TBallObject const);
-            bool    (*Equals) (TObject const, TObject const);
-            int     (*GetHashCode) (TObject const);
-            void    (*Dispose) (TObject const);
-            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
-            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TBallObject  (*Create) (Vec2 Position, float Radius, Vec2 Velocity, TTexture2D Sprite);
-            void    (*Draw) (TBallObject const, TSpriteRenderer renderer);
+            char*   (*ToString) (BallObject* const);
+            bool    (*Equals) (DSObject* const, DSObject* const);
+            int     (*GetHashCode) (DSObject* const);
+            void    (*Dispose) (DSObject* const);
+            bool    (*ReferenceEquals) (DSObject* const objA, DSObject* const objB);
+            bool    (*InstanceEquals) (DSObject* const objA, DSObject* const objB);
+            BallObject*  (*Create) (Vec2 Position, float Radius, Vec2 Velocity, Texture2D* Sprite);
+            void    (*Draw) (BallObject* const, SpriteRenderer* renderer);
         };
     };
     // Moves the ball, keeping it constrained within the window bounds (except bottom edge); returns new position
-    void    (*Move)         (TBallObject const, GLfloat dt, GLuint window_width);
+    void    (*Move)         (BallObject* const, GLfloat dt, GLuint window_width);
     // Resets the ball to original state with given position and velocity
-    void    (*Reset)        (TBallObject const, Vec2 position, Vec2 velocity);
-};
+    void    (*Reset)        (BallObject* const, Vec2 position, Vec2 velocity);
+} BallObjectClass;
 
 /**
  * BallObject API
  */
-void overload Draw(TBallObject, TSpriteRenderer renderer);
-void overload Move(TBallObject, GLfloat dt, GLuint window_width);
-void overload Reset(TBallObject, Vec2 position, Vec2 velocity);
-char* overload ToString(TBallObject const this);
+void overload Draw(BallObject*, SpriteRenderer* renderer);
+void overload Move(BallObject*, GLfloat dt, GLuint window_width);
+void overload Reset(BallObject*, Vec2 position, Vec2 velocity);
+char* overload ToString(BallObject* const this);
 
 

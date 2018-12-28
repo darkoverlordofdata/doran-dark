@@ -28,20 +28,24 @@ SOFTWARE.
 #define _CLASS_H_
 #include "core.h"
 
-struct Class {
-	struct Class * isa;
-	struct Class * superclass;
+#define IsClass(x) (x->isa == &DSClass)
+#define AsClass(x) (IsClass(x) ? (Class *)x : nullptr)
+
+class (Class) {
+	Class* isa;
+	Class* superclass;
 	char* name;
 };
 
-typedef struct Class* TClass;
-
-struct Metadata {
+/**
+ * Class metaclass
+ */
+// struct DSClass DSClass;
+struct DSClass {
     int count;
-    struct Class * classes[100];
-};
+    Class* classes[100];
+} DSClass;
 
-struct Metadata Metadata;
 
 /**
  * based on this Objective-C core pattern:

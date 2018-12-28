@@ -15,12 +15,12 @@
  * @param Velocity initial speed of ball
  * @param Sprite to display
  */
-struct BallObject *BallObject_Ctor(
-    struct BallObject *this, 
+BallObject* BallObject_Ctor(
+    BallObject* this, 
     Vec2 Position, 
     float Radius, 
     Vec2 Velocity, 
-    struct Texture2D *Sprite)
+    Texture2D* Sprite)
 {
     Radius = Radius != 0 ? Radius : 12.5f;
     GameObject_Ctor(this, "ball", Position, (Vec2){ Radius*2, Radius*2 }, Sprite, (Vec3){ 1, 1, 1 });
@@ -36,7 +36,7 @@ struct BallObject *BallObject_Ctor(
  * 
  * @param renderer to draw sprite with
  */
-void overload Draw(struct BallObject * const this, TSpriteRenderer renderer)
+void overload Draw(BallObject*  const this, SpriteRenderer* renderer)
 {
     DrawSprite(renderer, this->Sprite, this->Position, this->Size, this->Rotation, this->Color);
 }
@@ -49,7 +49,7 @@ void overload Draw(struct BallObject * const this, TSpriteRenderer renderer)
  * @param window_width
  * @returns Vec2 new position
  */
-void overload Move(struct BallObject * this, GLfloat dt, GLuint window_width)
+void overload Move(BallObject*  this, GLfloat dt, GLuint window_width)
 {
     // If not stuck to player board
     if (!this->Stuck)
@@ -82,7 +82,7 @@ void overload Move(struct BallObject * this, GLfloat dt, GLuint window_width)
  * @param velocity to reset to
  * 
  */
-void overload Reset(struct BallObject * const this, Vec2 position, Vec2 velocity)
+void overload Reset(BallObject*  const this, Vec2 position, Vec2 velocity)
 {
     this->Position = position;
     this->Velocity = velocity;
@@ -92,7 +92,7 @@ void overload Reset(struct BallObject * const this, Vec2 position, Vec2 velocity
 /**
  * ToString
  */
-char* overload ToString(struct BallObject * const this)
+char* overload ToString(BallObject*  const this)
 {
     return "BallObject";
 }
@@ -105,11 +105,11 @@ char* overload ToString(struct BallObject * const this)
  * @param Velocity initial speed of ball
  * @param Sprite to display
  */
-static struct BallObject* Create(
+BallObject* $BallObject(
     Vec2 Position, 
     float Radius, 
     Vec2 Velocity, 
-    struct Texture2D *Sprite) {
+    Texture2D* Sprite) {
     return BallObject_Ctor(new(BallObject), Position, Radius, Velocity, Sprite); 
 }
 
@@ -118,23 +118,23 @@ static struct BallObject* Create(
  */
 register (BallObject)
 {
-    if (BallObject.isa == nullptr) {
-        BallObject = (struct BallObjectClass) {
-            .isa            = &BallObject,
-            .superclass     = &GameObject,
+    if (BallObjectClass.isa == nullptr) {
+        BallObjectClass = (struct BallObjectClass) {
+            .isa            = &BallObjectClass,
+            .superclass     = &GameObjectClass,
             .name           = "BallObject",
+            .Create         = $BallObject,
             .ToString       = ToString,
-            .Equals         = Object.Equals,
-            .GetHashCode    = Object.GetHashCode,
-            .Dispose        = Object.Dispose,
-            .ReferenceEquals= Object.ReferenceEquals,
-            .InstanceEquals = Object.InstanceEquals,
+            .Equals         = DSObjectClass.Equals,
+            .GetHashCode    = DSObjectClass.GetHashCode,
+            .Dispose        = DSObjectClass.Dispose,
+            .ReferenceEquals= DSObjectClass.ReferenceEquals,
+            .InstanceEquals = DSObjectClass.InstanceEquals,
             .Move           = Move,
             .Reset          = Reset,
             .Draw           = Draw,
-            .Create         = Create,
         };
-        AddMetadata(BallObject);
+        AddMetadata(BallObjectClass);
     }
-    return &BallObject;
+    return &BallObjectClass;
 }

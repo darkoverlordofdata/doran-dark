@@ -26,23 +26,41 @@ a port of the breakout game from learnopengl.com
 > "C makes it easy to shoot yourself in the foot; C++ makes it harder, but when you do it blows your whole leg off" -- Bjarne Stroustrup
 
 
+
 ## example
+each class 
+    Object - type 
+    ObjectClass - metaclass
+
+$(str) - shortcut for DSString.Create(str);
+ClassName x = $ClassName();         // - create new object
+ClassName x = ClassName.Create();   // - create new object
+
+Other framework functions:
+
+DSLog();
+DSFree(void*);
+DSMalloc(int);
+DSRealloc(void*, int);
+DSCalloc(int, int);
+DSCollect();
+
 
 ```c
-void overload ForEach(List const this, void (^iter)(String))
+void overload ForEach(DSList const this, void (^iter)(DSString))
 {
-    for (ListNode curr = this->head; curr != nullptr; curr = curr->next) {
+    for (DSListNode curr = this->head; curr != nullptr; curr = curr->next) {
         iter(curr->data);
     }
 }
 
 int main(int argc, char **argv) {
-    List ls = DSList.Create();
-    Add(ls, DSString.Create("first"));
-    Add(ls, DSString.Create("second"));
+    DSList ls = DSListClass.Create();
+    Add(ls, DSStringClass.Create("first"));
+    Add(ls, $("second"));
 
 
-    ForEach(ls, ^(String s) {
+    ForEach(ls, ^(DSString s) {
         printf("item = %d) %s\n", s->length, s->value);
     });
     return 0;
@@ -57,33 +75,4 @@ int main(int argc, char **argv) {
 
 ```
 
-```c
 
-void overload ForEach(List const this, void (^iter)(String))
-{
-    for (ListNode curr = this->head; curr != nullptr; curr = curr->next) {
-        iter(curr->data);
-    }
-}
-
-int main(int argc, char **argv) {
-    List ls = $List.Create();
-    Add(ls, $String.Create("first"));
-    Add(ls, $String.Create("second"));
-
-
-    ForEach(ls, ^(String s) {
-        printf("item = %d) %s\n", s->length, s->value);
-    });
-    return 0;
-}
-```
-
-```c
-    $Log($("this string %f"), 20.0f);
-    List ls = $List.Create();
-
-    String s = $$.Join($("string 1"), $("string 2"));
-    String ss[] = s.Split(" ");
-
-```

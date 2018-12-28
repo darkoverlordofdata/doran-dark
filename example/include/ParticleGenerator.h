@@ -15,8 +15,8 @@
 #include "Texture.h"
 #include "GameObject.h"
 
-#define IsParticleGenerator(x) (x->isa == &ParticleGenerator)
-#define AsParticleGenerator(x) (IsParticleGenerator(x) ? (struct ParticleGenerator *)x : nullptr)
+#define IsParticleGenerator(x) (x->isa == &ParticleGeneratorClass)
+#define AsParticleGenerator(x) (IsParticleGenerator(x) ? (ParticleGenerator*)x : nullptr)
 
 
 // Represents a single particle and its state
@@ -36,45 +36,45 @@ struct Particle
 // them after a given amount of time.
 class (ParticleGenerator)
 {
-    struct ParticleGeneratorClass * isa;
+    struct ParticleGeneratorClass* isa;
     struct Particle * particles;
     GLuint amount;
-    struct Shader * shader;
-    struct Texture2D * texture;
+    Shader* shader;
+    Texture2D* texture;
     GLuint VAO;
 };
 
 struct ParticleGeneratorClass
 {
     union {
-        struct ObjectClass base;
+        struct DSObjectClass base;
         struct 
         {
-            struct  Class * isa;
-            struct  Class * superclass;
+            Class*  isa;
+            Class*  superclass;
             char*   name;
-            char*   (*ToString) (TParticleGenerator const);
-            bool    (*Equals) (TObject const, TObject const);
-            int     (*GetHashCode) (TObject const);
-            void    (*Dispose) (TObject const);
-            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
-            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TParticleGenerator  (*Create) (TShader shader, TTexture2D texture, int amount);
+            char*   (*ToString) (ParticleGenerator* const);
+            bool    (*Equals) (DSObject* const, DSObject* const);
+            int     (*GetHashCode) (DSObject* const);
+            void    (*Dispose) (DSObject* const);
+            bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
+            bool    (*InstanceEquals) (DSObject* const, DSObject* const);
+            ParticleGenerator*  (*Create) (Shader* shader, Texture2D* texture, int amount);
         };
     };
         
     // Update all particles
-    void    (*Update)               (TParticleGenerator const, GLfloat dt, TGameObject object, GLuint newParticles, Vec2 offset);
+    void    (*Update)               (ParticleGenerator* const, GLfloat dt, GameObject* object, GLuint newParticles, Vec2 offset);
     // Render all particles
-    void    (*Draw)                 (TParticleGenerator const);
+    void    (*Draw)                 (ParticleGenerator* const);
     // Initializes buffer and vertex attributes
-};
+} ParticleGeneratorClass;
 
 /**
  * ParticleGenerator API
  */
-void overload Update(TParticleGenerator, GLfloat dt, TGameObject object, GLuint newParticles, Vec2 offset);
-void overload Draw(TParticleGenerator);
-char* overload ToString(TParticleGenerator const);
+void overload Update(ParticleGenerator*, GLfloat dt, GameObject* object, GLuint newParticles, Vec2 offset);
+void overload Draw(ParticleGenerator*);
+char* overload ToString(ParticleGenerator* const);
 
 

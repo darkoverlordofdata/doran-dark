@@ -57,7 +57,7 @@ add_executable ( ${PROJECT_NAME} ${C_SOURCES} ${RESOURCES} )
 add_custom_command(TARGET ${PROJECT_NAME} 
                    POST_BUILD COMMAND 
                    ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}> .. )
-target_link_libraries ( ${PROJECT_NAME} m BlocksRuntime  )
+target_link_libraries ( ${PROJECT_NAME} m BlocksRuntime gc )
 install (TARGETS ${PROJECT_NAME} RUNTIME DESTINATION . )
 
 include (CPack)

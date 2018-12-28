@@ -27,51 +27,51 @@ static const Vec3 COLOR3 = { 0.8f, 0.8f, 0.4f };
 static const Vec3 COLOR4 = { 1.0f, 0.5f, 0.0f };
 static const Vec3 COLOR5 = { 1.0f, 1.0f, 1.0f };
 
-#define IsGameLevel(x) (x->isa == &GameLevel)
-#define AsGameLevel(x) (IsGameLevel(x) ? (struct GameLevel *)x : nullptr)
+#define IsGameLevel(x) (x->isa == &GameLevelClass)
+#define AsGameLevel(x) (IsGameLevel(x) ? (GameLevel*)x : nullptr)
 
 
 /// GameLevel holds all Tiles as part of a Breakout level and 
 /// hosts functionality to Load/render levels from the harddisk.
 class (GameLevel)
 {
-    struct GameLevelClass * isa;
-    struct Array * Bricks;
+    struct GameLevelClass* isa;
+    DSArray* Bricks;
 };
 
 struct GameLevelClass
 {
     union {
-        struct ObjectClass base;
+        struct DSObjectClass base;
         struct 
         {
-            struct  Class * isa;
-            struct  Class * superclass;
+            Class*  isa;
+            Class*  superclass;
             char*   name;
-            char*   (*ToString) (TGameLevel const);
-            bool    (*Equals) (TObject const, TObject const);
-            int     (*GetHashCode) (TObject const);
-            void    (*Dispose) (TObject const);
-            bool    (*ReferenceEquals) (TObject const objA, TObject const objB);
-            bool    (*InstanceEquals) (TObject const objA, TObject const objB);
-            TGameLevel  (*Create) (const GLchar *file, int levelWidth, int levelHeight);
+            char*   (*ToString) (GameLevel* const);
+            bool    (*Equals) (DSObject* const, DSObject* const);
+            int     (*GetHashCode) (DSObject* const);
+            void    (*Dispose) (DSObject* const);
+            bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
+            bool    (*InstanceEquals) (DSObject* const, DSObject* const);
+            GameLevel*  (*Create) (const GLchar *file, int levelWidth, int levelHeight);
         };
     };
     // Loads level from file
-    TGameLevel   (*Load)         (TGameLevel const, const GLchar *file, int levelWidth, int levelHeight);
+    GameLevel*   (*Load)         (GameLevel* const, const GLchar *file, int levelWidth, int levelHeight);
     // Render level
-    void        (*Draw)         (TGameLevel const, TSpriteRenderer renderer);
+    void        (*Draw)         (GameLevel* const, SpriteRenderer* renderer);
     // Check if the level is completed (all non-solid tiles are des troyed)
-    bool        (*IsCompleted)  (TGameLevel const *);
-};
+    bool        (*IsCompleted)  (GameLevel* const *);
+} GameLevelClass;
 
 /**
  * GameLevel API
  */
-TGameLevel overload Load(TGameLevel, const GLchar *file, int levelWidth, int levelHeight);
-void overload Draw(TGameLevel const, TSpriteRenderer renderer);
-bool overload IsCompleted(TGameLevel);
-char* overload ToString(TGameLevel);
-static void init(struct GameLevel *const this, TArray tileData, GLuint levelWidth, GLuint levelHeight);
-
+GameLevel* overload Load(GameLevel*, const GLchar *file, int levelWidth, int levelHeight);
+void overload Draw(GameLevel* const, SpriteRenderer* renderer);
+bool overload IsCompleted(GameLevel*);
+char* overload ToString(GameLevel*);
+static void init(struct GameLevel *const this, DSArray* tileData, GLuint levelWidth, GLuint levelHeight);
+GameLevel* $GameLevel(const GLchar *file, int levelWidth, int levelHeight); 
 

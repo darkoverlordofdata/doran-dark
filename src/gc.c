@@ -26,58 +26,32 @@ SOFTWARE.
 #include <dark/core.h>
 #include <dark/Class.h>
 #include <stdlib.h>
-
-#define USE_BOEHM 
-#ifdef USE_BOEHM
 #include <gc.h>
-#else
-#include <GC/gc.h>
-// unforunately, tgc is too eager and crashes
-// on the other hand, GC is GPL. 
-
-// #include "tgc.h" 
-// tgc_t gc;
-#endif
 
 /**
  * free the memory for this ptr
  */
-// void darko_free(TClass cls) 
-void darko_free(void* ptr) 
+// void DS_free(TClass cls) 
+void DSFree(void* ptr) 
 {
-    #ifdef USE_BOEHM
     GC_FREE(ptr);
-    #else
-    GC_free(ptr);
-    // tgc_free(&gc, ptr);
-    #endif
 }
 
 /**
  * malloc size bytes
  */
-void* darko_malloc(size_t size)
+void* DSMalloc(size_t size)
 {
-    #ifdef USE_BOEHM
     void* ptr = GC_MALLOC(size);
-    #else
-    void* ptr = GC_malloc(size);
-    // void* ptr = tgc_calloc(&gc, 1, size);
-    #endif
     return ptr;
 }
 
 /**
  * realloc size bytes from old pointer
  */
-void* darko_realloc(void * old, size_t new_size)
+void* DSRealloc(void * old, size_t new_size)
 {
-    #ifdef USE_BOEHM
     void* ptr = GC_REALLOC(old, new_size);
-    #else
-    void* ptr = GC_realloc(old, new_size);
-    // void* ptr = tgc_realloc(&gc, old, new_size);
-    #endif
     return ptr;
 
 }
@@ -85,53 +59,33 @@ void* darko_realloc(void * old, size_t new_size)
 /**
  * malloc num * size bytes
  */
-void* darko_calloc(size_t num, size_t size)
+void* DSCalloc(size_t num, size_t size)
 {
-    #ifdef USE_BOEHM
     void* ptr = GC_MALLOC(num * size);
-    #else
-    void* ptr = GC_malloc(num * size);
-    // void* ptr = tgc_calloc(&gc, num, size);
-    #endif
     return ptr;
 }
 
 /**
  * Explicitly force a garbage collection.
  */
-void darko_gc()
+void DSCollect()
 {
-    #ifdef USE_BOEHM
     GC_gcollect();
-    #else
-    GC_gcollect();
-    #endif
 }
 
 /**
  *  start the garbage collector
  */
-void __attribute__((constructor(101))) darko_gc_ctor()
+void __attribute__((constructor(101))) DSGCStart()
 {
-    #ifdef USE_BOEHM
     GC_INIT();
     GC_enable_incremental();
-    #else
-    // int argc;
-    // tgc_start(&gc, &argc);
-    GC_init();
-    #endif
 }
 
 /**
  *  stop the garbage collector
  */
-void __attribute__((destructor)) darko_gc_dtor()
+void __attribute__((destructor)) DSGCStop()
 {
-    #ifdef USE_BOEHM
-    #else
-    // tgc_stop(&gc);
-    #endif
-
 }
 

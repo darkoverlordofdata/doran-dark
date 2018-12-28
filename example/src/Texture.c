@@ -14,13 +14,13 @@
  * @param ImageFormat for binding the image
  * 
  */
-struct Texture2D *Texture2D_Ctor(
-    struct Texture2D *const this,
+Texture2D* Texture2D_Ctor(
+    Texture2D* const this,
     int InternalFormat,
     int ImageFormat,
     char* path)
 {
-	Object_Ctor(this);
+	DSObject_Ctor(this);
     this->isa = isa(Texture2D);
     this->path = strdup(path);
     this->Width = 0;
@@ -46,7 +46,7 @@ struct Texture2D *Texture2D_Ctor(
  * 
  */
 void overload Generate(
-    struct Texture2D *this, 
+    Texture2D* this, 
     GLuint width, 
     GLuint height, 
     unsigned char* data)
@@ -65,7 +65,7 @@ void overload Generate(
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void overload Bind(struct Texture2D * this)
+void overload Bind(Texture2D*  this)
 {
     glBindTexture(GL_TEXTURE_2D, this->Id);
 }
@@ -73,7 +73,7 @@ void overload Bind(struct Texture2D * this)
 /**
  * ToString
  */
-char* overload ToString(struct Texture2D *const this)
+char* overload ToString(Texture2D* const this)
 {
     return "Texture2D";
 }
@@ -81,7 +81,7 @@ char* overload ToString(struct Texture2D *const this)
 /**
  * Creates a new instance
  */
-static struct Texture2D *Create(int InternalFormat, int ImageFormat, char* path) { 
+Texture2D* $Texture2D(int InternalFormat, int ImageFormat, char* path) { 
     return Texture2D_Ctor(new(Texture2D), InternalFormat, ImageFormat, path);
 }
 
@@ -90,25 +90,25 @@ static struct Texture2D *Create(int InternalFormat, int ImageFormat, char* path)
  */
 register (Texture2D)
 {
-    if (Texture2D.isa == nullptr) {
-        Texture2D = (struct Texture2DClass) {
-            .isa            = &Texture2D,
-            .superclass     = &Object,
+    if (Texture2DClass.isa == nullptr) {
+        Texture2DClass = (struct Texture2DClass) {
+            .isa            = &Texture2DClass,
+            .superclass     = &DSObjectClass,
             .name           = "Texture2D",
+            .Create         = $Texture2D,
             .ToString       = ToString,
-            .Equals         = Object.Equals,
-            .GetHashCode    = Object.GetHashCode,
-            .Dispose        = Object.Dispose,
-            .ReferenceEquals= Object.ReferenceEquals,
-            .InstanceEquals = Object.InstanceEquals,
+            .Equals         = DSObjectClass.Equals,
+            .GetHashCode    = DSObjectClass.GetHashCode,
+            .Dispose        = DSObjectClass.Dispose,
+            .ReferenceEquals= DSObjectClass.ReferenceEquals,
+            .InstanceEquals = DSObjectClass.InstanceEquals,
             .Generate       = Generate,
             .Bind           = Bind,
-            .Create         = Create,
         };
-        AddMetadata(Texture2D);
+        AddMetadata(Texture2DClass);
     }
     
-    return &Texture2D;
+    return &Texture2DClass;
 }
 
 
