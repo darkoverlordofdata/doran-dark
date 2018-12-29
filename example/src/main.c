@@ -26,6 +26,7 @@ Game* Breakout;
 
 int main(int argc, char *argv[])
 {
+    DSLog("Hello Horld");
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -52,8 +53,7 @@ int main(int argc, char *argv[])
     GLfloat lastFrame = 0.0f;
 
     // Initialize game
-    Breakout = $Game(SCREEN_WIDTH, SCREEN_HEIGHT);
-    Start(Breakout);
+    Start(Breakout = $Game(SCREEN_WIDTH, SCREEN_HEIGHT));
     SetState(Breakout, GAME_ACTIVE);
 
     while (!glfwWindowShouldClose(window))

@@ -24,42 +24,29 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #pragma once
-#ifndef _DSCOMPARABLE_H_
-#define _DSCOMPARABLE_H_
-#include "DSObject.h"
-
-#define IsDSComparable(x) (x->isa == &DSComparableClass)
-#define AsDSComparable(x) (IsDSComparable(x) ? (DSComparable *)x : nullptr)
+#ifndef _DSLOG_H_
+#define _DSLOG_H_
 
 /**
- * Comparable Class
+ * DSLog
+ * 
+ * Writes output to stderr, with end of line.
  */
-class (DSComparable)
-{
-    const struct DSComparableClass* isa;
-};
-
-/**
- * Comparable MetaClass
- */
-struct DSComparableClass
-{
-    Class*  isa;
-    Class*  superclass;
-    char*   name;
-    char*   (*ToString) (DSComparable* const);
-    bool    (*Equals) (DSObject* const, DSObject* const);
-    int     (*GetHashCode) (DSObject* const);
-    void    (*Dispose) (DSObject* const);
-    bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-    bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-    DSComparable* (*Create) ();
+__attribute__((__format__ (__printf__, 1, 2)))
+static inline void DSLog (char* format, ...) {
+    va_list args1;
+    va_list args2;
     
-    int     (*CompareTo) (DSComparable* const, DSComparable* const);
-    
-} DSComparableClass;
+    va_start(args1, format);
+    va_copy(args2, args1);  
 
+    int len = vsnprintf(nullptr, 0, format, args1);
+    va_end(args1);
+    if (len == 0) return;
+    char* str = DSCalloc((len+1), sizeof(char));
+    len = vsnprintf(str, len+1, format, args2);
+    va_end(args2);
+    fprintf(stderr, "%s\n",str);
+}
 
-int overload CompareTo(DSComparable* const, DSComparable* const);
-
-#endif _DSCOMPARABLE_H_
+#endif _DSLOG_H_ 

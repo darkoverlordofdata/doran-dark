@@ -152,14 +152,14 @@ static void init(
             
             if (blockType == 1) // Solid
             {
-                struct Texture2D *tex = ResourceManagerClass.GetTexture("block_solid");
+                struct Texture2D *tex = Resources->GetTexture("block_solid");
                 GameObject* obj = $GameObject("tile", pos, size, tex, color);
                 obj->IsSolid = true;
                 Add(this->Bricks, obj);
             }
             else if (blockType > 1)	// Non-solid; now determine its color based on level data
             {
-                struct Texture2D *tex = ResourceManagerClass.GetTexture("block");
+                struct Texture2D *tex = Resources->GetTexture("block");
                 GameObject* obj = $GameObject("tile", pos, size, tex, color);
                 Add(this->Bricks, obj);
             }

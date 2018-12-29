@@ -32,9 +32,8 @@ each class
     Object - type 
     ObjectClass - metaclass
 
-$(str) - shortcut for DSString.Create(str);
-ClassName x = $ClassName();         // - create new object
-ClassName x = ClassName.Create();   // - create new object
+Class x = $Class();         // - create new object
+Class x = ClassName.Create();   // - create new object
 
 Other framework functions:
 

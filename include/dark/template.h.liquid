@@ -24,23 +24,41 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #pragma once
-#ifndef _TEMPLATE_H_
-#define _TEMPLATE_H_
-#include "../Object.h"
+#ifndef _{{ name | ucase }}_H_
+#define _{{ name | ucase }}_H_
+#include "DSObject.h"
 
-class (template)
-{
-    union {
-        DObject_t _;
-        struct 
-        {
-            int         RefCount;
-            char*       (*ToString)(Object const);
-            bool        (*Equals)(Object const, Object const);
-            int         (*GetHashCode)(Object const);
-            void        (*Dispose) (Object const);
-        };
-    };
+
+#define Is{{ name }}(x) (x->isa == &{{ name }}Class)
+#define As{{ name }}(x) (Is{{ name }}(x) ? ({{ name }} *)x : nullptr)
+
+
+/**
+ * Object class
+ */
+class ({{ name }}) {
+	const struct {{ name }}Class* isa;
 };
 
-#endif _TEMPLATE_H_
+
+/**
+ * Object metaclass
+ */
+struct {{ name }}Class 
+{
+    Class*  isa;
+    Class*  superclass;
+    char*   name;
+    char*   (*ToString) (const DSObject* const);
+    bool    (*Equals) (const DSObject* const, const DSObject* const);
+    int     (*GetHashCode) (const DSObject* const);
+    void    (*Dispose) (DSObject* const);
+    bool    (*ReferenceEquals) (const DSObject* const, const DSObject* const);
+    bool    (*InstanceEquals) (const DSObject* const, const DSObject* const);
+    DSObject* (*Create) ();
+
+} {{ name }}Class;
+
+
+
+#endif _{{ name | ucase }}_H_

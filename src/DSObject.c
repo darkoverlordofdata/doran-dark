@@ -119,7 +119,7 @@ Class* GetClass(const DSObject* const this)
 }
 char* GetClassName(const DSObject* const this)
 {
-    return this->isa->base.name;
+    return this->isa->name;
 }
 
 DSObject* $DSObject() { 

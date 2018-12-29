@@ -38,30 +38,19 @@ SOFTWARE.
 /** 
  * class (Name)
  * 
- * defines type for class: DSName_t
- * defines struct metaclass: DSName
- * defines metadata reference function: IsaName()
- * defines metadata singleton: DSName
- * start class struct definition: DSName_t
+ * defines type for instance: Name
+ * forward reference IsaName()
+ * start class struct definition for type: Name
  * 
  */
-// #define class(name) \
-//     typedef struct name##_t* name; \
-//     struct DS##name; \
-//     Class Isa##name(); \
-//     extern struct DS##name DS##name; \
-//     struct name##_t 
 #define class(name) \
-    struct DS##name; \
     typedef struct name name; \
     Class* Isa##name(); \
-    extern struct DS##name DS##name; \
     struct name
 
 /** 
  * register class
  * 
- * declares the metaclass implementation
  * declares the Isa implementation
  */
 #define register(name) \

@@ -26,26 +26,20 @@ class (ResourceManager)
     struct ResourceManagerClass * isa;
 };
 
-extern ResourceManager Resource;
+extern struct ResourceManagerClass* Resources;
 
 struct ResourceManagerClass
 {
-    union {
-        struct DSObjectClass base;
-        struct 
-        {
-            struct  Class * isa;
-            struct  Class * superclass;
-            char*   name;
-            char*   (*ToString) (ResourceManager* const);
-            bool    (*Equals) (DSObject* const, DSObject* const);
-            int     (*GetHashCode) (DSObject* const);
-            void    (*Dispose) (DSObject* const);
-            bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-            bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-            ResourceManager*  (*Create) ();
-        };
-    };
+    struct  Class * isa;
+    struct  Class * superclass;
+    char*   name;
+    char*   (*ToString) (ResourceManager* const);
+    bool    (*Equals) (DSObject* const, DSObject* const);
+    int     (*GetHashCode) (DSObject* const);
+    void    (*Dispose) (DSObject* const);
+    bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
+    bool    (*InstanceEquals) (DSObject* const, DSObject* const);
+    ResourceManager*  (*Create) ();
 
     DSHashmap* Shaders;
     DSHashmap* Textures;

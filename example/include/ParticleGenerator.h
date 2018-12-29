@@ -46,22 +46,16 @@ class (ParticleGenerator)
 
 struct ParticleGeneratorClass
 {
-    union {
-        struct DSObjectClass base;
-        struct 
-        {
-            Class*  isa;
-            Class*  superclass;
-            char*   name;
-            char*   (*ToString) (ParticleGenerator* const);
-            bool    (*Equals) (DSObject* const, DSObject* const);
-            int     (*GetHashCode) (DSObject* const);
-            void    (*Dispose) (DSObject* const);
-            bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-            bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-            ParticleGenerator*  (*Create) (Shader* shader, Texture2D* texture, int amount);
-        };
-    };
+    Class*  isa;
+    Class*  superclass;
+    char*   name;
+    char*   (*ToString) (ParticleGenerator* const);
+    bool    (*Equals) (DSObject* const, DSObject* const);
+    int     (*GetHashCode) (DSObject* const);
+    void    (*Dispose) (DSObject* const);
+    bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
+    bool    (*InstanceEquals) (DSObject* const, DSObject* const);
+    ParticleGenerator*  (*Create) (Shader* shader, Texture2D* texture, int amount);
         
     // Update all particles
     void    (*Update)               (ParticleGenerator* const, GLfloat dt, GameObject* object, GLuint newParticles, Vec2 offset);

@@ -49,31 +49,27 @@ class (DSArray)
  */
 struct DSArrayClass
 {
-    union {
-        struct DSCollectionClass base;
-        struct 
-        {
-            Class*  isa;
-            Class*  superclass;
-            char*   name;
-            char*   (*ToString) (const DSArray* const);
-            bool    (*Equals) (const DSObject* const, struct Object  *const);
-            int     (*GetHashCode) (const DSObject* const);
-            void    (*Dispose) (DSObject* const);
-            bool    (*ReferenceEquals) (const DSObject* const, DSObject* const);
-            bool    (*InstanceEquals) (const DSObject* const, DSObject* const);
-            DSArray*  (*Create) (int);
-            int     (*Length)       (const DSArray* const);
-            bool    (*IsEmpty)      (const DSArray* const);
-            bool    (*Contains)     (const DSArray* const, Any);
-            void    (*Clear)        (DSArray* const);
-            void    (*Add)          (DSArray* const, Any);
-            void    (*Remove)       (DSArray* const, int);
-        };
-    };
+    Class*  isa;
+    Class*  superclass;
+    char*   name;
+    char*   (*ToString) (const DSArray* const);
+    bool    (*Equals) (const DSObject* const, struct Object  *const);
+    int     (*GetHashCode) (const DSObject* const);
+    void    (*Dispose) (DSObject* const);
+    bool    (*ReferenceEquals) (const DSObject* const, DSObject* const);
+    bool    (*InstanceEquals) (const DSObject* const, DSObject* const);
+    DSArray*  (*Create) (int);
+    int     (*Length)       (const DSArray* const);
+    bool    (*IsEmpty)      (const DSArray* const);
+    bool    (*Contains)     (const DSArray* const, Any);
+    void    (*Clear)        (DSArray* const);
+    void    (*Add)          (DSArray* const, Any);
+    void    (*Remove)       (DSArray* const, int);
+
     void    (*Resize)       (DSArray* const, int);
     void    (*Set)          (DSArray* const, int, Any);
     Any     (*Get)          (const DSArray* const, int);
+    
 } DSArrayClass;
 
 

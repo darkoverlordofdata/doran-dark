@@ -49,39 +49,34 @@ class (DSString)
  */
 struct DSStringClass
 {
-    union {
-        struct DSComparableClass base;
-        struct 
-        {
-            Class*  isa;
-            Class*  superclass;
-            char*   name;
-            char*   (*ToString) (DSString* const);
-            bool    (*Equals) (DSObject* const, DSObject* const);
-            int     (*GetHashCode) (DSObject* const);
-            void    (*Dispose) (DSObject* const);
-            bool    (*ReferenceEquals) (DSObject* const objA, DSObject* const objB);
-            bool    (*InstanceEquals) (DSObject* const objA, DSObject* const objB);
-            DSString* (*Create) (char* value);
-            int     (*CompareTo) (DSComparable* const, DSComparable* const);
-            int     (*Length) (DSString* const);
-            bool    (*IsEmpty) (DSString* const);
-            char    (*CharAt) (DSString* const, int index);
-            int     (*CompareToIgnoreCase) (DSString* const, DSString* const);
-            DSString* (*Concat) (DSString* const, DSString* str);
-            DSString* (*Concatc) (DSString* const, char* str);
-            bool    (*Contains) (DSString* const, DSString* str);
-            DSString* (*CopyOf) (DSString* const);
-            bool    (*EndsWith) (DSString* const, DSString* suffix);
-            bool    (*StartsWith) (DSString* const, DSString* prefix, int offset);
-            char*   (*GetBytes) (DSString* const);
-            int     (*IndexOf) (DSString* const, DSString* str, int fromIndex);
-            int     (*LastIndexOf) (DSString* const, DSString* str, int fromIndex);
-            DSString* (*ToUpperCase) (DSString* const);
-            DSString* (*ToLowerCase) (DSString* const);
-            DSString* (*Trim) (DSString* const);
-        };
-    };
+    Class*  isa;
+    Class*  superclass;
+    char*   name;
+    char*   (*ToString) (DSString* const);
+    bool    (*Equals) (DSObject* const, DSObject* const);
+    int     (*GetHashCode) (DSObject* const);
+    void    (*Dispose) (DSObject* const);
+    bool    (*ReferenceEquals) (DSObject* const objA, DSObject* const objB);
+    bool    (*InstanceEquals) (DSObject* const objA, DSObject* const objB);
+    DSString* (*Create) (char* value);
+    int     (*CompareTo) (DSComparable* const, DSComparable* const);
+    int     (*Length) (DSString* const);
+    bool    (*IsEmpty) (DSString* const);
+    char    (*CharAt) (DSString* const, int index);
+    int     (*CompareToIgnoreCase) (DSString* const, DSString* const);
+    DSString* (*Concat) (DSString* const, DSString* str);
+    DSString* (*Concatc) (DSString* const, char* str);
+    bool    (*Contains) (DSString* const, DSString* str);
+    DSString* (*CopyOf) (DSString* const);
+    bool    (*EndsWith) (DSString* const, DSString* suffix);
+    bool    (*StartsWith) (DSString* const, DSString* prefix, int offset);
+    char*   (*GetBytes) (DSString* const);
+    int     (*IndexOf) (DSString* const, DSString* str, int fromIndex);
+    int     (*LastIndexOf) (DSString* const, DSString* str, int fromIndex);
+    DSString* (*ToUpperCase) (DSString* const);
+    DSString* (*ToLowerCase) (DSString* const);
+    DSString* (*Trim) (DSString* const);
+
 } DSStringClass, $$;
 
 

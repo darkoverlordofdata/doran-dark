@@ -49,23 +49,18 @@ class (DSBoolean)
  */
 struct DSBooleanClass
 {
-    union {
-        struct DSComparableClass base;
-        struct 
-        {
-            Class*  isa;
-            Class*  superclass;
-            char*   name;
-            char*   (*ToString) (const DSBoolean* const);
-            bool    (*Equals) (DSObject* const, DSObject* const);
-            int     (*GetHashCode) (DSObject* const);
-            void    (*Dispose) (DSObject* const);
-            bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-            bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-            DSBoolean*(*Create) (bool value);
-            int     (*CompareTo) (const DSBoolean* const, const DSBoolean* const);
-        };
-    };
+    Class*  isa;
+    Class*  superclass;
+    char*   name;
+    char*   (*ToString) (const DSBoolean* const);
+    bool    (*Equals) (DSObject* const, DSObject* const);
+    int     (*GetHashCode) (DSObject* const);
+    void    (*Dispose) (DSObject* const);
+    bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
+    bool    (*InstanceEquals) (DSObject* const, DSObject* const);
+    DSBoolean*(*Create) (bool value);
+    int     (*CompareTo) (const DSBoolean* const, const DSBoolean* const);
+
     bool    (*BoolValue) (const DSBoolean* const);
     int     (*Compare) (const bool, const bool);
     bool    (*ParseBool) (char const*);

@@ -44,7 +44,7 @@ void __attribute__((constructor)) FrameworkBoot()
     IsaShader();
     IsaSpriteRenderer();
     IsaTexture2D();
-
+    IsaResourceManager();
     #ifdef DEBUG_ON
     for (int i=0; Metadata.classes[i] != nullptr; i++) 
         printf("%s\n", Metadata.classes[i]->isa->name);

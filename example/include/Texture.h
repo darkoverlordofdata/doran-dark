@@ -36,22 +36,16 @@ class (Texture2D)
 
 struct Texture2DClass
 {
-    union {
-        struct DSObjectClass base;
-        struct 
-        {
-            Class*  isa;
-            Class*  superclass;
-            char*   name;
-            char*   (*ToString) (Texture2D* const);
-            bool    (*Equals) (DSObject* const, DSObject* const);
-            int     (*GetHashCode) (DSObject* const);
-            void    (*Dispose) (DSObject* const);
-            bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-            bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-            Texture2D*  (*Create) (int InternalFormat, int ImageFormat, char* path);
-        };
-    };
+    Class*  isa;
+    Class*  superclass;
+    char*   name;
+    char*   (*ToString) (Texture2D* const);
+    bool    (*Equals) (DSObject* const, DSObject* const);
+    int     (*GetHashCode) (DSObject* const);
+    void    (*Dispose) (DSObject* const);
+    bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
+    bool    (*InstanceEquals) (DSObject* const, DSObject* const);
+    Texture2D*  (*Create) (int InternalFormat, int ImageFormat, char* path);
 
     // Generates texture from image data
     void    (*Generate)     (Texture2D* const, GLuint width, GLuint height, unsigned char* data);

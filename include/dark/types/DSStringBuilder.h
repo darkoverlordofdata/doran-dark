@@ -85,28 +85,23 @@ class (DSStringBuilder)
  */
 struct DSStringBuilderClass
 {
-    union {
-        struct DSObjectClass base;
-        struct 
-        {
-            Class*  isa;
-            Class*  superclass;
-            char*   name;
-            char*   (*ToString) (DSStringBuilder* const);
-            bool    (*Equals) (DSObject* const, DSObject* const);
-            int     (*GetHashCode) (DSObject* const);
-            void    (*Dispose) (DSObject* const);
-            bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-            bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-            DSStringBuilder*(*Create) ();
-            int     (*Empty) (DSStringBuilder* const);
-            int     (*Append) (DSStringBuilder* const, char* str);
-            int     (*Appendc) (DSStringBuilder* const, char c);
-            int     (*Appendf) (DSStringBuilder* const, char* str, ...);
-            DSString* (*Concat) (DSStringBuilder* const);
-            void    (*Reset) (DSStringBuilder* const);
-        };
-    };
+    Class*  isa;
+    Class*  superclass;
+    char*   name;
+    char*   (*ToString) (DSStringBuilder* const);
+    bool    (*Equals) (DSObject* const, DSObject* const);
+    int     (*GetHashCode) (DSObject* const);
+    void    (*Dispose) (DSObject* const);
+    bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
+    bool    (*InstanceEquals) (DSObject* const, DSObject* const);
+    DSStringBuilder*(*Create) ();
+    int     (*Empty) (DSStringBuilder* const);
+    int     (*Append) (DSStringBuilder* const, char* str);
+    int     (*Appendc) (DSStringBuilder* const, char c);
+    int     (*Appendf) (DSStringBuilder* const, char* str, ...);
+    DSString* (*Concat) (DSStringBuilder* const);
+    void    (*Reset) (DSStringBuilder* const);
+
 } DSStringBuilderClass;
 
 __attribute__((__format__ (__printf__, 2, 3)))

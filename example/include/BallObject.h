@@ -23,22 +23,17 @@
 // were too specific for within GameObject alone.
 class (BallObject) 
 {
-    union {
-        struct GameObject base;
-        struct 
-        {
-            struct BallObjectClass* isa;
-            Vec2        Position;
-            Vec2        Size;
-            Vec2        Velocity;
-            Vec3        Color;
-            GLfloat     Rotation;
-            GLboolean   IsSolid;
-            GLboolean   Destroyed;
-            Texture2D*  Sprite;	
-            char*       Name;
-        };
-    };
+    struct BallObjectClass* isa;
+    Vec2        Position;
+    Vec2        Size;
+    Vec2        Velocity;
+    Vec3        Color;
+    GLfloat     Rotation;
+    GLboolean   IsSolid;
+    GLboolean   Destroyed;
+    Texture2D*  Sprite;	
+    char*       Name;
+
     float   Radius;
     bool    Stuck;
 };
@@ -46,23 +41,18 @@ class (BallObject)
 
 struct BallObjectClass
 {
-    union {
-        struct GameObjectClass base; //  superclass
-        struct 
-        {
-            Class*  isa;
-            Class*  superclass;
-            char*   name;
-            char*   (*ToString) (BallObject* const);
-            bool    (*Equals) (DSObject* const, DSObject* const);
-            int     (*GetHashCode) (DSObject* const);
-            void    (*Dispose) (DSObject* const);
-            bool    (*ReferenceEquals) (DSObject* const objA, DSObject* const objB);
-            bool    (*InstanceEquals) (DSObject* const objA, DSObject* const objB);
-            BallObject*  (*Create) (Vec2 Position, float Radius, Vec2 Velocity, Texture2D* Sprite);
-            void    (*Draw) (BallObject* const, SpriteRenderer* renderer);
-        };
-    };
+    Class*  isa;
+    Class*  superclass;
+    char*   name;
+    char*   (*ToString) (BallObject* const);
+    bool    (*Equals) (DSObject* const, DSObject* const);
+    int     (*GetHashCode) (DSObject* const);
+    void    (*Dispose) (DSObject* const);
+    bool    (*ReferenceEquals) (DSObject* const objA, DSObject* const objB);
+    bool    (*InstanceEquals) (DSObject* const objA, DSObject* const objB);
+    BallObject*  (*Create) (Vec2 Position, float Radius, Vec2 Velocity, Texture2D* Sprite);
+    void    (*Draw) (BallObject* const, SpriteRenderer* renderer);
+
     // Moves the ball, keeping it constrained within the window bounds (except bottom edge); returns new position
     void    (*Move)         (BallObject* const, GLfloat dt, GLuint window_width);
     // Resets the ball to original state with given position and velocity

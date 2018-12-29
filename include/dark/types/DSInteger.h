@@ -53,29 +53,24 @@ class (DSInteger)
  */
 struct DSIntegerClass
 {
-    union {
-        struct DSNumberClass base;
-        struct 
-        {
-            Class*  isa;
-            Class*  superclass;
-            char*   name;
-            char*   (*ToString) (DSInteger* const);
-            bool    (*Equals) (DSObject* const, DSObject* const);
-            int     (*GetHashCode) (DSObject* const);
-            void    (*Dispose) (DSObject* const);
-            bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-            bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-            DSInteger*(*Create) (int value);
-            int     (*CompareTo) (DSComparable* const, DSComparable* const);
-            int     (*IntValue) (DSInteger* const);
-            long    (*LongValue) (DSInteger* const);
-            float   (*FloatValue) (DSInteger* const);
-            double  (*DoubleValue) (DSInteger* const);
-            char    (*CharValue) (DSInteger* const);
-            short   (*ShortValue) (DSInteger* const);
-        };
-    };
+    Class*  isa;
+    Class*  superclass;
+    char*   name;
+    char*   (*ToString) (DSInteger* const);
+    bool    (*Equals) (DSObject* const, DSObject* const);
+    int     (*GetHashCode) (DSObject* const);
+    void    (*Dispose) (DSObject* const);
+    bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
+    bool    (*InstanceEquals) (DSObject* const, DSObject* const);
+    DSInteger*(*Create) (int value);
+    int     (*CompareTo) (DSComparable* const, DSComparable* const);
+    int     (*IntValue) (DSInteger* const);
+    long    (*LongValue) (DSInteger* const);
+    float   (*FloatValue) (DSInteger* const);
+    double  (*DoubleValue) (DSInteger* const);
+    char    (*CharValue) (DSInteger* const);
+    short   (*ShortValue) (DSInteger* const);
+
 } DSIntegerClass;
 
 int DSInteger_ParseInt(char *const, int);

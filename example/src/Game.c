@@ -15,8 +15,9 @@
 const Vec2 ZERO = { 0, 0 };
 const Vec3 WHITE = { 1, 1, 1 };
 
+extern struct ResourceManagerClass* Resources;
 // Game-related State data
-SpriteRenderer * Renderer;
+SpriteRenderer* Renderer;
 GameObject* Player;
 BallObject* Ball;
 
@@ -90,27 +91,24 @@ void SetState(Game* this, GameState state)
  */
 void overload Start(Game* this)
 {
-    if (ResourceManagerClass.Shaders == nullptr) 
-        IsaResourceManager();
-        
     // Load shaders
-    ResourceManagerClass.LoadShader("shaders/sprite.vs", "shaders/sprite.frag", "sprite");
+    Resources->LoadShader("shaders/sprite.vs", "shaders/sprite.frag", "sprite");
     // Configure shaders
     Mat projection = glm_ortho(0, (GLfloat)this->Width, (GLfloat)this->Height, 0, -1, 1);
-    Shader* shader = ResourceManagerClass.GetShader("sprite");
+    Shader* shader = Resources->GetShader("sprite");
     Use(shader);
     SetInteger(shader, "sprite", 0);
     SetMatrix4(shader, "projection", &projection);
  
     // Load textures
-    ResourceManagerClass.LoadTexture("textures/block.png", false, "block");
-    ResourceManagerClass.LoadTexture("textures/background.jpg", false, "background");
-    ResourceManagerClass.LoadTexture("textures/block.png", false, "block");
-    ResourceManagerClass.LoadTexture("textures/block_solid.png", false, "block_solid");
-    ResourceManagerClass.LoadTexture("textures/awesomeface.png", true, "face");
-    ResourceManagerClass.LoadTexture("textures/paddle.png", true, "paddle");
+    Resources->LoadTexture("textures/block.png", false, "block");
+    Resources->LoadTexture("textures/background.jpg", false, "background");
+    Resources->LoadTexture("textures/block.png", false, "block");
+    Resources->LoadTexture("textures/block_solid.png", false, "block_solid");
+    Resources->LoadTexture("textures/awesomeface.png", true, "face");
+    Resources->LoadTexture("textures/paddle.png", true, "paddle");
     // Set render-specific controls
-    Renderer = $SpriteRenderer(ResourceManagerClass.GetShader("sprite"));
+    Renderer = $SpriteRenderer(Resources->GetShader("sprite"));
     // Load levels
 
     Add(this->Levels, $GameLevel("levels/one.lvl", this->Width, this->Height * 0.5));
@@ -123,9 +121,9 @@ void overload Start(Game* this)
 
     // Configure game objects
     Vec2 playerPos = (Vec2){ this->Width / 2 - PLAYER_SIZE.x / 2, this->Height - PLAYER_SIZE.y };
-    Player = $GameObject("player", playerPos, PLAYER_SIZE, ResourceManagerClass.GetTexture("paddle"), WHITE);
+    Player = $GameObject("player", playerPos, PLAYER_SIZE, Resources->GetTexture("paddle"), WHITE);
     Vec2 ballPos = playerPos + (Vec2){ PLAYER_SIZE.x / 2 - BALL_RADIUS, -BALL_RADIUS * 2 };
-    Ball = $BallObject(ballPos, BALL_RADIUS, INITIAL_BALL_VELOCITY, ResourceManagerClass.GetTexture("face"));
+    Ball = $BallObject(ballPos, BALL_RADIUS, INITIAL_BALL_VELOCITY, Resources->GetTexture("face"));
 }
 
 /**
@@ -194,7 +192,7 @@ void overload Render(Game* this)
     {
         // Draw background
         Vec2 size = { this->Width, this->Height };
-        DrawSprite(Renderer, ResourceManagerClass.GetTexture("background"), ZERO, size, 0.0f, WHITE);
+        DrawSprite(Renderer, Resources->GetTexture("background"), ZERO, size, 0.0f, WHITE);
         GameLevel* level = Get(this->Levels, this->Level);
         Draw(level, Renderer);
         Draw(Player, Renderer);

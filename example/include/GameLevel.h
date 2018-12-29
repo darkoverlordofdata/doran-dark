@@ -41,22 +41,17 @@ class (GameLevel)
 
 struct GameLevelClass
 {
-    union {
-        struct DSObjectClass base;
-        struct 
-        {
-            Class*  isa;
-            Class*  superclass;
-            char*   name;
-            char*   (*ToString) (GameLevel* const);
-            bool    (*Equals) (DSObject* const, DSObject* const);
-            int     (*GetHashCode) (DSObject* const);
-            void    (*Dispose) (DSObject* const);
-            bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-            bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-            GameLevel*  (*Create) (const GLchar *file, int levelWidth, int levelHeight);
-        };
-    };
+    Class*  isa;
+    Class*  superclass;
+    char*   name;
+    char*   (*ToString) (GameLevel* const);
+    bool    (*Equals) (DSObject* const, DSObject* const);
+    int     (*GetHashCode) (DSObject* const);
+    void    (*Dispose) (DSObject* const);
+    bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
+    bool    (*InstanceEquals) (DSObject* const, DSObject* const);
+    GameLevel*  (*Create) (const GLchar *file, int levelWidth, int levelHeight);
+
     // Loads level from file
     GameLevel*   (*Load)         (GameLevel* const, const GLchar *file, int levelWidth, int levelHeight);
     // Render level

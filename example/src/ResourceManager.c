@@ -8,6 +8,8 @@
 ******************************************************************/
 #include <ResourceManager.h>
 
+struct ResourceManagerClass* Resources;
+
 /**
  * ResourceManager
  */
@@ -212,6 +214,7 @@ register (ResourceManager)
 
         };
         AddMetadata(ResourceManagerClass);
+        Resources = &ResourceManagerClass;
     }
     return &ResourceManagerClass;
 }

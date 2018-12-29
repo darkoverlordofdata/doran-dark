@@ -31,22 +31,6 @@ SOFTWARE.
 #define IsClass(x) (x->isa == &DSClass)
 #define AsClass(x) (IsClass(x) ? (Class *)x : nullptr)
 
-class (Class) {
-	Class* isa;
-	Class* superclass;
-	char* name;
-};
-
-/**
- * Class metaclass
- */
-// struct DSClass DSClass;
-struct DSClass {
-    int count;
-    Class* classes[100];
-} DSClass;
-
-
 /**
  * based on this Objective-C core pattern:
  * 
@@ -65,5 +49,22 @@ typedef struct objc_object {
 } *id;
 
 */
+
+class (Class) {
+	Class* isa;
+	Class* superclass;
+	char* name;
+};
+
+/**
+ * Class metaclass
+ */
+// struct DSClass DSClass;
+struct DSClass {
+    int count;
+    Class* classes[100];
+} DSClass;
+
+
 
 #endif _CLASS_H_ 

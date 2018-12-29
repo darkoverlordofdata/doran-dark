@@ -26,22 +26,17 @@ class (SpriteRenderer)
 
 struct SpriteRendererClass
 {
-    union {
-        struct DSObjectClass base;
-        struct 
-        {
-            Class*  isa;
-            Class*  superclass;
-            char*   name;
-            char*   (*ToString) (SpriteRenderer* const);
-            bool    (*Equals) (DSObject* const, DSObject* const);
-            int     (*GetHashCode) (DSObject* const);
-            void    (*Dispose) (DSObject* const);
-            bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-            bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-            SpriteRenderer*  (*Create) (Shader* shader);
-        };
-    };
+    Class*  isa;
+    Class*  superclass;
+    char*   name;
+    char*   (*ToString) (SpriteRenderer* const);
+    bool    (*Equals) (DSObject* const, DSObject* const);
+    int     (*GetHashCode) (DSObject* const);
+    void    (*Dispose) (DSObject* const);
+    bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
+    bool    (*InstanceEquals) (DSObject* const, DSObject* const);
+    SpriteRenderer*  (*Create) (Shader* shader);
+
     // Renders a defined quad textured with given sprite
     void (*DrawSprite)      (SpriteRenderer* const, Texture2D* *texture, Vec2 position, Vec2 size, GLfloat rotate, Vec3 color);
 } SpriteRendererClass;

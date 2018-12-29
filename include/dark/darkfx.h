@@ -64,6 +64,7 @@ static const int BuildVersion = 1;
 
 // #include "io/DSFile.h"
 // #include "io/DSFileSystem.h"
+#include "DSLog.h"
 
 
 

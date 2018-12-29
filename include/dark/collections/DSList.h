@@ -49,30 +49,26 @@ class (DSList)
 
 struct DSListClass
 {
-    union {
-        struct DSCollectionClass base;
-        struct {
-            Class*  isa;
-            Class*  superclass;
-            char*   name;
-            char*   (*ToString) (DSList* const);
-            bool    (*Equals) (DSObject* const, DSObject* const);
-            int     (*GetHashCode) (DSObject* const);
-            void    (*Dispose) (DSObject* const);
-            bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-            bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-            DSList*   (*Create) ();
-            int     (*Length)       (DSList* const);
-            bool    (*IsEmpty)      (DSList* const);
-            bool    (*Contains)     (DSList* const, Any);
-            void    (*Clear)        (DSList* const);
-            void    (*Add)          (DSList* const, Any);
-            Any     (*Remove)       (DSList* const);
+    Class*  isa;
+    Class*  superclass;
+    char*   name;
+    char*   (*ToString) (DSList* const);
+    bool    (*Equals) (DSObject* const, DSObject* const);
+    int     (*GetHashCode) (DSObject* const);
+    void    (*Dispose) (DSObject* const);
+    bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
+    bool    (*InstanceEquals) (DSObject* const, DSObject* const);
+    DSList*   (*Create) ();
+    int     (*Length)       (DSList* const);
+    bool    (*IsEmpty)      (DSList* const);
+    bool    (*Contains)     (DSList* const, Any);
+    void    (*Clear)        (DSList* const);
+    void    (*Add)          (DSList* const, Any);
+    Any     (*Remove)       (DSList* const);
 
-        };
-    };
     int (*Insert) (DSList* const, Any, DSList_Compare);
     void (*Iterate) (DSList* const, DSList_Interator);
+    
 } DSListClass;
 
 

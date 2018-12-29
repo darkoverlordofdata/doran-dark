@@ -51,23 +51,18 @@ class (DSNumber)
  */
 struct DSNumberClass
 {
-    union {
-        struct DSObject base;
-        struct 
-        {
-            struct  Class* isa;
-            struct  Class* superclass;
-            char*   name;
-            char*   (*ToString) (DSNumber* const);
-            bool    (*Equals) (DSObject* const, DSObject* const);
-            int     (*GetHashCode) (DSObject* const);
-            void    (*Dispose) (DSObject* const);
-            bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-            bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-            DSNumber* (*Create) ();
-            int     (*CompareTo) (DSComparable* const, DSComparable*);
-        };
-    };
+    Class*  isa;
+    Class*  superclass;
+    char*   name;
+    char*   (*ToString) (DSNumber* const);
+    bool    (*Equals) (DSObject* const, DSObject* const);
+    int     (*GetHashCode) (DSObject* const);
+    void    (*Dispose) (DSObject* const);
+    bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
+    bool    (*InstanceEquals) (DSObject* const, DSObject* const);
+    DSNumber* (*Create) ();
+    int     (*CompareTo) (DSComparable* const, DSComparable*);
+
     int     (*IntValue) (DSNumber* const);
     long    (*LongValue) (DSNumber* const);
     float   (*FloatValue) (DSNumber* const);

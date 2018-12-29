@@ -51,29 +51,24 @@ class (DSLong)
  */
 struct DSLongClass
 {
-    union {
-        struct DSNumberClass base;
-        struct 
-        {
-            Class*  isa;
-            Class*  superclass;
-            char*   name;
-            char*   (*ToString) (DSLong* const);
-            bool    (*Equals) (DSObject* const, DSObject* const);
-            int     (*GetHashCode) (DSObject* const);
-            void    (*Dispose) (DSObject* const);
-            bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-            bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-            DSLong*   (*Create) (long);
-            int     (*CompareTo) (DSComparable* const, DSComparable* const);
-            int     (*IntValue) (DSLong* const);
-            long    (*LongValue) (DSLong* const);
-            float   (*FloatValue) (DSLong* const);
-            double  (*DoubleValue) (DSLong* const);
-            char    (*CharValue) (DSLong* const);
-            short   (*ShortValue) (DSLong* const);
-        };
-    };
+    Class*  isa;
+    Class*  superclass;
+    char*   name;
+    char*   (*ToString) (DSLong* const);
+    bool    (*Equals) (DSObject* const, DSObject* const);
+    int     (*GetHashCode) (DSObject* const);
+    void    (*Dispose) (DSObject* const);
+    bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
+    bool    (*InstanceEquals) (DSObject* const, DSObject* const);
+    DSLong*   (*Create) (long);
+    int     (*CompareTo) (DSComparable* const, DSComparable* const);
+    int     (*IntValue) (DSLong* const);
+    long    (*LongValue) (DSLong* const);
+    float   (*FloatValue) (DSLong* const);
+    double  (*DoubleValue) (DSLong* const);
+    char    (*CharValue) (DSLong* const);
+    short   (*ShortValue) (DSLong* const);
+
 } DSLongClass;
 
 long DSLong_ParseLong(char *const, int);

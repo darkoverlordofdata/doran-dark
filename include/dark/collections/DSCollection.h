@@ -45,28 +45,24 @@ class (DSCollection)
  */
 struct DSCollectionClass
 {
-    union {
-        struct DSObjectClass base;
-        struct 
-        {
-            Class*  isa;
-            Class*  superclass;
-            char*   name;
-            char*   (*ToString) (DSCollection* const);
-            bool    (*Equals) (DSObject* const, DSObject* const);
-            int     (*GetHashCode) (DSObject* const);
-            void    (*Dispose) (DSObject* const);
-            bool    (*ReferenceEquals) (DSObject* const , DSObject* const);
-            bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-            DSCollection*  (*Create) ();
-        };
-    };
+    Class*  isa;
+    Class*  superclass;
+    char*   name;
+    char*   (*ToString) (DSCollection* const);
+    bool    (*Equals) (DSObject* const, DSObject* const);
+    int     (*GetHashCode) (DSObject* const);
+    void    (*Dispose) (DSObject* const);
+    bool    (*ReferenceEquals) (DSObject* const , DSObject* const);
+    bool    (*InstanceEquals) (DSObject* const, DSObject* const);
+    DSCollection*  (*Create) ();
+
     int     (*Length) (DSCollection* const);
     bool    (*IsEmpty) (DSCollection* const);
     bool    (*Contains) (DSCollection* const, Any);
     void    (*Clear) (DSCollection* const);
     bool    (*Add) (DSCollection* const, Any);
     bool    (*Remove) (DSCollection* const, Any);
+    
 } DSCollectionClass;
 
 

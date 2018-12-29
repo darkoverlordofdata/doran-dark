@@ -28,7 +28,7 @@ endif ()
 #   application source
 #
 
-# list ( APPEND C_SOURCES src/darkunit.c )
+list ( APPEND C_SOURCES src/darkunit.c )
 list ( APPEND C_SOURCES src/main.c )
 #
 #   application includes

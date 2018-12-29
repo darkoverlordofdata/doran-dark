@@ -24,8 +24,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #pragma once
-#ifndef _OBJECT_H_
-#define _OBJECT_H_
+#ifndef _DSOBJECT_H_
+#define _DSOBJECT_H_
 #include "Class.h"
 
 #define OBJECT_TYPE       (TYPE_OBJECT)
@@ -41,23 +41,16 @@ class (DSObject) {
 	const struct DSObjectClass* isa;
 };
 
-
 typedef DSObject id;
-
 
 /**
  * Object metaclass
  */
-struct DSObjectClass {
-    union {
-        struct Class base; 
-        struct 
-        {
-            Class*  isa;
-            Class*  superclass;
-            char*   name;
-        };
-    };
+struct DSObjectClass 
+{
+    Class*  isa;
+    Class*  superclass;
+    char*   name;
     char*   (*ToString) (const DSObject* const);
     bool    (*Equals) (const DSObject* const, const DSObject* const);
     int     (*GetHashCode) (const DSObject* const);
@@ -91,4 +84,4 @@ DSObject* DSObject_Ctor(DSObject* const);
 DSObject* DSObject_Dtor(DSObject*);
 
 
-#endif _OBJECT_H_ 
+#endif _DSOBJECT_H_ 

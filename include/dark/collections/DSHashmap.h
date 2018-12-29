@@ -68,36 +68,28 @@ class (DSHashmap)
 
 struct DSHashmapClass
 {
-    union {
-        struct DSCollectionClass base;
-        struct 
-        {
-            Class*  isa;
-            Class*  superclass;
-            char*   name;
-            char*   (*ToString) (DSHashmap* const);
-            bool    (*Equals) (DSObject* const, DSObject* const);
-            int     (*GetHashCode) (DSObject* const);
-            void    (*Dispose) (DSObject* const);
-            bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-            bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-            DSHashmap*(*Create) ();
-            /*
-             * Get the current size of a hashmap
-             */
-            int         (*Length)       (DSHashmap* const);
-            bool        (*IsEmpty)      (DSHashmap* const);
-            bool        (*Contains)     (DSHashmap* const, Any);
-            void        (*Clear)        (DSHashmap* const);
-            void        (*Add)          (DSHashmap* const, Any);
-            /*
-             * Remove an element from the hashmap. Return MAP_OK or MAP_MISSING.
-             */
-            Any         (*Remove)       (DSHashmap* const);
-
-        };
-    };
-
+    Class*  isa;
+    Class*  superclass;
+    char*   name;
+    char*   (*ToString) (DSHashmap* const);
+    bool    (*Equals) (DSObject* const, DSObject* const);
+    int     (*GetHashCode) (DSObject* const);
+    void    (*Dispose) (DSObject* const);
+    bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
+    bool    (*InstanceEquals) (DSObject* const, DSObject* const);
+    DSHashmap*(*Create) ();
+    /*
+        * Get the current size of a hashmap
+        */
+    int         (*Length)       (DSHashmap* const);
+    bool        (*IsEmpty)      (DSHashmap* const);
+    bool        (*Contains)     (DSHashmap* const, Any);
+    void        (*Clear)        (DSHashmap* const);
+    void        (*Add)          (DSHashmap* const, Any);
+    /*
+        * Remove an element from the hashmap. Return MAP_OK or MAP_MISSING.
+        */
+    Any         (*Remove)       (DSHashmap* const);
     /*
     * Iteratively call func with argument (item, data) for
     * each element data in the hashmap. The function must
