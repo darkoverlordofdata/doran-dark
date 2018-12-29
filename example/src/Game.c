@@ -50,7 +50,7 @@ static const Collision* Collision_Ctor(
 
 Collision* New_Collision(bool first, Direction second, Vec2 third)
 {
-    return Collision_Ctor(new(Collision), first, second, third);
+    return Collision_Ctor(DSNew(Collision), first, second, third);
 }
 
 
@@ -243,9 +243,6 @@ void overload ResetPlayer(Game* this)
  */
 void overload Dispose(Game* this)
 {
-    // tgc_free(&gc, Renderer);
-    // tgc_free(&gc, Player);
-    // tgc_free(&gc, Ball);
 }
 
 //===============================================================//
@@ -378,7 +375,7 @@ void overload DoCollisions(Game* this)
                         Ball->Position.y += penetration; // Move ball back down
                 }
             }
-            DSFree(collision);
+            // DSFree(collision);
         }    
     }
     // Also check collisions for player pad (unless stuck)
@@ -398,7 +395,7 @@ void overload DoCollisions(Game* this)
         // Fix sticky paddle
         Ball->Velocity.y = -1 * abs(Ball->Velocity.y);
     }
-    DSFree(result);
+    // DSFree(result);
 }
 
 /**
@@ -417,13 +414,13 @@ char* overload ToString(struct Game* const this)
  * 
  */
 Game* $Game(int Width, int Height) { 
-    return Game_Ctor(new(Game), Width, Height); 
+    return Game_Ctor(DSNew(Game), Width, Height); 
 }
 
 /**
  * Game Class Metadata
  */
-register (Game)
+DSMetaClass (Game)
 {
     if (GameClass.isa == nullptr) {
         GameClass = (struct GameClass) {
@@ -446,7 +443,7 @@ register (Game)
             .ResetPlayer    = ResetPlayer,
             .SetKey         = SetKey,
         };
-        AddMetadata(GameClass);
+        DSAddMetadata(GameClass);
     }
     return &GameClass;
 }

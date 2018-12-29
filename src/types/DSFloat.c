@@ -27,7 +27,7 @@ SOFTWARE.
 /* 
  * Throws NumberFormatException:
  */
-static Exception(NumberFormat);
+static DSException(NumberFormat);
 
 /**
  * Constructor
@@ -48,12 +48,12 @@ DSFloat* DSFloat_Ctor(DSFloat* const this, float value)
 /**
  * Returns a primitive float value parsed from input string. 
  */
-float DSFloat_ParseFloat(char* s)
+float DSParseFloat(char* s)
 {
     
-    double d = DSDouble_ParseDouble(s);
+    double d = DSParseDouble(s);
     if (d < FLOAT_MIN_VALUE || d > FLOAT_MAX_VALUE)
-        return NumberFormatException(
+        return DSNumberFormatException(
             "Value out of range. Value:\"%s\"", s);
     return (float)d;
 }
@@ -131,37 +131,21 @@ char* DSFloat_ToString(DSFloat* const this)
 }
 
 DSFloat* $DSFloat(float value) { 
-    return DSFloat_Ctor(new(DSFloat), value); 
+    return DSFloat_Ctor(DSNew(DSFloat), value); 
 }
 
 /**
  * Float Class Metadata
  */
-register (DSFloat)
-{
-    if (DSFloatClass.isa == nullptr) {
-        DSFloatClass = (struct DSFloatClass) {
-            .isa            = &DSFloatClass,
-            .superclass     = &DSNumberClass,
-            .name           = "DSFloat",
-            .Create         = $DSFloat,
-            .Equals         = DSObjectClass.Equals,
-            .GetHashCode    = DSObjectClass.GetHashCode,
-            .Dispose        = DSObjectClass.Dispose,
-            .ReferenceEquals= DSObjectClass.ReferenceEquals,
-            .InstanceEquals = DSObjectClass.InstanceEquals,
-            .ToString       = DSFloat_ToString,
-            .CompareTo      = DSFloat_CompareTo,
-            .IntValue       = DSFloat_IntValue, 
-            .LongValue      = DSFloat_LongValue, 
-            .FloatValue     = DSFloat_FloatValue, 
-            .DoubleValue    = DSFloat_DoubleValue, 
-            .CharValue      = DSFloat_CharValue, 
-            .ShortValue     = DSFloat_ShortValue, 
-        };
-        AddMetadata(DSFloatClass);
-    }
-    return &DSFloatClass;
-}
-
+DSDefine(DSFloat, DSNumber, cls, {
+    cls->ToString       = DSFloat_ToString;
+    cls->CompareTo      = DSFloat_CompareTo;
+    cls->IntValue       = DSFloat_IntValue;
+    cls->LongValue      = DSFloat_LongValue; 
+    cls->FloatValue     = DSFloat_FloatValue; 
+    cls->DoubleValue    = DSFloat_DoubleValue;
+    cls->CharValue      = DSFloat_CharValue;
+    cls->ShortValue     = DSFloat_ShortValue; 
+    cls->Create         = $DSFloat;
+});
 

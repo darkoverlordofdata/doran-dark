@@ -39,7 +39,7 @@ DSArray* DSArray_Ctor(DSArray* const this, int capacity)
 
 
 DSArray* overload DSArray_New(void) {
-    return DSArray_Ctor(new(DSArray), 4);
+    return DSArray_Ctor(DSNew(DSArray), 4);
 }
 /**
  * new Array
@@ -50,7 +50,7 @@ DSArray* overload DSArray_New(void) {
  * 
  */
 DSArray* overload DSArray_New(int capacity) {
-    return DSArray_Ctor(new(DSArray), capacity);
+    return DSArray_Ctor(DSNew(DSArray), capacity);
 }
 
 /**
@@ -64,7 +64,7 @@ DSArray* overload DSArray_New(int capacity) {
  * 
  */
 DSArray* overload DSArray_New(int count, ...) {
-    DSArray* v = DSArray_Ctor(new(DSArray), count);
+    DSArray* v = DSArray_Ctor(DSNew(DSArray), count);
     va_list args;
     va_start(args, count);
     for (int i=0; i<count; i++)
@@ -192,39 +192,23 @@ char* overload ToString(const DSArray* const this)
 }
 
 DSArray* $DSArray(int capacity) { 
-    return DSArray_Ctor(new(DSArray), capacity); 
+    return DSArray_Ctor(DSNew(DSArray), capacity); 
 }
 
 /**
- * Array Class Metadata
+ * Load Array Class Metadata
  */
-register (DSArray)
-{
-    if (DSArrayClass.isa == nullptr) {
-        DSArrayClass = (struct DSArrayClass) {
-            .isa            = &DSArrayClass,
-            .superclass     = &DSCollectionClass,
-            .name           = "DSArray",
-            .Create         = $DSArray,
-            .Equals         = DSObjectClass.Equals,
-            .GetHashCode    = DSObjectClass.GetHashCode,
-            .ReferenceEquals= DSObjectClass.ReferenceEquals,
-            .InstanceEquals = DSObjectClass.InstanceEquals,
-            .ToString       = ToString,
-            .Dispose        = Dispose,
-            .Length         = Length,
-            .IsEmpty        = IsEmpty,
-            .Contains       = Contains,
-            .Add            = Add,
-            .Remove         = Remove,
-            .Resize         = Resize,
-            .Set            = Set,
-            .Get            = Get,
-            .Clear          = Clear,
-        };
-        AddMetadata(DSArrayClass);
-    }
-    return &DSArrayClass;
-}
-
+DSDefine(DSArray, DSObject, cls, {
+    cls->ToString       = ToString;
+    cls->Dispose        = Dispose;
+    cls->Length         = Length;
+    cls->IsEmpty        = IsEmpty;
+    cls->Contains       = Contains;
+    cls->Add            = Add;
+    cls->Remove         = Remove;
+    cls->Resize         = Resize;
+    cls->Set            = Set;
+    cls->Get            = Get;
+    cls->Clear          = Clear;
+});
 

@@ -51,6 +51,7 @@ struct Texture2DClass
     void    (*Generate)     (Texture2D* const, GLuint width, GLuint height, unsigned char* data);
     // Binds the texture as the current active GL_TEXTURE_2D texture object
     void    (*Bind)         (Texture2D* const);
+    
 } Texture2DClass;
 
 /**

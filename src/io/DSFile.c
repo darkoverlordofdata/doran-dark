@@ -69,6 +69,6 @@ File File_Ctor(File const this)
  */
 File File_New()
 {
-    return File_Ctor(new(File));
+    return File_Ctor(DSNew(File));
 }
 

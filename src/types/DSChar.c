@@ -40,40 +40,23 @@ DSChar* DSChar_Ctor(DSChar* const this, char value)
 }
 
 DSChar* $DSChar(char value) { 
-    return DSChar_Ctor(new(DSChar), value); 
+    return DSChar_Ctor(DSNew(DSChar), value); 
 }
 
 /**
  * Char Class Metadata
  */
-register (DSChar)
-{
-    if (DSCharClass.isa == nullptr) {
-        DSCharClass = (struct DSCharClass) {
-            .isa            = &DSCharClass,
-            .superclass     = &DSNumberClass,
-            .name           = "DSChar",
-            .Equals         = DSObjectClass.Equals,
-            .GetHashCode    = DSObjectClass.GetHashCode,
-            .Dispose        = DSObjectClass.Dispose,
-            .ReferenceEquals= DSObjectClass.ReferenceEquals,
-            .InstanceEquals = DSObjectClass.InstanceEquals,
-            
-            .ToString       = DSChar_ToString,
-            .CompareTo      = DSChar_CompareTo,
-            .IntValue       = DSChar_IntValue, 
-            .LongValue      = DSChar_LongValue, 
-            .FloatValue     = DSChar_FloatValue, 
-            .DoubleValue    = DSChar_DoubleValue, 
-            .CharValue      = DSChar_CharValue, 
-            .ShortValue     = DSChar_ShortValue, 
-            .Create         = $DSChar,
-        };
-        AddMetadata(DSCharClass);
-    }
-    return &DSCharClass;
-}
-
+DSDefine(DSChar, DSNumber, cls, {
+    cls->ToString       = DSChar_ToString;
+    cls->CompareTo      = DSChar_CompareTo;
+    cls->IntValue       = DSChar_IntValue;
+    cls->LongValue      = DSChar_LongValue; 
+    cls->FloatValue     = DSChar_FloatValue; 
+    cls->DoubleValue    = DSChar_DoubleValue;
+    cls->CharValue      = DSChar_CharValue;
+    cls->ShortValue     = DSChar_ShortValue; 
+    cls->Create         = $DSChar;
+});
 
 /**
  * Compare two char primitives.

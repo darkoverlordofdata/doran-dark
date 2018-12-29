@@ -25,9 +25,9 @@ SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSNumber.h>
 /* 
- * Throws AbstractMethodException:
+ * Throws DSAbstractMethodException:
  */
-static Exception(AbstractMethod);
+static DSException(AbstractMethod);
 
 /**
  * Abstract Number
@@ -53,7 +53,7 @@ int DSNumber_CompareTo(DSNumber* this, DSNumber* other) {
     return this->isa->CompareTo(this, other);
 }
 static short Abstract_CompareTo(DSNumber* const this, DSNumber* other) {
-    return AbstractMethodException("Number_CompareTo");
+    return DSAbstractMethodException("Number_CompareTo");
 }
 
 /**
@@ -63,7 +63,7 @@ int overload IntValue(DSNumber* const this) {
     return this->isa->IntValue(this);
 }
 static int Abstract_IntValue(DSNumber* const this) {
-    return AbstractMethodException("Number_IntValue");
+    return DSAbstractMethodException("Number_IntValue");
 }
 
 /**
@@ -73,7 +73,7 @@ long LongValue(DSNumber* const this) {
     return this->isa->LongValue(this);
 }
 static long Abstract_LongValue(DSNumber* const this) {
-    return AbstractMethodException("Number_LongValue");
+    return DSAbstractMethodException("Number_LongValue");
 }
 
 /**
@@ -83,7 +83,7 @@ float overload FloatValue(DSNumber* const this) {
     return this->isa->FloatValue(this);
 }
 static float Abstract_FloatValue(DSNumber* const this) {
-    return AbstractMethodException("Number_FloatValue");
+    return DSAbstractMethodException("Number_FloatValue");
 }
 
 /**
@@ -93,7 +93,7 @@ double overload DoubleValue(DSNumber* const this) {
     return this->isa->DoubleValue(this);
 }
 static double Abstract_DoubleValue(DSNumber* const this) {
-    return AbstractMethodException("Number_DoubleValue");
+    return DSAbstractMethodException("Number_DoubleValue");
 }
 
 /**
@@ -103,7 +103,7 @@ char overload CharValue(DSNumber* const this) {
     return this->isa->CharValue(this);
 }
 static char Abstract_CharValue(DSNumber* const this) {
-    return AbstractMethodException("Number_CharValue");
+    return DSAbstractMethodException("Number_CharValue");
 }
 
 /**
@@ -113,7 +113,7 @@ short overload ShortValue(DSNumber* const this) {
     return this->isa->ShortValue(this);
 }
 static short Abstract_ShortValue(DSNumber* const this) {
-    return AbstractMethodException("Number_ShortValue");
+    return DSAbstractMethodException("Number_ShortValue");
 }
 
 
@@ -132,35 +132,52 @@ static bool Virtual_Equals(DSObject* const this, DSObject* const other) {
 }
 
 /**
+ * Long Class Metadata
+ */
+DSDefine(DSNumber, DSObject, cls, {
+    cls->CompareTo      = DSNumber_CompareTo;
+    cls->CompareTo      = DSNumber_CompareTo;
+    cls->ToString       = Virtual_ToString;
+    cls->Equals         = Virtual_Equals;
+    cls->CompareTo      = Abstract_CompareTo;
+    cls->IntValue       = Abstract_IntValue; 
+    cls->LongValue      = Abstract_LongValue; 
+    cls->FloatValue     = Abstract_FloatValue; 
+    cls->DoubleValue    = Abstract_DoubleValue; 
+    cls->CharValue      = Abstract_CharValue; 
+    cls->ShortValue     = Abstract_ShortValue;
+});
+
+/**
  * DSNumber Class Metadata
  */
-register (DSNumber)
-{
-    if (DSNumberClass.isa == nullptr) {
-        DSNumberClass = (struct DSNumberClass) {
-            .isa            = &DSNumberClass,
-            .superclass     = &DSComparableClass,
-            .name           = "DSNumber",
-            .Equals         = DSObjectClass.Equals,
-            .GetHashCode    = DSObjectClass.GetHashCode,
-            .Dispose        = DSObjectClass.Dispose,
-            .ReferenceEquals= DSObjectClass.ReferenceEquals,
-            .InstanceEquals = DSObjectClass.InstanceEquals,
-            .CompareTo      = DSNumber_CompareTo,
-            .ToString       = Virtual_ToString,
-            .Equals         = Virtual_Equals,
-            .CompareTo      = Abstract_CompareTo,
-            .IntValue       = Abstract_IntValue, 
-            .LongValue      = Abstract_LongValue, 
-            .FloatValue     = Abstract_FloatValue, 
-            .DoubleValue    = Abstract_DoubleValue, 
-            .CharValue      = Abstract_CharValue, 
-            .ShortValue     = Abstract_ShortValue 
-        };
-        AddMetadata(DSNumberClass);
-    }
-    return &DSNumberClass;
-}
+// DSMetaClass (DSNumber)
+// {
+//     if (DSNumberClass.isa == nullptr) {
+//         DSNumberClass = (struct DSNumberClass) {
+//             .isa            = &DSNumberClass,
+//             .superclass     = &DSComparableClass,
+//             .name           = "DSNumber",
+//             .Equals         = DSObjectClass.Equals,
+//             .GetHashCode    = DSObjectClass.GetHashCode,
+//             .Dispose        = DSObjectClass.Dispose,
+//             .ReferenceEquals= DSObjectClass.ReferenceEquals,
+//             .InstanceEquals = DSObjectClass.InstanceEquals,
+//             .CompareTo      = DSNumber_CompareTo,
+//             .ToString       = Virtual_ToString,
+//             .Equals         = Virtual_Equals,
+//             .CompareTo      = Abstract_CompareTo,
+//             .IntValue       = Abstract_IntValue, 
+//             .LongValue      = Abstract_LongValue, 
+//             .FloatValue     = Abstract_FloatValue, 
+//             .DoubleValue    = Abstract_DoubleValue, 
+//             .CharValue      = Abstract_CharValue, 
+//             .ShortValue     = Abstract_ShortValue 
+//         };
+//         DSAddMetadata(DSNumberClass);
+//     }
+//     return &DSNumberClass;
+// }
 
 /**
  * char table for radix up to 36

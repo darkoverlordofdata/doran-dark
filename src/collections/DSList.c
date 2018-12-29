@@ -52,7 +52,7 @@ DSListNode* DSListNode_Ctor(DSListNode* const this, Any data, DSListNode* next)
 
 DSListNode* DSListNode_New(Any data, DSListNode* next)
 {
-    return DSListNode_Ctor(new(DSList), data, next);
+    return DSListNode_Ctor(DSNew(DSList), data, next);
 }
 
 /**
@@ -164,13 +164,13 @@ char* overload ToString(DSList* const this)
 }
 
 DSList* $DSList() { 
-    return DSList_Ctor(new(DSList)); 
+    return DSList_Ctor(DSNew(DSList)); 
 }
 
 /**
  * List Class Metadata
  */
-register (DSList)
+DSMetaClass (DSList)
 {
     if (DSListClass.isa == nullptr) {
         DSListClass = (struct DSListClass) {
@@ -191,7 +191,7 @@ register (DSList)
             .Create         = $DSList
 
         };
-        AddMetadata(DSListClass);
+        DSAddMetadata(DSListClass);
     }
     return &DSListClass;
 }

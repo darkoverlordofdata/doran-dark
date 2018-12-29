@@ -39,6 +39,7 @@ struct SpriteRendererClass
 
     // Renders a defined quad textured with given sprite
     void (*DrawSprite)      (SpriteRenderer* const, Texture2D* *texture, Vec2 position, Vec2 size, GLfloat rotate, Vec3 color);
+    
 } SpriteRendererClass;
 
 /**

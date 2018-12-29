@@ -123,13 +123,13 @@ char* GetClassName(const DSObject* const this)
 }
 
 DSObject* $DSObject() { 
-    return DSObject_Ctor(new(DSObject)); 
+    return DSObject_Ctor(DSNew(DSObject)); 
 }
 
 /**
  * Object Class Metadata
  */
-register(DSObject)
+DSMetaClass(DSObject)
 {
     if (DSObjectClass.isa == nullptr) {
         DSObjectClass = (struct DSObjectClass) {
@@ -144,7 +144,7 @@ register(DSObject)
             .ReferenceEquals= ReferenceEquals,
             .InstanceEquals = InstanceEquals,
         };
-        // AddMetadata(Object);
+        // DSAddMetadata(Object);
     }
     return &DSObjectClass;
 }

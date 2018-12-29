@@ -82,13 +82,13 @@ char* overload ToString(Texture2D* const this)
  * Creates a new instance
  */
 Texture2D* $Texture2D(int InternalFormat, int ImageFormat, char* path) { 
-    return Texture2D_Ctor(new(Texture2D), InternalFormat, ImageFormat, path);
+    return Texture2D_Ctor(DSNew(Texture2D), InternalFormat, ImageFormat, path);
 }
 
 /**
  * Texture2D Class Metadata
  */
-register (Texture2D)
+DSMetaClass (Texture2D)
 {
     if (Texture2DClass.isa == nullptr) {
         Texture2DClass = (struct Texture2DClass) {
@@ -105,7 +105,7 @@ register (Texture2D)
             .Generate       = Generate,
             .Bind           = Bind,
         };
-        AddMetadata(Texture2DClass);
+        DSAddMetadata(Texture2DClass);
     }
     
     return &Texture2DClass;

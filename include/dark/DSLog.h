@@ -26,7 +26,9 @@ SOFTWARE.
 #pragma once
 #ifndef _DSLOG_H_
 #define _DSLOG_H_
-
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdarg.h>
 /**
  * DSLog
  * 
@@ -34,19 +36,12 @@ SOFTWARE.
  */
 __attribute__((__format__ (__printf__, 1, 2)))
 static inline void DSLog (char* format, ...) {
-    va_list args1;
-    va_list args2;
-    
-    va_start(args1, format);
-    va_copy(args2, args1);  
 
-    int len = vsnprintf(nullptr, 0, format, args1);
-    va_end(args1);
-    if (len == 0) return;
-    char* str = DSCalloc((len+1), sizeof(char));
-    len = vsnprintf(str, len+1, format, args2);
-    va_end(args2);
-    fprintf(stderr, "%s\n",str);
+    va_list args;
+    va_start(args, format);
+    vfprintf(stderr, format, args);
+    fprintf(stderr, "\n");
+    va_end(args);
 }
 
 #endif _DSLOG_H_ 

@@ -56,6 +56,7 @@ struct GameObjectClass
 
     // Draw sprite
     void        (*Draw)         (GameObject* const, SpriteRenderer* renderer);
+    
 } GameObjectClass;
 
 /**

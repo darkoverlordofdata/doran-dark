@@ -28,25 +28,24 @@ SOFTWARE.
 
 
 /**
- * Boot the application framework classes
+ * Load the class metadata
  * 
- * This initializes the application classes so
- * that static methods and variables are available
+ * Classes must be loaded before they can be used
  */
-void __attribute__((constructor)) FrameworkBoot() 
+void __attribute__((constructor)) ApplicationLoader() 
 {
-    IsaBallObject();
-    IsaGame();
-    IsaGameLevel();
-    IsaGameObject();
-    IsaParticleGenerator();
-    IsaResourceManager();
-    IsaShader();
-    IsaSpriteRenderer();
-    IsaTexture2D();
-    IsaResourceManager();
+    DSLoadClass(BallObject);
+    DSLoadClass(Game);
+    DSLoadClass(GameLevel);
+    DSLoadClass(GameObject);
+    DSLoadClass(ParticleGenerator);
+    DSLoadClass(ResourceManager);
+    DSLoadClass(Shader);
+    DSLoadClass(SpriteRenderer);
+    DSLoadClass(Texture2D);
+    DSLoadClass(ResourceManager);
     #ifdef DEBUG_ON
     for (int i=0; Metadata.classes[i] != nullptr; i++) 
-        printf("%s\n", Metadata.classes[i]->isa->name);
+        DSLog("%s", Metadata.classes[i]->isa->name);
     #endif
 }

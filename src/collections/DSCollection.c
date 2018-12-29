@@ -28,7 +28,7 @@ SOFTWARE.
 /**
  * Generic Collection implementation
  */
-static Exception(AbstractMethod);
+static DSException(AbstractMethod);
 
 /**
  * Initialize a new Array
@@ -49,7 +49,7 @@ int overload Length(DSCollection* const this)
 }
 static int Abstract_Length(DSCollection* const this)
 {
-    return AbstractMethodException("Collection_Length");
+    return DSAbstractMethodException("Collection_Length");
 }
 
 void Collection_Add(DSCollection* const this, Any data)
@@ -58,13 +58,13 @@ void Collection_Add(DSCollection* const this, Any data)
 }
 static void Abstract_Add(DSCollection* const this, Any data)
 {
-    AbstractMethodException("Collection_Add");
+    DSAbstractMethodException("Collection_Add");
 }
 
 /**
  * Collection Class Metadata
  */
-register (DSCollection)
+DSMetaClass (DSCollection)
 {
     if (DSCollectionClass.isa == nullptr) {
         DSCollectionClass = (struct DSCollectionClass) {
@@ -79,7 +79,7 @@ register (DSCollection)
             .Length         = Abstract_Length,
             .Add            = Abstract_Add,
         };
-        AddMetadata(DSCollectionClass);
+        DSAddMetadata(DSCollectionClass);
     }
     return &DSCollectionClass;
 }

@@ -24,34 +24,31 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/Class.h>
-#include <dark/darkfx.h>
-
 
 /**
- * Boot the core framework
+ * Load the class metadata
  * 
- * This initializes the framework classes so
- * that static methods and variables are available
+ * Classes must be loaded before they can be used
  */
 void __attribute__((constructor(101))) DSClassBoot() 
 {    
-    DSClass = (struct DSClass) { .count = 1, .classes = {IsaDSObject()} };
+    DSClass = (struct DSClass) { .count = 1, .classes = {DSLoadClass(DSObject)} };
 
-    IsaDSComparable();
-    IsaDSCollection();
-    IsaDSArray();
-    IsaDSList();
-    IsaDSHashmap();
-    IsaDSBoolean();
-    IsaDSNumber();
-    IsaDSChar();
-    IsaDSDouble();
-    IsaDSFloat();
-    IsaDSInteger();
-    IsaDSLong();
-    IsaDSShort();
-    IsaDSString();
-    IsaDSStringBuilder();
+    DSLoadClass(DSComparable);
+    DSLoadClass(DSCollection);
+    DSLoadClass(DSArray);
+    DSLoadClass(DSList);
+    DSLoadClass(DSHashmap);
+    DSLoadClass(DSBoolean);
+    DSLoadClass(DSNumber);
+    DSLoadClass(DSChar);
+    DSLoadClass(DSDouble);
+    DSLoadClass(DSFloat);
+    DSLoadClass(DSInteger);
+    DSLoadClass(DSLong);
+    DSLoadClass(DSShort);
+    DSLoadClass(DSString);
+    DSLoadClass(DSStringBuilder);
 
     // for (int i=0; Metadata.classes[i] != nullptr; i++) {
     // // for (int i=0; i < Metadata.count; i++) {

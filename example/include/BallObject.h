@@ -57,6 +57,7 @@ struct BallObjectClass
     void    (*Move)         (BallObject* const, GLfloat dt, GLuint window_width);
     // Resets the ball to original state with given position and velocity
     void    (*Reset)        (BallObject* const, Vec2 position, Vec2 velocity);
+    
 } BallObjectClass;
 
 /**

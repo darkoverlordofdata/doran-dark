@@ -419,6 +419,6 @@ FileSystem FileSystem_Ctor(FileSystem const this)
  */
 FileSystem FileSystem_New()
 {
-    return FileSystem_Ctor(new(FileSystem));
+    return FileSystem_Ctor(DSNew(FileSystem));
 }
 

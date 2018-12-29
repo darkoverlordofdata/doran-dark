@@ -28,27 +28,29 @@ SOFTWARE.
 #define _CLASS_H_
 #include "core.h"
 
-#define IsClass(x) (x->isa == &DSClass)
-#define AsClass(x) (IsClass(x) ? (Class *)x : nullptr)
+/** 
+ * create a new class instance 
+ */
+#define DSNew(class) DSMalloc (sizeof(class))
+
+
+/** 
+ * start a class definition
+ */
+#define class(name) \
+    typedef struct name name;   /* define name */ \
+    Class* DSIsa##name();       /* forward reference DSIsaName() */ \ 
+    struct name
 
 /**
- * based on this Objective-C core pattern:
- * 
- 
-typedef struct objc_class *Class;
+ * paste together a reference to class metadata 
+ */
+#define isa(name) &name##Class
 
-struct objc_class {
-    Class isa;
-    Class super_class;
-    // followed by runtime specific details...
-};
-
-typedef struct objc_object {
-    Class isa;
-    // ... 
-} *id;
-
-*/
+/**
+ * method overload 
+ */
+#define overload __attribute__((overloadable))
 
 class (Class) {
 	Class* isa;
@@ -59,12 +61,55 @@ class (Class) {
 /**
  * Class metaclass
  */
-// struct DSClass DSClass;
 struct DSClass {
     int count;
     Class* classes[100];
 } DSClass;
 
+/**
+ *  DSDefine - define a class runtime metadata
+ * 
+ * @param class name
+ * @param super superclass name
+ * @param var temporary variable to use
+ * @param block 
+ */
+#define DSDefine(class, super, var, block) \
+Class* DSIsa##class() \
+{   /* set defaults */ \
+    class##Class = (struct class##Class) { \
+        .isa            = &class##Class, \
+        .superclass     = &super##Class, \
+        .name           = #class, \
+        .Equals         = DSObjectClass.Equals, \
+        .GetHashCode    = DSObjectClass.GetHashCode, \
+        .Dispose        = DSObjectClass.Dispose, \
+        .ReferenceEquals= DSObjectClass.ReferenceEquals, \
+        .InstanceEquals = DSObjectClass.InstanceEquals, \
+        .ToString       = DSObjectClass.ToString, \
+    }; \
+    /* temporary variable used by block */ \
+    struct class##Class *var = &class##Class; \
+    /* excute the code block of customizations */ \
+    do { block } while(0);\
+    DSClass.classes[DSClass.count++] = &class##Class; \
+    return &class##Class; \
+}
 
+/** 
+ * start of metaclass definition
+ */
+#define DSMetaClass(name) \
+    Class* DSIsa##name()
+
+/**
+ * load the metaclass info for name 
+ */
+#define DSLoadClass(name) DSIsa##name()
+
+/**
+ * add a class to the global class list
+ */
+#define DSAddMetadata(name) (DSClass.classes[DSClass.count++] = &name)
 
 #endif _CLASS_H_ 

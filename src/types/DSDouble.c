@@ -27,7 +27,7 @@ SOFTWARE.
 /* 
  * Throws NumberFormatException:
  */
-static Exception(NumberFormat);
+static DSException(NumberFormat);
 
 /**
  * Constructor
@@ -47,18 +47,18 @@ DSDouble* DSDouble_Ctor(DSDouble* const this, double value)
 /**
  * Returns a primitive double value parsed from input string. 
  */
-double DSDouble_ParseDouble(char const *const s)
+double DSParseDouble(char const *const s)
 {
     errno = 0;
     char* endptr;
     double result = strtod(s, endptr);
 
     if (errno != 0)
-        return NumberFormatException(
+        return DSNumberFormatException(
             "Invalid input. Value:\"%s\"", s);
 
     if (s == endptr || *endptr != '\0')
-        return NumberFormatException(
+        return DSNumberFormatException(
             "Invalid input. Value:\"%s\"", s);
 
     return result;
@@ -136,37 +136,22 @@ char* DSDouble_ToString(DSDouble* const this) {
 }
 
 DSDouble* $DSDouble(double value) { 
-    return DSDouble_Ctor(new(DSDouble), value); 
+    return DSDouble_Ctor(DSNew(DSDouble), value); 
 }
 
 
 /**
  * DSDouble Class Metadata
  */
-register (DSDouble)
-{
-    if (DSDoubleClass.isa == nullptr) {
-        DSDoubleClass = (struct DSDoubleClass) {
-            .isa            = &DSDoubleClass,
-            .superclass     = &DSNumberClass,
-            .name           = "DSDouble",
-            .Create         = $DSDouble,
-            .Equals         = DSObjectClass.Equals,
-            .GetHashCode    = DSObjectClass.GetHashCode,
-            .Dispose        = DSObjectClass.Dispose,
-            .ReferenceEquals= DSObjectClass.ReferenceEquals,
-            .InstanceEquals = DSObjectClass.InstanceEquals,
-            .ToString       = DSDouble_ToString,
-            .CompareTo      = DSDouble_CompareTo,
-            .IntValue       = DSDouble_IntValue, 
-            .LongValue      = DSDouble_LongValue, 
-            .FloatValue     = DSDouble_FloatValue, 
-            .DoubleValue    = DSDouble_DoubleValue, 
-            .CharValue      = DSDouble_CharValue, 
-            .ShortValue     = DSDouble_ShortValue, 
-        };
-        AddMetadata(DSDoubleClass);
-    }
-    return &DSDoubleClass;
-}
+DSDefine(DSDouble, DSNumber, cls, {
+    cls->ToString       = DSDouble_ToString;
+    cls->CompareTo      = DSDouble_CompareTo;
+    cls->IntValue       = DSDouble_IntValue;
+    cls->LongValue      = DSDouble_LongValue; 
+    cls->FloatValue     = DSDouble_FloatValue; 
+    cls->DoubleValue    = DSDouble_DoubleValue;
+    cls->CharValue      = DSDouble_CharValue;
+    cls->ShortValue     = DSDouble_ShortValue; 
+    cls->Create         = $DSDouble;
+});
 

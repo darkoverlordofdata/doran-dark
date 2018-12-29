@@ -33,7 +33,6 @@ SOFTWARE.
 #define IsDSObject(x) (x->isa == &DSObjectClass)
 #define AsDSObject(x) (IsDSObject(x) ? (DSObject *)x : nullptr)
 
-
 /**
  * Object class
  */

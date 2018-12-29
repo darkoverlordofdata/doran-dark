@@ -54,7 +54,7 @@ SOFTWARE.
   /*  X^31 term, etc.  The X^0 term (usually shown as "+1") results in      */
   /*  the MSB being 1.                                                      */
   /*                                                                        */
-  /*  Note that the usual hardware shift register implementation, which     */
+  /*  Note that the usual hardware shift DSMetaClass implementation, which     */
   /*  is what we're using (we're merely optimizing it by doing eight-bit    */
   /*  chunks at a time) shifts bits into the lowest-order term.  In our     */
   /*  implementation, that means shifting towards the right.  Why do we     */
@@ -71,7 +71,7 @@ SOFTWARE.
   /*      The table can be generated at runtime if desired; code to do so   */
   /*      is shown later.  It might not be obvious, but the feedback        */
   /*      terms simply represent the results of eight shift/xor opera-      */
-  /*      tions for all combinations of data and CRC register values.       */
+  /*      tions for all combinations of data and CRC DSMetaClass values.       */
   /*                                                                        */
   /*      The values must be right-shifted by eight bits by the "updcrc"    */
   /*      logic; the shift must be unsigned (bring in zeroes).  On some     */
@@ -372,13 +372,13 @@ char* overload ToString(DSHashmap* const this)
 }
 
 DSHashmap* $DSHashmap() { 
-    return DSHashmap_Ctor(new(DSHashmap)); 
+    return DSHashmap_Ctor(DSNew(DSHashmap)); 
 }
 
 /**
  * List Class Metadata
  */
-register (DSHashmap)
+DSMetaClass (DSHashmap)
 {
     if (DSHashmapClass.isa == nullptr) {
         DSHashmapClass = (struct DSHashmapClass) {
@@ -401,7 +401,7 @@ register (DSHashmap)
             .Hash           = Hash,
             .Rehash         = Rehash,
         };
-        AddMetadata(DSHashmapClass);
+        DSAddMetadata(DSHashmapClass);
     }
     return &DSHashmapClass;
 }

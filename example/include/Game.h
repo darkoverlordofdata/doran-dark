@@ -87,6 +87,7 @@ struct GameClass
 
     void (*SetKey)          (Game* const, int key, bool value);
     void (*SetState)        (Game* const, GameState state);
+    
 } GameClass;
 
 /**

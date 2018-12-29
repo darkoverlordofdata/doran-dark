@@ -11,6 +11,7 @@ int main(int argc, char **argv) {
     __block struct DSLong* l = $DSLong(420);
     __block DSLong* m = $DSLong(420);
     __block DSBoolean* b = $DSBoolean(true);
+    DSLog("should be DSBoolean: %s", GetClassName(b));
 
     __block DSString* s = $("Frodo");
     __block DSArray* a = $DSArray(0);
@@ -68,6 +69,7 @@ int main(int argc, char **argv) {
     DSLog("=============");
     __block DSCollection* c = q;
 
+    __block DSChar* zz = $DSChar('c');
 
     Describe("Run Tests", ^{
 
@@ -104,6 +106,11 @@ int main(int argc, char **argv) {
             Expect(!strcmp("DSLong", GetClass(l)->name));
         });
 
+        It("Should be a Boolean", ^{
+            Expect(!strcmp("DSBoolean", GetClassName(b)));
+            Expect(!strcmp("DSBoolean", GetClass(b)->name));
+        });
+
         It("Should be true", ^{
             Expect(BoolValue(b) == true);
         });
@@ -112,11 +119,16 @@ int main(int argc, char **argv) {
             Expect(LongValue(Get(h,"keyB")) == 430);
         });
 
+        It("should be a c", ^{
+            Expect(LongValue(zz) == 99);
+        });
+
     });
     DSLog("");
     DSLog("Tests run: %d", tests.total);
     DSLog("Tests passed: %d", tests.passed);
     DSLog("Tests failed: %d", tests.failed);
+
     return tests.failed;
     DSLog("Hello World");
 

@@ -28,7 +28,7 @@ SOFTWARE.
  * Abstract Comparable
  */
 
-static Exception(AbstractMethod);
+static DSException(AbstractMethod);
 
 /**
  * Initialize a new DSComparable
@@ -45,7 +45,7 @@ int overload CompareTo(DSComparable* this, DSComparable* other) {
 }
 
 static short Abstract_CompareTo(DSComparable* const this, DSComparable* other) {
-    return AbstractMethodException("Comparable_CompareTo");
+    return DSAbstractMethodException("Comparable_CompareTo");
 }
 
 char* Comparable_ToString(DSComparable* const this) {
@@ -59,7 +59,7 @@ static char* Virtual_ToString(DSComparable* const this) {
 /**
  * DSComparable Class Metadata
  */
-register (DSComparable)
+DSMetaClass (DSComparable)
 {
     if (DSComparableClass.isa == nullptr) {
         DSComparableClass = (struct DSComparableClass) {
@@ -74,7 +74,7 @@ register (DSComparable)
             .ReferenceEquals = DSObjectClass.ReferenceEquals,
             .InstanceEquals  = DSObjectClass.InstanceEquals,
         };
-        AddMetadata(DSComparableClass);
+        DSAddMetadata(DSComparableClass);
     }
     return &DSComparableClass;
 }

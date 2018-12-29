@@ -171,9 +171,9 @@ static void checkCompileErrors(
         if (!success)
         {
             glGetShaderInfoLog(object, 1024, nullptr, infoLog);
-            printf("| ERROR::SHADER: Compile-time error: Type: %s\n", type);
-            printf("%s\n", infoLog);
-            printf("-- --------------------------------------------------- -- \n");
+            DSLog("| ERROR::SHADER: Compile-time error: Type: %s", type);
+            DSLog("%s", infoLog);
+            DSLog("-- --------------------------------------------------- -- ");
         }
     }
     else
@@ -182,9 +182,9 @@ static void checkCompileErrors(
         if (!success)
         {
             glGetProgramInfoLog(object, 1024, nullptr, infoLog);
-            printf("| ERROR::SHADER: Link-time error: Type: %s\n", type);
-            printf("%s\n", infoLog);
-            printf("-- --------------------------------------------------- -- \n");
+            DSLog("| ERROR::SHADER: Link-time error: Type: %s", type);
+            DSLog("%s", infoLog);
+            DSLog("-- --------------------------------------------------- -- ");
         }
     }
 }
@@ -198,13 +198,13 @@ char* overload ToString(Shader* const this)
 }
 
 Shader* $Shader() { 
-    return Shader_Ctor(new(Shader));
+    return Shader_Ctor(DSNew(Shader));
 }
 
 /**
  * Shader Class Metadata
  */
-register (Shader)
+DSMetaClass (Shader)
 {
     if (ShaderClass.isa == nullptr) {
         ShaderClass = (struct ShaderClass) {
@@ -231,7 +231,7 @@ register (Shader)
             .SetArray4      = SetArray4,
             .SetMatrix4     = SetMatrix4,
         };
-        AddMetadata(ShaderClass);
+        DSAddMetadata(ShaderClass);
     }
     return &ShaderClass;
 }

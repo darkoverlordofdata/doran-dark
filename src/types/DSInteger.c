@@ -27,7 +27,7 @@ SOFTWARE.
 /* 
  * Throws: NumberFormatException
  */
-static Exception(NumberFormat);
+static DSException(NumberFormat);
 
 /* 
  * Constructor
@@ -48,10 +48,10 @@ DSInteger* DSInteger_Ctor(DSInteger* const this, int value)
 /**
  * Returns a primitive integer value parsed from input string. 
  */
-int DSInteger_ParseInt(char* const s, int radix) {
-    long i = DSLong_ParseLong(s, radix);
+int DSParseInt(char* const s, int radix) {
+    long i = DSParseLong(s, radix);
     if (i < INTEGER_MIN_VALUE || i > INTEGER_MAX_VALUE)
-        return NumberFormatException(
+        return DSNumberFormatException(
             "Value out of range. Value:\"%s\" Radix: %d", s, radix);
     return (int)i;
 }
@@ -129,36 +129,21 @@ char* DSInteger_ToString(DSInteger* const this)
 }
 
 DSInteger* $DSInteger(int value) { 
-    return DSInteger_Ctor(new(DSInteger), value); 
+    return DSInteger_Ctor(DSNew(DSInteger), value); 
 }
 
 /**
  * Integer Class Metadata
  */
-register (DSInteger)
-{
-    if (DSIntegerClass.isa == nullptr) {
-        DSIntegerClass = (struct DSIntegerClass) {
-            .isa            = &DSIntegerClass,
-            .superclass     = &DSNumberClass,
-            .name           = "DSInteger",
-            .Create         = $DSInteger,
-            .Equals         = DSObjectClass.Equals,
-            .GetHashCode    = DSObjectClass.GetHashCode,
-            .Dispose        = DSObjectClass.Dispose,
-            .ReferenceEquals= DSObjectClass.ReferenceEquals,
-            .InstanceEquals = DSObjectClass.InstanceEquals,
-            .ToString       = DSInteger_ToString,
-            .CompareTo      = DSInteger_CompareTo,
-            .IntValue       = DSInteger_IntValue, 
-            .LongValue      = DSInteger_LongValue, 
-            .FloatValue     = DSInteger_FloatValue, 
-            .DoubleValue    = DSInteger_DoubleValue, 
-            .CharValue      = DSInteger_CharValue, 
-            .ShortValue     = DSInteger_ShortValue, 
-        };
-        AddMetadata(DSIntegerClass);
-    }
-    return &DSIntegerClass;
-}
+DSDefine(DSInteger, DSNumber, cls, {
+    cls->ToString       = DSInteger_ToString;
+    cls->CompareTo      = DSInteger_CompareTo;
+    cls->IntValue       = DSInteger_IntValue;
+    cls->LongValue      = DSInteger_LongValue; 
+    cls->FloatValue     = DSInteger_FloatValue; 
+    cls->DoubleValue    = DSInteger_DoubleValue;
+    cls->CharValue      = DSInteger_CharValue;
+    cls->ShortValue     = DSInteger_ShortValue; 
+    cls->Create         = $DSInteger;
+});
 

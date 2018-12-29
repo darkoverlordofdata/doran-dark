@@ -62,6 +62,7 @@ struct ParticleGeneratorClass
     // Render all particles
     void    (*Draw)                 (ParticleGenerator* const);
     // Initializes buffer and vertex attributes
+    
 } ParticleGeneratorClass;
 
 /**

@@ -58,6 +58,7 @@ struct GameLevelClass
     void        (*Draw)         (GameLevel* const, SpriteRenderer* renderer);
     // Check if the level is completed (all non-solid tiles are des troyed)
     bool        (*IsCompleted)  (GameLevel* const *);
+    
 } GameLevelClass;
 
 /**

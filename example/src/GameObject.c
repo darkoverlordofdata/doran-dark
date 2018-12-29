@@ -44,7 +44,7 @@ GameObject* $GameObject(
     Vec2 Size, 
     Texture2D* Sprite, 
     Vec3 Color) { 
-    return GameObject_Ctor(new(GameObject), name, Position, Size, Sprite, Color);
+    return GameObject_Ctor(DSNew(GameObject), name, Position, Size, Sprite, Color);
 }
 
 /**
@@ -71,7 +71,7 @@ char* overload ToString(GameObject* const this)
 /**
  * GameObject Class Metadata
  */
-register (GameObject)
+DSMetaClass (GameObject)
 {
     if (GameObjectClass.isa == nullptr) {
         GameObjectClass = (struct GameObjectClass) {
@@ -87,7 +87,7 @@ register (GameObject)
             .InstanceEquals = DSObjectClass.InstanceEquals,
             .Draw           = Draw,
         };
-        AddMetadata(GameObjectClass);
+        DSAddMetadata(GameObjectClass);
     }
     return &GameObjectClass;
 }

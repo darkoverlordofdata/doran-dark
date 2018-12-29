@@ -106,13 +106,13 @@ char* overload ToString(SpriteRenderer* const this)
 }
 
 SpriteRenderer* $SpriteRenderer(Shader* shader) { 
-    return SpriteRenderer_Ctor(new(SpriteRenderer), shader);
+    return SpriteRenderer_Ctor(DSNew(SpriteRenderer), shader);
 }
 
 /**
  * SpriteRenderer Class Metadata
  */
-register (SpriteRenderer)
+DSMetaClass (SpriteRenderer)
 {
     if (SpriteRendererClass.isa == nullptr) {
         SpriteRendererClass = (struct SpriteRendererClass) {
@@ -129,7 +129,7 @@ register (SpriteRenderer)
             .DrawSprite         = DrawSprite,
             .Dispose            = Dispose,
         };
-        AddMetadata(SpriteRendererClass);
+        DSAddMetadata(SpriteRendererClass);
     }
     return &SpriteRendererClass;
 }

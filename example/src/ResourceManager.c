@@ -42,8 +42,8 @@ static Shader* loadShaderFromFile(
     FILE* vertexShaderFile = fopen(vFile, "r");
     FILE* fragmentShaderFile = fopen(fFile, "r");
 
-    if (!vertexShaderFile) printf("Unable to open %s\n", vShaderFile);
-    if (!fragmentShaderFile) printf("Unable to open %s\n", fShaderFile);
+    if (!vertexShaderFile) DSLog("Unable to open %s", vShaderFile);
+    if (!fragmentShaderFile) DSLog("Unable to open %s", fShaderFile);
 
     // Read file's buffer contents into streams
     const GLchar *vShaderCode = rdbuf(vertexShaderFile);
@@ -182,13 +182,13 @@ static char* rdbuf(FILE* f)
 }
 
 ResourceManager* $ResourceManager() { 
-    return ResourceManager_Ctor(new(ResourceManager));
+    return ResourceManager_Ctor(DSNew(ResourceManager));
 }
 
 /**
  * ResourceManager Class Metadata
  */
-register (ResourceManager)
+DSMetaClass (ResourceManager)
 {
     if (ResourceManagerClass.isa == nullptr) {
         ResourceManagerClass = (struct ResourceManagerClass) {
@@ -213,7 +213,7 @@ register (ResourceManager)
             .Textures           = $DSHashmap(),
 
         };
-        AddMetadata(ResourceManagerClass);
+        DSAddMetadata(ResourceManagerClass);
         Resources = &ResourceManagerClass;
     }
     return &ResourceManagerClass;

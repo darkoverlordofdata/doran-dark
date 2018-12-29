@@ -27,7 +27,7 @@ SOFTWARE.
 /* 
  * Throws IndexOutOfBoundsException:
  */
-static Exception(IndexOutOfBounds);
+static DSException(IndexOutOfBounds);
 
 /**
  * Constructor
@@ -47,7 +47,7 @@ DSString* String_Ctor(DSString* const this, char* value)
 
 
 // DSString* _(char* value) {
-//     return String_Ctor(new(String), value);
+//     return String_Ctor(DSNew(String), value);
 // }
 
 void String_GetChars(DSString* this, char* dst, int dstBegin) {
@@ -173,7 +173,7 @@ char String_CharAt(DSString* const this, int index)
 {
     printf("string %d,%d %s\n", index, this->length, this->value);
     if (index < 0 || index >= this->length)
-        return IndexOutOfBoundsException("at index %d", index);
+        return DSIndexOutOfBoundsException("at index %d", index);
     return this->value[index];
 }
  
@@ -191,13 +191,13 @@ void String_Dispose(DSString* const this)
  * Shortcut for a new string object
  */
 DSString* $(const char* const str) {
-    return String_Ctor(new(DSString), str); 
+    return String_Ctor(DSNew(DSString), str); 
 }
 
 /**
  * String Class Metadata
  */
-register (DSString)
+DSMetaClass (DSString)
 {
     if (DSStringClass.isa == nullptr) {
         $$, DSStringClass = (struct DSStringClass) {
@@ -230,7 +230,7 @@ register (DSString)
             .ToUpperCase    = String_ToUpperCase,
             .Trim           = String_Trim,
         };
-        AddMetadata(DSStringClass);
+        DSAddMetadata(DSStringClass);
     }
     return &DSStringClass;
 }

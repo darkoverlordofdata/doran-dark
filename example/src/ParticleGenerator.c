@@ -123,7 +123,7 @@ static void init(ParticleGenerator* this)
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
     glBindVertexArray(0);
 
-    this->particles = allocate(Particle, this->amount);
+    this->particles = DSMalloc(sizeof(Particle) * this->amount);
 }
 
 // Stores the index of the last particle used (for quick access to next dead particle)
@@ -175,13 +175,13 @@ ParticleGenerator* $ParticleGenerator(
     Shader* shader, 
     Texture2D* texture, 
     int amount) { 
-    return ParticleGenerator_Ctor(new(ParticleGenerator), shader, texture, amount);
+    return ParticleGenerator_Ctor(DSNew(ParticleGenerator), shader, texture, amount);
 }
 
 /**
  * ParticleGenerator Class Metadata
  */
-register (ParticleGenerator)
+DSMetaClass (ParticleGenerator)
 {
     if (ParticleGeneratorClass.isa == nullptr) {
         ParticleGeneratorClass = (struct ParticleGeneratorClass) {
@@ -198,7 +198,7 @@ register (ParticleGenerator)
             .Update         = Update,
             .Draw           = Draw,
         };
-        AddMetadata(ParticleGeneratorClass);
+        DSAddMetadata(ParticleGeneratorClass);
     }
     return &ParticleGeneratorClass;
 }

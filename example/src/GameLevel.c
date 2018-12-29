@@ -128,7 +128,7 @@ static void init(
     GLuint width = Length(row); // Note we can index vector at [0] since this function is only called if height > 0
     GLfloat unit_width = levelWidth / (GLfloat)width, unit_height = levelHeight / height; 
     // Initialize level tiles based on tileData		
-    printf("(%d,%d)\n", height, width);
+    DSLog("(%d,%d)", height, width);
     for (GLuint y = 0; y < height; ++y)
     {
         for (GLuint x = 0; x < width; ++x)
@@ -179,12 +179,12 @@ GameLevel* $GameLevel(
     const GLchar *file, 
     int levelWidth, 
     int levelHeight) { 
-    return GameLevel_Ctor(new(GameLevel), file, levelWidth, levelHeight); 
+    return GameLevel_Ctor(DSNew(GameLevel), file, levelWidth, levelHeight); 
 }
 /**
  * Register the GameLevel Class runtime Metadata
  */
-register (GameLevel)
+DSMetaClass (GameLevel)
 {
     if (GameLevelClass.isa == nullptr) {
         GameLevelClass = (struct GameLevelClass) {
@@ -202,7 +202,7 @@ register (GameLevel)
             .Draw           = Draw,
             .IsCompleted    = IsCompleted,
         };
-        AddMetadata(GameLevelClass);
+        DSAddMetadata(GameLevelClass);
     }
     return &GameLevelClass;
 }

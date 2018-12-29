@@ -57,6 +57,7 @@ struct ResourceManagerClass
     Shader*      (*loadShaderFromFile)   (const GLchar *vShaderFile, const GLchar *fShaderFile);
     // Loads a single texture from file
     Texture2D*   (*loadTextureFromFile)  (const GLchar *file, GLboolean alpha);
+    
 } ResourceManagerClass;
 
 static Shader* loadShaderFromFile(const GLchar *vShaderFile, const GLchar *fShaderFile);

@@ -51,6 +51,7 @@ struct ShaderClass
     Shader*  (*SetArray4)    (Shader* const, const GLchar *name, GLfloat *value);
     Shader*  (*SetMatrix4)   (Shader* const, const GLchar *name, GLfloat *matrix);
     Shader*  (*SetMatrix)    (Shader* const, const GLchar *name, GLfloat *matrix);
+    
 } ShaderClass;
 
 /**

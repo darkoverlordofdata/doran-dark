@@ -45,7 +45,7 @@ static const int MajorVersion = 0;
 static const int MinorVersion = 0;
 static const int BuildVersion = 1;
 
-#include "core.h"
+#include "DSLog.h"
 #include "DSObject.h"
 #include "DSComparable.h"
 #include "collections/DSArray.h"
@@ -64,7 +64,6 @@ static const int BuildVersion = 1;
 
 // #include "io/DSFile.h"
 // #include "io/DSFileSystem.h"
-#include "DSLog.h"
 
 
 

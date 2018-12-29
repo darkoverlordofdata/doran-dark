@@ -27,7 +27,7 @@ SOFTWARE.
 /* 
  * Throws LongFormatException:
  */
-static Exception(LongFormat);
+static DSException(LongFormat);
 
 /**
  * Constructor
@@ -47,18 +47,18 @@ DSLong* DSLong_Ctor(DSLong* const this, long value)
 /**
  * Returns a primitive long value parsed from input string. 
  */
-long DSLong_ParseLong(char* const s, int radix)
+long DSParseLong(char* const s, int radix)
 {
     errno = 0;
     char* endptr;
     long result = strtol(s, endptr, radix);
 
     if (errno != 0)
-        return LongFormatException(
+        return DSLongFormatException(
             "Invalid input. Value:\"%s\" Radix: %d", s, radix);
 
     if (s == endptr || *endptr != '\0')
-        return LongFormatException(
+        return DSLongFormatException(
             "Invalid input. Value:\"%s\" Radix: %d", s, radix);
 
     return result;
@@ -142,37 +142,50 @@ char* DSLong_ToString(DSLong* const this)
 
 DSLong* $DSLong(long value) { 
     printf("DSLong* Create(%d);\n", value);
-    return DSLong_Ctor(new(DSLong), value); 
+    return DSLong_Ctor(DSNew(DSLong), value); 
 }
 
 /**
  * Long Class Metadata
  */
-register (DSLong)
-{
-    if (DSLongClass.isa == nullptr) {
-        DSLongClass = (struct DSLongClass) {
-            .isa            = &DSLongClass,
-            .superclass     = &DSNumberClass,
-            .name           = "DSLong",
-            .Create         = $DSLong,
-            .Equals         = DSObjectClass.Equals,
-            .GetHashCode    = DSObjectClass.GetHashCode,
-            .Dispose        = DSObjectClass.Dispose,
-            .ReferenceEquals= DSObjectClass.ReferenceEquals,
-            .InstanceEquals = DSObjectClass.InstanceEquals,
-            .Equals         = DSLong_Equals,
-            .ToString       = DSLong_ToString,
-            .CompareTo      = DSLong_CompareTo,
-            .IntValue       = DSLong_IntValue, 
-            .LongValue      = DSLong_LongValue, 
-            .FloatValue     = DSLong_FloatValue, 
-            .DoubleValue    = DSLong_DoubleValue, 
-            .CharValue      = DSLong_CharValue, 
-            .ShortValue     = DSLong_ShortValue, 
-        };
-        AddMetadata(DSLongClass);
-    }
-    return &DSLongClass;
-}
+DSDefine(DSLong, DSNumber, cls, {
+    cls->ToString       = DSLong_ToString;
+    cls->CompareTo      = DSLong_CompareTo;
+    cls->Equals         = DSLong_Equals;
+    cls->IntValue       = DSLong_IntValue;
+    cls->LongValue      = DSLong_LongValue; 
+    cls->FloatValue     = DSLong_FloatValue; 
+    cls->DoubleValue    = DSLong_DoubleValue;
+    cls->CharValue      = DSLong_CharValue;
+    cls->ShortValue     = DSLong_ShortValue; 
+    cls->Create         = $DSLong;
+});
+
+// DSMetaClass (DSLong)
+// {
+//     if (DSLongClass.isa == nullptr) {
+//         DSLongClass = (struct DSLongClass) {
+//             .isa            = &DSLongClass,
+//             .superclass     = &DSNumberClass,
+//             .name           = "DSLong",
+//             .Create         = $DSLong,
+//             .Equals         = DSObjectClass.Equals,
+//             .GetHashCode    = DSObjectClass.GetHashCode,
+//             .Dispose        = DSObjectClass.Dispose,
+//             .ReferenceEquals= DSObjectClass.ReferenceEquals,
+//             .InstanceEquals = DSObjectClass.InstanceEquals,
+//             .Equals         = DSLong_Equals,
+//             .ToString       = DSLong_ToString,
+//             .CompareTo      = DSLong_CompareTo,
+//             .IntValue       = DSLong_IntValue, 
+//             .LongValue      = DSLong_LongValue, 
+//             .FloatValue     = DSLong_FloatValue, 
+//             .DoubleValue    = DSLong_DoubleValue, 
+//             .CharValue      = DSLong_CharValue, 
+//             .ShortValue     = DSLong_ShortValue, 
+//         };
+//         DSAddMetadata(DSLongClass);
+//     }
+//     return &DSLongClass;
+// }
 

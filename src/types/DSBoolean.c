@@ -39,7 +39,7 @@ DSBoolean* DSBoolean_Ctor(DSBoolean* this, bool value)
     return this;
 }
 
-bool ParseBool(const char * const s)
+bool DSParseBool(const char * const s)
 {
     if (!strcmpi("y", s) 
     ||  !strcmpi("yes", s) 
@@ -87,50 +87,33 @@ char* overload ToString(const DSBoolean*  const this)
 }
 
 DSBoolean* $DSBoolean(bool value) { 
-    return DSBoolean_Ctor(new(DSBoolean), value); 
+    return DSBoolean_Ctor(DSNew(DSBoolean), value); 
 }
 
+/** class constant: True */
+static const DSBoolean True = {
+    .isa  = &DSBooleanClass,
+    .value = true
+};
+
+/** class constant: False */
+static const DSBoolean False = {
+    .isa  = &DSBooleanClass,
+    .value = false
+};
 
 /**
  * DSBoolean Class Metadata
  */
-register (DSBoolean)
-{
-    /** class constant: True */
-    static const DSBoolean True = {
-        .isa  = &DSBooleanClass,
-        .value = true
-    };
-    /** class constant: False */
-    static const DSBoolean False = {
-        .isa  = &DSBooleanClass,
-        .value = false
-    };
-
-    if (DSBooleanClass.isa == nullptr) {
-        DSBooleanClass = (struct DSBooleanClass) {
-            .isa            = &DSBooleanClass,
-            .superclass     = &DSComparableClass,
-            .name           = "DSBoolean",
-            /** Instance members */
-            .Equals         = DSObjectClass.Equals,
-            .GetHashCode    = DSObjectClass.GetHashCode,
-            .Dispose        = DSObjectClass.Dispose,
-            .ReferenceEquals= DSObjectClass.ReferenceEquals,
-            .InstanceEquals = DSObjectClass.InstanceEquals,
-            .ToString       = ToString,
-            .CompareTo      = CompareTo,
-            /** Class members */
-            .BoolValue      = BoolValue,
-            .Bytes          = BOOLEAN_BYTES,
-            .Size           = BOOLEAN_SIZE,
-            .Type           = BOOLEAN_TYPE,
-            .True           = &True,
-            .False          = &False,
-            .Create         = $DSBoolean,
-        };
-        AddMetadata(DSBooleanClass);
-    }
-    return &DSBooleanClass;
-}
+DSDefine(DSBoolean, DSComparable, cls, {
+    cls->ToString       = ToString;
+    cls->CompareTo      = CompareTo;
+    cls->BoolValue      = BoolValue;
+    cls->Bytes          = BOOLEAN_BYTES;
+    cls->Size           = BOOLEAN_SIZE;
+    cls->Type           = BOOLEAN_TYPE;
+    cls->True           = &True;
+    cls->False          = &False;
+    cls->Create         = $DSBoolean;
+});
 

@@ -43,6 +43,12 @@ DSMalloc(int);
 DSRealloc(void*, int);
 DSCalloc(int, int);
 DSCollect();
+DSParseBool(char*);
+DSParseShort(char*);
+DSParseInt(char*);
+DSParseLong(char*);
+DSParseFloat(char*);
+DSParseDouble(char*);
 
 
 ```c

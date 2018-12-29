@@ -110,13 +110,13 @@ BallObject* $BallObject(
     float Radius, 
     Vec2 Velocity, 
     Texture2D* Sprite) {
-    return BallObject_Ctor(new(BallObject), Position, Radius, Velocity, Sprite); 
+    return BallObject_Ctor(DSNew(BallObject), Position, Radius, Velocity, Sprite); 
 }
 
 /**
  * BallObject Class Metadata
  */
-register (BallObject)
+DSMetaClass (BallObject)
 {
     if (BallObjectClass.isa == nullptr) {
         BallObjectClass = (struct BallObjectClass) {
@@ -134,7 +134,7 @@ register (BallObject)
             .Reset          = Reset,
             .Draw           = Draw,
         };
-        AddMetadata(BallObjectClass);
+        DSAddMetadata(BallObjectClass);
     }
     return &BallObjectClass;
 }

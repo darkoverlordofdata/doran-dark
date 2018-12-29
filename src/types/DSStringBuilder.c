@@ -56,7 +56,7 @@ SOFTWARE.
 /* 
  * Throws OutOfMemoryException:
  */
-static Exception(OutOfMemory);
+static DSException(OutOfMemory);
 
 /* 
  * Constructor
@@ -99,7 +99,7 @@ int StringBuilder_Append(DSStringBuilder* this, const char *str)
 	length = strlen(str);
 	frag = (StringFragment*) DSCalloc(1, sizeof(struct StringFragment));
 	if (nullptr == frag)
-		return OutOfMemoryException("StringBuilder::Append");
+		return DSOutOfMemoryException("StringBuilder::Append");
 
 	frag->next = nullptr;
 	frag->length = length;
@@ -131,7 +131,7 @@ int StringBuilder_Appendf(DSStringBuilder* this, const char *format, ...)
 	va_end(args);
 
 	if (0 > len)
-		return OutOfMemoryException("StringBuilder::Append");
+		return DSOutOfMemoryException("StringBuilder::Append");
 
 	return StringBuilder_Append(this, buf);
 }
@@ -194,13 +194,13 @@ char* StringBuilder_ToString(DSStringBuilder* this)
 }
 
 DSStringBuilder* $DSStringBuilder() { 
-	return StringBuilder_Ctor(new(DSStringBuilder)); 
+	return StringBuilder_Ctor(DSNew(DSStringBuilder)); 
 }
 
 /**
  * StringBuilder Class Metadata
  */
-register (DSStringBuilder)
+DSMetaClass (DSStringBuilder)
 {
 	if (DSStringBuilderClass.isa == nullptr) {
 		DSStringBuilderClass = (struct DSStringBuilderClass) {
@@ -221,7 +221,7 @@ register (DSStringBuilder)
 			.Empty     		= StringBuilder_Empty,
 			.Reset     		= StringBuilder_Reset,
 		};
-        AddMetadata(DSStringBuilderClass);
+        DSAddMetadata(DSStringBuilderClass);
 	}
 	return &DSStringBuilderClass;
 }
