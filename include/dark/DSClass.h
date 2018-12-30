@@ -27,18 +27,27 @@ SOFTWARE.
 #ifndef _CLASS_H_
 #define _CLASS_H_
 #include "core.h"
-
 /**
  * Class
  */
-typedef struct Class Class;
-struct Class {
-	Class* isa;
-	Class* superclass;
+typedef struct objc_class *Class;
+struct objc_class {
+	Class isa;
+	Class super_class;
 	char* name;
     long info;
     long instance_size;
 };
+
+/**
+ * Id
+ */
+typedef struct objc_object {
+    Class isa;
+} *id;
+
+static inline char* typename(id obj) { return obj->isa->name; }
+static inline UInt64 typeid(id obj) { return (UInt64)obj->isa; }
 
 /**
  * DSClass 
@@ -47,8 +56,13 @@ struct Class {
  * DSClass holds the list of classes.
  */
 struct DSClass {
+    Class isa;
+    Class superclass;
+    char* name;
+    long info; 
+    long instance_size;
     long count;
-    Class* classes[100];
+    Class classes[100];
 } DSClass;
 
 /**
@@ -57,7 +71,7 @@ struct DSClass {
  */
 #define class(name) \
     typedef struct name name;   /* define name */ \
-    Class* DSDefine##name();    /* forward reference DSDefinexxx() */ \ 
+    Class DSDefine##name();    /* forward reference DSDefinexxx() */ \ 
     struct name
 
 /**
@@ -78,11 +92,13 @@ struct DSClass {
  */
 #define MAJIK   0xd16a000000000000
 #define MUGGLE  0x00000000ffffffff
-
 #define LSB04   0x000000000000ffff
 #define LSB40   0x00000000ffff0000
 #define MSB04   0x0000ffff00000000
 #define MSB40   0xffff000000000000
+
+#define ISA_MASK 0x00007ffffffffff8ULL
+
 
 /**
  *  MACRO class_alloc
@@ -94,7 +110,7 @@ struct DSClass {
  *  MACRO class_isa
  *      returns a muggled isa ptr from a class
  */
-#define class_isa(cls) ((Class*)(((UInt64)cls->isa)&MUGGLE))
+#define class_isa(cls) ((Class)(((UInt64)cls->isa)&MUGGLE))
 
 /**
  *  MACRO DSDefine
@@ -110,7 +126,7 @@ struct DSClass {
  * @param block of custom settings
  */
 #define DSDefine(class, super, var, block) \
-Class* class_load##class() \
+Class class_load##class() \
 {   /* set defaults */ \
     class##Class = (struct class##Class) { \
         .isa            = (MAJIK | (UInt64)ISA(class)), \

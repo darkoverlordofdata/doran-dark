@@ -49,8 +49,8 @@ class (DSList)
 
 struct DSListClass
 {
-    Class*  isa;
-    Class*  superclass;
+    Class  isa;
+    Class  superclass;
     char*   name;
     long    info, instance_size;
     char*   (*ToString) (DSList* const);

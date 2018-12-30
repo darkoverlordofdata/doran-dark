@@ -49,8 +49,8 @@ class (DSString)
  */
 struct DSStringClass
 {
-    Class*  isa;
-    Class*  superclass;
+    Class  isa;
+    Class  superclass;
     char*   name;
     long    info, instance_size;
     char*   (*ToString) (DSString* const);

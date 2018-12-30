@@ -44,8 +44,8 @@ class (DSComparable)
  */
 struct DSComparableClass
 {
-    Class*  isa;
-    Class*  superclass;
+    Class  isa;
+    Class  superclass;
     char*   name;
     long    info, instance_size;
     char*   (*ToString) (DSComparable* const);

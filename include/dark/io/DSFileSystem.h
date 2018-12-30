@@ -51,7 +51,7 @@ cyclic_reference(File);
 
 class (FileSystem)
 {
-    Class* isa;
+    Class isa;
     char*       (*ToString)(Object const);
     bool        (*Equals)(Object const, Object const);
     int         (*GetHashCode)(Object const);

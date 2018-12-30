@@ -33,8 +33,16 @@ SOFTWARE.
  */
 void __attribute__((constructor(101))) DSClassBoot() 
 {
-    DSClass = (struct DSClass) { .count = 1, .classes = { class_loadDSObject() } };
+    DSClass = (struct DSClass) { 
+        .isa            = &DSClass,
+        .superclass     = &DSClass,
+        .name           = "DSClass",
+        .instance_size  = sizeof(DSClass),
+        .count          = 1, 
+        .classes        = { &DSClass } 
+    };
 
+    class_loadDSObject();
     class_loadDSComparable();
     class_loadDSCollection();
     class_loadDSArray();
@@ -51,10 +59,8 @@ void __attribute__((constructor(101))) DSClassBoot()
     class_loadDSString();
     class_loadDSStringBuilder();
 
-    for (int i=0; DSClass.classes[i] != nullptr; i++) {
-        // DSLog(DSClass.classes[i]->isa->name);
-        Class* c = class_isa(DSClass.classes[i]);
-        DSLog(c->name);
-    }
+    // for (int i=0; DSClass.classes[i] != nullptr; i++) {
+    //     DSLog(class_isa(DSClass.classes[i])->name);
+    // }
 
 }

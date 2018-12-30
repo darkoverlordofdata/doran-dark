@@ -36,8 +36,8 @@ class (Texture2D)
 
 struct Texture2DClass
 {
-    Class*  isa;
-    Class*  superclass;
+    Class  isa;
+    Class  superclass;
     char*   name;
     long    info, instance_size;
     char*   (*ToString) (Texture2D* const);

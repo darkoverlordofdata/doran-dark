@@ -43,8 +43,8 @@ class (GameObject)
 
 struct GameObjectClass
 {
-    Class*  isa;
-    Class*  superclass;
+    Class  isa;
+    Class  superclass;
     char*   name;
     long    info, instance_size;
     char*   (*ToString) (GameObject* const);

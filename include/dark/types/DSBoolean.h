@@ -49,8 +49,8 @@ class (DSBoolean)
  */
 struct DSBooleanClass
 {
-    Class*  isa;
-    Class*  superclass;
+    Class  isa;
+    Class  superclass;
     char*   name;
     long    info, instance_size;
     char*   (*ToString) (const DSBoolean* const);

@@ -51,8 +51,8 @@ class (DSFloat)
  */
 struct DSFloatClass
 {
-    Class*  isa;
-    Class*  superclass;
+    Class  isa;
+    Class  superclass;
     char*   name;
     long    info, instance_size;
     char*   (*ToString) (DSFloat* const);

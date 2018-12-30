@@ -113,7 +113,7 @@ static int Virtual_GetHashCode(const DSObject* const this)
     return (int)this;
 }
 
-Class* GetClass(const DSObject* const this)
+Class GetClass(const DSObject* const this)
 {
     return &this->isa;
 }
@@ -129,7 +129,7 @@ DSObject* $DSObject() {
 /**
  * Object Class Metadata
  */
-Class* class_loadDSObject() {
+Class class_loadDSObject() {
     DSObjectClass = (struct DSObjectClass) {
         .isa            = ISA(DSObject),
         .superclass     = ISA(DS),
@@ -143,6 +143,8 @@ Class* class_loadDSObject() {
         .ReferenceEquals= ReferenceEquals,
         .InstanceEquals = InstanceEquals
     };
+    DSClass.classes[DSClass.count++] = ISA(DSObject); 
+
     return ISA(DSObject);
 }
 

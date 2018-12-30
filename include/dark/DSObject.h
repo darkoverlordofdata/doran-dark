@@ -43,11 +43,9 @@ SOFTWARE.
  *  + ivar definition must be the same across an inheritance chain.
  * 
  */
-class (DSObject) {
+typedef struct DSObject {
 	const struct DSObjectClass* isa;
-};
-
-typedef DSObject id;
+} DSObject;
 
 /**
  * Object Class/MetaClass
@@ -61,8 +59,8 @@ typedef DSObject id;
  */
 struct DSObjectClass 
 {
-    Class*  isa;
-    Class*  superclass;
+    Class   isa;
+    Class   superclass;
     char*   name;
     long    info, instance_size;
     char*   (*ToString) (const DSObject* const);
@@ -75,14 +73,10 @@ struct DSObjectClass
 
 } DSObjectClass;
 
-static inline char* typename(id* obj) { return obj->isa->name; }
-static inline UInt64 typeid(id* obj) { return (UInt64)obj->isa; }
-
-
 /**
  * Object API
  */
-Class* GetClass(const DSObject* const);
+Class GetClass(const DSObject* const);
 char* GetClassName(const DSObject* const);
 bool ReferenceEquals(const DSObject* const, const DSObject* const);
 bool InstanceEquals(const DSObject* const, const DSObject* const);
@@ -97,5 +91,6 @@ void overload Dispose(DSObject* const);
 DSObject* DSObject_init(DSObject* const);
 DSObject* DSObject_Dtor(DSObject*);
 
+Class DSDefineDSObject();
 
 #endif _DSOBJECT_H_ 

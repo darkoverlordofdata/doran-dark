@@ -37,7 +37,7 @@ SOFTWARE.
  * Object class
  */
 class ({{ name }}) {
-	const struct {{ name }}Class* isa;
+	const struct {{ name }}Class isa;
 };
 
 
@@ -46,8 +46,8 @@ class ({{ name }}) {
  */
 struct {{ name }}Class 
 {
-    Class*  isa;
-    Class*  superclass;
+    Class  isa;
+    Class  superclass;
     char*   name;
     char*   (*ToString) (const DSObject* const);
     bool    (*Equals) (const DSObject* const, const DSObject* const);

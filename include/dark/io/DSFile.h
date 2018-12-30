@@ -37,7 +37,7 @@ typedef enum { PS_UNCHECKED, PS_INVALID, PS_CHECKED } PathStatus;
 
 class (File)
 {
-    Class* isa;
+    Class isa;
     char*       (*ToString)(Object const);
     bool        (*Equals)(Object const, Object const);
     int         (*GetHashCode)(Object const);

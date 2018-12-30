@@ -51,8 +51,8 @@ class (DSLong)
  */
 struct DSLongClass
 {
-    Class*  isa;
-    Class*  superclass;
+    Class  isa;
+    Class  superclass;
     char*   name;
     long    info, instance_size;
     char*   (*ToString) (DSLong* const);

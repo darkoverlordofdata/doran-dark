@@ -26,7 +26,7 @@ Game* Breakout;
 
 int main(int argc, char *argv[])
 {
-    DSLog("Hello Horld %d", (sizeof(int)));
+    DSLog("Hello Horld %d", (log2(sizeof(char*))));
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);

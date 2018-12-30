@@ -41,8 +41,8 @@ class (BallObject)
 
 struct BallObjectClass
 {
-    Class*  isa;
-    Class*  superclass;
+    Class  isa;
+    Class  superclass;
     char*   name;
     long    info, instance_size;
     char*   (*ToString) (BallObject* const);
