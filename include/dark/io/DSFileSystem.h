@@ -51,18 +51,11 @@ cyclic_reference(File);
 
 class (FileSystem)
 {
-    union {
-        DObject_t _;
-        struct 
-        {
-            Class isa;
-            retained
-            char*       (*ToString)(Object const);
-            bool        (*Equals)(Object const, Object const);
-            int         (*GetHashCode)(Object const);
-            void        (*Dispose) (Object const);
-        };
-    };
+    Class* isa;
+    char*       (*ToString)(Object const);
+    bool        (*Equals)(Object const, Object const);
+    int         (*GetHashCode)(Object const);
+    void        (*Dispose) (Object const);
 
     char                slash;
     char                semicolon;

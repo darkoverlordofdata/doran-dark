@@ -31,16 +31,16 @@ SOFTWARE.
  * @param value of char
  * 
  */
-DSChar* DSChar_Ctor(DSChar* const this, char value)
+DSChar* DSChar_init(DSChar* const this, char value)
 {
-    DSNumber_Ctor(this);
-    this->isa = isa(DSChar);
+    DSNumber_init(this);
+    this->isa = ISA(DSChar);
     this->value = value;
     return this;
 }
 
 DSChar* $DSChar(char value) { 
-    return DSChar_Ctor(DSNew(DSChar), value); 
+    return DSChar_init(class_alloc(DSChar), value); 
 }
 
 /**

@@ -33,10 +33,10 @@ static DSException(AbstractMethod);
 /**
  * Initialize a new DSComparable
  */
-DSComparable* DSComparable_Ctor(DSComparable* const this)
+DSComparable* DSComparable_init(DSComparable* const this)
 {
-    DSObject_Ctor(this);
-    this->isa = isa(DSComparable);
+    DSObject_init(this);
+    this->isa = &DSComparableClass;
     return this;
 }
 
@@ -59,23 +59,8 @@ static char* Virtual_ToString(DSComparable* const this) {
 /**
  * DSComparable Class Metadata
  */
-DSMetaClass (DSComparable)
-{
-    if (DSComparableClass.isa == nullptr) {
-        DSComparableClass = (struct DSComparableClass) {
-            .isa             = &DSComparableClass,
-            .superclass      = &DSObjectClass,
-            .name            = "DSComparable",
-            .ToString        = Virtual_ToString,
-            .CompareTo       = Abstract_CompareTo,
-            .Equals          = DSObjectClass.Equals,
-            .GetHashCode     = DSObjectClass.GetHashCode,
-            .Dispose         = DSObjectClass.Dispose,
-            .ReferenceEquals = DSObjectClass.ReferenceEquals,
-            .InstanceEquals  = DSObjectClass.InstanceEquals,
-        };
-        DSAddMetadata(DSComparableClass);
-    }
-    return &DSComparableClass;
-}
+DSDefine(DSComparable, DSObject, cls, {
+    cls->ToString        = Virtual_ToString;
+    cls->CompareTo       = Abstract_CompareTo;
+});
 

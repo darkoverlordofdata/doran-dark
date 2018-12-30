@@ -36,10 +36,10 @@ static DSException(LongFormat);
  * @param value of long
  * 
  */
-DSLong* DSLong_Ctor(DSLong* const this, long value)
+DSLong* DSLong_init(DSLong* const this, long value)
 {
-    DSNumber_Ctor(this);
-    this->isa = isa(DSLong);
+    DSNumber_init(this);
+    this->isa = ISA(DSLong);
     this->value = value;
     return this;
 }
@@ -142,7 +142,7 @@ char* DSLong_ToString(DSLong* const this)
 
 DSLong* $DSLong(long value) { 
     printf("DSLong* Create(%d);\n", value);
-    return DSLong_Ctor(DSNew(DSLong), value); 
+    return DSLong_init(class_alloc(DSLong), value); 
 }
 
 /**
@@ -160,32 +160,4 @@ DSDefine(DSLong, DSNumber, cls, {
     cls->ShortValue     = DSLong_ShortValue; 
     cls->Create         = $DSLong;
 });
-
-// DSMetaClass (DSLong)
-// {
-//     if (DSLongClass.isa == nullptr) {
-//         DSLongClass = (struct DSLongClass) {
-//             .isa            = &DSLongClass,
-//             .superclass     = &DSNumberClass,
-//             .name           = "DSLong",
-//             .Create         = $DSLong,
-//             .Equals         = DSObjectClass.Equals,
-//             .GetHashCode    = DSObjectClass.GetHashCode,
-//             .Dispose        = DSObjectClass.Dispose,
-//             .ReferenceEquals= DSObjectClass.ReferenceEquals,
-//             .InstanceEquals = DSObjectClass.InstanceEquals,
-//             .Equals         = DSLong_Equals,
-//             .ToString       = DSLong_ToString,
-//             .CompareTo      = DSLong_CompareTo,
-//             .IntValue       = DSLong_IntValue, 
-//             .LongValue      = DSLong_LongValue, 
-//             .FloatValue     = DSLong_FloatValue, 
-//             .DoubleValue    = DSLong_DoubleValue, 
-//             .CharValue      = DSLong_CharValue, 
-//             .ShortValue     = DSLong_ShortValue, 
-//         };
-//         DSAddMetadata(DSLongClass);
-//     }
-//     return &DSLongClass;
-// }
 

@@ -48,6 +48,7 @@ struct DSCollectionClass
     Class*  isa;
     Class*  superclass;
     char*   name;
+    long    info, instance_size;
     char*   (*ToString) (DSCollection* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
@@ -71,7 +72,7 @@ struct DSCollectionClass
  */
 int overload Length(DSCollection* const);
 void overload Add(DSCollection* const, Any);
-DSCollection* DSCollection_Ctor(DSCollection* const);
+DSCollection* DSCollection_init(DSCollection* const);
 
 /**
  * AddAll

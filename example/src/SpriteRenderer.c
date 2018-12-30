@@ -14,12 +14,12 @@
  * @param shader to use for rendering
  * 
  */
-SpriteRenderer*  SpriteRenderer_Ctor(
+SpriteRenderer*  SpriteRenderer_init(
     SpriteRenderer* const this, 
     Shader* shader)
 {
-	DSObject_Ctor(this);
-    this->isa = isa(SpriteRenderer);
+	DSObject_init(this);
+    this->isa = ISA(SpriteRenderer);
     this->shader = shader;
     initRenderData(this);
     return this;
@@ -106,31 +106,16 @@ char* overload ToString(SpriteRenderer* const this)
 }
 
 SpriteRenderer* $SpriteRenderer(Shader* shader) { 
-    return SpriteRenderer_Ctor(DSNew(SpriteRenderer), shader);
+    return SpriteRenderer_init(class_alloc(SpriteRenderer), shader);
 }
 
 /**
  * SpriteRenderer Class Metadata
  */
-DSMetaClass (SpriteRenderer)
-{
-    if (SpriteRendererClass.isa == nullptr) {
-        SpriteRendererClass = (struct SpriteRendererClass) {
-            .isa                = &SpriteRendererClass,
-            .superclass         = &DSObjectClass,
-            .name               = "SpriteRenderer",
-            .Create             = $SpriteRenderer,
-            .ToString           = ToString,
-            .Equals             = DSObjectClass.Equals,
-            .GetHashCode        = DSObjectClass.GetHashCode,
-            .Dispose            = DSObjectClass.Dispose,
-            .ReferenceEquals    = DSObjectClass.ReferenceEquals,
-            .InstanceEquals     = DSObjectClass.InstanceEquals,
-            .DrawSprite         = DrawSprite,
-            .Dispose            = Dispose,
-        };
-        DSAddMetadata(SpriteRendererClass);
-    }
-    return &SpriteRendererClass;
-}
+DSDefine(SpriteRenderer, DSObject, cls, {
+    cls->Create             = $SpriteRenderer;
+    cls->ToString           = ToString;
+    cls->DrawSprite         = DrawSprite;
+    cls->Dispose            = Dispose;
+});
 

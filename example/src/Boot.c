@@ -23,29 +23,27 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include <dark/Class.h>
+#include <dark/DSClass.h>
 #include <dark/darkfx.h>
 
-
+#define DEBUG_ON
 /**
- * Load the class metadata
- * 
- * Classes must be loaded before they can be used
+ * Class loader
  */
 void __attribute__((constructor)) ApplicationLoader() 
 {
-    DSLoadClass(BallObject);
-    DSLoadClass(Game);
-    DSLoadClass(GameLevel);
-    DSLoadClass(GameObject);
-    DSLoadClass(ParticleGenerator);
-    DSLoadClass(ResourceManager);
-    DSLoadClass(Shader);
-    DSLoadClass(SpriteRenderer);
-    DSLoadClass(Texture2D);
-    DSLoadClass(ResourceManager);
+    class_loadBallObject();
+    class_loadGame();
+    class_loadGameLevel();
+    class_loadGameObject();
+    class_loadParticleGenerator();
+    class_loadResourceManager();
+    class_loadShader();
+    class_loadSpriteRenderer();
+    class_loadTexture2D();
+    class_loadResourceManager();
     #ifdef DEBUG_ON
-    for (int i=0; Metadata.classes[i] != nullptr; i++) 
-        DSLog("%s", Metadata.classes[i]->isa->name);
+    // for (int i=0; DSClass.classes[i] != nullptr; i++) 
+    //     DSLog("%s", DSClass.classes[i]->isa->name);
     #endif
 }

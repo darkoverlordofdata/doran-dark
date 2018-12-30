@@ -14,14 +14,14 @@
  * @param ImageFormat for binding the image
  * 
  */
-Texture2D* Texture2D_Ctor(
+Texture2D* Texture2D_init(
     Texture2D* const this,
     int InternalFormat,
     int ImageFormat,
     char* path)
 {
-	DSObject_Ctor(this);
-    this->isa = isa(Texture2D);
+	DSObject_init(this);
+    this->isa = ISA(Texture2D);
     this->path = strdup(path);
     this->Width = 0;
     this->Height = 0;
@@ -82,33 +82,16 @@ char* overload ToString(Texture2D* const this)
  * Creates a new instance
  */
 Texture2D* $Texture2D(int InternalFormat, int ImageFormat, char* path) { 
-    return Texture2D_Ctor(DSNew(Texture2D), InternalFormat, ImageFormat, path);
+    return Texture2D_init(class_alloc(Texture2D), InternalFormat, ImageFormat, path);
 }
 
 /**
  * Texture2D Class Metadata
  */
-DSMetaClass (Texture2D)
-{
-    if (Texture2DClass.isa == nullptr) {
-        Texture2DClass = (struct Texture2DClass) {
-            .isa            = &Texture2DClass,
-            .superclass     = &DSObjectClass,
-            .name           = "Texture2D",
-            .Create         = $Texture2D,
-            .ToString       = ToString,
-            .Equals         = DSObjectClass.Equals,
-            .GetHashCode    = DSObjectClass.GetHashCode,
-            .Dispose        = DSObjectClass.Dispose,
-            .ReferenceEquals= DSObjectClass.ReferenceEquals,
-            .InstanceEquals = DSObjectClass.InstanceEquals,
-            .Generate       = Generate,
-            .Bind           = Bind,
-        };
-        DSAddMetadata(Texture2DClass);
-    }
-    
-    return &Texture2DClass;
-}
-
+DSDefine(Texture2D, DSObject, cls, {
+    cls->Create         = $Texture2D;
+    cls->ToString       = ToString;
+    cls->Generate       = Generate;
+    cls->Bind           = Bind;
+});
 

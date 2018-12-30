@@ -171,10 +171,10 @@ unsigned int overload HashInt(DSHashmap* const this, char* keystring)
 /**
  * Default Constructor
  */
-DSHashmap* DSHashmap_Ctor(DSHashmap* const this)
+DSHashmap* DSHashmap_init(DSHashmap* const this)
 {
-    DSObject_Ctor(this);
-    this->isa = isa(DSHashmap);
+    DSObject_init(this);
+    this->isa = ISA(DSHashmap);
 
     this->data = DSCalloc(INITIAL_SIZE, sizeof(DSHashmapNode));
 	this->tableSize = INITIAL_SIZE;
@@ -372,40 +372,23 @@ char* overload ToString(DSHashmap* const this)
 }
 
 DSHashmap* $DSHashmap() { 
-    return DSHashmap_Ctor(DSNew(DSHashmap)); 
+    return DSHashmap_init(class_alloc(DSHashmap)); 
 }
 
 /**
  * List Class Metadata
  */
-DSMetaClass (DSHashmap)
-{
-    if (DSHashmapClass.isa == nullptr) {
-        DSHashmapClass = (struct DSHashmapClass) {
-            .isa            = &DSHashmapClass,
-            .superclass     = &DSCollectionClass,
-            .name           = "DSHashmap",
-            .Create         = $DSHashmap,
-            .Equals         = DSObjectClass.Equals,
-            .GetHashCode    = DSObjectClass.GetHashCode,
-            .ReferenceEquals= DSObjectClass.ReferenceEquals,
-            .InstanceEquals = DSObjectClass.InstanceEquals,
-            .ToString       = ToString,
-            .ForEach        = ForEach,
-            .Put            = Put,
-            .Get            = Get,
-            .Remove         = Remove,
-            .Dispose        = Dispose,
-            .Length         = Length,
-            .HashInt        = HashInt,
-            .Hash           = Hash,
-            .Rehash         = Rehash,
-        };
-        DSAddMetadata(DSHashmapClass);
-    }
-    return &DSHashmapClass;
-}
-
-
-
+DSDefine(DSHashmap, DSCollection, cls, {
+    cls->Create         = $DSHashmap;
+    cls->ToString       = ToString;
+    cls->ForEach        = ForEach;
+    cls->Put            = Put;
+    cls->Get            = Get;
+    cls->Remove         = Remove;
+    cls->Dispose        = Dispose;
+    cls->Length         = Length;
+    cls->HashInt        = HashInt;
+    cls->Hash           = Hash;
+    cls->Rehash         = Rehash;
+});
 

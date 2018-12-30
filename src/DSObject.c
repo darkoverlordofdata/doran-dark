@@ -27,9 +27,9 @@ SOFTWARE.
 /**
  * DSObjectClass constructor
  */
-DSObject* DSObject_Ctor(DSObject* this)
+DSObject* DSObject_init(DSObject* this)
 {
-    this->isa = isa(DSObject);
+    this->isa = &DSObjectClass;// isa(DSObject);
     return this;
 }
 
@@ -123,29 +123,26 @@ char* GetClassName(const DSObject* const this)
 }
 
 DSObject* $DSObject() { 
-    return DSObject_Ctor(DSNew(DSObject)); 
+    return DSObject_init(class_alloc(DSObject)); 
 }
 
 /**
  * Object Class Metadata
  */
-DSMetaClass(DSObject)
-{
-    if (DSObjectClass.isa == nullptr) {
-        DSObjectClass = (struct DSObjectClass) {
-            .isa            = &DSObjectClass,
-            .superclass     = nullptr,
-            .name           = "DSObject",
-            .Create         = $DSObject,
-            .ToString       = Virtual_ToString,
-            .Equals         = Virtual_Equals,
-            .GetHashCode    = Virtual_GetHashCode,
-            .Dispose        = Virtual_Dispose,
-            .ReferenceEquals= ReferenceEquals,
-            .InstanceEquals = InstanceEquals,
-        };
-        // DSAddMetadata(Object);
-    }
-    return &DSObjectClass;
+Class* class_loadDSObject() {
+    DSObjectClass = (struct DSObjectClass) {
+        .isa            = ISA(DSObject),
+        .superclass     = ISA(DS),
+        .name           = "DSObject",
+        .instance_size  = sizeof(DSObject), 
+        .Create         = $DSObject,
+        .ToString       = Virtual_ToString,
+        .Equals         = Virtual_Equals,
+        .GetHashCode    = Virtual_GetHashCode,
+        .Dispose        = Virtual_Dispose,
+        .ReferenceEquals= ReferenceEquals,
+        .InstanceEquals = InstanceEquals
+    };
+    return ISA(DSObject);
 }
 

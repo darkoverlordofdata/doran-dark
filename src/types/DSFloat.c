@@ -36,10 +36,10 @@ static DSException(NumberFormat);
  * @param value of float
  * 
  */
-DSFloat* DSFloat_Ctor(DSFloat* const this, float value)
+DSFloat* DSFloat_init(DSFloat* const this, float value)
 {
-    DSNumber_Ctor(this);
-    this->isa = isa(DSFloat);
+    DSNumber_init(this);
+    this->isa = ISA(DSFloat);
     this->value = value;
     return this;
 }
@@ -131,7 +131,7 @@ char* DSFloat_ToString(DSFloat* const this)
 }
 
 DSFloat* $DSFloat(float value) { 
-    return DSFloat_Ctor(DSNew(DSFloat), value); 
+    return DSFloat_init(class_alloc(DSFloat), value); 
 }
 
 /**

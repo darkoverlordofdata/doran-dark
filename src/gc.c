@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/core.h>
-#include <dark/Class.h>
+#include <dark/DSClass.h>
 #include <stdlib.h>
 #include <gc.h>
 

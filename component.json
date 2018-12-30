@@ -16,7 +16,9 @@
   "source": "src",
   "files": [
     "src/dark.vapi",
+    "src/gc.c",
     "src/string.c", 
+    "src/DSClass.c", 
     "src/DSComparable.c", 
     "src/DSObject.c", 
     "src/collections/DSArray.c", 

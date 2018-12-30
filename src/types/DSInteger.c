@@ -36,10 +36,10 @@ static DSException(NumberFormat);
  * @param value of int
  * 
  */
-DSInteger* DSInteger_Ctor(DSInteger* const this, int value)
+DSInteger* DSInteger_init(DSInteger* const this, int value)
 {
-    DSNumber_Ctor(this);
-    this->isa = isa(DSInteger);
+    DSNumber_init(this);
+    this->isa = ISA(DSInteger);
     this->value = value;
     return this;
 }
@@ -129,7 +129,7 @@ char* DSInteger_ToString(DSInteger* const this)
 }
 
 DSInteger* $DSInteger(int value) { 
-    return DSInteger_Ctor(DSNew(DSInteger), value); 
+    return DSInteger_init(class_alloc(DSInteger), value); 
 }
 
 /**

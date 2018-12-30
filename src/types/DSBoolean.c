@@ -31,10 +31,10 @@ SOFTWARE.
  * @param value of bool
  * 
  */
-DSBoolean* DSBoolean_Ctor(DSBoolean* this, bool value)
+DSBoolean* DSBoolean_init(DSBoolean* this, bool value)
 {
-    DSComparable_Ctor(this);
-    this->isa = isa(DSBoolean);
+    DSComparable_init(this);
+    this->isa = ISA(DSBoolean);
     this->value = value;
     return this;
 }
@@ -86,8 +86,9 @@ char* overload ToString(const DSBoolean*  const this)
     return this->value ? "true" : "false";
 }
 
+
 DSBoolean* $DSBoolean(bool value) { 
-    return DSBoolean_Ctor(DSNew(DSBoolean), value); 
+    return DSBoolean_init(class_alloc(DSBoolean), value); 
 }
 
 /** class constant: True */

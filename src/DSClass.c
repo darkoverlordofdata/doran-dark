@@ -23,7 +23,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include <dark/Class.h>
+#include <dark/DSClass.h>
+#include <dark/DSLog.h>
 
 /**
  * Load the class metadata
@@ -31,28 +32,29 @@ SOFTWARE.
  * Classes must be loaded before they can be used
  */
 void __attribute__((constructor(101))) DSClassBoot() 
-{    
-    DSClass = (struct DSClass) { .count = 1, .classes = {DSLoadClass(DSObject)} };
+{
+    DSClass = (struct DSClass) { .count = 1, .classes = { class_loadDSObject() } };
 
-    DSLoadClass(DSComparable);
-    DSLoadClass(DSCollection);
-    DSLoadClass(DSArray);
-    DSLoadClass(DSList);
-    DSLoadClass(DSHashmap);
-    DSLoadClass(DSBoolean);
-    DSLoadClass(DSNumber);
-    DSLoadClass(DSChar);
-    DSLoadClass(DSDouble);
-    DSLoadClass(DSFloat);
-    DSLoadClass(DSInteger);
-    DSLoadClass(DSLong);
-    DSLoadClass(DSShort);
-    DSLoadClass(DSString);
-    DSLoadClass(DSStringBuilder);
+    class_loadDSComparable();
+    class_loadDSCollection();
+    class_loadDSArray();
+    class_loadDSList();
+    class_loadDSHashmap();
+    class_loadDSBoolean();
+    class_loadDSNumber();
+    class_loadDSChar();
+    class_loadDSDouble();
+    class_loadDSFloat();
+    class_loadDSInteger();
+    class_loadDSLong();
+    class_loadDSShort();
+    class_loadDSString();
+    class_loadDSStringBuilder();
 
-    // for (int i=0; Metadata.classes[i] != nullptr; i++) {
-    // // for (int i=0; i < Metadata.count; i++) {
-    //     printf("%s\n", Metadata.classes[i]->isa->name);
-    // }
+    for (int i=0; DSClass.classes[i] != nullptr; i++) {
+        // DSLog(DSClass.classes[i]->isa->name);
+        Class* c = class_isa(DSClass.classes[i]);
+        DSLog(c->name);
+    }
 
 }

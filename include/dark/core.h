@@ -35,6 +35,12 @@ SOFTWARE.
 #include <string.h>
 #include <assert.h>
 #include <stdarg.h>
+
+void* DSMalloc(size_t);
+void* DSRealloc(void*, size_t);
+void* DSCalloc(size_t, size_t);
+void DSFree(void*);
+void DSCollect();
 /**
  * Friendlier type names
  */
@@ -86,7 +92,8 @@ typedef enum
 } TYPES;
 
 /**
- * Count the number of arguments
+ *  MACRO NARG
+ *      Count the number of arguments
  */
 #define PP_NARG(...) \
          PP_NARG_(__VA_ARGS__,PP_RSEQ_N())
@@ -110,14 +117,17 @@ typedef enum
          9,8,7,6,5,4,3,2,1,0
 
 /**
- * String.join(..)
+ *  MACRO join
+ *      String.join(..)
  */
-char* STR_JOIN(int count, ...);
 #define join(...) STR_JOIN(PP_NARG(__VA_ARGS__), __VA_ARGS__)
+char* STR_JOIN(int count, ...);
 
 
 /**
- * Pseudo Exception
+ *  MACRO DSException
+ *      Pseudo Exception
+ * 
  * this just prints the message on the stderr
  * and then returns 0/NULL
  */

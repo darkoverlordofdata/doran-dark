@@ -20,14 +20,14 @@ static void respawnParticle(ParticleGenerator* this, struct Particle particle, G
  * @param amount number of particles to generate
  * 
  */
-ParticleGenerator* ParticleGenerator_Ctor(
+ParticleGenerator* ParticleGenerator_init(
     ParticleGenerator* const this, 
     Shader* shader, 
     Texture2D* texture, 
     int amount)
 {
-	DSObject_Ctor(this);
-    this->isa = isa(ParticleGenerator);
+	DSObject_init(this);
+    this->isa = ISA(ParticleGenerator);
     this->shader = shader;
     this->texture = texture;
     this->amount = amount;
@@ -175,31 +175,16 @@ ParticleGenerator* $ParticleGenerator(
     Shader* shader, 
     Texture2D* texture, 
     int amount) { 
-    return ParticleGenerator_Ctor(DSNew(ParticleGenerator), shader, texture, amount);
+    return ParticleGenerator_init(class_alloc(ParticleGenerator), shader, texture, amount);
 }
 
 /**
  * ParticleGenerator Class Metadata
  */
-DSMetaClass (ParticleGenerator)
-{
-    if (ParticleGeneratorClass.isa == nullptr) {
-        ParticleGeneratorClass = (struct ParticleGeneratorClass) {
-            .isa            = &ParticleGeneratorClass,
-            .superclass     = &DSObjectClass,
-            .name           = "ParticleGenerator",
-            .Create         = $ParticleGenerator,
-            .ToString       = ToString,
-            .Equals         = DSObjectClass.Equals,
-            .GetHashCode    = DSObjectClass.GetHashCode,
-            .Dispose        = DSObjectClass.Dispose,
-            .ReferenceEquals= DSObjectClass.ReferenceEquals,
-            .InstanceEquals = DSObjectClass.InstanceEquals,
-            .Update         = Update,
-            .Draw           = Draw,
-        };
-        DSAddMetadata(ParticleGeneratorClass);
-    }
-    return &ParticleGeneratorClass;
-}
+DSDefine(ParticleGenerator, DSObject, cls, {
+    cls->Create         = $ParticleGenerator;
+    cls->ToString       = ToString;
+    cls->Update         = Update;
+    cls->Draw           = Draw;
+});
 

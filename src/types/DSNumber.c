@@ -33,10 +33,10 @@ static DSException(AbstractMethod);
  * Abstract Number
  * Initialize a new Number
  */
-DSNumber* DSNumber_Ctor(DSNumber* const this)
+DSNumber* DSNumber_init(DSNumber* const this)
 {
-    DSComparable_Ctor(this);
-    this->isa = isa(DSNumber);
+    DSComparable_init(this);
+    this->isa = ISA(DSNumber);
     return this;
 }
 
@@ -132,7 +132,7 @@ static bool Virtual_Equals(DSObject* const this, DSObject* const other) {
 }
 
 /**
- * Long Class Metadata
+ * DSNumber Class Metadata
  */
 DSDefine(DSNumber, DSObject, cls, {
     cls->CompareTo      = DSNumber_CompareTo;
@@ -147,37 +147,6 @@ DSDefine(DSNumber, DSObject, cls, {
     cls->CharValue      = Abstract_CharValue; 
     cls->ShortValue     = Abstract_ShortValue;
 });
-
-/**
- * DSNumber Class Metadata
- */
-// DSMetaClass (DSNumber)
-// {
-//     if (DSNumberClass.isa == nullptr) {
-//         DSNumberClass = (struct DSNumberClass) {
-//             .isa            = &DSNumberClass,
-//             .superclass     = &DSComparableClass,
-//             .name           = "DSNumber",
-//             .Equals         = DSObjectClass.Equals,
-//             .GetHashCode    = DSObjectClass.GetHashCode,
-//             .Dispose        = DSObjectClass.Dispose,
-//             .ReferenceEquals= DSObjectClass.ReferenceEquals,
-//             .InstanceEquals = DSObjectClass.InstanceEquals,
-//             .CompareTo      = DSNumber_CompareTo,
-//             .ToString       = Virtual_ToString,
-//             .Equals         = Virtual_Equals,
-//             .CompareTo      = Abstract_CompareTo,
-//             .IntValue       = Abstract_IntValue, 
-//             .LongValue      = Abstract_LongValue, 
-//             .FloatValue     = Abstract_FloatValue, 
-//             .DoubleValue    = Abstract_DoubleValue, 
-//             .CharValue      = Abstract_CharValue, 
-//             .ShortValue     = Abstract_ShortValue 
-//         };
-//         DSAddMetadata(DSNumberClass);
-//     }
-//     return &DSNumberClass;
-// }
 
 /**
  * char table for radix up to 36

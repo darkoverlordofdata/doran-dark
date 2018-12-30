@@ -39,6 +39,7 @@ struct Texture2DClass
     Class*  isa;
     Class*  superclass;
     char*   name;
+    long    info, instance_size;
     char*   (*ToString) (Texture2D* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);

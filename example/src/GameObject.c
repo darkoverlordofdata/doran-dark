@@ -17,7 +17,7 @@
  * @param Sprite to display
  * @param Color tiniting color
  */
-GameObject* GameObject_Ctor(
+GameObject* GameObject_init(
     GameObject* const this, 
     char* name, 
     Vec2 Position, 
@@ -25,8 +25,8 @@ GameObject* GameObject_Ctor(
     Texture2D* Sprite, 
     Vec3 Color)
 {
-	DSObject_Ctor(this);
-    this->isa = isa(GameObject);
+	DSObject_init(this);
+    this->isa = ISA(GameObject);
     this->IsSolid = false;
     this->Destroyed = false;
     this->Position = Position;
@@ -44,7 +44,7 @@ GameObject* $GameObject(
     Vec2 Size, 
     Texture2D* Sprite, 
     Vec3 Color) { 
-    return GameObject_Ctor(DSNew(GameObject), name, Position, Size, Sprite, Color);
+    return GameObject_init(class_alloc(GameObject), name, Position, Size, Sprite, Color);
 }
 
 /**
@@ -71,24 +71,9 @@ char* overload ToString(GameObject* const this)
 /**
  * GameObject Class Metadata
  */
-DSMetaClass (GameObject)
-{
-    if (GameObjectClass.isa == nullptr) {
-        GameObjectClass = (struct GameObjectClass) {
-            .isa            = &GameObjectClass,
-            .superclass     = &DSObjectClass,
-            .name           = "GameObject",
-            .Create         = $GameObject,
-            .ToString       = ToString,
-            .Equals         = DSObjectClass.Equals,
-            .GetHashCode    = DSObjectClass.GetHashCode,
-            .Dispose        = DSObjectClass.Dispose,
-            .ReferenceEquals= DSObjectClass.ReferenceEquals,
-            .InstanceEquals = DSObjectClass.InstanceEquals,
-            .Draw           = Draw,
-        };
-        DSAddMetadata(GameObjectClass);
-    }
-    return &GameObjectClass;
-}
+DSDefine(GameObject, DSObject, cls, {
+    cls->Create         = $GameObject;
+    cls->ToString       = ToString;
+    cls->Draw           = Draw;
+});
 

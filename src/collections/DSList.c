@@ -27,10 +27,10 @@ SOFTWARE.
 /**
  * Constructor
  */
-DSList* DSList_Ctor(DSList* const this)
+DSList* DSList_init(DSList* const this)
 {
-    DSCollection_Ctor(this);
-    this->isa = isa(DSList);
+    DSCollection_init(this);
+    this->isa = ISA(DSList);
     this->head = nullptr;
 
     return this;
@@ -43,7 +43,7 @@ DSList* DSList_Ctor(DSList* const this)
  * @param next node in list
  * 
  */
-DSListNode* DSListNode_Ctor(DSListNode* const this, Any data, DSListNode* next)
+DSListNode* DSListNode_init(DSListNode* const this, Any data, DSListNode* next)
 {
     this->data = data;
     this->next = next;
@@ -52,7 +52,7 @@ DSListNode* DSListNode_Ctor(DSListNode* const this, Any data, DSListNode* next)
 
 DSListNode* DSListNode_New(Any data, DSListNode* next)
 {
-    return DSListNode_Ctor(DSNew(DSList), data, next);
+    return DSListNode_init(class_alloc(DSList), data, next);
 }
 
 /**
@@ -164,36 +164,19 @@ char* overload ToString(DSList* const this)
 }
 
 DSList* $DSList() { 
-    return DSList_Ctor(DSNew(DSList)); 
+    return DSList_init(class_alloc(DSList)); 
 }
 
 /**
  * List Class Metadata
  */
-DSMetaClass (DSList)
-{
-    if (DSListClass.isa == nullptr) {
-        DSListClass = (struct DSListClass) {
-            .isa            = &DSListClass,
-            .superclass     = &DSCollectionClass,
-            .name           = "DSList",
-            .Equals         = DSObjectClass.Equals,
-            .GetHashCode    = DSObjectClass.GetHashCode,
-            .ReferenceEquals= DSObjectClass.ReferenceEquals,
-            .InstanceEquals = DSObjectClass.InstanceEquals,
-            .ToString       = ToString,
-            .Dispose        = Dispose,
-            .Length         = Length,
-            .Iterate        = ForEach,
-            .Insert         = Insert,
-            .Add            = Add,
-            .Remove         = Remove,
-            .Create         = $DSList
-
-        };
-        DSAddMetadata(DSListClass);
-    }
-    return &DSListClass;
-}
-
-
+DSDefine(DSList, DSCollection, cls, {
+    cls->Create         = $DSList;
+    cls->ToString       = ToString;
+    cls->Dispose        = Dispose;
+    cls->Length         = Length;
+    cls->Iterate        = ForEach;
+    cls->Insert         = Insert;
+    cls->Add            = Add;
+    cls->Remove         = Remove;
+});

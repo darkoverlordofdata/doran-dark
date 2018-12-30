@@ -15,7 +15,7 @@
  * @param Velocity initial speed of ball
  * @param Sprite to display
  */
-BallObject* BallObject_Ctor(
+BallObject* BallObject_init(
     BallObject* this, 
     Vec2 Position, 
     float Radius, 
@@ -23,8 +23,8 @@ BallObject* BallObject_Ctor(
     Texture2D* Sprite)
 {
     Radius = Radius != 0 ? Radius : 12.5f;
-    GameObject_Ctor(this, "ball", Position, (Vec2){ Radius*2, Radius*2 }, Sprite, (Vec3){ 1, 1, 1 });
-    this->isa = isa(BallObject);
+    GameObject_init(this, "ball", Position, (Vec2){ Radius*2, Radius*2 }, Sprite, (Vec3){ 1, 1, 1 });
+    this->isa = ISA(BallObject);
     this->Velocity = Velocity;
     this->Radius = Radius;
     return this;
@@ -110,31 +110,17 @@ BallObject* $BallObject(
     float Radius, 
     Vec2 Velocity, 
     Texture2D* Sprite) {
-    return BallObject_Ctor(DSNew(BallObject), Position, Radius, Velocity, Sprite); 
+    return BallObject_init(class_alloc(BallObject), Position, Radius, Velocity, Sprite); 
 }
 
 /**
  * BallObject Class Metadata
  */
-DSMetaClass (BallObject)
-{
-    if (BallObjectClass.isa == nullptr) {
-        BallObjectClass = (struct BallObjectClass) {
-            .isa            = &BallObjectClass,
-            .superclass     = &GameObjectClass,
-            .name           = "BallObject",
-            .Create         = $BallObject,
-            .ToString       = ToString,
-            .Equals         = DSObjectClass.Equals,
-            .GetHashCode    = DSObjectClass.GetHashCode,
-            .Dispose        = DSObjectClass.Dispose,
-            .ReferenceEquals= DSObjectClass.ReferenceEquals,
-            .InstanceEquals = DSObjectClass.InstanceEquals,
-            .Move           = Move,
-            .Reset          = Reset,
-            .Draw           = Draw,
-        };
-        DSAddMetadata(BallObjectClass);
-    }
-    return &BallObjectClass;
-}
+DSDefine(BallObject, GameObject, cls, {
+    cls->ToString       = ToString;
+    cls->Create         = $BallObject;
+    cls->Move           = Move;
+    cls->Reset          = Reset;
+    cls->Draw           = Draw;
+});
+

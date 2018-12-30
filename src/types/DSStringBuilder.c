@@ -63,10 +63,10 @@ static DSException(OutOfMemory);
  * create a new StringBuilder
  * 
  */
-DSStringBuilder* StringBuilder_Ctor(DSStringBuilder* const this)
+DSStringBuilder* StringBuilder_init(DSStringBuilder* const this)
 {
-    DSObject_Ctor(this);
-    this->isa = isa(DSStringBuilder); 
+    DSObject_init(this);
+    this->isa = ISA(DSStringBuilder); 
 	return this;
 }
 
@@ -194,35 +194,20 @@ char* StringBuilder_ToString(DSStringBuilder* this)
 }
 
 DSStringBuilder* $DSStringBuilder() { 
-	return StringBuilder_Ctor(DSNew(DSStringBuilder)); 
+	return StringBuilder_init(class_alloc(DSStringBuilder)); 
 }
 
 /**
  * StringBuilder Class Metadata
  */
-DSMetaClass (DSStringBuilder)
-{
-	if (DSStringBuilderClass.isa == nullptr) {
-		DSStringBuilderClass = (struct DSStringBuilderClass) {
-			.isa            = &DSStringBuilderClass,
-			.superclass     = &DSComparableClass,
-			.name           = "DSStringBuilder",
-            .Create         = $DSStringBuilder,
-			.Equals         = DSObjectClass.Equals,
-			.GetHashCode    = DSObjectClass.GetHashCode,
-			.Dispose        = DSObjectClass.Dispose,
-			.ReferenceEquals= DSObjectClass.ReferenceEquals,
-			.InstanceEquals = DSObjectClass.InstanceEquals,
-			.Append    		= StringBuilder_Append,
-			.Appendc 		= StringBuilder_Appendc,
-			.Appendf   		= StringBuilder_Appendf,
-			.Concat    		= StringBuilder_Concat,
-			.Dispose   		= StringBuilder_Dispose,
-			.Empty     		= StringBuilder_Empty,
-			.Reset     		= StringBuilder_Reset,
-		};
-        DSAddMetadata(DSStringBuilderClass);
-	}
-	return &DSStringBuilderClass;
-}
+DSDefine(DSStringBuilder, DSObject, cls, {
+    cls->Create     	= $DSStringBuilder;
+	cls->Append         = StringBuilder_Append;
+	cls->Appendc        = StringBuilder_Appendc;
+	cls->Appendf        = StringBuilder_Appendf;
+	cls->Concat         = StringBuilder_Concat;
+	cls->Dispose        = StringBuilder_Dispose;
+	cls->Empty          = StringBuilder_Empty;
+	cls->Reset          = StringBuilder_Reset;
+});
 

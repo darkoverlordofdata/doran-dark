@@ -53,9 +53,9 @@ char* File_ToString(File const this)
 /**
  * Initialize a new File
  */
-File File_Ctor(File const this)
+File File_init(File const this)
 {
-    Number_Ctor(this);
+    Number_init(this);
 
     this->ToString      = File_ToString;
 
@@ -69,6 +69,6 @@ File File_Ctor(File const this)
  */
 File File_New()
 {
-    return File_Ctor(DSNew(File));
+    return File_init(class_alloc(File));
 }
 

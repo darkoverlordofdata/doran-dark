@@ -391,9 +391,9 @@ int FileSystem_HashCode(FileSystem const this, File f) {
 /**
  * Initialize a new FileSystem
  */
-FileSystem FileSystem_Ctor(FileSystem const this)
+FileSystem FileSystem_init(FileSystem const this)
 {
-    DObject_Ctor(this);
+    DObject_init(this);
 
     this->ToString = FileSystem_ToString;
 
@@ -419,6 +419,6 @@ FileSystem FileSystem_Ctor(FileSystem const this)
  */
 FileSystem FileSystem_New()
 {
-    return FileSystem_Ctor(DSNew(FileSystem));
+    return FileSystem_init(class_alloc(FileSystem));
 }
 

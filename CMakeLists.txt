@@ -14,7 +14,7 @@ list ( APPEND INCLUDE .lib/dark/vendor/tgc )
 # C Sources:
 list ( APPEND CSOURCE .lib/dark/src/gc.c )
 list ( APPEND CSOURCE .lib/dark/src/string.c )
-list ( APPEND CSOURCE .lib/dark/src/Class.c )
+list ( APPEND CSOURCE .lib/dark/src/DSClass.c )
 list ( APPEND CSOURCE .lib/dark/src/DSObject.c )
 list ( APPEND CSOURCE .lib/dark/src/DSComparable.c )
 list ( APPEND CSOURCE .lib/dark/src/collections/DSCollection.c )

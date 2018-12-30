@@ -52,6 +52,7 @@ struct DSArrayClass
     Class*  isa;
     Class*  superclass;
     char*   name;
+    long    info, instance_size;
     char*   (*ToString) (const DSArray* const);
     bool    (*Equals) (const DSObject* const, struct Object  *const);
     int     (*GetHashCode) (const DSObject* const);

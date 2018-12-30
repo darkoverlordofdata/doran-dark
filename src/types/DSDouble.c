@@ -36,10 +36,10 @@ static DSException(NumberFormat);
  * @param value of double
  * 
  */
-DSDouble* DSDouble_Ctor(DSDouble* const this, double value)
+DSDouble* DSDouble_init(DSDouble* const this, double value)
 {
-    DSNumber_Ctor(this);
-    this->isa = isa(DSDouble);
+    DSNumber_init(this);
+    this->isa = ISA(DSDouble);
     this->value = value;
     return this;
 }
@@ -136,7 +136,7 @@ char* DSDouble_ToString(DSDouble* const this) {
 }
 
 DSDouble* $DSDouble(double value) { 
-    return DSDouble_Ctor(DSNew(DSDouble), value); 
+    return DSDouble_init(class_alloc(DSDouble), value); 
 }
 
 

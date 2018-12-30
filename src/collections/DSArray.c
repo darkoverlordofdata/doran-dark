@@ -27,10 +27,10 @@ SOFTWARE.
 /**
  * Default Constructor
  */
-DSArray* DSArray_Ctor(DSArray* const this, int capacity)
+DSArray* DSArray_init(DSArray* const this, int capacity)
 {
-    DSCollection_Ctor(this);
-    this->isa = isa(DSArray);
+    DSCollection_init(this);
+    this->isa = ISA(DSArray);
     this->capacity = capacity == 0 ? ARRAY_INIT_CAPACITY : capacity;
     this->length = 0;
     this->data = DSCalloc(this->capacity, sizeof(Any));
@@ -39,7 +39,7 @@ DSArray* DSArray_Ctor(DSArray* const this, int capacity)
 
 
 DSArray* overload DSArray_New(void) {
-    return DSArray_Ctor(DSNew(DSArray), 4);
+    return DSArray_init(class_alloc(DSArray), 4);
 }
 /**
  * new Array
@@ -50,7 +50,7 @@ DSArray* overload DSArray_New(void) {
  * 
  */
 DSArray* overload DSArray_New(int capacity) {
-    return DSArray_Ctor(DSNew(DSArray), capacity);
+    return DSArray_init(class_alloc(DSArray), capacity);
 }
 
 /**
@@ -64,7 +64,7 @@ DSArray* overload DSArray_New(int capacity) {
  * 
  */
 DSArray* overload DSArray_New(int count, ...) {
-    DSArray* v = DSArray_Ctor(DSNew(DSArray), count);
+    DSArray* v = DSArray_init(class_alloc(DSArray), count);
     va_list args;
     va_start(args, count);
     for (int i=0; i<count; i++)
@@ -192,13 +192,13 @@ char* overload ToString(const DSArray* const this)
 }
 
 DSArray* $DSArray(int capacity) { 
-    return DSArray_Ctor(DSNew(DSArray), capacity); 
+    return DSArray_init(class_alloc(DSArray), capacity); 
 }
 
 /**
  * Load Array Class Metadata
  */
-DSDefine(DSArray, DSObject, cls, {
+DSDefine(DSArray, DSCollection, cls, {
     cls->ToString       = ToString;
     cls->Dispose        = Dispose;
     cls->Length         = Length;

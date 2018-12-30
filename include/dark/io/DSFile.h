@@ -37,19 +37,12 @@ typedef enum { PS_UNCHECKED, PS_INVALID, PS_CHECKED } PathStatus;
 
 class (File)
 {
-    union {
-        Comparable_t _;
-        struct 
-        {
-            Class isa;
-            retained
-            char*       (*ToString)(Object const);
-            bool        (*Equals)(Object const, Object const);
-            int         (*GetHashCode)(Object const);
-            void        (*Dispose) (Object const);
-            int         (*CompareTo) (Comparable const, Comparable other);
-        };
-    };
+    Class* isa;
+    char*       (*ToString)(Object const);
+    bool        (*Equals)(Object const, Object const);
+    int         (*GetHashCode)(Object const);
+    void        (*Dispose) (Object const);
+    int         (*CompareTo) (Comparable const, Comparable other);
     FileSystem          fs;
     String              path;   
     PathStatus          status;

@@ -19,10 +19,10 @@ const char* HEADER = "#\n"
 /**
  * Shader
  */
-Shader* Shader_Ctor(Shader* const this)
+Shader* Shader_init(Shader* const this)
 {
-	DSObject_Ctor(this);
-    this->isa = isa(Shader);
+	DSObject_init(this);
+    this->isa = ISA(Shader);
     return this;
 }
 
@@ -198,41 +198,25 @@ char* overload ToString(Shader* const this)
 }
 
 Shader* $Shader() { 
-    return Shader_Ctor(DSNew(Shader));
+    return Shader_init(class_alloc(Shader));
 }
 
 /**
  * Shader Class Metadata
  */
-DSMetaClass (Shader)
-{
-    if (ShaderClass.isa == nullptr) {
-        ShaderClass = (struct ShaderClass) {
-            .isa            = &ShaderClass,
-            .superclass     = &DSObjectClass,
-            .name           = "Shader",
-            .Create         = $Shader,
-            .ToString       = ToString,
-            .Equals         = DSObjectClass.Equals,
-            .GetHashCode    = DSObjectClass.GetHashCode,
-            .Dispose        = DSObjectClass.Dispose,
-            .ReferenceEquals= DSObjectClass.ReferenceEquals,
-            .InstanceEquals = DSObjectClass.InstanceEquals,
-            .ToString       = ToString,
-            .Use            = Use,
-            .Compile        = Compile,
-            .SetFloat       = SetFloat,
-            .SetInteger     = SetInteger,
-            .SetArray2f     = SetArray2f,
-            .SetArray2      = SetArray2,
-            .SetArray3f     = SetArray3f,
-            .SetArray3      = SetArray3,
-            .SetArray4f     = SetArray4f,
-            .SetArray4      = SetArray4,
-            .SetMatrix4     = SetMatrix4,
-        };
-        DSAddMetadata(ShaderClass);
-    }
-    return &ShaderClass;
-}
+DSDefine(Shader, DSObject, cls, {
+    cls->Create         = $Shader;
+    cls->ToString       = ToString;
+    cls->Use            = Use;
+    cls->Compile        = Compile;
+    cls->SetFloat       = SetFloat;
+    cls->SetInteger     = SetInteger;
+    cls->SetArray2f     = SetArray2f;
+    cls->SetArray2      = SetArray2;
+    cls->SetArray3f     = SetArray3f;
+    cls->SetArray3      = SetArray3;
+    cls->SetArray4f     = SetArray4f;
+    cls->SetArray4      = SetArray4;
+    cls->SetMatrix4     = SetMatrix4;
+});
 

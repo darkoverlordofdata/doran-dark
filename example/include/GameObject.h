@@ -46,6 +46,7 @@ struct GameObjectClass
     Class*  isa;
     Class*  superclass;
     char*   name;
+    long    info, instance_size;
     char*   (*ToString) (GameObject* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);

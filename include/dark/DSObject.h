@@ -26,7 +26,7 @@ SOFTWARE.
 #pragma once
 #ifndef _DSOBJECT_H_
 #define _DSOBJECT_H_
-#include "Class.h"
+#include "DSClass.h"
 
 #define OBJECT_TYPE       (TYPE_OBJECT)
 
@@ -34,7 +34,14 @@ SOFTWARE.
 #define AsDSObject(x) (IsDSObject(x) ? (DSObject *)x : nullptr)
 
 /**
- * Object class
+ * Object 
+ * 
+ * the isa field holds the reference to the class that defines this object.
+ * All fields afer that make up the IVAR. This means:
+ * 
+ *  + No multiple inheritance. Mixins should work.
+ *  + ivar definition must be the same across an inheritance chain.
+ * 
  */
 class (DSObject) {
 	const struct DSObjectClass* isa;
@@ -43,13 +50,21 @@ class (DSObject) {
 typedef DSObject id;
 
 /**
- * Object metaclass
+ * Object Class/MetaClass
+ * 
+ * This is defined as a singleton.
+ * the isa field is a reference to itself.
+ * the superclass points to the superclass singleton.
+ * 
+ * This holds the vtable and class IVAR. Again, these must be
+ * kept the same down an entire inheritance chain.
  */
 struct DSObjectClass 
 {
     Class*  isa;
     Class*  superclass;
     char*   name;
+    long    info, instance_size;
     char*   (*ToString) (const DSObject* const);
     bool    (*Equals) (const DSObject* const, const DSObject* const);
     int     (*GetHashCode) (const DSObject* const);
@@ -61,7 +76,7 @@ struct DSObjectClass
 } DSObjectClass;
 
 static inline char* typename(id* obj) { return obj->isa->name; }
-static inline int typeid(id* obj) { return (int)obj->isa; }
+static inline UInt64 typeid(id* obj) { return (UInt64)obj->isa; }
 
 
 /**
@@ -79,7 +94,7 @@ int overload GetHashCode(const DSObject* const);
 void overload Dispose(DSObject* const);
 
 
-DSObject* DSObject_Ctor(DSObject* const);
+DSObject* DSObject_init(DSObject* const);
 DSObject* DSObject_Dtor(DSObject*);
 
 

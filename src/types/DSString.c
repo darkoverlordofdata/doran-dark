@@ -36,19 +36,14 @@ static DSException(IndexOutOfBounds);
  * @param value of long
  * 
  */
-DSString* String_Ctor(DSString* const this, char* value)
+DSString* String_init(DSString* const this, char* value)
 {
-    DSComparable_Ctor(this);
-    this->isa = isa(DSString);
+    DSComparable_init(this);
+    this->isa = ISA(DSString);
     this->value = strdup(value);
     this->length = strlen(value);
     return this;
 }
-
-
-// DSString* _(char* value) {
-//     return String_Ctor(DSNew(String), value);
-// }
 
 void String_GetChars(DSString* this, char* dst, int dstBegin) {
     memcpy(dst+dstBegin, this->value, this->length);
@@ -191,49 +186,35 @@ void String_Dispose(DSString* const this)
  * Shortcut for a new string object
  */
 DSString* $(const char* const str) {
-    return String_Ctor(DSNew(DSString), str); 
+    return String_init(class_alloc(DSString), str); 
 }
 
 /**
  * String Class Metadata
  */
-DSMetaClass (DSString)
-{
-    if (DSStringClass.isa == nullptr) {
-        $$, DSStringClass = (struct DSStringClass) {
-            .isa            = &DSStringClass,
-            .superclass     = &DSComparableClass,
-            .name           = "DSString",
-            .Create         = $,
-            .Equals         = DSObjectClass.Equals,
-            .GetHashCode    = DSObjectClass.GetHashCode,
-            .Dispose        = DSObjectClass.Dispose,
-            .ReferenceEquals= DSObjectClass.ReferenceEquals,
-            .InstanceEquals = DSObjectClass.InstanceEquals,
-            .ToString       = String_ToString,
-            .Dispose        = String_Dispose,
-            .CompareTo      = String_CompareTo,
-            .Length         = Length,
-            .IsEmpty        = String_IsEmpty,
-            .CharAt         = String_CharAt,
-            .CompareToIgnoreCase = String_CompareToIgnoreCase,
-            .Concat         = String_Concat,
-            .Concatc        = String_Concatc,
-            .Contains       = String_Contains,
-            .CopyOf         = String_CopyOf,
-            .EndsWith       = String_EndsWith,
-            .StartsWith     = String_StartsWith,
-            .GetBytes       = String_GetBytes,
-            .IndexOf        = String_IndexOf,
-            .LastIndexOf    = String_LastIndexOf,
-            .ToLowerCase    = String_ToLowerCase,
-            .ToUpperCase    = String_ToUpperCase,
-            .Trim           = String_Trim,
-        };
-        DSAddMetadata(DSStringClass);
-    }
-    return &DSStringClass;
-}
+DSDefine(DSString, DSObject, cls, {
+    cls->Create         = $;
+    cls->ToString       = String_ToString;
+    cls->Dispose        = String_Dispose;
+    cls->CompareTo      = String_CompareTo;
+    cls->Length         = Length;
+    cls->IsEmpty        = String_IsEmpty;
+    cls->CharAt         = String_CharAt;
+    cls->CompareToIgnoreCase = String_CompareToIgnoreCase;
+    cls->Concat         = String_Concat;
+    cls->Concatc        = String_Concatc;
+    cls->Contains       = String_Contains;
+    cls->CopyOf         = String_CopyOf;
+    cls->EndsWith       = String_EndsWith;
+    cls->StartsWith     = String_StartsWith;
+    cls->GetBytes       = String_GetBytes;
+    cls->IndexOf        = String_IndexOf;
+    cls->LastIndexOf    = String_LastIndexOf;
+    cls->ToLowerCase    = String_ToLowerCase;
+    cls->ToUpperCase    = String_ToUpperCase;
+    cls->Trim           = String_Trim;
+});
+
 
 __attribute__((__format__ (__printf__, 1, 2)))
 DSString* String_Format(char* format, ...) {

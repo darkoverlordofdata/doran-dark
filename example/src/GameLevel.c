@@ -13,14 +13,14 @@
 /**
  * GameLevel
  */
-GameLevel* GameLevel_Ctor(
+GameLevel* GameLevel_init(
     GameLevel* const this, 
     const GLchar *file, 
     int levelWidth, 
     int levelHeight)
 {
-	DSObject_Ctor(this);
-    this->isa = isa(GameLevel);
+	DSObject_init(this);
+    this->isa = ISA(GameLevel);
     this->Bricks = $DSArray(200);
     Load(this, file, levelWidth, levelHeight);
     return this;
@@ -179,31 +179,16 @@ GameLevel* $GameLevel(
     const GLchar *file, 
     int levelWidth, 
     int levelHeight) { 
-    return GameLevel_Ctor(DSNew(GameLevel), file, levelWidth, levelHeight); 
+    return GameLevel_init(class_alloc(GameLevel), file, levelWidth, levelHeight); 
 }
 /**
  * Register the GameLevel Class runtime Metadata
  */
-DSMetaClass (GameLevel)
-{
-    if (GameLevelClass.isa == nullptr) {
-        GameLevelClass = (struct GameLevelClass) {
-            .isa            = &GameLevelClass,
-            .superclass     = &DSObjectClass,
-            .name           = "GameLevel",
-            .Create         = $GameLevel,
-            .ToString       = ToString,
-            .Equals         = DSObjectClass.Equals,
-            .GetHashCode    = DSObjectClass.GetHashCode,
-            .Dispose        = DSObjectClass.Dispose,
-            .ReferenceEquals= DSObjectClass.ReferenceEquals,
-            .InstanceEquals = DSObjectClass.InstanceEquals,
-            .Load           = Load,
-            .Draw           = Draw,
-            .IsCompleted    = IsCompleted,
-        };
-        DSAddMetadata(GameLevelClass);
-    }
-    return &GameLevelClass;
-}
+DSDefine(GameLevel, DSObject, cls, {
+    cls->Create         = $GameLevel;
+    cls->ToString       = ToString;
+    cls->Load           = Load;
+    cls->Draw           = Draw;
+    cls->IsCompleted    = IsCompleted;
+});
 

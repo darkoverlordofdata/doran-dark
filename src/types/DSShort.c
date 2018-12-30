@@ -36,10 +36,10 @@ static DSException(NumberFormat);
  * @param value of short
  * 
  */
-DSShort* DSShort_Ctor(DSShort* const this, short value)
+DSShort* DSShort_init(DSShort* const this, short value)
 {
-    DSNumber_Ctor(this);
-    this->isa = isa(DSShort);
+    DSNumber_init(this);
+    this->isa = ISA(DSShort);
     this->value = value;
     return this;
 }
@@ -129,7 +129,7 @@ char* DSShort_ToString(DSShort* const this)
 }
 
 DSShort* $DSShort(short value) { 
-    return DSShort_Ctor(DSNew(DSShort), value); 
+    return DSShort_init(class_alloc(DSShort), value); 
 }
 
 
@@ -147,33 +147,3 @@ DSDefine(DSShort, DSNumber, cls, {
     cls->ShortValue     = DSShort_ShortValue; 
     cls->Create         = $DSShort;
 });
-
-
-// DSMetaClass (DSShort)
-// {
-//     if (DSShortClass.isa == nullptr) {
-//         DSShortClass = (struct DSShortClass) {
-//             .isa            = &DSShortClass,
-//             .superclass     = &DSNumberClass,
-//             .name           = "DSShort",
-//             .Create         = $DSShort,
-//             .Equals         = DSObjectClass.Equals,
-//             .GetHashCode    = DSObjectClass.GetHashCode,
-//             .Dispose        = DSObjectClass.Dispose,
-//             .ReferenceEquals= DSObjectClass.ReferenceEquals,
-//             .InstanceEquals = DSObjectClass.InstanceEquals,
-//             .ToString       = DSShort_ToString,
-//             .CompareTo      = DSShort_CompareTo,
-//             .IntValue       = DSShort_IntValue, 
-//             .LongValue      = DSShort_LongValue, 
-//             .FloatValue     = DSShort_FloatValue, 
-//             .DoubleValue    = DSShort_DoubleValue, 
-//             .CharValue      = DSShort_CharValue, 
-//             .ShortValue     = DSShort_ShortValue, 
-
-//         };
-//         DSAddMetadata(DSShortClass);
-//     }
-//     return &DSShortClass;
-// }
-

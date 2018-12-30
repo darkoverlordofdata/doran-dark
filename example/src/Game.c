@@ -36,7 +36,7 @@ class (Collision)
  * @param dir direction from
  * @param Vec2 difference point
  */
-static const Collision* Collision_Ctor(
+static const Collision* Collision_init(
     Collision* this, 
     bool isTrue, 
     Direction dir, 
@@ -50,7 +50,7 @@ static const Collision* Collision_Ctor(
 
 Collision* New_Collision(bool first, Direction second, Vec2 third)
 {
-    return Collision_Ctor(DSNew(Collision), first, second, third);
+    return Collision_init(DSMalloc(sizeof(Collision)), first, second, third);
 }
 
 
@@ -61,13 +61,13 @@ Collision* New_Collision(bool first, Direction second, Vec2 third)
  * @param Height of screen
  * 
  */
-Game* Game_Ctor(
+Game* Game_init(
     Game* const this, 
     int Width, 
     int Height)
 {
-	DSObject_Ctor(this);
-    this->isa = isa(Game);
+	DSObject_init(this);
+    this->isa = ISA(Game);
     this->Levels = $DSArray(4);
     this->Level = 0;
     this->State = GAME_ACTIVE;
@@ -414,37 +414,22 @@ char* overload ToString(struct Game* const this)
  * 
  */
 Game* $Game(int Width, int Height) { 
-    return Game_Ctor(DSNew(Game), Width, Height); 
+    return Game_init(class_alloc(Game), Width, Height); 
 }
 
 /**
  * Game Class Metadata
  */
-DSMetaClass (Game)
-{
-    if (GameClass.isa == nullptr) {
-        GameClass = (struct GameClass) {
-            .isa            = &GameClass,
-            .superclass     = &DSObjectClass,
-            .name           = "Game",
-            .Create         = $Game,
-            .ToString       = ToString,
-            .Equals         = DSObjectClass.Equals,
-            .GetHashCode    = DSObjectClass.GetHashCode,
-            .Dispose        = DSObjectClass.Dispose,
-            .ReferenceEquals= DSObjectClass.ReferenceEquals,
-            .InstanceEquals = DSObjectClass.InstanceEquals,
-            .Start          = Start,
-            .ProcessInput   = ProcessInput,
-            .Update         = Update,
-            .Render         = Render,
-            .DoCollisions   = DoCollisions,
-            .ResetLevel     = ResetLevel,
-            .ResetPlayer    = ResetPlayer,
-            .SetKey         = SetKey,
-        };
-        DSAddMetadata(GameClass);
-    }
-    return &GameClass;
-}
+DSDefine(Game, DSObject, cls, {
+    cls->Create         = $Game;
+    cls->ToString       = ToString;
+    cls->Start          = Start;
+    cls->ProcessInput   = ProcessInput;
+    cls->Update         = Update;
+    cls->Render         = Render;
+    cls->DoCollisions   = DoCollisions;
+    cls->ResetLevel     = ResetLevel;
+    cls->ResetPlayer    = ResetPlayer;
+    cls->SetKey         = SetKey;
+});
 

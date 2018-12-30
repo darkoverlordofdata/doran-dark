@@ -33,10 +33,10 @@ static DSException(AbstractMethod);
 /**
  * Initialize a new Array
  */
-DSCollection* DSCollection_Ctor(DSCollection* const this)
+DSCollection* DSCollection_init(DSCollection* const this)
 {
-    DSObject_Ctor(this);
-    this->isa = isa(DSCollection);
+    DSObject_init(this);
+    this->isa = ISA(DSCollection);
     return this;
 }
 
@@ -64,23 +64,7 @@ static void Abstract_Add(DSCollection* const this, Any data)
 /**
  * Collection Class Metadata
  */
-DSMetaClass (DSCollection)
-{
-    if (DSCollectionClass.isa == nullptr) {
-        DSCollectionClass = (struct DSCollectionClass) {
-            .isa            = &DSCollectionClass,
-            .superclass     = &DSObjectClass,
-            .name           = "DSCollection",
-            .Equals         = DSObjectClass.Equals,
-            .GetHashCode    = DSObjectClass.GetHashCode,
-            .Dispose        = DSObjectClass.Dispose,
-            .ReferenceEquals= DSObjectClass.ReferenceEquals,
-            .InstanceEquals = DSObjectClass.InstanceEquals,
-            .Length         = Abstract_Length,
-            .Add            = Abstract_Add,
-        };
-        DSAddMetadata(DSCollectionClass);
-    }
-    return &DSCollectionClass;
-}
-
+DSDefine(DSCollection, DSObject, cls, {
+    cls->Length         = Abstract_Length;
+    cls->Add            = Abstract_Add;
+});

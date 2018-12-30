@@ -46,6 +46,7 @@ static const int MinorVersion = 0;
 static const int BuildVersion = 1;
 
 #include "DSLog.h"
+#include "DSClass.h"
 #include "DSObject.h"
 #include "DSComparable.h"
 #include "collections/DSArray.h"

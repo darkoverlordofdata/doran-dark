@@ -13,10 +13,10 @@ struct ResourceManagerClass* Resources;
 /**
  * ResourceManager
  */
-ResourceManager* ResourceManager_Ctor(ResourceManager* this)
+ResourceManager* ResourceManager_init(ResourceManager* this)
 {
-    DSObject_Ctor(this); 
-    this->isa = isa(ResourceManager);
+    DSObject_init(this); 
+    this->isa = ISA(ResourceManager);
     return this;
 }
 
@@ -182,40 +182,24 @@ static char* rdbuf(FILE* f)
 }
 
 ResourceManager* $ResourceManager() { 
-    return ResourceManager_Ctor(DSNew(ResourceManager));
+    return ResourceManager_init(class_alloc(ResourceManager));
 }
 
 /**
  * ResourceManager Class Metadata
  */
-DSMetaClass (ResourceManager)
-{
-    if (ResourceManagerClass.isa == nullptr) {
-        ResourceManagerClass = (struct ResourceManagerClass) {
-            .isa                = &ResourceManagerClass,
-            .superclass         = &DSObjectClass,
-            .name               = "ResourceManager",
-            .Create             = $ResourceManager,
-            .ToString           = DSObjectClass.ToString,
-            .Equals             = DSObjectClass.Equals,
-            .GetHashCode        = DSObjectClass.GetHashCode,
-            .Dispose            = DSObjectClass.Dispose,
-            .ReferenceEquals    = DSObjectClass.ReferenceEquals,
-            .InstanceEquals     = DSObjectClass.InstanceEquals,
-            .LoadShader         = LoadShader,
-            .GetShader          = GetShader,
-            .LoadTexture        = LoadTexture,
-            .GetTexture         = GetTexture,
-            .Dtor               = Dtor,
-            .loadShaderFromFile = loadShaderFromFile,
-            .loadTextureFromFile= loadTextureFromFile,
-            .Shaders            = $DSHashmap(),
-            .Textures           = $DSHashmap(),
+DSDefine(ResourceManager, DSObject, cls, {
+    cls->Create             = $ResourceManager;
+    cls->LoadShader         = LoadShader;
+    cls->GetShader          = GetShader;
+    cls->LoadTexture        = LoadTexture;
+    cls->GetTexture         = GetTexture;
+    cls->Dtor               = Dtor;
+    cls->loadShaderFromFile = loadShaderFromFile;
+    cls->loadTextureFromFile= loadTextureFromFile;
+    cls->Shaders            = $DSHashmap();
+    cls->Textures           = $DSHashmap();
 
-        };
-        DSAddMetadata(ResourceManagerClass);
-        Resources = &ResourceManagerClass;
-    }
-    return &ResourceManagerClass;
-}
+    Resources = &ResourceManagerClass;
+});
 
