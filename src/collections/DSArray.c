@@ -24,19 +24,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/collections/DSArray.h>
+
+
 /**
  * Default Constructor
  */
 DSArray* DSArray_init(DSArray* const this, int capacity)
 {
     DSCollection_init(this);
-    this->isa = ISA(DSArray);
+    this->isa = IZA(DSArray);
     this->capacity = capacity == 0 ? ARRAY_INIT_CAPACITY : capacity;
     this->length = 0;
     this->data = DSCalloc(this->capacity, sizeof(Any));
     return this;
 }
-
 
 DSArray* overload DSArray_New(void) {
     return DSArray_init(class_alloc(DSArray), 4);
@@ -73,7 +74,6 @@ DSArray* overload DSArray_New(int count, ...) {
     v->length = count;
     return v;
 }
-
 
 
 int overload Length(const DSArray* const this)
@@ -172,6 +172,7 @@ void overload Clear(DSArray* const this)
         this->data[i] = nullptr;
     this->length = 0;
 }
+
 bool overload IsEmpty(const DSArray* const this)
 {
     return this->length <= 0;
@@ -193,6 +194,25 @@ char* overload ToString(const DSArray* const this)
 
 DSArray* $DSArray(int capacity) { 
     return DSArray_init(class_alloc(DSArray), capacity); 
+}
+
+Class implement_DSArray(Class super) 
+{
+    Class obj = objc_allocateClassPair(super, "DSArray", 0);
+    class_addMethod(obj, $toString, (DSArrayToString)ToString, "@@:v");
+    class_addMethod(obj, $dispose, (DSArrayDispose)Dispose, "v@:v");
+    class_addMethod(obj, $isEmpty, (DSArrayIsEmpty)IsEmpty, "B@:v");
+    class_addMethod(obj, $contains, (DSArrayContains)Contains, "B@:@");
+    class_addMethod(obj, $add, (DSArrayAdd)Add, "v@:@");
+    class_addMethod(obj, $remove, (DSArrayRemove)Remove, "v@:i");
+    class_addMethod(obj, $resize, (DSArrayResize)Resize, "v@:i");
+    class_addMethod(obj, $set, (DSArraySet)Set, "v@:i@");
+    class_addMethod(obj, $get, (DSArrayGet)Get, "@@:i");
+    class_addMethod(obj, $clear, (DSArrayClear)Clear, "v@:v");
+    class_addIvar(obj, "length", sizeof(int), log2(sizeof(int)), "i");
+    class_addIvar(obj, "data", sizeof(void*), log2(sizeof(void*)), "^");
+    class_addIvar(obj, "capacity", sizeof(int), log2(sizeof(int)), "i");
+    return obj;
 }
 
 /**

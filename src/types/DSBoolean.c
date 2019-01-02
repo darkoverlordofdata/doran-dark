@@ -34,7 +34,7 @@ SOFTWARE.
 DSBoolean* DSBoolean_init(DSBoolean* this, bool value)
 {
     DSComparable_init(this);
-    this->isa = ISA(DSBoolean);
+    this->isa = IZA(DSBoolean);
     this->value = value;
     return this;
 }
@@ -102,6 +102,19 @@ static const DSBoolean False = {
     .isa  = &DSBooleanClass,
     .value = false
 };
+
+// void implement_DSBoolean(Class obj) 
+// {
+//     class_addMethod(obj, $toString, (IMP)ToString, "$@:v");
+//     class_addMethod(obj, $equals, (IMP)DSObject_Equals, "B@:@@");
+//     class_addMethod(obj, $getHashCode, (IMP)DSObject_GetHashCode, "l@:v");
+//     class_addMethod(obj, $dispose, (IMP)DSObject_Dispose, "v@:v");
+//     class_addMethod(obj, $referenceEquals, (IMP)ReferenceEquals, "$@:v");
+//     class_addMethod(obj, $instanceEquals, (IMP)InstanceEquals, "$@:v");
+//     class_addMethod(obj, $compareTo, (IMP)DSComparable_CompareTo, "i@:@");
+
+//     class_addIvar(obj, "value", sizeof(int), log2(sizeof(int)), "i");
+// }
 
 /**
  * DSBoolean Class Metadata

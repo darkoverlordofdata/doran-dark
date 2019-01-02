@@ -39,7 +39,7 @@ static DSException(NumberFormat);
 DSInteger* DSInteger_init(DSInteger* const this, int value)
 {
     DSNumber_init(this);
-    this->isa = ISA(DSInteger);
+    this->isa = IZA(DSInteger);
     this->value = value;
     return this;
 }

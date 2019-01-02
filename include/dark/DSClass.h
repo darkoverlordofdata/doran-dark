@@ -27,28 +27,11 @@ SOFTWARE.
 #ifndef _CLASS_H_
 #define _CLASS_H_
 #include "core.h"
+#include "runtime.h"
 /**
- * Class
+ * 
+ * 
  */
-typedef struct objc_class *Class;
-struct objc_class {
-	Class isa;
-	Class super_class;
-	char* name;
-    long info;
-    long instance_size;
-};
-
-/**
- * Id
- */
-typedef struct objc_object {
-    Class isa;
-} *id;
-
-static inline char* typename(id obj) { return obj->isa->name; }
-static inline UInt64 typeid(id obj) { return (UInt64)obj->isa; }
-
 /**
  * DSClass 
  * we don't have a seperate metaclass, for simplicity, it's just
@@ -59,19 +42,24 @@ struct DSClass {
     Class isa;
     Class superclass;
     char* name;
+    long version;
     long info; 
     long instance_size;
+
+} DSClass;
+
+struct DSClassList {
     long count;
     Class classes[100];
-} DSClass;
+} DSClassList;
 
 /**
  *  MACRO class
  *      start a class definition
  */
-#define class(name) \
-    typedef struct name name;   /* define name */ \
-    Class DSDefine##name();    /* forward reference DSDefinexxx() */ \ 
+#define class(name)                                                     \
+    typedef struct name name;   /* define name */                       \
+    Class DSDefine##name();    /* forward reference DSDefinexxx() */    \ 
     struct name
 
 /**
@@ -81,10 +69,10 @@ struct DSClass {
 #define overload __attribute__((overloadable))
 
 /**
- *  MACRO ISA
+ *  MACRO IZA
  *      generate isa value from name
  */
-#define ISA(class) &class##Class
+#define IZA(class) &class##Class
 
 /**
  *  MACRO MAJIK
@@ -97,7 +85,7 @@ struct DSClass {
 #define MSB04   0x0000ffff00000000
 #define MSB40   0xffff000000000000
 
-#define ISA_MASK 0x00007ffffffffff8ULL
+#define IZA_MASK 0x00007ffffffffff8ULL
 
 
 /**
@@ -125,27 +113,27 @@ struct DSClass {
  * @param var temporary variable to use
  * @param block of custom settings
  */
-#define DSDefine(class, super, var, block) \
-Class class_load##class() \
-{   /* set defaults */ \
-    class##Class = (struct class##Class) { \
-        .isa            = (MAJIK | (UInt64)ISA(class)), \
-        .superclass     = ISA(super), \
-        .name           = #class, \
-        .instance_size  = sizeof(class), \
-        .Equals         = DSObjectClass.Equals, \
-        .GetHashCode    = DSObjectClass.GetHashCode, \
-        .Dispose        = DSObjectClass.Dispose, \
-        .ReferenceEquals= DSObjectClass.ReferenceEquals, \
-        .InstanceEquals = DSObjectClass.InstanceEquals, \
-        .ToString       = DSObjectClass.ToString, \
-    }; \
-    /* temporary variable used by block */ \
-    struct class##Class *var = &class##Class; \
-    /* excute the code block of customizations */ \
-    do { block } while(0); \
-    DSClass.classes[DSClass.count++] = &class##Class; \
-    return ISA(class); \
+#define DSDefine(class, super, var, block)                              \
+Class class_load##class()                                               \
+{   /* set defaults */                                                  \
+    class##Class = (struct class##Class) {                              \
+        .isa            = (MAJIK | (UInt64)IZA(class)),                 \
+        .superclass     = IZA(super),                                   \
+        .name           = #class,                                       \
+        .instance_size  = sizeof(class),                                \
+        .Equals         = DSObjectClass.Equals,                         \
+        .GetHashCode    = DSObjectClass.GetHashCode,                    \
+        .Dispose        = DSObjectClass.Dispose,                        \
+        .ReferenceEquals= DSObjectClass.ReferenceEquals,                \
+        .InstanceEquals = DSObjectClass.InstanceEquals,                 \
+        .ToString       = DSObjectClass.ToString,                       \
+    };                                                                  \
+    /* temporary variable used by block */                              \
+    struct class##Class *var = &class##Class;                           \
+    /* excute the code block of customizations */                       \
+    do { block } while(0);                                              \
+    DSClassList.classes[DSClassList.count++] = &class##Class;           \
+    return IZA(class);                                                  \
 }
 
 #endif _CLASS_H_ 

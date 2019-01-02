@@ -34,7 +34,7 @@ SOFTWARE.
 DSChar* DSChar_init(DSChar* const this, char value)
 {
     DSNumber_init(this);
-    this->isa = ISA(DSChar);
+    this->isa = IZA(DSChar);
     this->value = value;
     return this;
 }

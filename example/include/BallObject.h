@@ -44,7 +44,7 @@ struct BallObjectClass
     Class  isa;
     Class  superclass;
     char*   name;
-    long    info, instance_size;
+    long    version, info, instance_size;
     char*   (*ToString) (BallObject* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);

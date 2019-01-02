@@ -8,10 +8,14 @@ project ( dark VERSION 0.1.0 )
 
 # Includes: 
 list ( APPEND INCLUDE .lib/dark/include )
-list ( APPEND INCLUDE .lib/dark/vendor/tgc )
+list ( APPEND INCLUDE .lib/dark/src/vendor )
 
 
 # C Sources:
+list ( APPEND CSOURCE .lib/dark/src/runtime/hashmap.c )
+list ( APPEND CSOURCE .lib/dark/src/runtime/runtime.c )
+list ( APPEND CSOURCE .lib/dark/src/runtime/objc-cache.c )
+list ( APPEND CSOURCE .lib/dark/src/runtime/objc-class.c )
 list ( APPEND CSOURCE .lib/dark/src/gc.c )
 list ( APPEND CSOURCE .lib/dark/src/string.c )
 list ( APPEND CSOURCE .lib/dark/src/DSClass.c )

@@ -30,7 +30,7 @@ SOFTWARE.
 DSList* DSList_init(DSList* const this)
 {
     DSCollection_init(this);
-    this->isa = ISA(DSList);
+    this->isa = IZA(DSList);
     this->head = nullptr;
 
     return this;

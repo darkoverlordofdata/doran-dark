@@ -36,7 +36,7 @@ static DSException(AbstractMethod);
 DSNumber* DSNumber_init(DSNumber* const this)
 {
     DSComparable_init(this);
-    this->isa = ISA(DSNumber);
+    this->isa = IZA(DSNumber);
     return this;
 }
 

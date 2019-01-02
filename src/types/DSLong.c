@@ -39,7 +39,7 @@ static DSException(LongFormat);
 DSLong* DSLong_init(DSLong* const this, long value)
 {
     DSNumber_init(this);
-    this->isa = ISA(DSLong);
+    this->isa = IZA(DSLong);
     this->value = value;
     return this;
 }

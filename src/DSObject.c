@@ -29,8 +29,13 @@ SOFTWARE.
  */
 DSObject* DSObject_init(DSObject* this)
 {
-    this->isa = &DSObjectClass;// isa(DSObject);
+    this->isa = &DSObjectClass;
     return this;
+}
+
+DSObject* DSObject_alloc()
+{
+    return DSMalloc(DSObjectClass.instance_size);
 }
 
 /**
@@ -56,7 +61,7 @@ bool InstanceEquals(const DSObject* const objA, const DSObject* const objB)
     if (objA == nullptr || objB == nullptr) {
         return false;
     }
-    return Virtual_Equals(objA, objB);    
+    return DSObject_Equals(objA, objB);    
 }
 
 void overload Dispose(DSObject* const this){
@@ -65,7 +70,7 @@ void overload Dispose(DSObject* const this){
 /**
  * virtual Dispose method
  */
-static void Virtual_Dispose(DSObject* const this){}
+void DSObject_Dispose(DSObject* const this){}
 
 /**
  * Returns the string value of this Object. The default for 
@@ -78,7 +83,7 @@ const char* overload ToString(const DSObject* const this)
 /**
  * virtual ToString method
  */
-static const char *Virtual_ToString(const DSObject* const this)
+const char *DSObject_ToString(const DSObject* const this)
 {
     return "dark.Object";
 }
@@ -93,7 +98,7 @@ bool overload Equals(const DSObject* const this, const DSObject* const that)
 /**
  * virtual Equals method
  */
-static bool Virtual_Equals(DSObject* const this, DSObject* const that)
+bool DSObject_Equals(DSObject* const this, DSObject* const that)
 {
     return this == that;
 }
@@ -108,7 +113,7 @@ int overload GetHashCode(const DSObject* const this)
 /**
  * virtual GetHashCode method
  */
-static int Virtual_GetHashCode(const DSObject* const this)
+int DSObject_GetHashCode(const DSObject* const this)
 {
     return (int)this;
 }
@@ -122,8 +127,21 @@ char* GetClassName(const DSObject* const this)
     return this->isa->name;
 }
 
-DSObject* $DSObject() { 
-    return DSObject_init(class_alloc(DSObject)); 
+DSObject* $DSObject() 
+{ 
+    return DSObject_init(DSObject_alloc()); 
+}
+
+Class implement_DSObject() 
+{
+    Class obj = objc_allocateClassPair(nullptr, "DSObject", 0);
+    class_addMethod(obj, $toString, (IMP)DSObject_ToString, "$@:v");
+    class_addMethod(obj, $equals, (IMP)DSObject_Equals, "B@:@@");
+    class_addMethod(obj, $getHashCode, (IMP)DSObject_GetHashCode, "l@:v");
+    class_addMethod(obj, $dispose, (IMP)DSObject_Dispose, "v@:v");
+    class_addMethod(obj, $referenceEquals, (IMP)ReferenceEquals, "$@:v");
+    class_addMethod(obj, $instanceEquals, (IMP)InstanceEquals, "$@:v");
+    return obj;
 }
 
 /**
@@ -131,20 +149,20 @@ DSObject* $DSObject() {
  */
 Class class_loadDSObject() {
     DSObjectClass = (struct DSObjectClass) {
-        .isa            = ISA(DSObject),
-        .superclass     = ISA(DS),
+        .isa            = IZA(DSObject),
+        .superclass     = IZA(DS),
         .name           = "DSObject",
         .instance_size  = sizeof(DSObject), 
         .Create         = $DSObject,
-        .ToString       = Virtual_ToString,
-        .Equals         = Virtual_Equals,
-        .GetHashCode    = Virtual_GetHashCode,
-        .Dispose        = Virtual_Dispose,
+        .ToString       = DSObject_ToString,
+        .Equals         = DSObject_Equals,
+        .GetHashCode    = DSObject_GetHashCode,
+        .Dispose        = DSObject_Dispose,
         .ReferenceEquals= ReferenceEquals,
         .InstanceEquals = InstanceEquals
     };
-    DSClass.classes[DSClass.count++] = ISA(DSObject); 
+    DSClassList.classes[DSClassList.count++] = IZA(DSObject); 
 
-    return ISA(DSObject);
+    return IZA(DSObject);
 }
 

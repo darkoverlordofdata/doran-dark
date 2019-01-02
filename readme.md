@@ -1,6 +1,17 @@
-# darkstep
+# DaRKSTEP
 
-generic function runtime inspired by nextstep object. Linked with boehm gc.
+generic function runtime inspired by NSObject. Linked with boehm gc.
+reimplements NeXTSTEP object system entirely in c11 with clang extensions.
+
+message notation ObjC:
+
+    [object selector param];
+
+DarkC uses 'cartouche':
+
+    _(object, $selector, param);
+
+
 
 clang c99 with extensions:
 * BlocksRuntime
@@ -60,8 +71,16 @@ void overload ForEach(DSList const this, void (^iter)(DSString))
 }
 
 int main(int argc, char **argv) {
-    DSList ls = DSListClass.Create();
-    Add(ls, DSStringClass.Create("first"));
+
+    // message semantics
+    // $DSList is &DSListClass
+    DSList ls = _(_($DSList, $alloc)$init);
+    _(ls, $add, $("first"));
+    _(ls, $add, $("second"));
+
+    // classic semantics
+    DSList ls = $DSList->alloc()->init();
+    Add(ls, $("first"));
     Add(ls, $("second"));
 
 

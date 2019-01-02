@@ -6,6 +6,15 @@
 #include "darkunit.h"
 
 
+void TestHashMap();
+char keys[12][7] = {
+    "key1", "key2", "AbCdEf",
+    "key4", "key5", "key6",
+    "key7", "key8", "key9",
+    "keyA", "keyB", "keyC",
+};
+struct hashmap* class_hash;
+
 int main(int argc, char **argv) {
 
     __block struct DSLong* l = $DSLong(420);
@@ -13,17 +22,14 @@ int main(int argc, char **argv) {
     __block DSBoolean* b = $DSBoolean(true);
     DSLog("should be DSBoolean: %s", GetClassName(b));
 
+    // Class klass =  NX_hashmap_get(class_hash, "DSArray");
+    // DSLog("%s length = %d", klass->name, klass->instance_size);
+    return 0;
     __block DSString* s = $("Frodo");
     __block DSArray* a = $DSArray(0);
     __block DSList* q = $DSList();
     __block DSHashmap* h = $DSHashmap();
 
-    char keys[12][5] = {
-        "key1", "key2", "key3",
-        "key4", "key5", "key6",
-        "key7", "key8", "key9",
-        "keyA", "keyB", "keyC",
-    };
     for (int i=0; i<12; i++)
     {
         DSLog("%s", keys[i]);
@@ -129,10 +135,112 @@ int main(int argc, char **argv) {
     DSLog("Tests passed: %d", tests.passed);
     DSLog("Tests failed: %d", tests.failed);
 
-    return tests.failed;
-    DSLog("Hello World");
+    SEL _Add = "Add";
+    DSLog("SEL = %s", _Add);
 
-    return 0;
+    TestHashMap();
+    DSLog("sizeof(DSObject) = %d", sizeof(DSObject));
+    DSLog("sizeof(id) = %d", sizeof(id));
+    return tests.failed;
+}
+/* Some sample data structure with a string key */
+struct blob {
+  char key[32];
+  size_t data_len;
+  unsigned char data[1024];
+};
+
+HASHMAP_FUNCS_CREATE(DX, const char, struct blob)
+
+struct blob *blob_load(void)
+{ 
+    static k = 0;
+    struct blob *b;
+
+    if (k < 12) {
+        b = DSMalloc(sizeof(struct blob));
+        b->data_len = strlen(keys[k]);
+        memcpy(&b->key, &keys[k], b->data_len);
+        memcpy(&b->data, &keys[k], b->data_len);
+        k++;
+    }
+
+    /*
+    * Hypothetical function that allocates and loads blob structures
+    * from somewhere.  Returns NULL when there are no more blobs to load.
+    */
+    return b;
 }
 
+/* Hashmap structure */
+struct hashmap map;
 
+void TestHashMap() {
+    struct blob *b;
+    struct hashmap_iter *iter;
+
+    /* Initialize with default string key functions and init size */
+    hashmap_init(&map, hashmap_hash_string, hashmap_compare_string, 0);
+
+    /* Load some sample data into the map and discard duplicates */
+    while ((b = blob_load()) != NULL) {
+        if (DX_hashmap_put(&map, b->key, b) != b) {
+            DSLog("discarding blob with duplicate key: %s", b->key);
+            free(b);
+        }
+    }
+
+    /* Lookup a blob with key "AbCdEf" */
+    b = DX_hashmap_get(&map, "AbCdEf");
+    if (b) {
+        DSLog("Found blob[%s]", b->key);
+    }
+
+    /* Iterate through all blobs and print each one */
+    for (iter = hashmap_iter(&map); iter; iter = hashmap_iter_next(&map, iter)) {
+        DSLog("blob[%s]: data_len %u bytes", DX_hashmap_iter_get_key(iter),
+        DX_hashmap_iter_get_data(iter)->data_len);
+    }
+
+    /* Remove all blobs with no data */
+    iter = hashmap_iter(&map);
+    while (iter) {
+        b = DX_hashmap_iter_get_data(iter);
+        if (b->data_len == 0) {
+            iter = hashmap_iter_remove(&map, iter);
+            free(b);
+        } else {
+            iter = hashmap_iter_next(&map, iter);
+        }
+    }
+
+    /* Free all allocated resources associated with map and reset its state */
+    hashmap_destroy(&map);
+
+
+}
+
+typedef struct Person {
+    Class isa;
+    DSString* firstName;
+    DSString* lastName;
+    DSInteger* age;
+} Person;
+
+//https://www.cocoawithlove.com/2010/01/what-is-meta-class-in-objective-c.html
+
+void makeClass() {
+    // Class c = objc_allocateClassPair(&DSObjectClass, "Person", 0);
+    // class_addIvar(c, "firstName", sizeof(id), log2(sizeof(id)), '@');
+    // class_addIvar(c, "lastName", sizeof(id), log2(sizeof(id)), '@');
+    // class_addIvar(c, "age", sizeof(DSInteger), log2(sizeof(DSInteger)), 'i');
+
+    // Ivar firstNameIvar = class_getInstanceVariable(c, "firstName");
+    // Ivar lastNameIvar = class_getInstanceVariable(c, "lastName");
+    // int ageOffset = ivar_getOffset(class_getInstanceVariable(c, "age"));
+
+    // objc_registerClassPair(c);
+
+    // Class PersonClass = DSClassFromString("Person");
+    // Person* alex = _(_(PersonClass, $alloc),$init);
+}

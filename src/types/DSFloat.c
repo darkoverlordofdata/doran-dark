@@ -39,7 +39,7 @@ static DSException(NumberFormat);
 DSFloat* DSFloat_init(DSFloat* const this, float value)
 {
     DSNumber_init(this);
-    this->isa = ISA(DSFloat);
+    this->isa = IZA(DSFloat);
     this->value = value;
     return this;
 }

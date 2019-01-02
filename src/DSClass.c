@@ -33,14 +33,22 @@ SOFTWARE.
  */
 void __attribute__((constructor(101))) DSClassBoot() 
 {
+    /** Initialize the runtime object system */
+
+    /** Initialize the framework */
     DSClass = (struct DSClass) { 
         .isa            = &DSClass,
         .superclass     = &DSClass,
         .name           = "DSClass",
         .instance_size  = sizeof(DSClass),
+    };
+
+    DSClassList = (struct DSClassList) {
         .count          = 1, 
         .classes        = { &DSClass } 
     };
+
+    objc_init();
 
     class_loadDSObject();
     class_loadDSComparable();
@@ -64,3 +72,25 @@ void __attribute__((constructor(101))) DSClassBoot()
     // }
 
 }
+
+Class implement_DSClass(Class super) 
+{
+    Class obj = objc_allocateClassPair(super, "DSClass", 0);
+
+}
+/** 
+ * The interface to objc_sendMessage:
+ * 
+ *      DSDictionary d* = _(_(DSDictionary, $alloc)$init); 
+ *      _(d, $setObject, anObject, $forKey, $("foo"));
+ * 
+ *  In vala, call as:
+ * 
+ *  DSDictionary d* = _(_(DSDictionary, $alloc)$init);
+ *  _(d, setObject: anObject, forKey: $("foo"));
+ * 
+ */
+id _(id this, SEL _cmd, ...) {
+
+}
+

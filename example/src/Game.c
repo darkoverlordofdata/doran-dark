@@ -12,6 +12,7 @@
 #include <GameObject.h>
 #include <BallObject.h>
 
+
 const Vec2 ZERO = { 0, 0 };
 const Vec3 WHITE = { 1, 1, 1 };
 
@@ -28,6 +29,7 @@ class (Collision)
     Direction second; 
     Vec2 third;
 }; 
+
 
 /**
  * Collision Result Tuple

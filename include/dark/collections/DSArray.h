@@ -44,6 +44,18 @@ class (DSArray)
     int capacity;
 };
 
+typedef int     (*DSArrayLength)    (const DSArray* const);
+typedef void    (*DSArrayResize)    (const DSArray* const, int);
+typedef void    (*DSArrayAdd)       (DSArray* const, const Any);
+typedef void    (*DSArraySet)       (const DSArray* const, int, const Any);
+typedef Any     (*DSArrayGet)       (const DSArray* const, int);
+typedef void    (*DSArrayRemove)    (const DSArray* const, int);
+typedef void    (*DSArrayDispose)   (DSArray* const);
+typedef void    (*DSArrayClear)     (const DSArray* const);
+typedef bool    (*DSArrayIsEmpty)   (const DSArray* const);
+typedef bool    (*DSArrayContains)  (const DSArray* const, const Any);
+typedef char*   (*DSArrayToString)  (const DSArray* const);
+
 /**
  * Array metaclass
  */
@@ -52,7 +64,7 @@ struct DSArrayClass
     Class  isa;
     Class  superclass;
     char*   name;
-    long    info, instance_size;
+    long    version, info, instance_size;
     char*   (*ToString) (const DSArray* const);
     bool    (*Equals) (const DSObject* const, struct Object  *const);
     int     (*GetHashCode) (const DSObject* const);

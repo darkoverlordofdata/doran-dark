@@ -174,7 +174,7 @@ unsigned int overload HashInt(DSHashmap* const this, char* keystring)
 DSHashmap* DSHashmap_init(DSHashmap* const this)
 {
     DSObject_init(this);
-    this->isa = ISA(DSHashmap);
+    this->isa = IZA(DSHashmap);
 
     this->data = DSCalloc(INITIAL_SIZE, sizeof(DSHashmapNode));
 	this->tableSize = INITIAL_SIZE;

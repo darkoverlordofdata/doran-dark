@@ -36,7 +36,7 @@ static DSException(AbstractMethod);
 DSCollection* DSCollection_init(DSCollection* const this)
 {
     DSObject_init(this);
-    this->isa = ISA(DSCollection);
+    this->isa = IZA(DSCollection);
     return this;
 }
 
@@ -47,7 +47,7 @@ int overload Length(DSCollection* const this)
 {
     return this->isa->Length(this);
 }
-static int Abstract_Length(DSCollection* const this)
+int DSCollection_Length(DSCollection* const this)
 {
     return DSAbstractMethodException("Collection_Length");
 }
@@ -56,15 +56,23 @@ void Collection_Add(DSCollection* const this, Any data)
 {
     this->isa->Add(this, data);
 }
-static void Abstract_Add(DSCollection* const this, Any data)
+void DSCollection_Add(DSCollection* const this, Any data)
 {
     DSAbstractMethodException("Collection_Add");
 }
 
+Class implement_DSCollection(Class super) 
+{
+    Class obj = objc_allocateClassPair(super, "DSCollection", 0);
+    class_addMethod(obj, $length, (IMP)DSCollection_Length, "i@:v");
+    class_addMethod(obj, $add, (IMP)DSCollection_Add, "v@:@");
+    return obj;
+
+}
 /**
  * Collection Class Metadata
  */
 DSDefine(DSCollection, DSObject, cls, {
-    cls->Length         = Abstract_Length;
-    cls->Add            = Abstract_Add;
+    cls->Length         = DSCollection_Length;
+    cls->Add            = DSCollection_Add;
 });

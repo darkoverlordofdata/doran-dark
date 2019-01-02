@@ -66,7 +66,7 @@ static DSException(OutOfMemory);
 DSStringBuilder* StringBuilder_init(DSStringBuilder* const this)
 {
     DSObject_init(this);
-    this->isa = ISA(DSStringBuilder); 
+    this->isa = IZA(DSStringBuilder); 
 	return this;
 }
 

@@ -88,7 +88,7 @@ struct DSStringBuilderClass
     Class  isa;
     Class  superclass;
     char*   name;
-    long    info, instance_size;
+    long    version, info, instance_size;
     char*   (*ToString) (DSStringBuilder* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);

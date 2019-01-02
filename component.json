@@ -39,8 +39,7 @@
   ],
   "packages": null,
   "includes": [
-    ".lib/dark/include",
-    ".lib/dark/vendor",
+    ".lib/dark/include"
   ],
   "libraries": [
     "gc",

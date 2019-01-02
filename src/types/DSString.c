@@ -39,7 +39,7 @@ static DSException(IndexOutOfBounds);
 DSString* String_init(DSString* const this, char* value)
 {
     DSComparable_init(this);
-    this->isa = ISA(DSString);
+    this->isa = IZA(DSString);
     this->value = strdup(value);
     this->length = strlen(value);
     return this;

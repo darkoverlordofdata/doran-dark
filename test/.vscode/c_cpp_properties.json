@@ -3,7 +3,7 @@
         {
             "name": "Win32",
             "includePath": [
-                "${workspaceFolder}/.lib/dark/vendor/tgc",
+                "${workspaceFolder}/.lib/dark/src/vendor",
                 "${workspaceFolder}/.lib/dark/include",
                 "C:/msys64/mingw64/include"
             ],

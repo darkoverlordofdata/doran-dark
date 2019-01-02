@@ -62,7 +62,7 @@ struct DSObjectClass
     Class   isa;
     Class   superclass;
     char*   name;
-    long    info, instance_size;
+    long    version, info, instance_size;
     char*   (*ToString) (const DSObject* const);
     bool    (*Equals) (const DSObject* const, const DSObject* const);
     int     (*GetHashCode) (const DSObject* const);
@@ -80,7 +80,10 @@ Class GetClass(const DSObject* const);
 char* GetClassName(const DSObject* const);
 bool ReferenceEquals(const DSObject* const, const DSObject* const);
 bool InstanceEquals(const DSObject* const, const DSObject* const);
-static bool Virtual_Equals(DSObject* const, DSObject* const);
+bool DSObject_Equals(DSObject* const, DSObject* const);
+void DSObject_Dispose(DSObject* const);
+const char *DSObject_ToString(const DSObject* const);
+int DSObject_GetHashCode(const DSObject* const);
 
 const char* overload ToString(const DSObject* const);
 bool overload Equals(const DSObject* const, const DSObject* const);

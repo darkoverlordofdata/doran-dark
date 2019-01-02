@@ -39,7 +39,7 @@ static DSException(NumberFormat);
 DSShort* DSShort_init(DSShort* const this, short value)
 {
     DSNumber_init(this);
-    this->isa = ISA(DSShort);
+    this->isa = IZA(DSShort);
     this->value = value;
     return this;
 }
