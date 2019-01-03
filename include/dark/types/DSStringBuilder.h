@@ -106,11 +106,12 @@ struct DSStringBuilderClass
 } DSStringBuilderClass;
 
 __attribute__((__format__ (__printf__, 2, 3)))
-int StringBuilder_Appendf(DSStringBuilder* sb, const char *format, ...);
-int StringBuilder_Appendc(DSStringBuilder* sb, const char c);
-int StringBuilder_Append(DSStringBuilder* sb, const char *str);
-DSString* StringBuilder_Concat(DSStringBuilder* sb);
-void StringBuilder_Reset(DSStringBuilder* sb);
-int StringBuilder_Empty(DSStringBuilder* sb);
+int DSStringBuilder_Appendf(DSStringBuilder* sb, const char *format, ...);
+int DSStringBuilder_Appendc(DSStringBuilder* sb, const char c);
+int DSStringBuilder_Append(DSStringBuilder* sb, const char *str);
+DSString* DSStringBuilder_Concat(DSStringBuilder* sb);
+void DSStringBuilder_Reset(DSStringBuilder* sb);
+int DSStringBuilder_Empty(DSStringBuilder* sb);
+void DSStringBuilder_Dispose(DSStringBuilder*);
 
 #endif _DSSTRING_BUILDER_H_

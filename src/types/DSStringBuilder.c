@@ -57,16 +57,31 @@ SOFTWARE.
  * Throws OutOfMemoryException:
  */
 static DSException(OutOfMemory);
+begin_class(DSStringBuilder)
+
+    method("Append", DSStringBuilder_Append, "i@:v");
+    method("Appendc", DSStringBuilder_Appendc, "i@:c");
+    method("Appendf", DSStringBuilder_Appendf, "i@:c.");
+    method("Concat", DSStringBuilder_Concat, "$@:v");
+    method("Dispose", DSStringBuilder_Dispose, "v@:v");
+    method("Empty", DSStringBuilder_Empty, "B@:v");
+    method("Reset", DSStringBuilder_Reset, "v@:v");
+
+    ivar("root", sizeof(id), "^");
+    ivar("trunk", sizeof(id), "^");
+    ivar("length", sizeof(int), "i");
+
+end_class
 
 /* 
  * Constructor
  * create a new StringBuilder
  * 
  */
-DSStringBuilder* StringBuilder_init(DSStringBuilder* const this)
+DSStringBuilder* DSStringBuilder_init(DSStringBuilder* const this)
 {
     DSObject_init(this);
-    this->isa = IZA(DSStringBuilder); 
+    this->isa = ISA(DSStringBuilder); 
 	return this;
 }
 
@@ -74,13 +89,13 @@ DSStringBuilder* StringBuilder_init(DSStringBuilder* const this)
 /*
  * sb_empty returns non-zero if the given StringBuilder is empty.
  */
-int StringBuilder_Empty(DSStringBuilder* this)
+int DSStringBuilder_Empty(DSStringBuilder* this)
 {
 	return (this->root == nullptr);
 }
 
 
-int StringBuilder_Appendc(DSStringBuilder* this, const char c)
+int DSStringBuilder_Appendc(DSStringBuilder* this, const char c)
 {
 	char str[2] = { c, 0 };
 	return this->isa->Append(this, str);
@@ -88,7 +103,7 @@ int StringBuilder_Appendc(DSStringBuilder* this, const char c)
 /*
  * sb_append adds a copy of the given string to a StringBuilder.
  */
-int StringBuilder_Append(DSStringBuilder* this, const char *str)
+int DSStringBuilder_Append(DSStringBuilder* this, const char *str)
 {
 	int	length = 0;
 	struct StringFragment * frag = nullptr;
@@ -119,7 +134,7 @@ int StringBuilder_Append(DSStringBuilder* this, const char *str)
  * sb_appendf adds a copy of the given formatted string to a StringBuilder.
  */
 __attribute__((__format__ (__printf__, 2, 3)))
-int StringBuilder_Appendf(DSStringBuilder* this, const char *format, ...)
+int DSStringBuilder_Appendf(DSStringBuilder* this, const char *format, ...)
 {
 	const int MAX_FRAG_LENGTH = 4096;
 	int len = 0;
@@ -133,7 +148,7 @@ int StringBuilder_Appendf(DSStringBuilder* this, const char *format, ...)
 	if (0 > len)
 		return DSOutOfMemoryException("StringBuilder::Append");
 
-	return StringBuilder_Append(this, buf);
+	return DSStringBuilder_Append(this, buf);
 }
 
 /*
@@ -144,7 +159,7 @@ int StringBuilder_Appendf(DSStringBuilder* this, const char *format, ...)
  * The StringBuilder is not modified by this function and can therefore continue
  * to be used.
  */
-DSString* StringBuilder_Concat(DSStringBuilder* this)
+DSString* DSStringBuilder_Concat(DSStringBuilder* this)
 {
 	char *buf = nullptr;
 	char *c = nullptr;
@@ -168,7 +183,7 @@ DSString* StringBuilder_Concat(DSStringBuilder* this)
  * sb_reset resets the given StringBuilder, freeing all previously appended
  * strings.
  */
-void StringBuilder_Reset(DSStringBuilder* this)
+void DSStringBuilder_Reset(DSStringBuilder* this)
 {
 	StringFragment* frag = nullptr;
 	StringFragment* next = nullptr;
@@ -182,19 +197,19 @@ void StringBuilder_Reset(DSStringBuilder* this)
 /*
  * sb_free frees the given StringBuilder and all of its appended strings.
  */
-void StringBuilder_Dispose(DSStringBuilder* this)
+void DSStringBuilder_Dispose(DSStringBuilder* this)
 {
-	StringBuilder_Reset(this);
+	DSStringBuilder_Reset(this);
 }
 
 
-char* StringBuilder_ToString(DSStringBuilder* this)
+char* DSStringBuilder_ToString(DSStringBuilder* this)
 {
     return "dark.StringBuilder";
 }
 
 DSStringBuilder* $DSStringBuilder() { 
-	return StringBuilder_init(class_alloc(DSStringBuilder)); 
+	return DSStringBuilder_init(class_alloc(DSStringBuilder)); 
 }
 
 /**
@@ -202,12 +217,12 @@ DSStringBuilder* $DSStringBuilder() {
  */
 DSDefine(DSStringBuilder, DSObject, cls, {
     cls->Create     	= $DSStringBuilder;
-	cls->Append         = StringBuilder_Append;
-	cls->Appendc        = StringBuilder_Appendc;
-	cls->Appendf        = StringBuilder_Appendf;
-	cls->Concat         = StringBuilder_Concat;
-	cls->Dispose        = StringBuilder_Dispose;
-	cls->Empty          = StringBuilder_Empty;
-	cls->Reset          = StringBuilder_Reset;
+	cls->Append         = DSStringBuilder_Append;
+	cls->Appendc        = DSStringBuilder_Appendc;
+	cls->Appendf        = DSStringBuilder_Appendf;
+	cls->Concat         = DSStringBuilder_Concat;
+	cls->Dispose        = DSStringBuilder_Dispose;
+	cls->Empty          = DSStringBuilder_Empty;
+	cls->Reset          = DSStringBuilder_Reset;
 });
 

@@ -28,6 +28,20 @@ SOFTWARE.
  * Throws LongFormatException:
  */
 static DSException(LongFormat);
+begin_class(DSLong)
+
+    method("ToString", DSLong_ToString, "$@:v");
+    method("CompareTo", DSLong_CompareTo, "i@:@");
+    method("IntValue", DSLong_IntValue, "i@:v");
+    method("LongValue", DSLong_LongValue, "l@:v");
+    method("FloatValue", DSLong_FloatValue, "f@:v");
+    method("DoubleValue", DSLong_DoubleValue, "d@:v");
+    method("CharValue", DSLong_CharValue, "c@:v");
+    method("ShortValue", DSLong_ShortValue, "s@:v");
+
+    ivar("value", sizeof(long), "l");
+
+end_class
 
 /**
  * Constructor
@@ -39,7 +53,7 @@ static DSException(LongFormat);
 DSLong* DSLong_init(DSLong* const this, long value)
 {
     DSNumber_init(this);
-    this->isa = IZA(DSLong);
+    this->isa = ISA(DSLong);
     this->value = value;
     return this;
 }
@@ -133,7 +147,7 @@ bool DSLong_Equals(DSLong* const this, DSLong* const other)
     return this->value == other->value;
 }
 
-char* DSLong_ToString(DSLong* const this)
+char* DSLong_ToString(const DSLong* const this)
 {
     static char str[20];
     sprintf(str, "%d", this->value);

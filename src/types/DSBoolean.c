@@ -24,6 +24,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSBoolean.h>
+begin_class(DSBoolean)
+
+    method("ToString", (DSBooleanToString)ToString, "$@:v");
+    method("CompareTo", (DSBooleanCompareTo)CompareTo, "i@:@");
+    ivar("value", sizeof(int), "B");
+
+    class_ivar("Bytes", sizeof(int), "i");
+    class_ivar("Size", sizeof(int), "i");
+    class_ivar("Type", sizeof(int), "i");
+    class_ivar("True", sizeof(id), "@");
+    class_ivar("False", sizeof(id), "@");
+    
+end_class
+
+
 /**
  * Constructor
  * create a new DSBoolean
@@ -34,7 +49,7 @@ SOFTWARE.
 DSBoolean* DSBoolean_init(DSBoolean* this, bool value)
 {
     DSComparable_init(this);
-    this->isa = IZA(DSBoolean);
+    this->isa = ISA(DSBoolean);
     this->value = value;
     return this;
 }
@@ -87,10 +102,14 @@ char* overload ToString(const DSBoolean*  const this)
 }
 
 
+
+
+/**
+ * New DSBoolean
+ */
 DSBoolean* $DSBoolean(bool value) { 
     return DSBoolean_init(class_alloc(DSBoolean), value); 
 }
-
 /** class constant: True */
 static const DSBoolean True = {
     .isa  = &DSBooleanClass,
@@ -103,21 +122,8 @@ static const DSBoolean False = {
     .value = false
 };
 
-// void implement_DSBoolean(Class obj) 
-// {
-//     class_addMethod(obj, $toString, (IMP)ToString, "$@:v");
-//     class_addMethod(obj, $equals, (IMP)DSObject_Equals, "B@:@@");
-//     class_addMethod(obj, $getHashCode, (IMP)DSObject_GetHashCode, "l@:v");
-//     class_addMethod(obj, $dispose, (IMP)DSObject_Dispose, "v@:v");
-//     class_addMethod(obj, $referenceEquals, (IMP)ReferenceEquals, "$@:v");
-//     class_addMethod(obj, $instanceEquals, (IMP)InstanceEquals, "$@:v");
-//     class_addMethod(obj, $compareTo, (IMP)DSComparable_CompareTo, "i@:@");
-
-//     class_addIvar(obj, "value", sizeof(int), log2(sizeof(int)), "i");
-// }
-
 /**
- * DSBoolean Class Metadata
+ * Connect the generic method interface
  */
 DSDefine(DSBoolean, DSComparable, cls, {
     cls->ToString       = ToString;

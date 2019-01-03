@@ -28,6 +28,32 @@ SOFTWARE.
  * Throws IndexOutOfBoundsException:
  */
 static DSException(IndexOutOfBounds);
+begin_class(DSString)
+
+    method("ToString", DSString_ToString, "$@:v");
+    method("CompareTo", DSString_CompareTo, "i@:@");
+    method("f", DSString_Dispose, "v@:v");
+    method("Length", Length, "i@:v");
+    method("IsEmpty", DSString_IsEmpty, "B@:v");    
+    method("CharAt", DSString_CharAt, "c@:i");
+    method("CompareToIgnoreCase", DSString_CompareToIgnoreCase, "@:");    
+    method("Concat", DSString_Concat, "v@:$");
+    method("Concatc", DSString_Concatc, "v@:c");
+    method("Contains", DSString_Contains, "B@:$");
+    method("CopyOf", DSString_CopyOf, "$@:v");
+    method("EndsWith", DSString_EndsWith, "B@:$");
+    method("StartsWith", DSString_StartsWith, "B@:$");
+    method("GetBytes", DSString_GetBytes, "b@:*");
+    method("IndexOf", DSString_IndexOf, "i@:$");
+    method("LastIndexOf", DSString_LastIndexOf, "i@:$");
+    method("ToLowerCase", DSString_ToLowerCase, "$@:v");
+    method("ToUpperCase", DSString_ToUpperCase, "$@:v");
+    method("Trim", DSString_Trim, "$@:v");
+
+    ivar("value", sizeof(char*), "*");
+    ivar("length", sizeof(int), "i");
+
+end_class
 
 /**
  * Constructor
@@ -36,16 +62,16 @@ static DSException(IndexOutOfBounds);
  * @param value of long
  * 
  */
-DSString* String_init(DSString* const this, char* value)
+DSString* DSString_init(DSString* const this, char* value)
 {
     DSComparable_init(this);
-    this->isa = IZA(DSString);
+    this->isa = ISA(DSString);
     this->value = strdup(value);
     this->length = strlen(value);
     return this;
 }
 
-void String_GetChars(DSString* this, char* dst, int dstBegin) {
+void DSString_GetChars(DSString* this, char* dst, int dstBegin) {
     memcpy(dst+dstBegin, this->value, this->length);
 }
 
@@ -58,7 +84,7 @@ void String_GetChars(DSString* this, char* dst, int dstBegin) {
  *         +1 x is true
  *         -1 y is true
  */
-int String_Compare(char* x, char* y) {
+int DSString_Compare(char* x, char* y) {
     return strcmp(x, y);
 }
 
@@ -68,15 +94,15 @@ int String_Compare(char* x, char* y) {
  * @param   other  String to be compared
  * @return same as String_Compare
  */
-int String_CompareTo(DSString* this, DSString* other) {
-    return String_Compare(this->value, other->value);
+int DSString_CompareTo(DSString* this, DSString* other) {
+    return DSString_Compare(this->value, other->value);
 }
 
-int String_CompareToIgnoreCase(DSString* this, DSString* str) {
+int DSString_CompareToIgnoreCase(DSString* this, DSString* str) {
     return strcmpi(this->value, str->value);
 }
 
-DSString* String_Concatc(DSString* this, char* other) {
+DSString* DSString_Concatc(DSString* this, char* other) {
     int length = strlen(other);
     if (length == 0) return this;
     int len = this->length;
@@ -88,7 +114,7 @@ DSString* String_Concatc(DSString* this, char* other) {
 
 }
 
-DSString* String_Concat(DSString* this, DSString* other) {
+DSString* DSString_Concat(DSString* this, DSString* other) {
     if (other->length == 0)
         return this;
 
@@ -100,47 +126,47 @@ DSString* String_Concat(DSString* this, DSString* other) {
     return result;
 }
 
-bool String_Contains(DSString* this, DSString* s) {
+bool DSString_Contains(DSString* this, DSString* s) {
     return this->isa->IndexOf(this, s, 0) > -1;
 }
 
-DSString* String_CopyOf(DSString* this) {
+DSString* DSString_CopyOf(DSString* this) {
     return DSStringClass.Create(this->value);
 }
 
-bool String_EndsWith(DSString* this, DSString* suffix) {
+bool DSString_EndsWith(DSString* this, DSString* suffix) {
     char* offset = this->value + this->length - suffix->length;
     return !strcmp(offset, suffix);
 }
 
-bool String_StartsWith(DSString* this, DSString* prefix, int offset) {
+bool DSString_StartsWith(DSString* this, DSString* prefix, int offset) {
     char* c = strstr(this->value+offset, prefix->value);
     return c == (this->value+offset) ? true : false;
 }
 
-char* String_GetBytes(DSString* this) {
+char* DSString_GetBytes(DSString* this) {
     return strdup(this->value);
 }
 
-int String_IndexOf(DSString* this, DSString* str, int offset) {
+int DSString_IndexOf(DSString* this, DSString* str, int offset) {
     char* c = strstr(this->value+offset, str->value);
     return c == nullptr ? 0 : c - this->value;
 }
 
-int String_LastIndexOf(DSString* this, DSString* str, int offset) {
+int DSString_LastIndexOf(DSString* this, DSString* str, int offset) {
     char* c = strrstr(this->value+offset, str->value);
     return c == nullptr ? 0 : c - this->value;
 }
 
-DSString* String_ToUpperCase(DSString* this) {
+DSString* DSString_ToUpperCase(DSString* this) {
     return DSStringClass.Create(strupr(this->value));
 }
 
-DSString* String_ToLowerCase(DSString* this) {
+DSString* DSString_ToLowerCase(DSString* this) {
     return DSStringClass.Create(strlwr(this->value));
 }
 
-DSString* String_Trim(DSString* this) {
+DSString* DSString_Trim(DSString* this) {
     int len = this->length;
     int start = 0;
     while ((start < len) && (this->value[start] <= ' ')) {
@@ -159,12 +185,12 @@ int overload Length(DSString* const this)
     return this->length;
 }
 
-bool String_IsEmpty(DSString* const this)
+bool DSString_IsEmpty(DSString* const this)
 {
     return this->length == 0;
 }
 
-char String_CharAt(DSString* const this, int index)
+char DSString_CharAt(DSString* const this, int index)
 {
     printf("string %d,%d %s\n", index, this->length, this->value);
     if (index < 0 || index >= this->length)
@@ -173,12 +199,12 @@ char String_CharAt(DSString* const this, int index)
 }
  
 
-char* String_ToString(DSString* const this)
+char* DSString_ToString(const DSString* const this)
 {
     return this->value;
 }
 
-void String_Dispose(DSString* const this)
+void DSString_Dispose(DSString* const this)
 {
 }
 
@@ -186,7 +212,7 @@ void String_Dispose(DSString* const this)
  * Shortcut for a new string object
  */
 DSString* $(const char* const str) {
-    return String_init(class_alloc(DSString), str); 
+    return DSString_init(class_alloc(DSString), str); 
 }
 
 /**
@@ -194,30 +220,30 @@ DSString* $(const char* const str) {
  */
 DSDefine(DSString, DSObject, cls, {
     cls->Create         = $;
-    cls->ToString       = String_ToString;
-    cls->Dispose        = String_Dispose;
-    cls->CompareTo      = String_CompareTo;
+    cls->ToString       = DSString_ToString;
+    cls->Dispose        = DSString_Dispose;
+    cls->CompareTo      = DSString_CompareTo;
     cls->Length         = Length;
-    cls->IsEmpty        = String_IsEmpty;
-    cls->CharAt         = String_CharAt;
-    cls->CompareToIgnoreCase = String_CompareToIgnoreCase;
-    cls->Concat         = String_Concat;
-    cls->Concatc        = String_Concatc;
-    cls->Contains       = String_Contains;
-    cls->CopyOf         = String_CopyOf;
-    cls->EndsWith       = String_EndsWith;
-    cls->StartsWith     = String_StartsWith;
-    cls->GetBytes       = String_GetBytes;
-    cls->IndexOf        = String_IndexOf;
-    cls->LastIndexOf    = String_LastIndexOf;
-    cls->ToLowerCase    = String_ToLowerCase;
-    cls->ToUpperCase    = String_ToUpperCase;
-    cls->Trim           = String_Trim;
+    cls->IsEmpty        = DSString_IsEmpty;
+    cls->CharAt         = DSString_CharAt;
+    cls->CompareToIgnoreCase = DSString_CompareToIgnoreCase;
+    cls->Concat         = DSString_Concat;
+    cls->Concatc        = DSString_Concatc;
+    cls->Contains       = DSString_Contains;
+    cls->CopyOf         = DSString_CopyOf;
+    cls->EndsWith       = DSString_EndsWith;
+    cls->StartsWith     = DSString_StartsWith;
+    cls->GetBytes       = DSString_GetBytes;
+    cls->IndexOf        = DSString_IndexOf;
+    cls->LastIndexOf    = DSString_LastIndexOf;
+    cls->ToLowerCase    = DSString_ToLowerCase;
+    cls->ToUpperCase    = DSString_ToUpperCase;
+    cls->Trim           = DSString_Trim;
 });
 
 
 __attribute__((__format__ (__printf__, 1, 2)))
-DSString* String_Format(char* format, ...) {
+DSString* DSString_Format(char* format, ...) {
     va_list args1;
     va_list args2;
     

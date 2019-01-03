@@ -47,6 +47,7 @@ typedef struct DSObject {
 	const struct DSObjectClass* isa;
 } DSObject;
 
+
 /**
  * Object Class/MetaClass
  * 

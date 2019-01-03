@@ -72,7 +72,6 @@ struct DSDoubleClass
 
 } DSDoubleClass;
 
-
 int DSDouble_CompareTo(DSDouble* const, DSDouble* const);
 int DSDouble_IntValue(DSDouble* const);
 long DSDouble_LongValue(DSDouble* const);
@@ -80,5 +79,6 @@ float DSDouble_FloatValue(DSDouble* const);
 double DSDouble_DoubleValue(DSDouble* const);
 char DSDouble_CharValue(DSDouble* const);
 short DSDouble_ShortValue(DSDouble* const);
+char* DSDouble_ToString(const DSDouble* const);
 
 #endif _DSDOUBLE_H_

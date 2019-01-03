@@ -44,6 +44,7 @@ class (DSArray)
     int capacity;
 };
 
+
 typedef int     (*DSArrayLength)    (const DSArray* const);
 typedef void    (*DSArrayResize)    (const DSArray* const, int);
 typedef void    (*DSArrayAdd)       (DSArray* const, const Any);

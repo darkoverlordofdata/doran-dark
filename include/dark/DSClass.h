@@ -54,14 +54,58 @@ struct DSClassList {
 } DSClassList;
 
 /**
+ *  MACRO begin_class
+ *      start a class definition- create objects
+ */
+#define begin_class(class) Class class##Implementation(Class super)     \
+{                                                                       \
+    Class obj = objc_allocateClassPair(super, #class, 0);
+
+/**
+ *  MACRO method
+ *      
+ */
+#define method(name, imp, type) class_addMethod(obj, name, imp, type);
+/**
+ *  MACRO ivar
+ *      
+ */
+#define ivar(name, len, type) class_addIvar(obj, name, len, log2(len), type);
+
+/**
+ *  MACRO class method
+ *      
+ */
+#define class_method(name, imp, type) class_addMethod(GETMETA(obj), name, imp, type);
+/**
+ *  MACRO  class ivar
+ *      
+ */
+#define class_ivar(name, len, type) class_addIvar(GETMETA(obj), name, len, log2(len), type);
+
+/**
+ *  MACRO end_class
+ *      wrap up, define vtable     
+ */
+#define end_class                                                       \
+    return methodizeClass(obj);                                         \
+}
+
+
+/**
  *  MACRO class
  *      start a class definition
  */
 #define class(name)                                                     \
     typedef struct name name;   /* define name */                       \
-    Class DSDefine##name();    /* forward reference DSDefinexxx() */    \ 
+    Class DSDefine##name();     /* forward reference DSDefinexxx() */   \ 
+    Class name##Implemention(Class super);                              \
     struct name
 
+#define IVAR(name)                                                      \
+    typedef struct name name;   /* define name */                       \
+    Class name##Implemention(Class super);                              \
+    struct name
 /**
  *  MACRO overload
  *      method overload 
@@ -69,23 +113,10 @@ struct DSClassList {
 #define overload __attribute__((overloadable))
 
 /**
- *  MACRO IZA
+ *  MACRO ISA
  *      generate isa value from name
  */
-#define IZA(class) &class##Class
-
-/**
- *  MACRO MAJIK
- *      Tagged ptr mask
- */
-#define MAJIK   0xd16a000000000000
-#define MUGGLE  0x00000000ffffffff
-#define LSB04   0x000000000000ffff
-#define LSB40   0x00000000ffff0000
-#define MSB04   0x0000ffff00000000
-#define MSB40   0xffff000000000000
-
-#define IZA_MASK 0x00007ffffffffff8ULL
+#define ISA(class) &class##Class
 
 
 /**
@@ -117,8 +148,8 @@ struct DSClassList {
 Class class_load##class()                                               \
 {   /* set defaults */                                                  \
     class##Class = (struct class##Class) {                              \
-        .isa            = (MAJIK | (UInt64)IZA(class)),                 \
-        .superclass     = IZA(super),                                   \
+        .isa            = ISA(class),                                   \
+        .superclass     = ISA(super),                                   \
         .name           = #class,                                       \
         .instance_size  = sizeof(class),                                \
         .Equals         = DSObjectClass.Equals,                         \
@@ -133,7 +164,7 @@ Class class_load##class()                                               \
     /* excute the code block of customizations */                       \
     do { block } while(0);                                              \
     DSClassList.classes[DSClassList.count++] = &class##Class;           \
-    return IZA(class);                                                  \
+    return ISA(class);                                                  \
 }
 
 #endif _CLASS_H_ 

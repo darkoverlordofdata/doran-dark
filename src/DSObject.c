@@ -24,6 +24,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/DSObject.h>
+begin_class(DSObject)
+
+    method("ToString", (IMP)DSObject_ToString, "$@:v");
+    method("Equals", (IMP)DSObject_Equals, "B@:@@");
+    method("GetHashCode", (IMP)DSObject_GetHashCode, "l@:v");
+    method("Dispose", (IMP)DSObject_Dispose, "v@:v");
+    method("ReferenceEquals", (IMP)ReferenceEquals, "@:v");
+    method("InstanceEquals", (IMP)InstanceEquals, "$@:v");
+
+end_class
+
 /**
  * DSObjectClass constructor
  */
@@ -132,25 +143,15 @@ DSObject* $DSObject()
     return DSObject_init(DSObject_alloc()); 
 }
 
-Class implement_DSObject() 
-{
-    Class obj = objc_allocateClassPair(nullptr, "DSObject", 0);
-    class_addMethod(obj, $toString, (IMP)DSObject_ToString, "$@:v");
-    class_addMethod(obj, $equals, (IMP)DSObject_Equals, "B@:@@");
-    class_addMethod(obj, $getHashCode, (IMP)DSObject_GetHashCode, "l@:v");
-    class_addMethod(obj, $dispose, (IMP)DSObject_Dispose, "v@:v");
-    class_addMethod(obj, $referenceEquals, (IMP)ReferenceEquals, "$@:v");
-    class_addMethod(obj, $instanceEquals, (IMP)InstanceEquals, "$@:v");
-    return obj;
-}
+
 
 /**
  * Object Class Metadata
  */
 Class class_loadDSObject() {
     DSObjectClass = (struct DSObjectClass) {
-        .isa            = IZA(DSObject),
-        .superclass     = IZA(DS),
+        .isa            = ISA(DSObject),
+        .superclass     = ISA(DS),
         .name           = "DSObject",
         .instance_size  = sizeof(DSObject), 
         .Create         = $DSObject,
@@ -161,8 +162,8 @@ Class class_loadDSObject() {
         .ReferenceEquals= ReferenceEquals,
         .InstanceEquals = InstanceEquals
     };
-    DSClassList.classes[DSClassList.count++] = IZA(DSObject); 
+    DSClassList.classes[DSClassList.count++] = ISA(DSObject); 
 
-    return IZA(DSObject);
+    return ISA(DSObject);
 }
 

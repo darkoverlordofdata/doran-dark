@@ -24,6 +24,14 @@ I may change IMP:
 
 there is no reason the reciving method needs to know the _cmd, and forwarding is smoother without it.
 
+### VTables
+Tne point is not to replicate objc, but to have objc objects available in c.
+
+That's the mantra. I'm not sole on sendMsg. rather than cacheing selectors, I'm building a vtable when the class is created. My design uses the SEL as a generic function. but I want to support sendMsg, using a 'cartouche':
+
+	_(obj, SEL, ...)
+
+
 
 
 

@@ -44,6 +44,10 @@ class (DSBoolean)
     bool value;
 };
 
+
+typedef bool    (*DSBooleanCompareTo)  (const DSBoolean* const, const DSBoolean* const);
+typedef char*   (*DSBooleanToString)  (const DSBoolean* const);
+
 /**
  * DSBoolean metaclass
  */
@@ -77,7 +81,8 @@ bool BoolValue(const DSBoolean* const);
 bool ParseBool(const char *const);
 
 int overload Compare(bool, bool);
-int overload CompareTo(const DSBoolean* const, const DSBoolean* const);
+int DSBoolean_CompareTo(const DSBoolean* const, const DSBoolean* const);
 char* overload ToString(const DSBoolean* const);
+DSBoolean* DSBoolean_init(DSBoolean* this, bool value);
 
 #endif // _DSBOOLEAN_H_

@@ -45,7 +45,7 @@ void _objc_init_class_hash(void)
 
 }
 
-void objc_init() {
+void objc_register_builtins() {
 
 
     if (!class_hash) _objc_init_class_hash();
@@ -57,39 +57,40 @@ void objc_init() {
      * will be fabricated instead of loaded.
      */
 
-    /** Class & MetaClass */
+    /** DSObject */
     Class obj;
-    objc_registerClassPair(obj = implement_DSObject());
+    objc_registerClassPair(obj = DSObjectImplementation(Nil));
 
+    /** DSClass */
     Class cls;
-    objc_registerClassPair(cls = implement_DSClass(obj));
+    objc_registerClassPair(cls = DSClassImplementation(obj));
 
+    /** DSCollection */
     Class col;
-    objc_registerClassPair(col = implement_DSCollection(obj));
+    objc_registerClassPair(col = DSCollectionImplementation(obj));
 
-    Class array;
-    objc_registerClassPair(array = implement_DSArray(col));
+    objc_registerClassPair(DSArrayImplementation(col));
+    objc_registerClassPair(DSListImplementation(col));
+    objc_registerClassPair(DSHashmapImplementation(col));
 
-    // objc_registerClassPair(implementDSDSList(col));
-    // objc_registerClassPair(implementDSDSHashmap(col));
+    /** DSComparable */
+    Class cmp;
+    objc_registerClassPair(cmp = DSComparableImplementation(obj));
 
-    // Class cmp = objc_allocateClassPair(obj, "DSComparable", 0);
-    // objc_registerClassPair(cmp);
+    objc_registerClassPair(DSBooleanImplementation(cmp));
 
-    // objc_registerClassPair(objc_allocateClassPair(cmp, "DSBoolean", 0));
+    Class num;
+    objc_registerClassPair(num = DSNumberImplementation(cmp));
 
-    // Class num = objc_allocateClassPair(cmp, "DSNumber", 0);
-    // objc_registerClassPair(num);
+    objc_registerClassPair(DSCharImplementation(num));
+    objc_registerClassPair(DSDoubleImplementation(num));
+    objc_registerClassPair(DSFloatImplementation(num));
+    objc_registerClassPair(DSIntegerImplementation(num));
+    objc_registerClassPair(DSLongImplementation(num));
+    objc_registerClassPair(DSShortImplementation(num));
 
-    // objc_registerClassPair(objc_allocateClassPair(num, "DSChar", 0));
-    // objc_registerClassPair(objc_allocateClassPair(num, "DSDouble", 0));
-    // objc_registerClassPair(objc_allocateClassPair(num, "DSFloat", 0));
-    // objc_registerClassPair(objc_allocateClassPair(num, "DSInteger", 0));
-    // objc_registerClassPair(objc_allocateClassPair(num, "DSLong", 0));
-    // objc_registerClassPair(objc_allocateClassPair(num, "DSShort", 0));
-
-    // objc_registerClassPair(objc_allocateClassPair(obj, "DSString", 0));
-    // objc_registerClassPair(objc_allocateClassPair(obj, "DSStringBuilder", 0));
+    objc_registerClassPair(DSStringImplementation(obj));
+    objc_registerClassPair(DSStringBuilderImplementation(obj));
 
 
 }
@@ -238,3 +239,17 @@ void _objc_insertMethods(Class cls, struct objc_method_list *mlist, struct objc_
     **list = mlist;
 }
 
+
+/***********************************************************************
+* methodizeClass
+* Fixes up cls's method list, protocol list, and property list.
+* Attaches any outstanding categories.
+* Builds vtable.
+* Locking: runtimeLock must be held by the caller
+**********************************************************************/
+Class methodizeClass(Class cls)
+{
+    // got thru the methodLists and build the vTable:
+
+    return cls;
+}

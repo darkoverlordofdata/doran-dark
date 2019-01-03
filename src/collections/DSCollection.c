@@ -29,6 +29,12 @@ SOFTWARE.
  * Generic Collection implementation
  */
 static DSException(AbstractMethod);
+begin_class(DSCollection)
+
+    method("Length", (IMP)DSCollection_Length, "i@:v");
+    method("Add", (IMP)DSCollection_Add, "v@:@");
+
+end_class
 
 /**
  * Initialize a new Array
@@ -36,7 +42,7 @@ static DSException(AbstractMethod);
 DSCollection* DSCollection_init(DSCollection* const this)
 {
     DSObject_init(this);
-    this->isa = IZA(DSCollection);
+    this->isa = ISA(DSCollection);
     return this;
 }
 
@@ -61,14 +67,6 @@ void DSCollection_Add(DSCollection* const this, Any data)
     DSAbstractMethodException("Collection_Add");
 }
 
-Class implement_DSCollection(Class super) 
-{
-    Class obj = objc_allocateClassPair(super, "DSCollection", 0);
-    class_addMethod(obj, $length, (IMP)DSCollection_Length, "i@:v");
-    class_addMethod(obj, $add, (IMP)DSCollection_Add, "v@:@");
-    return obj;
-
-}
 /**
  * Collection Class Metadata
  */

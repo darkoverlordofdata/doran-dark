@@ -46,6 +46,9 @@ class (DSNumber)
     struct DSNumberClass* isa;
 };
 
+typedef bool    (*DSNumberCompareTo)  (const DSNumber* const, const DSNumber* const);
+typedef char*   (*DSNumberToString)  (const DSNumber* const);
+
 /**
  * Object metaclass
  */
@@ -73,15 +76,15 @@ struct DSNumberClass
     
 } DSNumberClass;
 
-
-int Number_CompareTo(DSNumber* const, DSNumber*);
-bool Number_Equals(DSNumber* const, DSNumber*);
-int Number_IntValue(DSNumber* const);
-long LongValue(DSNumber* const);
-float Number_FloatValue(DSNumber* const);
-double Number_DoubleValue(DSNumber* const);
-char Number_CharValue(DSNumber* const);
-short Number_ShortValue(DSNumber* const);
-int Number_Digit(char, int);
+int DSNumber_CompareTo(DSNumber* const, DSNumber*);
+bool DSNumber_Equals(DSNumber* const, DSNumber*);
+int DSNumber_IntValue(DSNumber* const);
+long DSNumber_LongValue(DSNumber* const);
+float DSNumber_FloatValue(DSNumber* const);
+double DSNumber_DoubleValue(DSNumber* const);
+char DSNumber_CharValue(DSNumber* const);
+short DSNumber_ShortValue(DSNumber* const);
+int DSNumber_Digit(char, int);
+char* DSNumber_ToString(const DSNumber* const);
 
 #endif _DSNUMBER_H_

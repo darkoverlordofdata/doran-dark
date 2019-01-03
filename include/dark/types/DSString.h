@@ -82,27 +82,28 @@ struct DSStringClass
 
 
 DSString* $(const char* const value);
-int String_Compare(char* x, char* y);
-int String_CompareTo(DSString* this, DSString* other);
-int String_CompareToIgnoreCase(DSString* this, DSString* other);
-DSString* String_Concat(DSString* this, DSString* str);
-DSString* String_Concatc(DSString* this, char* str);
-bool String_Contains(DSString* this, DSString* str);
-DSString* String_CopyOf(DSString* this);
-bool String_EndsWith(DSString* this, DSString* suffix);
-bool String_StartsWith(DSString* this, DSString* prefix, int offset);
-char* String_GetBytes(DSString* this);
-int String_IndexOf(DSString* this, DSString* str, int fromIndex);
-int String_LastIndexOf(DSString* this, DSString* str, int fromIndex);
-DSString* String_ToUpperCase(DSString* this);
-DSString* String_ToLowerCase(DSString* this);
-DSString* String_Trim(DSString* this);
+void DSString_Dispose(DSString* const this);
+int DSString_Compare(char* x, char* y);
+int DSString_CompareTo(DSString* this, DSString* other);
+int DSString_CompareToIgnoreCase(DSString* this, DSString* other);
+DSString* DSString_Concat(DSString* this, DSString* str);
+DSString* DSString_Concatc(DSString* this, char* str);
+bool DSString_Contains(DSString* this, DSString* str);
+DSString* DSString_CopyOf(DSString* this);
+bool DSString_EndsWith(DSString* this, DSString* suffix);
+bool DSString_StartsWith(DSString* this, DSString* prefix, int offset);
+char* DSString_GetBytes(DSString* this);
+int DSString_IndexOf(DSString* this, DSString* str, int fromIndex);
+int DSString_LastIndexOf(DSString* this, DSString* str, int fromIndex);
+DSString* DSString_ToUpperCase(DSString* this);
+DSString* DSString_ToLowerCase(DSString* this);
+DSString* DSString_Trim(DSString* this);
 int overload Length(DSString* const);
-bool String_IsEmpty(DSString* const this);
-char String_CharAt(DSString* const this, int index);
-char* String_ToString(DSString* const this);
+bool DSString_IsEmpty(DSString* const this);
+char DSString_CharAt(DSString* const this, int index);
+char* DSString_ToString(const DSString* const this);
 
 __attribute__((__format__ (__printf__, 1, 2)))
-DSString* String_Format(char* format, ...);
+DSString* DSString_Format(char* format, ...);
 
 #endif _DSSTRING_H_

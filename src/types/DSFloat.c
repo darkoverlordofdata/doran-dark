@@ -28,6 +28,20 @@ SOFTWARE.
  * Throws NumberFormatException:
  */
 static DSException(NumberFormat);
+begin_class(DSFloat)
+
+    method("ToString", DSFloat_ToString, "$@:v");
+    method("CompareTo", DSFloat_CompareTo, "i@:@");
+    method("IntValue", DSFloat_IntValue, "i@:v");
+    method("LongValue", DSFloat_LongValue, "l@:v");
+    method("FloatValue", DSFloat_FloatValue, "f@:v");
+    method("DoubleValue", DSFloat_DoubleValue, "d@:v");
+    method("CharValue", DSFloat_CharValue, "c@:v");
+    method("ShortValue", DSFloat_ShortValue, "s@:v");
+
+    ivar("value", sizeof(float), "f");
+
+end_class
 
 /**
  * Constructor
@@ -39,7 +53,7 @@ static DSException(NumberFormat);
 DSFloat* DSFloat_init(DSFloat* const this, float value)
 {
     DSNumber_init(this);
-    this->isa = IZA(DSFloat);
+    this->isa = ISA(DSFloat);
     this->value = value;
     return this;
 }
@@ -123,7 +137,7 @@ short DSFloat_ShortValue(DSFloat* const this) {
 }
 
 
-char* DSFloat_ToString(DSFloat* const this)
+char* DSFloat_ToString(const DSFloat* const this)
 {
     static char str[20];
     sprintf(str, "%f", this->value);

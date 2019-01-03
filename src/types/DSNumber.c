@@ -28,6 +28,19 @@ SOFTWARE.
  * Throws DSAbstractMethodException:
  */
 static DSException(AbstractMethod);
+begin_class(DSNumber) 
+
+    method("ToString", DSNumber_ToString, "$@:v");
+    method("CompareTo", DSNumber_CompareTo, "i@:@");
+    method("IntValue", DSNumber_IntValue, "i@:v");
+    method("LongValue", DSNumber_LongValue, "l@:v");
+    method("FloatValue", DSNumber_FloatValue, "f@:v");
+    method("DoubleValue", DSNumber_DoubleValue, "d@:v");
+    method("CharValue", DSNumber_CharValue, "c@:v");
+    method("ShortValue", DSNumber_ShortValue, "s@:v");
+
+end_class
+
 
 /**
  * Abstract Number
@@ -36,7 +49,7 @@ static DSException(AbstractMethod);
 DSNumber* DSNumber_init(DSNumber* const this)
 {
     DSComparable_init(this);
-    this->isa = IZA(DSNumber);
+    this->isa = ISA(DSNumber);
     return this;
 }
 
@@ -49,10 +62,10 @@ DSNumber* DSNumber_init(DSNumber* const this)
  *         +1 this < other
  *         -1 this > other
  */
-int DSNumber_CompareTo(DSNumber* this, DSNumber* other) {
+int overload CompareTo(DSNumber* this, DSNumber* other) {
     return this->isa->CompareTo(this, other);
 }
-static short Abstract_CompareTo(DSNumber* const this, DSNumber* other) {
+int DSNumber_CompareTo(DSNumber* const this, DSNumber* other) {
     return DSAbstractMethodException("Number_CompareTo");
 }
 
@@ -62,7 +75,7 @@ static short Abstract_CompareTo(DSNumber* const this, DSNumber* other) {
 int overload IntValue(DSNumber* const this) {
     return this->isa->IntValue(this);
 }
-static int Abstract_IntValue(DSNumber* const this) {
+int DSNumber_IntValue(DSNumber* const this) {
     return DSAbstractMethodException("Number_IntValue");
 }
 
@@ -72,7 +85,7 @@ static int Abstract_IntValue(DSNumber* const this) {
 long LongValue(DSNumber* const this) {
     return this->isa->LongValue(this);
 }
-static long Abstract_LongValue(DSNumber* const this) {
+long DSNumber_LongValue(DSNumber* const this) {
     return DSAbstractMethodException("Number_LongValue");
 }
 
@@ -82,7 +95,7 @@ static long Abstract_LongValue(DSNumber* const this) {
 float overload FloatValue(DSNumber* const this) {
     return this->isa->FloatValue(this);
 }
-static float Abstract_FloatValue(DSNumber* const this) {
+float DSNumber_FloatValue(DSNumber* const this) {
     return DSAbstractMethodException("Number_FloatValue");
 }
 
@@ -92,7 +105,7 @@ static float Abstract_FloatValue(DSNumber* const this) {
 double overload DoubleValue(DSNumber* const this) {
     return this->isa->DoubleValue(this);
 }
-static double Abstract_DoubleValue(DSNumber* const this) {
+double DSNumber_DoubleValue(DSNumber* const this) {
     return DSAbstractMethodException("Number_DoubleValue");
 }
 
@@ -102,7 +115,7 @@ static double Abstract_DoubleValue(DSNumber* const this) {
 char overload CharValue(DSNumber* const this) {
     return this->isa->CharValue(this);
 }
-static char Abstract_CharValue(DSNumber* const this) {
+char DSNumber_CharValue(DSNumber* const this) {
     return DSAbstractMethodException("Number_CharValue");
 }
 
@@ -112,22 +125,22 @@ static char Abstract_CharValue(DSNumber* const this) {
 short overload ShortValue(DSNumber* const this) {
     return this->isa->ShortValue(this);
 }
-static short Abstract_ShortValue(DSNumber* const this) {
+short DSNumber_ShortValue(DSNumber* const this) {
     return DSAbstractMethodException("Number_ShortValue");
 }
 
 
-char* overload ToString(DSNumber* const this) {
+char* overload ToString(const DSNumber* const this) {
     return this->isa->ToString(this);
 }
-static char* Virtual_ToString(DSNumber* const this) {
+char* DSNumber_ToString(const DSNumber* const this) {
     return "dark.Number";
 }
 
-bool Number_Equals(DSNumber* const this, DSNumber* const other) {
+bool overload Equals(DSNumber* const this, DSNumber* const other) {
     return this->isa->Equals(this, other);
 }
-static bool Virtual_Equals(DSObject* const this, DSObject* const other) {
+bool DSNumber_Equals(DSNumber* const this, DSNumber* const other) {
     return true;
 }
 
@@ -135,17 +148,15 @@ static bool Virtual_Equals(DSObject* const this, DSObject* const other) {
  * DSNumber Class Metadata
  */
 DSDefine(DSNumber, DSObject, cls, {
+    cls->ToString       = DSNumber_ToString;
+    cls->Equals         = DSNumber_Equals;
     cls->CompareTo      = DSNumber_CompareTo;
-    cls->CompareTo      = DSNumber_CompareTo;
-    cls->ToString       = Virtual_ToString;
-    cls->Equals         = Virtual_Equals;
-    cls->CompareTo      = Abstract_CompareTo;
-    cls->IntValue       = Abstract_IntValue; 
-    cls->LongValue      = Abstract_LongValue; 
-    cls->FloatValue     = Abstract_FloatValue; 
-    cls->DoubleValue    = Abstract_DoubleValue; 
-    cls->CharValue      = Abstract_CharValue; 
-    cls->ShortValue     = Abstract_ShortValue;
+    cls->IntValue       = DSNumber_IntValue; 
+    cls->LongValue      = DSNumber_LongValue; 
+    cls->FloatValue     = DSNumber_FloatValue; 
+    cls->DoubleValue    = DSNumber_DoubleValue; 
+    cls->CharValue      = DSNumber_CharValue; 
+    cls->ShortValue     = DSNumber_ShortValue;
 });
 
 /**

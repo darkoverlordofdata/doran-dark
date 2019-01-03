@@ -24,25 +24,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSChar.h>
-/**
- * Constructor
- * create a new Char
- * 
- * @param value of char
- * 
- */
-DSChar* DSChar_init(DSChar* const this, char value)
-{
-    DSNumber_init(this);
-    this->isa = IZA(DSChar);
-    this->value = value;
-    return this;
-}
+begin_class(DSChar)
 
-DSChar* $DSChar(char value) { 
-    return DSChar_init(class_alloc(DSChar), value); 
-}
+    method("ToString", DSChar_ToString, "$@:v");
+    method("CompareTo", DSChar_CompareTo, "i@:@");
+    method("IntValue", DSChar_IntValue, "i@:v");
+    method("LongValue", DSChar_LongValue, "l@:v");
+    method("FloatValue", DSChar_FloatValue, "f@:v");
+    method("DoubleValue", DSChar_DoubleValue, "d@:v");
+    method("CharValue", DSChar_CharValue, "c@:v");
+    method("ShortValue", DSChar_ShortValue, "s@:v");
 
+    ivar("value", sizeof(char), "c");
+
+end_class
 /**
  * Char Class Metadata
  */
@@ -57,6 +52,26 @@ DSDefine(DSChar, DSNumber, cls, {
     cls->ShortValue     = DSChar_ShortValue; 
     cls->Create         = $DSChar;
 });
+
+
+/**
+ * Constructor
+ * create a new Char
+ * 
+ * @param value of char
+ * 
+ */
+DSChar* DSChar_init(DSChar* const this, char value)
+{
+    DSNumber_init(this);
+    this->isa = ISA(DSChar);
+    this->value = value;
+    return this;
+}
+
+DSChar* $DSChar(char value) { 
+    return DSChar_init(class_alloc(DSChar), value); 
+}
 
 /**
  * Compare two char primitives.

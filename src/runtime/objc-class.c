@@ -2,13 +2,43 @@
 #include <dark/DSLog.h>
 #include <dark/runtime.h>
 
-//https://opensource.apple.com/source/objc4/objc4-437/runtime/
+#define WORD_SHIFT 3UL
+#define WORD_MASK 7UL
+#define WORD_BITS 64
 
 
 Class _calloc_class(size_t size)
 {
     return (Class) DSCalloc(1, size);
 }
+
+Class class_getSuperclass(Class cls)
+{
+    if (!cls) return nil;
+    return cls->super_class;
+}
+
+bool class_isMetaClass(Class cls)
+{
+    if (!cls) return NO;
+    return ISMETA(cls);
+}
+
+/** use for malloc */
+size_t class_getInstanceSize(Class cls)
+{
+    if (!cls) return 0;
+    return cls->instance_size;
+}
+
+size_t class_getAlignedInstanceSize(Class cls)
+{
+    if (!cls) return 0;
+    return (class_getInstanceSize(cls) + WORD_MASK) & ~WORD_MASK;
+}
+
+//https://opensource.apple.com/source/objc4/objc4-437/runtime/
+
 
 void set_super_class(Class cls, Class supercls, bool cls_is_new)
 {
@@ -63,12 +93,12 @@ Class objc_initializeClassPair(Class supercls, const char *name, Class cls, Clas
     // No ivars. No methods. Empty cache. No protocols. No layout. Empty ext.
     cls->ivars = nil;
     cls->methodLists = nil;
-    cls->cache = (Cache)&_objc_empty_cache;
+    // cls->cache = (Cache)&_objc_empty_cache;
     cls->protocols = nil;
 
     meta->ivars = nil;
     meta->methodLists = nil;
-    meta->cache = (Cache)&_objc_empty_cache;
+    // meta->cache = (Cache)&_objc_empty_cache;
     meta->protocols = nil;
     
     return cls;
@@ -318,7 +348,7 @@ bool class_addIvar(Class cls, const char *name, size_t size,
         alignBytes = 1 << alignment;
         misalign = cls->instance_size % alignBytes;
         // DSObject not internally aligned
-        // if (misalign) cls->instance_size += (long)(alignBytes - misalign);
+        if (misalign) cls->instance_size += (long)(alignBytes - misalign);
 
         // set ivar offset and increase instance size
         ivar->ivar_offset = (int)cls->instance_size;

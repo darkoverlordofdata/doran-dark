@@ -9,6 +9,11 @@
 static __inline void bcopy(const void *src, void *dst, size_t size) { memcpy(dst, src, size); }
 static __inline void bzero(void *dst, size_t size) { memset(dst, 0, size); }
 
+/**
+ * _objc_inform
+ * 
+ */
+__attribute__((__format__ (__printf__, 1, 2)))
 static inline void _objc_inform(const char *fmt, ...)
 {
     va_list args;
@@ -53,7 +58,8 @@ struct objc_class {
     long instance_size;
 	struct objc_ivar_list *ivars;
 	struct objc_method_list **methodLists;
-	struct objc_cache *cache; //  use vtable...
+	// struct objc_cache *cache; 
+	IMP* vtable;
 	struct objc_protocol_list *protocols;
 };
 
@@ -163,9 +169,12 @@ int class_getVersion(Class cls);
 void class_setVersion(Class cls, int version);
 
 size_t class_getInstanceSize(Class cls);
+size_t class_getAlignedInstanceSize(Class cls);
+Class _calloc_class(size_t size);
 
 Ivar class_getInstanceVariable(Class cls, const char *name);
 Ivar class_getClassVariable(Class cls, const char *name);
+Ivar class_setClassVariable(Class cls, const char *name);
 Ivar *class_copyIvarList(Class cls, unsigned int *outCount);
 
 Method class_getInstanceMethod(Class cls, SEL name);
@@ -197,6 +206,7 @@ bool class_addIvar(Class cls, const char *name, size_t size, uint8_t alignment, 
 bool class_addProtocol(Class cls, Protocol *protocol);
 void class_setIvarLayout(Class cls, const char *layout);
 void class_setWeakIvarLayout(Class cls, const char *layout);
+Class methodizeClass(Class cls);
 
 
 SEL method_getName(Method m);
@@ -247,7 +257,7 @@ void objc_setForwardHandler(void *fwd, void *fwd_stret);
 
 extern void _objc_insertMethods(Class cls, struct objc_method_list *mlist, struct objc_category *cat);
 
-
+#define _C_ELISIS   '.'
 #define _C_STRING   '$'
 #define _C_ID       '@'
 #define _C_CLASS    '#'
@@ -334,24 +344,6 @@ extern void _objc_insertMethods(Class cls, struct objc_method_list *mlist, struc
 #define GETMETA(cls)		            (ISMETA(cls) ? (cls) : (cls)->isa)
 
 
-extern SEL $alloc;
-extern SEL $init;
-extern SEL $toString;
-extern SEL $equals;
-extern SEL $getHashCode;
-extern SEL $dispose;
-extern SEL $referenceEquals;
-extern SEL $instanceEquals;
-extern SEL $isEmpty;
-extern SEL $length;
-extern SEL $add;
-extern SEL $contains;
-extern SEL $remove;
-extern SEL $resize;
-extern SEL $set;
-extern SEL $get;
-extern SEL $clear;
-
 static inline char* typename(id obj) { return obj->isa->name; }
 static inline UInt64 typeid(id obj) { return (UInt64)obj->isa; }
 
@@ -380,8 +372,15 @@ extern SEL $getHashCode;
 extern SEL $dispose;
 extern SEL $referenceEquals;
 extern SEL $instanceEquals;
-extern SEL $compareTo;
+extern SEL $isEmpty;
 extern SEL $length;
 extern SEL $add;
+extern SEL $contains;
+extern SEL $remove;
+extern SEL $resize;
+extern SEL $set;
+extern SEL $get;
+extern SEL $clear;
+
 
 #endif _OBJC_CORE_H_ 

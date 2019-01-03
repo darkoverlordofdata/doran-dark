@@ -80,5 +80,6 @@ float DSLong_FloatValue(DSLong* const);
 double DSLong_DoubleValue(DSLong* const);
 char DSLong_CharValue(DSLong* const);
 short DSLong_ShortValue(DSLong* const);
+char* DSLong_ToString(const DSLong* const);
 
 #endif _DSLONG_H_

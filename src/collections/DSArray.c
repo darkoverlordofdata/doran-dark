@@ -25,6 +25,25 @@ SOFTWARE.
 ******************************************************************/
 #include <dark/collections/DSArray.h>
 
+begin_class(DSArray)
+
+    method("ToString", (DSArrayToString)ToString, "@@:v");
+    method("Dispose", (DSArrayDispose)Dispose, "v@:v");
+    method("TsEmpty", (DSArrayIsEmpty)IsEmpty, "B@:v");
+    method("Contains", (DSArrayContains)Contains, "B@:@");
+    method("Add", (DSArrayAdd)Add, "v@:@");
+    method("Remove", (DSArrayRemove)Remove, "v@:i");
+    method("Resize", (DSArrayResize)Resize, "v@:i");
+    method("Set", (DSArraySet)Set, "v@:i@");
+    method("Get", (DSArrayGet)Get, "@@:i");
+    method("Clear", (DSArrayClear)Clear, "v@:v");
+
+    ivar("length", sizeof(int), "i");
+    ivar("data", sizeof(void*), "^");
+    ivar("capacity", sizeof(int), "i");
+
+end_class
+
 
 /**
  * Default Constructor
@@ -32,7 +51,7 @@ SOFTWARE.
 DSArray* DSArray_init(DSArray* const this, int capacity)
 {
     DSCollection_init(this);
-    this->isa = IZA(DSArray);
+    this->isa = ISA(DSArray);
     this->capacity = capacity == 0 ? ARRAY_INIT_CAPACITY : capacity;
     this->length = 0;
     this->data = DSCalloc(this->capacity, sizeof(Any));
@@ -196,24 +215,6 @@ DSArray* $DSArray(int capacity) {
     return DSArray_init(class_alloc(DSArray), capacity); 
 }
 
-Class implement_DSArray(Class super) 
-{
-    Class obj = objc_allocateClassPair(super, "DSArray", 0);
-    class_addMethod(obj, $toString, (DSArrayToString)ToString, "@@:v");
-    class_addMethod(obj, $dispose, (DSArrayDispose)Dispose, "v@:v");
-    class_addMethod(obj, $isEmpty, (DSArrayIsEmpty)IsEmpty, "B@:v");
-    class_addMethod(obj, $contains, (DSArrayContains)Contains, "B@:@");
-    class_addMethod(obj, $add, (DSArrayAdd)Add, "v@:@");
-    class_addMethod(obj, $remove, (DSArrayRemove)Remove, "v@:i");
-    class_addMethod(obj, $resize, (DSArrayResize)Resize, "v@:i");
-    class_addMethod(obj, $set, (DSArraySet)Set, "v@:i@");
-    class_addMethod(obj, $get, (DSArrayGet)Get, "@@:i");
-    class_addMethod(obj, $clear, (DSArrayClear)Clear, "v@:v");
-    class_addIvar(obj, "length", sizeof(int), log2(sizeof(int)), "i");
-    class_addIvar(obj, "data", sizeof(void*), log2(sizeof(void*)), "^");
-    class_addIvar(obj, "capacity", sizeof(int), log2(sizeof(int)), "i");
-    return obj;
-}
 
 /**
  * Load Array Class Metadata

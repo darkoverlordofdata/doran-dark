@@ -77,8 +77,9 @@ int DSFloat_CompareTo(DSFloat* const, DSFloat* const);
 int DSFloat_IntValue(DSFloat* const);
 long DSFloat_LongValue(DSFloat* const);
 float DSFloat_FloatValue(DSFloat* const);
-float DSFloat_FloatValue(DSFloat* const);
+double DSFloat_DoubleValue(DSFloat* const);
 char DSFloat_CharValue(DSFloat* const);
 short DSFloat_ShortValue(DSFloat* const);
+char* DSFloat_ToString(const DSFloat* const);
 
 #endif _DSFLOAT_H_

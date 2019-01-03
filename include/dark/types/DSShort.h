@@ -80,5 +80,6 @@ float DSShort_FloatValue(DSShort* const);
 double DSShort_DoubleValue(DSShort* const);
 char DSShort_CharValue(DSShort* const);
 short DSShort_ShortValue(DSShort* const);
+char* DSShort_ToString(const DSShort* const);
 
 #endif _DSSHORT_H_

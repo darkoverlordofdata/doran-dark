@@ -32,7 +32,7 @@ SOFTWARE.
 #define AsDSList(x) (IsDSList(x) ? (DSList*)x : nullptr)
 
 typedef int (*DSList_Compare) (Any, Any);
-typedef void (^DSList_Interator) (Any);
+typedef void (^DSList_Iterator) (Any);
 
 class (DSListNode)
 {
@@ -47,20 +47,29 @@ class (DSList)
     DSListNode* head;
 };
 
+/** Interface */
+typedef char*   (*DSListToString)   (const DSList* const);
+typedef void    (*DSListDispose)    (DSList* const);
+typedef int     (*DSListLength)     (const DSList* const);
+typedef int     (*DSListForEach)    (DSList* const this, DSList_Iterator f, Any item);
+typedef void    (*DSListInsert)     (const DSList* const Any, DSList_Compare);
+typedef void    (*DSListAdd)        (DSList* const, Any);
+typedef Any     (*DSListRemove)     (const DSList* const);
+
 struct DSListClass
 {
     Class  isa;
     Class  superclass;
     char*   name;
     long    version, info, instance_size;
-    char*   (*ToString) (DSList* const);
+    char*   (*ToString) (const DSList* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
     bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
     bool    (*InstanceEquals) (DSObject* const, DSObject* const);
     DSList*   (*Create) ();
-    int     (*Length)       (DSList* const);
+    int     (*Length)       (const DSList* const);
     bool    (*IsEmpty)      (DSList* const);
     bool    (*Contains)     (DSList* const, Any);
     void    (*Clear)        (DSList* const);
@@ -68,7 +77,7 @@ struct DSListClass
     Any     (*Remove)       (DSList* const);
 
     int (*Insert) (DSList* const, Any, DSList_Compare);
-    void (*Iterate) (DSList* const, DSList_Interator);
+    void (*Iterate) (DSList* const, DSList_Iterator);
     
 } DSListClass;
 
@@ -76,9 +85,9 @@ struct DSListClass
 /**
  * List API
  */
-char* overload ToString(DSList* const);
+char* overload ToString(const DSList* const);
 void overload Dispose(DSList* const);
-int overload Length(DSList* const);
+int overload Length(const DSList* const);
 bool overload IsEmpty(DSList* const);
 bool overload Contains(DSList* const);
 void overload Clear(DSList* const);
@@ -86,6 +95,6 @@ void overload Add(DSList* const, Any);
 Any overload Remove(DSList* const);
 
 int Insert(DSList* const, Any, DSList_Compare);
-void overload ForEach(DSList* const, DSList_Interator);
+void overload ForEach(DSList* const, DSList_Iterator);
 
 #endif _DSLIST_H_ 

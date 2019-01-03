@@ -25,6 +25,9 @@ SOFTWARE.
 ******************************************************************/
 #include <dark/DSClass.h>
 #include <dark/DSLog.h>
+// Class implement_DSClass(Class super) 
+begin_class(DSClass)
+end_class
 
 /**
  * Load the class metadata
@@ -48,8 +51,11 @@ void __attribute__((constructor(101))) DSClassBoot()
         .classes        = { &DSClass } 
     };
 
-    objc_init();
+    objc_register_builtins();
 
+    /**
+     * Deprecated:
+     */
     class_loadDSObject();
     class_loadDSComparable();
     class_loadDSCollection();
@@ -70,27 +76,6 @@ void __attribute__((constructor(101))) DSClassBoot()
     // for (int i=0; DSClass.classes[i] != nullptr; i++) {
     //     DSLog(class_isa(DSClass.classes[i])->name);
     // }
-
-}
-
-Class implement_DSClass(Class super) 
-{
-    Class obj = objc_allocateClassPair(super, "DSClass", 0);
-
-}
-/** 
- * The interface to objc_sendMessage:
- * 
- *      DSDictionary d* = _(_(DSDictionary, $alloc)$init); 
- *      _(d, $setObject, anObject, $forKey, $("foo"));
- * 
- *  In vala, call as:
- * 
- *  DSDictionary d* = _(_(DSDictionary, $alloc)$init);
- *  _(d, setObject: anObject, forKey: $("foo"));
- * 
- */
-id _(id this, SEL _cmd, ...) {
 
 }
 

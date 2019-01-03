@@ -64,7 +64,19 @@ class (DSHashmap)
 	int tableSize;
 	int size;
 	DSHashmapNode* data;
-};
+}; 
+
+/** Interface */
+typedef char*   (*DSHashmapToString)    (const DSHashmap* const);
+typedef int     (*DSHashmapForEach)     (DSHashmap* const this, DSHashmap_Iterator f, Any item);
+typedef void    (*DSHashmapPut)         (const DSHashmap* const, int, const Any);
+typedef Any     (*DSHashmapGet)         (const DSHashmap* const, int);
+typedef void    (*DSHashmapRemove)      (const DSHashmap* const, int);
+typedef void    (*DSHashmapDispose)     (DSHashmap* const);
+typedef int     (*DSHashmapLength)      (const DSHashmap* const);
+typedef UInt    (*DSHashmapHashInt)     (const DSHashmap* const, char*);
+typedef int     (*DSHashmapHash)        (const DSHashmap* const, char*);
+typedef int     (*DSHashmapRehash)      (const DSHashmap* const);
 
 struct DSHashmapClass
 {
@@ -72,7 +84,7 @@ struct DSHashmapClass
     Class  superclass;
     char*   name;
     long    version, info, instance_size;
-    char*   (*ToString) (DSHashmap* const);
+    char*   (*ToString) (const DSHashmap* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
@@ -82,7 +94,7 @@ struct DSHashmapClass
     /*
         * Get the current size of a hashmap
         */
-    int         (*Length)       (DSHashmap* const);
+    int         (*Length)       (const DSHashmap* const);
     bool        (*IsEmpty)      (DSHashmap* const);
     bool        (*Contains)     (DSHashmap* const, Any);
     void        (*Clear)        (DSHashmap* const);
@@ -140,7 +152,7 @@ Any overload Get(DSHashmap* const, char*);
 int overload ForEach(DSHashmap* const, DSHashmap_Iterator, Any);
 int overload Remove(DSHashmap* const, char*);
 void overload Dispose(DSHashmap* const);
-int overload Length(DSHashmap* const);
-char* overload ToString(DSHashmap* const);
+int overload Length(const DSHashmap* const);
+char* overload ToString(const DSHashmap* const);
 
 #endif _DSHASHMAP_H_

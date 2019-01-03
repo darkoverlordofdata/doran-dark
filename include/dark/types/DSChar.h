@@ -81,5 +81,6 @@ double DSChar_DoubleValue(DSChar* const);
 char DSChar_CharValue(DSChar* const);
 short DSChar_ShortValue(DSChar* const);
 char* DSChar_ToString(DSChar* const);
+DSChar* $DSChar(char value);
 
 #endif _DSCHAR_H_

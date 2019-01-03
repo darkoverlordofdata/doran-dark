@@ -168,13 +168,33 @@ unsigned int overload HashInt(DSHashmap* const this, char* keystring)
 	return key % this->tableSize;
 }
 
+begin_class(DSHashmap)
+
+    method("ToString", (DSHashmapToString)ToString, "@@:v");
+    method("ForEach", (DSHashmapForEach)ForEach, "i@:@@");
+    method("Put", (DSHashmapPut)Put, "i@:*@");
+    method("Get", (DSHashmapGet)Get, "@@:*");
+    method("Remove", (DSHashmapRemove)Remove, "i@:*");
+    method("Dispose", (DSHashmapDispose)Dispose, "v@:v");
+    method("Length", (DSHashmapLength)Length, "i@:v");
+    method("HashInt", (DSHashmapHashInt)HashInt, "I@:*");
+    method("Hash", (DSHashmapHash)Hash, "i@:*");
+    method("Rehash", (DSHashmapRehash)Rehash, "i@:v");
+
+    ivar("tableSize", sizeof(int), "i");
+    ivar("size", sizeof(int), "i");
+    ivar("data", sizeof(id), "^");
+
+end_class
+
+
 /**
  * Default Constructor
  */
 DSHashmap* DSHashmap_init(DSHashmap* const this)
 {
     DSObject_init(this);
-    this->isa = IZA(DSHashmap);
+    this->isa = ISA(DSHashmap);
 
     this->data = DSCalloc(INITIAL_SIZE, sizeof(DSHashmapNode));
 	this->tableSize = INITIAL_SIZE;
@@ -361,12 +381,12 @@ void overload Dispose(DSHashmap* const this)
 }
 
 /* Return the length of the hashmap */
-int overload Length(DSHashmap* const this)
+int overload Length(const DSHashmap* const this)
 {
     return this->size;
 }
 
-char* overload ToString(DSHashmap* const this)
+char* overload ToString(const DSHashmap* const this)
 {
     return "dark.collections.Hashmap";
 }

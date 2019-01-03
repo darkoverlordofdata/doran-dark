@@ -39,6 +39,13 @@ class (DSComparable)
     const struct DSComparableClass* isa;
 };
 
+IVAR (DSComparable_t) {
+    Class isa;
+};
+
+typedef bool    (*DSComparableCompareTo)  (const DSComparable* const, const DSComparable* const);
+typedef char*   (*DSComparableToString)  (const DSComparable* const);
+
 /**
  * Comparable MetaClass
  */
@@ -48,7 +55,7 @@ struct DSComparableClass
     Class  superclass;
     char*   name;
     long    version, info, instance_size;
-    char*   (*ToString) (DSComparable* const);
+    char*   (*ToString) (const DSComparable* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
@@ -56,11 +63,12 @@ struct DSComparableClass
     bool    (*InstanceEquals) (DSObject* const, DSObject* const);
     DSComparable* (*Create) ();
     
-    int     (*CompareTo) (DSComparable* const, DSComparable* const);
+    int     (*CompareTo) (const DSComparable* const, const DSComparable* const);
     
 } DSComparableClass;
 
 
-int overload CompareTo(DSComparable* const, DSComparable* const);
+int overload CompareTo(const DSComparable* const, const DSComparable* const);
+char* overload ToString(const DSComparable* const this);
 
 #endif _DSCOMPARABLE_H_

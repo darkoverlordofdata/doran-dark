@@ -17,6 +17,7 @@ struct hashmap* class_hash;
 
 int main(int argc, char **argv) {
 
+
     __block struct DSLong* l = $DSLong(420);
     __block DSLong* m = $DSLong(420);
     __block DSBoolean* b = $DSBoolean(true);
@@ -24,7 +25,7 @@ int main(int argc, char **argv) {
 
     // Class klass =  NX_hashmap_get(class_hash, "DSArray");
     // DSLog("%s length = %d", klass->name, klass->instance_size);
-    return 0;
+    // return 0;
     __block DSString* s = $("Frodo");
     __block DSArray* a = $DSArray(0);
     __block DSList* q = $DSList();
@@ -129,6 +130,8 @@ int main(int argc, char **argv) {
             Expect(LongValue(zz) == 99);
         });
 
+
+
     });
     DSLog("");
     DSLog("Tests run: %d", tests.total);
@@ -138,109 +141,40 @@ int main(int argc, char **argv) {
     SEL _Add = "Add";
     DSLog("SEL = %s", _Add);
 
-    TestHashMap();
+    // TestHashMap();
     DSLog("sizeof(DSObject) = %d", sizeof(DSObject));
     DSLog("sizeof(id) = %d", sizeof(id));
+
+    DSLog("size of bool = %d", sizeof(bool));
+    DSLog("4) = %d", sizeof(bool));
+
+    DSLog("=================================");
+    DSLog("Boolean %d - %d - %d", 
+        DSBooleanClass.instance_size, 
+        class_getAlignedInstanceSize(objc_getClass("DSBoolean")),
+        objc_getClass("DSBoolean")->instance_size);
+
+    DSLog("Char %d - %d - %d", 
+        DSCharClass.instance_size, 
+        class_getAlignedInstanceSize(objc_getClass("DSChar")),
+        objc_getClass("DSChar")->instance_size);
+
+    DSLog("Double %d - %d - %d", 
+        DSDoubleClass.instance_size, 
+        class_getAlignedInstanceSize(objc_getClass("DSDouble")),
+        objc_getClass("DSDouble")->instance_size);
+
+    DSLog("Array %d - %d - %d", 
+        DSArrayClass.instance_size, 
+        class_getAlignedInstanceSize(objc_getClass("DSArray")),
+        objc_getClass("DSArray")->instance_size);
+
+    DSLog("Hashmap %d - %d - %d", 
+        DSHashmapClass.instance_size, 
+        class_getAlignedInstanceSize(objc_getClass("DSHashmap")),
+        objc_getClass("DSHashmap")->instance_size);
+
     return tests.failed;
 }
-/* Some sample data structure with a string key */
-struct blob {
-  char key[32];
-  size_t data_len;
-  unsigned char data[1024];
-};
-
-HASHMAP_FUNCS_CREATE(DX, const char, struct blob)
-
-struct blob *blob_load(void)
-{ 
-    static k = 0;
-    struct blob *b;
-
-    if (k < 12) {
-        b = DSMalloc(sizeof(struct blob));
-        b->data_len = strlen(keys[k]);
-        memcpy(&b->key, &keys[k], b->data_len);
-        memcpy(&b->data, &keys[k], b->data_len);
-        k++;
-    }
-
-    /*
-    * Hypothetical function that allocates and loads blob structures
-    * from somewhere.  Returns NULL when there are no more blobs to load.
-    */
-    return b;
-}
-
-/* Hashmap structure */
-struct hashmap map;
-
-void TestHashMap() {
-    struct blob *b;
-    struct hashmap_iter *iter;
-
-    /* Initialize with default string key functions and init size */
-    hashmap_init(&map, hashmap_hash_string, hashmap_compare_string, 0);
-
-    /* Load some sample data into the map and discard duplicates */
-    while ((b = blob_load()) != NULL) {
-        if (DX_hashmap_put(&map, b->key, b) != b) {
-            DSLog("discarding blob with duplicate key: %s", b->key);
-            free(b);
-        }
-    }
-
-    /* Lookup a blob with key "AbCdEf" */
-    b = DX_hashmap_get(&map, "AbCdEf");
-    if (b) {
-        DSLog("Found blob[%s]", b->key);
-    }
-
-    /* Iterate through all blobs and print each one */
-    for (iter = hashmap_iter(&map); iter; iter = hashmap_iter_next(&map, iter)) {
-        DSLog("blob[%s]: data_len %u bytes", DX_hashmap_iter_get_key(iter),
-        DX_hashmap_iter_get_data(iter)->data_len);
-    }
-
-    /* Remove all blobs with no data */
-    iter = hashmap_iter(&map);
-    while (iter) {
-        b = DX_hashmap_iter_get_data(iter);
-        if (b->data_len == 0) {
-            iter = hashmap_iter_remove(&map, iter);
-            free(b);
-        } else {
-            iter = hashmap_iter_next(&map, iter);
-        }
-    }
-
-    /* Free all allocated resources associated with map and reset its state */
-    hashmap_destroy(&map);
 
 
-}
-
-typedef struct Person {
-    Class isa;
-    DSString* firstName;
-    DSString* lastName;
-    DSInteger* age;
-} Person;
-
-//https://www.cocoawithlove.com/2010/01/what-is-meta-class-in-objective-c.html
-
-void makeClass() {
-    // Class c = objc_allocateClassPair(&DSObjectClass, "Person", 0);
-    // class_addIvar(c, "firstName", sizeof(id), log2(sizeof(id)), '@');
-    // class_addIvar(c, "lastName", sizeof(id), log2(sizeof(id)), '@');
-    // class_addIvar(c, "age", sizeof(DSInteger), log2(sizeof(DSInteger)), 'i');
-
-    // Ivar firstNameIvar = class_getInstanceVariable(c, "firstName");
-    // Ivar lastNameIvar = class_getInstanceVariable(c, "lastName");
-    // int ageOffset = ivar_getOffset(class_getInstanceVariable(c, "age"));
-
-    // objc_registerClassPair(c);
-
-    // Class PersonClass = DSClassFromString("Person");
-    // Person* alex = _(_(PersonClass, $alloc),$init);
-}

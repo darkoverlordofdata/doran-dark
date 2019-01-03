@@ -24,13 +24,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/collections/DSList.h>
+begin_class(DSList)
+
+    method("ToString", (DSListToString)ToString, "@@:v");
+    method("Dispose", (DSListDispose)Dispose, "v@:v");
+    method("Length", (DSListLength)Length, "i@:v");
+    method("Iterate", (DSListForEach)ForEach, "i@:@@");
+    method("Insert", (DSListInsert)Insert, "i@:*@");
+    method("Add", (DSListAdd)Add, "@@:*");
+    method("Remove", (DSListRemove)Remove, "i@:*");
+
+    ivar("length", sizeof(int), "i");
+    ivar("head", sizeof(void*), "^");
+
+end_class
+
 /**
  * Constructor
  */
 DSList* DSList_init(DSList* const this)
 {
     DSCollection_init(this);
-    this->isa = IZA(DSList);
+    this->isa = ISA(DSList);
     this->head = nullptr;
 
     return this;
@@ -150,7 +165,7 @@ void overload Dispose(DSList* const this)
 /**
  * Number of items in vector
  */
-int overload Length(DSList* const this)
+int overload Length(const DSList* const this)
 {
     return this->length;
 }
@@ -158,7 +173,7 @@ int overload Length(DSList* const this)
 /**
  * ToString
  */
-char* overload ToString(DSList* const this)
+char* overload ToString(const DSList* const this)
 {
     return "dark.collections.List";
 }

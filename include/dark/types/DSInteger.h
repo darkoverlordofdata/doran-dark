@@ -78,9 +78,10 @@ int DSInteger_ParseInt(char *const, int);
 int DSInteger_CompareTo(DSInteger* const, DSInteger* const);
 int DSInteger_IntValue(DSInteger* const);
 long DSInteger_LongValue(DSInteger* const);
-int DSInteger_IntegerValue(DSInteger* const);
+float DSInteger_FloatValue(DSInteger* const);
 double DSInteger_DoubleValue(DSInteger* const);
 char DSInteger_CharValue(DSInteger* const);
 short DSInteger_ShortValue(DSInteger* const);
+char* DSInteger_ToString(const DSInteger* const);
 
 #endif _DSINTEGER_H_

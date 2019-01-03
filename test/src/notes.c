@@ -1,12 +1,10 @@
 
-typedef struct objc_selector *SEL;
+static void _objc_exception_noop(void) { } 
 
-external const SEL Load 		= (SEL) "Load";
-external const SEL GetShader 	= (SEL) "GetShader";
-external const SEL Use 			= (SEL) "Use";
-external const SEL SetInteger 	= (SEL) "SetInteger";
-external const SEL SetMatrix4 	= (SEL) "SetMatrix4";
-
+const void* vtable[] = {
+    (void*)_objc_exception_noop,      // in-place destructor?
+}
+//==========================================================
 
 
 

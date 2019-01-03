@@ -73,6 +73,8 @@ struct DSCollectionClass
 int overload Length(DSCollection* const);
 void overload Add(DSCollection* const, Any);
 DSCollection* DSCollection_init(DSCollection* const);
+int DSCollection_Length(DSCollection* const);
+void DSCollection_Add(DSCollection* const, Any);
 
 /**
  * AddAll
