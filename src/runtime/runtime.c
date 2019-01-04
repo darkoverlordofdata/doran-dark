@@ -1,3 +1,27 @@
+/*
+ * Copyright (c) 1999-2006 Apple Inc.  All Rights Reserved.
+ * Copyright (c) 2018-2019 Dark Overlord of Data - modifications for DaRKStep
+ * 
+ * @APPLE_LICENSE_HEADER_START@
+ * 
+ * This file contains Original Code and/or Modifications of Original Code
+ * as defined in and that are subject to the Apple Public Source License
+ * Version 2.0 (the 'License'). You may not use this file except in
+ * compliance with the License. Please obtain a copy of the License at
+ * http://www.opensource.apple.com/apsl/ and read it before using this
+ * file.
+ * 
+ * The Original Code and all software distributed under the License are
+ * distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+ * EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+ * INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+ * Please see the License for the specific language governing rights and
+ * limitations under the License.
+ * 
+ * @APPLE_LICENSE_HEADER_END@
+ */
+#include <stdio.h>
 #include <dark/DSClass.h>
 #include <dark/DSLog.h>
 #include <dark/runtime.h>
@@ -22,11 +46,6 @@ SEL $set = "Set";
 SEL $get = "Get";
 SEL $clear = "Clear";
 
-Class implement_DSObject();
-Class implement_DSClass(Class super);
-Class implement_DSComparable(Class super);
-Class implement_DSCollection(Class super);
-Class implement_DSArray(Class super);
 
 /* NX_hashmap interface for Class objects */
 HASHMAP_FUNCS_CREATE(NX, const char, struct objc_class)
@@ -65,32 +84,32 @@ void objc_register_builtins() {
     Class cls;
     objc_registerClassPair(cls = DSClassImplementation(obj));
 
-    /** DSCollection */
-    Class col;
-    objc_registerClassPair(col = DSCollectionImplementation(obj));
+    // /** DSCollection */
+    // Class col;
+    // objc_registerClassPair(col = DSCollectionImplementation(obj));
 
-    objc_registerClassPair(DSArrayImplementation(col));
-    objc_registerClassPair(DSListImplementation(col));
-    objc_registerClassPair(DSHashmapImplementation(col));
+    // objc_registerClassPair(DSArrayImplementation(col));
+    // objc_registerClassPair(DSListImplementation(col));
+    // objc_registerClassPair(DSHashmapImplementation(col));
 
-    /** DSComparable */
-    Class cmp;
-    objc_registerClassPair(cmp = DSComparableImplementation(obj));
+    // /** DSComparable */
+    // Class cmp;
+    // objc_registerClassPair(cmp = DSComparableImplementation(obj));
 
-    objc_registerClassPair(DSBooleanImplementation(cmp));
+    // objc_registerClassPair(DSBooleanImplementation(cmp));
 
-    Class num;
-    objc_registerClassPair(num = DSNumberImplementation(cmp));
+    // Class num;
+    // objc_registerClassPair(num = DSNumberImplementation(cmp));
 
-    objc_registerClassPair(DSCharImplementation(num));
-    objc_registerClassPair(DSDoubleImplementation(num));
-    objc_registerClassPair(DSFloatImplementation(num));
-    objc_registerClassPair(DSIntegerImplementation(num));
-    objc_registerClassPair(DSLongImplementation(num));
-    objc_registerClassPair(DSShortImplementation(num));
+    // objc_registerClassPair(DSCharImplementation(num));
+    // objc_registerClassPair(DSDoubleImplementation(num));
+    // objc_registerClassPair(DSFloatImplementation(num));
+    // objc_registerClassPair(DSIntegerImplementation(num));
+    // objc_registerClassPair(DSLongImplementation(num));
+    // objc_registerClassPair(DSShortImplementation(num));
 
-    objc_registerClassPair(DSStringImplementation(obj));
-    objc_registerClassPair(DSStringBuilderImplementation(obj));
+    // objc_registerClassPair(DSStringImplementation(obj));
+    // objc_registerClassPair(DSStringBuilderImplementation(obj));
 
 
 }
@@ -123,7 +142,6 @@ Class look_up_class(const char *aClassName, bool includeUnconnected,
 Class objc_getClass(const char *aClassName)
 {
     if (!aClassName) return Nil;
-
     // NO unconnected, YES class handler
     return look_up_class(aClassName, NO, YES);
 }
@@ -183,23 +201,6 @@ void _objc_insertMethods(Class cls, struct objc_method_list *mlist, struct objc_
         return;
     }
 
-    // Log any existing methods being replaced
-    // if (PrintReplacedMethods) {
-    //     int i;
-    //     for (i = 0; i < mlist->method_count; i++) {
-    //         extern IMP findIMPInClass(Class cls, SEL sel);
-    //         SEL sel = sel_registerName((char *)mlist->method_list[i].method_name);
-    //         IMP newImp = mlist->method_list[i].method_imp;
-    //         IMP oldImp;
-
-    //         if ((oldImp = findIMPInClass(cls, sel))) {
-    //             logReplacedMethod(cls->name, sel, ISMETA(cls), 
-    //                               cat ? cat->category_name : nil, 
-    //                               oldImp, newImp);
-    //         }
-    //     }
-    // }
-
     // Create method list array if necessary
     _objcTweakMethodListPointerForClass(cls);
 
@@ -251,5 +252,17 @@ Class methodizeClass(Class cls)
 {
     // got thru the methodLists and build the vTable:
 
+	struct objc_method_list **ml = cls->methodLists;
+    // int count = ml[0]->method_count;
+    // _objc_inform("count = %d", count);
+    // _objc_inform("method_count = %d", ml[0]->method_count);
+    // _objc_inform("len %d", strlen(ml[0]->method_list->method_name));
+    // _objc_inform("name %s", ml[0]->method_list->method_name);
+    // for (int i=0; i<ml[0]->method_count; i++) {
+    //     struct objc_method m2 = ml[0]->method_list[i];
+    //     _objc_inform("name = %s", m2.method_name);
+        
+        
+    // }
     return cls;
 }

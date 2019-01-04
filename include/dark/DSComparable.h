@@ -28,44 +28,33 @@ SOFTWARE.
 #define _DSCOMPARABLE_H_
 #include "DSObject.h"
 
-#define IsDSComparable(x) (x->isa == &DSComparableClass)
-#define AsDSComparable(x) (IsDSComparable(x) ? (DSComparable *)x : nullptr)
+// #define IsDSComparable(x) (x->isa == &DSComparableClass)
+// #define AsDSComparable(x) (IsDSComparable(x) ? (DSComparable *)x : nullptr)
 
 /**
- * Comparable Class
+ * DSComparable Class
  */
-class (DSComparable)
-{
-    const struct DSComparableClass* isa;
-};
-
-IVAR (DSComparable_t) {
+Ivar (DSComparable) {
     Class isa;
 };
 
-typedef bool    (*DSComparableCompareTo)  (const DSComparable* const, const DSComparable* const);
+typedef DSComparable* (*DSComparableCreate) ();
 typedef char*   (*DSComparableToString)  (const DSComparable* const);
+typedef int     (*DSComparableCompareTo)  (const DSComparable* const, const DSComparable* const);
 
 /**
- * Comparable MetaClass
+ * DSComparable Vtable
  */
-struct DSComparableClass
-{
-    Class  isa;
-    Class  superclass;
-    char*   name;
-    long    version, info, instance_size;
-    char*   (*ToString) (const DSComparable* const);
-    bool    (*Equals) (DSObject* const, DSObject* const);
-    int     (*GetHashCode) (DSObject* const);
-    void    (*Dispose) (DSObject* const);
-    bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-    bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-    DSComparable* (*Create) ();
-    
-    int     (*CompareTo) (const DSComparable* const, const DSComparable* const);
-    
-} DSComparableClass;
+VTable (DSComparable) {
+    DSComparableToString    ToString;
+    DSObjectEquals          Equals;
+    DSObjectGetHashCode     GetHashCode;
+    DSObjectDispose         Dispose;
+    DSObjectReferenceEquals ReferenceEquals;
+    DSObjectInstanceEquals  InstanceEquals;
+    DSComparableCreate      Create;
+    DSComparableCompareTo   CompareTo;
+};
 
 
 int overload CompareTo(const DSComparable* const, const DSComparable* const);

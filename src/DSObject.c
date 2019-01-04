@@ -24,38 +24,45 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/DSObject.h>
-begin_class(DSObject)
-
-    method("ToString", (IMP)DSObject_ToString, "$@:v");
-    method("Equals", (IMP)DSObject_Equals, "B@:@@");
-    method("GetHashCode", (IMP)DSObject_GetHashCode, "l@:v");
-    method("Dispose", (IMP)DSObject_Dispose, "v@:v");
-    method("ReferenceEquals", (IMP)ReferenceEquals, "@:v");
-    method("InstanceEquals", (IMP)InstanceEquals, "$@:v");
-
-end_class
+#include <dark/DSClass.h>
+#include <dark/DSLog.h>
 
 /**
- * DSObjectClass constructor
+ * Define the DSObject implementation
+ */
+$implementation(DSObject);
+$method(ToString,           DSObject_ToString, "$@:v");
+$method(Equals,             DSObject_Equals, "B@:@@");
+$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
+$method(Dispose,            DSObject_Dispose, "v@:v");
+$method(ReferenceEquals,    ReferenceEquals, "@:v");
+$method(InstanceEquals,     InstanceEquals, "$@:v");
+$end;
+
+/**
+ * Define the DSClass implementation
+ */
+$implementation(DSClass);
+$method(ToString,           DSObject_ToString, "$@:v");
+$method(Equals,             DSObject_Equals, "B@:@@");
+$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
+$method(Dispose,            DSObject_Dispose, "v@:v");
+$method(ReferenceEquals,    ReferenceEquals, "@:v");
+$method(InstanceEquals,     InstanceEquals, "$@:v");
+$end;
+
+/**class_getAlignedInstanceSize
+ * DSObject constructor
  */
 DSObject* DSObject_init(DSObject* this)
 {
-    this->isa = &DSObjectClass;
+    this->isa = objc_getClass("DSObject");
     return this;
 }
 
 DSObject* DSObject_alloc()
 {
-    return DSMalloc(DSObjectClass.instance_size);
-}
-
-/**
- * Destructor
- */
-DSObject* DSObject_Dtor(DSObject* this)
-{
-    this->isa->Dispose(this);
-    return nullptr;
+    return DSMalloc(getDSObjectSize());
 }
 
 bool ReferenceEquals(const DSObject* const objA, const DSObject* const objB)
@@ -76,7 +83,7 @@ bool InstanceEquals(const DSObject* const objA, const DSObject* const objB)
 }
 
 void overload Dispose(DSObject* const this){
-    this->isa->Dispose(this);
+    _vptr(DSObject)->Dispose(this);
 }
 /**
  * virtual Dispose method
@@ -89,14 +96,22 @@ void DSObject_Dispose(DSObject* const this){}
  */
 const char* overload ToString(const DSObject* const this)
 {
-    return this->isa->ToString(this);
+    DSLog("ToString");
+    _vptr(DSObject)->ToString(this);
 }
 /**
  * virtual ToString method
  */
 const char *DSObject_ToString(const DSObject* const this)
 {
-    return "dark.Object";
+    return "DSObject";
+}
+/**
+ * virtual ToString method
+ */
+const char *DSClass_ToString(const DSClass* const this)
+{
+    return "DSClass";
 }
 
 /**
@@ -104,7 +119,7 @@ const char *DSObject_ToString(const DSObject* const this)
  */
 bool overload Equals(const DSObject* const this, const DSObject* const that)
 {
-    return this->isa->Equals(this, that);
+    _vptr(DSObject)->Equals(this, that);
 }
 /**
  * virtual Equals method
@@ -119,7 +134,7 @@ bool DSObject_Equals(DSObject* const this, DSObject* const that)
  */
 int overload GetHashCode(const DSObject* const this)
 {
-    return this->isa->GetHashCode(this);
+    _vptr(DSObject)->GetHashCode(this);
 }
 /**
  * virtual GetHashCode method
@@ -143,27 +158,4 @@ DSObject* $DSObject()
     return DSObject_init(DSObject_alloc()); 
 }
 
-
-
-/**
- * Object Class Metadata
- */
-Class class_loadDSObject() {
-    DSObjectClass = (struct DSObjectClass) {
-        .isa            = ISA(DSObject),
-        .superclass     = ISA(DS),
-        .name           = "DSObject",
-        .instance_size  = sizeof(DSObject), 
-        .Create         = $DSObject,
-        .ToString       = DSObject_ToString,
-        .Equals         = DSObject_Equals,
-        .GetHashCode    = DSObject_GetHashCode,
-        .Dispose        = DSObject_Dispose,
-        .ReferenceEquals= ReferenceEquals,
-        .InstanceEquals = InstanceEquals
-    };
-    DSClassList.classes[DSClassList.count++] = ISA(DSObject); 
-
-    return ISA(DSObject);
-}
 

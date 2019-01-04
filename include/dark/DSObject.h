@@ -30,11 +30,10 @@ SOFTWARE.
 
 #define OBJECT_TYPE       (TYPE_OBJECT)
 
-#define IsDSObject(x) (x->isa == &DSObjectClass)
+#define IsDSObject(x) (x->isa == &DSObjectVTable)
 #define AsDSObject(x) (IsDSObject(x) ? (DSObject *)x : nullptr)
-
 /**
- * Object 
+ * DSObject 
  * 
  * the isa field holds the reference to the class that defines this object.
  * All fields afer that make up the IVAR. This means:
@@ -43,39 +42,71 @@ SOFTWARE.
  *  + ivar definition must be the same across an inheritance chain.
  * 
  */
-typedef struct DSObject {
-	const struct DSObjectClass* isa;
-} DSObject;
+Ivar (DSObject) {
+    Class isa;
+};
 
-
-/**
- * Object Class/MetaClass
- * 
- * This is defined as a singleton.
- * the isa field is a reference to itself.
- * the superclass points to the superclass singleton.
- * 
- * This holds the vtable and class IVAR. Again, these must be
- * kept the same down an entire inheritance chain.
+/** 
+ * DSObject Interface
  */
-struct DSObjectClass 
-{
-    Class   isa;
-    Class   superclass;
-    char*   name;
-    long    version, info, instance_size;
-    char*   (*ToString) (const DSObject* const);
-    bool    (*Equals) (const DSObject* const, const DSObject* const);
-    int     (*GetHashCode) (const DSObject* const);
-    void    (*Dispose) (DSObject* const);
-    bool    (*ReferenceEquals) (const DSObject* const, const DSObject* const);
-    bool    (*InstanceEquals) (const DSObject* const, const DSObject* const);
-    DSObject* (*Create) ();
-
-} DSObjectClass;
+typedef DSObject* (*DSObjectCreate) ();
+typedef char*   (*DSObjectToString)  (const DSObject* const);
+typedef bool    (*DSObjectEquals) (const DSObject* const, const DSObject* const);
+typedef int     (*DSObjectGetHashCode) (const DSObject* const);
+typedef void    (*DSObjectDispose) (DSObject* const);
+typedef bool    (*DSObjectReferenceEquals) (const DSObject* const, const DSObject* const);
+typedef bool    (*DSObjectInstanceEquals) (const DSObject* const, const DSObject* const);
 
 /**
- * Object API
+ * DSObject Vtable
+ */
+VTable (DSObject) {
+    DSObjectToString        ToString;
+    DSObjectEquals          Equals;
+    DSObjectGetHashCode     GetHashCode;
+    DSObjectDispose         Dispose;
+    DSObjectReferenceEquals ReferenceEquals;
+    DSObjectInstanceEquals  InstanceEquals;
+    DSObjectCreate          Create;
+};/**
+ * Class Ivar
+ * 
+ */
+Ivar (DSClass) {
+    Class isa;
+};
+
+/** 
+ * DSClass Interface
+ */
+typedef DSClass* (*DSClassCreate) ();
+typedef char*   (*DSClassToString)  (const DSClass* const);
+typedef bool    (*DSClassEquals) (const DSClass* const, const DSClass* const);
+typedef int     (*DSClassGetHashCode) (const DSClass* const);
+typedef void    (*DSClassDispose) (DSClass* const);
+typedef bool    (*DSClassReferenceEquals) (const DSClass* const, const DSClass* const);
+typedef bool    (*DSClassInstanceEquals) (const DSClass* const, const DSClass* const);
+
+
+/**
+ * DSClass VTable
+ */
+VTable (DSClass) {
+    DSClassToString        ToString;
+    DSClassEquals          Equals;
+    DSClassGetHashCode     GetHashCode;
+    DSClassDispose         Dispose;
+    DSClassReferenceEquals ReferenceEquals;
+    DSClassInstanceEquals  InstanceEquals;
+    DSClassCreate          Create;
+};
+
+
+
+
+
+/**
+ * API Function Templates
  */
 Class GetClass(const DSObject* const);
 char* GetClassName(const DSObject* const);

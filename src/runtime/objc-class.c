@@ -1,3 +1,26 @@
+/*
+ * Copyright (c) 1999-2006 Apple Inc.  All Rights Reserved.
+ * Copyright (c) 2018-2019 Dark Overlord of Data - modifications for DaRKStep
+ * 
+ * @APPLE_LICENSE_HEADER_START@
+ * 
+ * This file contains Original Code and/or Modifications of Original Code
+ * as defined in and that are subject to the Apple Public Source License
+ * Version 2.0 (the 'License'). You may not use this file except in
+ * compliance with the License. Please obtain a copy of the License at
+ * http://www.opensource.apple.com/apsl/ and read it before using this
+ * file.
+ * 
+ * The Original Code and all software distributed under the License are
+ * distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+ * EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+ * INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+ * Please see the License for the specific language governing rights and
+ * limitations under the License.
+ * 
+ * @APPLE_LICENSE_HEADER_END@
+ */
 #include <dark/DSClass.h>
 #include <dark/DSLog.h>
 #include <dark/runtime.h>
@@ -259,15 +282,13 @@ static IMP _class_addMethod(Class cls, SEL name, IMP imp,
         struct objc_method_list *mlist = 
             (struct objc_method_list *)DSCalloc(sizeof(struct objc_method_list), 1);
         mlist->method_count = 1;
-        mlist->method_list[0].method_name = name;
+        mlist->method_list[0].method_name = strdup(name);
         mlist->method_list[0].method_types = strdup(types);
-        // if (!ignoreSelector(name)) {
-            mlist->method_list[0].method_imp = imp;
-        // } else {
-        //     mlist->method_list[0].method_imp = (IMP)&_objc_ignored_method;
-        // }
+        mlist->method_list[0].method_imp = imp;
         
-        _objc_insertMethods(cls, mlist, nil);
+        _objc_inform("%x %s",imp , name);
+
+        // _objc_insertMethods(cls, mlist, nil);
         result = nil;
     }
 

@@ -24,58 +24,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/DSClass.h>
-#include <dark/DSLog.h>
-// Class implement_DSClass(Class super) 
-begin_class(DSClass)
-end_class
 
-/**
- * Load the class metadata
- * 
- * Classes must be loaded before they can be used
+
+/** 
+ * Initialize the runtime object system 
  */
 void __attribute__((constructor(101))) DSClassBoot() 
 {
-    /** Initialize the runtime object system */
-
-    /** Initialize the framework */
-    DSClass = (struct DSClass) { 
-        .isa            = &DSClass,
-        .superclass     = &DSClass,
-        .name           = "DSClass",
-        .instance_size  = sizeof(DSClass),
-    };
-
-    DSClassList = (struct DSClassList) {
-        .count          = 1, 
-        .classes        = { &DSClass } 
-    };
-
-    objc_register_builtins();
-
     /**
-     * Deprecated:
+     * Load the class metadata
+     * 
+     * Classes must be loaded before they can be used
      */
-    class_loadDSObject();
-    class_loadDSComparable();
-    class_loadDSCollection();
-    class_loadDSArray();
-    class_loadDSList();
-    class_loadDSHashmap();
-    class_loadDSBoolean();
-    class_loadDSNumber();
-    class_loadDSChar();
-    class_loadDSDouble();
-    class_loadDSFloat();
-    class_loadDSInteger();
-    class_loadDSLong();
-    class_loadDSShort();
-    class_loadDSString();
-    class_loadDSStringBuilder();
-
-    // for (int i=0; DSClass.classes[i] != nullptr; i++) {
-    //     DSLog(class_isa(DSClass.classes[i])->name);
-    // }
+    objc_register_builtins();
 
 }
 

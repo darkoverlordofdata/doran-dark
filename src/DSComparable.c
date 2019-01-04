@@ -29,12 +29,16 @@ SOFTWARE.
  */
 
 static DSException(AbstractMethod);
-begin_class(DSComparable) 
 
-    method("ToString", (DSComparableToString)ToString, "$@:v");
-    method("CompareTo", (DSComparableCompareTo)CompareTo, "i@:@");
-
-end_class
+$implementation(DSComparable);
+$method(ToString,           (DSComparableToString)ToString, "$@:v");
+$method(Equals,             DSObject_Equals, "B@:@@");
+$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
+$method(Dispose,            DSObject_Dispose, "v@:v");
+$method(ReferenceEquals,    ReferenceEquals, "@:v");
+$method(InstanceEquals,     InstanceEquals, "$@:v");
+$method(CompareTo,          (DSComparableCompareTo)CompareTo, "i@:@");
+$end;
 
 /**
  * Initialize a new DSComparable
@@ -42,31 +46,24 @@ end_class
 DSComparable* DSComparable_init(DSComparable* const this)
 {
     DSObject_init(this);
-    this->isa = &DSComparableClass;
+    this->isa = objc_getClass("DSComparable");
     return this;
 }
 
 int overload CompareTo(const DSComparable* const this, const DSComparable* const other) {
-    return this->isa->CompareTo(this, other);
+    _vptr(DSComparable)->CompareTo(this, other);
 }
 
 int DSComparable_CompareTo(const DSComparable* const this, const DSComparable* const other) {
     return DSAbstractMethodException("Comparable_CompareTo");
 }
 
-char* DSComparable_ToString(const DSComparable* const this) {
-    return this->isa->ToString(this);
-}
-
 char* overload ToString(const DSComparable* const this) {
     return "dark.DSComparable";
 }
 
-/**
- * DSComparable Class Metadata
- */
-DSDefine(DSComparable, DSObject, cls, {
-    cls->ToString        = DSComparable_ToString;
-    cls->CompareTo       = DSComparable_CompareTo;
-});
+char* DSComparable_ToString(const DSComparable* const this) {
+    _vptr(DSComparable)->ToString(this);
+}
+
 
