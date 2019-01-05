@@ -65,7 +65,7 @@ DSNumber* DSNumber_init(DSNumber* const this)
  *         -1 this > other
  */
 int overload CompareTo(DSNumber* this, DSNumber* other) {
-    return DSNumberVTable.CompareTo(this, other);
+    return Vptr(DSNumber)->CompareTo(this, other);
 }
 int DSNumber_CompareTo(DSNumber* const this, DSNumber* other) {
     return DSAbstractMethodException("Number_CompareTo");
@@ -75,7 +75,7 @@ int DSNumber_CompareTo(DSNumber* const this, DSNumber* other) {
  * Returns the value of this value cast as an int
  */
 int overload IntValue(DSNumber* const this) {
-    return DSNumberVTable.IntValue(this);
+    return Vptr(DSNumber)->IntValue(this);
 }
 int DSNumber_IntValue(DSNumber* const this) {
     return DSAbstractMethodException("Number_IntValue");
@@ -85,12 +85,7 @@ int DSNumber_IntValue(DSNumber* const this) {
  * Returns the value of this value cast as an long
  */
 long LongValue(DSNumber* const this) {
-    // DSLog("LongValue: vtable %x", DSNumberVTable.LongValue);
-    // return DSNumberVTable.LongValue(this);
-    struct DSNumberVTable* v = (struct DSNumberVTable*)(this->isa->vtable);
-    DSLog("LongValue: vtable %x", v->LongValue);
-    return v->LongValue(this);
-    // return this->isa->LongValue(this);
+    return Vptr(DSNumber)->LongValue(this);
 }
 long DSNumber_LongValue(DSNumber* const this) {
     return DSAbstractMethodException("Number_LongValue");
@@ -100,7 +95,7 @@ long DSNumber_LongValue(DSNumber* const this) {
  * Returns the value of this value cast as an float
  */
 float overload FloatValue(DSNumber* const this) {
-    return DSNumberVTable.FloatValue(this);
+    return Vptr(DSNumber)->FloatValue(this);
 }
 float DSNumber_FloatValue(DSNumber* const this) {
     return DSAbstractMethodException("Number_FloatValue");
@@ -110,7 +105,7 @@ float DSNumber_FloatValue(DSNumber* const this) {
  * Returns the value of this value cast as an double
  */
 double overload DoubleValue(DSNumber* const this) {
-    return DSNumberVTable.DoubleValue(this);
+    return Vptr(DSNumber)->DoubleValue(this);
 }
 double DSNumber_DoubleValue(DSNumber* const this) {
     return DSAbstractMethodException("Number_DoubleValue");
@@ -120,7 +115,7 @@ double DSNumber_DoubleValue(DSNumber* const this) {
  * Returns the value of this value cast as an char
  */
 char overload CharValue(DSNumber* const this) {
-    return DSNumberVTable.CharValue(this);
+    return Vptr(DSNumber)->CharValue(this);
 }
 char DSNumber_CharValue(DSNumber* const this) {
     return DSAbstractMethodException("Number_CharValue");
@@ -130,7 +125,7 @@ char DSNumber_CharValue(DSNumber* const this) {
  * Returns the value of this value cast as an short
  */
 short overload ShortValue(DSNumber* const this) {
-    return DSNumberVTable.ShortValue(this);
+    return Vptr(DSNumber)->ShortValue(this);
 }
 short DSNumber_ShortValue(DSNumber* const this) {
     return DSAbstractMethodException("Number_ShortValue");
@@ -138,14 +133,14 @@ short DSNumber_ShortValue(DSNumber* const this) {
 
 
 char* overload ToString(const DSNumber* const this) {
-    return DSNumberVTable.ToString(this);
+    return Vptr(DSNumber)->ToString(this);
 }
 char* DSNumber_ToString(const DSNumber* const this) {
     return "dark.Number";
 }
 
 bool overload Equals(DSNumber* const this, DSNumber* const other) {
-    return DSNumberVTable.Equals(this, other);
+    return Vptr(DSNumber)->Equals(this, other);
 }
 bool DSNumber_Equals(DSNumber* const this, DSNumber* const other) {
     return true;

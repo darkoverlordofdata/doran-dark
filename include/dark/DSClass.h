@@ -81,6 +81,7 @@ Class class##Implementation(Class super)                                \
 {                                                                       \
     int k = 0;                                                          \
     IMP* vt = &class##VTable;                                           \
+    char* class_name = #class;                                          \
     Class isa = objc_allocateClassPair(super, #class, 0);               \
     isa->vtable = &vt[0];               
     
@@ -122,6 +123,13 @@ Class class##Implementation(Class super)                                \
 #define $end                                                            \
     return methodizeClass(isa);                                         \
 }
+
+    // // return DSNumberVTable.LongValue(this);
+    // struct DSNumberVTable* v = (struct DSNumberVTable*)(this->isa->vtable);
+    // DSLog("LongValue: vtable %x", v->LongValue);
+    // return v->LongValue(this);
+
+#define Vptr(class) ((struct class##VTable*)(this->isa->vtable))
 
 
 #endif _DSCLASS_H_ 

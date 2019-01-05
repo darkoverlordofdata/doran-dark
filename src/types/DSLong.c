@@ -44,6 +44,8 @@ $method(ShortValue,         DSLong_ShortValue, "s@:v");
 
 $ivar(value, sizeof(long), "l");
 
+$DSLong.Create = NewDSLong;
+
 $end;
 
 /**

@@ -57,17 +57,14 @@ VTable (DSBoolean) {
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
-    // bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-    // bool    (*InstanceEquals) (DSObject* const, DSObject* const);
     int     (*CompareTo) (const DSBoolean* const, const DSBoolean* const);
-
-    // bool    (*BoolValue) (const DSBoolean* const);
-    // int     (*Compare) (const bool, const bool);
-    // bool    (*ParseBool) (char const*);
-};// DSBooleanVTable;
+    bool    (*BoolValue) (const DSBoolean* const);
+};
 
 Singleton ($DSBoolean) {
     DSBoolean*(*Create) (bool value);
+    int (*Compare) (const bool, const bool);
+    bool (*ParseBool) (char const*);
     int  Bytes;
     int  Size;
     int  Type;
@@ -76,8 +73,7 @@ Singleton ($DSBoolean) {
 };
 
 bool BoolValue(const DSBoolean* const);
-bool ParseBool(const char *const);
-
+static bool ParseBool(const char *const);
 int overload Compare(bool, bool);
 int overload CompareTo(const DSBoolean* const, const DSBoolean* const);
 int DSBoolean_CompareTo(const DSBoolean* const, const DSBoolean* const);

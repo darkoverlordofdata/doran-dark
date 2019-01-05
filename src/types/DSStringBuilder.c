@@ -110,7 +110,7 @@ int DSStringBuilder_Empty(DSStringBuilder* this)
 int DSStringBuilder_Appendc(DSStringBuilder* this, const char c)
 {
 	char str[2] = { c, 0 };
-	return DSStringBuilderVTable.Append(this, str);
+	return Vptr(DSStringBuilder)->Append(this, str);
 }
 /*
  * sb_append adds a copy of the given string to a StringBuilder.

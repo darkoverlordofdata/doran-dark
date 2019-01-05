@@ -138,7 +138,7 @@ DSString* DSString_Concat(DSString* this, DSString* other) {
 }
 
 bool DSString_Contains(DSString* this, DSString* s) {
-    return DSStringVTable.IndexOf(this, s, 0) > -1;
+    return Vptr(DSString)->IndexOf(this, s, 0) > -1;
 }
 
 DSString* DSString_CopyOf(DSString* this) {

@@ -51,10 +51,7 @@ DSComparable* DSComparable_init(DSComparable* const this)
 }
 
 int overload CompareTo(const DSComparable* const this, const DSComparable* const other) {
-    DSLog("CompareTo ??");// infinite looping...
-    struct DSComparableVTable* v = (struct DSComparableVTable*)(this->isa->vtable);
-    return v->CompareTo(this, other);
-    // DSComparableVTable.CompareTo(this, other);
+    return Vptr(DSComparable)->CompareTo(this, other);
 }
 
 int DSComparable_CompareTo(const DSComparable* const this, const DSComparable* const other) {
@@ -66,7 +63,7 @@ char* overload ToString(const DSComparable* const this) {
 }
 
 char* DSComparable_ToString(const DSComparable* const this) {
-    DSComparableVTable.ToString(this);
+    Vptr(DSComparable)->ToString(this);
 }
 
 

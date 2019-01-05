@@ -1,8 +1,8 @@
 # DaRKSTEP
 
-generic function runtime inspired by NSObject. Linked with boehm gc.
-reimplements NeXTSTEP object system entirely in c11 with clang extensions.
+NeXTSTEP-like object system entirely in c11 with clang extensions. This is not objective-c, this is c. Instead of method lists, I'm using vtables. Instead of messages, I'm using the selector as a generic function via the overloadable attribute.
 
+The object system is mainly used for metadata and the ability to define classes at runtime. 
 
 clang c99 with extensions:
 * BlocksRuntime

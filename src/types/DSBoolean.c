@@ -31,17 +31,17 @@ $method(Equals,             DSObject_Equals, "B@:@@");
 $method(GetHashCode,        DSObject_GetHashCode, "l@:v");
 $method(Dispose,            DSObject_Dispose, "v@:v");
 $method(CompareTo,          (DSBooleanCompareTo)CompareTo, "i@:@");
+$method(BoolValue,          BoolValue, "B@:v");
 
 $ivar(value, sizeof(int), "B");
 
-/** class constant: True */
+/** Class methods, vars */
 static DSBoolean True;
-True.isa = objc_getClass("DSBoolean");//&isa;
+True.isa = objc_getClass("DSBoolean");
 True.value = true;
 
-/** class constant: False */
 static DSBoolean False;
-False.isa = objc_getClass("DSBoolean");//&isa;
+False.isa = objc_getClass("DSBoolean");
 False.value = false;
 
 
@@ -50,12 +50,9 @@ $DSBoolean.Size = BOOLEAN_SIZE;
 $DSBoolean.Type = BOOLEAN_TYPE;
 $DSBoolean.True = &True;
 $DSBoolean.False = &False;
-
-    // class_ivar("Bytes", sizeof(int), "i");
-    // class_ivar("Size", sizeof(int), "i");
-    // class_ivar("Type", sizeof(int), "i");
-    // class_ivar("True", sizeof(id), "@");
-    // class_ivar("False", sizeof(id), "@");
+$DSBoolean.ParseBool = ParseBool;
+$DSBoolean.Compare = Compare;
+$DSBoolean.Create = NewDSBoolean;
     
 $end;
 
@@ -83,7 +80,7 @@ DSBoolean* DSBoolean_alloc() {
     return DSMalloc(getDSBooleanSize());
 }
 
-bool DSParseBool(const char * const s)
+static bool ParseBool(const char * const s)
 {
     if (!strcmpi("y", s) 
     ||  !strcmpi("yes", s) 

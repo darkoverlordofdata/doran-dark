@@ -132,7 +132,7 @@ void Resize(DSArray* const this, int capacity)
 void overload Add(DSArray* const this, const Any item)
 {
     if (this->capacity == this->length) {
-        DSArrayVTable.Resize(this, this->capacity * 2);
+        Vptr(DSArray)->Resize(this, this->capacity * 2);
     }
     this->data[this->length++] = item;
 }
@@ -181,7 +181,7 @@ void overload Remove(DSArray* const this, int index)
     this->length--;
 
     if (this->length > 0 && this->length == this->capacity / 4)
-        DSArrayVTable.Resize(this, this->capacity / 2);
+        Vptr(DSArray)->Resize(this, this->capacity / 2);
 }
 
 /**

@@ -13,7 +13,6 @@ char keys[12][7] = {
     "key7", "key8", "key9",
     "keyA", "keyB", "keyC",
 };
-struct hashmap* class_hash;
 
 int main(int argc, char **argv) {
 
@@ -45,7 +44,7 @@ int main(int argc, char **argv) {
     }
 
 
-    __block DSLong* l0 = NewDSLong(0);
+    __block DSLong* l0 = $DSLong.Create(0);
     __block DSLong* l1 = NewDSLong(1);
     __block DSLong* l2 = NewDSLong(2);
     __block DSLong* l3 = NewDSLong(3);
@@ -62,8 +61,6 @@ int main(int argc, char **argv) {
     Add(q, l);    
     Add(q, m);
 
-    // // Long ll = Get(a, 0);    
-    
     DSLog("=============");
     DSLog("%d", Length(a));
     for (int i=0; i<Length(a); i++) {
@@ -77,7 +74,6 @@ int main(int argc, char **argv) {
     DSLog("TRUE = %s", ToString($DSBoolean.True));
     DSLog("FALSE = %s", ToString($DSBoolean.False));
     DSLog("=============");
-    // __block DSCollection* c = q;
 
     __block DSChar* zz = NewDSChar('c');
 
@@ -85,9 +81,6 @@ int main(int argc, char **argv) {
     Describe("Run Tests", ^{
 
         It("True and True are the same", ^{
-            DSLog("True = %d", $DSBoolean.True->value);
-            DSLog("False = %d", $DSBoolean.False->value);
-            // return 0;
             Expect(CompareTo($DSBoolean.True, $DSBoolean.True) == 0);
         });
         

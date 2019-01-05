@@ -55,7 +55,7 @@ DSCollection* DSCollection_init(DSCollection* const this)
  */
 int overload Length(DSCollection* const this)
 {
-    return DSCollectionVTable.Length(this);
+    return Vptr(DSCollection)->Length(this);
 }
 int DSCollection_Length(DSCollection* const this)
 {
@@ -64,7 +64,7 @@ int DSCollection_Length(DSCollection* const this)
 
 void Collection_Add(DSCollection* const this, Any data)
 {
-    DSCollectionVTable.Add(this, data);
+    Vptr(DSCollection)->Add(this, data);
 }
 void DSCollection_Add(DSCollection* const this, Any data)
 {

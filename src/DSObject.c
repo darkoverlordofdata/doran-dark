@@ -81,7 +81,7 @@ bool InstanceEquals(const DSObject* const objA, const DSObject* const objB)
 }
 
 void overload Dispose(DSObject* const this){
-    return DSObjectVTable.Dispose(this);
+    return Vptr(DSObject)->Dispose(this);
 }
 /**
  * virtual Dispose method
@@ -94,7 +94,7 @@ void DSObject_Dispose(DSObject* const this){}
  */
 const char* overload ToString(const DSObject* const this)
 {
-    return DSObjectVTable.ToString(this);
+    return Vptr(DSObject)->ToString(this);
 }
 /**
  * virtual ToString method
@@ -116,7 +116,7 @@ const char *DSClass_ToString(const DSClass* const this)
  */
 bool overload Equals(const DSObject* const this, const DSObject* const that)
 {
-    return DSObjectVTable.Equals(this, that);
+    return Vptr(DSObject)->Equals(this, that);
 }
 /**
  * virtual Equals method
@@ -131,7 +131,7 @@ bool DSObject_Equals(DSObject* const this, DSObject* const that)
  */
 int overload GetHashCode(const DSObject* const this)
 {
-    return DSObjectVTable.GetHashCode(this);
+    return Vptr(DSObject)->GetHashCode(this);
 }
 /**
  * virtual GetHashCode method
