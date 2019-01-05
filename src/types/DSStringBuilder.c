@@ -59,13 +59,19 @@ SOFTWARE.
 static DSException(OutOfMemory);
 $implementation(DSStringBuilder)
 
-$method(Append, DSStringBuilder_Append, "i@:v");
-$method(Appendc, DSStringBuilder_Appendc, "i@:c");
-$method(Appendf, DSStringBuilder_Appendf, "i@:c.");
-$method(Concat, DSStringBuilder_Concat, "$@:v");
-$method(Dispose, DSStringBuilder_Dispose, "v@:v");
-$method(Empty, DSStringBuilder_Empty, "B@:v");
-$method(Reset, DSStringBuilder_Reset, "v@:v");
+$method(ToString, 			DSObject_ToString, "$@:v");
+$method(Equals,             DSObject_Equals, "B@:@@");
+$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
+$method(Dispose,            DSObject_Dispose, "v@:v");
+$method(ReferenceEquals,    ReferenceEquals, "@:v");
+$method(InstanceEquals,     InstanceEquals, "$@:v");
+$method(Append,				DSStringBuilder_Append, "i@:v");
+$method(Appendc, 			DSStringBuilder_Appendc, "i@:c");
+$method(Appendf, 			DSStringBuilder_Appendf, "i@:c.");
+$method(Concat, 			DSStringBuilder_Concat, "$@:v");
+$method(Dispose, 			DSStringBuilder_Dispose, "v@:v");
+$method(Empty, 				DSStringBuilder_Empty, "B@:v");
+$method(Reset, 				DSStringBuilder_Reset, "v@:v");
 
 $ivar(root, sizeof(id), "^");
 $ivar(trunk, sizeof(id), "^");

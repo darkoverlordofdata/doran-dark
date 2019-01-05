@@ -26,14 +26,19 @@ SOFTWARE.
 #include <dark/types/DSChar.h>
 $implementation(DSChar);
 
-$method(ToString, DSChar_ToString, "$@:v");
-$method(CompareTo, DSChar_CompareTo, "i@:@");
-$method(IntValue, DSChar_IntValue, "i@:v");
-$method(LongValue, DSChar_LongValue, "l@:v");
-$method(FloatValue, DSChar_FloatValue, "f@:v");
-$method(DoubleValue, DSChar_DoubleValue, "d@:v");
-$method(CharValue, DSChar_CharValue, "c@:v");
-$method(ShortValue, DSChar_ShortValue, "s@:v");
+$method(ToString,           DSChar_ToString, "$@:v");
+$method(Equals,             DSObject_Equals, "B@:@@");
+$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
+$method(Dispose,            DSObject_Dispose, "v@:v");
+$method(ReferenceEquals,    ReferenceEquals, "@:v");
+$method(InstanceEquals,     InstanceEquals, "$@:v");
+$method(CompareTo,          DSChar_CompareTo, "i@:@");
+$method(IntValue,           DSChar_IntValue, "i@:v");
+$method(LongValue,          DSChar_LongValue, "l@:v");
+$method(FloatValue,         DSChar_FloatValue, "f@:v");
+$method(DoubleValue,        DSChar_DoubleValue, "d@:v");
+$method(CharValue,          DSChar_CharValue, "c@:v");
+$method(ShortValue,         DSChar_ShortValue, "s@:v");
 
 $ivar(value, sizeof(char), "c");
 

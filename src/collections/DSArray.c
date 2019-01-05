@@ -27,16 +27,21 @@ SOFTWARE.
 
 $implementation(DSArray)
 
-$method(ToString, (DSArrayToString)ToString, "@@:v");
-$method(Dispose, (DSArrayDispose)Dispose, "v@:v");
-$method(TsEmpty, (DSArrayIsEmpty)IsEmpty, "B@:v");
-$method(Contains, (DSArrayContains)Contains, "B@:@");
-$method(Add, (DSArrayAdd)Add, "v@:@");
-$method(Remove, (DSArrayRemove)Remove, "v@:i");
-$method(Resize, (DSArrayResize)Resize, "v@:i");
-$method(Set, (DSArraySet)Set, "v@:i@");
-$method(Get, (DSArrayGet)Get, "@@:i");
-$method(Clear, (DSArrayClear)Clear, "v@:v");
+$method(ToString,           (DSArrayToString)ToString, "@@:v");
+$method(Equals,             DSObject_Equals, "B@:@@");
+$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
+$method(Dispose,            (DSArrayDispose)Dispose, "v@:v");
+$method(ReferenceEquals,    ReferenceEquals, "@:v");
+$method(InstanceEquals,     InstanceEquals, "$@:v");
+$method(Length,             (DSArrayLength)Length, "i@:v");
+$method(IsEmpty,            (DSArrayIsEmpty)IsEmpty, "B@:v");
+$method(Contains,           (DSArrayContains)Contains, "B@:@");
+$method(Clear,              (DSArrayClear)Clear, "v@:v");
+$method(Add,                (DSArrayAdd)Add, "v@:@");
+$method(Remove,             (DSArrayRemove)Remove, "v@:i");
+$method(Resize,             (DSArrayResize)Resize, "v@:i");
+$method(Set,                (DSArraySet)Set, "v@:i@");
+$method(Get,                (DSArrayGet)Get, "@@:i");
 
 $ivar(length, sizeof(int), "i");
 $ivar(data, sizeof(void*), "^");
@@ -85,7 +90,7 @@ DSArray* overload NewDSArray(void) {
  */
 DSArray* DSArray_init(DSArray* const this, int capacity)
 {
-    DSCollection_init(this);
+    DSObject_init(this);
     this->isa = objc_getClass("DSArray");
     this->capacity = capacity == 0 ? ARRAY_INIT_CAPACITY : capacity;
     this->length = 0;

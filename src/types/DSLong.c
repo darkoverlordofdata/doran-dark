@@ -30,14 +30,19 @@ SOFTWARE.
 static DSException(LongFormat);
 $implementation(DSLong)
 
-$method(ToString, DSLong_ToString, "$@:v");
-$method(CompareTo, DSLong_CompareTo, "i@:@");
-$method(IntValue, DSLong_IntValue, "i@:v");
-$method(LongValue, DSLong_LongValue, "l@:v");
-$method(FloatValue, DSLong_FloatValue, "f@:v");
-$method(DoubleValue, DSLong_DoubleValue, "d@:v");
-$method(CharValue, DSLong_CharValue, "c@:v");
-$method(ShortValue, DSLong_ShortValue, "s@:v");
+$method(ToString,           DSLong_ToString, "$@:v");
+$method(Equals,             DSObject_Equals, "B@:@@");
+$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
+$method(Dispose,            DSObject_Dispose, "v@:v");
+$method(ReferenceEquals,    ReferenceEquals, "@:v");
+$method(InstanceEquals,     InstanceEquals, "$@:v");
+$method(CompareTo,          DSLong_CompareTo, "i@:@");
+$method(IntValue,           DSLong_IntValue, "i@:v");
+$method(LongValue,          DSLong_LongValue, "l@:v");
+$method(FloatValue,         DSLong_FloatValue, "f@:v");
+$method(DoubleValue,        DSLong_DoubleValue, "d@:v");
+$method(CharValue,          DSLong_CharValue, "c@:v");
+$method(ShortValue,         DSLong_ShortValue, "s@:v");
 
 $ivar(value, sizeof(long), "l");
 

@@ -28,16 +28,22 @@ SOFTWARE.
  * Throws DSAbstractMethodException:
  */
 static DSException(AbstractMethod);
+
 $implementation(DSNumber); 
 
-$method(ToString,   DSNumber_ToString, "$@:v");
-$method(CompareTo,  DSNumber_CompareTo, "i@:@");
-$method(IntValue,   DSNumber_IntValue, "i@:v");
-$method(LongValue,  DSNumber_LongValue, "l@:v");
-$method(FloatValue, DSNumber_FloatValue, "f@:v");
-$method(DoubleValue, DSNumber_DoubleValue, "d@:v");
-$method(CharValue,  DSNumber_CharValue, "c@:v");
-$method(ShortValue, DSNumber_ShortValue, "s@:v");
+$method(ToString,           DSNumber_ToString, "$@:v");
+$method(Equals,             DSObject_Equals, "B@:@@");
+$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
+$method(Dispose,            DSObject_Dispose, "v@:v");
+$method(ReferenceEquals,    ReferenceEquals, "@:v");
+$method(InstanceEquals,     InstanceEquals, "$@:v");
+$method(CompareTo,          DSNumber_CompareTo, "i@:@");
+$method(IntValue,           DSNumber_IntValue, "i@:v");
+$method(LongValue,          DSNumber_LongValue, "l@:v");
+$method(FloatValue,         DSNumber_FloatValue, "f@:v");
+$method(DoubleValue,        DSNumber_DoubleValue, "d@:v");
+$method(CharValue,          DSNumber_CharValue, "c@:v");
+$method(ShortValue,         DSNumber_ShortValue, "s@:v");
 
 $end;
 
@@ -81,7 +87,12 @@ int DSNumber_IntValue(DSNumber* const this) {
  * Returns the value of this value cast as an long
  */
 long LongValue(DSNumber* const this) {
-    return DSNumberVTable.LongValue(this);
+    // DSLog("LongValue: vtable %x", DSNumberVTable.LongValue);
+    // return DSNumberVTable.LongValue(this);
+    struct DSNumberVTable* v = (struct DSNumberVTable*)(this->isa->vtable);
+    DSLog("LongValue: vtable %x", v->LongValue);
+    return v->LongValue(this);
+    // return this->isa->LongValue(this);
 }
 long DSNumber_LongValue(DSNumber* const this) {
     return DSAbstractMethodException("Number_LongValue");

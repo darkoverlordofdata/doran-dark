@@ -188,10 +188,8 @@ void objc_registerClassPair(Class cls)
 
     if (NX_hashmap_get(class_hash, cls->name) == nullptr) {
         NX_hashmap_put(class_hash, cls->name, cls);
-        // _objc_inform("objc_registerClassPair %s length = %d", cls->name, cls->instance_size);
         NX_hashmap_put(class_hash, cls->name, cls);
         Class kls = NX_hashmap_get(class_hash, cls->name);
-        // _objc_inform("objc_registerClassPair %s length = %d", kls->name, kls->instance_size);
     }
 }
 
@@ -286,8 +284,6 @@ static IMP _class_addMethod(Class cls, SEL name, IMP imp,
         mlist->method_list[0].method_types = strdup(types);
         mlist->method_list[0].method_imp = imp;
         
-        _objc_inform("%x %s",imp , name);
-
         // _objc_insertMethods(cls, mlist, nil);
         result = nil;
     }

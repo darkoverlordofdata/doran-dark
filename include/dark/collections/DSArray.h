@@ -88,7 +88,6 @@ Singleton ($DSArray) {
  * Array API
  */
 DSArray* overload NewDSArray(void);
-DSArray* overload NewDSArray(int);
 DSArray* overload NewDSArray(int, ...);
 
 char* overload ToString(const DSArray* const);

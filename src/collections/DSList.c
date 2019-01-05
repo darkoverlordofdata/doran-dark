@@ -26,13 +26,18 @@ SOFTWARE.
 #include <dark/collections/DSList.h>
 $implementation(DSList)
 
-$method(ToString, (DSListToString)ToString, "@@:v");
-$method(Dispose, (DSListDispose)Dispose, "v@:v");
-$method(Length, (DSListLength)Length, "i@:v");
-$method(Iterate, (DSListForEach)ForEach, "i@:@@");
-$method(Insert, (DSListInsert)Insert, "i@:*@");
-$method(Add, (DSListAdd)Add, "@@:*");
-$method(Remove, (DSListRemove)Remove, "i@:*");
+
+$method(ToString,           (DSListToString)ToString, "@@:v");
+$method(Equals,             DSObject_Equals, "B@:@@");
+$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
+$method(Dispose,            (DSListDispose)Dispose, "v@:v");
+$method(ReferenceEquals,    ReferenceEquals, "@:v");
+$method(InstanceEquals,     InstanceEquals, "$@:v");
+$method(Length,             (DSListLength)Length, "i@:v");
+$method(Add,                (DSListAdd)Add, "@@:*");
+$method(Remove,             (DSListRemove)Remove, "i@:*");
+$method(Insert,             (DSListInsert)Insert, "i@:*@");
+$method(Iterate,            (DSListForEach)ForEach, "i@:@@");
 
 $ivar(length, sizeof(int), "i");
 $ivar(head, sizeof(void*), "^");
@@ -48,7 +53,7 @@ DSList* NewDSList() {
 
 DSList* DSList_init(DSList* const this)
 {
-    DSCollection_init(this);
+    DSObject_init(this);
     this->isa = objc_getClass("DSList");
     this->head = nullptr;
 

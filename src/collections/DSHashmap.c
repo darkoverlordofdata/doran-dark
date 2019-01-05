@@ -170,16 +170,20 @@ unsigned int overload HashInt(DSHashmap* const this, char* keystring)
 
 $implementation(DSHashmap)
 
-$method(ToString, (DSHashmapToString)ToString, "@@:v");
-$method(ForEach, (DSHashmapForEach)ForEach, "i@:@@");
-$method(Put, (DSHashmapPut)Put, "i@:*@");
-$method(Get, (DSHashmapGet)Get, "@@:*");
-$method(Remove, (DSHashmapRemove)Remove, "i@:*");
-$method(Dispose, (DSHashmapDispose)Dispose, "v@:v");
-$method(Length, (DSHashmapLength)Length, "i@:v");
-$method(HashInt, (DSHashmapHashInt)HashInt, "I@:*");
-$method(Hash, (DSHashmapHash)Hash, "i@:*");
-$method(Rehash, (DSHashmapRehash)Rehash, "i@:v");
+$method(ToString,           (DSHashmapToString)ToString, "@@:v");
+$method(Equals,             DSObject_Equals, "B@:@@");
+$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
+$method(Dispose,            (DSHashmapDispose)Dispose, "v@:v");
+$method(ReferenceEquals,    ReferenceEquals, "@:v");
+$method(InstanceEquals,     InstanceEquals, "$@:v");
+$method(Length,             (DSHashmapLength)Length, "i@:v");
+$method(Remove,             (DSHashmapRemove)Remove, "v@:i");
+$method(ForEach,            (DSHashmapForEach)ForEach, "i@:@@");
+$method(Put,                (DSHashmapPut)Put, "i@:*@");
+$method(Get,                (DSHashmapGet)Get, "@@:*");
+$method(HashInt,            (DSHashmapHashInt)HashInt, "I@:*");
+$method(Hash,               (DSHashmapHash)Hash, "i@:*");
+$method(Rehash,             (DSHashmapRehash)Rehash, "i@:v");
 
 $ivar(tableSize, sizeof(int), "i");
 $ivar(size, sizeof(int), "i");

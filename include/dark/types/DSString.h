@@ -47,7 +47,7 @@ Ivar (DSString) {
  * Object metaclass
  */
 VTable (DSString) {
-    char*   (*ToString) (DSString* const);
+    char*   (*ToString) (const DSString* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
@@ -98,7 +98,7 @@ DSString* DSString_Trim(DSString* this);
 int overload Length(DSString* const);
 bool DSString_IsEmpty(DSString* const this);
 char DSString_CharAt(DSString* const this, int index);
-char* DSString_ToString(const DSString* const this);
+char* DSString_ToString(const DSString* const);
 DSString* DSString_init(DSString* const this, char* value);
 DSString* DSString_alloc();
 

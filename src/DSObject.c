@@ -37,7 +37,6 @@ $method(GetHashCode,        DSObject_GetHashCode, "l@:v");
 $method(Dispose,            DSObject_Dispose, "v@:v");
 $method(ReferenceEquals,    ReferenceEquals, "@:v");
 $method(InstanceEquals,     InstanceEquals, "$@:v");
-$method(Create,             NewDSObject, "@v");
 $end;
 
 /**

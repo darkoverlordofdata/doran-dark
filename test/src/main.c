@@ -19,176 +19,135 @@ int main(int argc, char **argv) {
 
 
     DSLog("Hello World");
+    __block struct DSLong* l = NewDSLong(420);
+    __block DSLong* m = NewDSLong(420);
+    __block DSBoolean* b = NewDSBoolean(true);
+    DSLog("should be DSBoolean: %s", GetClassName(b));
 
-    
+    __block DSString* s = $("Frodo");
+    __block DSArray* a = NewDSArray(0);
+    __block DSList* q = NewDSList();
+    __block DSHashmap* h = NewDSHashmap();
 
-    DSObject* x = NewDSObject();
-    DSLog(ToString(x));
-    DSLog("size = %d", sizeof(DSObjectVTable));
+    for (int i=0; i<12; i++)
+    {
+        DSLog("%s", keys[i]);
+        Put(h, keys[i], NewDSLong(i+420));
+    }
 
-    DSBoolean* b = NewDSBoolean(true);
-    DSLog("bool %s", ToString(b));
+    for (int i=0; i<12; i++)
+    {
+        DSLog("Get %d", i);
+        DSLong* l1 = Get(h, keys[i]);
+        DSLog("Got %d", i);
+        int l2 = LongValue(l1);
+        DSLog("%d", l2);
+    }
 
-    if ($DSBoolean.True == nullptr) DSLog("NULL"); else DSLog("Not Null");
-    DSLog("value = %d", $DSBoolean.True->value);
-    bool bb = Equals($DSBoolean.True, b);
-    // DSLog("Equal? %d", bb);
-    DSLog("Done.");
-    return 0;
-    // __block struct DSLong* l = $DSLong(420);
-    // __block DSLong* m = $DSLong(420);
-    // __block DSBoolean* b = $DSBoolean(true);
-    // DSLog("should be DSBoolean: %s", GetClassName(b));
 
-    // __block DSString* s = $("Frodo");
-    // __block DSArray* a = $DSArray(0);
-    // __block DSList* q = $DSList();
-    // __block DSHashmap* h = $DSHashmap();
+    __block DSLong* l0 = NewDSLong(0);
+    __block DSLong* l1 = NewDSLong(1);
+    __block DSLong* l2 = NewDSLong(2);
+    __block DSLong* l3 = NewDSLong(3);
+    __block DSLong* l4 = NewDSLong(4);
+    __block DSLong* l5 = NewDSLong(5);
 
-    // for (int i=0; i<12; i++)
-    // {
-    //     DSLog("%s", keys[i]);
-    //     Put(h, keys[i], $DSLong(i+420));
-    // }
+    Add(a, l0);
+    Add(a, l1);
+    Add(a, l2);
+    Add(a, l3);
+    Add(a, l4);
+    Add(a, l5);
 
-    // for (int i=0; i<12; i++)
-    // {
-    //     DSLog("%d", LongValue(Get(h, keys[i])));
-    // }
-
-    // __block DSLong* l0 = $DSLong(0);
-    // __block DSLong* l1 = $DSLong(1);
-    // __block DSLong* l2 = $DSLong(2);
-    // __block DSLong* l3 = $DSLong(3);
-    // __block DSLong* l4 = $DSLong(4);
-    // __block DSLong* l5 = $DSLong(5);
-
-    // Add(a, l0);
-    // Add(a, l1);
-    // Add(a, l2);
-    // Add(a, l3);
-    // Add(a, l4);
-    // Add(a, l5);
-
-    // Add(q, l);    
-    // Add(q, m);
+    Add(q, l);    
+    Add(q, m);
 
     // // Long ll = Get(a, 0);    
     
-    // DSLog("=============");
-    // DSLog("%d", Length(a));
-    // for (int i=0; i<Length(a); i++) {
-    //     DSLog("%d)", i);
-    //     DSLog("%d) %d", i, LongValue(Get(a, i)));
-    // }
-    // DSLog("%s", ToString(q));
-    // DSLog("Bytes = %d", DSBooleanClass.Bytes);
-    // DSLog("Size = %d", DSBooleanClass.Size);
-    // DSLog("Type = %d", DSBooleanClass.Type);
-    // DSLog("TRUE = %s", ToString(DSBooleanClass.True));
-    // DSLog("FALSE = %s", ToString(DSBooleanClass.False));
-    // DSLog("=============");
+    DSLog("=============");
+    DSLog("%d", Length(a));
+    for (int i=0; i<Length(a); i++) {
+        DSLog("%d)", i);
+        DSLog("%d) %d", i, LongValue(Get(a, i)));
+    }
+    DSLog("%s", ToString(q));
+    DSLog("Bytes = %d", $DSBoolean.Bytes);
+    DSLog("Size = %d", $DSBoolean.Size);
+    DSLog("Type = %d", $DSBoolean.Type);
+    DSLog("TRUE = %s", ToString($DSBoolean.True));
+    DSLog("FALSE = %s", ToString($DSBoolean.False));
+    DSLog("=============");
     // __block DSCollection* c = q;
 
-    // __block DSChar* zz = $DSChar('c');
+    __block DSChar* zz = NewDSChar('c');
 
-    // Describe("Run Tests", ^{
+    Describe("Run Tests", ^{
 
-    //     It("True and True are the same", ^{
-    //         Expect(CompareTo(DSBooleanClass.True, DSBooleanClass.True) == 0);
-    //     });
+        It("True and True are the same", ^{
+            DSLog("True = %d", $DSBoolean.True->value);
+            DSLog("False = %d", $DSBoolean.False->value);
+            return 0;
+            // Expect(CompareTo($DSBoolean.True, $DSBoolean.True) == 0);
+        });
         
-    //     It("Should be 5", ^{
-    //         Expect(Length(s) == 5);
-    //     });
+        It("Should be 5", ^{
+            Expect(Length(s) == 5);
+        });
 
-    //     It("Should be 6", ^{
-    //         Expect(Length(a) == 6);
-    //     });
+        It("Should be 6", ^{
+            Expect(Length(a) == 6);
+        });
 
-    //     It("Should be 2", ^{
-    //         Expect(Length(q) == 2);
-    //     });
+        It("Should be 2", ^{
+            Expect(Length(q) == 2);
+        });
 
-    //     It("Should be 2", ^{
-    //         Expect(Length(c) == 2);
-    //     });
+        // It("Should be 2", ^{
+        //     Expect(Length(c) == 2);
+        // });
 
-    //     It("Should equal 420", ^{
-    //         Expect(LongValue(l) == 420);
-    //     });
+        It("Should equal 420", ^{
+            Expect(LongValue(l) == 420);
+        });
 
-    //     It("Should equal another instance", ^{
-    //         Expect(Equals(l, m));
-    //     });
+        It("Should equal another instance", ^{
+            Expect(Equals(l, m));
+        });
 
-    //     It("Should be a Long", ^{
-    //         Expect(!strcmp("DSLong", GetClassName(l)));
-    //         Expect(!strcmp("DSLong", GetClass(l)->name));
-    //     });
+        It("Should be a Long", ^{
+            Expect(!strcmp("DSLong", GetClassName(l)));
+            Expect(!strcmp("DSLong", GetClass(l)->name));
+        });
 
-    //     It("Should be a Boolean", ^{
-    //         Expect(!strcmp("DSBoolean", GetClassName(b)));
-    //         Expect(!strcmp("DSBoolean", GetClass(b)->name));
-    //     });
+        It("Should be a Boolean", ^{
+            Expect(!strcmp("DSBoolean", GetClassName(b)));
+            Expect(!strcmp("DSBoolean", GetClass(b)->name));
+        });
 
-    //     It("Should be true", ^{
-    //         Expect(BoolValue(b) == true);
-    //     });
+        It("Should be true", ^{
+            Expect(BoolValue(b) == true);
+        });
 
-    //     It("keyB is 430", ^{
-    //         Expect(LongValue(Get(h,"keyB")) == 430);
-    //     });
+        It("keyB is 430", ^{
+            Expect(LongValue(Get(h,"keyB")) == 430);
+        });
 
-    //     It("should be a c", ^{
-    //         Expect(LongValue(zz) == 99);
-    //     });
+        It("should be a c", ^{
+            Expect(LongValue(zz) == 99);
+        });
 
 
 
-    // });
-    // DSLog("");
-    // DSLog("Tests run: %d", tests.total);
-    // DSLog("Tests passed: %d", tests.passed);
-    // DSLog("Tests failed: %d", tests.failed);
+    });
 
-    // SEL _Add = "Add";
-    // DSLog("SEL = %s", _Add);
+    DSLog("");
+    DSLog("Tests run: %d", tests.total);
+    DSLog("Tests passed: %d", tests.passed);
+    DSLog("Tests failed: %d", tests.failed);
+    DSLog("Fini!");
+    return 0;
 
-    // // TestHashMap();
-    // DSLog("sizeof(DSObject) = %d", sizeof(DSObject));
-    // DSLog("sizeof(id) = %d", sizeof(id));
-
-    // DSLog("size of bool = %d", sizeof(bool));
-    // DSLog("4) = %d", sizeof(bool));
-
-    // DSLog("=================================");
-    // DSLog("Boolean %d - %d - %d", 
-    //     DSBooleanClass.instance_size, 
-    //     class_getAlignedInstanceSize(objc_getClass("DSBoolean")),
-    //     objc_getClass("DSBoolean")->instance_size);
-
-    // DSLog("Char %d - %d - %d", 
-    //     DSCharClass.instance_size, 
-    //     class_getAlignedInstanceSize(objc_getClass("DSChar")),
-    //     objc_getClass("DSChar")->instance_size);
-
-    // DSLog("Double %d - %d - %d", 
-    //     DSDoubleClass.instance_size, 
-    //     class_getAlignedInstanceSize(objc_getClass("DSDouble")),
-    //     objc_getClass("DSDouble")->instance_size);
-
-    // DSLog("Array %d - %d - %d", 
-    //     DSArrayClass.instance_size, 
-    //     class_getAlignedInstanceSize(objc_getClass("DSArray")),
-    //     objc_getClass("DSArray")->instance_size);
-
-    // DSLog("Hashmap %d - %d - %d", 
-    //     DSHashmapClass.instance_size, 
-    //     class_getAlignedInstanceSize(objc_getClass("DSHashmap")),
-    //     objc_getClass("DSHashmap")->instance_size);
-
-    // return tests.failed;
+    return tests.failed;
 }
 
 

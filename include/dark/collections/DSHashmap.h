@@ -88,10 +88,10 @@ VTable (DSHashmap) {
         * Get the current size of a hashmap
         */
     int         (*Length)       (const DSHashmap* const);
-    bool        (*IsEmpty)      (DSHashmap* const);
-    bool        (*Contains)     (DSHashmap* const, Any);
-    void        (*Clear)        (DSHashmap* const);
-    void        (*Add)          (DSHashmap* const, Any);
+    // bool        (*IsEmpty)      (DSHashmap* const);
+    // bool        (*Contains)     (DSHashmap* const, Any);
+    // void        (*Clear)        (DSHashmap* const);
+    // void        (*Add)          (DSHashmap* const, Any);
     /*
         * Remove an element from the hashmap. Return MAP_OK or MAP_MISSING.
         */

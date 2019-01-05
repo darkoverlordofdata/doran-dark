@@ -50,7 +50,7 @@ static const int BuildVersion = 1;
 #include "DSClass.h"
 #include "DSObject.h"
 #include "DSComparable.h"
-#include "collections/DSCollection.h"
+// #include "collections/DSCollection.h"
 #include "collections/DSArray.h"
 #include "collections/DSHashmap.h"
 #include "collections/DSList.h"

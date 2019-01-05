@@ -50,12 +50,12 @@ VTable (DSCollection) {
     bool    (*ReferenceEquals) (DSObject* const , DSObject* const);
     bool    (*InstanceEquals) (DSObject* const, DSObject* const);
 
-    int     (*Length) (DSCollection* const);
-    bool    (*IsEmpty) (DSCollection* const);
-    bool    (*Contains) (DSCollection* const, Any);
-    void    (*Clear) (DSCollection* const);
-    bool    (*Add) (DSCollection* const, Any);
-    bool    (*Remove) (DSCollection* const, Any);
+    // int     (*Length) (DSCollection* const);
+    // bool    (*IsEmpty) (DSCollection* const);
+    // bool    (*Contains) (DSCollection* const, Any);
+    // void    (*Clear) (DSCollection* const);
+    // bool    (*Add) (DSCollection* const, Any);
+    // bool    (*Remove) (DSCollection* const, Any);
     
 };
 

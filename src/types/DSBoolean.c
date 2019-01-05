@@ -34,7 +34,7 @@ True.value = true;
 /** class constant: False */
 static DSBoolean False;
 False.isa = &isa;
-False.value = true;
+False.value = false;
 
 $method(ToString,           (DSBooleanToString)ToString, "$@:v");
 $method(Equals,             DSObject_Equals, "B@:@@");
@@ -43,6 +43,7 @@ $method(Dispose,            DSObject_Dispose, "v@:v");
 $method(ReferenceEquals,    ReferenceEquals, "@:v");
 $method(InstanceEquals,     InstanceEquals, "$@:v");
 $method(CompareTo,          (DSBooleanCompareTo)CompareTo, "i@:@");
+
 $ivar(value, sizeof(int), "B");
 
 $DSBoolean.Bytes = BOOLEAN_BYTES;
@@ -111,6 +112,7 @@ int overload Compare(bool x, bool y) {
  * @return same as Boolean_Compare
  */
 int overload CompareTo(const DSBoolean*  const this, const DSBoolean*  const other) {
+    DSLog("CompareTo");
     return Compare(this->value, other->value);
 }
 

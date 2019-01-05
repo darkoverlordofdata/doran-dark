@@ -84,13 +84,13 @@ void objc_register_builtins() {
     Class cls;
     objc_registerClassPair(cls = DSClassImplementation(obj));
 
-    // /** DSCollection */
+    /** DSCollection */
     // Class col;
     // objc_registerClassPair(col = DSCollectionImplementation(obj));
 
-    // objc_registerClassPair(DSArrayImplementation(col));
-    // objc_registerClassPair(DSListImplementation(col));
-    // objc_registerClassPair(DSHashmapImplementation(col));
+    objc_registerClassPair(DSArrayImplementation(obj));
+    objc_registerClassPair(DSListImplementation(obj));
+    objc_registerClassPair(DSHashmapImplementation(obj));
 
     /** DSComparable */
     Class cmp;
@@ -98,18 +98,18 @@ void objc_register_builtins() {
 
     objc_registerClassPair(DSBooleanImplementation(cmp));
 
-    // Class num;
-    // objc_registerClassPair(num = DSNumberImplementation(cmp));
+    Class num;
+    objc_registerClassPair(num = DSNumberImplementation(cmp));
 
-    // objc_registerClassPair(DSCharImplementation(num));
-    // objc_registerClassPair(DSDoubleImplementation(num));
-    // objc_registerClassPair(DSFloatImplementation(num));
-    // objc_registerClassPair(DSIntegerImplementation(num));
-    // objc_registerClassPair(DSLongImplementation(num));
-    // objc_registerClassPair(DSShortImplementation(num));
+    objc_registerClassPair(DSCharImplementation(num));
+    objc_registerClassPair(DSDoubleImplementation(num));
+    objc_registerClassPair(DSFloatImplementation(num));
+    objc_registerClassPair(DSIntegerImplementation(num));
+    objc_registerClassPair(DSLongImplementation(num));
+    objc_registerClassPair(DSShortImplementation(num));
 
-    // objc_registerClassPair(DSStringImplementation(obj));
-    // objc_registerClassPair(DSStringBuilderImplementation(obj));
+    objc_registerClassPair(DSStringImplementation(obj));
+    objc_registerClassPair(DSStringBuilderImplementation(obj));
 
 
 }
