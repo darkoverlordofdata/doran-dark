@@ -64,8 +64,8 @@ VTable (DSArray) {
     bool    (*Equals) (const DSObject* const, struct Object  *const);
     int     (*GetHashCode) (const DSObject* const);
     void    (*Dispose) (DSObject* const);
-    bool    (*ReferenceEquals) (const DSObject* const, DSObject* const);
-    bool    (*InstanceEquals) (const DSObject* const, DSObject* const);
+    // bool    (*ReferenceEquals) (const DSObject* const, DSObject* const);
+    // bool    (*InstanceEquals) (const DSObject* const, DSObject* const);
     int     (*Length)       (const DSArray* const);
     bool    (*IsEmpty)      (const DSArray* const);
     bool    (*Contains)     (const DSArray* const, Any);

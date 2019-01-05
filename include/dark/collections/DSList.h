@@ -60,8 +60,8 @@ VTable (DSList) {
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
-    bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-    bool    (*InstanceEquals) (DSObject* const, DSObject* const);
+    // bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
+    // bool    (*InstanceEquals) (DSObject* const, DSObject* const);
     int     (*Length)       (const DSList* const);
     bool    (*IsEmpty)      (DSList* const);
     bool    (*Contains)     (DSList* const, Any);

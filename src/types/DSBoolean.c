@@ -26,25 +26,24 @@ SOFTWARE.
 #include <dark/types/DSBoolean.h>
 
 $implementation(DSBoolean);
-/** class constant: True */
-static DSBoolean True;
-True.isa = &isa;
-True.value = true;
-
-/** class constant: False */
-static DSBoolean False;
-False.isa = &isa;
-False.value = false;
-
 $method(ToString,           (DSBooleanToString)ToString, "$@:v");
 $method(Equals,             DSObject_Equals, "B@:@@");
 $method(GetHashCode,        DSObject_GetHashCode, "l@:v");
 $method(Dispose,            DSObject_Dispose, "v@:v");
-$method(ReferenceEquals,    ReferenceEquals, "@:v");
-$method(InstanceEquals,     InstanceEquals, "$@:v");
 $method(CompareTo,          (DSBooleanCompareTo)CompareTo, "i@:@");
 
 $ivar(value, sizeof(int), "B");
+
+/** class constant: True */
+static DSBoolean True;
+True.isa = objc_getClass("DSBoolean");//&isa;
+True.value = true;
+
+/** class constant: False */
+static DSBoolean False;
+False.isa = objc_getClass("DSBoolean");//&isa;
+False.value = false;
+
 
 $DSBoolean.Bytes = BOOLEAN_BYTES;
 $DSBoolean.Size = BOOLEAN_SIZE;
@@ -73,6 +72,7 @@ DSBoolean* NewDSBoolean(bool value) {
 }
 
 DSBoolean* DSBoolean_init(DSBoolean* this, bool value) {
+    // DSObject_init(this);
     DSComparable_init(this);
     this->isa = objc_getClass("DSBoolean");
     this->value = value;

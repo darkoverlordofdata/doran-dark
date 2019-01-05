@@ -174,8 +174,6 @@ $method(ToString,           (DSHashmapToString)ToString, "@@:v");
 $method(Equals,             DSObject_Equals, "B@:@@");
 $method(GetHashCode,        DSObject_GetHashCode, "l@:v");
 $method(Dispose,            (DSHashmapDispose)Dispose, "v@:v");
-$method(ReferenceEquals,    ReferenceEquals, "@:v");
-$method(InstanceEquals,     InstanceEquals, "$@:v");
 $method(Length,             (DSHashmapLength)Length, "i@:v");
 $method(Remove,             (DSHashmapRemove)Remove, "v@:i");
 $method(ForEach,            (DSHashmapForEach)ForEach, "i@:@@");

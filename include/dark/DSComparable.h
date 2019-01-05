@@ -46,13 +46,11 @@ typedef int     (*DSComparableCompareTo)  (const DSComparable* const, const DSCo
  * DSComparable Vtable
  */
 VTable (DSComparable) {
-    DSComparableToString    ToString;
-    DSObjectEquals          Equals;
-    DSObjectGetHashCode     GetHashCode;
-    DSObjectDispose         Dispose;
-    DSObjectReferenceEquals ReferenceEquals;
-    DSObjectInstanceEquals  InstanceEquals;
-    DSComparableCompareTo   CompareTo;
+    char*   (*ToString) (const DSComparable* const);
+    bool    (*Equals) (DSObject* const, DSObject* const);
+    int     (*GetHashCode) (DSObject* const);
+    void    (*Dispose) (DSObject* const);
+    int     (*CompareTo) (const DSComparable* const, const DSComparable* const);
 };
 
 

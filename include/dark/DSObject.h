@@ -61,9 +61,7 @@ VTable (DSObject) {
     DSObjectEquals          Equals;
     DSObjectGetHashCode     GetHashCode;
     DSObjectDispose         Dispose;
-    DSObjectReferenceEquals ReferenceEquals;
-    DSObjectInstanceEquals  InstanceEquals;
-} ;
+};
 
 
 /**
@@ -74,9 +72,12 @@ VTable (DSObject) {
 // struct $DSObject {
 Singleton ($DSObject) {
     DSObjectCreate          Create;
+    DSObjectReferenceEquals ReferenceEquals;
+    DSObjectInstanceEquals  InstanceEquals;
 };
 
 //=======================================================================//
+//              Which came first, the Class or the Object?               //          
 //=======================================================================//
 
 /**
@@ -104,14 +105,8 @@ VTable (DSClass) {
     DSClassEquals          Equals;
     DSClassGetHashCode     GetHashCode;
     DSClassDispose         Dispose;
-    DSClassReferenceEquals ReferenceEquals;
-    DSClassInstanceEquals  InstanceEquals;
-    DSClassCreate          Create;
 };
 
-Singleton ($DSClass) {
-    DSClassCreate          Create;
-};
 
 /**
  * API Function Templates

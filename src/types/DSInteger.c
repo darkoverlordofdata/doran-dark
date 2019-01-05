@@ -34,8 +34,6 @@ $method(ToString,           DSInteger_ToString, "$@:v");
 $method(Equals,             DSObject_Equals, "B@:@@");
 $method(GetHashCode,        DSObject_GetHashCode, "l@:v");
 $method(Dispose,            DSObject_Dispose, "v@:v");
-$method(ReferenceEquals,    ReferenceEquals, "@:v");
-$method(InstanceEquals,     InstanceEquals, "$@:v");
 $method(CompareTo,          DSInteger_CompareTo, "i@:@");
 $method(IntValue,           DSInteger_IntValue, "i@:v");
 $method(LongValue,          DSInteger_LongValue, "l@:v");

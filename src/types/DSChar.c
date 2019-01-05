@@ -30,8 +30,6 @@ $method(ToString,           DSChar_ToString, "$@:v");
 $method(Equals,             DSObject_Equals, "B@:@@");
 $method(GetHashCode,        DSObject_GetHashCode, "l@:v");
 $method(Dispose,            DSObject_Dispose, "v@:v");
-$method(ReferenceEquals,    ReferenceEquals, "@:v");
-$method(InstanceEquals,     InstanceEquals, "$@:v");
 $method(CompareTo,          DSChar_CompareTo, "i@:@");
 $method(IntValue,           DSChar_IntValue, "i@:v");
 $method(LongValue,          DSChar_LongValue, "l@:v");

@@ -43,7 +43,7 @@ Ivar (DSBoolean) {
     bool value;
 };
 
-typedef bool    (*DSBooleanCompareTo)  (const DSBoolean* const, const DSBoolean* const);
+typedef int    (*DSBooleanCompareTo)  (const DSBoolean* const, const DSBoolean* const);
 typedef char*   (*DSBooleanToString)  (const DSBoolean* const);
 // typedef bool    (*BoolValue) (const DSBoolean* const);
 // typedef int     (*Compare) (const bool, const bool);
@@ -57,14 +57,14 @@ VTable (DSBoolean) {
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
-    bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-    bool    (*InstanceEquals) (DSObject* const, DSObject* const);
+    // bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
+    // bool    (*InstanceEquals) (DSObject* const, DSObject* const);
     int     (*CompareTo) (const DSBoolean* const, const DSBoolean* const);
 
-    bool    (*BoolValue) (const DSBoolean* const);
-    int     (*Compare) (const bool, const bool);
-    bool    (*ParseBool) (char const*);
-} DSBooleanVTable;
+    // bool    (*BoolValue) (const DSBoolean* const);
+    // int     (*Compare) (const bool, const bool);
+    // bool    (*ParseBool) (char const*);
+};// DSBooleanVTable;
 
 Singleton ($DSBoolean) {
     DSBoolean*(*Create) (bool value);
@@ -79,6 +79,7 @@ bool BoolValue(const DSBoolean* const);
 bool ParseBool(const char *const);
 
 int overload Compare(bool, bool);
+int overload CompareTo(const DSBoolean* const, const DSBoolean* const);
 int DSBoolean_CompareTo(const DSBoolean* const, const DSBoolean* const);
 char* overload ToString(const DSBoolean* const);
 DSBoolean* DSBoolean_init(DSBoolean* this, bool value);

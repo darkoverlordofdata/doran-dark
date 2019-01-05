@@ -31,8 +31,6 @@ $method(ToString,           (DSListToString)ToString, "@@:v");
 $method(Equals,             DSObject_Equals, "B@:@@");
 $method(GetHashCode,        DSObject_GetHashCode, "l@:v");
 $method(Dispose,            (DSListDispose)Dispose, "v@:v");
-$method(ReferenceEquals,    ReferenceEquals, "@:v");
-$method(InstanceEquals,     InstanceEquals, "$@:v");
 $method(Length,             (DSListLength)Length, "i@:v");
 $method(Add,                (DSListAdd)Add, "@@:*");
 $method(Remove,             (DSListRemove)Remove, "i@:*");

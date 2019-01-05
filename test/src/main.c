@@ -81,13 +81,14 @@ int main(int argc, char **argv) {
 
     __block DSChar* zz = NewDSChar('c');
 
+
     Describe("Run Tests", ^{
 
         It("True and True are the same", ^{
             DSLog("True = %d", $DSBoolean.True->value);
             DSLog("False = %d", $DSBoolean.False->value);
-            return 0;
-            // Expect(CompareTo($DSBoolean.True, $DSBoolean.True) == 0);
+            // return 0;
+            Expect(CompareTo($DSBoolean.True, $DSBoolean.True) == 0);
         });
         
         It("Should be 5", ^{
@@ -101,10 +102,6 @@ int main(int argc, char **argv) {
         It("Should be 2", ^{
             Expect(Length(q) == 2);
         });
-
-        // It("Should be 2", ^{
-        //     Expect(Length(c) == 2);
-        // });
 
         It("Should equal 420", ^{
             Expect(LongValue(l) == 420);

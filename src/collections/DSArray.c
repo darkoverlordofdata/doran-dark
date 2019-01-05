@@ -31,8 +31,6 @@ $method(ToString,           (DSArrayToString)ToString, "@@:v");
 $method(Equals,             DSObject_Equals, "B@:@@");
 $method(GetHashCode,        DSObject_GetHashCode, "l@:v");
 $method(Dispose,            (DSArrayDispose)Dispose, "v@:v");
-$method(ReferenceEquals,    ReferenceEquals, "@:v");
-$method(InstanceEquals,     InstanceEquals, "$@:v");
 $method(Length,             (DSArrayLength)Length, "i@:v");
 $method(IsEmpty,            (DSArrayIsEmpty)IsEmpty, "B@:v");
 $method(Contains,           (DSArrayContains)Contains, "B@:@");

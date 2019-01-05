@@ -106,7 +106,7 @@ Class class##Implementation(Class super)                                \
  */
 #define $class_method(name, imp, type)                                  \
     class_addMethod(GETMETA(isa), #name, imp, type);                    \
-    vt[k++] = imp; 
+    //vt[k++] = imp; 
 
 /**
  *  MACRO  $isa ivar

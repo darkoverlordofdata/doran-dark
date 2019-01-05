@@ -87,8 +87,8 @@ VTable (DSStringBuilder) {
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
-    bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-    bool    (*InstanceEquals) (DSObject* const, DSObject* const);
+    // bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
+    // bool    (*InstanceEquals) (DSObject* const, DSObject* const);
     int     (*Empty) (DSStringBuilder* const);
     int     (*Append) (DSStringBuilder* const, char* str);
     int     (*Appendc) (DSStringBuilder* const, char c);

@@ -53,8 +53,8 @@ VTable (DSShort) {
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
-    bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-    bool    (*InstanceEquals) (DSObject* const, DSObject* const);
+    // bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
+    // bool    (*InstanceEquals) (DSObject* const, DSObject* const);
     int     (*CompareTo) (DSComparable* const, DSComparable* const);
     int     (*IntValue) (DSShort* const);
     long    (*LongValue) (DSShort* const);
