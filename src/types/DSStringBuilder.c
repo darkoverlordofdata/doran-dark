@@ -57,32 +57,40 @@ SOFTWARE.
  * Throws OutOfMemoryException:
  */
 static DSException(OutOfMemory);
-begin_class(DSStringBuilder)
+$implementation(DSStringBuilder)
 
-    method("Append", DSStringBuilder_Append, "i@:v");
-    method("Appendc", DSStringBuilder_Appendc, "i@:c");
-    method("Appendf", DSStringBuilder_Appendf, "i@:c.");
-    method("Concat", DSStringBuilder_Concat, "$@:v");
-    method("Dispose", DSStringBuilder_Dispose, "v@:v");
-    method("Empty", DSStringBuilder_Empty, "B@:v");
-    method("Reset", DSStringBuilder_Reset, "v@:v");
+$method(Append, DSStringBuilder_Append, "i@:v");
+$method(Appendc, DSStringBuilder_Appendc, "i@:c");
+$method(Appendf, DSStringBuilder_Appendf, "i@:c.");
+$method(Concat, DSStringBuilder_Concat, "$@:v");
+$method(Dispose, DSStringBuilder_Dispose, "v@:v");
+$method(Empty, DSStringBuilder_Empty, "B@:v");
+$method(Reset, DSStringBuilder_Reset, "v@:v");
 
-    ivar("root", sizeof(id), "^");
-    ivar("trunk", sizeof(id), "^");
-    ivar("length", sizeof(int), "i");
+$ivar(root, sizeof(id), "^");
+$ivar(trunk, sizeof(id), "^");
+$ivar(length, sizeof(int), "i");
 
-end_class
+$end;
 
 /* 
  * Constructor
  * create a new StringBuilder
  * 
  */
+DSStringBuilder* NewDSStringBuilder() { 
+	return DSStringBuilder_init(DSStringBuilder_alloc()); 
+}
+
 DSStringBuilder* DSStringBuilder_init(DSStringBuilder* const this)
 {
     DSObject_init(this);
-    this->isa = ISA(DSStringBuilder); 
+    this->isa = objc_getClass("DSStringBuilder"); 
 	return this;
+}
+
+DSStringBuilder* DSStringBuilder_alloc() {
+    return DSMalloc(getDSStringBuilderSize());
 }
 
 
@@ -98,7 +106,7 @@ int DSStringBuilder_Empty(DSStringBuilder* this)
 int DSStringBuilder_Appendc(DSStringBuilder* this, const char c)
 {
 	char str[2] = { c, 0 };
-	return this->isa->Append(this, str);
+	return DSStringBuilderVTable.Append(this, str);
 }
 /*
  * sb_append adds a copy of the given string to a StringBuilder.
@@ -176,7 +184,7 @@ DSString* DSStringBuilder_Concat(DSStringBuilder* this)
 	}
 
 	*c = '\0';
-	return DSStringClass.Create(buf);
+	return $DSString.Create(buf);
 }
 
 /*
@@ -208,21 +216,4 @@ char* DSStringBuilder_ToString(DSStringBuilder* this)
     return "dark.StringBuilder";
 }
 
-DSStringBuilder* $DSStringBuilder() { 
-	return DSStringBuilder_init(class_alloc(DSStringBuilder)); 
-}
-
-/**
- * StringBuilder Class Metadata
- */
-DSDefine(DSStringBuilder, DSObject, cls, {
-    cls->Create     	= $DSStringBuilder;
-	cls->Append         = DSStringBuilder_Append;
-	cls->Appendc        = DSStringBuilder_Appendc;
-	cls->Appendf        = DSStringBuilder_Appendf;
-	cls->Concat         = DSStringBuilder_Concat;
-	cls->Dispose        = DSStringBuilder_Dispose;
-	cls->Empty          = DSStringBuilder_Empty;
-	cls->Reset          = DSStringBuilder_Reset;
-});
 

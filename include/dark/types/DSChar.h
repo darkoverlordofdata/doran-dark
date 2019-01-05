@@ -34,34 +34,29 @@ SOFTWARE.
 #define CHAR_SIZE       (CHAR_BYTES * CHAR_BIT)
 #define CHAR_TYPE       (TYPE_CHAR)
 
-#define IsDSChar(x) (x->isa == &DSCharClass)
+#define IsDSChar(x) (x->isa == &$DSChar)
 #define AsDSChar(x) (IsDSChar(x) ? (DSChar* )x : nullptr)
 
 /**
  * Char class
  */
-class (DSChar) 
+Ivar (DSChar) 
 {
-    struct DSCharClass *isa;
+    Class isa;
     char value;
 };
 
 /**
  * Char metaclass
  */
-struct DSCharClass
+VTable (DSChar)
 {
-    Class  isa;
-    Class  superclass;
-    char*   name;
-    long    version, info, instance_size;
     char*   (*ToString) (DSChar* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
     bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
     bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-    DSChar* (*Create) (char value);
     int     (*CompareTo) (DSComparable* const, DSComparable* const);
     int     (*IntValue) (DSChar* const);
     long    (*LongValue) (DSChar* const);
@@ -70,8 +65,11 @@ struct DSCharClass
     char    (*CharValue) (DSChar* const);
     short   (*ShortValue) (DSChar* const);
 
-} DSCharClass;
+};
 
+Singleton ($DSChar) {
+    DSChar*(*Create) (char value);
+};
 
 int DSChar_CompareTo(DSChar* const, DSChar* const);
 int DSChar_IntValue(DSChar* const);
@@ -81,6 +79,8 @@ double DSChar_DoubleValue(DSChar* const);
 char DSChar_CharValue(DSChar* const);
 short DSChar_ShortValue(DSChar* const);
 char* DSChar_ToString(DSChar* const);
-DSChar* $DSChar(char value);
+DSChar* DSChar_init(DSChar* const this, char value);
+DSChar* DSChar_alloc();
+DSChar* NewDSChar(char value);
 
 #endif _DSCHAR_H_

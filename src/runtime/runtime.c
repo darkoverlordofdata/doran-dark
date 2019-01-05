@@ -92,11 +92,11 @@ void objc_register_builtins() {
     // objc_registerClassPair(DSListImplementation(col));
     // objc_registerClassPair(DSHashmapImplementation(col));
 
-    // /** DSComparable */
-    // Class cmp;
-    // objc_registerClassPair(cmp = DSComparableImplementation(obj));
+    /** DSComparable */
+    Class cmp;
+    objc_registerClassPair(cmp = DSComparableImplementation(obj));
 
-    // objc_registerClassPair(DSBooleanImplementation(cmp));
+    objc_registerClassPair(DSBooleanImplementation(cmp));
 
     // Class num;
     // objc_registerClassPair(num = DSNumberImplementation(cmp));

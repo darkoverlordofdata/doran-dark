@@ -37,6 +37,7 @@ $method(GetHashCode,        DSObject_GetHashCode, "l@:v");
 $method(Dispose,            DSObject_Dispose, "v@:v");
 $method(ReferenceEquals,    ReferenceEquals, "@:v");
 $method(InstanceEquals,     InstanceEquals, "$@:v");
+$method(Create,             NewDSObject, "@v");
 $end;
 
 /**
@@ -54,14 +55,12 @@ $end;
 /**class_getAlignedInstanceSize
  * DSObject constructor
  */
-DSObject* DSObject_init(DSObject* this)
-{
+DSObject* DSObject_init(DSObject* this) {
     this->isa = objc_getClass("DSObject");
     return this;
 }
 
-DSObject* DSObject_alloc()
-{
+DSObject* DSObject_alloc() {
     return DSMalloc(getDSObjectSize());
 }
 
@@ -83,7 +82,7 @@ bool InstanceEquals(const DSObject* const objA, const DSObject* const objB)
 }
 
 void overload Dispose(DSObject* const this){
-    _vptr(DSObject)->Dispose(this);
+    return DSObjectVTable.Dispose(this);
 }
 /**
  * virtual Dispose method
@@ -96,8 +95,7 @@ void DSObject_Dispose(DSObject* const this){}
  */
 const char* overload ToString(const DSObject* const this)
 {
-    DSLog("ToString");
-    _vptr(DSObject)->ToString(this);
+    return DSObjectVTable.ToString(this);
 }
 /**
  * virtual ToString method
@@ -119,7 +117,7 @@ const char *DSClass_ToString(const DSClass* const this)
  */
 bool overload Equals(const DSObject* const this, const DSObject* const that)
 {
-    _vptr(DSObject)->Equals(this, that);
+    return DSObjectVTable.Equals(this, that);
 }
 /**
  * virtual Equals method
@@ -134,7 +132,7 @@ bool DSObject_Equals(DSObject* const this, DSObject* const that)
  */
 int overload GetHashCode(const DSObject* const this)
 {
-    _vptr(DSObject)->GetHashCode(this);
+    return DSObjectVTable.GetHashCode(this);
 }
 /**
  * virtual GetHashCode method
@@ -153,7 +151,7 @@ char* GetClassName(const DSObject* const this)
     return this->isa->name;
 }
 
-DSObject* $DSObject() 
+DSObject* NewDSObject() 
 { 
     return DSObject_init(DSObject_alloc()); 
 }

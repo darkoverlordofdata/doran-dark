@@ -40,28 +40,23 @@ SOFTWARE.
 /**
  * Object class
  */
-class (DSFloat) 
+Ivar (DSFloat) 
 {
-    struct DSFloatClass* isa;
+    Class isa;
     float value;
 };
 
 /**
  * Object metaclass
  */
-struct DSFloatClass
+VTable (DSFloat)
 {
-    Class  isa;
-    Class  superclass;
-    char*   name;
-    long    version, info, instance_size;
     char*   (*ToString) (DSFloat* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
     bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
     bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-    DSFloat*  (*Create) (float value);
     int     (*CompareTo) (DSComparable* const, DSComparable* const);
     int     (*IntValue) (DSFloat* const);
     long    (*LongValue) (DSFloat* const);
@@ -70,8 +65,11 @@ struct DSFloatClass
     char    (*CharValue) (DSFloat* const);
     short   (*ShortValue) (DSFloat* const);
 
-} DSFloatClass;
+};
 
+Singleton ($DSFloat) {
+    DSFloat*  (*Create) (float value);
+};
 
 int DSFloat_CompareTo(DSFloat* const, DSFloat* const);
 int DSFloat_IntValue(DSFloat* const);
@@ -81,5 +79,7 @@ double DSFloat_DoubleValue(DSFloat* const);
 char DSFloat_CharValue(DSFloat* const);
 short DSFloat_ShortValue(DSFloat* const);
 char* DSFloat_ToString(const DSFloat* const);
-
+DSFloat* DSFloat_init(DSFloat* const this, float value);
+DSFloat* DSFloat_alloc();
+DSFloat* NewDSFloat(float value);
 #endif _DSFLOAT_H_

@@ -28,20 +28,20 @@ SOFTWARE.
  * Throws NumberFormatException:
  */
 static DSException(NumberFormat);
-begin_class(DSDouble)
+$implementation(DSDouble);
 
-    method("ToString", DSDouble_ToString, "$@:v");
-    method("CompareTo", DSDouble_CompareTo, "i@:@");
-    method("IntValue", DSDouble_IntValue, "i@:v");
-    method("LongValue", DSDouble_LongValue, "l@:v");
-    method("FloatValue", DSDouble_FloatValue, "f@:v");
-    method("DoubleValue", DSDouble_DoubleValue, "d@:v");
-    method("CharValue", DSDouble_CharValue, "c@:v");
-    method("ShortValue", DSDouble_ShortValue, "s@:v");
+$method(ToString, DSDouble_ToString, "$@:v");
+$method(CompareTo, DSDouble_CompareTo, "i@:@");
+$method(IntValue, DSDouble_IntValue, "i@:v");
+$method(LongValue, DSDouble_LongValue, "l@:v");
+$method(FloatValue, DSDouble_FloatValue, "f@:v");
+$method(DoubleValue, DSDouble_DoubleValue, "d@:v");
+$method(CharValue, DSDouble_CharValue, "c@:v");
+$method(ShortValue, DSDouble_ShortValue, "s@:v");
 
-    ivar("value", sizeof(double), "d");
+$ivar(value, sizeof(double), "d");
 
-end_class
+$end;
 
 /**
  * Constructor
@@ -50,12 +50,21 @@ end_class
  * @param value of double
  * 
  */
+DSDouble* NewDSDouble(double value) { 
+    return DSDouble_init(DSDouble_alloc(), value); 
+}
+
+
 DSDouble* DSDouble_init(DSDouble* const this, double value)
 {
     DSNumber_init(this);
-    this->isa = ISA(DSDouble);
+    this->isa = objc_getClass("DSDouble");
     this->value = value;
     return this;
+}
+
+DSDouble* DSDouble_alloc() {
+    return DSMalloc(getDSDoubleSize());
 }
 
 /**
@@ -149,23 +158,4 @@ char* DSDouble_ToString(const DSDouble* const this) {
     return str;
 }
 
-DSDouble* $DSDouble(double value) { 
-    return DSDouble_init(class_alloc(DSDouble), value); 
-}
-
-
-/**
- * DSDouble Class Metadata
- */
-DSDefine(DSDouble, DSNumber, cls, {
-    cls->ToString       = DSDouble_ToString;
-    cls->CompareTo      = DSDouble_CompareTo;
-    cls->IntValue       = DSDouble_IntValue;
-    cls->LongValue      = DSDouble_LongValue; 
-    cls->FloatValue     = DSDouble_FloatValue; 
-    cls->DoubleValue    = DSDouble_DoubleValue;
-    cls->CharValue      = DSDouble_CharValue;
-    cls->ShortValue     = DSDouble_ShortValue; 
-    cls->Create         = $DSDouble;
-});
 

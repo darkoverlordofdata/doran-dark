@@ -40,28 +40,22 @@ SOFTWARE.
 /**
  * Object class
  */
-class (DSLong) 
+Ivar (DSLong) 
 {
-    struct DSLongClass * isa;
+    Class isa;
     long value;
 };
 
 /**
  * Object metaclass
  */
-struct DSLongClass
-{
-    Class  isa;
-    Class  superclass;
-    char*   name;
-    long    version, info, instance_size;
+VTable (DSLong) {
     char*   (*ToString) (DSLong* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
     bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
     bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-    DSLong*   (*Create) (long);
     int     (*CompareTo) (DSComparable* const, DSComparable* const);
     int     (*IntValue) (DSLong* const);
     long    (*LongValue) (DSLong* const);
@@ -70,9 +64,13 @@ struct DSLongClass
     char    (*CharValue) (DSLong* const);
     short   (*ShortValue) (DSLong* const);
 
-} DSLongClass;
+};
 
-long DSLong_ParseLong(char *const, int);
+Singleton ($DSLong) {
+    DSLong*   (*Create) (long);
+};
+
+long DSLongParseLong(char *const, int);
 int DSLong_CompareTo(DSLong* const, DSLong* const);
 int DSLong_IntValue(DSLong* const);
 long DSLong_LongValue(DSLong* const);
@@ -81,5 +79,8 @@ double DSLong_DoubleValue(DSLong* const);
 char DSLong_CharValue(DSLong* const);
 short DSLong_ShortValue(DSLong* const);
 char* DSLong_ToString(const DSLong* const);
+DSLong* DSLong_init(DSLong* const this, long value);
+DSLong* DSLong_alloc();
+DSLong* NewDSLong(long value);
 
 #endif _DSLONG_H_

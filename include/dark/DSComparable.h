@@ -52,7 +52,6 @@ VTable (DSComparable) {
     DSObjectDispose         Dispose;
     DSObjectReferenceEquals ReferenceEquals;
     DSObjectInstanceEquals  InstanceEquals;
-    DSComparableCreate      Create;
     DSComparableCompareTo   CompareTo;
 };
 

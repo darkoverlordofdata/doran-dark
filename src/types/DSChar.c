@@ -24,35 +24,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSChar.h>
-begin_class(DSChar)
+$implementation(DSChar);
 
-    method("ToString", DSChar_ToString, "$@:v");
-    method("CompareTo", DSChar_CompareTo, "i@:@");
-    method("IntValue", DSChar_IntValue, "i@:v");
-    method("LongValue", DSChar_LongValue, "l@:v");
-    method("FloatValue", DSChar_FloatValue, "f@:v");
-    method("DoubleValue", DSChar_DoubleValue, "d@:v");
-    method("CharValue", DSChar_CharValue, "c@:v");
-    method("ShortValue", DSChar_ShortValue, "s@:v");
+$method(ToString, DSChar_ToString, "$@:v");
+$method(CompareTo, DSChar_CompareTo, "i@:@");
+$method(IntValue, DSChar_IntValue, "i@:v");
+$method(LongValue, DSChar_LongValue, "l@:v");
+$method(FloatValue, DSChar_FloatValue, "f@:v");
+$method(DoubleValue, DSChar_DoubleValue, "d@:v");
+$method(CharValue, DSChar_CharValue, "c@:v");
+$method(ShortValue, DSChar_ShortValue, "s@:v");
 
-    ivar("value", sizeof(char), "c");
+$ivar(value, sizeof(char), "c");
 
-end_class
-/**
- * Char Class Metadata
- */
-DSDefine(DSChar, DSNumber, cls, {
-    cls->ToString       = DSChar_ToString;
-    cls->CompareTo      = DSChar_CompareTo;
-    cls->IntValue       = DSChar_IntValue;
-    cls->LongValue      = DSChar_LongValue; 
-    cls->FloatValue     = DSChar_FloatValue; 
-    cls->DoubleValue    = DSChar_DoubleValue;
-    cls->CharValue      = DSChar_CharValue;
-    cls->ShortValue     = DSChar_ShortValue; 
-    cls->Create         = $DSChar;
-});
-
+$end;
 
 /**
  * Constructor
@@ -61,17 +46,22 @@ DSDefine(DSChar, DSNumber, cls, {
  * @param value of char
  * 
  */
+DSChar* NewDSChar(char value) { 
+    return DSChar_init(DSChar_alloc(), value); 
+}
+
 DSChar* DSChar_init(DSChar* const this, char value)
 {
     DSNumber_init(this);
-    this->isa = ISA(DSChar);
+    this->isa = objc_getClass("DSChar");
     this->value = value;
     return this;
 }
 
-DSChar* $DSChar(char value) { 
-    return DSChar_init(class_alloc(DSChar), value); 
+DSChar* DSChar_alloc() {
+    return DSMalloc(getDSCharSize());
 }
+
 
 /**
  * Compare two char primitives.

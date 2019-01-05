@@ -39,7 +39,7 @@ SOFTWARE.
 #define MAP_OMEM -1 	/* Out of Memory */
 #define MAP_OK 0 	    /* OK */
 
-#define IsDSHashmap(x) (x->isa == &DSHashmapClass)
+#define IsDSHashmap(x) (x->isa == &$DSHashmap)
 #define AsDSHashmap(x) (IsDSHashmap(x) ? (DSHashmap*)x : nullptr)
 
 /*
@@ -58,9 +58,8 @@ class (DSHashmapNode)
 
 /* A hashmap has some maximum size and current size,
  * as well as the data to hold. */
-class (DSHashmap)
-{
-    struct DSHashmapClass* isa;
+Ivar (DSHashmap) {
+    Class isa;
 	int tableSize;
 	int size;
 	DSHashmapNode* data;
@@ -78,19 +77,13 @@ typedef UInt    (*DSHashmapHashInt)     (const DSHashmap* const, char*);
 typedef int     (*DSHashmapHash)        (const DSHashmap* const, char*);
 typedef int     (*DSHashmapRehash)      (const DSHashmap* const);
 
-struct DSHashmapClass
-{
-    Class  isa;
-    Class  superclass;
-    char*   name;
-    long    version, info, instance_size;
+VTable (DSHashmap) {
     char*   (*ToString) (const DSHashmap* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
     bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
     bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-    DSHashmap*(*Create) ();
     /*
         * Get the current size of a hashmap
         */
@@ -139,7 +132,11 @@ struct DSHashmapClass
      */
     int (*Rehash)   (DSHashmap* const);
 
-} DSHashmapClass;
+} ;
+
+Singleton ($DSHashmap) {
+    DSHashmap*(*Create) ();
+};
 
 /**
  * Hashmap API
@@ -154,5 +151,8 @@ int overload Remove(DSHashmap* const, char*);
 void overload Dispose(DSHashmap* const);
 int overload Length(const DSHashmap* const);
 char* overload ToString(const DSHashmap* const);
+DSHashmap* DSHashmap_init(DSHashmap* const this);
+DSHashmap* DSHashmap_alloc();
+DSHashmap* NewDSHashmap();
 
 #endif _DSHASHMAP_H_

@@ -24,19 +24,40 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSBoolean.h>
-begin_class(DSBoolean)
 
-    method("ToString", (DSBooleanToString)ToString, "$@:v");
-    method("CompareTo", (DSBooleanCompareTo)CompareTo, "i@:@");
-    ivar("value", sizeof(int), "B");
+$implementation(DSBoolean);
+/** class constant: True */
+static DSBoolean True;
+True.isa = &isa;
+True.value = true;
 
-    class_ivar("Bytes", sizeof(int), "i");
-    class_ivar("Size", sizeof(int), "i");
-    class_ivar("Type", sizeof(int), "i");
-    class_ivar("True", sizeof(id), "@");
-    class_ivar("False", sizeof(id), "@");
+/** class constant: False */
+static DSBoolean False;
+False.isa = &isa;
+False.value = true;
+
+$method(ToString,           (DSBooleanToString)ToString, "$@:v");
+$method(Equals,             DSObject_Equals, "B@:@@");
+$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
+$method(Dispose,            DSObject_Dispose, "v@:v");
+$method(ReferenceEquals,    ReferenceEquals, "@:v");
+$method(InstanceEquals,     InstanceEquals, "$@:v");
+$method(CompareTo,          (DSBooleanCompareTo)CompareTo, "i@:@");
+$ivar(value, sizeof(int), "B");
+
+$DSBoolean.Bytes = BOOLEAN_BYTES;
+$DSBoolean.Size = BOOLEAN_SIZE;
+$DSBoolean.Type = BOOLEAN_TYPE;
+$DSBoolean.True = &True;
+$DSBoolean.False = &False;
+
+    // class_ivar("Bytes", sizeof(int), "i");
+    // class_ivar("Size", sizeof(int), "i");
+    // class_ivar("Type", sizeof(int), "i");
+    // class_ivar("True", sizeof(id), "@");
+    // class_ivar("False", sizeof(id), "@");
     
-end_class
+$end;
 
 
 /**
@@ -46,12 +67,19 @@ end_class
  * @param value of bool
  * 
  */
-DSBoolean* DSBoolean_init(DSBoolean* this, bool value)
-{
+DSBoolean* NewDSBoolean(bool value) { 
+    return DSBoolean_init(DSBoolean_alloc(), value); 
+}
+
+DSBoolean* DSBoolean_init(DSBoolean* this, bool value) {
     DSComparable_init(this);
-    this->isa = ISA(DSBoolean);
+    this->isa = objc_getClass("DSBoolean");
     this->value = value;
     return this;
+}
+
+DSBoolean* DSBoolean_alloc() {
+    return DSMalloc(getDSBooleanSize());
 }
 
 bool DSParseBool(const char * const s)
@@ -96,44 +124,10 @@ bool BoolValue(const DSBoolean*  const this) {
 /**
  * Returns the string value of this DSBoolean
  */
-char* overload ToString(const DSBoolean*  const this)
+char* overload ToString(const DSBoolean* const this)
 {
     return this->value ? "true" : "false";
 }
 
 
-
-
-/**
- * New DSBoolean
- */
-DSBoolean* $DSBoolean(bool value) { 
-    return DSBoolean_init(class_alloc(DSBoolean), value); 
-}
-/** class constant: True */
-static const DSBoolean True = {
-    .isa  = &DSBooleanClass,
-    .value = true
-};
-
-/** class constant: False */
-static const DSBoolean False = {
-    .isa  = &DSBooleanClass,
-    .value = false
-};
-
-/**
- * Connect the generic method interface
- */
-DSDefine(DSBoolean, DSComparable, cls, {
-    cls->ToString       = ToString;
-    cls->CompareTo      = CompareTo;
-    cls->BoolValue      = BoolValue;
-    cls->Bytes          = BOOLEAN_BYTES;
-    cls->Size           = BOOLEAN_SIZE;
-    cls->Type           = BOOLEAN_TYPE;
-    cls->True           = &True;
-    cls->False          = &False;
-    cls->Create         = $DSBoolean;
-});
 

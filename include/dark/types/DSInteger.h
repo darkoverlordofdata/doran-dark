@@ -36,34 +36,28 @@ SOFTWARE.
 #define INTEGER_SIZE       (INTEGER_BYTES * CHAR_BIT)
 #define INTEGER_TYPE       (TYPE_LONG)
 
-#define IsDSInteger(x) (x->isa == &DSIntegerClass)
+#define IsDSInteger(x) (x->isa == &$DSInteger)
 #define AsDSInteger(x) (IsDSInteger(x) ? (DSInteger*)x : nullptr)
 
 /**
  * Object class
  */
-class (DSInteger) 
+Ivar (DSInteger) 
 {
-    struct DSIntegerClass *isa;
+    Class isa;
     int value;
 };
 
 /**
  * Object metaclass
  */
-struct DSIntegerClass
-{
-    Class  isa;
-    Class  superclass;
-    char*   name;
-    long    version, info, instance_size;
+VTable (DSInteger) {
     char*   (*ToString) (DSInteger* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
     bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
     bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-    DSInteger*(*Create) (int value);
     int     (*CompareTo) (DSComparable* const, DSComparable* const);
     int     (*IntValue) (DSInteger* const);
     long    (*LongValue) (DSInteger* const);
@@ -72,7 +66,11 @@ struct DSIntegerClass
     char    (*CharValue) (DSInteger* const);
     short   (*ShortValue) (DSInteger* const);
 
-} DSIntegerClass;
+};
+
+Singleton ($DSInteger) {
+    DSInteger*(*Create) (int value);
+};
 
 int DSInteger_ParseInt(char *const, int);
 int DSInteger_CompareTo(DSInteger* const, DSInteger* const);
@@ -83,5 +81,8 @@ double DSInteger_DoubleValue(DSInteger* const);
 char DSInteger_CharValue(DSInteger* const);
 short DSInteger_ShortValue(DSInteger* const);
 char* DSInteger_ToString(const DSInteger* const);
+DSInteger* DSInteger_init(DSInteger* const this, int value);
+DSInteger* DSInteger_alloc();
+DSInteger* NewDSInteger(int value);
 
 #endif _DSINTEGER_H_

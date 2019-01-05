@@ -24,31 +24,39 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/collections/DSList.h>
-begin_class(DSList)
+$implementation(DSList)
 
-    method("ToString", (DSListToString)ToString, "@@:v");
-    method("Dispose", (DSListDispose)Dispose, "v@:v");
-    method("Length", (DSListLength)Length, "i@:v");
-    method("Iterate", (DSListForEach)ForEach, "i@:@@");
-    method("Insert", (DSListInsert)Insert, "i@:*@");
-    method("Add", (DSListAdd)Add, "@@:*");
-    method("Remove", (DSListRemove)Remove, "i@:*");
+$method(ToString, (DSListToString)ToString, "@@:v");
+$method(Dispose, (DSListDispose)Dispose, "v@:v");
+$method(Length, (DSListLength)Length, "i@:v");
+$method(Iterate, (DSListForEach)ForEach, "i@:@@");
+$method(Insert, (DSListInsert)Insert, "i@:*@");
+$method(Add, (DSListAdd)Add, "@@:*");
+$method(Remove, (DSListRemove)Remove, "i@:*");
 
-    ivar("length", sizeof(int), "i");
-    ivar("head", sizeof(void*), "^");
+$ivar(length, sizeof(int), "i");
+$ivar(head, sizeof(void*), "^");
 
-end_class
+$end;
 
 /**
  * Constructor
  */
+DSList* NewDSList() { 
+    return DSList_init(DSList_alloc()); 
+}
+
 DSList* DSList_init(DSList* const this)
 {
     DSCollection_init(this);
-    this->isa = ISA(DSList);
+    this->isa = objc_getClass("DSList");
     this->head = nullptr;
 
     return this;
+}
+
+DSList* DSList_alloc() {
+    return DSMalloc(getDSListSize());
 }
 
 /**
@@ -67,7 +75,7 @@ DSListNode* DSListNode_init(DSListNode* const this, Any data, DSListNode* next)
 
 DSListNode* DSListNode_New(Any data, DSListNode* next)
 {
-    return DSListNode_init(class_alloc(DSList), data, next);
+    return DSListNode_init(DSList_alloc(), data, next);
 }
 
 /**
@@ -178,20 +186,3 @@ char* overload ToString(const DSList* const this)
     return "dark.collections.List";
 }
 
-DSList* $DSList() { 
-    return DSList_init(class_alloc(DSList)); 
-}
-
-/**
- * List Class Metadata
- */
-DSDefine(DSList, DSCollection, cls, {
-    cls->Create         = $DSList;
-    cls->ToString       = ToString;
-    cls->Dispose        = Dispose;
-    cls->Length         = Length;
-    cls->Iterate        = ForEach;
-    cls->Insert         = Insert;
-    cls->Add            = Add;
-    cls->Remove         = Remove;
-});

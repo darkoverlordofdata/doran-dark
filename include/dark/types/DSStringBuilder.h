@@ -65,16 +65,15 @@ class (StringFragment)
 	char* str;
 };
 
-#define IsDSStringBuilder(x) (x->isa == &DSStringBuilderClass)
+#define IsDSStringBuilder(x) (x->isa == &$DSStringBuilder)
 #define AsDSStringBuilder(x) (IsDSStringBuilder(x) ? (DSStringBuilder *)x : nullptr)
 
 
 /**
  * StringBuilder class
  */
-class (DSStringBuilder) 
-{
-    struct DSStringBuilderClass* isa;
+Ivar (DSStringBuilder) {
+    Class isa;
 	StringFragment* root;
 	StringFragment* trunk;
 	int length;
@@ -83,19 +82,13 @@ class (DSStringBuilder)
 /**
  * StringBuilder metaclass
  */
-struct DSStringBuilderClass
-{
-    Class  isa;
-    Class  superclass;
-    char*   name;
-    long    version, info, instance_size;
+VTable (DSStringBuilder) {
     char*   (*ToString) (DSStringBuilder* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
     bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
     bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-    DSStringBuilder*(*Create) ();
     int     (*Empty) (DSStringBuilder* const);
     int     (*Append) (DSStringBuilder* const, char* str);
     int     (*Appendc) (DSStringBuilder* const, char c);
@@ -103,7 +96,11 @@ struct DSStringBuilderClass
     DSString* (*Concat) (DSStringBuilder* const);
     void    (*Reset) (DSStringBuilder* const);
 
-} DSStringBuilderClass;
+};
+
+Singleton ($DSStringBuilder) {
+    DSStringBuilder*(*Create) ();
+};
 
 __attribute__((__format__ (__printf__, 2, 3)))
 int DSStringBuilder_Appendf(DSStringBuilder* sb, const char *format, ...);
@@ -113,5 +110,8 @@ DSString* DSStringBuilder_Concat(DSStringBuilder* sb);
 void DSStringBuilder_Reset(DSStringBuilder* sb);
 int DSStringBuilder_Empty(DSStringBuilder* sb);
 void DSStringBuilder_Dispose(DSStringBuilder*);
+DSStringBuilder* DSStringBuilder_init(DSStringBuilder* const this);
+DSStringBuilder* DSStringBuilder_alloc();
+DSStringBuilder* NewDSStringBuilder();
 
 #endif _DSSTRING_BUILDER_H_

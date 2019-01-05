@@ -31,15 +31,14 @@ SOFTWARE.
 
 #define STRING_TYPE       (TYPE_STRING)
 
-#define IsDSString(x) (x->isa == &DSStringClass)
+#define IsDSString(x) (x->isa == &$DSString)
 #define AsDSString(x) (IsDSString(x) ? (DSString *)x : nullptr)
 
 /**
  * Object class
  */
-class (DSString) 
-{
-    struct DSStringClass* isa;
+Ivar (DSString) {
+    Class isa;
     const char* value;
     int length;
 };
@@ -47,19 +46,13 @@ class (DSString)
 /**
  * Object metaclass
  */
-struct DSStringClass
-{
-    Class  isa;
-    Class  superclass;
-    char*   name;
-    long    version, info, instance_size;
+VTable (DSString) {
     char*   (*ToString) (DSString* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
     bool    (*ReferenceEquals) (DSObject* const objA, DSObject* const objB);
     bool    (*InstanceEquals) (DSObject* const objA, DSObject* const objB);
-    DSString* (*Create) (char* value);
     int     (*CompareTo) (DSComparable* const, DSComparable* const);
     int     (*Length) (DSString* const);
     bool    (*IsEmpty) (DSString* const);
@@ -78,7 +71,11 @@ struct DSStringClass
     DSString* (*ToLowerCase) (DSString* const);
     DSString* (*Trim) (DSString* const);
 
-} DSStringClass, $$;
+} $$;
+
+Singleton ($DSString) {
+    DSString* (*Create) (char* value);
+};
 
 
 DSString* $(const char* const value);
@@ -102,6 +99,8 @@ int overload Length(DSString* const);
 bool DSString_IsEmpty(DSString* const this);
 char DSString_CharAt(DSString* const this, int index);
 char* DSString_ToString(const DSString* const this);
+DSString* DSString_init(DSString* const this, char* value);
+DSString* DSString_alloc();
 
 __attribute__((__format__ (__printf__, 1, 2)))
 DSString* DSString_Format(char* format, ...);

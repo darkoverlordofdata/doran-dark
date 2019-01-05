@@ -34,34 +34,28 @@ SOFTWARE.
 #define DOUBLE_SIZE       (DOUBLE_BYTES * CHAR_BIT)
 #define DOUBLE_TYPE       (TYPE_DOUBLE)
 
-#define IsDSDouble(x) (x->isa == &DSDoubleClass)
+#define IsDSDouble(x) (x->isa == &$DSDouble)
 #define AsDSDouble(x) (IsDSDouble(x) ? (DSDouble*)x : nullptr)
 
 /**
  * Double class
  */
-class (DSDouble) 
+Ivar (DSDouble) 
 {
-    struct DSDoubleClass* isa;
+    Class isa;
     double value;
 };
 
 /**
  * Double metaclass
  */
-struct DSDoubleClass
-{
-    Class  isa;
-    Class  superclass;
-    char*   name;
-    long    version, info, instance_size;
+VTable (DSDouble) {
     char*   (*ToString) (DSDouble* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
     bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
     bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-    DSDouble* (*Create) (double value);
     int     (*CompareTo) (DSComparable* const, DSComparable* const);
     int     (*IntValue) (DSDouble* const);
     long    (*LongValue) (DSDouble* const);
@@ -70,7 +64,12 @@ struct DSDoubleClass
     char    (*CharValue) (DSDouble* const);
     short   (*ShortValue) (DSDouble* const);
 
-} DSDoubleClass;
+};
+
+Singleton ($DSDouble) {
+    DSDouble* (*Create) (double value);
+};
+
 
 int DSDouble_CompareTo(DSDouble* const, DSDouble* const);
 int DSDouble_IntValue(DSDouble* const);
@@ -80,5 +79,8 @@ double DSDouble_DoubleValue(DSDouble* const);
 char DSDouble_CharValue(DSDouble* const);
 short DSDouble_ShortValue(DSDouble* const);
 char* DSDouble_ToString(const DSDouble* const);
+DSDouble* DSDouble_init(DSDouble* const this, double value);
+DSDouble* DSDouble_alloc();
+DSDouble* NewDSDouble(double value);
 
 #endif _DSDOUBLE_H_

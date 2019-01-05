@@ -25,42 +25,24 @@ SOFTWARE.
 ******************************************************************/
 #include <dark/collections/DSArray.h>
 
-begin_class(DSArray)
+$implementation(DSArray)
 
-    method("ToString", (DSArrayToString)ToString, "@@:v");
-    method("Dispose", (DSArrayDispose)Dispose, "v@:v");
-    method("TsEmpty", (DSArrayIsEmpty)IsEmpty, "B@:v");
-    method("Contains", (DSArrayContains)Contains, "B@:@");
-    method("Add", (DSArrayAdd)Add, "v@:@");
-    method("Remove", (DSArrayRemove)Remove, "v@:i");
-    method("Resize", (DSArrayResize)Resize, "v@:i");
-    method("Set", (DSArraySet)Set, "v@:i@");
-    method("Get", (DSArrayGet)Get, "@@:i");
-    method("Clear", (DSArrayClear)Clear, "v@:v");
+$method(ToString, (DSArrayToString)ToString, "@@:v");
+$method(Dispose, (DSArrayDispose)Dispose, "v@:v");
+$method(TsEmpty, (DSArrayIsEmpty)IsEmpty, "B@:v");
+$method(Contains, (DSArrayContains)Contains, "B@:@");
+$method(Add, (DSArrayAdd)Add, "v@:@");
+$method(Remove, (DSArrayRemove)Remove, "v@:i");
+$method(Resize, (DSArrayResize)Resize, "v@:i");
+$method(Set, (DSArraySet)Set, "v@:i@");
+$method(Get, (DSArrayGet)Get, "@@:i");
+$method(Clear, (DSArrayClear)Clear, "v@:v");
 
-    ivar("length", sizeof(int), "i");
-    ivar("data", sizeof(void*), "^");
-    ivar("capacity", sizeof(int), "i");
+$ivar(length, sizeof(int), "i");
+$ivar(data, sizeof(void*), "^");
+$ivar(capacity, sizeof(int), "i");
 
-end_class
-
-
-/**
- * Default Constructor
- */
-DSArray* DSArray_init(DSArray* const this, int capacity)
-{
-    DSCollection_init(this);
-    this->isa = ISA(DSArray);
-    this->capacity = capacity == 0 ? ARRAY_INIT_CAPACITY : capacity;
-    this->length = 0;
-    this->data = DSCalloc(this->capacity, sizeof(Any));
-    return this;
-}
-
-DSArray* overload DSArray_New(void) {
-    return DSArray_init(class_alloc(DSArray), 4);
-}
+$end;
 /**
  * new Array
  * 
@@ -69,8 +51,8 @@ DSArray* overload DSArray_New(void) {
  * @param capacity initial max size of vector
  * 
  */
-DSArray* overload DSArray_New(int capacity) {
-    return DSArray_init(class_alloc(DSArray), capacity);
+DSArray* overload NewDSArray(int capacity) {
+    return DSArray_init(DSArray_alloc(), capacity);
 }
 
 /**
@@ -83,8 +65,8 @@ DSArray* overload DSArray_New(int capacity) {
  * @param ... list of initial values
  * 
  */
-DSArray* overload DSArray_New(int count, ...) {
-    DSArray* v = DSArray_init(class_alloc(DSArray), count);
+DSArray* overload NewDSArray(int count, ...) {
+    DSArray* v = DSArray_init(DSArray_alloc(), count);
     va_list args;
     va_start(args, count);
     for (int i=0; i<count; i++)
@@ -93,6 +75,28 @@ DSArray* overload DSArray_New(int count, ...) {
     v->length = count;
     return v;
 }
+
+DSArray* overload NewDSArray(void) {
+    return DSArray_init(DSArray_alloc(), 4);
+}
+
+/**
+ * Default Constructor
+ */
+DSArray* DSArray_init(DSArray* const this, int capacity)
+{
+    DSCollection_init(this);
+    this->isa = objc_getClass("DSArray");
+    this->capacity = capacity == 0 ? ARRAY_INIT_CAPACITY : capacity;
+    this->length = 0;
+    this->data = DSCalloc(this->capacity, sizeof(Any));
+    return this;
+}
+
+DSArray* DSArray_alloc() {
+    return DSMalloc(getDSArraySize());
+}
+
 
 
 int overload Length(const DSArray* const this)
@@ -125,7 +129,7 @@ void Resize(DSArray* const this, int capacity)
 void overload Add(DSArray* const this, const Any item)
 {
     if (this->capacity == this->length) {
-        this->isa->Resize(this, this->capacity * 2);
+        DSArrayVTable.Resize(this, this->capacity * 2);
     }
     this->data[this->length++] = item;
 }
@@ -174,7 +178,7 @@ void overload Remove(DSArray* const this, int index)
     this->length--;
 
     if (this->length > 0 && this->length == this->capacity / 4)
-        this->isa->Resize(this, this->capacity / 2);
+        DSArrayVTable.Resize(this, this->capacity / 2);
 }
 
 /**
@@ -210,26 +214,4 @@ char* overload ToString(const DSArray* const this)
 {
     return "dark.collections.Array";
 }
-
-DSArray* $DSArray(int capacity) { 
-    return DSArray_init(class_alloc(DSArray), capacity); 
-}
-
-
-/**
- * Load Array Class Metadata
- */
-DSDefine(DSArray, DSCollection, cls, {
-    cls->ToString       = ToString;
-    cls->Dispose        = Dispose;
-    cls->Length         = Length;
-    cls->IsEmpty        = IsEmpty;
-    cls->Contains       = Contains;
-    cls->Add            = Add;
-    cls->Remove         = Remove;
-    cls->Resize         = Resize;
-    cls->Set            = Set;
-    cls->Get            = Get;
-    cls->Clear          = Clear;
-});
 

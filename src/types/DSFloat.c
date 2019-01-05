@@ -28,20 +28,20 @@ SOFTWARE.
  * Throws NumberFormatException:
  */
 static DSException(NumberFormat);
-begin_class(DSFloat)
+$implementation(DSFloat)
 
-    method("ToString", DSFloat_ToString, "$@:v");
-    method("CompareTo", DSFloat_CompareTo, "i@:@");
-    method("IntValue", DSFloat_IntValue, "i@:v");
-    method("LongValue", DSFloat_LongValue, "l@:v");
-    method("FloatValue", DSFloat_FloatValue, "f@:v");
-    method("DoubleValue", DSFloat_DoubleValue, "d@:v");
-    method("CharValue", DSFloat_CharValue, "c@:v");
-    method("ShortValue", DSFloat_ShortValue, "s@:v");
+$method(ToString, DSFloat_ToString, "$@:v");
+$method(CompareTo, DSFloat_CompareTo, "i@:@");
+$method(IntValue, DSFloat_IntValue, "i@:v");
+$method(LongValue, DSFloat_LongValue, "l@:v");
+$method(FloatValue, DSFloat_FloatValue, "f@:v");
+$method(DoubleValue, DSFloat_DoubleValue, "d@:v");
+$method(CharValue, DSFloat_CharValue, "c@:v");
+$method(ShortValue, DSFloat_ShortValue, "s@:v");
 
-    ivar("value", sizeof(float), "f");
+$ivar(value, sizeof(float), "f");
 
-end_class
+$end;
 
 /**
  * Constructor
@@ -50,12 +50,22 @@ end_class
  * @param value of float
  * 
  */
+
+DSFloat* NewDSFloat(float value) { 
+    return DSFloat_init(DSFloat_alloc(), value); 
+}
+
+
 DSFloat* DSFloat_init(DSFloat* const this, float value)
 {
     DSNumber_init(this);
-    this->isa = ISA(DSFloat);
+    this->isa = objc_getClass("DSFloat");
     this->value = value;
     return this;
+}
+
+DSFloat* DSFloat_alloc() {
+    return DSMalloc(getDSFloatSize());
 }
 
 
@@ -143,23 +153,3 @@ char* DSFloat_ToString(const DSFloat* const this)
     sprintf(str, "%f", this->value);
     return str;
 }
-
-DSFloat* $DSFloat(float value) { 
-    return DSFloat_init(class_alloc(DSFloat), value); 
-}
-
-/**
- * Float Class Metadata
- */
-DSDefine(DSFloat, DSNumber, cls, {
-    cls->ToString       = DSFloat_ToString;
-    cls->CompareTo      = DSFloat_CompareTo;
-    cls->IntValue       = DSFloat_IntValue;
-    cls->LongValue      = DSFloat_LongValue; 
-    cls->FloatValue     = DSFloat_FloatValue; 
-    cls->DoubleValue    = DSFloat_DoubleValue;
-    cls->CharValue      = DSFloat_CharValue;
-    cls->ShortValue     = DSFloat_ShortValue; 
-    cls->Create         = $DSFloat;
-});
-

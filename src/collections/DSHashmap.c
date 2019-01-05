@@ -168,39 +168,47 @@ unsigned int overload HashInt(DSHashmap* const this, char* keystring)
 	return key % this->tableSize;
 }
 
-begin_class(DSHashmap)
+$implementation(DSHashmap)
 
-    method("ToString", (DSHashmapToString)ToString, "@@:v");
-    method("ForEach", (DSHashmapForEach)ForEach, "i@:@@");
-    method("Put", (DSHashmapPut)Put, "i@:*@");
-    method("Get", (DSHashmapGet)Get, "@@:*");
-    method("Remove", (DSHashmapRemove)Remove, "i@:*");
-    method("Dispose", (DSHashmapDispose)Dispose, "v@:v");
-    method("Length", (DSHashmapLength)Length, "i@:v");
-    method("HashInt", (DSHashmapHashInt)HashInt, "I@:*");
-    method("Hash", (DSHashmapHash)Hash, "i@:*");
-    method("Rehash", (DSHashmapRehash)Rehash, "i@:v");
+$method(ToString, (DSHashmapToString)ToString, "@@:v");
+$method(ForEach, (DSHashmapForEach)ForEach, "i@:@@");
+$method(Put, (DSHashmapPut)Put, "i@:*@");
+$method(Get, (DSHashmapGet)Get, "@@:*");
+$method(Remove, (DSHashmapRemove)Remove, "i@:*");
+$method(Dispose, (DSHashmapDispose)Dispose, "v@:v");
+$method(Length, (DSHashmapLength)Length, "i@:v");
+$method(HashInt, (DSHashmapHashInt)HashInt, "I@:*");
+$method(Hash, (DSHashmapHash)Hash, "i@:*");
+$method(Rehash, (DSHashmapRehash)Rehash, "i@:v");
 
-    ivar("tableSize", sizeof(int), "i");
-    ivar("size", sizeof(int), "i");
-    ivar("data", sizeof(id), "^");
+$ivar(tableSize, sizeof(int), "i");
+$ivar(size, sizeof(int), "i");
+$ivar(data, sizeof(id), "^");
 
-end_class
+$end;
 
 
 /**
  * Default Constructor
  */
+DSHashmap* NewDSHashmap() { 
+    return DSHashmap_init(DSHashmap_alloc()); 
+}
+
 DSHashmap* DSHashmap_init(DSHashmap* const this)
 {
     DSObject_init(this);
-    this->isa = ISA(DSHashmap);
+    this->isa = objc_getClass("DSHashmap");
 
     this->data = DSCalloc(INITIAL_SIZE, sizeof(DSHashmapNode));
 	this->tableSize = INITIAL_SIZE;
 	this->size = 0;
 
     return this;
+}
+
+DSHashmap* DSHashmap_alloc() {
+    return DSMalloc(getDSHashmapSize());
 }
 
 
@@ -391,24 +399,4 @@ char* overload ToString(const DSHashmap* const this)
     return "dark.collections.Hashmap";
 }
 
-DSHashmap* $DSHashmap() { 
-    return DSHashmap_init(class_alloc(DSHashmap)); 
-}
-
-/**
- * List Class Metadata
- */
-DSDefine(DSHashmap, DSCollection, cls, {
-    cls->Create         = $DSHashmap;
-    cls->ToString       = ToString;
-    cls->ForEach        = ForEach;
-    cls->Put            = Put;
-    cls->Get            = Get;
-    cls->Remove         = Remove;
-    cls->Dispose        = Dispose;
-    cls->Length         = Length;
-    cls->HashInt        = HashInt;
-    cls->Hash           = Hash;
-    cls->Rehash         = Rehash;
-});
 

@@ -29,12 +29,12 @@ SOFTWARE.
  * Generic Collection implementation
  */
 static DSException(AbstractMethod);
-begin_class(DSCollection)
+$implementation(DSCollection)
 
-    method("Length", (IMP)DSCollection_Length, "i@:v");
-    method("Add", (IMP)DSCollection_Add, "v@:@");
+$method("Length", (IMP)DSCollection_Length, "i@:v");
+$method("Add", (IMP)DSCollection_Add, "v@:@");
 
-end_class
+$end;
 
 /**
  * Initialize a new Array
@@ -42,7 +42,7 @@ end_class
 DSCollection* DSCollection_init(DSCollection* const this)
 {
     DSObject_init(this);
-    this->isa = ISA(DSCollection);
+    this->isa = objc_getClass("DSCollection");
     return this;
 }
 
@@ -51,7 +51,7 @@ DSCollection* DSCollection_init(DSCollection* const this)
  */
 int overload Length(DSCollection* const this)
 {
-    return this->isa->Length(this);
+    return DSCollectionVTable.Length(this);
 }
 int DSCollection_Length(DSCollection* const this)
 {
@@ -60,17 +60,10 @@ int DSCollection_Length(DSCollection* const this)
 
 void Collection_Add(DSCollection* const this, Any data)
 {
-    this->isa->Add(this, data);
+    DSCollectionVTable.Add(this, data);
 }
 void DSCollection_Add(DSCollection* const this, Any data)
 {
     DSAbstractMethodException("Collection_Add");
 }
 
-/**
- * Collection Class Metadata
- */
-DSDefine(DSCollection, DSObject, cls, {
-    cls->Length         = DSCollection_Length;
-    cls->Add            = DSCollection_Add;
-});

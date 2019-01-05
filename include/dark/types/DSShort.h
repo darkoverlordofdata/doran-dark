@@ -34,34 +34,27 @@ SOFTWARE.
 #define SHORT_SIZE       (SHORT_BYTES * CHAR_BIT)
 #define SHORT_TYPE       (TYPE_SHORT)
 
-#define IsDSShort(x) (x->isa == &DSShortClass)
+#define IsDSShort(x) (x->isa == &$DSShort)
 #define AsDSShort(x) (IsDSShort(x) ? (DSShort*)x : nullptr)
 
 /**
  * Object class
  */
-class (DSShort) 
-{
-    struct DSShortClass * isa;
+Ivar (DSShort) {
+    Class isa;
     short value;
 };
 
 /**
  * Object metaclass
  */
-struct DSShortClass
-{
-    Class  isa;
-    Class  superclass;
-    char*   name;
-    long    version, info, instance_size;
+VTable (DSShort) {
     char*   (*ToString) (DSShort* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
     bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
     bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-    DSShort*  (*Create) (short value);
     int     (*CompareTo) (DSComparable* const, DSComparable* const);
     int     (*IntValue) (DSShort* const);
     long    (*LongValue) (DSShort* const);
@@ -70,7 +63,11 @@ struct DSShortClass
     char    (*CharValue) (DSShort* const);
     short   (*ShortValue) (DSShort* const);
 
-} DSShortClass;
+};
+
+Singleton ($DSShort) {
+    DSShort*  (*Create) (short value);
+};
 
 short DSShort_ParseShort(char const *const s, int);
 int DSShort_CompareTo(DSShort* const, DSShort* const);
@@ -81,5 +78,8 @@ double DSShort_DoubleValue(DSShort* const);
 char DSShort_CharValue(DSShort* const);
 short DSShort_ShortValue(DSShort* const);
 char* DSShort_ToString(const DSShort* const);
+DSShort* DSShort_init(DSShort* const this, short value);
+DSShort* DSShort_alloc();
+DSShort* NewDSShort(short value);
 
 #endif _DSSHORT_H_

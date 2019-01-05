@@ -28,20 +28,20 @@ SOFTWARE.
  * Throws LongFormatException:
  */
 static DSException(LongFormat);
-begin_class(DSLong)
+$implementation(DSLong)
 
-    method("ToString", DSLong_ToString, "$@:v");
-    method("CompareTo", DSLong_CompareTo, "i@:@");
-    method("IntValue", DSLong_IntValue, "i@:v");
-    method("LongValue", DSLong_LongValue, "l@:v");
-    method("FloatValue", DSLong_FloatValue, "f@:v");
-    method("DoubleValue", DSLong_DoubleValue, "d@:v");
-    method("CharValue", DSLong_CharValue, "c@:v");
-    method("ShortValue", DSLong_ShortValue, "s@:v");
+$method(ToString, DSLong_ToString, "$@:v");
+$method(CompareTo, DSLong_CompareTo, "i@:@");
+$method(IntValue, DSLong_IntValue, "i@:v");
+$method(LongValue, DSLong_LongValue, "l@:v");
+$method(FloatValue, DSLong_FloatValue, "f@:v");
+$method(DoubleValue, DSLong_DoubleValue, "d@:v");
+$method(CharValue, DSLong_CharValue, "c@:v");
+$method(ShortValue, DSLong_ShortValue, "s@:v");
 
-    ivar("value", sizeof(long), "l");
+$ivar(value, sizeof(long), "l");
 
-end_class
+$end;
 
 /**
  * Constructor
@@ -50,13 +50,23 @@ end_class
  * @param value of long
  * 
  */
+
+DSLong* NewDSLong(long value) { 
+    return DSLong_init(DSLong_alloc(), value); 
+}
+
 DSLong* DSLong_init(DSLong* const this, long value)
 {
     DSNumber_init(this);
-    this->isa = ISA(DSLong);
+    this->isa = objc_getClass("DSLong");
     this->value = value;
     return this;
 }
+
+DSLong* DSLong_alloc() {
+    return DSMalloc(getDSLongSize());
+}
+
 
 /**
  * Returns a primitive long value parsed from input string. 
@@ -153,25 +163,3 @@ char* DSLong_ToString(const DSLong* const this)
     sprintf(str, "%d", this->value);
     return str;
 }
-
-DSLong* $DSLong(long value) { 
-    printf("DSLong* Create(%d);\n", value);
-    return DSLong_init(class_alloc(DSLong), value); 
-}
-
-/**
- * Long Class Metadata
- */
-DSDefine(DSLong, DSNumber, cls, {
-    cls->ToString       = DSLong_ToString;
-    cls->CompareTo      = DSLong_CompareTo;
-    cls->Equals         = DSLong_Equals;
-    cls->IntValue       = DSLong_IntValue;
-    cls->LongValue      = DSLong_LongValue; 
-    cls->FloatValue     = DSLong_FloatValue; 
-    cls->DoubleValue    = DSLong_DoubleValue;
-    cls->CharValue      = DSLong_CharValue;
-    cls->ShortValue     = DSLong_ShortValue; 
-    cls->Create         = $DSLong;
-});
-

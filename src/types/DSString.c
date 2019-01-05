@@ -28,32 +28,32 @@ SOFTWARE.
  * Throws IndexOutOfBoundsException:
  */
 static DSException(IndexOutOfBounds);
-begin_class(DSString)
+$implementation(DSString)
 
-    method("ToString", DSString_ToString, "$@:v");
-    method("CompareTo", DSString_CompareTo, "i@:@");
-    method("f", DSString_Dispose, "v@:v");
-    method("Length", Length, "i@:v");
-    method("IsEmpty", DSString_IsEmpty, "B@:v");    
-    method("CharAt", DSString_CharAt, "c@:i");
-    method("CompareToIgnoreCase", DSString_CompareToIgnoreCase, "@:");    
-    method("Concat", DSString_Concat, "v@:$");
-    method("Concatc", DSString_Concatc, "v@:c");
-    method("Contains", DSString_Contains, "B@:$");
-    method("CopyOf", DSString_CopyOf, "$@:v");
-    method("EndsWith", DSString_EndsWith, "B@:$");
-    method("StartsWith", DSString_StartsWith, "B@:$");
-    method("GetBytes", DSString_GetBytes, "b@:*");
-    method("IndexOf", DSString_IndexOf, "i@:$");
-    method("LastIndexOf", DSString_LastIndexOf, "i@:$");
-    method("ToLowerCase", DSString_ToLowerCase, "$@:v");
-    method("ToUpperCase", DSString_ToUpperCase, "$@:v");
-    method("Trim", DSString_Trim, "$@:v");
+$method(ToString, DSString_ToString, "$@:v");
+$method(CompareTo, DSString_CompareTo, "i@:@");
+$method(Dispose, DSString_Dispose, "v@:v");
+$method(Length, Length, "i@:v");
+$method(IsEmpty, DSString_IsEmpty, "B@:v");    
+$method(CharAt, DSString_CharAt, "c@:i");
+$method(CompareToIgnoreCase, DSString_CompareToIgnoreCase, "@:");    
+$method(Concat, DSString_Concat, "v@:$");
+$method(Concatc, DSString_Concatc, "v@:c");
+$method(Contains, DSString_Contains, "B@:$");
+$method(CopyOf, DSString_CopyOf, "$@:v");
+$method(EndsWith, DSString_EndsWith, "B@:$");
+$method(StartsWith, DSString_StartsWith, "B@:$");
+$method(GetBytes, DSString_GetBytes, "b@:*");
+$method(IndexOf, DSString_IndexOf, "i@:$");
+$method(LastIndexOf, DSString_LastIndexOf, "i@:$");
+$method(ToLowerCase, DSString_ToLowerCase, "$@:v");
+$method(ToUpperCase, DSString_ToUpperCase, "$@:v");
+$method(Trim, DSString_Trim, "$@:v");
 
-    ivar("value", sizeof(char*), "*");
-    ivar("length", sizeof(int), "i");
+$ivar(value, sizeof(char*), "*");
+$ivar(length, sizeof(int), "i");
 
-end_class
+$end;
 
 /**
  * Constructor
@@ -62,13 +62,21 @@ end_class
  * @param value of long
  * 
  */
+DSString* $(const char* const str) {
+    return DSString_init(DSString_alloc(), str); 
+}
+
 DSString* DSString_init(DSString* const this, char* value)
 {
     DSComparable_init(this);
-    this->isa = ISA(DSString);
+    this->isa = objc_getClass("DSString");
     this->value = strdup(value);
     this->length = strlen(value);
     return this;
+}
+
+DSString* DSString_alloc() {
+    return DSMalloc(getDSStringSize());
 }
 
 void DSString_GetChars(DSString* this, char* dst, int dstBegin) {
@@ -109,7 +117,7 @@ DSString* DSString_Concatc(DSString* this, char* other) {
     char* str = DSCalloc((len+length+1), sizeof(char));
     strncpy(str, this->value, len);
     strncpy(str+len, other, length);
-    DSString* result = DSStringClass.Create(str);
+    DSString* result = $DSString.Create(str);
     return result;
 
 }
@@ -122,16 +130,16 @@ DSString* DSString_Concat(DSString* this, DSString* other) {
     char* str = DSCalloc((len+other->length+1), sizeof(char));
     strncpy(str, this->value, len);
     strncpy(str+len, other->value, other->length);
-    DSString* result = DSStringClass.Create(str);
+    DSString* result = $DSString.Create(str);
     return result;
 }
 
 bool DSString_Contains(DSString* this, DSString* s) {
-    return this->isa->IndexOf(this, s, 0) > -1;
+    return DSStringVTable.IndexOf(this, s, 0) > -1;
 }
 
 DSString* DSString_CopyOf(DSString* this) {
-    return DSStringClass.Create(this->value);
+    return $DSString.Create(this->value);
 }
 
 bool DSString_EndsWith(DSString* this, DSString* suffix) {
@@ -159,11 +167,11 @@ int DSString_LastIndexOf(DSString* this, DSString* str, int offset) {
 }
 
 DSString* DSString_ToUpperCase(DSString* this) {
-    return DSStringClass.Create(strupr(this->value));
+    return $DSString.Create(strupr(this->value));
 }
 
 DSString* DSString_ToLowerCase(DSString* this) {
-    return DSStringClass.Create(strlwr(this->value));
+    return $DSString.Create(strlwr(this->value));
 }
 
 DSString* DSString_Trim(DSString* this) {
@@ -176,7 +184,7 @@ DSString* DSString_Trim(DSString* this) {
         len--;
     }
     return ((start > 0) || (len < this->length)) 
-        ? DSStringClass.Create(strndup(this->value+start, len-start))
+        ? $DSString.Create(strndup(this->value+start, len-start))
         : this;    
 }
 
@@ -208,38 +216,6 @@ void DSString_Dispose(DSString* const this)
 {
 }
 
-/*
- * Shortcut for a new string object
- */
-DSString* $(const char* const str) {
-    return DSString_init(class_alloc(DSString), str); 
-}
-
-/**
- * String Class Metadata
- */
-DSDefine(DSString, DSObject, cls, {
-    cls->Create         = $;
-    cls->ToString       = DSString_ToString;
-    cls->Dispose        = DSString_Dispose;
-    cls->CompareTo      = DSString_CompareTo;
-    cls->Length         = Length;
-    cls->IsEmpty        = DSString_IsEmpty;
-    cls->CharAt         = DSString_CharAt;
-    cls->CompareToIgnoreCase = DSString_CompareToIgnoreCase;
-    cls->Concat         = DSString_Concat;
-    cls->Concatc        = DSString_Concatc;
-    cls->Contains       = DSString_Contains;
-    cls->CopyOf         = DSString_CopyOf;
-    cls->EndsWith       = DSString_EndsWith;
-    cls->StartsWith     = DSString_StartsWith;
-    cls->GetBytes       = DSString_GetBytes;
-    cls->IndexOf        = DSString_IndexOf;
-    cls->LastIndexOf    = DSString_LastIndexOf;
-    cls->ToLowerCase    = DSString_ToLowerCase;
-    cls->ToUpperCase    = DSString_ToUpperCase;
-    cls->Trim           = DSString_Trim;
-});
 
 
 __attribute__((__format__ (__printf__, 1, 2)))
@@ -252,9 +228,9 @@ DSString* DSString_Format(char* format, ...) {
 
     int len = vsnprintf(nullptr, 0, format, args1);
     va_end(args1);
-    if (len == 0) return DSStringClass.Create("");
+    if (len == 0) return $DSString.Create("");
     char* str = DSCalloc((len+1), sizeof(char));
     len = vsnprintf(str, len+1, format, args2);
     va_end(args2);
-    return DSStringClass.Create(str);
+    return $DSString.Create(str);
 }

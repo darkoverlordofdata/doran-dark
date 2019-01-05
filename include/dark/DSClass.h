@@ -39,25 +39,29 @@ SOFTWARE.
     typedef struct name name;                                           \
     struct name
 
+/**
+ * 3 clobal variables are created for each Class:
+ *  DSOject         - Ivar Instance Variables
+ *  DSObjectVTable  - Instance Methods
+ *  $DSObject       - Class Methods/Variables
+ */
 #define Ivar(name)                                                      \
     typedef struct name name;                                           \
     struct name
 
 #define VTable(name)                                                    \
-    typedef struct name##VTable name##VTable;                           \
+    struct name##VTable name##VTable;                                   \
     struct name##VTable
+
+#define Singleton(name)                                                 \
+    struct name name;                                                   \
+    struct name
 
 /**
  *  MACRO overload
  *      method overload 
  */
 #define overload __attribute__((overloadable))
-
-/**
- *  MACRO _vptr
- *      extract the vatble ptr from the class  
- */
-#define _vptr(class)  ((class##VTable*)this->isa->vtable)
 
 
 /**
@@ -76,8 +80,9 @@ Class class##Implementation(Class super);                               \
 Class class##Implementation(Class super)                                \
 {                                                                       \
     int k = 0;                                                          \
-    IMP* vt = DSMalloc(sizeof(class##VTable));                          \
-    Class obj = objc_allocateClassPair(super, #class, 0)
+    IMP* vt = &class##VTable;                                           \
+    Class isa = objc_allocateClassPair(super, #class, 0);               \
+    isa->vtable = &vt[0];               
     
 
 /**
@@ -85,7 +90,7 @@ Class class##Implementation(Class super)                                \
  *      
  */
 #define $method(name, imp, type)                                        \
-    class_addMethod(obj, #name, imp, type);                             \
+    class_addMethod(isa, #name, imp, type);                             \
     vt[k++] = imp; 
 
 /**
@@ -93,29 +98,29 @@ Class class##Implementation(Class super)                                \
  *      
  */
 #define $ivar(name, len, type)                                          \
-    class_addIvar(obj, name, len, log2(len), type);
+    class_addIvar(isa, #name, len, log2(len), type);
 
 /**
- *  MACRO $class method
+ *  MACRO $isa method
  *      
  */
 #define $class_method(name, imp, type)                                  \
-    class_addMethod(GETMETA(obj), name, imp, type);                     \
-    vptr->name = imp;
+    class_addMethod(GETMETA(isa), #name, imp, type);                    \
+    vt[k++] = imp; 
+
 /**
- *  MACRO  $class ivar
+ *  MACRO  $isa ivar
  *      
  */
 #define $class_ivar(name, len, type)                                    \
-    class_addIvar(GETMETA(obj), name, len, log2(len), type);
+    class_addIvar(GETMETA(isa), #name, len, log2(len), type);
 
 /**
  *  MACRO $end
  *      wrap up, define vtable     
  */
 #define $end                                                            \
-    obj->vtable = &vt[0];                                               \
-    return methodizeClass(obj);                                         \
+    return methodizeClass(isa);                                         \
 }
 
 

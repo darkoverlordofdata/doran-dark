@@ -51,7 +51,7 @@ DSComparable* DSComparable_init(DSComparable* const this)
 }
 
 int overload CompareTo(const DSComparable* const this, const DSComparable* const other) {
-    _vptr(DSComparable)->CompareTo(this, other);
+    DSComparableVTable.CompareTo(this, other);
 }
 
 int DSComparable_CompareTo(const DSComparable* const this, const DSComparable* const other) {
@@ -63,7 +63,7 @@ char* overload ToString(const DSComparable* const this) {
 }
 
 char* DSComparable_ToString(const DSComparable* const this) {
-    _vptr(DSComparable)->ToString(this);
+    DSComparableVTable.ToString(this);
 }
 
 

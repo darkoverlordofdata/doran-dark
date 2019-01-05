@@ -20,10 +20,20 @@ int main(int argc, char **argv) {
 
     DSLog("Hello World");
 
-    DSObject* x = $DSObject();
-    DSLog(ToString(x));
+    
 
+    DSObject* x = NewDSObject();
+    DSLog(ToString(x));
     DSLog("size = %d", sizeof(DSObjectVTable));
+
+    DSBoolean* b = NewDSBoolean(true);
+    DSLog("bool %s", ToString(b));
+
+    if ($DSBoolean.True == nullptr) DSLog("NULL"); else DSLog("Not Null");
+    DSLog("value = %d", $DSBoolean.True->value);
+    bool bb = Equals($DSBoolean.True, b);
+    // DSLog("Equal? %d", bb);
+    DSLog("Done.");
     return 0;
     // __block struct DSLong* l = $DSLong(420);
     // __block DSLong* m = $DSLong(420);

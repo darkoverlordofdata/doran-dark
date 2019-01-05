@@ -28,20 +28,20 @@ SOFTWARE.
  * Throws: NumberFormatException
  */
 static DSException(NumberFormat);
-begin_class(DSInteger)
+$implementation(DSInteger)
 
-    method("ToString", DSInteger_ToString, "$@:v");
-    method("CompareTo", DSInteger_CompareTo, "i@:@");
-    method("IntValue", DSInteger_IntValue, "i@:v");
-    method("LongValue", DSInteger_LongValue, "l@:v");
-    method("FloatValue", DSInteger_FloatValue, "f@:v");
-    method("DoubleValue", DSInteger_DoubleValue, "d@:v");
-    method("CharValue", DSInteger_CharValue, "c@:v");
-    method("ShortValue", DSInteger_ShortValue, "s@:v");
+$method(ToString, DSInteger_ToString, "$@:v");
+$method(CompareTo, DSInteger_CompareTo, "i@:@");
+$method(IntValue, DSInteger_IntValue, "i@:v");
+$method(LongValue, DSInteger_LongValue, "l@:v");
+$method(FloatValue, DSInteger_FloatValue, "f@:v");
+$method(DoubleValue, DSInteger_DoubleValue, "d@:v");
+$method(CharValue, DSInteger_CharValue, "c@:v");
+$method(ShortValue, DSInteger_ShortValue, "s@:v");
 
-    ivar("value", sizeof(int), "i");
+$ivar(value, sizeof(int), "i");
 
-end_class
+$end;
 
 /* 
  * Constructor
@@ -50,14 +50,23 @@ end_class
  * @param value of int
  * 
  */
+
+DSInteger* NewDSInteger(int value) { 
+    return DSInteger_init(DSInteger_alloc(), value); 
+}
+
+
 DSInteger* DSInteger_init(DSInteger* const this, int value)
 {
     DSNumber_init(this);
-    this->isa = ISA(DSInteger);
+    this->isa = objc_getClass("DSInteger");
     this->value = value;
     return this;
 }
 
+DSInteger* DSInteger_alloc() {
+    return DSMalloc(getDSIntegerSize());
+}
 
 /**
  * Returns a primitive integer value parsed from input string. 
@@ -141,23 +150,3 @@ char* DSInteger_ToString(const DSInteger* const this)
     sprintf(str, "%d", this->value);
     return str;
 }
-
-DSInteger* $DSInteger(int value) { 
-    return DSInteger_init(class_alloc(DSInteger), value); 
-}
-
-/**
- * Integer Class Metadata
- */
-DSDefine(DSInteger, DSNumber, cls, {
-    cls->ToString       = DSInteger_ToString;
-    cls->CompareTo      = DSInteger_CompareTo;
-    cls->IntValue       = DSInteger_IntValue;
-    cls->LongValue      = DSInteger_LongValue; 
-    cls->FloatValue     = DSInteger_FloatValue; 
-    cls->DoubleValue    = DSInteger_DoubleValue;
-    cls->CharValue      = DSInteger_CharValue;
-    cls->ShortValue     = DSInteger_ShortValue; 
-    cls->Create         = $DSInteger;
-});
-

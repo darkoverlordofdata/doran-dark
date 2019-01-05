@@ -39,11 +39,11 @@ static __inline void bzero(void *dst, size_t size) { memset(dst, 0, size); }
 __attribute__((__format__ (__printf__, 1, 2)))
 static inline void _objc_inform(const char *fmt, ...)
 {
-    va_list args;
-    va_start(args, fmt);
-    _vcprintf(fmt, args);
-    va_end(args);
-    _cprintf("\n");
+	va_list args;
+	va_start(args, fmt);
+	_vcprintf(fmt, args);
+	va_end(args);
+	_cprintf("\n");
 }
 
 
@@ -66,7 +66,7 @@ typedef struct objc_object 		Protocol;
 typedef struct objc_property 	*objc_property_t;
 
 typedef struct objc_object {
-    Class isa;
+	Class isa;
 } *id;
 
 // typedef id (*IMP)(id, SEL, ...);
@@ -76,20 +76,20 @@ struct objc_class {
 	Class isa;
 	Class super_class;
 	char* name;
-    long version;
+	long version;
 	long info;
-    long instance_size;
+	long instance_size;
 	struct objc_ivar_list *ivars;
 	struct objc_method_list **methodLists;
-	// struct objc_cache *cache; 
+	// struct objc_cache *cache; /**  cache is replaced with vtable */
 	IMP* vtable;
 	struct objc_protocol_list *protocols;
 };
 
 struct objc_protocol_list {
-    struct objc_protocol_list *next;
-    long count;
-    Protocol *list[1];
+	struct objc_protocol_list *next;
+	long count;
+	Protocol *list[1];
 };
 
 struct objc_method_description {
@@ -241,7 +241,7 @@ char *method_copyReturnType(Method m);
 char *method_copyArgumentType(Method m, unsigned int index);
 void method_getReturnType(Method m, char *dst, size_t dst_len);
 void method_getArgumentType(Method m, unsigned int index, 
-                                        char *dst, size_t dst_len);
+										char *dst, size_t dst_len);
 struct objc_method_description *method_getDescription(Method m);
 
 IMP method_setImplementation(Method m, IMP imp);
@@ -266,7 +266,7 @@ Protocol **protocol_copyProtocolList(Protocol *proto, unsigned int *outCount);
 const char **objc_copyImageNames(unsigned int *outCount);
 const char *class_getImageName(Class cls);
 const char **objc_copyClassNamesForImage(const char *image, 
-                                                     unsigned int *outCount);
+													 unsigned int *outCount);
 
 const char *sel_getName(SEL sel);
 SEL sel_getUid(const char *str);
@@ -282,36 +282,36 @@ extern void _objc_insertMethods(Class cls, struct objc_method_list *mlist, struc
 
 #define _C_ELISIS   '.'
 #define _C_STRING   '$'
-#define _C_ID       '@'
-#define _C_CLASS    '#'
-#define _C_SEL      ':'
-#define _C_CHR      'c'
-#define _C_UCHR     'C'
-#define _C_SHT      's'
-#define _C_USHT     'S'
-#define _C_INT      'i'
-#define _C_UINT     'I'
-#define _C_LNG      'l'
-#define _C_ULNG     'L'
+#define _C_ID	   '@'
+#define _C_CLASS	'#'
+#define _C_SEL	  ':'
+#define _C_CHR	  'c'
+#define _C_UCHR	 'C'
+#define _C_SHT	  's'
+#define _C_USHT	 'S'
+#define _C_INT	  'i'
+#define _C_UINT	 'I'
+#define _C_LNG	  'l'
+#define _C_ULNG	 'L'
 #define _C_LNG_LNG  'q'
 #define _C_ULNG_LNG 'Q'
-#define _C_FLT      'f'
-#define _C_DBL      'd'
-#define _C_BFLD     'b'
-#define _C_BOOL     'B'
-#define _C_VOID     'v'
-#define _C_UNDEF    '?'
-#define _C_PTR      '^'
+#define _C_FLT	  'f'
+#define _C_DBL	  'd'
+#define _C_BFLD	 'b'
+#define _C_BOOL	 'B'
+#define _C_VOID	 'v'
+#define _C_UNDEF	'?'
+#define _C_PTR	  '^'
 #define _C_CHARPTR  '*'
-#define _C_ATOM     '%'
-#define _C_ARY_B    '['
-#define _C_ARY_E    ']'
+#define _C_ATOM	 '%'
+#define _C_ARY_B	'['
+#define _C_ARY_E	']'
 #define _C_UNION_B  '('
 #define _C_UNION_E  ')'
 #define _C_STRUCT_B '{'
 #define _C_STRUCT_E '}'
 #define _C_VECTOR   '!'
-#define _C_CONST    'r'
+#define _C_CONST	'r'
 
 #define CLS_CLASS		0x1
 #define CLS_META		0x2
@@ -321,7 +321,7 @@ extern void _objc_insertMethods(Class cls, struct objc_method_list *mlist, struc
 #define CLS_FLUSH_CACHE		0x20
 #define CLS_GROW_CACHE		0x40
 #define CLS_NEED_BIND		0x80
-#define CLS_METHOD_ARRAY        0x100
+#define CLS_METHOD_ARRAY		0x100
 // the JavaBridge constructs classes with these markers
 #define CLS_JAVA_HYBRID		0x200
 #define CLS_JAVA_CLASS		0x400
@@ -334,24 +334,24 @@ extern void _objc_insertMethods(Class cls, struct objc_method_list *mlist, struc
 // Lazy method list arrays
 #define CLS_NO_METHOD_ARRAY	0x4000
 // +load implementation
-#define CLS_HAS_LOAD_METHOD     0x8000
+#define CLS_HAS_LOAD_METHOD	 0x8000
 // objc_allocateClassPair API
-#define CLS_CONSTRUCTING        0x10000
+#define CLS_CONSTRUCTING		0x10000
 // visibility=hidden
-#define CLS_HIDDEN              0x20000
+#define CLS_HIDDEN			  0x20000
 // class compiled with bigger class structure
-#define CLS_EXT                 0x20000
+#define CLS_EXT				 0x20000
 // GC:  class has unsafe finalize method
 #define CLS_FINALIZE_ON_MAIN_THREAD 0x40000
 // Lazy property list arrays
 #define CLS_NO_PROPERTY_ARRAY	0x80000
 // +load implementation
-#define CLS_CONNECTED           0x100000
-#define CLS_LOADED              0x200000
+#define CLS_CONNECTED		   0x100000
+#define CLS_LOADED			  0x200000
 // objc_allocateClassPair API
-#define CLS_CONSTRUCTED         0x400000
+#define CLS_CONSTRUCTED		 0x400000
 // class is leaf for cache flushing
-#define CLS_LEAF                0x800000
+#define CLS_LEAF				0x800000
 // class instances may have associative references
 #define CLS_INSTANCES_HAVE_ASSOCIATED_OBJECTS 0x1000000
 // class has instance-specific GC layout
@@ -360,11 +360,11 @@ extern void _objc_insertMethods(Class cls, struct objc_method_list *mlist, struc
 #define END_OF_METHODS_LIST ((struct objc_method_list*)-1)
 
 
-#define CLS_GETINFO(cls,infomask)       ((cls)->info & (infomask))
-#define CLS_SETINFO(cls,infomask)       ((cls)->info |= (infomask))
-#define ISCLASS(cls)		            (((cls)->info & CLS_CLASS) != 0)
-#define ISMETA(cls)		                (((cls)->info & CLS_META) != 0)
-#define GETMETA(cls)		            (ISMETA(cls) ? (cls) : (cls)->isa)
+#define CLS_GETINFO(cls,infomask)	   ((cls)->info & (infomask))
+#define CLS_SETINFO(cls,infomask)	   ((cls)->info |= (infomask))
+#define ISCLASS(cls)					(((cls)->info & CLS_CLASS) != 0)
+#define ISMETA(cls)						(((cls)->info & CLS_META) != 0)
+#define GETMETA(cls)					(ISMETA(cls) ? (cls) : (cls)->isa)
 
 
 static inline char* typename(id obj) { return obj->isa->name; }
@@ -376,12 +376,12 @@ static inline UInt64 typeid(id obj) { return (UInt64)obj->isa; }
  * 'Cartouche' Send Message Notation:
  * 
  *  instead of:
- *      NSDictionary d* = [[NSDictionary alloc]init];
- *      [d setObject:anObject forKey:@"foo"];
+ *	  NSDictionary d* = [[NSDictionary alloc]init];
+ *	  [d setObject:anObject forKey:@"foo"];
  * 
  *  use:
- *      DSDictionary d* = _(_(DSDictionary, $alloc)$init); 
- *      _(d, $setObject, anObject, $forKey, $("foo"));
+ *	  DSDictionary d* = _(_(DSDictionary, $alloc)$init); 
+ *	  _(d, $setObject, anObject, $forKey, $("foo"));
  * 
  */
 id _(id this, SEL _cmd, ...);

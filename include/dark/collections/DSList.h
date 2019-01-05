@@ -28,7 +28,7 @@ SOFTWARE.
 #define _DSLIST_H_
 #include "DSCollection.h"
 
-#define IsDSList(x) (x->isa == &DSListClass)
+#define IsDSList(x) (x->isa == &$DSList)
 #define AsDSList(x) (IsDSList(x) ? (DSList*)x : nullptr)
 
 typedef int (*DSList_Compare) (Any, Any);
@@ -40,9 +40,8 @@ class (DSListNode)
     DSListNode* next;
 };
 
-class (DSList)
-{
-    struct DSListClass* isa;
+Ivar (DSList) {
+    Class isa;
     int length;
     DSListNode* head;
 };
@@ -56,19 +55,13 @@ typedef void    (*DSListInsert)     (const DSList* const Any, DSList_Compare);
 typedef void    (*DSListAdd)        (DSList* const, Any);
 typedef Any     (*DSListRemove)     (const DSList* const);
 
-struct DSListClass
-{
-    Class  isa;
-    Class  superclass;
-    char*   name;
-    long    version, info, instance_size;
+VTable (DSList) {
     char*   (*ToString) (const DSList* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
     bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
     bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-    DSList*   (*Create) ();
     int     (*Length)       (const DSList* const);
     bool    (*IsEmpty)      (DSList* const);
     bool    (*Contains)     (DSList* const, Any);
@@ -79,7 +72,11 @@ struct DSListClass
     int (*Insert) (DSList* const, Any, DSList_Compare);
     void (*Iterate) (DSList* const, DSList_Iterator);
     
-} DSListClass;
+};
+
+Singleton ($DSList) {
+    DSList*   (*Create) ();
+};
 
 
 /**
@@ -96,5 +93,8 @@ Any overload Remove(DSList* const);
 
 int Insert(DSList* const, Any, DSList_Compare);
 void overload ForEach(DSList* const, DSList_Iterator);
+DSList* DSList_alloc();
+DSList* DSList_init(DSList* const this);
+DSList* NewDSList();
 
 #endif _DSLIST_H_ 

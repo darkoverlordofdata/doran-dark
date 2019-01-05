@@ -28,20 +28,20 @@ SOFTWARE.
  * Throws NumberFormatException:
  */
 static DSException(NumberFormat);
-begin_class(DSShort)
+$implementation(DSShort)
 
-    method("ToString", DSShort_ToString, "$@:v");
-    method("CompareTo", DSShort_CompareTo, "i@:@");
-    method("IntValue", DSShort_IntValue, "i@:v");
-    method("LongValue", DSShort_LongValue, "l@:v");
-    method("FloatValue", DSShort_FloatValue, "f@:v");
-    method("DoubleValue", DSShort_DoubleValue, "d@:v");
-    method("CharValue", DSShort_CharValue, "c@:v");
-    method("ShortValue", DSShort_ShortValue, "s@:v");
+$method(ToString, DSShort_ToString, "$@:v");
+$method(CompareTo, DSShort_CompareTo, "i@:@");
+$method(IntValue, DSShort_IntValue, "i@:v");
+$method(LongValue, DSShort_LongValue, "l@:v");
+$method(FloatValue, DSShort_FloatValue, "f@:v");
+$method(DoubleValue, DSShort_DoubleValue, "d@:v");
+$method(CharValue, DSShort_CharValue, "c@:v");
+$method(ShortValue, DSShort_ShortValue, "s@:v");
 
-    ivar("value", sizeof(short), "s");
+$ivar(value, sizeof(short), "s");
 
-end_class
+$end;
 
 /**
  * Constructor
@@ -50,13 +50,22 @@ end_class
  * @param value of short
  * 
  */
+DSShort* NewDSShort(short value) { 
+    return DSShort_init(objc_getClass("DSShort"), value); 
+}
+
 DSShort* DSShort_init(DSShort* const this, short value)
 {
     DSNumber_init(this);
-    this->isa = ISA(DSShort);
+    this->isa = objc_getClass("DSShort");
     this->value = value;
     return this;
 }
+
+DSShort* DSShort_alloc() {
+    return DSMalloc(getDSShortSize());
+}
+
 
 /**
  * Returns a primitive short value parsed from input string. 
@@ -142,22 +151,3 @@ char* DSShort_ToString(const DSShort* const this)
     return str;
 }
 
-DSShort* $DSShort(short value) { 
-    return DSShort_init(class_alloc(DSShort), value); 
-}
-
-
-/**
- * Short Class Metadata
- */
-DSDefine(DSShort, DSNumber, cls, {
-    cls->ToString       = DSShort_ToString;
-    cls->CompareTo      = DSShort_CompareTo;
-    cls->IntValue       = DSShort_IntValue;
-    cls->LongValue      = DSShort_LongValue; 
-    cls->FloatValue     = DSShort_FloatValue; 
-    cls->DoubleValue    = DSShort_DoubleValue;
-    cls->CharValue      = DSShort_CharValue;
-    cls->ShortValue     = DSShort_ShortValue; 
-    cls->Create         = $DSShort;
-});

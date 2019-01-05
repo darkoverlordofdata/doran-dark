@@ -28,34 +28,27 @@ SOFTWARE.
 #define _DSCOLLECTION_H_
 #include "../DSObject.h"
 
-#define IsDSCollection(x) (x->isa == &DSCollectionClass)
+#define IsDSCollection(x) (x->isa == &DSCollection)
 #define AsDSCollection(x) (IsDSCollection(x) ? (DSCollection*)x : nullptr)
 
 /**
  * Base collection interface for sequential collections such as list and array
  */
-class (DSCollection)
-{
-    struct DSCollectionClass* isa;
+Ivar (DSCollection) {
+    Class isa;
 };
 
 
 /**
  * Collection metaclass
  */
-struct DSCollectionClass
-{
-    Class  isa;
-    Class  superclass;
-    char*   name;
-    long    version, info, instance_size;
+VTable (DSCollection) {
     char*   (*ToString) (DSCollection* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
     bool    (*ReferenceEquals) (DSObject* const , DSObject* const);
     bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-    DSCollection*  (*Create) ();
 
     int     (*Length) (DSCollection* const);
     bool    (*IsEmpty) (DSCollection* const);
@@ -64,8 +57,11 @@ struct DSCollectionClass
     bool    (*Add) (DSCollection* const, Any);
     bool    (*Remove) (DSCollection* const, Any);
     
-} DSCollectionClass;
+};
 
+Singleton ($DSCollection) {
+    DSCollection*  (*Create) ();
+};
 
 /**
  * Collection API

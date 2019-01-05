@@ -33,19 +33,13 @@ SOFTWARE.
 #define IsDSObject(x) (x->isa == &DSObjectVTable)
 #define AsDSObject(x) (IsDSObject(x) ? (DSObject *)x : nullptr)
 /**
- * DSObject 
- * 
- * the isa field holds the reference to the class that defines this object.
- * All fields afer that make up the IVAR. This means:
- * 
- *  + No multiple inheritance. Mixins should work.
- *  + ivar definition must be the same across an inheritance chain.
- * 
+ * DSObject ivar
  */
+// typedef struct DSObject DSObject;
+// struct DSObject {
 Ivar (DSObject) {
     Class isa;
 };
-
 /** 
  * DSObject Interface
  */
@@ -56,10 +50,12 @@ typedef int     (*DSObjectGetHashCode) (const DSObject* const);
 typedef void    (*DSObjectDispose) (DSObject* const);
 typedef bool    (*DSObjectReferenceEquals) (const DSObject* const, const DSObject* const);
 typedef bool    (*DSObjectInstanceEquals) (const DSObject* const, const DSObject* const);
-
 /**
  * DSObject Vtable
+ * 
  */
+// struct DSObjectVTable DSObjectVTable;
+// struct DSObjectVTable {
 VTable (DSObject) {
     DSObjectToString        ToString;
     DSObjectEquals          Equals;
@@ -67,15 +63,29 @@ VTable (DSObject) {
     DSObjectDispose         Dispose;
     DSObjectReferenceEquals ReferenceEquals;
     DSObjectInstanceEquals  InstanceEquals;
+} ;
+
+
+/**
+ * DSObject Class Methods & Variables
+ * 
+ */
+// struct $DSObject $DSObject;
+// struct $DSObject {
+Singleton ($DSObject) {
     DSObjectCreate          Create;
-};/**
+};
+
+//=======================================================================//
+//=======================================================================//
+
+/**
  * Class Ivar
  * 
  */
 Ivar (DSClass) {
     Class isa;
 };
-
 /** 
  * DSClass Interface
  */
@@ -86,8 +96,6 @@ typedef int     (*DSClassGetHashCode) (const DSClass* const);
 typedef void    (*DSClassDispose) (DSClass* const);
 typedef bool    (*DSClassReferenceEquals) (const DSClass* const, const DSClass* const);
 typedef bool    (*DSClassInstanceEquals) (const DSClass* const, const DSClass* const);
-
-
 /**
  * DSClass VTable
  */
@@ -101,9 +109,9 @@ VTable (DSClass) {
     DSClassCreate          Create;
 };
 
-
-
-
+Singleton ($DSClass) {
+    DSClassCreate          Create;
+};
 
 /**
  * API Function Templates
@@ -122,10 +130,9 @@ bool overload Equals(const DSObject* const, const DSObject* const);
 int overload GetHashCode(const DSObject* const);
 void overload Dispose(DSObject* const);
 
-
+DSObject* NewDSObject();
 DSObject* DSObject_init(DSObject* const);
 DSObject* DSObject_Dtor(DSObject*);
 
-Class DSDefineDSObject();
 
 #endif _DSOBJECT_H_ 

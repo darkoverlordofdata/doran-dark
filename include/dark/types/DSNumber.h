@@ -35,15 +35,14 @@ SOFTWARE.
 #define NUMBER_MIN_RADIX 2
 #define NUMBER_MAX_RADIX 36
 
-#define IsDSNumber(x) (x->isa == &DSNumberClass)
+#define IsDSNumber(x) (x->isa == &$DSNumber)
 #define AsDSNumber(x) (IsDSNumber(x) ? (DSNumber *)x : nullptr)
 
 /**
  * Object class
  */
-class (DSNumber) 
-{
-    struct DSNumberClass* isa;
+Ivar (DSNumber) {
+    Class isa;
 };
 
 typedef bool    (*DSNumberCompareTo)  (const DSNumber* const, const DSNumber* const);
@@ -52,21 +51,14 @@ typedef char*   (*DSNumberToString)  (const DSNumber* const);
 /**
  * Object metaclass
  */
-struct DSNumberClass
-{
-    Class  isa;
-    Class  superclass;
-    char*   name;
-    long    version, info, instance_size;
+VTable (DSNumber) {
     char*   (*ToString) (DSNumber* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
     bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
     bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-    DSNumber* (*Create) ();
     int     (*CompareTo) (DSComparable* const, DSComparable*);
-
     int     (*IntValue) (DSNumber* const);
     long    (*LongValue) (DSNumber* const);
     float   (*FloatValue) (DSNumber* const);
@@ -74,7 +66,11 @@ struct DSNumberClass
     char    (*CharValue) (DSNumber* const);
     short   (*ShortValue) (DSNumber* const);
     
-} DSNumberClass;
+};
+
+Singleton ($DSNumber) {
+    DSNumber* (*Create) ();
+};
 
 int DSNumber_CompareTo(DSNumber* const, DSNumber*);
 bool DSNumber_Equals(DSNumber* const, DSNumber*);
