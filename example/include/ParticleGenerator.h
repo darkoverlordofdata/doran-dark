@@ -34,9 +34,8 @@ struct Particle
 // ParticleGenerator acts as a container for rendering a large number of 
 // particles by repeatedly spawning and updating particles and killing 
 // them after a given amount of time.
-class (ParticleGenerator)
-{
-    struct ParticleGeneratorClass* isa;
+ivar (ParticleGenerator) {
+    Class isa;
     struct Particle * particles;
     GLuint amount;
     Shader* shader;
@@ -44,19 +43,18 @@ class (ParticleGenerator)
     GLuint VAO;
 };
 
-struct ParticleGeneratorClass
-{
-    Class  isa;
-    Class  superclass;
-    char*   name;
-    long    version, info, instance_size;
-    char*   (*ToString) (ParticleGenerator* const);
+typedef char*   (*ParticleGeneratorToString)  (const ParticleGenerator* const);
+typedef void    (*ParticleGeneratorDraw) (ParticleGenerator* const);
+
+class (ParticleGenerator) {
+    ParticleGenerator*  (*Create) (Shader* shader, Texture2D* texture, int amount);
+};
+
+vtable (ParticleGenerator) {
+    char*   (*ToString) (const ParticleGenerator* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
-    bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-    bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-    ParticleGenerator*  (*Create) (Shader* shader, Texture2D* texture, int amount);
         
     // Update all particles
     void    (*Update)               (ParticleGenerator* const, GLfloat dt, GameObject* object, GLuint newParticles, Vec2 offset);
@@ -64,13 +62,14 @@ struct ParticleGeneratorClass
     void    (*Draw)                 (ParticleGenerator* const);
     // Initializes buffer and vertex attributes
     
-} ParticleGeneratorClass;
+};
 
 /**
  * ParticleGenerator API
  */
 void overload Update(ParticleGenerator*, GLfloat dt, GameObject* object, GLuint newParticles, Vec2 offset);
 void overload Draw(ParticleGenerator*);
-char* overload ToString(ParticleGenerator* const);
-
-
+char* overload ToString(const ParticleGenerator* const);
+ParticleGenerator* NewParticleGenerator(Shader* shader, Texture2D* texture, int amount);
+ParticleGenerator* ParticleGenerator_alloc();
+ParticleGenerator* ParticleGenerator_init(ParticleGenerator* const this, Shader* shader, Texture2D* texture, int amount);

@@ -21,27 +21,16 @@
 // and/or shader is also stored for future reference by string
 // handles. 
 
-class (ResourceManager)
-{
-    struct ResourceManagerClass * isa;
+ivar (ResourceManager) {
+    Class isa;
 };
+
+typedef char*   (*ResourceManagerToString)  (const ResourceManager* const);
 
 extern struct ResourceManagerClass* Resources;
 
-struct ResourceManagerClass
-{
-    struct  Class * isa;
-    struct  Class * superclass;
-    char*   name;
-    long    version, info, instance_size;
-    char*   (*ToString) (ResourceManager* const);
-    bool    (*Equals) (DSObject* const, DSObject* const);
-    int     (*GetHashCode) (DSObject* const);
-    void    (*Dispose) (DSObject* const);
-    bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-    bool    (*InstanceEquals) (DSObject* const, DSObject* const);
+class (ResourceManager) {
     ResourceManager*  (*Create) ();
-
     DSHashmap* Shaders;
     DSHashmap* Textures;
     // Loads (and generates) a shader program from file loading vertex, fragment (and geometry) shader's source code. If gShaderFile is not nullptr, it also loads a geometry shader
@@ -58,8 +47,14 @@ struct ResourceManagerClass
     Shader*      (*loadShaderFromFile)   (const GLchar *vShaderFile, const GLchar *fShaderFile);
     // Loads a single texture from file
     Texture2D*   (*loadTextureFromFile)  (const GLchar *file, GLboolean alpha);
-    
-} ResourceManagerClass;
+};
+
+vtable (ResourceManager) {
+    char*   (*ToString) (const ResourceManager* const);
+    bool    (*Equals) (DSObject* const, DSObject* const);
+    int     (*GetHashCode) (DSObject* const);
+    void    (*Dispose) (DSObject* const);
+};
 
 static Shader* loadShaderFromFile(const GLchar *vShaderFile, const GLchar *fShaderFile);
 static Texture2D* loadTextureFromFile(const GLchar *file, bool alpha);
@@ -69,4 +64,7 @@ Texture2D* LoadTexture(const GLchar *file, bool alpha, char* name);
 Texture2D* GetTexture(char* name);
 void Dtor(ResourceManager*);
 static char* rdbuf(FILE* f);
-
+char* overload ToString(const ResourceManager* const);
+ResourceManager* ResourceManager_init(ResourceManager* this);
+ResourceManager* ResourceManager_alloc();
+ResourceManager* NewResourceManager();

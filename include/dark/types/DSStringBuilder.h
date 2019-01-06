@@ -58,7 +58,7 @@ SOFTWARE.
 #include <string.h>
 #include "DSString.h"
 
-class (StringFragment)
+ivar (StringFragment)
 {
 	StringFragment * next;
 	int length;
@@ -72,7 +72,7 @@ class (StringFragment)
 /**
  * StringBuilder class
  */
-Ivar (DSStringBuilder) {
+ivar (DSStringBuilder) {
     Class isa;
 	StringFragment* root;
 	StringFragment* trunk;
@@ -82,7 +82,7 @@ Ivar (DSStringBuilder) {
 /**
  * StringBuilder metaclass
  */
-VTable (DSStringBuilder) {
+vtable (DSStringBuilder) {
     char*   (*ToString) (DSStringBuilder* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
@@ -98,7 +98,7 @@ VTable (DSStringBuilder) {
 
 };
 
-Singleton ($DSStringBuilder) {
+class (DSStringBuilder) {
     DSStringBuilder*(*Create) ();
 };
 

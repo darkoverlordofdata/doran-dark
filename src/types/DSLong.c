@@ -28,6 +28,7 @@ SOFTWARE.
  * Throws LongFormatException:
  */
 static DSException(LongFormat);
+
 $implementation(DSLong)
 
 $method(ToString,           DSLong_ToString, "$@:v");
@@ -63,7 +64,7 @@ DSLong* NewDSLong(long value) {
 DSLong* DSLong_init(DSLong* const this, long value)
 {
     DSNumber_init(this);
-    this->isa = objc_getClass("DSLong");
+    this->isa = getDSLongIsa();
     this->value = value;
     return this;
 }

@@ -34,7 +34,7 @@ SOFTWARE.
 /**
  * DSComparable Class
  */
-Ivar (DSComparable) {
+ivar (DSComparable) {
     Class isa;
 };
 
@@ -45,7 +45,7 @@ typedef int     (*DSComparableCompareTo)  (const DSComparable* const, const DSCo
 /**
  * DSComparable Vtable
  */
-VTable (DSComparable) {
+vtable (DSComparable) {
     char*   (*ToString) (const DSComparable* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);

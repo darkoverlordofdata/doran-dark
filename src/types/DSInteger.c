@@ -62,7 +62,7 @@ DSInteger* NewDSInteger(int value) {
 DSInteger* DSInteger_init(DSInteger* const this, int value)
 {
     DSNumber_init(this);
-    this->isa = objc_getClass("DSInteger");
+    this->isa = getDSIntegerIsa();
     this->value = value;
     return this;
 }

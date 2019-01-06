@@ -36,23 +36,20 @@ SOFTWARE.
 #define AsDSBoolean(x) (IsDSBoolean(x) ? (DSBoolean *)x : nullptr)
 
 /**
- * DSBoolean class
+ * DSBoolean instance variables
  */
-Ivar (DSBoolean) {
+ivar (DSBoolean) {
     Class isa;
     bool value;
 };
 
-typedef int    (*DSBooleanCompareTo)  (const DSBoolean* const, const DSBoolean* const);
+typedef int     (*DSBooleanCompareTo)  (const DSBoolean* const, const DSBoolean* const);
 typedef char*   (*DSBooleanToString)  (const DSBoolean* const);
-// typedef bool    (*BoolValue) (const DSBoolean* const);
-// typedef int     (*Compare) (const bool, const bool);
-// typedef bool    (*ParseBool) (char const*);
 
 /**
- * DSBoolean metaclass
+ * DSBoolean vtable
  */
-VTable (DSBoolean) {
+vtable (DSBoolean) {
     char*   (*ToString) (const DSBoolean* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
@@ -61,7 +58,10 @@ VTable (DSBoolean) {
     bool    (*BoolValue) (const DSBoolean* const);
 };
 
-Singleton ($DSBoolean) {
+/**
+ * DSBoolean class methods & vars
+ */
+class (DSBoolean) {
     DSBoolean*(*Create) (bool value);
     int (*Compare) (const bool, const bool);
     bool (*ParseBool) (char const*);

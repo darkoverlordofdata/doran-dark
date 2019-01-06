@@ -37,7 +37,7 @@ SOFTWARE.
 /**
  * Object class
  */
-Ivar (DSString) {
+ivar (DSString) {
     Class isa;
     const char* value;
     int length;
@@ -46,7 +46,7 @@ Ivar (DSString) {
 /**
  * Object metaclass
  */
-VTable (DSString) {
+vtable (DSString) {
     char*   (*ToString) (const DSString* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
@@ -73,7 +73,7 @@ VTable (DSString) {
 
 } $$;
 
-Singleton ($DSString) {
+class (DSString) {
     DSString* (*Create) (char* value);
 };
 

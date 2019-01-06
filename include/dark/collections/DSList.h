@@ -34,13 +34,13 @@ SOFTWARE.
 typedef int (*DSList_Compare) (Any, Any);
 typedef void (^DSList_Iterator) (Any);
 
-class (DSListNode)
+ivar (DSListNode)
 {
     Any data;
     DSListNode* next;
 };
 
-Ivar (DSList) {
+ivar (DSList) {
     Class isa;
     int length;
     DSListNode* head;
@@ -55,26 +55,23 @@ typedef void    (*DSListInsert)     (const DSList* const Any, DSList_Compare);
 typedef void    (*DSListAdd)        (DSList* const, Any);
 typedef Any     (*DSListRemove)     (const DSList* const);
 
-VTable (DSList) {
-    char*   (*ToString) (const DSList* const);
-    bool    (*Equals) (DSObject* const, DSObject* const);
-    int     (*GetHashCode) (DSObject* const);
-    void    (*Dispose) (DSObject* const);
-    // bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-    // bool    (*InstanceEquals) (DSObject* const, DSObject* const);
+vtable (DSList) {
+    char*   (*ToString)     (const DSList* const);
+    bool    (*Equals)       (DSObject* const, DSObject* const);
+    int     (*GetHashCode)  (DSObject* const);
+    void    (*Dispose)      (DSObject* const);
     int     (*Length)       (const DSList* const);
     bool    (*IsEmpty)      (DSList* const);
     bool    (*Contains)     (DSList* const, Any);
     void    (*Clear)        (DSList* const);
     void    (*Add)          (DSList* const, Any);
     Any     (*Remove)       (DSList* const);
-
-    int (*Insert) (DSList* const, Any, DSList_Compare);
-    void (*Iterate) (DSList* const, DSList_Iterator);
+    int     (*Insert)       (DSList* const, Any, DSList_Compare);
+    void    (*Iterate)      (DSList* const, DSList_Iterator);
     
 };
 
-Singleton ($DSList) {
+class (DSList) {
     DSList*   (*Create) ();
 };
 

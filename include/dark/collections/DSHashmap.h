@@ -49,7 +49,7 @@ SOFTWARE.
 typedef int (^DSHashmap_Iterator)(Any, Any);
 
 /* We need to keep keys and values */
-class (DSHashmapNode)
+ivar (DSHashmapNode)
 {
 	char* key;
 	int inUse;
@@ -58,7 +58,7 @@ class (DSHashmapNode)
 
 /* A hashmap has some maximum size and current size,
  * as well as the data to hold. */
-Ivar (DSHashmap) {
+ivar (DSHashmap) {
     Class isa;
 	int tableSize;
 	int size;
@@ -77,7 +77,7 @@ typedef UInt    (*DSHashmapHashInt)     (const DSHashmap* const, char*);
 typedef int     (*DSHashmapHash)        (const DSHashmap* const, char*);
 typedef int     (*DSHashmapRehash)      (const DSHashmap* const);
 
-VTable (DSHashmap) {
+vtable (DSHashmap) {
     char*   (*ToString) (const DSHashmap* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
@@ -134,7 +134,7 @@ VTable (DSHashmap) {
 
 } ;
 
-Singleton ($DSHashmap) {
+class (DSHashmap) {
     DSHashmap*(*Create) ();
 };
 

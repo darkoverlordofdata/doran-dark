@@ -46,7 +46,7 @@ $end;
 DSCollection* DSCollection_init(DSCollection* const this)
 {
     DSObject_init(this);
-    this->isa = objc_getClass("DSCollection");
+    this->isa = getDSCollectionIsa();
     return this;
 }
 
@@ -55,7 +55,7 @@ DSCollection* DSCollection_init(DSCollection* const this)
  */
 int overload Length(DSCollection* const this)
 {
-    return Vptr(DSCollection)->Length(this);
+    return _vptr(this)->Length(this);
 }
 int DSCollection_Length(DSCollection* const this)
 {
@@ -64,7 +64,7 @@ int DSCollection_Length(DSCollection* const this)
 
 void Collection_Add(DSCollection* const this, Any data)
 {
-    Vptr(DSCollection)->Add(this, data);
+    _vptr(this)->Add(this, data);
 }
 void DSCollection_Add(DSCollection* const this, Any data)
 {

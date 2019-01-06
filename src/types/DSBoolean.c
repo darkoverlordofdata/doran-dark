@@ -69,9 +69,8 @@ DSBoolean* NewDSBoolean(bool value) {
 }
 
 DSBoolean* DSBoolean_init(DSBoolean* this, bool value) {
-    // DSObject_init(this);
     DSComparable_init(this);
-    this->isa = objc_getClass("DSBoolean");
+    this->isa = getDSBooleanIsa();
     this->value = value;
     return this;
 }

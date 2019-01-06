@@ -61,7 +61,7 @@ DSDouble* NewDSDouble(double value) {
 DSDouble* DSDouble_init(DSDouble* const this, double value)
 {
     DSNumber_init(this);
-    this->isa = objc_getClass("DSDouble");
+    this->isa = getDSDoubleIsa();
     this->value = value;
     return this;
 }

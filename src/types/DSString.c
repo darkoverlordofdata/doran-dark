@@ -72,7 +72,7 @@ DSString* $(const char* const str) {
 DSString* DSString_init(DSString* const this, char* value)
 {
     DSComparable_init(this);
-    this->isa = objc_getClass("DSString");
+    this->isa = getDSStringIsa();
     this->value = strdup(value);
     this->length = strlen(value);
     return this;
@@ -138,7 +138,7 @@ DSString* DSString_Concat(DSString* this, DSString* other) {
 }
 
 bool DSString_Contains(DSString* this, DSString* s) {
-    return Vptr(DSString)->IndexOf(this, s, 0) > -1;
+    return _vptr(this)->IndexOf(this, s, 0) > -1;
 }
 
 DSString* DSString_CopyOf(DSString* this) {

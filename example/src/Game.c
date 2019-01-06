@@ -12,18 +12,42 @@
 #include <GameObject.h>
 #include <BallObject.h>
 
+$implementation(Game);
+
+$method(ToString,           (GameToString)ToString, "$@:v");
+$method(Equals,             DSObject_Equals, "B@:@@");
+$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
+$method(Dispose,            DSObject_Dispose, "v@:v");
+
+$method(Start,              Start, "@@:v");
+$method(ProcessInput,       ProcessInput, "@@:v"); 
+$method(Update,             Update, "@@:f");
+$method(Render,             Render, "@@:f");
+$method(DoCollisions,       DoCollisions, "@@:v");
+$method(ResetLevel,         ResetLevel, "@@:v");
+$method(ResetPlayer,        ResetPlayer, "@@:v");
+$method(SetKey,             SetKey, "@@:iB");
+$method(SetState,           SetState, "@@:i");
+
+$ivar("State", sizeof(GameState), "i");
+$ivar("Keys", sizeof(bool)*1024, "B");
+$ivar("Width", sizeof(GLuint), "I");
+$ivar("Height", sizeof(GLuint), "I");
+$ivar("Levels", sizeof(id), "@");
+$ivar("Level", sizeof(GLuint), "I");
+
+$end;
 
 const Vec2 ZERO = { 0, 0 };
 const Vec3 WHITE = { 1, 1, 1 };
 
-extern struct ResourceManagerClass* Resources;
 // Game-related State data
 SpriteRenderer* Renderer;
 GameObject* Player;
 BallObject* Ball;
 
 // Defines a Collision Result Tuple
-class (Collision) 
+ivar (Collision) 
 {
     bool first;
     Direction second; 
@@ -50,32 +74,39 @@ static const Collision* Collision_init(
     return this;
 }
 
-Collision* New_Collision(bool first, Direction second, Vec2 third)
+Collision* NewCollision(bool first, Direction second, Vec2 third)
 {
     return Collision_init(DSMalloc(sizeof(Collision)), first, second, third);
 }
 
-
 /**
- * Game
+ * Create Game instance
  * 
  * @param Width of screen
  * @param Height of screen
  * 
  */
+Game* NewGame(int Width, int Height) { 
+    return Game_init(Game_alloc(), Width, Height); 
+}
+
 Game* Game_init(
     Game* const this, 
     int Width, 
     int Height)
 {
 	DSObject_init(this);
-    this->isa = ISA(Game);
-    this->Levels = $DSArray(4);
+    this->isa = getGameIsa();
+    this->Levels = NewDSArray(4);
     this->Level = 0;
     this->State = GAME_ACTIVE;
     this->Width = Width;
     this->Height = Height;
     return this;
+}
+
+Game* Game_alloc() {
+    return DSMalloc(getGameSize());
 }
 
 void SetKey(Game* this, int key, bool value)
@@ -93,39 +124,37 @@ void SetState(Game* this, GameState state)
  */
 void overload Start(Game* this)
 {
-    // Load shaders
-    Resources->LoadShader("shaders/sprite.vs", "shaders/sprite.frag", "sprite");
+   // Load shaders
+    $ResourceManager.LoadShader("shaders/sprite.vs", "shaders/sprite.frag", "sprite");
     // Configure shaders
     Mat projection = glm_ortho(0, (GLfloat)this->Width, (GLfloat)this->Height, 0, -1, 1);
-    Shader* shader = Resources->GetShader("sprite");
+    Shader* shader = $ResourceManager.GetShader("sprite");
     Use(shader);
     SetInteger(shader, "sprite", 0);
     SetMatrix4(shader, "projection", &projection);
  
     // Load textures
-    Resources->LoadTexture("textures/block.png", false, "block");
-    Resources->LoadTexture("textures/background.jpg", false, "background");
-    Resources->LoadTexture("textures/block.png", false, "block");
-    Resources->LoadTexture("textures/block_solid.png", false, "block_solid");
-    Resources->LoadTexture("textures/awesomeface.png", true, "face");
-    Resources->LoadTexture("textures/paddle.png", true, "paddle");
+    $ResourceManager.LoadTexture("textures/block.png", false, "block");
+    $ResourceManager.LoadTexture("textures/background.jpg", false, "background");
+    $ResourceManager.LoadTexture("textures/block.png", false, "block");
+    $ResourceManager.LoadTexture("textures/block_solid.png", false, "block_solid");
+    $ResourceManager.LoadTexture("textures/awesomeface.png", true, "face");
+    $ResourceManager.LoadTexture("textures/paddle.png", true, "paddle");
     // Set render-specific controls
-    Renderer = $SpriteRenderer(Resources->GetShader("sprite"));
+    Renderer = NewSpriteRenderer($ResourceManager.GetShader("sprite"));
     // Load levels
 
-    Add(this->Levels, $GameLevel("levels/one.lvl", this->Width, this->Height * 0.5));
-    Add(this->Levels, $GameLevel("levels/two.lvl", this->Width, this->Height * 0.5));
-    Add(this->Levels, $GameLevel("levels/three.lvl", this->Width, this->Height * 0.5));
-    Add(this->Levels, $GameLevel("levels/four.lvl", this->Width, this->Height * 0.5));
-    this->Level = 0;
-        
-
+    DSLog("Game Start 1");
+    Add(this->Levels, NewGameLevel("levels/one.lvl", this->Width, this->Height * 0.5));
+    Add(this->Levels, NewGameLevel("levels/two.lvl", this->Width, this->Height * 0.5));
+    Add(this->Levels, NewGameLevel("levels/three.lvl", this->Width, this->Height * 0.5));
+    Add(this->Levels, NewGameLevel("levels/four.lvl", this->Width, this->Height * 0.5));
 
     // Configure game objects
     Vec2 playerPos = (Vec2){ this->Width / 2 - PLAYER_SIZE.x / 2, this->Height - PLAYER_SIZE.y };
-    Player = $GameObject("player", playerPos, PLAYER_SIZE, Resources->GetTexture("paddle"), WHITE);
+    Player = NewGameObject("player", playerPos, PLAYER_SIZE, $ResourceManager.GetTexture("paddle"), WHITE);
     Vec2 ballPos = playerPos + (Vec2){ PLAYER_SIZE.x / 2 - BALL_RADIUS, -BALL_RADIUS * 2 };
-    Ball = $BallObject(ballPos, BALL_RADIUS, INITIAL_BALL_VELOCITY, Resources->GetTexture("face"));
+    Ball = NewBallObject(ballPos, BALL_RADIUS, INITIAL_BALL_VELOCITY, $ResourceManager.GetTexture("face"));
 }
 
 /**
@@ -194,7 +223,7 @@ void overload Render(Game* this)
     {
         // Draw background
         Vec2 size = { this->Width, this->Height };
-        DrawSprite(Renderer, Resources->GetTexture("background"), ZERO, size, 0.0f, WHITE);
+        DrawSprite(Renderer, $ResourceManager.GetTexture("background"), ZERO, size, 0.0f, WHITE);
         GameLevel* level = Get(this->Levels, this->Level);
         Draw(level, Renderer);
         Draw(Player, Renderer);
@@ -325,9 +354,9 @@ static Collision* CheckCollision(
     difference = closest - center;
     
     if (glm_length(difference) < one->Radius) // not <= since in that case a collision also occurs when object one exactly touches object two, which they are at the end of each collision resolution stage.
-        return New_Collision(true, ArrayDirection(difference), difference);
+        return NewCollision(true, ArrayDirection(difference), difference);
     else
-        return New_Collision(false, UP, (Vec2){ 0, 0 });
+        return NewCollision(false, UP, (Vec2){ 0, 0 });
 }
 
 
@@ -403,35 +432,8 @@ void overload DoCollisions(Game* this)
 /**
  * ToString
  */
-char* overload ToString(struct Game* const this)
+char* overload ToString(const Game* const this)
 {
     return "Game";
 }
-
-/**
- * Create Game instance
- * 
- * @param Width of screen
- * @param Height of screen
- * 
- */
-Game* $Game(int Width, int Height) { 
-    return Game_init(class_alloc(Game), Width, Height); 
-}
-
-/**
- * Game Class Metadata
- */
-DSDefine(Game, DSObject, cls, {
-    cls->Create         = $Game;
-    cls->ToString       = ToString;
-    cls->Start          = Start;
-    cls->ProcessInput   = ProcessInput;
-    cls->Update         = Update;
-    cls->Render         = Render;
-    cls->DoCollisions   = DoCollisions;
-    cls->ResetLevel     = ResetLevel;
-    cls->ResetPlayer    = ResetPlayer;
-    cls->SetKey         = SetKey;
-});
 

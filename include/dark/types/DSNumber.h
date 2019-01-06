@@ -41,7 +41,7 @@ SOFTWARE.
 /**
  * Object class
  */
-Ivar (DSNumber) {
+ivar (DSNumber) {
     Class isa;
 };
 
@@ -51,7 +51,7 @@ typedef char*   (*DSNumberToString)  (const DSNumber* const);
 /**
  * Object metaclass
  */
-VTable (DSNumber) {
+vtable (DSNumber) {
     char*   (*ToString) (DSNumber* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
@@ -68,9 +68,10 @@ VTable (DSNumber) {
     
 };
 
-Singleton ($DSNumber) {
+class (DSNumber) {
     DSNumber* (*Create) ();
 };
+
 
 int DSNumber_CompareTo(DSNumber* const, DSNumber*);
 bool DSNumber_Equals(DSNumber* const, DSNumber*);

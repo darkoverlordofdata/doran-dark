@@ -7,6 +7,19 @@
 ** option) any later version.
 ******************************************************************/
 #include <SpriteRenderer.h>
+$implementation(SpriteRenderer);
+
+$method(ToString,           (SpriteRendererToString)ToString, "$@:v");
+$method(Equals,             DSObject_Equals, "B@:@@");
+$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
+$method(Dispose,            DSObject_Dispose, "v@:v");
+$method(DrawSprite,         DrawSprite, "@@:@!!f!");
+
+$ivar(shader, sizeof(id), "@");
+$ivar(VAO, sizeof(GLuint), "I");
+
+$end;
+
 
 /**
  * SpriteRenderer
@@ -14,15 +27,23 @@
  * @param shader to use for rendering
  * 
  */
+SpriteRenderer* NewSpriteRenderer(Shader* shader) { 
+    return SpriteRenderer_init(SpriteRenderer_alloc(), shader);
+}
+
 SpriteRenderer*  SpriteRenderer_init(
     SpriteRenderer* const this, 
     Shader* shader)
 {
 	DSObject_init(this);
-    this->isa = ISA(SpriteRenderer);
+    this->isa = getSpriteRendererIsa();
     this->shader = shader;
     initRenderData(this);
     return this;
+}
+
+SpriteRenderer* SpriteRenderer_alloc() {
+    return DSMalloc(getSpriteRendererSize());
 }
 
 /**
@@ -100,22 +121,9 @@ static void initRenderData(SpriteRenderer* this)
 /**
  * ToString
  */
-char* overload ToString(SpriteRenderer* const this)
+char* overload ToString(const SpriteRenderer* const this)
 {
     return "SpriteRenderer";
 }
 
-SpriteRenderer* $SpriteRenderer(Shader* shader) { 
-    return SpriteRenderer_init(class_alloc(SpriteRenderer), shader);
-}
-
-/**
- * SpriteRenderer Class Metadata
- */
-DSDefine(SpriteRenderer, DSObject, cls, {
-    cls->Create             = $SpriteRenderer;
-    cls->ToString           = ToString;
-    cls->DrawSprite         = DrawSprite;
-    cls->Dispose            = Dispose;
-});
 

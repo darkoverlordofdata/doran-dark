@@ -38,25 +38,23 @@ SOFTWARE.
 #define AsDSChar(x) (IsDSChar(x) ? (DSChar* )x : nullptr)
 
 /**
- * Char class
+ * Char instance variables
  */
-Ivar (DSChar) 
+ivar (DSChar) 
 {
     Class isa;
     char value;
 };
 
 /**
- * Char metaclass
+ * Char vtable
  */
-VTable (DSChar)
+vtable (DSChar)
 {
     char*   (*ToString) (DSChar* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
-    // bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-    // bool    (*InstanceEquals) (DSObject* const, DSObject* const);
     int     (*CompareTo) (DSComparable* const, DSComparable* const);
     int     (*IntValue) (DSChar* const);
     long    (*LongValue) (DSChar* const);
@@ -67,7 +65,7 @@ VTable (DSChar)
 
 };
 
-Singleton ($DSChar) {
+class (DSChar) {
     DSChar*(*Create) (char value);
 };
 

@@ -33,26 +33,26 @@ static const Vec3 COLOR5 = { 1.0f, 1.0f, 1.0f };
 
 /// GameLevel holds all Tiles as part of a Breakout level and 
 /// hosts functionality to Load/render levels from the harddisk.
-class (GameLevel)
+ivar (GameLevel)
 {
-    struct GameLevelClass* isa;
+    Class isa;
     DSArray* Bricks;
 };
 
-struct GameLevelClass
+typedef char*   (*GameLevelToString)  (const GameLevel* const);
+typedef void   (*GameLevelDraw)  (GameLevel* const, SpriteRenderer* renderer);
+
+
+class (GameLevel) {
+    GameLevel*  (*Create) (const GLchar *file, int levelWidth, int levelHeight);
+};
+
+vtable (GameLevel)
 {
-    Class  isa;
-    Class  superclass;
-    char*   name;
-    long    version, info, instance_size;
-    char*   (*ToString) (GameLevel* const);
+    char*   (*ToString) (const GameLevel* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
-    bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-    bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-    GameLevel*  (*Create) (const GLchar *file, int levelWidth, int levelHeight);
-
     // Loads level from file
     GameLevel*   (*Load)         (GameLevel* const, const GLchar *file, int levelWidth, int levelHeight);
     // Render level
@@ -60,7 +60,7 @@ struct GameLevelClass
     // Check if the level is completed (all non-solid tiles are des troyed)
     bool        (*IsCompleted)  (GameLevel* const *);
     
-} GameLevelClass;
+};
 
 /**
  * GameLevel API
@@ -68,7 +68,9 @@ struct GameLevelClass
 GameLevel* overload Load(GameLevel*, const GLchar *file, int levelWidth, int levelHeight);
 void overload Draw(GameLevel* const, SpriteRenderer* renderer);
 bool overload IsCompleted(GameLevel*);
-char* overload ToString(GameLevel*);
+char* overload ToString(const GameLevel*);
 static void init(struct GameLevel *const this, DSArray* tileData, GLuint levelWidth, GLuint levelHeight);
-GameLevel* $GameLevel(const GLchar *file, int levelWidth, int levelHeight); 
-
+GameLevel* NewGameLevel(const GLchar *file, int levelWidth, int levelHeight); 
+GameLevel* GameLevel_init(GameLevel* const this, const GLchar *file, int levelWidth, int levelHeight);
+GameLevel* GameLevel_alloc();
+GameLevel* NewGameLevel(const GLchar *file, int levelWidth, int levelHeight);

@@ -5,7 +5,6 @@
 #include <Block.h>
 #include "darkunit.h"
 
-
 void TestHashMap();
 char keys[12][7] = {
     "key1", "key2", "AbCdEf",
@@ -13,6 +12,7 @@ char keys[12][7] = {
     "key7", "key8", "key9",
     "keyA", "keyB", "keyC",
 };
+
 
 int main(int argc, char **argv) {
 

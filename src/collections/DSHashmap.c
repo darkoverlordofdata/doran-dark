@@ -200,7 +200,7 @@ DSHashmap* NewDSHashmap() {
 DSHashmap* DSHashmap_init(DSHashmap* const this)
 {
     DSObject_init(this);
-    this->isa = objc_getClass("DSHashmap");
+    this->isa = getDSHashmapIsa();
 
     this->data = DSCalloc(INITIAL_SIZE, sizeof(DSHashmapNode));
 	this->tableSize = INITIAL_SIZE;

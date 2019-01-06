@@ -36,7 +36,7 @@ SOFTWARE.
 #define IsDSArray(x) (x->isa == &$DSArray)
 #define AsDSArray(x) (IsDSArray(x) ? (DSArray*)x : nullptr)
 
-Ivar (DSArray) {
+ivar (DSArray) {
     Class isa;
     int length;
     void **data;
@@ -59,13 +59,12 @@ typedef char*   (*DSArrayToString)  (const DSArray* const);
 /**
  * Array metaclass
  */
-VTable (DSArray) {
-    char*   (*ToString) (const DSArray* const);
-    bool    (*Equals) (const DSObject* const, struct Object  *const);
-    int     (*GetHashCode) (const DSObject* const);
-    void    (*Dispose) (DSObject* const);
-    // bool    (*ReferenceEquals) (const DSObject* const, DSObject* const);
-    // bool    (*InstanceEquals) (const DSObject* const, DSObject* const);
+vtable (DSArray) {
+    char*   (*ToString)     (const DSArray* const);
+    bool    (*Equals)       (const DSObject* const, struct Object  *const);
+    int     (*GetHashCode)  (const DSObject* const);
+    void    (*Dispose)      (DSObject* const);
+
     int     (*Length)       (const DSArray* const);
     bool    (*IsEmpty)      (const DSArray* const);
     bool    (*Contains)     (const DSArray* const, Any);
@@ -79,7 +78,7 @@ VTable (DSArray) {
     
 };
 
-Singleton ($DSArray) {
+class (DSArray) {
     DSArray*  (*Create) (int);
 };
 
@@ -88,7 +87,8 @@ Singleton ($DSArray) {
  * Array API
  */
 DSArray* overload NewDSArray(void);
-DSArray* overload NewDSArray(int, ...);
+DSArray* overload NewDSArray(int);
+// DSArray* overload NewDSArray(int, ...);
 
 char* overload ToString(const DSArray* const);
 void overload Dispose(DSArray* const);

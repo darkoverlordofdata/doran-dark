@@ -10,6 +10,29 @@
 
 static void checkCompileErrors(Shader* this, GLuint object, char* type);
 
+$implementation(Shader);
+
+$method(ToString,           (ShaderToString)ToString, "$@:v");
+$method(Equals,             DSObject_Equals, "B@:@@");
+$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
+$method(Dispose,            DSObject_Dispose, "v@:v");
+
+$method(Use,                Use, "@@:v");
+$method(Compile,            Compile, "@@:**");
+$method(SetFloat,           SetFloat, "@@:*f");
+$method(SetInteger,         SetInteger, "@@:*i");
+$method(SetArray2f,         SetArray2f, "@@:*ff");
+$method(SetArray2,          SetArray2, "@@:*!");
+$method(SetArray3f,         SetArray3f, "@@:*fff");
+$method(SetArray3,          SetArray3, "@@:*!");
+$method(SetArray4f,         SetArray4f, "@@:*ffff");
+$method(SetArray4,          SetArray4, "@@:*!");
+$method(SetMatrix4,         SetMatrix4, "@@:*!");
+$method(SetMatrix,          SetMatrix, "@@:*!");
+
+$ivar(Id, sizeof(GLuint), "I");
+$end;
+
 const char* VERSION = "#version 300 es\n";
 const char* HEADER = "#\n"
                     "#ifdef GL_ES\n"
@@ -19,11 +42,20 @@ const char* HEADER = "#\n"
 /**
  * Shader
  */
+Shader* NewShader() { 
+    return Shader_init(Shader_alloc());
+}
+
+
 Shader* Shader_init(Shader* const this)
 {
 	DSObject_init(this);
-    this->isa = ISA(Shader);
+    this->isa = getShaderIsa();
     return this;
+}
+
+Shader* Shader_alloc() {
+    return DSMalloc(getShaderSize());
 }
 
 /**
@@ -192,31 +224,8 @@ static void checkCompileErrors(
 /**
  * ToString
  */
-char* overload ToString(Shader* const this)
+char* overload ToString(const Shader* const this)
 {
     return "Shader";
 }
-
-Shader* $Shader() { 
-    return Shader_init(class_alloc(Shader));
-}
-
-/**
- * Shader Class Metadata
- */
-DSDefine(Shader, DSObject, cls, {
-    cls->Create         = $Shader;
-    cls->ToString       = ToString;
-    cls->Use            = Use;
-    cls->Compile        = Compile;
-    cls->SetFloat       = SetFloat;
-    cls->SetInteger     = SetInteger;
-    cls->SetArray2f     = SetArray2f;
-    cls->SetArray2      = SetArray2;
-    cls->SetArray3f     = SetArray3f;
-    cls->SetArray3      = SetArray3;
-    cls->SetArray4f     = SetArray4f;
-    cls->SetArray4      = SetArray4;
-    cls->SetMatrix4     = SetMatrix4;
-});
 

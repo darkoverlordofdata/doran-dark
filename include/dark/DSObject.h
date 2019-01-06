@@ -37,7 +37,7 @@ SOFTWARE.
  */
 // typedef struct DSObject DSObject;
 // struct DSObject {
-Ivar (DSObject) {
+ivar (DSObject) {
     Class isa;
 };
 /** 
@@ -56,7 +56,7 @@ typedef bool    (*DSObjectInstanceEquals) (const DSObject* const, const DSObject
  */
 // struct DSObjectVTable DSObjectVTable;
 // struct DSObjectVTable {
-VTable (DSObject) {
+vtable (DSObject) {
     DSObjectToString        ToString;
     DSObjectEquals          Equals;
     DSObjectGetHashCode     GetHashCode;
@@ -70,7 +70,7 @@ VTable (DSObject) {
  */
 // struct $DSObject $DSObject;
 // struct $DSObject {
-Singleton ($DSObject) {
+class (DSObject) {
     DSObjectCreate          Create;
     DSObjectReferenceEquals ReferenceEquals;
     DSObjectInstanceEquals  InstanceEquals;
@@ -81,10 +81,10 @@ Singleton ($DSObject) {
 //=======================================================================//
 
 /**
- * Class Ivar
+ * Class ivar
  * 
  */
-Ivar (DSClass) {
+ivar (DSClass) {
     Class isa;
 };
 /** 
@@ -98,9 +98,11 @@ typedef void    (*DSClassDispose) (DSClass* const);
 typedef bool    (*DSClassReferenceEquals) (const DSClass* const, const DSClass* const);
 typedef bool    (*DSClassInstanceEquals) (const DSClass* const, const DSClass* const);
 /**
- * DSClass VTable
+ * DSClass vtable
  */
-VTable (DSClass) {
+vtable (DSClass) {
+// struct DSClassVTable DSClassVTable;
+// struct DSClassVTable {
     DSClassToString        ToString;
     DSClassEquals          Equals;
     DSClassGetHashCode     GetHashCode;

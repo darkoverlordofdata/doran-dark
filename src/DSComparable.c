@@ -46,12 +46,12 @@ $end;
 DSComparable* DSComparable_init(DSComparable* const this)
 {
     DSObject_init(this);
-    this->isa = objc_getClass("DSComparable");
+    this->isa = getDSComparableIsa();
     return this;
 }
 
 int overload CompareTo(const DSComparable* const this, const DSComparable* const other) {
-    return Vptr(DSComparable)->CompareTo(this, other);
+    return _vptr(this)->CompareTo(this, other);
 }
 
 int DSComparable_CompareTo(const DSComparable* const this, const DSComparable* const other) {
@@ -63,7 +63,7 @@ char* overload ToString(const DSComparable* const this) {
 }
 
 char* DSComparable_ToString(const DSComparable* const this) {
-    Vptr(DSComparable)->ToString(this);
+    _vptr(this)->ToString(this);
 }
 
 

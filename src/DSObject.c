@@ -39,23 +39,11 @@ $method(ReferenceEquals,    ReferenceEquals, "@:v");
 $method(InstanceEquals,     InstanceEquals, "$@:v");
 $end;
 
-/**
- * Define the DSClass implementation
- */
-$implementation(DSClass);
-$method(ToString,           DSObject_ToString, "$@:v");
-$method(Equals,             DSObject_Equals, "B@:@@");
-$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
-$method(Dispose,            DSObject_Dispose, "v@:v");
-$method(ReferenceEquals,    ReferenceEquals, "@:v");
-$method(InstanceEquals,     InstanceEquals, "$@:v");
-$end;
-
 /**class_getAlignedInstanceSize
  * DSObject constructor
  */
 DSObject* DSObject_init(DSObject* this) {
-    this->isa = objc_getClass("DSObject");
+    this->isa = getDSObjectIsa();
     return this;
 }
 
@@ -81,7 +69,7 @@ bool InstanceEquals(const DSObject* const objA, const DSObject* const objB)
 }
 
 void overload Dispose(DSObject* const this){
-    return Vptr(DSObject)->Dispose(this);
+    return _vptr(this)->Dispose(this);
 }
 /**
  * virtual Dispose method
@@ -94,7 +82,7 @@ void DSObject_Dispose(DSObject* const this){}
  */
 const char* overload ToString(const DSObject* const this)
 {
-    return Vptr(DSObject)->ToString(this);
+    return _vptr(this)->ToString(this);
 }
 /**
  * virtual ToString method
@@ -116,7 +104,7 @@ const char *DSClass_ToString(const DSClass* const this)
  */
 bool overload Equals(const DSObject* const this, const DSObject* const that)
 {
-    return Vptr(DSObject)->Equals(this, that);
+    return _vptr(this)->Equals(this, that);
 }
 /**
  * virtual Equals method
@@ -131,7 +119,7 @@ bool DSObject_Equals(DSObject* const this, DSObject* const that)
  */
 int overload GetHashCode(const DSObject* const this)
 {
-    return Vptr(DSObject)->GetHashCode(this);
+    return _vptr(this)->GetHashCode(this);
 }
 /**
  * virtual GetHashCode method

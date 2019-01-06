@@ -10,9 +10,29 @@
 #include <stdio.h>
 #include <GameLevel.h>
 
+$implementation(GameLevel);
+
+$method(ToString,           (GameLevelToString)ToString, "$@:v");
+$method(Equals,             DSObject_Equals, "B@:@@");
+$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
+$method(Dispose,            DSObject_Dispose, "v@:v");
+$method(Load,               Load, "@@:*ii");
+$method(Draw,               (GameLevelDraw)Draw, "v@:@");
+$method(IsCompleted,        IsCompleted, "B@:v");
+$ivar(Bricks, sizeof(id), "@");
+
+$end;
+
 /**
  * GameLevel
  */
+GameLevel* NewGameLevel(
+    const GLchar *file, 
+    int levelWidth, 
+    int levelHeight) { 
+    return GameLevel_init(GameLevel_alloc(), file, levelWidth, levelHeight); 
+}
+
 GameLevel* GameLevel_init(
     GameLevel* const this, 
     const GLchar *file, 
@@ -20,10 +40,16 @@ GameLevel* GameLevel_init(
     int levelHeight)
 {
 	DSObject_init(this);
-    this->isa = ISA(GameLevel);
-    this->Bricks = $DSArray(200);
+    this->isa = getGameLevelIsa();
+    this->Bricks = NewDSArray(200);
+    DSLog("Game GameLevel_init %s", file);
     Load(this, file, levelWidth, levelHeight);
+    DSLog("Game GameLevel_init 2");
     return this;
+}
+
+GameLevel* GameLevel_alloc() {
+    return DSMalloc(getGameLevelSize());
 }
 
 /**
@@ -48,24 +74,30 @@ GameLevel* overload Load(
    
     char* path = join("assets/", file);
     char* line;
+    DSLog("path = %s", path);
     FILE* fstream = fopen(path, "r");
-    DSArray* tileData = $DSArray(20);
-    DSArray* row = $DSArray(20);
+    DSArray* tileData = NewDSArray(20);
+    DSArray* row = NewDSArray(20);
+    DSLog("start row len = %d", Length(row));
+    DSLog("start row len = %d", row->length);
+    DSLog("start row cap = %d", row->capacity);
     int i;
     char c;
     if (fstream)
     {
         while (fscanf(fstream, "%d%c", &i, &c) != EOF)
         {
+            DSLog("row len = %d", Length(row));
             Add(row, (Any)i);
             if (c == '\n')
             {
                 Add(tileData, (Any)row);
-                row = $DSArray(20);
+                row = NewDSArray(20);
             }
         }
 
         if (Length(tileData) > 0) {
+            DSLog("init - %d,%d", levelWidth, levelHeight);
             init(this, tileData, levelWidth, levelHeight);
         }
     }
@@ -122,10 +154,14 @@ static void init(
     GLuint levelWidth, 
     GLuint levelHeight)
 {
+    DSLog("GameLevel::init 0");
     // Calculate dimensions
     GLuint height = Length(tileData);
+    DSLog("GameLevel::init 1 - %d", height);
     DSArray* row = tileData->data[0];
+    DSLog("GameLevel::init 2");
     GLuint width = Length(row); // Note we can index vector at [0] since this function is only called if height > 0
+    DSLog("GameLevel::init 3");
     GLfloat unit_width = levelWidth / (GLfloat)width, unit_height = levelHeight / height; 
     // Initialize level tiles based on tileData		
     DSLog("(%d,%d)", height, width);
@@ -152,15 +188,15 @@ static void init(
             
             if (blockType == 1) // Solid
             {
-                struct Texture2D *tex = Resources->GetTexture("block_solid");
-                GameObject* obj = $GameObject("tile", pos, size, tex, color);
+                struct Texture2D *tex = $ResourceManager.GetTexture("block_solid");
+                GameObject* obj = NewGameObject("tile", pos, size, tex, color);
                 obj->IsSolid = true;
                 Add(this->Bricks, obj);
             }
             else if (blockType > 1)	// Non-solid; now determine its color based on level data
             {
-                struct Texture2D *tex = Resources->GetTexture("block");
-                GameObject* obj = $GameObject("tile", pos, size, tex, color);
+                struct Texture2D *tex = $ResourceManager.GetTexture("block");
+                GameObject* obj = NewGameObject("tile", pos, size, tex, color);
                 Add(this->Bricks, obj);
             }
         }
@@ -170,25 +206,8 @@ static void init(
 /**
  * ToString
  */
-char* overload ToString(GameLevel* const this)
+char* overload ToString(const GameLevel* const this)
 {
     return "GameLevel";
 }
-
-GameLevel* $GameLevel(
-    const GLchar *file, 
-    int levelWidth, 
-    int levelHeight) { 
-    return GameLevel_init(class_alloc(GameLevel), file, levelWidth, levelHeight); 
-}
-/**
- * Register the GameLevel Class runtime Metadata
- */
-DSDefine(GameLevel, DSObject, cls, {
-    cls->Create         = $GameLevel;
-    cls->ToString       = ToString;
-    cls->Load           = Load;
-    cls->Draw           = Draw;
-    cls->IsCompleted    = IsCompleted;
-});
 

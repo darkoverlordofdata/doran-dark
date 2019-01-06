@@ -56,7 +56,7 @@ extern struct hashmap* class_hash;
 typedef struct objc_cache 		*Cache;
 typedef struct objc_category 	*Category;
 typedef struct objc_class 		*Class;
-typedef struct objc_ivar 		*Ivar;
+typedef struct objc_ivar 		*ivar;
 typedef struct objc_method 		*Method;
 typedef struct objc_module 		*Module;
 typedef struct objc_selector 	*SEL;
@@ -166,11 +166,11 @@ Class object_setClass(id obj, Class cls);
 const char *object_getClassName(id obj);
 void *object_getIndexedIvars(id obj);
 
-id object_getIvar(id obj, Ivar ivar);
-void object_setIvar(id obj, Ivar ivar, id value);
+id object_getIvar(id obj, ivar ivar);
+void object_setIvar(id obj, ivar ivar, id value);
 
-Ivar object_setInstanceVariable(id obj, const char *name, void *value);
-Ivar object_getInstanceVariable(id obj, const char *name, void **outValue);
+ivar object_setInstanceVariable(id obj, const char *name, void *value);
+ivar object_getInstanceVariable(id obj, const char *name, void **outValue);
 
 Class objc_getClass(const char *name);
 id objc_getMetaClass(const char *name);
@@ -195,10 +195,10 @@ size_t class_getInstanceSize(Class cls);
 size_t class_getAlignedInstanceSize(Class cls);
 Class _calloc_class(size_t size);
 
-Ivar class_getInstanceVariable(Class cls, const char *name);
-Ivar class_getClassVariable(Class cls, const char *name);
-Ivar class_setClassVariable(Class cls, const char *name);
-Ivar *class_copyIvarList(Class cls, unsigned int *outCount);
+ivar class_getInstanceVariable(Class cls, const char *name);
+ivar class_getClassVariable(Class cls, const char *name);
+ivar class_setClassVariable(Class cls, const char *name);
+ivar *class_copyIvarList(Class cls, unsigned int *outCount);
 
 Method class_getInstanceMethod(Class cls, SEL name);
 Method class_getClassMethod(Class cls, SEL name);
@@ -247,9 +247,9 @@ struct objc_method_description *method_getDescription(Method m);
 IMP method_setImplementation(Method m, IMP imp);
 void method_exchangeImplementations(Method m1, Method m2);
 
-const char *ivar_getName(Ivar v);
-const char *ivar_getTypeEncoding(Ivar v);
-ptrdiff_t ivar_getOffset(Ivar v);
+const char *ivar_getName(ivar v);
+const char *ivar_getTypeEncoding(ivar v);
+ptrdiff_t ivar_getOffset(ivar v);
 
 const char *property_getName(objc_property_t property);
 const char *property_getAttributes(objc_property_t property);

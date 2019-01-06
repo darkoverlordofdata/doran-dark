@@ -17,25 +17,22 @@
 // General purpsoe shader object. Compiles from file, generates
 // compile/link-time error messages and hosts several utility 
 // functions for easy management.
-class (Shader)
-{
-    struct ShaderClass* isa;
+ivar (Shader) {
+    Class isa;
     GLuint Id; 
 };
 
-struct ShaderClass
-{
-    Class  isa;
-    Class  superclass;
-    char*   name;
-    long    version, info, instance_size;
-    char*   (*ToString) (Shader* const);
+typedef char*   (*ShaderToString)  (const Shader* const);
+
+class (Shader) {
+    Shader* (*Create) (void);
+};
+
+vtable (Shader) {
+    char*   (*ToString) (const Shader* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
-    bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-    bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-    Shader* (*Create) (void);
 
     // Sets the current shader as active
     Shader*  (*Use)          (Shader* const);
@@ -53,7 +50,7 @@ struct ShaderClass
     Shader*  (*SetMatrix4)   (Shader* const, const GLchar *name, GLfloat *matrix);
     Shader*  (*SetMatrix)    (Shader* const, const GLchar *name, GLfloat *matrix);
     
-} ShaderClass;
+};
 
 /**
  * Shader API
@@ -70,5 +67,7 @@ Shader* overload SetArray4f(Shader*, const GLchar *name, GLfloat x, GLfloat y, G
 Shader* overload SetArray4(Shader*, const GLchar *name, const GLfloat* value);
 Shader* overload SetMatrix(Shader*, const GLchar *name,  GLfloat * matrix);
 Shader* overload SetMatrix4(Shader*, const GLchar *name,  GLfloat* matrix);
-char* overload ToString(Shader* const);
-
+char* overload ToString(const Shader* const);
+Shader* Shader_init(Shader* const this);
+Shader* Shader_alloc();
+Shader* NewShader();

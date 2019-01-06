@@ -62,7 +62,7 @@ DSFloat* NewDSFloat(float value) {
 DSFloat* DSFloat_init(DSFloat* const this, float value)
 {
     DSNumber_init(this);
-    this->isa = objc_getClass("DSFloat");
+    this->isa = getDSFloatIsa();
     this->value = value;
     return this;
 }

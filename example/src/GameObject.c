@@ -8,7 +8,25 @@
 ******************************************************************/
 #include <GameObject.h>
 #include <ResourceManager.h>
+$implementation(GameObject);
 
+$method(ToString,           (GameObjectToString)ToString, "$@:v");
+$method(Equals,             DSObject_Equals, "B@:@@");
+$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
+$method(Dispose,            DSObject_Dispose, "v@:v");
+$method(Draw,               Draw, "v@:@");
+
+$ivar(Position,  sizeof(Vec2), "!");
+$ivar(Size, sizeof(Vec2), "!");
+$ivar(Velocity, sizeof(Vec2), "!");
+$ivar(Color, sizeof(Vec3), "!");
+$ivar(Rotation, sizeof(GLfloat), "f");
+$ivar(IsSolid, sizeof(GLfloat), "B");
+$ivar(Destroyed, sizeof(GLfloat), "B");
+$ivar(Sprite, sizeof(GLfloat), "@");
+$ivar(Name, sizeof(GLfloat), "*");
+
+$end;
 /**
  * Constructor
  * 
@@ -17,6 +35,16 @@
  * @param Sprite to display
  * @param Color tiniting color
  */
+GameObject* NewGameObject(
+    char* name, 
+    Vec2 Position, 
+    Vec2 Size, 
+    Texture2D* Sprite, 
+    Vec3 Color) { 
+    return GameObject_init(GameObject_alloc(), name, Position, Size, Sprite, Color);
+}
+
+
 GameObject* GameObject_init(
     GameObject* const this, 
     char* name, 
@@ -26,7 +54,7 @@ GameObject* GameObject_init(
     Vec3 Color)
 {
 	DSObject_init(this);
-    this->isa = ISA(GameObject);
+    this->isa = getGameObjectIsa();
     this->IsSolid = false;
     this->Destroyed = false;
     this->Position = Position;
@@ -38,13 +66,8 @@ GameObject* GameObject_init(
     return this;
 }
 
-GameObject* $GameObject(
-    char* name, 
-    Vec2 Position, 
-    Vec2 Size, 
-    Texture2D* Sprite, 
-    Vec3 Color) { 
-    return GameObject_init(class_alloc(GameObject), name, Position, Size, Sprite, Color);
+GameObject* GameObject_alloc() {
+    return DSMalloc(getGameObjectSize());
 }
 
 /**
@@ -62,18 +85,9 @@ void overload Draw(
 /**
  * ToString
  */
-char* overload ToString(GameObject* const this)
+char* overload ToString(const GameObject* const this)
 {
     return "GameObject";
 } 
 
-
-/**
- * GameObject Class Metadata
- */
-DSDefine(GameObject, DSObject, cls, {
-    cls->Create         = $GameObject;
-    cls->ToString       = ToString;
-    cls->Draw           = Draw;
-});
 

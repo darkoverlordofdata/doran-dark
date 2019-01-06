@@ -42,7 +42,7 @@ SOFTWARE.
 /**
  * Object class
  */
-Ivar (DSInteger) 
+ivar (DSInteger) 
 {
     Class isa;
     int value;
@@ -51,7 +51,7 @@ Ivar (DSInteger)
 /**
  * Object metaclass
  */
-VTable (DSInteger) {
+vtable (DSInteger) {
     char*   (*ToString) (DSInteger* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
@@ -68,7 +68,7 @@ VTable (DSInteger) {
 
 };
 
-Singleton ($DSInteger) {
+class (DSInteger) {
     DSInteger*(*Create) (int value);
 };
 

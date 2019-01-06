@@ -40,7 +40,7 @@ SOFTWARE.
 /**
  * Object class
  */
-Ivar (DSShort) {
+ivar (DSShort) {
     Class isa;
     short value;
 };
@@ -48,7 +48,7 @@ Ivar (DSShort) {
 /**
  * Object metaclass
  */
-VTable (DSShort) {
+vtable (DSShort) {
     char*   (*ToString) (DSShort* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
@@ -65,7 +65,7 @@ VTable (DSShort) {
 
 };
 
-Singleton ($DSShort) {
+class (DSShort) {
     DSShort*  (*Create) (short value);
 };
 

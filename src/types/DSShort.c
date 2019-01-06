@@ -60,7 +60,7 @@ DSShort* NewDSShort(short value) {
 DSShort* DSShort_init(DSShort* const this, short value)
 {
     DSNumber_init(this);
-    this->isa = objc_getClass("DSShort");
+    this->isa = getDSShortIsa();
     this->value = value;
     return this;
 }

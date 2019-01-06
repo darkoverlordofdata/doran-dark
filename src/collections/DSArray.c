@@ -89,7 +89,7 @@ DSArray* overload NewDSArray(void) {
 DSArray* DSArray_init(DSArray* const this, int capacity)
 {
     DSObject_init(this);
-    this->isa = objc_getClass("DSArray");
+    this->isa = getDSArrayIsa();
     this->capacity = capacity == 0 ? ARRAY_INIT_CAPACITY : capacity;
     this->length = 0;
     this->data = DSCalloc(this->capacity, sizeof(Any));
@@ -132,7 +132,7 @@ void Resize(DSArray* const this, int capacity)
 void overload Add(DSArray* const this, const Any item)
 {
     if (this->capacity == this->length) {
-        Vptr(DSArray)->Resize(this, this->capacity * 2);
+        _vptr(this)->Resize(this, this->capacity * 2);
     }
     this->data[this->length++] = item;
 }
@@ -181,7 +181,7 @@ void overload Remove(DSArray* const this, int index)
     this->length--;
 
     if (this->length > 0 && this->length == this->capacity / 4)
-        Vptr(DSArray)->Resize(this, this->capacity / 2);
+        _vptr(this)->Resize(this, this->capacity / 2);
 }
 
 /**

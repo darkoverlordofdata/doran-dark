@@ -15,9 +15,9 @@
 
 // Texture2D is able to store and configure a texture in OpenGL.
 // It also hosts utility functions for easy management.
-class (Texture2D)
+ivar (Texture2D)
 {
-    struct Texture2DClass* isa;
+    Class isa;
     // Holds the Id of the texture object, used for all texture operations to reference to particlar texture
     GLuint Id;
     char* path;
@@ -34,31 +34,31 @@ class (Texture2D)
     GLuint FilterMag;       // Filtering mode if texture pixels > screen pixels
 };
 
-struct Texture2DClass
-{
-    Class  isa;
-    Class  superclass;
-    char*   name;
-    long    version, info, instance_size;
-    char*   (*ToString) (Texture2D* const);
+typedef char*   (*Texture2DToString)  (const Texture2D* const);
+
+class (Texture2D) {
+    Texture2D*  (*Create) (int InternalFormat, int ImageFormat, char* path);
+};
+
+vtable (Texture2D) {
+    char*   (*ToString) (const Texture2D* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
-    bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-    bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-    Texture2D*  (*Create) (int InternalFormat, int ImageFormat, char* path);
 
     // Generates texture from image data
     void    (*Generate)     (Texture2D* const, GLuint width, GLuint height, unsigned char* data);
     // Binds the texture as the current active GL_TEXTURE_2D texture object
     void    (*Bind)         (Texture2D* const);
     
-} Texture2DClass;
+};
 
 /**
  * Texture2D API
  */
 void overload Generate(Texture2D*, GLuint width, GLuint height, unsigned char* data);
 void overload Bind(Texture2D*);
-char* overload ToString(Texture2D* const);
-
+char* overload ToString(const Texture2D* const);
+Texture2D* Texture2D_init(Texture2D* const this, int InternalFormat, int ImageFormat, char* path);
+Texture2D* NewTexture2D(int InternalFormat, int ImageFormat, char* path);
+Texture2D* Texture2D_alloc();

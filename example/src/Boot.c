@@ -32,18 +32,17 @@ SOFTWARE.
  */
 void __attribute__((constructor)) ApplicationLoader() 
 {
-    class_loadBallObject();
-    class_loadGame();
-    class_loadGameLevel();
-    class_loadGameObject();
-    class_loadParticleGenerator();
-    class_loadResourceManager();
-    class_loadShader();
-    class_loadSpriteRenderer();
-    class_loadTexture2D();
-    class_loadResourceManager();
-    #ifdef DEBUG_ON
-    // for (int i=0; DSClass.classes[i] != nullptr; i++) 
-    //     DSLog("%s", DSClass.classes[i]->isa->name);
-    #endif
+
+    Class obj = objc_getClass("DSObject");
+    Class gameObj;
+
+    objc_registerClassPair(gameObj = GameObjectImplementation(obj));
+    objc_registerClassPair(BallObjectImplementation(gameObj));
+    objc_registerClassPair(GameImplementation(obj));
+    objc_registerClassPair(GameLevelImplementation(obj));
+    objc_registerClassPair(ParticleGeneratorImplementation(obj));
+    objc_registerClassPair(ResourceManagerImplementation(obj));
+    objc_registerClassPair(ShaderImplementation(obj));
+    objc_registerClassPair(SpriteRendererImplementation(obj));
+    objc_registerClassPair(Texture2DImplementation(obj));
 }

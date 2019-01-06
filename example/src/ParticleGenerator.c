@@ -12,6 +12,23 @@ static void init(ParticleGenerator* this);
 static GLuint firstUnusedParticle(ParticleGenerator* this);
 static void respawnParticle(ParticleGenerator* this, struct Particle particle, GameObject* object, Vec2 offset);
 
+$implementation(ParticleGenerator);
+
+$method(ToString,           (ParticleGeneratorToString)ToString, "$@:v");
+$method(Equals,             DSObject_Equals, "B@:@@");
+$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
+$method(Dispose,            DSObject_Dispose, "v@:v");
+$method(Update,             Update, "v@:f@i!");
+$method(Draw,               (ParticleGeneratorDraw)Draw, "v@:@");
+
+$ivar(particles, sizeof(id), "@");
+$ivar(amount, sizeof(GLuint), "I");
+$ivar(shader, sizeof(id), "@");
+$ivar(texture, sizeof(id), "@");
+$ivar(VAO, sizeof(GLuint), "I");
+
+$end;
+
 /**
  * ParticleGenerator
  * 
@@ -20,6 +37,13 @@ static void respawnParticle(ParticleGenerator* this, struct Particle particle, G
  * @param amount number of particles to generate
  * 
  */
+ParticleGenerator* NewParticleGenerator(
+    Shader* shader, 
+    Texture2D* texture, 
+    int amount) { 
+    return ParticleGenerator_init(ParticleGenerator_alloc(), shader, texture, amount);
+}
+
 ParticleGenerator* ParticleGenerator_init(
     ParticleGenerator* const this, 
     Shader* shader, 
@@ -27,7 +51,7 @@ ParticleGenerator* ParticleGenerator_init(
     int amount)
 {
 	DSObject_init(this);
-    this->isa = ISA(ParticleGenerator);
+    this->isa = getParticleGeneratorIsa();
     this->shader = shader;
     this->texture = texture;
     this->amount = amount;
@@ -35,6 +59,9 @@ ParticleGenerator* ParticleGenerator_init(
     return this;
 }
 
+ParticleGenerator* ParticleGenerator_alloc() {
+    return DSMalloc(getParticleGeneratorSize());
+}
 /**
  * Update
  * 
@@ -166,25 +193,9 @@ static void respawnParticle(
 /**
  * ToString
  */
-char* overload ToString(ParticleGenerator* const this)
+char* overload ToString(const ParticleGenerator* const this)
 {
     return "ParticleGenerator";
 }
 
-ParticleGenerator* $ParticleGenerator(
-    Shader* shader, 
-    Texture2D* texture, 
-    int amount) { 
-    return ParticleGenerator_init(class_alloc(ParticleGenerator), shader, texture, amount);
-}
-
-/**
- * ParticleGenerator Class Metadata
- */
-DSDefine(ParticleGenerator, DSObject, cls, {
-    cls->Create         = $ParticleGenerator;
-    cls->ToString       = ToString;
-    cls->Update         = Update;
-    cls->Draw           = Draw;
-});
 

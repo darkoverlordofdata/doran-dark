@@ -13,17 +13,15 @@
 
 #include "GameObject.h"
 
-#define IsBallObject(x) (x->isa == &BallObjectClass)
+#define IsBallObject(x) (x->isa == &$BallObject)
 #define AsBallObject(x) (IsBallObject(x) ? (BallObject*)x : nullptr)
-
 
 // BallObject holds the state of the Ball object inheriting
 // relevant state data from GameObject. Contains some extra
 // functionality specific to Breakout's ball object that
 // were too specific for within GameObject alone.
-class (BallObject) 
-{
-    struct BallObjectClass* isa;
+ivar (BallObject) {
+    Class       isa;
     Vec2        Position;
     Vec2        Size;
     Vec2        Velocity;
@@ -38,20 +36,19 @@ class (BallObject)
     bool    Stuck;
 };
 
+typedef char*   (*BallObjectToString)  (const BallObject* const);
+typedef void    (*BallObjectDraw)  (BallObject* const, SpriteRenderer*);
 
-struct BallObjectClass
-{
-    Class  isa;
-    Class  superclass;
-    char*   name;
-    long    version, info, instance_size;
-    char*   (*ToString) (BallObject* const);
+
+class (BallObject) {
+    BallObject*  (*Create) (Vec2 Position, float Radius, Vec2 Velocity, Texture2D* Sprite);
+};
+
+vtable (BallObject) {
+    char*   (*ToString) (const BallObject* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
-    bool    (*ReferenceEquals) (DSObject* const objA, DSObject* const objB);
-    bool    (*InstanceEquals) (DSObject* const objA, DSObject* const objB);
-    BallObject*  (*Create) (Vec2 Position, float Radius, Vec2 Velocity, Texture2D* Sprite);
     void    (*Draw) (BallObject* const, SpriteRenderer* renderer);
 
     // Moves the ball, keeping it constrained within the window bounds (except bottom edge); returns new position
@@ -59,7 +56,7 @@ struct BallObjectClass
     // Resets the ball to original state with given position and velocity
     void    (*Reset)        (BallObject* const, Vec2 position, Vec2 velocity);
     
-} BallObjectClass;
+};
 
 /**
  * BallObject API
@@ -67,6 +64,7 @@ struct BallObjectClass
 void overload Draw(BallObject*, SpriteRenderer* renderer);
 void overload Move(BallObject*, GLfloat dt, GLuint window_width);
 void overload Reset(BallObject*, Vec2 position, Vec2 velocity);
-char* overload ToString(BallObject* const this);
-
-
+char* overload ToString(const BallObject* const this);
+BallObject* NewBallObject(Vec2 Position, float Radius, Vec2 Velocity, Texture2D* Sprite);
+BallObject* BallObject_alloc();
+BallObject* BallObject_init(BallObject* this, Vec2 Position, float Radius, Vec2 Velocity, Texture2D* Sprite);

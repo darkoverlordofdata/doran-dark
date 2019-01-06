@@ -38,18 +38,18 @@ SOFTWARE.
 #define AsDSDouble(x) (IsDSDouble(x) ? (DSDouble*)x : nullptr)
 
 /**
- * Double class
+ * Double instance variables
  */
-Ivar (DSDouble) 
+ivar (DSDouble) 
 {
     Class isa;
     double value;
 };
 
 /**
- * Double metaclass
+ * Double vtable
  */
-VTable (DSDouble) {
+vtable (DSDouble) {
     char*   (*ToString) (DSDouble* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
@@ -66,7 +66,10 @@ VTable (DSDouble) {
 
 };
 
-Singleton ($DSDouble) {
+/**
+ * Double class methods & vars
+ */
+class (DSDouble) {
     DSDouble* (*Create) (double value);
 };
 

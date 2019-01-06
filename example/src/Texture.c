@@ -7,6 +7,28 @@
 ** option) any later version.
 ******************************************************************/
 #include <Texture.h>
+$implementation(Texture2D);
+
+$method(ToString,           (Texture2DToString)ToString, "$@:v");
+$method(Equals,             DSObject_Equals, "B@:@@");
+$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
+$method(Dispose,            DSObject_Dispose, "v@:v");
+$method(Generate,           Generate, "v@:II*");
+$method(Bind,               Bind, "v@:@");
+
+$ivar(Id, sizeof(GLuint), "I");
+$ivar(path, sizeof(char*), "*");
+$ivar(Width, sizeof(GLuint), "I");
+$ivar(Height, sizeof(GLuint), "I");
+$ivar(InternalFormat, sizeof(GLuint), "I");
+$ivar(ImageFormat, sizeof(GLuint), "I");
+$ivar(WrapS, sizeof(GLuint), "I");
+$ivar(WrapT, sizeof(GLuint), "I");
+$ivar(FilterMin, sizeof(GLuint), "I");
+$ivar(FilterMag, sizeof(GLuint), "I");
+
+$end;
+
 /**
  * Texture2D
  * 
@@ -14,6 +36,10 @@
  * @param ImageFormat for binding the image
  * 
  */
+Texture2D* NewTexture2D(int InternalFormat, int ImageFormat, char* path) { 
+    return Texture2D_init(Texture2D_alloc(), InternalFormat, ImageFormat, path);
+}
+
 Texture2D* Texture2D_init(
     Texture2D* const this,
     int InternalFormat,
@@ -21,7 +47,7 @@ Texture2D* Texture2D_init(
     char* path)
 {
 	DSObject_init(this);
-    this->isa = ISA(Texture2D);
+    this->isa = getTexture2DIsa();
     this->path = strdup(path);
     this->Width = 0;
     this->Height = 0;
@@ -35,6 +61,10 @@ Texture2D* Texture2D_init(
     this->ImageFormat = ImageFormat;
     glGenTextures(1, &this->Id);
     return this;
+}
+
+Texture2D* Texture2D_alloc() {
+    return DSMalloc(getTexture2DSize());
 }
 
 /**
@@ -73,25 +103,8 @@ void overload Bind(Texture2D*  this)
 /**
  * ToString
  */
-char* overload ToString(Texture2D* const this)
+char* overload ToString(const Texture2D* const this)
 {
     return "Texture2D";
 }
-
-/**
- * Creates a new instance
- */
-Texture2D* $Texture2D(int InternalFormat, int ImageFormat, char* path) { 
-    return Texture2D_init(class_alloc(Texture2D), InternalFormat, ImageFormat, path);
-}
-
-/**
- * Texture2D Class Metadata
- */
-DSDefine(Texture2D, DSObject, cls, {
-    cls->Create         = $Texture2D;
-    cls->ToString       = ToString;
-    cls->Generate       = Generate;
-    cls->Bind           = Bind;
-});
 

@@ -40,7 +40,7 @@ SOFTWARE.
 /**
  * Object class
  */
-Ivar (DSLong) 
+ivar (DSLong) 
 {
     Class isa;
     long value;
@@ -49,7 +49,7 @@ Ivar (DSLong)
 /**
  * Object metaclass
  */
-VTable (DSLong) {
+vtable (DSLong) {
     char*   (*ToString) (DSLong* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
@@ -66,7 +66,7 @@ VTable (DSLong) {
 
 };
 
-Singleton ($DSLong) {
+class (DSLong) {
     DSLong*   (*Create) (long);
 };
 

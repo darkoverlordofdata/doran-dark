@@ -56,7 +56,7 @@ DSChar* NewDSChar(char value) {
 DSChar* DSChar_init(DSChar* const this, char value)
 {
     DSNumber_init(this);
-    this->isa = objc_getClass("DSChar");
+    this->isa = getDSCharIsa();
     this->value = value;
     return this;
 }

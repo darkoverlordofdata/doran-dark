@@ -34,7 +34,7 @@ SOFTWARE.
 /**
  * Base collection interface for sequential collections such as list and array
  */
-Ivar (DSCollection) {
+ivar (DSCollection) {
     Class isa;
 };
 
@@ -42,7 +42,7 @@ Ivar (DSCollection) {
 /**
  * Collection metaclass
  */
-VTable (DSCollection) {
+vtable (DSCollection) {
     char*   (*ToString) (DSCollection* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
@@ -59,7 +59,7 @@ VTable (DSCollection) {
     
 };
 
-Singleton ($DSCollection) {
+class (DSCollection) {
     DSCollection*  (*Create) ();
 };
 

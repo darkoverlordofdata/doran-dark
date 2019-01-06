@@ -35,27 +35,27 @@ SOFTWARE.
  *  MACRO class
  *      typedef'd structs
  */
-#define class(name)                                                     \
-    typedef struct name name;                                           \
-    struct name
+// #define class(name)                                                     \
+//     typedef struct name name;                                           \
+//     struct name
 
 /**
  * 3 clobal variables are created for each Class:
- *  DSOject         - Ivar Instance Variables
+ *  DSOject         - ivar Instance Variables
  *  DSObjectVTable  - Instance Methods
  *  $DSObject       - Class Methods/Variables
  */
-#define Ivar(name)                                                      \
+#define ivar(name)                                                      \
     typedef struct name name;                                           \
     struct name
 
-#define VTable(name)                                                    \
-    struct name##VTable name##VTable;                                   \
-    struct name##VTable
+#define vtable(class)                                                   \
+    struct class##vtable class##vtable;                                 \
+    struct class##vtable
 
-#define Singleton(name)                                                 \
-    struct name name;                                                   \
-    struct name
+#define class(name)                                                 \
+    struct $##name $##name;                                                   \
+    struct $##name
 
 /**
  *  MACRO overload
@@ -67,8 +67,14 @@ SOFTWARE.
 /**
  *  MACRO $implementation
  *      start a class definition- create objects
+ *      defines the inline vptr accessor
+ * 
+ *  warning: only 1 $implementation per file due to vptr scoping
  */
 #define $implementation(class)                                          \
+static inline struct class##vtable* _vptr(class* this) {                \
+    return (struct class##vtable*)this->isa->vtable;                    \
+}                                                                       \
 static int _##class##_size = -1;                                        \
 static int get##class##Size() {                                         \
     _##class##_size = _##class##_size > 0                               \
@@ -76,11 +82,18 @@ static int get##class##Size() {                                         \
         : class_getAlignedInstanceSize(objc_getClass(#class));          \
     return _##class##_size;                                             \
 }                                                                       \
+static Class _##class##_isa = nullptr;                                  \
+static Class get##class##Isa() {                                        \
+    _##class##_isa = _##class##_isa != nullptr                          \
+        ? _##class##_isa                                                \
+        : objc_getClass(#class);                                        \
+    return _##class##_isa;                                              \
+}                                                                       \
 Class class##Implementation(Class super);                               \
 Class class##Implementation(Class super)                                \
 {                                                                       \
     int k = 0;                                                          \
-    IMP* vt = &class##VTable;                                           \
+    IMP* vt = &class##vtable;                                           \
     char* class_name = #class;                                          \
     Class isa = objc_allocateClassPair(super, #class, 0);               \
     isa->vtable = &vt[0];               
@@ -124,12 +137,10 @@ Class class##Implementation(Class super)                                \
     return methodizeClass(isa);                                         \
 }
 
-    // // return DSNumberVTable.LongValue(this);
-    // struct DSNumberVTable* v = (struct DSNumberVTable*)(this->isa->vtable);
-    // DSLog("LongValue: vtable %x", v->LongValue);
-    // return v->LongValue(this);
-
-#define Vptr(class) ((struct class##VTable*)(this->isa->vtable))
-
+/**
+ *  MACRO Vptr
+ *      Returns the vtable base for this class
+ */
+#define $vptr(class) ((struct class##vtable*)(this->isa->vtable))
 
 #endif _DSCLASS_H_ 

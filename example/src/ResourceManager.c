@@ -8,18 +8,43 @@
 ******************************************************************/
 #include <ResourceManager.h>
 
-struct ResourceManagerClass* Resources;
+$implementation(ResourceManager);
+
+$method(ToString,           (ResourceManagerToString)ToString, "$@:v");
+$method(Equals,             DSObject_Equals, "B@:@@");
+$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
+$method(Dispose,            DSObject_Dispose, "v@:v");
+
+$ResourceManager.Shaders = NewDSHashmap();
+$ResourceManager.Textures = NewDSHashmap();
+$ResourceManager.LoadShader = LoadShader;
+$ResourceManager.GetShader = GetShader;
+$ResourceManager.LoadTexture = LoadTexture;
+$ResourceManager.GetTexture = GetTexture;
+$ResourceManager.Dtor = Dtor;
+$ResourceManager.loadShaderFromFile = loadShaderFromFile;
+$ResourceManager.loadTextureFromFile = loadTextureFromFile;
+
+$end;
 
 /**
  * ResourceManager
  */
+ResourceManager* NewResourceManager() { 
+    return ResourceManager_init(ResourceManager_alloc());
+}
+
+
 ResourceManager* ResourceManager_init(ResourceManager* this)
 {
     DSObject_init(this); 
-    this->isa = ISA(ResourceManager);
+    this->isa = getResourceManagerIsa();
     return this;
 }
 
+ResourceManager* ResourceManager_alloc() {
+    return DSMalloc(getResourceManagerSize());
+}
 /**
  * loadShaderFromFile
  * 
@@ -53,7 +78,7 @@ static Shader* loadShaderFromFile(
     fclose(fragmentShaderFile);
 
     // 2. Now create shader object from source code
-    Shader* shader = $Shader();
+    Shader* shader = NewShader();
     Compile(shader, vShaderCode, fShaderCode);
     return shader;
 }
@@ -72,7 +97,7 @@ static Texture2D* loadTextureFromFile(const GLchar *file, bool alpha)
     int format = alpha ? GL_RGBA : GL_RGB;
     char* path = join("assets/", file);
     int width, height, channels;
-    Texture2D* texture = $Texture2D(format, format, path);
+    Texture2D* texture = NewTexture2D(format, format, path);
     // Load image
     unsigned char* image = stbi_load(path, &width, &height, &channels, 0); //texture->ImageFormat == GL_RGBA ? 4 : 3);
     // generate texture
@@ -92,8 +117,8 @@ static Texture2D* loadTextureFromFile(const GLchar *file, bool alpha)
  */
 Shader* LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, char* name)
 {
-    Put(ResourceManagerClass.Shaders, name, loadShaderFromFile(vShaderFile, fShaderFile));
-    return Get(ResourceManagerClass.Shaders, name);
+    Put($ResourceManager.Shaders, name, loadShaderFromFile(vShaderFile, fShaderFile));
+    return Get($ResourceManager.Shaders, name);
     // return s;
 }
 
@@ -106,7 +131,7 @@ Shader* LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, char* n
  */
 Shader* GetShader(char* name)
 {
-    return Get(ResourceManagerClass.Shaders, name);
+    return Get($ResourceManager.Shaders, name);
 }
 
 /**
@@ -121,7 +146,7 @@ Shader* GetShader(char* name)
 Texture2D* LoadTexture(const GLchar *file, bool alpha, char* name)
 {
     Texture2D* tex = loadTextureFromFile(file, alpha);
-    Put(ResourceManagerClass.Textures, name, tex);
+    Put($ResourceManager.Textures, name, tex);
     return tex;
 }
 
@@ -134,7 +159,7 @@ Texture2D* LoadTexture(const GLchar *file, bool alpha, char* name)
  */
 Texture2D* GetTexture(char* name)
 {
-    Texture2D* tex = Get(ResourceManagerClass.Textures, name);
+    Texture2D* tex = Get($ResourceManager.Textures, name);
     return tex;
 }
 
@@ -153,9 +178,9 @@ Clear2(Any item, Any data)
 void Dtor(struct ResourceManager * this)
 {
     // (Properly) delete all shaders	
-    // Iterate(ResourceManagerClass.Shaders, Clear1, nullptr);
+    // Iterate($ResourceManager.Shaders, Clear1, nullptr);
     // (Properly) delete all textures
-    // Iterate(ResourceManagerClass.Textures, Clear2, nullptr);
+    // Iterate($ResourceManager.Textures, Clear2, nullptr);
 }
 
 /**
@@ -181,25 +206,11 @@ static char* rdbuf(FILE* f)
     return buf;
 }
 
-ResourceManager* $ResourceManager() { 
-    return ResourceManager_init(class_alloc(ResourceManager));
-}
-
 /**
- * ResourceManager Class Metadata
+ * ToString
  */
-DSDefine(ResourceManager, DSObject, cls, {
-    cls->Create             = $ResourceManager;
-    cls->LoadShader         = LoadShader;
-    cls->GetShader          = GetShader;
-    cls->LoadTexture        = LoadTexture;
-    cls->GetTexture         = GetTexture;
-    cls->Dtor               = Dtor;
-    cls->loadShaderFromFile = loadShaderFromFile;
-    cls->loadTextureFromFile= loadTextureFromFile;
-    cls->Shaders            = $DSHashmap();
-    cls->Textures           = $DSHashmap();
-
-    Resources = &ResourceManagerClass;
-});
+char* overload ToString(const ResourceManager* const this)
+{
+    return "ResourceManager";
+}
 

@@ -46,9 +46,9 @@ static const GLfloat BALL_RADIUS = 12.5f;
 // Game holds all game-related state and functionality.
 // Combines all game-related data into a single class for
 // easy access to each of the components and manageability.
-class (Game)
+ivar (Game)
 {
-    struct GameClass* isa;
+    Class isa;
     GameState State;	
     bool Keys[1024];
     GLuint Width;
@@ -57,23 +57,22 @@ class (Game)
     GLuint Level;    
 };
 
+typedef char*   (*GameToString)  (const Game* const);
+
+class (game) {
+    Game*   (*Create) (int, int);
+
+};
 /**
  * Metadata for the Game class:
  * attributes, vtable, class members
  */
-struct GameClass
+vtable (Game)
 {
-    Class  isa;
-    Class  superclass;
-    char*   name;
-    long    version, info, instance_size;
-    char*   (*ToString) (Game* const);
+    char*   (*ToString) (const Game* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
-    bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-    bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-    Game*   (*Create) (int, int);
 
     // Initialize game state (load all shaders/textures/levels)
     void (*Start)           (Game* const);
@@ -89,7 +88,7 @@ struct GameClass
     void (*SetKey)          (Game* const, int key, bool value);
     void (*SetState)        (Game* const, GameState state);
     
-} GameClass;
+};
 
 /**
  * Game API
@@ -104,5 +103,7 @@ void overload ResetLevel(Game*);
 void overload ResetPlayer(Game*);
 void overload Dispose(Game*);
 void overload DoCollisions(Game*);
-char* overload ToString(Game* const);
-
+char* overload ToString(const Game* const);
+Game* NewGame(int Width, int Height);
+Game* Game_alloc();
+Game* Game_init(Game* const this, int Width, int Height);

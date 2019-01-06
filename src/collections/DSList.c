@@ -52,7 +52,7 @@ DSList* NewDSList() {
 DSList* DSList_init(DSList* const this)
 {
     DSObject_init(this);
-    this->isa = objc_getClass("DSList");
+    this->isa = getDSListIsa();
     this->head = nullptr;
 
     return this;
@@ -76,7 +76,7 @@ DSListNode* DSListNode_init(DSListNode* const this, Any data, DSListNode* next)
     return this;
 }
 
-DSListNode* DSListNode_New(Any data, DSListNode* next)
+DSListNode* NewDSListNode(Any data, DSListNode* next)
 {
     return DSListNode_init(DSList_alloc(), data, next);
 }
@@ -91,7 +91,7 @@ DSListNode* DSListNode_New(Any data, DSListNode* next)
 int Insert(DSList* const this, Any data, int (*comp)(Any, Any))
 {
     if (this->head == nullptr) {
-        this->head = DSListNode_New(data, nullptr);
+        this->head = NewDSListNode(data, nullptr);
         return 1;
     }
 
@@ -104,9 +104,9 @@ int Insert(DSList* const this, Any data, int (*comp)(Any, Any))
     }
 
     if (prev == nullptr) 
-        this->head = DSListNode_New(data, this->head);
+        this->head = NewDSListNode(data, this->head);
     else 
-        prev->next = DSListNode_New(data, curr);
+        prev->next = NewDSListNode(data, curr);
 
     this->length++;
     return 1;
@@ -121,10 +121,10 @@ int Insert(DSList* const this, Any data, int (*comp)(Any, Any))
 void overload Add(DSList* const this, Any data)
 {
     if (this->head == nullptr) {
-        this->head = DSListNode_New(data, nullptr);
+        this->head = NewDSListNode(data, nullptr);
     }
     else { 
-       this->head = DSListNode_New(data, this->head);
+       this->head = NewDSListNode(data, this->head);
     }
     this->length++;
 }

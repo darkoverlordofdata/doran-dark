@@ -40,7 +40,7 @@ SOFTWARE.
 /**
  * Object class
  */
-Ivar (DSFloat) 
+ivar (DSFloat) 
 {
     Class isa;
     float value;
@@ -49,7 +49,7 @@ Ivar (DSFloat)
 /**
  * Object metaclass
  */
-VTable (DSFloat)
+vtable (DSFloat)
 {
     char*   (*ToString) (DSFloat* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
@@ -67,7 +67,7 @@ VTable (DSFloat)
 
 };
 
-Singleton ($DSFloat) {
+class (DSFloat) {
     DSFloat*  (*Create) (float value);
 };
 

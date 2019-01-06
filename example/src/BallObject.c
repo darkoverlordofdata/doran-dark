@@ -7,6 +7,47 @@
 ** option) any later version.
 ******************************************************************/
 #include <BallObject.h>
+$implementation(BallObject);
+
+$method(ToString,           (BallObjectToString)ToString, "$@:v");
+$method(Equals,             DSObject_Equals, "B@:@@");
+$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
+$method(Dispose,            DSObject_Dispose, "v@:v");
+$method(Draw,               (BallObjectDraw)Draw, "v@:@");
+$method(Move,               Move, "v@:iI");
+$method(Reset,              Reset, "v@:!!");
+
+$ivar(Position,  sizeof(Vec2), "!");
+$ivar(Size, sizeof(Vec2), "!");
+$ivar(Velocity, sizeof(Vec2), "!");
+$ivar(Color, sizeof(Vec3), "!");
+$ivar(Rotation, sizeof(GLfloat), "f");
+$ivar(IsSolid, sizeof(GLfloat), "B");
+$ivar(Destroyed, sizeof(GLfloat), "B");
+$ivar(Sprite, sizeof(GLfloat), "@");
+$ivar(Name, sizeof(GLfloat), "*");
+$ivar(Radius, sizeof(float), "f");
+$ivar(Stuck, sizeof(bool), "B");
+
+$end;
+
+/**
+ * Create new instance
+ * 
+ * @param Position initial placement of ball 
+ * @param Radius size of ball
+ * @param Velocity initial speed of ball
+ * @param Sprite to display
+ */
+BallObject* NewBallObject(
+    Vec2 Position, 
+    float Radius, 
+    Vec2 Velocity, 
+    Texture2D* Sprite) {
+    return BallObject_init(BallObject_alloc(), Position, Radius, Velocity, Sprite); 
+}
+
+
 /**
  * BallObject
  * 
@@ -24,10 +65,14 @@ BallObject* BallObject_init(
 {
     Radius = Radius != 0 ? Radius : 12.5f;
     GameObject_init(this, "ball", Position, (Vec2){ Radius*2, Radius*2 }, Sprite, (Vec3){ 1, 1, 1 });
-    this->isa = ISA(BallObject);
+    this->isa = getBallObjectIsa();
     this->Velocity = Velocity;
     this->Radius = Radius;
     return this;
+}
+
+BallObject* BallObject_alloc() {
+    return DSMalloc(getBallObjectSize());
 }
 
 
@@ -92,35 +137,8 @@ void overload Reset(BallObject*  const this, Vec2 position, Vec2 velocity)
 /**
  * ToString
  */
-char* overload ToString(BallObject*  const this)
+char* overload ToString(const BallObject*  const this)
 {
     return "BallObject";
 }
-
-/**
- * Create new instance
- * 
- * @param Position initial placement of ball 
- * @param Radius size of ball
- * @param Velocity initial speed of ball
- * @param Sprite to display
- */
-BallObject* $BallObject(
-    Vec2 Position, 
-    float Radius, 
-    Vec2 Velocity, 
-    Texture2D* Sprite) {
-    return BallObject_init(class_alloc(BallObject), Position, Radius, Velocity, Sprite); 
-}
-
-/**
- * BallObject Class Metadata
- */
-DSDefine(BallObject, GameObject, cls, {
-    cls->ToString       = ToString;
-    cls->Create         = $BallObject;
-    cls->Move           = Move;
-    cls->Reset          = Reset;
-    cls->Draw           = Draw;
-});
 

@@ -26,9 +26,9 @@ static const Vec3 GAME_OBJECT_COLOR    = { 1.0f, 1.0f, 1.0f };
 // Container object for holding all state relevant for a single
 // game object entity. Each object in the game likely needs the
 // minimal of state as described within GameObject.
-class (GameObject)
+ivar (GameObject)
 {
-    struct GameObjectClass* isa;
+    Class isa;
     Vec2        Position;
     Vec2        Size;
     Vec2        Velocity;
@@ -41,29 +41,30 @@ class (GameObject)
 
 };
 
-struct GameObjectClass
+typedef char*   (*GameObjectToString)  (const GameObject* const);
+
+class (GameObject) {
+    GameObject*  (*Create) (char* name, Vec2 Position, Vec2 Size, Texture2D* Sprite, Vec3 Color);
+};
+
+vtable (GameObject)
 {
-    Class  isa;
-    Class  superclass;
-    char*   name;
-    long    version, info, instance_size;
-    char*   (*ToString) (GameObject* const);
+    char*   (*ToString) (const GameObject* const);
     bool    (*Equals) (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
-    bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-    bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-    GameObject*  (*Create) (char* name, Vec2 Position, Vec2 Size, Texture2D* Sprite, Vec3 Color);
 
     // Draw sprite
     void        (*Draw)         (GameObject* const, SpriteRenderer* renderer);
     
-} GameObjectClass;
+};
 
 /**
  * GameObject API
  */
 void overload Draw(GameObject*, SpriteRenderer* renderer);
-char* overload ToString(GameObject*);
-
+char* overload ToString(const GameObject*);
+GameObject* GameObject_init(GameObject* const this, char* name, Vec2 Position, Vec2 Size, Texture2D* Sprite, Vec3 Color);
+GameObject* GameObject_alloc();
+GameObject* NewGameObject(char* name, Vec2 Position, Vec2 Size, Texture2D* Sprite, Vec3 Color);
 
