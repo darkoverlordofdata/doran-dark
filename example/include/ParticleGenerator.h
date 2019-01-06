@@ -73,3 +73,6 @@ char* overload ToString(const ParticleGenerator* const);
 ParticleGenerator* NewParticleGenerator(Shader* shader, Texture2D* texture, int amount);
 ParticleGenerator* ParticleGenerator_alloc();
 ParticleGenerator* ParticleGenerator_init(ParticleGenerator* const this, Shader* shader, Texture2D* texture, int amount);
+static void init(ParticleGenerator* this);
+static GLuint firstUnusedParticle(ParticleGenerator* this);
+static void respawnParticle(ParticleGenerator* this, struct Particle particle, GameObject* object, Vec2 offset);

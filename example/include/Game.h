@@ -12,8 +12,11 @@
 #include <dark/darkfx.h>
 #include <tglm/tglm.h>
 
-#include "GameLevel.h"
-#include "ResourceManager.h"
+#include <GameLevel.h>
+#include <ResourceManager.h>
+#include <SpriteRenderer.h>
+#include <GameObject.h>
+#include <BallObject.h>
 
 #define IsGame(x) (x->isa == &DSGame)
 #define AsGame(x) (IsGame(x) ? (Game*)x : nullptr)
@@ -59,9 +62,8 @@ ivar (Game)
 
 typedef char*   (*GameToString)  (const Game* const);
 
-class (game) {
-    Game*   (*Create) (int, int);
-
+class (Game) {
+    Game*           (*Create) (int, int);
 };
 /**
  * Metadata for the Game class:

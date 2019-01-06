@@ -4,7 +4,7 @@ NeXTSTEP-like object system entirely in c11 with clang extensions. This is not o
 
 The object system is mainly used for metadata and the ability to define classes at runtime. 
 
-clang c99 with extensions:
+clang c11 with extensions:
 * BlocksRuntime
 * __attribute__((ext_vector_type(n)))
 * __attribute__((overloadable))
@@ -47,7 +47,7 @@ int main(int argc, char **argv) {
 
 
     ForEach(ls, ^(DSString* s) {
-        printf("item = %d) %s\n", s->length, s->value);
+        DSLog("item = %d) %s\n", s->length, s->value);
     });
     return 0;
 }

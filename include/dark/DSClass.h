@@ -29,21 +29,11 @@ SOFTWARE.
 #include "core.h"
 #include "runtime.h"
 #include <dark/DSLog.h>
-/** Class Macro's */
-
 /**
- *  MACRO class
- *      typedef'd structs
- */
-// #define class(name)                                                     \
-//     typedef struct name name;                                           \
-//     struct name
-
-/**
- * 3 clobal variables are created for each Class:
- *  DSOject         - ivar Instance Variables
- *  DSObjectVTable  - Instance Methods
- *  $DSObject       - Class Methods/Variables
+ * 3 global tuples are created for each Class:
+ *  ivar    DSOject         - Instance Variables
+ *  vtable  DSObjectVTable  - Instance Methods
+ *  class   $DSObject       - Class Methods/Variables
  */
 #define ivar(name)                                                      \
     typedef struct name name;                                           \
@@ -53,8 +43,8 @@ SOFTWARE.
     struct class##vtable class##vtable;                                 \
     struct class##vtable
 
-#define class(name)                                                 \
-    struct $##name $##name;                                                   \
+#define class(name)                                                     \
+    struct $##name $##name;                                             \
     struct $##name
 
 /**
@@ -68,8 +58,9 @@ SOFTWARE.
  *  MACRO $implementation
  *      start a class definition- create objects
  *      defines the inline vptr accessor
+ *      defines lazy accessors for class size and reference
  * 
- *  warning: only 1 $implementation per file due to vptr scoping
+ *  warning: only 1 $implementation per main file due to vptr scoping
  */
 #define $implementation(class)                                          \
 static inline struct class##vtable* _vptr(class* this) {                \

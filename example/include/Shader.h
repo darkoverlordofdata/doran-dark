@@ -71,3 +71,4 @@ char* overload ToString(const Shader* const);
 Shader* Shader_init(Shader* const this);
 Shader* Shader_alloc();
 Shader* NewShader();
+static void checkCompileErrors(Shader* this, GLuint object, char* type);

@@ -9,20 +9,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <GameLevel.h>
-
-$implementation(GameLevel);
-
-$method(ToString,           (GameLevelToString)ToString, "$@:v");
-$method(Equals,             DSObject_Equals, "B@:@@");
-$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
-$method(Dispose,            DSObject_Dispose, "v@:v");
-$method(Load,               Load, "@@:*ii");
-$method(Draw,               (GameLevelDraw)Draw, "v@:@");
-$method(IsCompleted,        IsCompleted, "B@:v");
-$ivar(Bricks, sizeof(id), "@");
-
-$end;
-
+#include "imp/GameLevel.h"
 /**
  * GameLevel
  */
@@ -42,9 +29,7 @@ GameLevel* GameLevel_init(
 	DSObject_init(this);
     this->isa = getGameLevelIsa();
     this->Bricks = NewDSArray(200);
-    DSLog("Game GameLevel_init %s", file);
     Load(this, file, levelWidth, levelHeight);
-    DSLog("Game GameLevel_init 2");
     return this;
 }
 
@@ -74,20 +59,15 @@ GameLevel* overload Load(
    
     char* path = join("assets/", file);
     char* line;
-    DSLog("path = %s", path);
     FILE* fstream = fopen(path, "r");
     DSArray* tileData = NewDSArray(20);
     DSArray* row = NewDSArray(20);
-    DSLog("start row len = %d", Length(row));
-    DSLog("start row len = %d", row->length);
-    DSLog("start row cap = %d", row->capacity);
     int i;
     char c;
     if (fstream)
     {
         while (fscanf(fstream, "%d%c", &i, &c) != EOF)
         {
-            DSLog("row len = %d", Length(row));
             Add(row, (Any)i);
             if (c == '\n')
             {
@@ -97,7 +77,6 @@ GameLevel* overload Load(
         }
 
         if (Length(tileData) > 0) {
-            DSLog("init - %d,%d", levelWidth, levelHeight);
             init(this, tileData, levelWidth, levelHeight);
         }
     }
@@ -154,17 +133,12 @@ static void init(
     GLuint levelWidth, 
     GLuint levelHeight)
 {
-    DSLog("GameLevel::init 0");
     // Calculate dimensions
     GLuint height = Length(tileData);
-    DSLog("GameLevel::init 1 - %d", height);
     DSArray* row = tileData->data[0];
-    DSLog("GameLevel::init 2");
     GLuint width = Length(row); // Note we can index vector at [0] since this function is only called if height > 0
-    DSLog("GameLevel::init 3");
     GLfloat unit_width = levelWidth / (GLfloat)width, unit_height = levelHeight / height; 
     // Initialize level tiles based on tileData		
-    DSLog("(%d,%d)", height, width);
     for (GLuint y = 0; y < height; ++y)
     {
         for (GLuint x = 0; x < width; ++x)

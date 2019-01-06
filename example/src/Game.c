@@ -7,54 +7,14 @@
 ** option) any later version.
 ******************************************************************/
 #include <Game.h>
-#include <ResourceManager.h>
-#include <SpriteRenderer.h>
-#include <GameObject.h>
-#include <BallObject.h>
-
-$implementation(Game);
-
-$method(ToString,           (GameToString)ToString, "$@:v");
-$method(Equals,             DSObject_Equals, "B@:@@");
-$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
-$method(Dispose,            DSObject_Dispose, "v@:v");
-
-$method(Start,              Start, "@@:v");
-$method(ProcessInput,       ProcessInput, "@@:v"); 
-$method(Update,             Update, "@@:f");
-$method(Render,             Render, "@@:f");
-$method(DoCollisions,       DoCollisions, "@@:v");
-$method(ResetLevel,         ResetLevel, "@@:v");
-$method(ResetPlayer,        ResetPlayer, "@@:v");
-$method(SetKey,             SetKey, "@@:iB");
-$method(SetState,           SetState, "@@:i");
-
-$ivar("State", sizeof(GameState), "i");
-$ivar("Keys", sizeof(bool)*1024, "B");
-$ivar("Width", sizeof(GLuint), "I");
-$ivar("Height", sizeof(GLuint), "I");
-$ivar("Levels", sizeof(id), "@");
-$ivar("Level", sizeof(GLuint), "I");
-
-$end;
-
-const Vec2 ZERO = { 0, 0 };
-const Vec3 WHITE = { 1, 1, 1 };
-
-// Game-related State data
-SpriteRenderer* Renderer;
-GameObject* Player;
-BallObject* Ball;
-
-// Defines a Collision Result Tuple
+#include "imp/Game.h"
+/** Defines a Collision Result Tuple */
 ivar (Collision) 
 {
     bool first;
     Direction second; 
     Vec2 third;
 }; 
-
-
 /**
  * Collision Result Tuple
  * 
@@ -62,21 +22,13 @@ ivar (Collision)
  * @param dir direction from
  * @param Vec2 difference point
  */
-static const Collision* Collision_init(
-    Collision* this, 
-    bool isTrue, 
-    Direction dir, 
-    Vec2 vec)
+Collision* NewCollision(bool isTrue, Direction dir, Vec2 vec)
 {
+    Collision* this = DSMalloc(sizeof(Collision));
     this->first = isTrue;
     this->second = dir;
     this->third = vec;
     return this;
-}
-
-Collision* NewCollision(bool first, Direction second, Vec2 third)
-{
-    return Collision_init(DSMalloc(sizeof(Collision)), first, second, third);
 }
 
 /**
@@ -108,6 +60,15 @@ Game* Game_init(
 Game* Game_alloc() {
     return DSMalloc(getGameSize());
 }
+
+const Vec2 ZERO = { 0, 0 };
+const Vec3 WHITE = { 1, 1, 1 };
+
+// Game-related State data
+static SpriteRenderer* Renderer;
+static GameObject* Player;
+static BallObject* Ball;
+
 
 void SetKey(Game* this, int key, bool value)
 {
@@ -144,7 +105,6 @@ void overload Start(Game* this)
     Renderer = NewSpriteRenderer($ResourceManager.GetShader("sprite"));
     // Load levels
 
-    DSLog("Game Start 1");
     Add(this->Levels, NewGameLevel("levels/one.lvl", this->Width, this->Height * 0.5));
     Add(this->Levels, NewGameLevel("levels/two.lvl", this->Width, this->Height * 0.5));
     Add(this->Levels, NewGameLevel("levels/three.lvl", this->Width, this->Height * 0.5));

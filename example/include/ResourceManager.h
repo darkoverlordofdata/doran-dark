@@ -27,8 +27,6 @@ ivar (ResourceManager) {
 
 typedef char*   (*ResourceManagerToString)  (const ResourceManager* const);
 
-extern struct ResourceManagerClass* Resources;
-
 class (ResourceManager) {
     ResourceManager*  (*Create) ();
     DSHashmap* Shaders;
