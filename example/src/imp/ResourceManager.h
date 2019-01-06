@@ -1,11 +1,14 @@
+/**
+ * ResourceManager class
+ */
 #pragma once
 
-$implementation(ResourceManager);
+$implementation( ResourceManager );
 
-$method(ToString,           (ResourceManagerToString)ToString, "$@:v");
-$method(Equals,             DSObject_Equals, "B@:@@");
-$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
-$method(Dispose,            DSObject_Dispose, "v@:v");
+$method( ToString,           (ResourceManagerToString)ToString, "$@:v" );
+$method( Equals,             DSObject_Equals, "B@:@@" );
+$method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
+$method( Dispose,            DSObject_Dispose, "v@:v" );
 
 $ResourceManager.Shaders = NewDSHashmap();
 $ResourceManager.Textures = NewDSHashmap();
