@@ -52,19 +52,17 @@ ivar (DSInteger)
  * Object metaclass
  */
 vtable (DSInteger) {
-    char*   (*ToString) (DSInteger* const);
-    bool    (*Equals) (DSObject* const, DSObject* const);
-    int     (*GetHashCode) (DSObject* const);
-    void    (*Dispose) (DSObject* const);
-    // bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-    // bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-    int     (*CompareTo) (DSComparable* const, DSComparable* const);
-    int     (*IntValue) (DSInteger* const);
-    long    (*LongValue) (DSInteger* const);
-    float   (*FloatValue) (DSInteger* const);
-    double  (*DoubleValue) (DSInteger* const);
-    char    (*CharValue) (DSInteger* const);
-    short   (*ShortValue) (DSInteger* const);
+    char*   (*ToString)     (const DSInteger* const);
+    bool    (*Equals)       (const DSObject* const, DSObject* const);
+    int     (*GetHashCode)  (const DSObject* const);
+    void    (*Dispose)      (DSObject* const);
+    int     (*CompareTo)    (const DSComparable* const, const DSComparable* const);
+    int     (*IntValue)     (const DSInteger* const);
+    long    (*LongValue)    (const DSInteger* const);
+    float   (*FloatValue)   (const DSInteger* const);
+    double  (*DoubleValue)  (const DSInteger* const);
+    char    (*CharValue)    (const DSInteger* const);
+    short   (*ShortValue)   (const DSInteger* const);
 
 };
 
@@ -72,17 +70,17 @@ class (DSInteger) {
     DSInteger*(*Create) (int value);
 };
 
-int DSInteger_ParseInt(char *const, int);
-int DSInteger_CompareTo(DSInteger* const, DSInteger* const);
-int DSInteger_IntValue(DSInteger* const);
-long DSInteger_LongValue(DSInteger* const);
-float DSInteger_FloatValue(DSInteger* const);
-double DSInteger_DoubleValue(DSInteger* const);
-char DSInteger_CharValue(DSInteger* const);
-short DSInteger_ShortValue(DSInteger* const);
-char* DSInteger_ToString(const DSInteger* const);
-DSInteger* DSInteger_init(DSInteger* const this, int value);
+DSInteger* NewDSInteger(const int value);
+DSInteger* DSInteger_init(DSInteger* const this, const int value);
 DSInteger* DSInteger_alloc();
-DSInteger* NewDSInteger(int value);
+int DSInteger_ParseInt(const char *const, const int);
+int DSInteger_CompareTo(const DSInteger* const, const DSInteger* const);
+int DSInteger_IntValue(const DSInteger* const);
+long DSInteger_LongValue(const DSInteger* const);
+float DSInteger_FloatValue(const DSInteger* const);
+double DSInteger_DoubleValue(const DSInteger* const);
+char DSInteger_CharValue(const DSInteger* const);
+short DSInteger_ShortValue(const DSInteger* const);
+char* DSInteger_ToString(const DSInteger* const);
 
 #endif _DSINTEGER_H_

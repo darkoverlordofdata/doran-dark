@@ -82,7 +82,7 @@ DSStringBuilder* DSStringBuilder_alloc() {
 /*
  * sb_empty returns non-zero if the given StringBuilder is empty.
  */
-int DSStringBuilder_Empty(DSStringBuilder* this)
+int DSStringBuilder_Empty(const DSStringBuilder* this)
 {
 	return (this->root == nullptr);
 }
@@ -152,7 +152,7 @@ int DSStringBuilder_Appendf(DSStringBuilder* this, const char *format, ...)
  * The StringBuilder is not modified by this function and can therefore continue
  * to be used.
  */
-DSString* DSStringBuilder_Concat(DSStringBuilder* this)
+DSString* DSStringBuilder_Concat(const DSStringBuilder* this)
 {
 	char *buf = nullptr;
 	char *c = nullptr;
@@ -196,7 +196,7 @@ void DSStringBuilder_Dispose(DSStringBuilder* this)
 }
 
 
-char* DSStringBuilder_ToString(DSStringBuilder* this)
+char* DSStringBuilder_ToString(const DSStringBuilder* this)
 {
     return "dark.StringBuilder";
 }

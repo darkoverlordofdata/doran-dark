@@ -31,19 +31,19 @@ class (SpriteRenderer) {
 
 vtable (SpriteRenderer) {
     char*   (*ToString) (const SpriteRenderer* const);
-    bool    (*Equals) (DSObject* const, DSObject* const);
+    bool    (*Equals)   (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
-    void    (*Dispose) (DSObject* const);
+    void    (*Dispose)  (DSObject* const);
 
     // Renders a defined quad textured with given sprite
-    void (*DrawSprite)      (SpriteRenderer* const, const Texture2D* const texture, const Vec2 position, const Vec2 size, const GLfloat rotate, const Vec3 color);
+    void    (*Draw)     (SpriteRenderer* const, const Texture2D* const texture, const Vec2 position, const Vec2 size, const GLfloat rotate, const Vec3 color);
     
 };
 
 /**
  * SpriteRenderer API
  */
-void overload DrawSprite(SpriteRenderer* const, const Texture2D* const texture, const Vec2 position, const Vec2 size, const GLfloat rot, const Vec3 color);
+void overload Draw(SpriteRenderer* const, const Texture2D* const texture, const Vec2 position, const Vec2 size, const GLfloat rot, const Vec3 color);
 void overload Dispose(SpriteRenderer*);
 char* overload ToString(const SpriteRenderer* const);
 static void initRenderData(SpriteRenderer* this);

@@ -52,18 +52,18 @@ vtable (BallObject) {
     void    (*Draw) (BallObject* const, SpriteRenderer* renderer);
 
     // Moves the ball, keeping it constrained within the window bounds (except bottom edge); returns new position
-    void    (*Move)         (BallObject* const, GLfloat dt, GLuint window_width);
+    void    (*Move)         (BallObject* const, const GLfloat dt, const GLuint window_width);
     // Resets the ball to original state with given position and velocity
-    void    (*Reset)        (BallObject* const, Vec2 position, Vec2 velocity);
+    void    (*Reset)        (BallObject* const, const Vec2 position, const Vec2 velocity);
     
 };
 
 /**
  * BallObject API
  */
-void overload Draw(BallObject*, SpriteRenderer* renderer);
-void overload Move(BallObject*, GLfloat dt, GLuint window_width);
-void overload Reset(BallObject*, Vec2 position, Vec2 velocity);
+void overload Draw(BallObject* const, SpriteRenderer* renderer);
+void overload Move(BallObject* const, const GLfloat dt, const GLuint window_width);
+void overload Reset(BallObject*, const Vec2 position, const Vec2 velocity);
 char* overload ToString(const BallObject* const this);
 BallObject* NewBallObject(Vec2 Position, float Radius, Vec2 Velocity, Texture2D* Sprite);
 BallObject* BallObject_alloc();

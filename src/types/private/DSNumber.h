@@ -25,17 +25,17 @@ SOFTWARE.
 ******************************************************************/
 $implementation( DSNumber ); 
 
-$method( ToString,           DSNumber_ToString, "$@:v" );
+$virtual( ToString,          (DSNumberToString)ToString, "$@:v" );
 $method( Equals,             DSObject_Equals, "B@:@@" );
 $method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
 $method( Dispose,            DSObject_Dispose, "v@:v" );
-$method( CompareTo,          DSNumber_CompareTo, "i@:@" );
-$method( IntValue,           DSNumber_IntValue, "i@:v" );
-$method( LongValue,          DSNumber_LongValue, "l@:v" );
-$method( FloatValue,         DSNumber_FloatValue, "f@:v" );
-$method( DoubleValue,        DSNumber_DoubleValue, "d@:v" );
-$method( CharValue,          DSNumber_CharValue, "c@:v" );
-$method( ShortValue,         DSNumber_ShortValue, "s@:v" );
+$virtual( CompareTo,         (DSNumberCompareTo)CompareTo, "i@:@" );
+$virtual( IntValue,          (DSNumberIntValue)IntValue, "i@:v" );
+$virtual( LongValue,         (DSNumberLongValue)LongValue, "l@:v" );
+$virtual( FloatValue,        (DSNumberFloatValue)FloatValue, "f@:v" );
+$virtual( DoubleValue,       (DSNumberDoubleValue)DoubleValue, "d@:v" );
+$virtual( CharValue,         (DSNumberCharValue)CharValue, "c@:v" );
+$virtual( ShortValue,        (DSNumberShortValue)ShortValue, "s@:v" );
 
 $end;
 

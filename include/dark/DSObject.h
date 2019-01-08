@@ -44,12 +44,12 @@ ivar (DSObject) {
  * DSObject Interface
  */
 typedef DSObject* (*DSObjectCreate) ();
-typedef char*   (*DSObjectToString)  (const DSObject* const);
-typedef bool    (*DSObjectEquals) (const DSObject* const, const DSObject* const);
-typedef int     (*DSObjectGetHashCode) (const DSObject* const);
-typedef void    (*DSObjectDispose) (DSObject* const);
-typedef bool    (*DSObjectReferenceEquals) (const DSObject* const, const DSObject* const);
-typedef bool    (*DSObjectInstanceEquals) (const DSObject* const, const DSObject* const);
+typedef char*   (*DSObjectToString)     (const DSObject* const);
+typedef bool    (*DSObjectEquals)       (const DSObject* const, const DSObject* const);
+typedef int     (*DSObjectGetHashCode)  (const DSObject* const);
+typedef void    (*DSObjectDispose)      (DSObject* const);
+typedef bool    (*DSObjectReferenceEquals)  (const DSObject* const, const DSObject* const);
+typedef bool    (*DSObjectInstanceEquals)   (const DSObject* const, const DSObject* const);
 /**
  * DSObject Vtable
  * 
@@ -101,8 +101,6 @@ typedef bool    (*DSClassInstanceEquals) (const DSClass* const, const DSClass* c
  * DSClass vtable
  */
 vtable (DSClass) {
-// struct DSClassVTable DSClassVTable;
-// struct DSClassVTable {
     DSClassToString        ToString;
     DSClassEquals          Equals;
     DSClassGetHashCode     GetHashCode;

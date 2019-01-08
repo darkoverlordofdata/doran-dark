@@ -183,7 +183,7 @@ void overload Render(Game* this)
     {
         // Draw background
         Vec2 size = { this->Width, this->Height };
-        DrawSprite(Renderer, $ResourceManager.GetTexture("background"), ZERO, size, 0.0f, WHITE);
+        Draw(Renderer, $ResourceManager.GetTexture("background"), ZERO, size, 0.0f, WHITE);
         GameLevel* level = Get(this->Levels, this->Level);
         Draw(level, Renderer);
         Draw(Player, Renderer);

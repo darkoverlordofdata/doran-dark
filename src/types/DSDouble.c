@@ -37,13 +37,12 @@ static DSException(NumberFormat);
  * @param value of double
  * 
  */
-DSDouble* NewDSDouble(double value) { 
+DSDouble* NewDSDouble(const double value) { 
     return DSDouble_init(DSDouble_alloc(), value); 
 }
 
 
-DSDouble* DSDouble_init(DSDouble* const this, double value)
-{
+DSDouble* DSDouble_init(DSDouble* const this, const double value) {
     DSNumber_init(this);
     this->isa = getDSDoubleIsa();
     this->value = value;
@@ -57,8 +56,7 @@ DSDouble* DSDouble_alloc() {
 /**
  * Returns a primitive double value parsed from input string. 
  */
-double DSParseDouble(char const *const s)
-{
+double DSParseDouble(char const *const s) {
     errno = 0;
     char* endptr;
     double result = strtod(s, endptr);
@@ -82,7 +80,7 @@ double DSParseDouble(char const *const s)
  *         +1 x < y
  *         -1 x > y
  */
-int DSDouble_Compare(double x, double y) {
+int overload Compare(const double x, const double y) {
     return (x < y) ? -1 : (( x == y ) ? 0 : 1);
 }
 
@@ -92,57 +90,55 @@ int DSDouble_Compare(double x, double y) {
  * @param   other  DSDouble to be compared
  * @return same as DSDouble_Compare
  */
-int DSDouble_CompareTo(DSDouble* const this, DSDouble* const other) {
-    return DSDouble_Compare(this->value, other->value);
+int overload CompareTo(const DSDouble* const this, const DSDouble* const other) {
+    return Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int DSDouble_IntValue(DSDouble* const this) {
+int overload IntValue(const DSDouble* const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-long DSDouble_LongValue(DSDouble* const this) {
+long overload LongValue(const DSDouble* const this) {
     return (long)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-float DSDouble_FloatValue(DSDouble* const this) {
+float overload FloatValue(const DSDouble* const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-double DSDouble_DoubleValue(DSDouble* const this) {
+double overload DoubleValue(const DSDouble* const this) {
     return this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-char DSDouble_CharValue(DSDouble* const this) {
+char overload CharValue(const DSDouble* const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-short DSDouble_ShortValue(DSDouble* const this) {
+short overload ShortValue(const DSDouble* const this) {
     return (short)this->value;
 }
 
-
-char* DSDouble_ToString(const DSDouble* const this) {
+char* overload ToString(const DSDouble* const this) {
     static char str[20];
     sprintf(str, "%f", this->value);
     return str;
 }
-
 

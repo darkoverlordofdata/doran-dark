@@ -45,26 +45,30 @@ ivar (DSNumber) {
     Class isa;
 };
 
-typedef bool    (*DSNumberCompareTo)  (const DSNumber* const, const DSNumber* const);
+typedef int     (*DSNumberCompareTo)  (const DSNumber* const, const DSNumber* const);
 typedef char*   (*DSNumberToString)  (const DSNumber* const);
+typedef int     (*DSNumberIntValue)  (const DSNumber* const);
+typedef long    (*DSNumberLongValue)  (const DSNumber* const);
+typedef float   (*DSNumberFloatValue)  (const DSNumber* const);
+typedef double  (*DSNumberDoubleValue)  (const DSNumber* const);
+typedef char    (*DSNumberCharValue)  (const DSNumber* const);
+typedef short   (*DSNumberShortValue)  (const DSNumber* const);
 
 /**
  * Object metaclass
  */
 vtable (DSNumber) {
-    char*   (*ToString) (DSNumber* const);
-    bool    (*Equals) (DSObject* const, DSObject* const);
-    int     (*GetHashCode) (DSObject* const);
-    void    (*Dispose) (DSObject* const);
-    // bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-    // bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-    int     (*CompareTo) (DSComparable* const, DSComparable*);
-    int     (*IntValue) (DSNumber* const);
-    long    (*LongValue) (DSNumber* const);
-    float   (*FloatValue) (DSNumber* const);
-    double  (*DoubleValue) (DSNumber* const);
-    char    (*CharValue) (DSNumber* const);
-    short   (*ShortValue) (DSNumber* const);
+    char*   (*ToString)     (const DSNumber* const);
+    bool    (*Equals)       (const DSObject* const, const DSObject* const);
+    int     (*GetHashCode)  (const DSObject* const);
+    void    (*Dispose)      (DSObject* const);
+    int     (*CompareTo)    (const DSNumber* const, const DSNumber*);
+    int     (*IntValue)     (const DSNumber* const);
+    long    (*LongValue)    (const DSNumber* const);
+    float   (*FloatValue)   (const DSNumber* const);
+    double  (*DoubleValue)  (const DSNumber* const);
+    char    (*CharValue)    (const DSNumber* const);
+    short   (*ShortValue)   (const DSNumber* const);
     
 };
 
@@ -73,15 +77,13 @@ class (DSNumber) {
 };
 
 
-int DSNumber_CompareTo(DSNumber* const, DSNumber*);
-bool DSNumber_Equals(DSNumber* const, DSNumber*);
-int DSNumber_IntValue(DSNumber* const);
-long DSNumber_LongValue(DSNumber* const);
-float DSNumber_FloatValue(DSNumber* const);
-double DSNumber_DoubleValue(DSNumber* const);
-char DSNumber_CharValue(DSNumber* const);
-short DSNumber_ShortValue(DSNumber* const);
-int DSNumber_Digit(char, int);
-char* DSNumber_ToString(const DSNumber* const);
+int overload CompareTo(const DSNumber* const, const DSNumber* const);
+int overload IntValue(const DSNumber* const);
+long overload LongValue(const DSNumber* const);
+float overload FloatValue(const DSNumber* const);
+double overload DoubleValue(const DSNumber* const);
+char overload CharValue(const DSNumber* const);
+short overload ShortValue(const DSNumber* const);
+char* overload ToString(const DSNumber* const);
 
 #endif _DSNUMBER_H_

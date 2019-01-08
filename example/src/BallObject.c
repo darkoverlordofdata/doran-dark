@@ -58,9 +58,9 @@ BallObject* BallObject_alloc() {
  * 
  * @param renderer to draw sprite with
  */
-void overload Draw(BallObject*  const this, SpriteRenderer* renderer)
+void overload Draw(BallObject* const this, SpriteRenderer* renderer)
 {
-    DrawSprite(renderer, this->Sprite, this->Position, this->Size, this->Rotation, this->Color);
+    Draw(renderer, this->Sprite, this->Position, this->Size, this->Rotation, this->Color);
 }
 
 
@@ -71,7 +71,7 @@ void overload Draw(BallObject*  const this, SpriteRenderer* renderer)
  * @param window_width
  * @returns Vec2 new position
  */
-void overload Move(BallObject*  this, GLfloat dt, GLuint window_width)
+void overload Move(BallObject* const this, const GLfloat dt, const GLuint window_width)
 {
     // If not stuck to player board
     if (!this->Stuck)
@@ -104,7 +104,7 @@ void overload Move(BallObject*  this, GLfloat dt, GLuint window_width)
  * @param velocity to reset to
  * 
  */
-void overload Reset(BallObject*  const this, Vec2 position, Vec2 velocity)
+void overload Reset(BallObject* const this, const Vec2 position, const Vec2 velocity)
 {
     this->Position = position;
     this->Velocity = velocity;

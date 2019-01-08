@@ -25,11 +25,11 @@ SOFTWARE.
 ******************************************************************/
 $implementation( DSBoolean );
 
-$method( ToString,           (DSBooleanToString)ToString, "$@:v" );
+$override( ToString,         (DSBooleanToString)ToString, "$@:v" );
 $method( Equals,             DSObject_Equals, "B@:@@" );
 $method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
 $method( Dispose,            DSObject_Dispose, "v@:v" );
-$method( CompareTo,          (DSBooleanCompareTo)CompareTo, "i@:@" );
+$override( CompareTo,        (DSBooleanCompareTo)CompareTo, "i@:@" );
 $method( BoolValue,          BoolValue, "B@:v" );
 
 $ivar( value, sizeof( int ), "B" );

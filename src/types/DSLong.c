@@ -37,11 +37,11 @@ static DSException(LongFormat);
  * 
  */
 
-DSLong* NewDSLong(long value) { 
+DSLong* NewDSLong(const long value) { 
     return DSLong_init(DSLong_alloc(), value); 
 }
 
-DSLong* DSLong_init(DSLong* const this, long value)
+DSLong* DSLong_init(DSLong* const this, const long value)
 {
     DSNumber_init(this);
     this->isa = getDSLongIsa();
@@ -57,7 +57,7 @@ DSLong* DSLong_alloc() {
 /**
  * Returns a primitive long value parsed from input string. 
  */
-long DSParseLong(char* const s, int radix)
+long DSParseLong(const char* const s, const int radix)
 {
     errno = 0;
     char* endptr;
@@ -82,7 +82,7 @@ long DSParseLong(char* const s, int radix)
  *         +1 x < y
  *         -1 x > y
  */
-int DSLong_Compare(long x, long y) {
+int DSLong_Compare(const long x, const long y) {
     return (x < y) ? -1 : (( x == y ) ? 0 : 1);
 }
 
@@ -92,53 +92,53 @@ int DSLong_Compare(long x, long y) {
  * @param   other  Long to be compared
  * @return same as DSLong_Compare
  */
-int DSLong_CompareTo(DSLong* const this, DSLong* const other) {
+int DSLong_CompareTo(const DSLong* const this, const DSLong* const other) {
     return DSLong_Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int DSLong_IntValue(DSLong* const this) {
+int DSLong_IntValue(const DSLong* const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-long DSLong_LongValue(DSLong* const this) {
+long DSLong_LongValue(const DSLong* const this) {
     return (long)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-float DSLong_FloatValue(DSLong* const this) {
+float DSLong_FloatValue(const DSLong* const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-double DSLong_DoubleValue(DSLong* const this) {
+double DSLong_DoubleValue(const DSLong* const this) {
     return (double)this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-char DSLong_CharValue(DSLong* const this) {
+char DSLong_CharValue(const DSLong* const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-short DSLong_ShortValue(DSLong* const this) {
+short DSLong_ShortValue(const DSLong* const this) {
     return (short)this->value;
 }
 
-bool DSLong_Equals(DSLong* const this, DSLong* const other)
+bool DSLong_Equals(const DSLong* const this, const DSLong* const other)
 {
     return this->value == other->value;
 }

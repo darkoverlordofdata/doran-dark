@@ -83,18 +83,16 @@ ivar (DSStringBuilder) {
  * StringBuilder metaclass
  */
 vtable (DSStringBuilder) {
-    char*   (*ToString) (DSStringBuilder* const);
-    bool    (*Equals) (DSObject* const, DSObject* const);
-    int     (*GetHashCode) (DSObject* const);
-    void    (*Dispose) (DSObject* const);
-    // bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-    // bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-    int     (*Empty) (DSStringBuilder* const);
-    int     (*Append) (DSStringBuilder* const, char* str);
-    int     (*Appendc) (DSStringBuilder* const, char c);
-    int     (*Appendf) (DSStringBuilder* const, char* str, ...);
-    DSString* (*Concat) (DSStringBuilder* const);
-    void    (*Reset) (DSStringBuilder* const);
+    char*   (*ToString)     (const DSStringBuilder* const);
+    bool    (*Equals)       (const DSObject* const, const DSObject* const);
+    int     (*GetHashCode)  (const DSObject* const);
+    void    (*Dispose)      (DSObject* const);
+    int     (*Empty)        (const DSStringBuilder* const);
+    int     (*Append)       (const DSStringBuilder* const, const char* str);
+    int     (*Appendc)      (const DSStringBuilder* const, const char c);
+    int     (*Appendf)      (const DSStringBuilder* const, const char* str, ...);
+    DSString* (*Concat)     (const DSStringBuilder* const);
+    void    (*Reset)        (const DSStringBuilder* const);
 
 };
 
@@ -102,16 +100,16 @@ class (DSStringBuilder) {
     DSStringBuilder*(*Create) ();
 };
 
+DSStringBuilder* NewDSStringBuilder();
+DSStringBuilder* DSStringBuilder_init(DSStringBuilder* const this);
+DSStringBuilder* DSStringBuilder_alloc();
 __attribute__((__format__ (__printf__, 2, 3)))
 int DSStringBuilder_Appendf(DSStringBuilder* sb, const char *format, ...);
 int DSStringBuilder_Appendc(DSStringBuilder* sb, const char c);
 int DSStringBuilder_Append(DSStringBuilder* sb, const char *str);
-DSString* DSStringBuilder_Concat(DSStringBuilder* sb);
+DSString* DSStringBuilder_Concat(const DSStringBuilder* sb);
 void DSStringBuilder_Reset(DSStringBuilder* sb);
-int DSStringBuilder_Empty(DSStringBuilder* sb);
-void DSStringBuilder_Dispose(DSStringBuilder*);
-DSStringBuilder* DSStringBuilder_init(DSStringBuilder* const this);
-DSStringBuilder* DSStringBuilder_alloc();
-DSStringBuilder* NewDSStringBuilder();
+int DSStringBuilder_Empty(const DSStringBuilder* sb);
+void DSStringBuilder_Dispose(DSStringBuilder* const);
 
 #endif _DSSTRING_BUILDER_H_

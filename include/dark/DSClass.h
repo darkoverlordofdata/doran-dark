@@ -40,8 +40,8 @@ SOFTWARE.
     struct T
 
 #define vtable(T)                                                       \
-    struct T##vtable T##vtable;                                         \
-    struct T##vtable
+    struct T##_vtable T##_vtable;                                         \
+    struct T##_vtable
 
 #define class(T)                                                        \
     struct $##T $##T;                                                   \
@@ -63,8 +63,8 @@ SOFTWARE.
  *  warning: only 1 $implementation per main file due to vptr scoping
  */
 #define $implementation(T)                                              \
-static inline struct T##vtable* _vptr(T* this) {                        \
-    return (struct T##vtable*)this->isa->vtable;                        \
+static inline struct T##_vtable* _vptr(T* this) {                        \
+    return (struct T##_vtable*)this->isa->vtable;                        \
 }                                                                       \
 static int _##T##_size = -1;                                            \
 static int get##T##Size() {                                             \
@@ -84,7 +84,7 @@ Class T##Implementation(Class super);                                   \
 Class T##Implementation(Class super)                                    \
 {                                                                       \
     int k = 0;                                                          \
-    IMP* vt = &T##vtable;                                               \
+    IMP* vt = &T##_vtable;                                               \
     char* class_name = #T;                                              \
     Class isa = objc_allocateClassPair(super, #T, 0);                   \
     isa->vtable = &vt[0];               
@@ -95,6 +95,23 @@ Class T##Implementation(Class super)                                    \
  *      
  */
 #define $method(name, imp, type)                                        \
+    class_addMethod(isa, #name, imp, type);                             \
+    vt[k++] = imp; 
+
+/**
+ *  MACRO $virtual method
+ *      this just documents that this is a virtual method
+ */
+#define $virtual(name, imp, type)                                       \
+    class_addMethod(isa, #name, imp, type);                             \
+    vt[k++] = imp; 
+
+/**
+ *  MACRO $override method
+ *      this just documents that this is a overriden method
+ *      
+ */
+#define $override(name, imp, type)                                      \
     class_addMethod(isa, #name, imp, type);                             \
     vt[k++] = imp; 
 
@@ -111,7 +128,6 @@ Class T##Implementation(Class super)                                    \
  */
 #define $class_method(name, imp, type)                                  \
     class_addMethod(GETMETA(isa), #name, imp, type);                    \
-    //vt[k++] = imp; 
 
 /**
  *  MACRO  $isa ivar
@@ -132,7 +148,7 @@ Class T##Implementation(Class super)                                    \
  *  MACRO Vptr
  *      Returns the vtable base for this class
  */
-#define $vptr(T) ((struct T##vtable*)(this->isa->vtable))
+#define $vptr(T) ((struct T##_vtable*)(this->isa->vtable))
 
 
 // DSChar* NewDSChar(char value) { 

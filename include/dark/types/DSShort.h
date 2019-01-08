@@ -49,19 +49,17 @@ ivar (DSShort) {
  * Object metaclass
  */
 vtable (DSShort) {
-    char*   (*ToString) (DSShort* const);
-    bool    (*Equals) (DSObject* const, DSObject* const);
-    int     (*GetHashCode) (DSObject* const);
-    void    (*Dispose) (DSObject* const);
-    // bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-    // bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-    int     (*CompareTo) (DSComparable* const, DSComparable* const);
-    int     (*IntValue) (DSShort* const);
-    long    (*LongValue) (DSShort* const);
-    float   (*FloatValue) (DSShort* const);
-    double  (*DoubleValue) (DSShort* const);
-    char    (*CharValue) (DSShort* const);
-    short   (*ShortValue) (DSShort* const);
+    char*   (*ToString) (const DSShort* const);
+    bool    (*Equals) (const DSObject* const, DSObject* const);
+    int     (*GetHashCode) (const DSObject* const);
+    void    (*Dispose) (const DSObject* const);
+    int     (*CompareTo) (const DSComparable* const, const DSComparable* const);
+    int     (*IntValue) (const DSShort* const);
+    long    (*LongValue) (const DSShort* const);
+    float   (*FloatValue) (const DSShort* const);
+    double  (*DoubleValue) (const DSShort* const);
+    char    (*CharValue) (const DSShort* const);
+    short   (*ShortValue) (const DSShort* const);
 
 };
 
@@ -69,17 +67,17 @@ class (DSShort) {
     DSShort*  (*Create) (short value);
 };
 
-short DSShort_ParseShort(char const *const s, int);
-int DSShort_CompareTo(DSShort* const, DSShort* const);
-int DSShort_IntValue(DSShort* const);
-long DSShort_LongValue(DSShort* const);
-float DSShort_FloatValue(DSShort* const);
-double DSShort_DoubleValue(DSShort* const);
-char DSShort_CharValue(DSShort* const);
-short DSShort_ShortValue(DSShort* const);
-char* DSShort_ToString(const DSShort* const);
-DSShort* DSShort_init(DSShort* const this, short value);
+DSShort* NewDSShort(short const value);
+DSShort* DSShort_init(DSShort* const this, const short value);
 DSShort* DSShort_alloc();
-DSShort* NewDSShort(short value);
+short DSShort_ParseShort(char const *const, const int);
+int DSShort_CompareTo(const DSShort* const, const DSShort* const);
+int DSShort_IntValue(const DSShort* const);
+long DSShort_LongValue(const DSShort* const);
+float DSShort_FloatValue(const DSShort* const);
+double DSShort_DoubleValue(const DSShort* const);
+char DSShort_CharValue(const DSShort* const);
+short DSShort_ShortValue(const DSShort* const);
+char* DSShort_ToString(const DSShort* const);
 
 #endif _DSSHORT_H_

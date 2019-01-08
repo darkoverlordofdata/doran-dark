@@ -20,7 +20,7 @@ $method( Equals,             DSObject_Equals, "B@:@@" );
 $method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
 $method( Dispose,            DSObject_Dispose, "v@:v" );
 
-$method( Draw,               Draw, "v@:@" );
+$method( Draw,               (GameObjectDraw)Draw, "v@:@" );
 
 
 $end;

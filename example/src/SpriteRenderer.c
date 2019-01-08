@@ -34,7 +34,7 @@ SpriteRenderer* SpriteRenderer_alloc() {
 }
 
 /**
- * DrawSprite
+ * Draw
  * 
  * @param texture the image to render
  * @param position to render at
@@ -43,7 +43,7 @@ SpriteRenderer* SpriteRenderer_alloc() {
  * @param color to tint
  * 
  */
-void overload DrawSprite(
+void overload Draw(
     SpriteRenderer* this, 
     const Texture2D* const texture, 
     const Vec2 position, 
@@ -74,7 +74,6 @@ void overload Dispose(SpriteRenderer* this)
 {
     glDeleteVertexArrays(1, this->VAO);
 }
-
 
 static void initRenderData(SpriteRenderer* this)
 {

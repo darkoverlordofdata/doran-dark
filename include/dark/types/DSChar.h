@@ -46,39 +46,51 @@ ivar (DSChar)
     char value;
 };
 
+DSChar* NewDSChar(const char value);
+DSChar* DSChar_alloc();
+DSChar* DSChar_init(DSChar* const this, const char value);
+
+char*   overload ToString(const DSChar* const);
+int     overload Compare(const char x, const char y);
+int     overload CompareTo(const DSChar* const, const DSChar* const);
+int     overload IntValue(const DSChar* const);
+long    overload LongValue(const DSChar* const);
+float   overload FloatValue(const DSChar* const);
+double  overload DoubleValue(const DSChar* const);
+char    overload CharValue(const DSChar* const);
+short   overload ShortValue(const DSChar* const);
+
+
+typedef char*   (*DSCharToString)       (const DSChar* const);
+typedef int     (*DSCharCompareTo)      (const DSChar* const, const DSChar* const);
+typedef int     (*DSCharIntValue)       (const DSChar* const);
+typedef long    (*DSCharLongValue)      (const DSChar* const);
+typedef float   (*DSCharFloatValue)     (const DSChar* const);
+typedef double  (*DSCharDoubleValue)    (const DSChar* const);
+typedef char    (*DSCharCharValue)      (const DSChar* const);
+typedef short   (*DSCharShortValue)     (const DSChar* const);
+
 /**
- * Char vtable
+ * Char vtable with overrides
  */
 vtable (DSChar)
 {
-    char*   (*ToString) (DSChar* const);
-    bool    (*Equals) (DSObject* const, DSObject* const);
-    int     (*GetHashCode) (DSObject* const);
-    void    (*Dispose) (DSObject* const);
-    int     (*CompareTo) (DSComparable* const, DSComparable* const);
-    int     (*IntValue) (DSChar* const);
-    long    (*LongValue) (DSChar* const);
-    float   (*FloatValue) (DSChar* const);
-    double  (*DoubleValue) (DSChar* const);
-    char    (*CharValue) (DSChar* const);
-    short   (*ShortValue) (DSChar* const);
-
+    DSCharToString          ToString;
+    DSObjectEquals          Equals;
+    DSObjectGetHashCode     GetHashCode;
+    DSObjectDispose         Dispose;
+    DSCharCompareTo         CompareTo;
+    DSCharIntValue          IntValue;
+    DSCharLongValue         LongValue;
+    DSCharFloatValue        FloatValue;
+    DSCharDoubleValue       DoubleValue;
+    DSCharCharValue         CharValue;
+    DSCharShortValue        ShortValue;
 };
 
 class (DSChar) {
     DSChar*(*Create) (char value);
 };
 
-int DSChar_CompareTo(DSChar* const, DSChar* const);
-int DSChar_IntValue(DSChar* const);
-long DSChar_LongValue(DSChar* const);
-float DSChar_FloatValue(DSChar* const);
-double DSChar_DoubleValue(DSChar* const);
-char DSChar_CharValue(DSChar* const);
-short DSChar_ShortValue(DSChar* const);
-char* DSChar_ToString(DSChar* const);
-DSChar* DSChar_init(DSChar* const this, char value);
-DSChar* DSChar_alloc();
-DSChar* NewDSChar(char value);
 
 #endif _DSCHAR_H_

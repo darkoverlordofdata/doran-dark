@@ -51,19 +51,17 @@ ivar (DSFloat)
  */
 vtable (DSFloat)
 {
-    char*   (*ToString) (DSFloat* const);
-    bool    (*Equals) (DSObject* const, DSObject* const);
-    int     (*GetHashCode) (DSObject* const);
-    void    (*Dispose) (DSObject* const);
-    // bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-    // bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-    int     (*CompareTo) (DSComparable* const, DSComparable* const);
-    int     (*IntValue) (DSFloat* const);
-    long    (*LongValue) (DSFloat* const);
-    float   (*FloatValue) (DSFloat* const);
-    double  (*DoubleValue) (DSFloat* const);
-    char    (*CharValue) (DSFloat* const);
-    short   (*ShortValue) (DSFloat* const);
+    char*   (*ToString)     (const DSFloat* const);
+    bool    (*Equals)       (const DSObject* const, DSObject* const);
+    int     (*GetHashCode)  (const DSObject* const);
+    void    (*Dispose)      (DSObject* const);
+    int     (*CompareTo)    (const DSComparable* const, const DSComparable* const);
+    int     (*IntValue)     (const DSFloat* const);
+    long    (*LongValue)    (const DSFloat* const);
+    float   (*FloatValue)   (const DSFloat* const);
+    double  (*DoubleValue)  (const DSFloat* const);
+    char    (*CharValue)    (const DSFloat* const);
+    short   (*ShortValue)   (const DSFloat* const);
 
 };
 
@@ -71,15 +69,15 @@ class (DSFloat) {
     DSFloat*  (*Create) (float value);
 };
 
-int DSFloat_CompareTo(DSFloat* const, DSFloat* const);
-int DSFloat_IntValue(DSFloat* const);
-long DSFloat_LongValue(DSFloat* const);
-float DSFloat_FloatValue(DSFloat* const);
-double DSFloat_DoubleValue(DSFloat* const);
-char DSFloat_CharValue(DSFloat* const);
-short DSFloat_ShortValue(DSFloat* const);
-char* DSFloat_ToString(const DSFloat* const);
-DSFloat* DSFloat_init(DSFloat* const this, float value);
+DSFloat* NewDSFloat(const float value);
+DSFloat* DSFloat_init(DSFloat* const this, const float value);
 DSFloat* DSFloat_alloc();
-DSFloat* NewDSFloat(float value);
+int DSFloat_CompareTo(const DSFloat* const, const DSFloat* const);
+int DSFloat_IntValue(const DSFloat* const);
+long DSFloat_LongValue(const DSFloat* const);
+float DSFloat_FloatValue(const DSFloat* const);
+double DSFloat_DoubleValue(const DSFloat* const);
+char DSFloat_CharValue(const DSFloat* const);
+short DSFloat_ShortValue(const DSFloat* const);
+char* DSFloat_ToString(const DSFloat* const);
 #endif _DSFLOAT_H_

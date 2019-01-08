@@ -42,6 +42,7 @@ ivar (GameObject)
 };
 
 typedef char*   (*GameObjectToString)  (const GameObject* const);
+typedef void    (*GameObjectDraw)  (GameObject* const, SpriteRenderer*);
 
 class (GameObject) {
     GameObject*  (*Create) (char* name, Vec2 Position, Vec2 Size, Texture2D* Sprite, Vec3 Color);
@@ -50,12 +51,12 @@ class (GameObject) {
 vtable (GameObject)
 {
     char*   (*ToString) (const GameObject* const);
-    bool    (*Equals) (DSObject* const, DSObject* const);
+    bool    (*Equals)   (DSObject* const, DSObject* const);
     int     (*GetHashCode) (DSObject* const);
-    void    (*Dispose) (DSObject* const);
+    void    (*Dispose)  (DSObject* const);
 
     // Draw sprite
-    void        (*Draw)         (GameObject* const, SpriteRenderer* renderer);
+    void    (*Draw)     (GameObject* const, SpriteRenderer* renderer);
     
 };
 

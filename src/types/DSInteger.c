@@ -37,12 +37,12 @@ static DSException(NumberFormat);
  * 
  */
 
-DSInteger* NewDSInteger(int value) { 
+DSInteger* NewDSInteger(const int value) { 
     return DSInteger_init(DSInteger_alloc(), value); 
 }
 
 
-DSInteger* DSInteger_init(DSInteger* const this, int value)
+DSInteger* DSInteger_init(DSInteger* const this, const int value)
 {
     DSNumber_init(this);
     this->isa = getDSIntegerIsa();
@@ -57,7 +57,7 @@ DSInteger* DSInteger_alloc() {
 /**
  * Returns a primitive integer value parsed from input string. 
  */
-int DSParseInt(char* const s, int radix) {
+int DSParseInt(const char* const s, const int radix) {
     long i = DSParseLong(s, radix);
     if (i < INTEGER_MIN_VALUE || i > INTEGER_MAX_VALUE)
         return DSNumberFormatException(
@@ -73,7 +73,7 @@ int DSParseInt(char* const s, int radix) {
  *        +1 x < y
  *        -1 x > y
  */
-int DSInteger_Compare(int x, int y) {
+int DSInteger_Compare(const int x, const int y) {
     return (x < y) ? -1 : (( x == y ) ? 0 : 1);
 }
 
@@ -83,49 +83,49 @@ int DSInteger_Compare(int x, int y) {
  * @param   other  Integer to be compared
  * @return same as DSInteger_Compare
  */
-int DSInteger_CompareTo(DSInteger* this, DSInteger* other) {
+int DSInteger_CompareTo(const DSInteger* this, const DSInteger* other) {
     return DSInteger_Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int DSInteger_IntValue(DSInteger* const this) {
+int DSInteger_IntValue(const DSInteger* const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-long DSInteger_LongValue(DSInteger* const this) {
+long DSInteger_LongValue(const DSInteger* const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-float DSInteger_FloatValue(DSInteger* const this) {
+float DSInteger_FloatValue(const DSInteger* const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-double DSInteger_DoubleValue(DSInteger* const this) {
+double DSInteger_DoubleValue(const DSInteger* const this) {
     return (double)this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-char DSInteger_CharValue(DSInteger* const this) {
+char DSInteger_CharValue(const DSInteger* const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-short DSInteger_ShortValue(DSInteger* const this) {
+short DSInteger_ShortValue(const DSInteger* const this) {
     return (short)this->value;
 }
 

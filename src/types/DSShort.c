@@ -36,11 +36,11 @@ static DSException(NumberFormat);
  * @param value of short
  * 
  */
-DSShort* NewDSShort(short value) { 
+DSShort* NewDSShort(const short value) { 
     return DSShort_init(objc_getClass("DSShort"), value); 
 }
 
-DSShort* DSShort_init(DSShort* const this, short value)
+DSShort* DSShort_init(DSShort* const this, const short value)
 {
     DSNumber_init(this);
     this->isa = getDSShortIsa();
@@ -56,7 +56,7 @@ DSShort* DSShort_alloc() {
 /**
  * Returns a primitive short value parsed from input string. 
  */
-short DSParseShort(char const *const s, int radix)
+short DSParseShort(char const *const s, int const radix)
 {
     long i = DSParseLong(s, radix);
     if (i < SHORT_MIN_VALUE || i > SHORT_MAX_VALUE)
@@ -73,7 +73,7 @@ short DSParseShort(char const *const s, int radix)
  *         +1 x < y
  *         -1 x > y
  */
-short DSShort_Compare(short x, short y) {
+short DSShort_Compare(const short x, const short y) {
     return (x < y) ? -1 : (( x == y ) ? 0 : 1);
 }
 
@@ -83,49 +83,49 @@ short DSShort_Compare(short x, short y) {
  * @param   other  Short to be compared
  * @return same as DSShort_Compare
  */
-int DSShort_CompareTo(DSShort* this, DSShort* other) {
+int DSShort_CompareTo(const DSShort* this, const DSShort* other) {
     return DSShort_Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int DSShort_IntValue(DSShort* const this) {
+int DSShort_IntValue(const DSShort* const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-long DSShort_LongValue(DSShort* const this) {
+long DSShort_LongValue(const DSShort* const this) {
     return (long)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-float DSShort_FloatValue(DSShort* const this) {
+float DSShort_FloatValue(const DSShort* const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-double DSShort_DoubleValue(DSShort* const this) {
+double DSShort_DoubleValue(const DSShort* const this) {
     return (double)this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-char DSShort_CharValue(DSShort* const this) {
+char DSShort_CharValue(const DSShort* const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-short DSShort_ShortValue(DSShort* const this) {
+short DSShort_ShortValue(const DSShort* const this) {
     return (short)this->value;
 }
 

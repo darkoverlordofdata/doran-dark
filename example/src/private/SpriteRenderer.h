@@ -12,6 +12,6 @@ $method( ToString,           (SpriteRendererToString)ToString, "$@:v" );
 $method( Equals,             DSObject_Equals, "B@:@@" );
 $method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
 $method( Dispose,            DSObject_Dispose, "v@:v" );
-$method( DrawSprite,         DrawSprite, "@@:@!!f!" );
+$method( Draw,         Draw, "@@:@!!f!" );
 
 $end;

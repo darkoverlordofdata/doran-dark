@@ -17,13 +17,13 @@ $ivar( Name,        sizeof( GLchar ), "*" );
 $ivar( Radius,      sizeof( float ), "f" );
 $ivar( Stuck,       sizeof( bool ), "B" );
 
-$method( ToString,          (BallObjectToString)ToString, "$@:v" );
-$method( Equals,            DSObject_Equals, "B@:@@" );
-$method( GetHashCode,       DSObject_GetHashCode, "l@:v" );
-$method( Dispose,           DSObject_Dispose, "v@:v" );
+$method( ToString,      (BallObjectToString)ToString, "$@:v" );
+$method( Equals,        DSObject_Equals, "B@:@@" );
+$method( GetHashCode,   DSObject_GetHashCode, "l@:v" );
+$method( Dispose,       DSObject_Dispose, "v@:v" );
 
-$method( Draw,              (BallObjectDraw)Draw, "v@:@" );
-$method( Move,              Move, "v@:iI" );
-$method( Reset,             Reset, "v@:!!" );
+$method( Draw,          (BallObjectDraw)Draw, "v@:@" );
+$method( Move,          Move, "v@:iI" );
+$method( Reset,         Reset, "v@:!!" );
 
 $end;

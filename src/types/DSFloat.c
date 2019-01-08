@@ -37,12 +37,12 @@ static DSException(NumberFormat);
  * 
  */
 
-DSFloat* NewDSFloat(float value) { 
+DSFloat* NewDSFloat(const float value) { 
     return DSFloat_init(DSFloat_alloc(), value); 
 }
 
 
-DSFloat* DSFloat_init(DSFloat* const this, float value)
+DSFloat* DSFloat_init(DSFloat* const this, const float value)
 {
     DSNumber_init(this);
     this->isa = getDSFloatIsa();
@@ -58,7 +58,7 @@ DSFloat* DSFloat_alloc() {
 /**
  * Returns a primitive float value parsed from input string. 
  */
-float DSParseFloat(char* s)
+float DSParseFloat(const char* s)
 {
     
     double d = DSParseDouble(s);
@@ -76,7 +76,7 @@ float DSParseFloat(char* s)
  *         +1 x < y
  *         -1 x > y
  */
-int DSFloat_Compare(float x, float y) {
+int DSFloat_Compare(const float x, const float y) {
     return (x < y) ? -1 : (( x == y ) ? 0 : 1);
 }
 
@@ -86,49 +86,49 @@ int DSFloat_Compare(float x, float y) {
  * @param   other  Float to be compared
  * @return same as DSFloat_Compare
  */
-int DSFloat_CompareTo(DSFloat* this, DSFloat* other) {
+int DSFloat_CompareTo(const DSFloat* this, const DSFloat* other) {
     return DSFloat_Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int DSFloat_IntValue(DSFloat* const this) {
+int DSFloat_IntValue(const DSFloat* const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-long DSFloat_LongValue(DSFloat* const this) {
+long DSFloat_LongValue(const DSFloat* const this) {
     return (long)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-double DSFloat_DoubleValue(DSFloat* const this) {
+double DSFloat_DoubleValue(const DSFloat* const this) {
     return (double)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-float DSFloat_FloatValue(DSFloat* const this) {
+float DSFloat_FloatValue(const DSFloat* const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-char DSFloat_CharValue(DSFloat* const this) {
+char DSFloat_CharValue(const DSFloat* const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-short DSFloat_ShortValue(DSFloat* const this) {
+short DSFloat_ShortValue(const DSFloat* const this) {
     return (short)this->value;
 }
 

@@ -61,7 +61,7 @@ void overload Draw(
     GameObject* const this, 
     SpriteRenderer* renderer)
 {
-    DrawSprite(renderer, this->Sprite, this->Position, this->Size, this->Rotation, this->Color);
+    Draw(renderer, this->Sprite, this->Position, this->Size, this->Rotation, this->Color);
 }
 
 /**

@@ -32,11 +32,11 @@ SOFTWARE.
  * @param value of bool
  * 
  */
-DSBoolean* NewDSBoolean(bool value) { 
+DSBoolean* NewDSBoolean(const bool value) { 
     return DSBoolean_init(DSBoolean_alloc(), value); 
 }
 
-DSBoolean* DSBoolean_init(DSBoolean* this, bool value) {
+DSBoolean* DSBoolean_init(DSBoolean* this, const bool value) {
     DSComparable_init(this);
     this->isa = getDSBooleanIsa();
     this->value = value;
@@ -47,8 +47,7 @@ DSBoolean* DSBoolean_alloc() {
     return DSMalloc(getDSBooleanSize());
 }
 
-static bool ParseBool(const char * const s)
-{
+bool ParseBool(const char * const s) {
     if (!strcmpi("y", s) 
     ||  !strcmpi("yes", s) 
     ||  !strcmpi("t", s) 
@@ -90,8 +89,7 @@ bool BoolValue(const DSBoolean*  const this) {
 /**
  * Returns the string value of this DSBoolean
  */
-char* overload ToString(const DSBoolean* const this)
-{
+char* overload ToString(const DSBoolean* const this) {
     return this->value ? "true" : "false";
 }
 

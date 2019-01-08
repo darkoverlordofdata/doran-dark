@@ -50,19 +50,17 @@ ivar (DSLong)
  * Object metaclass
  */
 vtable (DSLong) {
-    char*   (*ToString) (DSLong* const);
-    bool    (*Equals) (DSObject* const, DSObject* const);
-    int     (*GetHashCode) (DSObject* const);
-    void    (*Dispose) (DSObject* const);
-    // bool    (*ReferenceEquals) (DSObject* const, DSObject* const);
-    // bool    (*InstanceEquals) (DSObject* const, DSObject* const);
-    int     (*CompareTo) (DSComparable* const, DSComparable* const);
-    int     (*IntValue) (DSLong* const);
-    long    (*LongValue) (DSLong* const);
-    float   (*FloatValue) (DSLong* const);
-    double  (*DoubleValue) (DSLong* const);
-    char    (*CharValue) (DSLong* const);
-    short   (*ShortValue) (DSLong* const);
+    char*   (*ToString)     (const DSLong* const);
+    bool    (*Equals)       (const DSObject* const, DSObject* const);
+    int     (*GetHashCode)  (const DSObject* const);
+    void    (*Dispose)      (const DSObject* const);
+    int     (*CompareTo)    (const DSComparable* const, const DSComparable* const);
+    int     (*IntValue)     (const DSLong* const);
+    long    (*LongValue)    (const DSLong* const);
+    float   (*FloatValue)   (const DSLong* const);
+    double  (*DoubleValue)  (const DSLong* const);
+    char    (*CharValue)    (const DSLong* const);
+    short   (*ShortValue)   (const DSLong* const);
 
 };
 
@@ -70,17 +68,17 @@ class (DSLong) {
     DSLong*   (*Create) (long);
 };
 
-long DSLongParseLong(char *const, int);
-int DSLong_CompareTo(DSLong* const, DSLong* const);
-int DSLong_IntValue(DSLong* const);
-long DSLong_LongValue(DSLong* const);
-float DSLong_FloatValue(DSLong* const);
-double DSLong_DoubleValue(DSLong* const);
-char DSLong_CharValue(DSLong* const);
-short DSLong_ShortValue(DSLong* const);
-char* DSLong_ToString(const DSLong* const);
-DSLong* DSLong_init(DSLong* const this, long value);
+DSLong* NewDSLong(const long value);
+DSLong* DSLong_init(DSLong* const this, const long value);
 DSLong* DSLong_alloc();
-DSLong* NewDSLong(long value);
+long DSLongParseLong(char *const, int);
+int DSLong_CompareTo(const DSLong* const, const DSLong* const);
+int DSLong_IntValue(const DSLong* const);
+long DSLong_LongValue(const DSLong* const);
+float DSLong_FloatValue(const DSLong* const);
+double DSLong_DoubleValue(const DSLong* const);
+char DSLong_CharValue(const DSLong* const);
+short DSLong_ShortValue(const DSLong* const);
+char* DSLong_ToString(const DSLong* const);
 
 #endif _DSLONG_H_

@@ -32,11 +32,11 @@ SOFTWARE.
  * @param value of char
  * 
  */
-DSChar* NewDSChar(char value) { 
+DSChar* NewDSChar(const char value) { 
     return DSChar_init(DSChar_alloc(), value); 
 }
 
-DSChar* DSChar_init(DSChar* const this, char value)
+DSChar* DSChar_init(DSChar* const this, const char value)
 {
     DSNumber_init(this);
     this->isa = getDSCharIsa();
@@ -56,7 +56,7 @@ DSChar* DSChar_alloc() {
  *         +1 x < y
  *         -1 x > y
  */
-int DSChar_Compare(char x, char y) {
+int overload Compare(const char x, const char y) {
     return (x < y) ? -1 : (( x == y ) ? 0 : 1);
 }
 
@@ -66,49 +66,49 @@ int DSChar_Compare(char x, char y) {
  * @param   other  Char to be compared
  * @return same as DSChar_Compare
  */
-int DSChar_CompareTo(DSChar* const this, DSChar* const other) {
-    return DSChar_Compare(this->value, other->value);
+int overload CompareTo(const DSChar* const this, const DSChar* const other) {
+    return Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int DSChar_IntValue(DSChar* const this) {
+int overload IntValue(const DSChar* const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-long DSChar_LongValue(DSChar* const this) {
+long overload LongValue(const DSChar* const this) {
     return (long)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-float DSChar_FloatValue(DSChar* const this) {
+float overload FloatValue(const DSChar* const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-double DSChar_DoubleValue(DSChar* const this) {
+double overload DoubleValue(const DSChar* const this) {
     return (double)this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-char DSChar_CharValue(DSChar* const this) {
+char overload CharValue(const DSChar* const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-short DSChar_ShortValue(DSChar* const this) {
+short overload ShortValue(const DSChar* const this) {
     return (short)this->value;
 }
 
@@ -116,8 +116,9 @@ short DSChar_ShortValue(DSChar* const this) {
 /**
  * Returns the string value of this Char
  */
-char* DSChar_ToString(DSChar* const this)
+char* overload ToString(const DSChar* const this)
 {
+    DSLog("DSChar ToString");
     static char str[2];
     sprintf(str, "%c", this->value);
     return str;

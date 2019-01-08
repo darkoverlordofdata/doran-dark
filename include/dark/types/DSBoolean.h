@@ -43,6 +43,17 @@ ivar (DSBoolean) {
     bool value;
 };
 
+DSBoolean* NewDSBoolean(const bool value);
+DSBoolean* DSBoolean_init(DSBoolean* this, const bool value);
+DSBoolean* DSBoolean_alloc();
+
+char*   overload ToString(const DSBoolean* const);
+int     overload Compare(const bool, const bool);
+int     overload CompareTo(const DSBoolean* const, const DSBoolean* const);
+
+bool    BoolValue(const DSBoolean* const);
+bool    ParseBool(const char *const);
+
 typedef int     (*DSBooleanCompareTo)  (const DSBoolean* const, const DSBoolean* const);
 typedef char*   (*DSBooleanToString)  (const DSBoolean* const);
 
@@ -50,12 +61,12 @@ typedef char*   (*DSBooleanToString)  (const DSBoolean* const);
  * DSBoolean vtable
  */
 vtable (DSBoolean) {
-    char*   (*ToString) (const DSBoolean* const);
-    bool    (*Equals) (DSObject* const, DSObject* const);
-    int     (*GetHashCode) (DSObject* const);
-    void    (*Dispose) (DSObject* const);
-    int     (*CompareTo) (const DSBoolean* const, const DSBoolean* const);
-    bool    (*BoolValue) (const DSBoolean* const);
+    DSBooleanToString       ToString;
+    DSObjectEquals          Equals;
+    DSObjectGetHashCode     GetHashCode;
+    DSObjectDispose         Dispose;
+    DSBooleanCompareTo      CompareTo;
+    bool    (*ParseBool)    (const char *const);    
 };
 
 /**
@@ -71,16 +82,5 @@ class (DSBoolean) {
     DSBoolean* True;
     DSBoolean* False;
 };
-
-bool BoolValue(const DSBoolean* const);
-static bool ParseBool(const char *const);
-int overload Compare(bool, bool);
-int overload CompareTo(const DSBoolean* const, const DSBoolean* const);
-int DSBoolean_CompareTo(const DSBoolean* const, const DSBoolean* const);
-char* overload ToString(const DSBoolean* const);
-DSBoolean* DSBoolean_init(DSBoolean* this, bool value);
-DSBoolean* NewDSBoolean(bool value);
-DSBoolean* DSBoolean_init(DSBoolean* this, bool value);
-DSBoolean* DSBoolean_alloc();
 
 #endif // _DSBOOLEAN_H_
