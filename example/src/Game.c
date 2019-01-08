@@ -7,7 +7,7 @@
 ** option) any later version.
 ******************************************************************/
 #include <Game.h>
-#include "imp/Game.h"
+#include "private/Game.h"
 /** Defines a Collision Result Tuple */
 ivar (Collision) 
 {
@@ -49,7 +49,7 @@ Game* Game_init(
 {
 	DSObject_init(this);
     this->isa = getGameIsa();
-    this->Levels = NewDSArray(4);
+    this->Levels = new(DSArray, 4);
     this->Level = 0;
     this->State = GAME_ACTIVE;
     this->Width = Width;
@@ -102,7 +102,7 @@ void overload Start(Game* this)
     $ResourceManager.LoadTexture("textures/awesomeface.png", true, "face");
     $ResourceManager.LoadTexture("textures/paddle.png", true, "paddle");
     // Set render-specific controls
-    Renderer = NewSpriteRenderer($ResourceManager.GetShader("sprite"));
+    Renderer = new(SpriteRenderer, $ResourceManager.GetShader("sprite"));
     // Load levels
 
     Add(this->Levels, NewGameLevel("levels/one.lvl", this->Width, this->Height * 0.5));
@@ -112,9 +112,9 @@ void overload Start(Game* this)
 
     // Configure game objects
     Vec2 playerPos = (Vec2){ this->Width / 2 - PLAYER_SIZE.x / 2, this->Height - PLAYER_SIZE.y };
-    Player = NewGameObject("player", playerPos, PLAYER_SIZE, $ResourceManager.GetTexture("paddle"), WHITE);
+    Player = new(GameObject, "player", playerPos, PLAYER_SIZE, $ResourceManager.GetTexture("paddle"), WHITE);
     Vec2 ballPos = playerPos + (Vec2){ PLAYER_SIZE.x / 2 - BALL_RADIUS, -BALL_RADIUS * 2 };
-    Ball = NewBallObject(ballPos, BALL_RADIUS, INITIAL_BALL_VELOCITY, $ResourceManager.GetTexture("face"));
+    Ball = new(BallObject, ballPos, BALL_RADIUS, INITIAL_BALL_VELOCITY, $ResourceManager.GetTexture("face"));
 }
 
 /**

@@ -7,7 +7,7 @@
 ** option) any later version.
 ******************************************************************/
 #include <SpriteRenderer.h>
-#include "imp/SpriteRenderer.h"
+#include "private/SpriteRenderer.h"
 /**
  * SpriteRenderer
  * 
@@ -45,11 +45,11 @@ SpriteRenderer* SpriteRenderer_alloc() {
  */
 void overload DrawSprite(
     SpriteRenderer* this, 
-    Texture2D* texture, 
-    Vec2 position, 
-    Vec2 size, 
-    GLfloat rot, 
-    Vec3 color)
+    const Texture2D* const texture, 
+    const Vec2 position, 
+    const Vec2 size, 
+    const GLfloat rot, 
+    const Vec3 color)
 {
     Mat model = mat_identity();
     model = glm_translate(model, (Vec3){ position.x, position.y, 0.0f });  // First translate (transformations are: scale happens first, then rotation and then finall translation happens; reversed order)

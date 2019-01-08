@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <GameLevel.h>
-#include "imp/GameLevel.h"
+#include "private/GameLevel.h"
 /**
  * GameLevel
  */
@@ -28,7 +28,7 @@ GameLevel* GameLevel_init(
 {
 	DSObject_init(this);
     this->isa = getGameLevelIsa();
-    this->Bricks = NewDSArray(200);
+    this->Bricks = new(DSArray, 200);
     Load(this, file, levelWidth, levelHeight);
     return this;
 }
@@ -60,8 +60,8 @@ GameLevel* overload Load(
     char* path = join("assets/", file);
     char* line;
     FILE* fstream = fopen(path, "r");
-    DSArray* tileData = NewDSArray(20);
-    DSArray* row = NewDSArray(20);
+    DSArray* tileData = new(DSArray, 20);
+    DSArray* row = new(DSArray, 20);
     int i;
     char c;
     if (fstream)
@@ -72,7 +72,7 @@ GameLevel* overload Load(
             if (c == '\n')
             {
                 Add(tileData, (Any)row);
-                row = NewDSArray(20);
+                row = new(DSArray, 20);
             }
         }
 
@@ -163,14 +163,14 @@ static void init(
             if (blockType == 1) // Solid
             {
                 struct Texture2D *tex = $ResourceManager.GetTexture("block_solid");
-                GameObject* obj = NewGameObject("tile", pos, size, tex, color);
+                GameObject* obj = new(GameObject, "tile", pos, size, tex, color);
                 obj->IsSolid = true;
                 Add(this->Bricks, obj);
             }
             else if (blockType > 1)	// Non-solid; now determine its color based on level data
             {
                 struct Texture2D *tex = $ResourceManager.GetTexture("block");
-                GameObject* obj = NewGameObject("tile", pos, size, tex, color);
+                GameObject* obj = new(GameObject, "tile", pos, size, tex, color);
                 Add(this->Bricks, obj);
             }
         }

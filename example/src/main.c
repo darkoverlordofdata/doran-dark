@@ -8,7 +8,7 @@
 ******************************************************************/
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <dark/darkfx.h>
+#include <dark/Foundation.h>
 #include <Game.h>
 #include <ResourceManager.h>
 
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     GLfloat lastFrame = 0.0f;
 
     // Initialize game
-    Start(Breakout = NewGame(SCREEN_WIDTH, SCREEN_HEIGHT));
+    Start(Breakout = new(Game, SCREEN_WIDTH, SCREEN_HEIGHT));
     SetState(Breakout, GAME_ACTIVE);
 
     while (!glfwWindowShouldClose(window))

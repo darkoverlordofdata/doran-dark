@@ -5,14 +5,6 @@
 
 $implementation( BallObject );
 
-$method( ToString,          (BallObjectToString)ToString, "$@:v" );
-$method( Equals,            DSObject_Equals, "B@:@@" );
-$method( GetHashCode,       DSObject_GetHashCode, "l@:v" );
-$method( Dispose,           DSObject_Dispose, "v@:v" );
-$method( Draw,              (BallObjectDraw)Draw, "v@:@" );
-$method( Move,              Move, "v@:iI" );
-$method( Reset,             Reset, "v@:!!" );
-
 $ivar( Position,    sizeof( Vec2 ), "!" );
 $ivar( Size,        sizeof( Vec2 ), "!" );
 $ivar( Velocity,    sizeof( Vec2 ), "!" );
@@ -24,5 +16,14 @@ $ivar( Sprite,      sizeof( GLfloat ), "@" );
 $ivar( Name,        sizeof( GLchar ), "*" );
 $ivar( Radius,      sizeof( float ), "f" );
 $ivar( Stuck,       sizeof( bool ), "B" );
+
+$method( ToString,          (BallObjectToString)ToString, "$@:v" );
+$method( Equals,            DSObject_Equals, "B@:@@" );
+$method( GetHashCode,       DSObject_GetHashCode, "l@:v" );
+$method( Dispose,           DSObject_Dispose, "v@:v" );
+
+$method( Draw,              (BallObjectDraw)Draw, "v@:@" );
+$method( Move,              Move, "v@:iI" );
+$method( Reset,             Reset, "v@:!!" );
 
 $end;

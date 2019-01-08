@@ -7,7 +7,7 @@
 ** option) any later version.
 ******************************************************************/
 #include <ResourceManager.h>
-#include "imp/ResourceManager.h"
+#include "private/ResourceManager.h"
 /**
  * ResourceManager
  */
@@ -15,9 +15,7 @@ ResourceManager* NewResourceManager() {
     return ResourceManager_init(ResourceManager_alloc());
 }
 
-
-ResourceManager* ResourceManager_init(ResourceManager* this)
-{
+ResourceManager* ResourceManager_init(ResourceManager* this) {
     DSObject_init(this); 
     this->isa = getResourceManagerIsa();
     return this;
@@ -26,7 +24,6 @@ ResourceManager* ResourceManager_init(ResourceManager* this)
 ResourceManager* ResourceManager_alloc() {
     return DSMalloc(getResourceManagerSize());
 }
-
 
 /**
  * loadShaderFromFile
@@ -61,7 +58,7 @@ static Shader* loadShaderFromFile(
     fclose(fragmentShaderFile);
 
     // 2. Now create shader object from source code
-    Shader* shader = NewShader();
+    Shader* shader = new(Shader);
     Compile(shader, vShaderCode, fShaderCode);
     return shader;
 }
@@ -80,7 +77,8 @@ static Texture2D* loadTextureFromFile(const GLchar *file, bool alpha)
     int format = alpha ? GL_RGBA : GL_RGB;
     char* path = join("assets/", file);
     int width, height, channels;
-    Texture2D* texture = NewTexture2D(format, format, path);
+    
+    Texture2D* texture = new(Texture2D, format, format, path);
     // Load image
     unsigned char* image = stbi_load(path, &width, &height, &channels, 0); //texture->ImageFormat == GL_RGBA ? 4 : 3);
     // generate texture

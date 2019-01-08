@@ -9,7 +9,7 @@
 #pragma once
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <dark/darkfx.h>
+#include <dark/Foundation.h>
 #include <tglm/tglm.h>
 
 #include <GameLevel.h>

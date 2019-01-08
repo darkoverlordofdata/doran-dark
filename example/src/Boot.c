@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/DSClass.h>
-#include <dark/darkfx.h>
+#include <dark/Foundation.h>
 
 #define DEBUG_ON
 /**

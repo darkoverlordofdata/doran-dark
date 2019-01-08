@@ -10,8 +10,8 @@ $method( Equals,             DSObject_Equals, "B@:@@" );
 $method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
 $method( Dispose,            DSObject_Dispose, "v@:v" );
 
-$ResourceManager.Shaders = NewDSHashmap();
-$ResourceManager.Textures = NewDSHashmap();
+$ResourceManager.Shaders = new(DSHashmap);
+$ResourceManager.Textures = new(DSHashmap);
 $ResourceManager.LoadShader = LoadShader;
 $ResourceManager.GetShader = GetShader;
 $ResourceManager.LoadTexture = LoadTexture;

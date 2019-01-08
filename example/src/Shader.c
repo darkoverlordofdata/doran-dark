@@ -7,7 +7,7 @@
 ** option) any later version.
 ******************************************************************/
 #include <Shader.h>
-#include "imp/Shader.h"
+#include "private/Shader.h"
 /**
  * Shader
  */
@@ -37,7 +37,7 @@ const char* HEADER = "#\n"
 /**
  * Use shader
  */
-Shader* overload Use(Shader* this)
+Shader* overload Use(Shader* const this)
 {
     glUseProgram(this->Id);
     return this;
@@ -51,7 +51,7 @@ Shader* overload Use(Shader* this)
  * 
  */
 void overload Compile(
-    Shader* this, 
+    Shader* const this, 
     const GLchar* vertexSource, 
     const GLchar* fragmentSource)
 {
@@ -82,32 +82,32 @@ void overload Compile(
 }
 
 Shader* overload SetFloat(
-    Shader* this, 
+    Shader* const this, 
     const GLchar *name, 
-    GLfloat value) {
+    const GLfloat value) {
     glUniform1f(glGetUniformLocation(this->Id, name), value);
     return this;
 }
 
 Shader* overload SetInteger(
-    Shader* this, 
+    Shader* const this, 
     const GLchar *name, 
-    GLint value) {
+    const GLint value) {
     glUniform1i(glGetUniformLocation(this->Id, name), value);
     return this;
 }
 
 Shader* overload SetArray2f(
-    Shader* this, 
+    Shader* const this, 
     const GLchar *name, 
-    GLfloat x, 
-    GLfloat y) {
+    const GLfloat x, 
+    const GLfloat y) {
     glUniform2f(glGetUniformLocation(this->Id, name), x, y);
     return this;
 }
 
 Shader* overload SetArray2(
-    Shader* this, 
+    Shader* const this, 
     const GLchar *name, 
     const GLfloat* value) {
     glUniform2f(glGetUniformLocation(this->Id, name), value[0], value[1]);
@@ -115,17 +115,17 @@ Shader* overload SetArray2(
 }
 
 Shader* overload SetArray3f(
-    Shader* this, 
+    Shader* const this, 
     const GLchar *name, 
-    GLfloat x, 
-    GLfloat y, 
-    GLfloat z) {
+    const GLfloat x, 
+    const GLfloat y, 
+    const GLfloat z) {
     glUniform3f(glGetUniformLocation(this->Id, name), x, y, z);
     return this;
 }
 
 Shader* overload SetArray3(
-    Shader* this, 
+    Shader* const this, 
     const GLchar *name, 
     const GLfloat* value) {
     glUniform3f(glGetUniformLocation(this->Id, name), value[0], value[1], value[2]);
@@ -133,18 +133,18 @@ Shader* overload SetArray3(
 }
 
 Shader* overload SetArray4f(
-    Shader* this, 
+    Shader* const this, 
     const GLchar *name, 
-    GLfloat x, 
-    GLfloat y, 
-    GLfloat z, 
-    GLfloat w) {
+    const GLfloat x, 
+    const GLfloat y, 
+    const GLfloat z, 
+    const GLfloat w) {
     glUniform4f(glGetUniformLocation(this->Id, name), x, y, z, w);
     return this;
 }
 
 Shader* overload SetArray4(
-    Shader* this, 
+    Shader* const this, 
     const GLchar *name, 
     const GLfloat* value) {
     glUniform4f(glGetUniformLocation(this->Id, name), value[0], value[1], value[2], value[3]);
@@ -152,25 +152,25 @@ Shader* overload SetArray4(
 }
 
 Shader* overload SetMatrix(
-    Shader* this, 
+    Shader* const this, 
     const GLchar *name,  
-    GLfloat * matrix) {
+    const GLfloat * matrix) {
     glUniformMatrix4fv(glGetUniformLocation(this->Id, name), 1, GL_FALSE, matrix);
     return this;
 }
 
 Shader* overload SetMatrix4(
-    Shader* this, 
+    Shader* const this, 
     const GLchar *name,  
-    GLfloat* matrix) {
+    const GLfloat* matrix) {
     glUniformMatrix4fv(glGetUniformLocation(this->Id, name), 1, GL_FALSE, matrix);
     return this;
 }
 
 static void checkCompileErrors(
-    Shader* this, 
-    GLuint object, 
-    char* type) {
+    Shader* const this, 
+    const GLuint object, 
+    const char* type) {
     GLint success;
     GLchar infoLog[1024];
     if (type != "PROGRAM")

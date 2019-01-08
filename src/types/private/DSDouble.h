@@ -23,41 +23,21 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include <stdarg.h>
-#include <dark/collections/DSCollection.h>
-#include "private/DSCollection.h"
-/**
- * Generic Collection implementation
- */
-static DSException(AbstractMethod);
-/**
- * Initialize a new Array
- */
-DSCollection* DSCollection_init(DSCollection* const this)
-{
-    DSObject_init(this);
-    this->isa = getDSCollectionIsa();
-    return this;
-}
+$implementation( DSDouble );
 
-/**
- * Number of items in collection
- */
-int overload Length(DSCollection* const this)
-{
-    return _vptr(this)->Length(this);
-}
-int DSCollection_Length(DSCollection* const this)
-{
-    return DSAbstractMethodException("Collection_Length");
-}
+$method( ToString,           DSDouble_ToString, "$@:v" );
+$method( Equals,             DSObject_Equals, "B@:@@" );
+$method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
+$method( Dispose,            DSObject_Dispose, "v@:v" );
+$method( CompareTo,          DSDouble_CompareTo, "i@:@" );
+$method( IntValue,           DSDouble_IntValue, "i@:v" );
+$method( LongValue,          DSDouble_LongValue, "l@:v" );
+$method( FloatValue,         DSDouble_FloatValue, "f@:v" );
+$method( DoubleValue,        DSDouble_DoubleValue, "d@:v" );
+$method( CharValue,          DSDouble_CharValue, "c@:v" );
+$method( ShortValue,         DSDouble_ShortValue, "s@:v" );
 
-void Collection_Add(DSCollection* const this, Any data)
-{
-    _vptr(this)->Add(this, data);
-}
-void DSCollection_Add(DSCollection* const this, Any data)
-{
-    DSAbstractMethodException("Collection_Add");
-}
+$ivar( value, sizeof( double ), "d" );
+
+$end;
 

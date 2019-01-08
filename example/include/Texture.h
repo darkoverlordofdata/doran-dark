@@ -8,7 +8,7 @@
 ******************************************************************/
 #pragma once
 #include <GL/glew.h>
-#include <dark/darkfx.h>
+#include <dark/Foundation.h>
 
 #define IsTexture2D(x) (x->isa == &Texture2DClass)
 #define AsTexture2D(x) (IsTexture2D(x) ? (Texture2D*)x : nullptr)
@@ -47,7 +47,7 @@ vtable (Texture2D) {
     void    (*Dispose) (DSObject* const);
 
     // Generates texture from image data
-    void    (*Generate)     (Texture2D* const, GLuint width, GLuint height, unsigned char* data);
+    void    (*Generate)     (Texture2D* const, const GLuint width, const GLuint height, const unsigned char* data);
     // Binds the texture as the current active GL_TEXTURE_2D texture object
     void    (*Bind)         (Texture2D* const);
     
@@ -56,7 +56,7 @@ vtable (Texture2D) {
 /**
  * Texture2D API
  */
-void overload Generate(Texture2D*, GLuint width, GLuint height, unsigned char* data);
+void overload Generate(Texture2D* const, const GLuint, const GLuint height, const unsigned char* data);
 void overload Bind(Texture2D*);
 char* overload ToString(const Texture2D* const);
 Texture2D* Texture2D_init(Texture2D* const this, int InternalFormat, int ImageFormat, char* path);

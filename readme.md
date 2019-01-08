@@ -24,9 +24,9 @@ clang c11 with extensions:
 a port of the breakout game from learnopengl.com
 
 ## Why?
+C is simple. I tried Borland C++ 2.0 when it came out. I didn't like it then - too 'gimicky'. It's gotten better, but its still a noisy syntax. I c compiles faster, too.
+
 > "C makes it easy to shoot yourself in the foot; C++ makes it harder, but when you do it blows your whole leg off" -- Bjarne Stroustrup
-
-
 
 ## example
 
@@ -41,22 +41,20 @@ void overload ForEach(DSList* const this, void (^iter)(DSString))
 
 int main(int argc, char **argv) {
 
-    DSList* ls = NewDSList();
+    DSList* ls = new(DSList);
     Add(ls, $("first"));
     Add(ls, $("second"));
 
+    DSLog($("this string %f"), 20.0f);
+
+    String* s = $$.Join($("string 1"), $("string 2"));
+    String* ss[] = s.Split(" ");
 
     ForEach(ls, ^(DSString* s) {
         DSLog("item = %d) %s\n", s->length, s->value);
     });
     return 0;
 }
-
-    DSLog($("this string %f"), 20.0f);
-    List* ls = DSList.Create();
-
-    String* s = $$.Join($("string 1"), $("string 2"));
-    String* ss[] = s.Split(" ");
 
 
 ```

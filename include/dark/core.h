@@ -133,9 +133,9 @@ char* STR_JOIN(int count, ...);
  * this just prints the message on the stderr
  * and then returns 0/NULL
  */
-#define DSException(name) static                                        \
+#define DSException(name) static inline                                 \
 __attribute__((__format__ (__printf__, 1, 2)))                          \
-long DS##name##Exception(const char* msg, ...)                          \
+_Noreturn long DS##name##Exception(const char* msg, ...)                          \
 {                                                                       \
     va_list args;                                                       \
     va_start(args, msg);                                                \
@@ -144,7 +144,7 @@ long DS##name##Exception(const char* msg, ...)                          \
     vfprintf(stderr, msg, args);                                        \
     fprintf(stderr, "\n");                                              \
     va_end(args);                                                       \
-    return 0;                                                           \
+    exit(99);                                                           \
 }
 
 #endif _CORE_H

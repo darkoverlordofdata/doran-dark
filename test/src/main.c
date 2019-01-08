@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <dark/darkfx.h>
+#include <dark/Foundation.h>
 #include <Block.h>
 #include "darkunit.h"
 
@@ -13,25 +13,32 @@ char keys[12][7] = {
     "keyA", "keyB", "keyC",
 };
 
+int overload MyFunc(int test) {
+    return test;
+}
+
+int overload MyFunc(float test) {
+    return MyFunc((int)test);
+}
 
 int main(int argc, char **argv) {
 
+    int zzz = MyFunc(2.0f);
+    __block auto l = new(DSLong, 420);
+    __block auto m = new(DSLong, 420); 
+    __block auto b = new(DSBoolean, true); 
 
-    DSLog("Hello World");
-    __block struct DSLong* l = NewDSLong(420);
-    __block DSLong* m = NewDSLong(420);
-    __block DSBoolean* b = NewDSBoolean(true);
     DSLog("should be DSBoolean: %s", GetClassName(b));
 
-    __block DSString* s = $("Frodo");
-    __block DSArray* a = NewDSArray(0);
-    __block DSList* q = NewDSList();
-    __block DSHashmap* h = NewDSHashmap();
+    __block auto s = $("Frodo");
+    __block auto a = new(DSArray, 0);
+    __block auto q = new(DSList);
+    __block auto h = new(DSHashmap);
 
     for (int i=0; i<12; i++)
     {
         DSLog("%s", keys[i]);
-        Put(h, keys[i], NewDSLong(i+420));
+        Put(h, keys[i], new(DSLong, i+420));
     }
 
     for (int i=0; i<12; i++)
@@ -44,12 +51,12 @@ int main(int argc, char **argv) {
     }
 
 
-    __block DSLong* l0 = $DSLong.Create(0);
-    __block DSLong* l1 = NewDSLong(1);
-    __block DSLong* l2 = NewDSLong(2);
-    __block DSLong* l3 = NewDSLong(3);
-    __block DSLong* l4 = NewDSLong(4);
-    __block DSLong* l5 = NewDSLong(5);
+    __block auto l0 = $DSLong.Create(0);
+    __block auto l1 = new(DSLong, 1);
+    __block auto l2 = new(DSLong, 2);
+    __block auto l3 = new(DSLong, 3);
+    __block auto l4 = new(DSLong, 4);
+    __block auto l5 = new(DSLong, 5);
 
     Add(a, l0);
     Add(a, l1);

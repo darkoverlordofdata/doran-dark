@@ -7,7 +7,7 @@
 ** option) any later version.
 ******************************************************************/
 #include <ParticleGenerator.h>
-#include "imp/ParticleGenerator.h"
+#include "private/ParticleGenerator.h"
 /**
  * ParticleGenerator
  * 

@@ -35,17 +35,17 @@ SOFTWARE.
  *  vtable  DSObjectVTable  - Instance Methods
  *  class   $DSObject       - Class Methods/Variables
  */
-#define ivar(name)                                                      \
-    typedef struct name name;                                           \
-    struct name
+#define ivar(T)                                                         \
+    typedef struct T T;                                                 \
+    struct T
 
-#define vtable(class)                                                   \
-    struct class##vtable class##vtable;                                 \
-    struct class##vtable
+#define vtable(T)                                                       \
+    struct T##vtable T##vtable;                                         \
+    struct T##vtable
 
-#define class(name)                                                     \
-    struct $##name $##name;                                             \
-    struct $##name
+#define class(T)                                                        \
+    struct $##T $##T;                                                   \
+    struct $##T
 
 /**
  *  MACRO overload
@@ -62,31 +62,31 @@ SOFTWARE.
  * 
  *  warning: only 1 $implementation per main file due to vptr scoping
  */
-#define $implementation(class)                                          \
-static inline struct class##vtable* _vptr(class* this) {                \
-    return (struct class##vtable*)this->isa->vtable;                    \
+#define $implementation(T)                                              \
+static inline struct T##vtable* _vptr(T* this) {                        \
+    return (struct T##vtable*)this->isa->vtable;                        \
 }                                                                       \
-static int _##class##_size = -1;                                        \
-static int get##class##Size() {                                         \
-    _##class##_size = _##class##_size > 0                               \
-        ? _##class##_size                                               \
-        : class_getAlignedInstanceSize(objc_getClass(#class));          \
-    return _##class##_size;                                             \
+static int _##T##_size = -1;                                            \
+static int get##T##Size() {                                             \
+    _##T##_size = _##T##_size > 0                                       \
+        ? _##T##_size                                                   \
+        : class_getAlignedInstanceSize(objc_getClass(#T));              \
+    return _##T##_size;                                                 \
 }                                                                       \
-static Class _##class##_isa = nullptr;                                  \
-static Class get##class##Isa() {                                        \
-    _##class##_isa = _##class##_isa != nullptr                          \
-        ? _##class##_isa                                                \
-        : objc_getClass(#class);                                        \
-    return _##class##_isa;                                              \
+static Class _##T##_isa = nullptr;                                      \
+static Class get##T##Isa() {                                            \
+    _##T##_isa = _##T##_isa != nullptr                                  \
+        ? _##T##_isa                                                    \
+        : objc_getClass(#T);                                            \
+    return _##T##_isa;                                                  \
 }                                                                       \
-Class class##Implementation(Class super);                               \
-Class class##Implementation(Class super)                                \
+Class T##Implementation(Class super);                                   \
+Class T##Implementation(Class super)                                    \
 {                                                                       \
     int k = 0;                                                          \
-    IMP* vt = &class##vtable;                                           \
-    char* class_name = #class;                                          \
-    Class isa = objc_allocateClassPair(super, #class, 0);               \
+    IMP* vt = &T##vtable;                                               \
+    char* class_name = #T;                                              \
+    Class isa = objc_allocateClassPair(super, #T, 0);                   \
     isa->vtable = &vt[0];               
     
 
@@ -132,6 +132,16 @@ Class class##Implementation(Class super)                                \
  *  MACRO Vptr
  *      Returns the vtable base for this class
  */
-#define $vptr(class) ((struct class##vtable*)(this->isa->vtable))
+#define $vptr(T) ((struct T##vtable*)(this->isa->vtable))
+
+
+// DSChar* NewDSChar(char value) { 
+//     return DSChar_init(DSChar_alloc(), value); 
+// }
+
+#define new(T, args...) T##_init(T##_alloc(), ## args)
+// #define new(T, ...) T##_init(T##_alloc(), ## __VA_ARGS__)
+
+#define auto __auto_type
 
 #endif _DSCLASS_H_ 

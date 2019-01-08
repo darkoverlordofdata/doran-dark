@@ -24,31 +24,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSLong.h>
+#include "private/DSLong.h"
 /* 
  * Throws LongFormatException:
  */
 static DSException(LongFormat);
-
-$implementation(DSLong)
-
-$method(ToString,           DSLong_ToString, "$@:v");
-$method(Equals,             DSObject_Equals, "B@:@@");
-$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
-$method(Dispose,            DSObject_Dispose, "v@:v");
-$method(CompareTo,          DSLong_CompareTo, "i@:@");
-$method(IntValue,           DSLong_IntValue, "i@:v");
-$method(LongValue,          DSLong_LongValue, "l@:v");
-$method(FloatValue,         DSLong_FloatValue, "f@:v");
-$method(DoubleValue,        DSLong_DoubleValue, "d@:v");
-$method(CharValue,          DSLong_CharValue, "c@:v");
-$method(ShortValue,         DSLong_ShortValue, "s@:v");
-
-$ivar(value, sizeof(long), "l");
-
-$DSLong.Create = NewDSLong;
-
-$end;
-
 /**
  * Constructor
  * create a new Long

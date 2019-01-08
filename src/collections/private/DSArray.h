@@ -23,41 +23,24 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include <stdarg.h>
-#include <dark/collections/DSCollection.h>
-#include "private/DSCollection.h"
-/**
- * Generic Collection implementation
- */
-static DSException(AbstractMethod);
-/**
- * Initialize a new Array
- */
-DSCollection* DSCollection_init(DSCollection* const this)
-{
-    DSObject_init(this);
-    this->isa = getDSCollectionIsa();
-    return this;
-}
+$implementation(DSArray);
 
-/**
- * Number of items in collection
- */
-int overload Length(DSCollection* const this)
-{
-    return _vptr(this)->Length(this);
-}
-int DSCollection_Length(DSCollection* const this)
-{
-    return DSAbstractMethodException("Collection_Length");
-}
+$method(ToString,           (DSArrayToString)ToString, "@@:v");
+$method(Equals,             DSObject_Equals, "B@:@@");
+$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
+$method(Dispose,            (DSArrayDispose)Dispose, "v@:v");
+$method(Length,             (DSArrayLength)Length, "i@:v");
+$method(IsEmpty,            (DSArrayIsEmpty)IsEmpty, "B@:v");
+$method(Contains,           (DSArrayContains)Contains, "B@:@");
+$method(Clear,              (DSArrayClear)Clear, "v@:v");
+$method(Add,                (DSArrayAdd)Add, "v@:@");
+$method(Remove,             (DSArrayRemove)Remove, "v@:i");
+$method(Resize,             (DSArrayResize)Resize, "v@:i");
+$method(Set,                (DSArraySet)Set, "v@:i@");
+$method(Get,                (DSArrayGet)Get, "@@:i");
 
-void Collection_Add(DSCollection* const this, Any data)
-{
-    _vptr(this)->Add(this, data);
-}
-void DSCollection_Add(DSCollection* const this, Any data)
-{
-    DSAbstractMethodException("Collection_Add");
-}
+$ivar(length, sizeof(int), "i");
+$ivar(data, sizeof(void*), "^");
+$ivar(capacity, sizeof(int), "i");
 
+$end;

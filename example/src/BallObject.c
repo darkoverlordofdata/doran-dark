@@ -7,7 +7,7 @@
 ** option) any later version.
 ******************************************************************/
 #include <BallObject.h>
-#include "imp/BallObject.h"
+#include "private/BallObject.h"
 /**
  * Create new instance
  * 

@@ -23,41 +23,37 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include <stdarg.h>
-#include <dark/collections/DSCollection.h>
-#include "private/DSCollection.h"
-/**
- * Generic Collection implementation
- */
-static DSException(AbstractMethod);
-/**
- * Initialize a new Array
- */
-DSCollection* DSCollection_init(DSCollection* const this)
-{
-    DSObject_init(this);
-    this->isa = getDSCollectionIsa();
-    return this;
-}
+$implementation( DSBoolean );
 
-/**
- * Number of items in collection
+$method( ToString,           (DSBooleanToString)ToString, "$@:v" );
+$method( Equals,             DSObject_Equals, "B@:@@" );
+$method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
+$method( Dispose,            DSObject_Dispose, "v@:v" );
+$method( CompareTo,          (DSBooleanCompareTo)CompareTo, "i@:@" );
+$method( BoolValue,          BoolValue, "B@:v" );
+
+$ivar( value, sizeof( int ), "B" );
+
+/** 
+ * Static constructor
+ * set class properties 
+ * 
  */
-int overload Length(DSCollection* const this)
-{
-    return _vptr(this)->Length(this);
-}
-int DSCollection_Length(DSCollection* const this)
-{
-    return DSAbstractMethodException("Collection_Length");
-}
+static DSBoolean True;
+True.isa = isa; 
+True.value = true;
 
-void Collection_Add(DSCollection* const this, Any data)
-{
-    _vptr(this)->Add(this, data);
-}
-void DSCollection_Add(DSCollection* const this, Any data)
-{
-    DSAbstractMethodException("Collection_Add");
-}
+static DSBoolean False;
+False.isa = isa;
+False.value = false;
 
+$DSBoolean.Bytes = BOOLEAN_BYTES;
+$DSBoolean.Size = BOOLEAN_SIZE;
+$DSBoolean.Type = BOOLEAN_TYPE;
+$DSBoolean.True = &True;
+$DSBoolean.False = &False;
+$DSBoolean.ParseBool = ParseBool;
+$DSBoolean.Compare = Compare;
+$DSBoolean.Create = NewDSBoolean;
+    
+$end;

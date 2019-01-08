@@ -24,27 +24,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSDouble.h>
+#include "private/DSDouble.h"
 /* 
  * Throws NumberFormatException:
  */
 static DSException(NumberFormat);
-$implementation(DSDouble);
-
-$method(ToString,           DSDouble_ToString, "$@:v");
-$method(Equals,             DSObject_Equals, "B@:@@");
-$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
-$method(Dispose,            DSObject_Dispose, "v@:v");
-$method(CompareTo,          DSDouble_CompareTo, "i@:@");
-$method(IntValue,           DSDouble_IntValue, "i@:v");
-$method(LongValue,          DSDouble_LongValue, "l@:v");
-$method(FloatValue,         DSDouble_FloatValue, "f@:v");
-$method(DoubleValue,        DSDouble_DoubleValue, "d@:v");
-$method(CharValue,          DSDouble_CharValue, "c@:v");
-$method(ShortValue,         DSDouble_ShortValue, "s@:v");
-
-$ivar(value, sizeof(double), "d");
-
-$end;
 
 /**
  * Constructor

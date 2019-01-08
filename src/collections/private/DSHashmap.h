@@ -23,41 +23,23 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include <stdarg.h>
-#include <dark/collections/DSCollection.h>
-#include "private/DSCollection.h"
-/**
- * Generic Collection implementation
- */
-static DSException(AbstractMethod);
-/**
- * Initialize a new Array
- */
-DSCollection* DSCollection_init(DSCollection* const this)
-{
-    DSObject_init(this);
-    this->isa = getDSCollectionIsa();
-    return this;
-}
+$implementation(DSHashmap)
 
-/**
- * Number of items in collection
- */
-int overload Length(DSCollection* const this)
-{
-    return _vptr(this)->Length(this);
-}
-int DSCollection_Length(DSCollection* const this)
-{
-    return DSAbstractMethodException("Collection_Length");
-}
+$method(ToString,           (DSHashmapToString)ToString, "@@:v");
+$method(Equals,             DSObject_Equals, "B@:@@");
+$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
+$method(Dispose,            (DSHashmapDispose)Dispose, "v@:v");
+$method(Length,             (DSHashmapLength)Length, "i@:v");
+$method(Remove,             (DSHashmapRemove)Remove, "v@:i");
+$method(ForEach,            (DSHashmapForEach)ForEach, "i@:@@");
+$method(Put,                (DSHashmapPut)Put, "i@:*@");
+$method(Get,                (DSHashmapGet)Get, "@@:*");
+$method(HashInt,            (DSHashmapHashInt)HashInt, "I@:*");
+$method(Hash,               (DSHashmapHash)Hash, "i@:*");
+$method(Rehash,             (DSHashmapRehash)Rehash, "i@:v");
 
-void Collection_Add(DSCollection* const this, Any data)
-{
-    _vptr(this)->Add(this, data);
-}
-void DSCollection_Add(DSCollection* const this, Any data)
-{
-    DSAbstractMethodException("Collection_Add");
-}
+$ivar(tableSize, sizeof(int), "i");
+$ivar(size, sizeof(int), "i");
+$ivar(data, sizeof(id), "^");
 
+$end;

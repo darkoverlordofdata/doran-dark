@@ -38,8 +38,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ****************************************************************************** */
 #pragma once
-#ifndef _DARKFX_H_
-#define _DARKFX_H_
+#ifndef _FOUNDATION_H_
+#define _FOUNDATION_H_
 
 static const int MajorVersion = 0; 
 static const int MinorVersion = 0;
@@ -50,7 +50,6 @@ static const int BuildVersion = 1;
 #include "DSClass.h"
 #include "DSObject.h"
 #include "DSComparable.h"
-// #include "collections/DSCollection.h"
 #include "collections/DSArray.h"
 #include "collections/DSHashmap.h"
 #include "collections/DSList.h"
@@ -65,9 +64,10 @@ static const int BuildVersion = 1;
 #include "types/DSLong.h"
 #include "types/DSShort.h"
 
+// #include "collections/DSCollection.h"
 // #include "io/DSFile.h"
 // #include "io/DSFileSystem.h"
 
 
 
-#endif _DARKFX_H_
+#endif _FOUNDATION_H_

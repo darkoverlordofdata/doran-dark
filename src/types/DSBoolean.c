@@ -24,39 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSBoolean.h>
-
-$implementation(DSBoolean);
-$method(ToString,           (DSBooleanToString)ToString, "$@:v");
-$method(Equals,             DSObject_Equals, "B@:@@");
-$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
-$method(Dispose,            DSObject_Dispose, "v@:v");
-$method(CompareTo,          (DSBooleanCompareTo)CompareTo, "i@:@");
-$method(BoolValue,          BoolValue, "B@:v");
-
-$ivar(value, sizeof(int), "B");
-
-/** Class methods, vars */
-static DSBoolean True;
-True.isa = objc_getClass("DSBoolean");
-True.value = true;
-
-static DSBoolean False;
-False.isa = objc_getClass("DSBoolean");
-False.value = false;
-
-
-$DSBoolean.Bytes = BOOLEAN_BYTES;
-$DSBoolean.Size = BOOLEAN_SIZE;
-$DSBoolean.Type = BOOLEAN_TYPE;
-$DSBoolean.True = &True;
-$DSBoolean.False = &False;
-$DSBoolean.ParseBool = ParseBool;
-$DSBoolean.Compare = Compare;
-$DSBoolean.Create = NewDSBoolean;
-    
-$end;
-
-
+#include "private/DSBoolean.h"
 /**
  * Constructor
  * create a new DSBoolean

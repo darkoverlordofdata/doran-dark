@@ -8,7 +8,7 @@
 ******************************************************************/
 #include <GameObject.h>
 #include <ResourceManager.h>
-#include "imp/GameObject.h"
+#include "private/GameObject.h"
 /**
  * Constructor
  * 

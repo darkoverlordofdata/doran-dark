@@ -9,7 +9,7 @@
 #pragma once
 #include <GL/glew.h>
 #include <tglm/tglm.h>
-#include <dark/darkfx.h>
+#include <dark/Foundation.h>
 
 #include "Texture.h"
 #include "SpriteRenderer.h"

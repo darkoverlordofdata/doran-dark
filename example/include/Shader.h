@@ -9,7 +9,7 @@
 #pragma once
 #include <GL/glew.h>
 #include <tglm/tglm.h>
-#include <dark/darkfx.h>
+#include <dark/Foundation.h>
 
 #define IsShader(x) (x->isa == &ShaderClass)
 #define AsShader(x) (IsShader(x) ? (Shader*)x : nullptr)
@@ -37,18 +37,18 @@ vtable (Shader) {
     // Sets the current shader as active
     Shader*  (*Use)          (Shader* const);
     // Compiles the shader from given source code
-    void    (*Compile)      (Shader* const, const GLchar *vertexSource, const GLchar *fragmentSource); // Note: geometry source code is optional 
+    void    (*Compile)      (Shader* const, const GLchar *vertexSource, const GLchar *fragmentSource); 
     // Utility functions
-    Shader*  (*SetFloat)     (Shader* const, const GLchar *name, GLfloat value);
-    Shader*  (*SetInteger)   (Shader* const, const GLchar *name, GLint value);
-    Shader*  (*SetArray2f)   (Shader* const, const GLchar *name, GLfloat x, GLfloat y);
-    Shader*  (*SetArray2)    (Shader* const, const GLchar *name, GLfloat *value);
-    Shader*  (*SetArray3f)   (Shader* const, const GLchar *name, GLfloat x, GLfloat y, GLfloat z);
-    Shader*  (*SetArray3)    (Shader* const, const GLchar *name, GLfloat *value);
-    Shader*  (*SetArray4f)   (Shader* const, const GLchar *name, GLfloat x, GLfloat y, GLfloat z, GLfloat w);
-    Shader*  (*SetArray4)    (Shader* const, const GLchar *name, GLfloat *value);
-    Shader*  (*SetMatrix4)   (Shader* const, const GLchar *name, GLfloat *matrix);
-    Shader*  (*SetMatrix)    (Shader* const, const GLchar *name, GLfloat *matrix);
+    Shader*  (*SetFloat)     (Shader* const, const GLchar *name, const GLfloat value);
+    Shader*  (*SetInteger)   (Shader* const, const GLchar *name, const GLint value);
+    Shader*  (*SetArray2f)   (Shader* const, const GLchar *name, const GLfloat x, const GLfloat y);
+    Shader*  (*SetArray2)    (Shader* const, const GLchar *name, const GLfloat *value);
+    Shader*  (*SetArray3f)   (Shader* const, const GLchar *name, const GLfloat x, const GLfloat y, const GLfloat z);
+    Shader*  (*SetArray3)    (Shader* const, const GLchar *name, const GLfloat *value);
+    Shader*  (*SetArray4f)   (Shader* const, const GLchar *name, const GLfloat x, const GLfloat y, const GLfloat z, const GLfloat w);
+    Shader*  (*SetArray4)    (Shader* const, const GLchar *name, const GLfloat *value);
+    Shader*  (*SetMatrix4)   (Shader* const, const GLchar *name, const GLfloat *matrix);
+    Shader*  (*SetMatrix)    (Shader* const, const GLchar *name, const GLfloat *matrix);
     
 };
 
@@ -56,19 +56,19 @@ vtable (Shader) {
  * Shader API
  */
 Shader* overload Use(Shader*);
-void overload Compile(Shader*, const GLchar* vertexSource, const GLchar* fragmentSource);
-Shader* overload SetFloat(Shader*, const GLchar *name, GLfloat value);
-Shader* overload SetInteger(Shader*, const GLchar *name, GLint value);
-Shader* overload SetArray2f(Shader*, const GLchar *name, GLfloat x, GLfloat y);
+void overload Compile(Shader* const, const GLchar* vertexSource, const GLchar* fragmentSource);
+Shader* overload SetFloat(Shader*, const GLchar *name, const GLfloat value);
+Shader* overload SetInteger(Shader*, const GLchar *name, const GLint value);
+Shader* overload SetArray2f(Shader*, const GLchar *name, const GLfloat x, const GLfloat y);
 Shader* overload SetArray2(Shader*, const GLchar *name, const GLfloat* value);
-Shader* overload SetArray3f(Shader*, const GLchar *name, GLfloat x, GLfloat y, GLfloat z);
+Shader* overload SetArray3f(Shader*, const GLchar *name, const GLfloat x, const GLfloat y, const GLfloat z);
 Shader* overload SetArray3(Shader*, const GLchar *name, const GLfloat* value);
-Shader* overload SetArray4f(Shader*, const GLchar *name, GLfloat x, GLfloat y, GLfloat z, GLfloat w);
+Shader* overload SetArray4f(Shader*, const GLchar *name, const GLfloat x, const GLfloat y, const GLfloat z, const GLfloat w);
 Shader* overload SetArray4(Shader*, const GLchar *name, const GLfloat* value);
-Shader* overload SetMatrix(Shader*, const GLchar *name,  GLfloat * matrix);
-Shader* overload SetMatrix4(Shader*, const GLchar *name,  GLfloat* matrix);
+Shader* overload SetMatrix(Shader*, const GLchar *name,  const GLfloat * matrix);
+Shader* overload SetMatrix4(Shader*, const GLchar *name,  const GLfloat* matrix);
 char* overload ToString(const Shader* const);
 Shader* Shader_init(Shader* const this);
 Shader* Shader_alloc();
 Shader* NewShader();
-static void checkCompileErrors(Shader* this, GLuint object, char* type);
+static void checkCompileErrors(Shader* const, const GLuint, const char*);

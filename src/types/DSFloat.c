@@ -24,28 +24,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSFloat.h>
+#include "private/DSFloat.h"
 /* 
  * Throws NumberFormatException:
  */
 static DSException(NumberFormat);
-$implementation(DSFloat)
-
-$method(ToString,           DSFloat_ToString, "$@:v");
-$method(Equals,             DSObject_Equals, "B@:@@");
-$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
-$method(Dispose,            DSObject_Dispose, "v@:v");
-$method(CompareTo,          DSFloat_CompareTo, "i@:@");
-$method(IntValue,           DSFloat_IntValue, "i@:v");
-$method(LongValue,          DSFloat_LongValue, "l@:v");
-$method(FloatValue,         DSFloat_FloatValue, "f@:v");
-$method(DoubleValue,        DSFloat_DoubleValue, "d@:v");
-$method(CharValue,          DSFloat_CharValue, "c@:v");
-$method(ShortValue,         DSFloat_ShortValue, "s@:v");
-
-$ivar(value, sizeof(float), "f");
-
-$end;
-
 /**
  * Constructor
  * create a new Float

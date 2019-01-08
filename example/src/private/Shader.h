@@ -5,6 +5,8 @@
 
 $implementation( Shader );
 
+$ivar( Id, sizeof( GLuint ), "I" );
+
 $method( ToString,           (ShaderToString)ToString, "$@:v" );
 $method( Equals,             DSObject_Equals, "B@:@@" );
 $method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
@@ -23,5 +25,4 @@ $method( SetArray4,          SetArray4, "@@:*!" );
 $method( SetMatrix4,         SetMatrix4, "@@:*!" );
 $method( SetMatrix,          SetMatrix, "@@:*!" );
 
-$ivar( Id, sizeof( GLuint ), "I" );
 $end;

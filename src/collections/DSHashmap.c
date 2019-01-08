@@ -24,6 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/collections/DSHashmap.h>
+#include "private/DSHashmap.h"
 /* 
  * Generic Hashmap implementation
  * 
@@ -167,28 +168,6 @@ unsigned int overload HashInt(DSHashmap* const this, char* keystring)
 
 	return key % this->tableSize;
 }
-
-$implementation(DSHashmap)
-
-$method(ToString,           (DSHashmapToString)ToString, "@@:v");
-$method(Equals,             DSObject_Equals, "B@:@@");
-$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
-$method(Dispose,            (DSHashmapDispose)Dispose, "v@:v");
-$method(Length,             (DSHashmapLength)Length, "i@:v");
-$method(Remove,             (DSHashmapRemove)Remove, "v@:i");
-$method(ForEach,            (DSHashmapForEach)ForEach, "i@:@@");
-$method(Put,                (DSHashmapPut)Put, "i@:*@");
-$method(Get,                (DSHashmapGet)Get, "@@:*");
-$method(HashInt,            (DSHashmapHashInt)HashInt, "I@:*");
-$method(Hash,               (DSHashmapHash)Hash, "i@:*");
-$method(Rehash,             (DSHashmapRehash)Rehash, "i@:v");
-
-$ivar(tableSize, sizeof(int), "i");
-$ivar(size, sizeof(int), "i");
-$ivar(data, sizeof(id), "^");
-
-$end;
-
 
 /**
  * Default Constructor

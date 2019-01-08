@@ -9,7 +9,7 @@
 #pragma once
 #include <GL/glew.h>
 #include <tglm/tglm.h>
-#include <dark/darkfx.h>
+#include <dark/Foundation.h>
 
 #include "Game.h"
 #include "Texture.h"
@@ -70,7 +70,6 @@ void overload Draw(GameLevel* const, SpriteRenderer* renderer);
 bool overload IsCompleted(GameLevel*);
 char* overload ToString(const GameLevel*);
 static void init(struct GameLevel *const this, DSArray* tileData, GLuint levelWidth, GLuint levelHeight);
-GameLevel* NewGameLevel(const GLchar *file, int levelWidth, int levelHeight); 
+GameLevel* NewGameLevel(const GLchar *file, int levelWidth, int levelHeight);
 GameLevel* GameLevel_init(GameLevel* const this, const GLchar *file, int levelWidth, int levelHeight);
 GameLevel* GameLevel_alloc();
-GameLevel* NewGameLevel(const GLchar *file, int levelWidth, int levelHeight);

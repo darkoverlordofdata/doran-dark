@@ -7,7 +7,7 @@
 ** option) any later version.
 ******************************************************************/
 #include <Texture.h>
-#include "imp/Texture2D.h"
+#include "private/Texture2D.h"
 /**
  * Texture2D
  * 
@@ -55,10 +55,10 @@ Texture2D* Texture2D_alloc() {
  * 
  */
 void overload Generate(
-    Texture2D* this, 
-    GLuint width, 
-    GLuint height, 
-    unsigned char* data)
+    Texture2D* const this, 
+    const GLuint width, 
+    const GLuint height, 
+    const unsigned char* data)
 {
     this->Width = width;
     this->Height = height;

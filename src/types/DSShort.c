@@ -24,28 +24,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSShort.h>
+#include "private/DSShort.h"
 /* 
  * Throws NumberFormatException:
  */
 static DSException(NumberFormat);
-$implementation(DSShort)
-
-$method(ToString,           DSShort_ToString, "$@:v");
-$method(Equals,             DSObject_Equals, "B@:@@");
-$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
-$method(Dispose,            DSObject_Dispose, "v@:v");
-$method(CompareTo,          DSShort_CompareTo, "i@:@");
-$method(IntValue,           DSShort_IntValue, "i@:v");
-$method(LongValue,          DSShort_LongValue, "l@:v");
-$method(FloatValue,         DSShort_FloatValue, "f@:v");
-$method(DoubleValue,        DSShort_DoubleValue, "d@:v");
-$method(CharValue,          DSShort_CharValue, "c@:v");
-$method(ShortValue,         DSShort_ShortValue, "s@:v");
-
-$ivar(value, sizeof(short), "s");
-
-$end;
-
 /**
  * Constructor
  * create a new Short

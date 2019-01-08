@@ -24,27 +24,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSNumber.h>
+#include "private/DSNumber.h"
 /* 
  * Throws DSAbstractMethodException:
  */
 static DSException(AbstractMethod);
-
-$implementation(DSNumber); 
-
-$method(ToString,           DSNumber_ToString, "$@:v");
-$method(Equals,             DSObject_Equals, "B@:@@");
-$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
-$method(Dispose,            DSObject_Dispose, "v@:v");
-$method(CompareTo,          DSNumber_CompareTo, "i@:@");
-$method(IntValue,           DSNumber_IntValue, "i@:v");
-$method(LongValue,          DSNumber_LongValue, "l@:v");
-$method(FloatValue,         DSNumber_FloatValue, "f@:v");
-$method(DoubleValue,        DSNumber_DoubleValue, "d@:v");
-$method(CharValue,          DSNumber_CharValue, "c@:v");
-$method(ShortValue,         DSNumber_ShortValue, "s@:v");
-
-$end;
-
 /**
  * Abstract Number
  * Initialize a new Number

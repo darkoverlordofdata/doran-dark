@@ -8,7 +8,7 @@
 ******************************************************************/
 #pragma once
 #include <GL/glew.h>
-#include <dark/darkfx.h>
+#include <dark/Foundation.h>
 
 #include "Shader.h"
 #include "Texture.h"

@@ -9,7 +9,7 @@
 #pragma once
 #include <GL/glew.h>
 #include <tglm/tglm.h>
-#include <dark/darkfx.h>
+#include <dark/Foundation.h>
 
 #include "Texture.h"
 #include "Shader.h"
@@ -36,14 +36,14 @@ vtable (SpriteRenderer) {
     void    (*Dispose) (DSObject* const);
 
     // Renders a defined quad textured with given sprite
-    void (*DrawSprite)      (SpriteRenderer* const, Texture2D* *texture, Vec2 position, Vec2 size, GLfloat rotate, Vec3 color);
+    void (*DrawSprite)      (SpriteRenderer* const, const Texture2D* const texture, const Vec2 position, const Vec2 size, const GLfloat rotate, const Vec3 color);
     
 };
 
 /**
  * SpriteRenderer API
  */
-void overload DrawSprite(SpriteRenderer*, Texture2D* texture, Vec2 position, Vec2 size, GLfloat rot, Vec3 color);
+void overload DrawSprite(SpriteRenderer* const, const Texture2D* const texture, const Vec2 position, const Vec2 size, const GLfloat rot, const Vec3 color);
 void overload Dispose(SpriteRenderer*);
 char* overload ToString(const SpriteRenderer* const);
 static void initRenderData(SpriteRenderer* this);
