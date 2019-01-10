@@ -34,8 +34,10 @@ SOFTWARE.
 #define SHORT_SIZE       (SHORT_BYTES * CHAR_BIT)
 #define SHORT_TYPE       (TYPE_SHORT)
 
-#define IsDSShort(x) (x->isa == &$DSShort)
-#define AsDSShort(x) (IsDSShort(x) ? (DSShort*)x : nullptr)
+#define IsDSShort(object) _Generic((object), DSShort*: true, default: false)
+#define AsDSShort(object) _Generic((object),                            \
+                            DSShort*: (DSShort *)object,                \
+                            default: nullptr)
 
 /**
  * Object class
@@ -45,39 +47,49 @@ ivar (DSShort) {
     short value;
 };
 
-/**
- * Object metaclass
- */
-vtable (DSShort) {
-    char*   (*ToString) (const DSShort* const);
-    bool    (*Equals) (const DSObject* const, DSObject* const);
-    int     (*GetHashCode) (const DSObject* const);
-    void    (*Dispose) (const DSObject* const);
-    int     (*CompareTo) (const DSComparable* const, const DSComparable* const);
-    int     (*IntValue) (const DSShort* const);
-    long    (*LongValue) (const DSShort* const);
-    float   (*FloatValue) (const DSShort* const);
-    double  (*DoubleValue) (const DSShort* const);
-    char    (*CharValue) (const DSShort* const);
-    short   (*ShortValue) (const DSShort* const);
+DSShort* NewDSShort(short const value);
+DSShort* DSShort_init(DSShort* const this, const short value);
+DSShort* DSShort_alloc();
 
+char*   overload ToString(const DSShort* const);
+int     overload CompareTo(const DSShort* const, const DSShort* const);
+int     overload IntValue(const DSShort* const);
+long    overload LongValue(const DSShort* const);
+float   overload IntegerValue(const DSShort* const);
+double  overload DoubleValue(const DSShort* const);
+char    overload CharValue(const DSShort* const);
+short   overload ShortValue(const DSShort* const);
+
+typedef char*   (*DSShortToString)       (const DSShort* const);
+typedef int     (*DSShortCompareTo)      (const DSShort* const, const DSShort* const);
+typedef int     (*DSShortIntValue)       (const DSShort* const);
+typedef long    (*DSShortLongValue)      (const DSShort* const);
+typedef float   (*DSShortFloatValue)     (const DSShort* const);
+typedef double  (*DSShortDoubleValue)    (const DSShort* const);
+typedef char    (*DSShortCharValue)      (const DSShort* const);
+typedef short   (*DSShortShortValue)     (const DSShort* const);
+
+/**
+ * Integer vtable with overrides
+ */
+vtable (DSShort)
+{
+    DSShortToString           ToString;
+    DSObjectEquals              Equals;
+    DSObjectGetHashCode         GetHashCode;
+    DSObjectDispose             Dispose;
+    DSShortCompareTo          CompareTo;
+    DSShortIntValue           IntValue;
+    DSShortLongValue          LongValue;
+    DSShortFloatValue         IntegerValue;
+    DSShortDoubleValue        DoubleValue;
+    DSShortCharValue          CharValue;
+    DSShortShortValue         ShortValue;
 };
+
 
 class (DSShort) {
     DSShort*  (*Create) (short value);
 };
-
-DSShort* NewDSShort(short const value);
-DSShort* DSShort_init(DSShort* const this, const short value);
-DSShort* DSShort_alloc();
-short DSShort_ParseShort(char const *const, const int);
-int DSShort_CompareTo(const DSShort* const, const DSShort* const);
-int DSShort_IntValue(const DSShort* const);
-long DSShort_LongValue(const DSShort* const);
-float DSShort_FloatValue(const DSShort* const);
-double DSShort_DoubleValue(const DSShort* const);
-char DSShort_CharValue(const DSShort* const);
-short DSShort_ShortValue(const DSShort* const);
-char* DSShort_ToString(const DSShort* const);
 
 #endif _DSSHORT_H_

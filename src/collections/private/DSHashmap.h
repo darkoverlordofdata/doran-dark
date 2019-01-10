@@ -42,4 +42,6 @@ $ivar(tableSize, sizeof(int), "i");
 $ivar(size, sizeof(int), "i");
 $ivar(data, sizeof(id), "^");
 
+$DSHashmap.Create = NewDSHashmap;
+
 $end;

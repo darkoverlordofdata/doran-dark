@@ -28,8 +28,10 @@ SOFTWARE.
 #define _DSCOMPARABLE_H_
 #include "DSObject.h"
 
-// #define IsDSComparable(x) (x->isa == &DSComparableClass)
-// #define AsDSComparable(x) (IsDSComparable(x) ? (DSComparable *)x : nullptr)
+#define IsDSComparable(object) _Generic((object), DSComparable*: true, default: false)
+#define AsDSComparable(object) _Generic((object),                   \
+                            DSComparable*: (DSComparable *)object,  \
+                            default: nullptr)
 
 /**
  * DSComparable Class

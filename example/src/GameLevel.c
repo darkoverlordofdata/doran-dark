@@ -68,10 +68,10 @@ GameLevel* overload Load(
     {
         while (fscanf(fstream, "%d%c", &i, &c) != EOF)
         {
-            Add(row, (Any)i);
+            Add(row, (void*)i);
             if (c == '\n')
             {
-                Add(tileData, (Any)row);
+                Add(tileData, (void*)row);
                 row = new(DSArray, 20);
             }
         }

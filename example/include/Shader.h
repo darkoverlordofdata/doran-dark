@@ -1,9 +1,9 @@
 /*******************************************************************
 ** This code is part of Breakout.
 **
-** Breakout is free software: you can redistribute it and/or modify
+** Breakout is free software:ou can redistribute it and/or modify
 ** it under the terms of the CC BY 4.0 license as published by
-** Creative Commons, either version 4 of the License, or (at your
+** Creative Commons, either version 4 of the License, or (atour
 ** option) any later version.
 ******************************************************************/
 #pragma once
@@ -13,6 +13,10 @@
 
 #define IsShader(x) (x->isa == &ShaderClass)
 #define AsShader(x) (IsShader(x) ? (Shader*)x : nullptr)
+#define IsShader(object) _Generic((object), Shader*: true, default: false)
+#define AsShader(object) _Generic((object),                     \
+                            Shader*: (Shader *)object,          \
+                            default: nullptr)
 
 // General purpsoe shader object. Compiles from file, generates
 // compile/link-time error messages and hosts several utility 
@@ -22,53 +26,62 @@ ivar (Shader) {
     GLuint Id; 
 };
 
-typedef char*   (*ShaderToString)  (const Shader* const);
+Shader* Shader_init(Shader* const this);
+Shader* Shader_alloc();
+Shader* NewShader();
+
+char*   overload ToString(const Shader* const);
+Shader* overload Use(Shader*);
+void    overload Compile(Shader* const, const GLchar*, const GLchar*);
+Shader* overload SetFloat(Shader*, const GLchar*, const GLfloat);
+Shader* overload SetInteger(Shader*, const GLchar*, const GLint);
+Shader* overload SetArray2f(Shader*, const GLchar*, const GLfloat, const GLfloat);
+Shader* overload SetArray2(Shader*, const GLchar*, const GLfloat*);
+Shader* overload SetArray3f(Shader*, const GLchar*, const GLfloat, const GLfloat, const GLfloat);
+Shader* overload SetArray3(Shader*, const GLchar*, const GLfloat*);
+Shader* overload SetArray4f(Shader*, const GLchar*, const GLfloat, const GLfloat, const GLfloat, const GLfloat);
+Shader* overload SetArray4(Shader*, const GLchar*, const GLfloat*);
+Shader* overload SetMatrix(Shader*, const GLchar*, const GLfloat*);
+Shader* overload SetMatrix4(Shader*, const GLchar*, const GLfloat*);
+
+static void checkCompileErrors(Shader* const, const GLuint, const char*);
+
+typedef char*   (*ShaderToString)   (const Shader* const);
+typedef Shader* (*ShaderUse)        (Shader*);
+typedef Shader* (*ShaderCompile)    (Shader* const, const GLchar*, const GLchar*);
+typedef Shader* (*ShaderSetFloat)   (Shader*, const GLchar*, const GLfloat);
+typedef Shader* (*ShaderSetInteger) (Shader*, const GLchar*, const GLint);
+typedef Shader* (*ShaderSetArray2f) (Shader*, const GLchar*, const GLfloat, const GLfloat);
+typedef Shader* (*ShaderSetArray2)  (Shader*, const GLchar*, const GLfloat*);
+typedef Shader* (*ShaderSetArray3f) (Shader*, const GLchar*, const GLfloat, const GLfloat, const GLfloat);
+typedef Shader* (*ShaderSetArray3)  (Shader*, const GLchar*, const GLfloat*);
+typedef Shader* (*ShaderSetArray4f) (Shader*, const GLchar*, const GLfloat, const GLfloat, const GLfloat, const GLfloat);
+typedef Shader* (*ShaderSetArray4)  (Shader*, const GLchar*, const GLfloat*);
+typedef Shader* (*ShaderSetMatrix)  (Shader*, const GLchar*, const GLfloat*);
+typedef Shader* (*ShaderSetMatrix4) (Shader*, const GLchar*, const GLfloat*);
+
+
+vtable (Shader) {
+    ShaderToString          ToString;
+    DSObjectEquals          Equals;
+    DSObjectGetHashCode     GetHashCode;
+    DSObjectDispose         Dispose;
+    ShaderUse               Use;
+    ShaderCompile           Compile;
+    ShaderSetFloat          SetFloat;
+    ShaderSetInteger        SetInteger;
+    ShaderSetArray2f        SetArray2f;
+    ShaderSetArray2         SetArray2;
+    ShaderSetArray3f        SetArray3f;
+    ShaderSetArray3         SetArray3;
+    ShaderSetArray4f        SetArray4f;
+    ShaderSetArray4         SetArray4;
+    ShaderSetMatrix4        SetMatrix4;
+    ShaderSetMatrix         SetMatrix;
+};
 
 class (Shader) {
     Shader* (*Create) (void);
 };
 
-vtable (Shader) {
-    char*   (*ToString) (const Shader* const);
-    bool    (*Equals) (DSObject* const, DSObject* const);
-    int     (*GetHashCode) (DSObject* const);
-    void    (*Dispose) (DSObject* const);
 
-    // Sets the current shader as active
-    Shader*  (*Use)          (Shader* const);
-    // Compiles the shader from given source code
-    void    (*Compile)      (Shader* const, const GLchar *vertexSource, const GLchar *fragmentSource); 
-    // Utility functions
-    Shader*  (*SetFloat)     (Shader* const, const GLchar *name, const GLfloat value);
-    Shader*  (*SetInteger)   (Shader* const, const GLchar *name, const GLint value);
-    Shader*  (*SetArray2f)   (Shader* const, const GLchar *name, const GLfloat x, const GLfloat y);
-    Shader*  (*SetArray2)    (Shader* const, const GLchar *name, const GLfloat *value);
-    Shader*  (*SetArray3f)   (Shader* const, const GLchar *name, const GLfloat x, const GLfloat y, const GLfloat z);
-    Shader*  (*SetArray3)    (Shader* const, const GLchar *name, const GLfloat *value);
-    Shader*  (*SetArray4f)   (Shader* const, const GLchar *name, const GLfloat x, const GLfloat y, const GLfloat z, const GLfloat w);
-    Shader*  (*SetArray4)    (Shader* const, const GLchar *name, const GLfloat *value);
-    Shader*  (*SetMatrix4)   (Shader* const, const GLchar *name, const GLfloat *matrix);
-    Shader*  (*SetMatrix)    (Shader* const, const GLchar *name, const GLfloat *matrix);
-    
-};
-
-/**
- * Shader API
- */
-Shader* overload Use(Shader*);
-void overload Compile(Shader* const, const GLchar* vertexSource, const GLchar* fragmentSource);
-Shader* overload SetFloat(Shader*, const GLchar *name, const GLfloat value);
-Shader* overload SetInteger(Shader*, const GLchar *name, const GLint value);
-Shader* overload SetArray2f(Shader*, const GLchar *name, const GLfloat x, const GLfloat y);
-Shader* overload SetArray2(Shader*, const GLchar *name, const GLfloat* value);
-Shader* overload SetArray3f(Shader*, const GLchar *name, const GLfloat x, const GLfloat y, const GLfloat z);
-Shader* overload SetArray3(Shader*, const GLchar *name, const GLfloat* value);
-Shader* overload SetArray4f(Shader*, const GLchar *name, const GLfloat x, const GLfloat y, const GLfloat z, const GLfloat w);
-Shader* overload SetArray4(Shader*, const GLchar *name, const GLfloat* value);
-Shader* overload SetMatrix(Shader*, const GLchar *name,  const GLfloat * matrix);
-Shader* overload SetMatrix4(Shader*, const GLchar *name,  const GLfloat* matrix);
-char* overload ToString(const Shader* const);
-Shader* Shader_init(Shader* const this);
-Shader* Shader_alloc();
-Shader* NewShader();
-static void checkCompileErrors(Shader* const, const GLuint, const char*);

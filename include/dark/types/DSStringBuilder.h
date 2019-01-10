@@ -65,8 +65,10 @@ ivar (StringFragment)
 	char* str;
 };
 
-#define IsDSStringBuilder(x) (x->isa == &$DSStringBuilder)
-#define AsDSStringBuilder(x) (IsDSStringBuilder(x) ? (DSStringBuilder *)x : nullptr)
+#define IsDSStringBuilder(object) _Generic((object), DSStringBuilder*: true, default: false)
+#define AsDSStringBuilder(object) _Generic((object),                    \
+                            DSStringBuilder*: (DSStringBuilder *)object,\
+                            default: nullptr)
 
 
 /**
@@ -79,37 +81,46 @@ ivar (DSStringBuilder) {
 	int length;
 };
 
+DSStringBuilder* NewDSStringBuilder();
+DSStringBuilder* DSStringBuilder_init(DSStringBuilder* const this);
+DSStringBuilder* DSStringBuilder_alloc();
+
+__attribute__((__format__ (__printf__, 2, 3)))
+int         overload Appendf(DSStringBuilder* sb, const char *format, ...);
+int         overload Appendc(DSStringBuilder* sb, const char c);
+int         overload Append(DSStringBuilder* sb, const char *str);
+DSString*   overload Concat(const DSStringBuilder* sb);
+void        overload Reset(DSStringBuilder* sb);
+int         overload Empty(const DSStringBuilder* sb);
+void        overload Dispose(DSStringBuilder* const);
+
+typedef void        (*DSStringBuilderDispose)   (DSStringBuilder* const);
+typedef int         (*DSStringBuilderAppendf)   (DSStringBuilder* sb, const char *format, ...);
+typedef int         (*DSStringBuilderAppendc)   (DSStringBuilder* sb, const char c);
+typedef int         (*DSStringBuilderAppend)    (DSStringBuilder* sb, const char *str);
+typedef DSString*   (*DSStringBuilderConcat)    (const DSStringBuilder* sb);
+typedef void        (*DSStringBuilderReset)     (DSStringBuilder* sb);
+typedef int         (*DSStringBuilderEmpty)     (const DSStringBuilder* sb);
+
+
 /**
  * StringBuilder metaclass
  */
 vtable (DSStringBuilder) {
-    char*   (*ToString)     (const DSStringBuilder* const);
-    bool    (*Equals)       (const DSObject* const, const DSObject* const);
-    int     (*GetHashCode)  (const DSObject* const);
-    void    (*Dispose)      (DSObject* const);
-    int     (*Empty)        (const DSStringBuilder* const);
-    int     (*Append)       (const DSStringBuilder* const, const char* str);
-    int     (*Appendc)      (const DSStringBuilder* const, const char c);
-    int     (*Appendf)      (const DSStringBuilder* const, const char* str, ...);
-    DSString* (*Concat)     (const DSStringBuilder* const);
-    void    (*Reset)        (const DSStringBuilder* const);
-
+    DSObjectToString        ToString;
+    DSObjectEquals          Equals;
+    DSObjectGetHashCode     GetHashCode;
+    DSStringBuilderDispose  Dispose;
+    DSStringBuilderEmpty    Empty;        
+    DSStringBuilderAppend   Append;
+    DSStringBuilderAppendc  Appendc;
+    DSStringBuilderAppendf  Appendf;
+    DSStringBuilderConcat   Concat;
+    DSStringBuilderReset    Reset;
 };
 
 class (DSStringBuilder) {
     DSStringBuilder*(*Create) ();
 };
-
-DSStringBuilder* NewDSStringBuilder();
-DSStringBuilder* DSStringBuilder_init(DSStringBuilder* const this);
-DSStringBuilder* DSStringBuilder_alloc();
-__attribute__((__format__ (__printf__, 2, 3)))
-int DSStringBuilder_Appendf(DSStringBuilder* sb, const char *format, ...);
-int DSStringBuilder_Appendc(DSStringBuilder* sb, const char c);
-int DSStringBuilder_Append(DSStringBuilder* sb, const char *str);
-DSString* DSStringBuilder_Concat(const DSStringBuilder* sb);
-void DSStringBuilder_Reset(DSStringBuilder* sb);
-int DSStringBuilder_Empty(const DSStringBuilder* sb);
-void DSStringBuilder_Dispose(DSStringBuilder* const);
 
 #endif _DSSTRING_BUILDER_H_

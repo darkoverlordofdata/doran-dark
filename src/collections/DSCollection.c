@@ -52,11 +52,11 @@ int DSCollection_Length(DSCollection* const this)
     return DSAbstractMethodException("Collection_Length");
 }
 
-void Collection_Add(DSCollection* const this, Any data)
+void Collection_Add(DSCollection* const this, DSObject* data)
 {
     _vptr(this)->Add(this, data);
 }
-void DSCollection_Add(DSCollection* const this, Any data)
+void DSCollection_Add(DSCollection* const this, DSObject* data)
 {
     DSAbstractMethodException("Collection_Add");
 }

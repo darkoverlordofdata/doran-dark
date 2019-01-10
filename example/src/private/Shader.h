@@ -12,8 +12,8 @@ $method( Equals,             DSObject_Equals, "B@:@@" );
 $method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
 $method( Dispose,            DSObject_Dispose, "v@:v" );
 
-$method( Use,                Use, "@@:v" );
-$method( Compile,            Compile, "@@:**" );
+$method( Use,                (ShaderUse)Use, "@@:v" );
+$method( Compile,            (ShaderCompile)Compile, "@@:**" );
 $method( SetFloat,           SetFloat, "@@:*f" );
 $method( SetInteger,         SetInteger, "@@:*i" );
 $method( SetArray2f,         SetArray2f, "@@:*ff" );

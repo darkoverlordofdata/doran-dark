@@ -254,7 +254,7 @@ int overload Rehash(DSHashmap* const this)
 /*
  * Add a pointer to the hashmap with some key
  */
-int overload Put(DSHashmap* const this, char* key, Any value)
+int overload Put(DSHashmap* const this, char* key, DSObject* value)
 {
 	/* Find a place to put our value */
 	int index = Hash(this, key);
@@ -276,12 +276,14 @@ int overload Put(DSHashmap* const this, char* key, Any value)
 	return MAP_OK;
 }
 
+
+
 /*
  * Get your pointer out of the hashmap with a key
  */
-Any overload Get(DSHashmap* const this, char* key)
+DSObject* overload Get(DSHashmap* const this, char* key)
 {
-    Any result;
+    DSObject* result;
 	/* Find data location */
 	int curr = HashInt(this, key);
 
@@ -305,10 +307,10 @@ Any overload Get(DSHashmap* const this, char* key)
 
 /*
  * Iterate the function parameter over each element this the hashmap.  The
- * additional Any argument is passed to the function as its first
+ * additional DSObject* argument is passed to the function as its first
  * argument and the hashmap element is the second.
  */
-int overload ForEach(DSHashmap* const this, DSHashmap_Iterator f, Any item) 
+int overload ForEach(DSHashmap* const this, DSHashmap_Iterator f, DSObject* item) 
 {
 	/* On empty hashmap, return immediately */
 	if (Length(this) <= 0)
@@ -319,7 +321,7 @@ int overload ForEach(DSHashmap* const this, DSHashmap_Iterator f, Any item)
     {
 		if (this->data[i].inUse != 0) 
         {
-			Any data = (Any) (this->data[i].data);
+			DSObject* data = (DSObject*) (this->data[i].data);
 			int status = f(item, data);
 			if (status != MAP_OK) 
             {

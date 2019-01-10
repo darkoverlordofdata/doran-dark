@@ -57,10 +57,10 @@ class (DSCollection) {
  * Collection API
  */
 int overload Length(DSCollection* const);
-void overload Add(DSCollection* const, Any);
+void overload Add(DSCollection* const, DSObject*);
 DSCollection* DSCollection_init(DSCollection* const);
 int DSCollection_Length(DSCollection* const);
-void DSCollection_Add(DSCollection* const, Any);
+void DSCollection_Add(DSCollection* const, DSObject*);
 
 /**
  * AddAll

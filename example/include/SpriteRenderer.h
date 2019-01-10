@@ -14,8 +14,10 @@
 #include "Texture.h"
 #include "Shader.h"
 
-#define IsSpriteRenderer(x) (x->isa == &SpriteRendererClass)
-#define AsSpriteRenderer(x) (IsSpriteRenderer(x) ? (SpriteRenderer*)x : nullptr)
+#define IsSpriteRenderer(object) _Generic((object), SpriteRenderer*: true, default: false)
+#define AsSpriteRenderer(object) _Generic((object),                             \
+                            SpriteRenderer*: (SpriteRenderer *)object,          \
+                            default: nullptr)
 
 ivar (SpriteRenderer) {
     Class isa;
@@ -23,30 +25,29 @@ ivar (SpriteRenderer) {
     GLuint VAO;
 };
 
-typedef char*   (*SpriteRendererToString)  (const SpriteRenderer* const);
+SpriteRenderer*     NewSpriteRenderer(Shader* shader);
+SpriteRenderer*     SpriteRenderer_init(SpriteRenderer* const this, Shader* shader);
+SpriteRenderer*     SpriteRenderer_alloc();
+
+char*   overload ToString(const SpriteRenderer* const);
+void    overload Draw(SpriteRenderer* , const Texture2D* const, const Vec2, const Vec2, const GLfloat, const Vec3);
+void    overload Dispose(SpriteRenderer* const);
+
+static void initRenderData(SpriteRenderer* this);
+
+typedef char*   (*SpriteRendererToString)   (const SpriteRenderer* const);
+typedef void    (*SpriteRendererDispose)    (SpriteRenderer* const);
+typedef char*   (*SpriteRendererDraw)       (SpriteRenderer*, const Texture2D* const, const Vec2, const Vec2, const GLfloat, const Vec3);
+
+vtable (SpriteRenderer) {
+    SpriteRendererToString  ToString;
+    DSObjectEquals          Equals;
+    DSObjectGetHashCode     GetHashCode;
+    SpriteRendererDispose   Dispose;
+    SpriteRendererDraw      Draw;
+};
 
 class (SpriteRenderer) {
     SpriteRenderer*  (*Create) (Shader* shader);
 };
 
-vtable (SpriteRenderer) {
-    char*   (*ToString) (const SpriteRenderer* const);
-    bool    (*Equals)   (DSObject* const, DSObject* const);
-    int     (*GetHashCode) (DSObject* const);
-    void    (*Dispose)  (DSObject* const);
-
-    // Renders a defined quad textured with given sprite
-    void    (*Draw)     (SpriteRenderer* const, const Texture2D* const texture, const Vec2 position, const Vec2 size, const GLfloat rotate, const Vec3 color);
-    
-};
-
-/**
- * SpriteRenderer API
- */
-void overload Draw(SpriteRenderer* const, const Texture2D* const texture, const Vec2 position, const Vec2 size, const GLfloat rot, const Vec3 color);
-void overload Dispose(SpriteRenderer*);
-char* overload ToString(const SpriteRenderer* const);
-static void initRenderData(SpriteRenderer* this);
-SpriteRenderer*  SpriteRenderer_init(SpriteRenderer* const this, Shader* shader);
-SpriteRenderer* SpriteRenderer_alloc();
-SpriteRenderer* NewSpriteRenderer(Shader* shader);

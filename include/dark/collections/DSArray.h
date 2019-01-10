@@ -26,15 +26,20 @@ SOFTWARE.
 #pragma once
 #ifndef _DSARRAY_H_
 #define _DSARRAY_H_
-#include "DSCollection.h"
+#include "../DSObject.h"
+// #include "DSCollection.h"
 /**
  * An ArrayList based on:
  * @see https://eddmann.com/posts/implementing-a-dynamic-vector-array-in-c/
  */
 #define ARRAY_INIT_CAPACITY 4
 
-#define IsDSArray(x) (x->isa == &$DSArray)
-#define AsDSArray(x) (IsDSArray(x) ? (DSArray*)x : nullptr)
+
+#define IsDSArray(object) _Generic((object), DSArray*: true, default: false)
+#define AsDSArray(object) _Generic((object),                            \
+                            DSArray*: (DSArray *)object,                \
+                            default: nullptr)
+
 
 ivar (DSArray) {
     Class isa;
@@ -46,14 +51,14 @@ ivar (DSArray) {
 
 typedef int     (*DSArrayLength)    (const DSArray* const);
 typedef void    (*DSArrayResize)    (const DSArray* const, int);
-typedef void    (*DSArrayAdd)       (DSArray* const, const Any);
-typedef void    (*DSArraySet)       (const DSArray* const, int, const Any);
-typedef Any     (*DSArrayGet)       (const DSArray* const, int);
+typedef void    (*DSArrayAdd)       (DSArray* const, const DSObject*);
+typedef void    (*DSArraySet)       (const DSArray* const, int, const DSObject*);
+typedef DSObject*     (*DSArrayGet)       (const DSArray* const, int);
 typedef void    (*DSArrayRemove)    (const DSArray* const, int);
 typedef void    (*DSArrayDispose)   (DSArray* const);
 typedef void    (*DSArrayClear)     (const DSArray* const);
 typedef bool    (*DSArrayIsEmpty)   (const DSArray* const);
-typedef bool    (*DSArrayContains)  (const DSArray* const, const Any);
+typedef bool    (*DSArrayContains)  (const DSArray* const, const DSObject*);
 typedef char*   (*DSArrayToString)  (const DSArray* const);
 
 /**
@@ -67,14 +72,14 @@ vtable (DSArray) {
 
     int     (*Length)       (const DSArray* const);
     bool    (*IsEmpty)      (const DSArray* const);
-    bool    (*Contains)     (const DSArray* const, Any);
+    bool    (*Contains)     (const DSArray* const, DSObject*);
     void    (*Clear)        (DSArray* const);
-    void    (*Add)          (DSArray* const, Any);
+    void    (*Add)          (DSArray* const, const DSObject*);
     void    (*Remove)       (DSArray* const, int);
 
     void    (*Resize)       (DSArray* const, int);
-    void    (*Set)          (DSArray* const, int, Any);
-    Any     (*Get)          (const DSArray* const, int);
+    void    (*Set)          (DSArray* const, int, DSObject*);
+    DSObject*     (*Get)          (const DSArray* const, int);
     
 };
 
@@ -88,19 +93,18 @@ class (DSArray) {
  */
 DSArray* overload NewDSArray(void);
 DSArray* overload NewDSArray(int);
-// DSArray* overload NewDSArray(int, ...);
 
 char* overload ToString(const DSArray* const);
 void overload Dispose(DSArray* const);
 int overload Length(const DSArray* const);
 bool overload IsEmpty(const DSArray* const);
-bool overload Contains(const DSArray* const, Any);
+bool overload Contains(const DSArray* const, DSObject*);
 void overload Clear(DSArray* const);
-void overload Add(DSArray* const, Any);
+void overload Add(DSArray* const, const DSObject*);
 void overload Remove(DSArray* const, int);
 void Resize(DSArray* const, int);
-void Set(DSArray* const, int, const Any);
-Any Get(const DSArray* const, int);
+void Set(DSArray* const, int, const DSObject*);
+DSObject* Get(const DSArray* const, int);
 DSArray* DSArray_init(DSArray* const this, int capacity);
 DSArray* DSArray_alloc();
 

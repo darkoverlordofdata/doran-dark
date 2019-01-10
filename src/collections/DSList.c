@@ -52,14 +52,14 @@ DSList* DSList_alloc() {
  * @param next node in list
  * 
  */
-DSListNode* DSListNode_init(DSListNode* const this, Any data, DSListNode* next)
+DSListNode* DSListNode_init(DSListNode* const this, DSObject* data, DSListNode* next)
 {
     this->data = data;
     this->next = next;
     return this;
 }
 
-DSListNode* NewDSListNode(Any data, DSListNode* next)
+DSListNode* NewDSListNode(DSObject* data, DSListNode* next)
 {
     return DSListNode_init(DSList_alloc(), data, next);
 }
@@ -71,7 +71,7 @@ DSListNode* NewDSListNode(Any data, DSListNode* next)
  * @param comp function to compare for insertion
  * 
  */
-int Insert(DSList* const this, Any data, int (*comp)(Any, Any))
+int Insert(DSList* const this, DSObject* data, DSList_Compare comp) //int (*comp)(DSObject*, DSObject*))
 {
     if (this->head == nullptr) {
         this->head = NewDSListNode(data, nullptr);
@@ -101,7 +101,7 @@ int Insert(DSList* const this, Any data, int (*comp)(Any, Any))
  * @param data to insert
  * 
  */
-void overload Add(DSList* const this, Any data)
+void overload Add(DSList* const this, DSObject* data)
 {
     if (this->head == nullptr) {
         this->head = NewDSListNode(data, nullptr);
@@ -115,11 +115,11 @@ void overload Add(DSList* const this, Any data)
 /**
  * Remove item at end of list
  */
-Any overload Remove(DSList* const this)
+DSObject* overload Remove(DSList* const this)
 {
     DSListNode* head = this->head;
 
-    Any popped_data = head->data;
+    DSObject* popped_data = head->data;
     this->head = head->next;
 
     // delete(head);
@@ -133,7 +133,7 @@ Any overload Remove(DSList* const this)
  * @param iter function to call for each iteration
  * 
  */
-void overload ForEach(DSList* const this, void (^iter)(Any))
+void overload ForEach(DSList* const this, void (^iter)(DSObject*))
 {
     for (DSListNode* curr = this->head; curr != nullptr; curr = curr->next) {
         iter(curr->data);

@@ -25,19 +25,21 @@ SOFTWARE.
 ******************************************************************/
 $implementation( DSDouble );
 
-$method( ToString,           (DSDoubleToString)ToString, "$@:v" );
+$override( ToString,         (DSDoubleToString)ToString, "$@:v" );
 $method( Equals,             DSObject_Equals, "B@:@@" );
 $method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
 $method( Dispose,            DSObject_Dispose, "v@:v" );
-$method( CompareTo,          (DSDoubleCompareTo)CompareTo, "i@:@" );
-$method( IntValue,           (DSDoubleIntValue)IntValue, "i@:v" );
-$method( LongValue,          (DSDoubleLongValue)LongValue, "l@:v" );
-$method( FloatValue,         (DSDoubleFloatValue)FloatValue, "f@:v" );
-$method( DoubleValue,        (DSDoubleDoubleValue)DoubleValue, "d@:v" );
-$method( CharValue,          (DSDoubleCharValue)CharValue, "c@:v" );
-$method( ShortValue,         (DSDoubleShortValue)ShortValue, "s@:v" );
+$override( CompareTo,        (DSDoubleCompareTo)CompareTo, "i@:@" );
+$override( IntValue,         (DSDoubleIntValue)IntValue, "i@:v" );
+$override( LongValue,        (DSDoubleLongValue)LongValue, "l@:v" );
+$override( FloatValue,       (DSDoubleFloatValue)FloatValue, "f@:v" );
+$override( DoubleValue,      (DSDoubleDoubleValue)DoubleValue, "d@:v" );
+$override( CharValue,        (DSDoubleCharValue)CharValue, "c@:v" );
+$override( ShortValue,       (DSDoubleShortValue)ShortValue, "s@:v" );
 
 $ivar( value, sizeof( double ), "d" );
+
+$DSDouble.Create = NewDSDouble;
 
 $end;
 

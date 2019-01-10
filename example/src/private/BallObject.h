@@ -23,7 +23,7 @@ $method( GetHashCode,   DSObject_GetHashCode, "l@:v" );
 $method( Dispose,       DSObject_Dispose, "v@:v" );
 
 $method( Draw,          (BallObjectDraw)Draw, "v@:@" );
-$method( Move,          Move, "v@:iI" );
-$method( Reset,         Reset, "v@:!!" );
+$method( Move,          (BallObjectMove)Move, "v@:iI" );
+$method( Reset,         (BallObjectReset)Reset, "v@:!!" );
 
 $end;

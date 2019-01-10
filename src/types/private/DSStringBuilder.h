@@ -54,21 +54,22 @@ SOFTWARE.
 ******************************************************************/
 $implementation( DSStringBuilder );
 
-$method( ToString, 			DSObject_ToString, "$@:v" );
-$method( Equals,             DSObject_Equals, "B@:@@" );
-$method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
-$method( Dispose,            DSObject_Dispose, "v@:v" );
-$method( Append,				DSStringBuilder_Append, "i@:v" );
-$method( Appendc, 			DSStringBuilder_Appendc, "i@:c" );
-$method( Appendf, 			DSStringBuilder_Appendf, "i@:c." );
-$method( Concat, 			DSStringBuilder_Concat, "$@:v" );
-$method( Dispose, 			DSStringBuilder_Dispose, "v@:v" );
-$method( Empty, 				DSStringBuilder_Empty, "B@:v" );
-$method( Reset, 				DSStringBuilder_Reset, "v@:v" );
+$method( ToString, 		    DSObject_ToString, "$@:v" );
+$method( Equals,            DSObject_Equals, "B@:@@" );
+$method( GetHashCode,       DSObject_GetHashCode, "l@:v" );
+$override( Dispose, 		(DSStringBuilderDispose)Dispose, "v@:v" );
+$method( Append,			(DSStringBuilderAppend)Append, "i@:v" );
+$method( Appendc, 			(DSStringBuilderAppendc)Appendc, "i@:c" );
+$method( Appendf, 			(DSStringBuilderAppendf)Appendf, "i@:c." );
+$method( Concat, 			(DSStringBuilderConcat)Concat, "$@:v" );
+$method( Empty, 			(DSStringBuilderEmpty)Empty, "B@:v" );
+$method( Reset, 			(DSStringBuilderReset)Reset, "v@:v" );
 
 $ivar( root, sizeof( id ), "^" );
 $ivar( trunk, sizeof( id ), "^" );
 $ivar( length, sizeof( int ), "i" );
+
+$DSStringBuilder.Create = NewDSStringBuilder;
 
 $end;
 

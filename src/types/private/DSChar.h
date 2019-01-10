@@ -39,4 +39,6 @@ $override( ShortValue,       (DSCharShortValue)ShortValue, "s@:v" );
 
 $ivar( value, sizeof( char ), "c" );
 
+$DSChar.Create = NewDSChar;
+
 $end;

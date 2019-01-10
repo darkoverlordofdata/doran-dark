@@ -38,13 +38,11 @@ SOFTWARE.
  */
 char * strrstr(char *str1, char *str2)
 {
-  char *result;
   size_t slen = strlen(str1);
   size_t flen = strlen(str2);
   if (flen > slen) return nullptr;
 
-
-  for (result = str1 + slen - flen; result >= str1; result--)
+  for (char* result = str1 + slen - flen; result >= str1; result--)
   {
     if (strncmp(result, str2, flen) == 0)
         return result;
@@ -63,10 +61,9 @@ char * strrstr(char *str1, char *str2)
  */
 char * strndup (const char *str, size_t size)
 {
-  char *result;
   size_t len = strlen(str);
   len = size < len ? size : len;
-  result = DSCalloc(len + 1, sizeof(char));
+  char *result = DSCalloc(len + 1, sizeof(char));
   return strncpy(result, str, len);
 }
 
@@ -79,6 +76,7 @@ char * strndup (const char *str, size_t size)
  */
 char* STR_JOIN(int count, ...)
 {
+    
     int size = 0;
     va_list args1;
     va_start(args1, count);

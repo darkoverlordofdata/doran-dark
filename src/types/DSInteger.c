@@ -73,7 +73,7 @@ int DSParseInt(const char* const s, const int radix) {
  *        +1 x < y
  *        -1 x > y
  */
-int DSInteger_Compare(const int x, const int y) {
+int overload Compare(const int x, const int y) {
     return (x < y) ? -1 : (( x == y ) ? 0 : 1);
 }
 
@@ -83,54 +83,54 @@ int DSInteger_Compare(const int x, const int y) {
  * @param   other  Integer to be compared
  * @return same as DSInteger_Compare
  */
-int DSInteger_CompareTo(const DSInteger* this, const DSInteger* other) {
-    return DSInteger_Compare(this->value, other->value);
+int overload CompareTo(const DSInteger* this, const DSInteger* other) {
+    return Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int DSInteger_IntValue(const DSInteger* const this) {
+int overload IntValue(const DSInteger* const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-long DSInteger_LongValue(const DSInteger* const this) {
+long overload LongValue(const DSInteger* const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-float DSInteger_FloatValue(const DSInteger* const this) {
+float overload FloatValue(const DSInteger* const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-double DSInteger_DoubleValue(const DSInteger* const this) {
+double overload DoubleValue(const DSInteger* const this) {
     return (double)this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-char DSInteger_CharValue(const DSInteger* const this) {
+char overload CharValue(const DSInteger* const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-short DSInteger_ShortValue(const DSInteger* const this) {
+short overload ShortValue(const DSInteger* const this) {
     return (short)this->value;
 }
 
 
-char* DSInteger_ToString(const DSInteger* const this)
+char* overload ToString(const DSInteger* const this)
 {
     static char str[20];
     sprintf(str, "%d", this->value);

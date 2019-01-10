@@ -15,8 +15,10 @@
 #include "Texture.h"
 #include "GameObject.h"
 
-#define IsParticleGenerator(x) (x->isa == &ParticleGeneratorClass)
-#define AsParticleGenerator(x) (IsParticleGenerator(x) ? (ParticleGenerator*)x : nullptr)
+#define IsParticleGenerator(object) _Generic((object), ParticleGenerator*: true, default: false)
+#define AsParticleGenerator(object) _Generic((object),                          \
+                            ParticleGenerator*: (ParticleGenerator *)object,    \
+                            default: nullptr)
 
 
 // Represents a single particle and its state
@@ -43,36 +45,34 @@ ivar (ParticleGenerator) {
     GLuint VAO;
 };
 
-typedef char*   (*ParticleGeneratorToString)  (const ParticleGenerator* const);
-typedef void    (*ParticleGeneratorDraw) (ParticleGenerator* const);
+ParticleGenerator* NewParticleGenerator(Shader* shader, Texture2D* texture, int amount);
+ParticleGenerator* ParticleGenerator_alloc();
+ParticleGenerator* ParticleGenerator_init(ParticleGenerator* const this, Shader* shader, Texture2D* texture, int amount);
+
+char*   overload ToString(const ParticleGenerator* const);
+void    overload Update(ParticleGenerator*, GLfloat, GameObject*, GLuint, Vec2);
+void    overload Draw(ParticleGenerator*);
+
+static  void    init(ParticleGenerator*);
+static  GLuint  firstUnusedParticle(ParticleGenerator*);
+static  void    respawnParticle(ParticleGenerator*, struct Particle, GameObject*, Vec2);
+
+typedef char*   (*ParticleGeneratorToString)    (const ParticleGenerator* const);
+typedef void    (*ParticleGeneratorUpdate)      (ParticleGenerator*, GLfloat, GameObject*, GLuint, Vec2);
+typedef void    (*ParticleGeneratorDraw)        (ParticleGenerator*);
+
+vtable (ParticleGenerator) {
+    ParticleGeneratorToString   ToString;
+    DSObjectEquals              Equals;
+    DSObjectGetHashCode         GetHashCode;
+    DSObjectDispose             Dispose;
+    ParticleGeneratorUpdate     Update;
+    ParticleGeneratorDraw       Draw;
+};
 
 class (ParticleGenerator) {
     ParticleGenerator*  (*Create) (Shader* shader, Texture2D* texture, int amount);
 };
 
-vtable (ParticleGenerator) {
-    char*   (*ToString) (const ParticleGenerator* const);
-    bool    (*Equals) (DSObject* const, DSObject* const);
-    int     (*GetHashCode) (DSObject* const);
-    void    (*Dispose) (DSObject* const);
-        
-    // Update all particles
-    void    (*Update)               (ParticleGenerator* const, GLfloat dt, GameObject* object, GLuint newParticles, Vec2 offset);
-    // Render all particles
-    void    (*Draw)                 (ParticleGenerator* const);
-    // Initializes buffer and vertex attributes
-    
-};
 
-/**
- * ParticleGenerator API
- */
-void overload Update(ParticleGenerator*, GLfloat dt, GameObject* object, GLuint newParticles, Vec2 offset);
-void overload Draw(ParticleGenerator*);
-char* overload ToString(const ParticleGenerator* const);
-ParticleGenerator* NewParticleGenerator(Shader* shader, Texture2D* texture, int amount);
-ParticleGenerator* ParticleGenerator_alloc();
-ParticleGenerator* ParticleGenerator_init(ParticleGenerator* const this, Shader* shader, Texture2D* texture, int amount);
-static void init(ParticleGenerator* this);
-static GLuint firstUnusedParticle(ParticleGenerator* this);
-static void respawnParticle(ParticleGenerator* this, struct Particle particle, GameObject* object, Vec2 offset);
+

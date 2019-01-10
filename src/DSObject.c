@@ -31,12 +31,19 @@ SOFTWARE.
  * Define the DSObject implementation
  */
 $implementation(DSObject);
-$method(ToString,           DSObject_ToString, "$@:v");
-$method(Equals,             DSObject_Equals, "B@:@@");
-$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
-$method(Dispose,            DSObject_Dispose, "v@:v");
+// $method(ToString,           DSObject_ToString, "$@:v");
+// $method(Equals,             DSObject_Equals, "B@:@@");
+// $method(GetHashCode,        DSObject_GetHashCode, "l@:v");
+// $method(Dispose,            DSObject_Dispose, "v@:v");
+$method(ToString,           ToString, "$@:v");
+$method(Equals,             Equals, "B@:@@");
+$method(GetHashCode,        GetHashCode, "l@:v");
+$method(Dispose,            Dispose, "v@:v");
 $method(ReferenceEquals,    ReferenceEquals, "@:v");
 $method(InstanceEquals,     InstanceEquals, "$@:v");
+
+$DSObject.Empty = nullptr;
+
 $end;
 
 /**class_getAlignedInstanceSize
@@ -104,7 +111,9 @@ const char *DSClass_ToString(const DSClass* const this)
  */
 bool overload Equals(const DSObject* const this, const DSObject* const that)
 {
-    return _vptr(this)->Equals(this, that);
+    DSLog("DSObject Equals");
+    return this == that;
+    // return _vptr(this)->Equals(this, that);
 }
 /**
  * virtual Equals method

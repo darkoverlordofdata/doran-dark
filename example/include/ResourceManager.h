@@ -13,8 +13,10 @@
 #include "Shader.h"
 #include "Texture.h"
 
-#define IsResourceManager(x) (x->isa == &ResourceManagerClass)
-#define AsResourceManager(x) (IsResourceManager(x) ? (ResourceManager*)x : nullptr)
+#define IsDResourceManager(object) _Generic((object), DResourceManager*: true, default: false)
+#define AsDResourceManager(object) _Generic((object),                           \
+                            DResourceManager*: (DResourceManager *)object,      \
+                            default: nullptr)
 
 // A singleton ResourceManager class that hosts several
 // functions to load Textures and Shaders. Each loaded texture
@@ -25,7 +27,30 @@ ivar (ResourceManager) {
     Class isa;
 };
 
-typedef char*   (*ResourceManagerToString)  (const ResourceManager* const);
+ResourceManager* NewResourceManager();
+ResourceManager* ResourceManager_init(ResourceManager* this);
+ResourceManager* ResourceManager_alloc();
+
+char*   overload ToString(const ResourceManager* const);
+Shader*     LoadShader(const GLchar*, const GLchar*, char*);
+Shader*     GetShader(char*);
+Texture2D*  LoadTexture(const GLchar*, bool, char*);
+Texture2D*  GetTexture(char*);
+void        Dtor(ResourceManager*);
+
+static  char*       rdbuf(FILE* f);
+static  Shader*     loadShaderFromFile(const GLchar*, const GLchar*);
+static  Texture2D*  loadTextureFromFile(const GLchar*, bool);
+
+typedef char*       (*ResourceManagerToString)      (const ResourceManager* const);
+
+
+vtable (ResourceManager) {
+    ResourceManagerToString ToString;
+    DSObjectEquals          Equals;
+    DSObjectGetHashCode     GetHashCode;
+    DSObjectDispose         Dispose;
+};
 
 class (ResourceManager) {
     ResourceManager*  (*Create) ();
@@ -46,23 +71,3 @@ class (ResourceManager) {
     // Loads a single texture from file
     Texture2D*   (*loadTextureFromFile)  (const GLchar *file, GLboolean alpha);
 };
-
-vtable (ResourceManager) {
-    char*   (*ToString) (const ResourceManager* const);
-    bool    (*Equals) (DSObject* const, DSObject* const);
-    int     (*GetHashCode) (DSObject* const);
-    void    (*Dispose) (DSObject* const);
-};
-
-static Shader* loadShaderFromFile(const GLchar *vShaderFile, const GLchar *fShaderFile);
-static Texture2D* loadTextureFromFile(const GLchar *file, bool alpha);
-Shader* LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, char* name);
-Shader* GetShader(char* name);
-Texture2D* LoadTexture(const GLchar *file, bool alpha, char* name);
-Texture2D* GetTexture(char* name);
-void Dtor(ResourceManager*);
-static char* rdbuf(FILE* f);
-char* overload ToString(const ResourceManager* const);
-ResourceManager* ResourceManager_init(ResourceManager* this);
-ResourceManager* ResourceManager_alloc();
-ResourceManager* NewResourceManager();

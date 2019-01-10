@@ -34,8 +34,10 @@ SOFTWARE.
 #define DOUBLE_SIZE       (DOUBLE_BYTES * CHAR_BIT)
 #define DOUBLE_TYPE       (TYPE_DOUBLE)
 
-#define IsDSDouble(x) (x->isa == &$DSDouble)
-#define AsDSDouble(x) (IsDSDouble(x) ? (DSDouble*)x : nullptr)
+#define IsDSDouble(object) _Generic((object), DSDouble*: true, default: false)
+#define AsDSDouble(object) _Generic((object),                          \
+                            DSDouble*: (DSDouble *)object,             \
+                            default: nullptr)
 
 /**
  * Double instance variables

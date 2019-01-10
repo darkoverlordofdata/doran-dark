@@ -76,7 +76,7 @@ float DSParseFloat(const char* s)
  *         +1 x < y
  *         -1 x > y
  */
-int DSFloat_Compare(const float x, const float y) {
+int overload Compare(const float x, const float y) {
     return (x < y) ? -1 : (( x == y ) ? 0 : 1);
 }
 
@@ -86,54 +86,54 @@ int DSFloat_Compare(const float x, const float y) {
  * @param   other  Float to be compared
  * @return same as DSFloat_Compare
  */
-int DSFloat_CompareTo(const DSFloat* this, const DSFloat* other) {
-    return DSFloat_Compare(this->value, other->value);
+int overload CompareTo(const DSFloat* this, const DSFloat* other) {
+    return Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int DSFloat_IntValue(const DSFloat* const this) {
+int overload IntValue(const DSFloat* const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-long DSFloat_LongValue(const DSFloat* const this) {
+long overload LongValue(const DSFloat* const this) {
     return (long)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-double DSFloat_DoubleValue(const DSFloat* const this) {
+double overload DoubleValue(const DSFloat* const this) {
     return (double)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-float DSFloat_FloatValue(const DSFloat* const this) {
+float overload FloatValue(const DSFloat* const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-char DSFloat_CharValue(const DSFloat* const this) {
+char overload CharValue(const DSFloat* const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-short DSFloat_ShortValue(const DSFloat* const this) {
+short overload ShortValue(const DSFloat* const this) {
     return (short)this->value;
 }
 
 
-char* DSFloat_ToString(const DSFloat* const this)
+char* overload ToString(const DSFloat* const this)
 {
     static char str[20];
     sprintf(str, "%f", this->value);

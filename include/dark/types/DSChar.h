@@ -34,8 +34,10 @@ SOFTWARE.
 #define CHAR_SIZE       (CHAR_BYTES * CHAR_BIT)
 #define CHAR_TYPE       (TYPE_CHAR)
 
-#define IsDSChar(x) (x->isa == &$DSChar)
-#define AsDSChar(x) (IsDSChar(x) ? (DSChar* )x : nullptr)
+#define IsDSChar(object) _Generic((object), DSChar*: true, default: false)
+#define AsDSChar(object) _Generic((object),                             \
+                            DSChar*: (DSChar *)object,                  \
+                            default: nullptr)
 
 /**
  * Char instance variables

@@ -26,17 +26,20 @@ SOFTWARE.
 #pragma once
 #ifndef _DSLIST_H_
 #define _DSLIST_H_
-#include "DSCollection.h"
+#include "../DSObject.h"
+// #include "DSCollection.h"
 
-#define IsDSList(x) (x->isa == &$DSList)
-#define AsDSList(x) (IsDSList(x) ? (DSList*)x : nullptr)
+#define IsDSList(object) _Generic((object), DSList*: true, default: false)
+#define AsDSList(object) _Generic((object),                             \
+                            DSList*: (DSList *)object,                  \
+                            default: nullptr)
 
-typedef int (*DSList_Compare) (Any, Any);
-typedef void (^DSList_Iterator) (Any);
+typedef int (*DSList_Compare) (DSObject*, DSObject*);
+typedef void (^DSList_Iterator) (DSObject*);
 
 ivar (DSListNode)
 {
-    Any data;
+    DSObject* data;
     DSListNode* next;
 };
 
@@ -50,10 +53,10 @@ ivar (DSList) {
 typedef char*   (*DSListToString)   (const DSList* const);
 typedef void    (*DSListDispose)    (DSList* const);
 typedef int     (*DSListLength)     (const DSList* const);
-typedef int     (*DSListForEach)    (DSList* const this, DSList_Iterator f, Any item);
-typedef void    (*DSListInsert)     (const DSList* const Any, DSList_Compare);
-typedef void    (*DSListAdd)        (DSList* const, Any);
-typedef Any     (*DSListRemove)     (const DSList* const);
+typedef int     (*DSListForEach)    (DSList* const, DSList_Iterator, DSObject*);
+typedef void    (*DSListInsert)     (DSList* const, DSObject*, DSList_Compare);
+typedef void    (*DSListAdd)        (DSList* const, DSObject*);
+typedef DSObject*     (*DSListRemove)     (const DSList* const);
 
 vtable (DSList) {
     char*   (*ToString)     (const DSList* const);
@@ -62,11 +65,11 @@ vtable (DSList) {
     void    (*Dispose)      (DSObject* const);
     int     (*Length)       (const DSList* const);
     bool    (*IsEmpty)      (DSList* const);
-    bool    (*Contains)     (DSList* const, Any);
+    bool    (*Contains)     (DSList* const, DSObject*);
     void    (*Clear)        (DSList* const);
-    void    (*Add)          (DSList* const, Any);
-    Any     (*Remove)       (DSList* const);
-    int     (*Insert)       (DSList* const, Any, DSList_Compare);
+    void    (*Add)          (DSList* const, DSObject*);
+    DSObject*     (*Remove)       (DSList* const);
+    int     (*Insert)       (DSList* const, DSObject*, DSList_Compare);
     void    (*Iterate)      (DSList* const, DSList_Iterator);
     
 };
@@ -85,10 +88,10 @@ int overload Length(const DSList* const);
 bool overload IsEmpty(DSList* const);
 bool overload Contains(DSList* const);
 void overload Clear(DSList* const);
-void overload Add(DSList* const, Any);
-Any overload Remove(DSList* const);
+void overload Add(DSList* const, DSObject*);
+DSObject* overload Remove(DSList* const);
 
-int Insert(DSList* const, Any, DSList_Compare);
+int Insert(DSList* const, DSObject*, DSList_Compare);
 void overload ForEach(DSList* const, DSList_Iterator);
 DSList* DSList_alloc();
 DSList* DSList_init(DSList* const this);

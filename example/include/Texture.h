@@ -10,8 +10,10 @@
 #include <GL/glew.h>
 #include <dark/Foundation.h>
 
-#define IsTexture2D(x) (x->isa == &Texture2DClass)
-#define AsTexture2D(x) (IsTexture2D(x) ? (Texture2D*)x : nullptr)
+#define IsTexture2D(object) _Generic((object), Texture2D*: true, default: false)
+#define AsTexture2D(object) _Generic((object),                          \
+                            Texture2D*: (Texture2D *)object,            \
+                            default: nullptr)
 
 // Texture2D is able to store and configure a texture in OpenGL.
 // It also hosts utility functions for easy management.
@@ -34,31 +36,28 @@ ivar (Texture2D)
     GLuint FilterMag;       // Filtering mode if texture pixels > screen pixels
 };
 
-typedef char*   (*Texture2DToString)  (const Texture2D* const);
+Texture2D* NewTexture2D(int InternalFormat, int ImageFormat, char* path);
+Texture2D* Texture2D_init(Texture2D* const this, int InternalFormat, int ImageFormat, char* path);
+Texture2D* Texture2D_alloc();
+
+char*   overload ToString(const Texture2D* const);
+void    overload Generate(Texture2D* const, const GLuint, const GLuint, const unsigned char*);
+void    overload Bind(Texture2D*);
+
+typedef char*   (*Texture2DToString)    (const Texture2D* const);
+typedef char*   (*Texture2DGenerate)    (Texture2D*, const GLuint, const GLuint, const unsigned char*);
+typedef char*   (*Texture2DBind)        (Texture2D*);
+
+vtable (Texture2D) {
+    Texture2DToString       ToString;
+    DSObjectEquals          Equals;
+    DSObjectGetHashCode     GetHashCode;
+    DSObjectDispose         Dispose;
+    Texture2DGenerate       Generate;
+    Texture2DBind           Bind;
+};
 
 class (Texture2D) {
     Texture2D*  (*Create) (int InternalFormat, int ImageFormat, char* path);
 };
 
-vtable (Texture2D) {
-    char*   (*ToString) (const Texture2D* const);
-    bool    (*Equals) (DSObject* const, DSObject* const);
-    int     (*GetHashCode) (DSObject* const);
-    void    (*Dispose) (DSObject* const);
-
-    // Generates texture from image data
-    void    (*Generate)     (Texture2D* const, const GLuint width, const GLuint height, const unsigned char* data);
-    // Binds the texture as the current active GL_TEXTURE_2D texture object
-    void    (*Bind)         (Texture2D* const);
-    
-};
-
-/**
- * Texture2D API
- */
-void overload Generate(Texture2D* const, const GLuint, const GLuint height, const unsigned char* data);
-void overload Bind(Texture2D*);
-char* overload ToString(const Texture2D* const);
-Texture2D* Texture2D_init(Texture2D* const this, int InternalFormat, int ImageFormat, char* path);
-Texture2D* NewTexture2D(int InternalFormat, int ImageFormat, char* path);
-Texture2D* Texture2D_alloc();

@@ -11,7 +11,7 @@ $ivar( VAO,     sizeof( GLuint ), "I" );
 $method( ToString,           (SpriteRendererToString)ToString, "$@:v" );
 $method( Equals,             DSObject_Equals, "B@:@@" );
 $method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
-$method( Dispose,            DSObject_Dispose, "v@:v" );
-$method( Draw,         Draw, "@@:@!!f!" );
+$method( Dispose,            (SpriteRendererDispose)Dispose, "v@:v" );
+$method( Draw,               (SpriteRendererDraw)Draw, "@@:@!!f!" );
 
 $end;

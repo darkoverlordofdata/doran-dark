@@ -32,28 +32,31 @@ SOFTWARE.
 #pragma once
 #ifndef _DSHASHMAP_H_
 #define _DSHASHMAP_H_
-#include "DSCollection.h"
+#include "../DSObject.h"
+// #include "DSCollection.h"
 
 #define MAP_MISSING -3  /* No such element */
 #define MAP_FULL -2 	/* Hashmap is full */
 #define MAP_OMEM -1 	/* Out of Memory */
 #define MAP_OK 0 	    /* OK */
 
-#define IsDSHashmap(x) (x->isa == &$DSHashmap)
-#define AsDSHashmap(x) (IsDSHashmap(x) ? (DSHashmap*)x : nullptr)
+#define IsDSHashmap(object) _Generic((object), DSHashmap*: true, default: false)
+#define AsDSHashmap(object) _Generic((object),                          \
+                            DSHashmap*: (DSHashmap *)object,            \
+                            default: nullptr)
 
 /*
- * Iterator is a pointer to a function that can take two Any arguments
+ * Iterator is a pointer to a function that can take two DSObject* arguments
  * and return an integer. Returns status code..
  */
-typedef int (^DSHashmap_Iterator)(Any, Any);
+typedef int (^DSHashmap_Iterator)(DSObject*, DSObject*);
 
 /* We need to keep keys and values */
 ivar (DSHashmapNode)
 {
 	char* key;
 	int inUse;
-	Any data;
+	DSObject* data;
 };
 
 /* A hashmap has some maximum size and current size,
@@ -65,17 +68,19 @@ ivar (DSHashmap) {
 	DSHashmapNode* data;
 }; 
 
+
 /** Interface */
 typedef char*   (*DSHashmapToString)    (const DSHashmap* const);
-typedef int     (*DSHashmapForEach)     (DSHashmap* const this, DSHashmap_Iterator f, Any item);
-typedef void    (*DSHashmapPut)         (const DSHashmap* const, int, const Any);
-typedef Any     (*DSHashmapGet)         (const DSHashmap* const, int);
+typedef int     (*DSHashmapForEach)     (DSHashmap* const this, DSHashmap_Iterator f, DSObject* item);
+typedef void    (*DSHashmapPut)         (const DSHashmap* const, int, const DSObject*);
+typedef DSObject*     (*DSHashmapGet)         (const DSHashmap* const, int);
 typedef void    (*DSHashmapRemove)      (const DSHashmap* const, int);
 typedef void    (*DSHashmapDispose)     (DSHashmap* const);
 typedef int     (*DSHashmapLength)      (const DSHashmap* const);
 typedef UInt    (*DSHashmapHashInt)     (const DSHashmap* const, char*);
 typedef int     (*DSHashmapHash)        (const DSHashmap* const, char*);
 typedef int     (*DSHashmapRehash)      (const DSHashmap* const);
+
 
 vtable (DSHashmap) {
     char*   (*ToString) (const DSHashmap* const);
@@ -89,13 +94,13 @@ vtable (DSHashmap) {
         */
     int         (*Length)       (const DSHashmap* const);
     // bool        (*IsEmpty)      (DSHashmap* const);
-    // bool        (*Contains)     (DSHashmap* const, Any);
+    // bool        (*Contains)     (DSHashmap* const, DSObject*);
     // void        (*Clear)        (DSHashmap* const);
-    // void        (*Add)          (DSHashmap* const, Any);
+    // void        (*Add)          (DSHashmap* const, DSObject*);
     /*
         * Remove an element from the hashmap. Return MAP_OK or MAP_MISSING.
         */
-    Any         (*Remove)       (DSHashmap* const);
+    DSObject*         (*Remove)       (DSHashmap* const);
     /*
     * Iteratively call func with argument (item, data) for
     * each element data in the hashmap. The function must
@@ -103,18 +108,18 @@ vtable (DSHashmap) {
     * than MAP_OK the traversal is terminated. f must
     * not reenter any hashmap functions, or deadlock may arise.
     */
-    int (*ForEach)  (DSHashmap* const, DSHashmap_Iterator, Any);
+    int (*ForEach)  (DSHashmap* const, DSHashmap_Iterator, DSObject*);
 
     /*
     * Add an element to the hashmap. Return MAP_OK or MAP_OMEM.
     */
-    int (*Put)      (DSHashmap* const, char*, Any);
+    int (*Put)      (DSHashmap* const, char*, DSObject*);
 
     /*
     * Get an element from the hashmap. Return MAP_OK or MAP_MISSING.
     */
-    // int (*Get)      (Hashmap * const, char* key, Any *arg);
-    Any (*Get)      (DSHashmap* const, char*);
+    // int (*Get)      (Hashmap * const, char* key, DSObject* *arg);
+    DSObject* (*Get)      (DSHashmap* const, char*);
 
     /*
      * Hashing function for a string
@@ -144,9 +149,9 @@ class (DSHashmap) {
 unsigned int overload HashInt(DSHashmap* const, char*);
 int overload Hash(DSHashmap* const, char*);
 int overload Rehash(DSHashmap* const);
-int overload Put(DSHashmap* const, char*, Any);
-Any overload Get(DSHashmap* const, char*);
-int overload ForEach(DSHashmap* const, DSHashmap_Iterator, Any);
+int overload Put(DSHashmap* const, char*, DSObject*);
+DSObject* overload Get(DSHashmap* const, char*);
+int overload ForEach(DSHashmap* const, DSHashmap_Iterator, DSObject*);
 int overload Remove(DSHashmap* const, char*);
 void overload Dispose(DSHashmap* const);
 int overload Length(const DSHashmap* const);

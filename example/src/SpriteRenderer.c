@@ -70,7 +70,7 @@ void overload Draw(
     glBindVertexArray(0);
 }
 
-void overload Dispose(SpriteRenderer* this)
+void overload Dispose(SpriteRenderer* const this)
 {
     glDeleteVertexArrays(1, this->VAO);
 }

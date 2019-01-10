@@ -34,8 +34,11 @@ SOFTWARE.
 #define LONG_SIZE       (LONG_BYTES * CHAR_BIT)
 #define LONG_TYPE       (TYPE_LONG)
 
-#define IsDSLong(x) (x->isa == &DSLongClass)
-#define AsDSLong(x) (IsDSLong(x) ? (DSLong*)x : nullptr)
+#define IsDSLong(object) _Generic((object), DSLong*: true, default: false)
+#define AsDSLong(object) _Generic((object),                             \
+                            DSLong*: (DSLong *)object,                  \
+                            default: nullptr)
+
 
 /**
  * Object class
@@ -46,39 +49,52 @@ ivar (DSLong)
     long value;
 };
 
-/**
- * Object metaclass
- */
-vtable (DSLong) {
-    char*   (*ToString)     (const DSLong* const);
-    bool    (*Equals)       (const DSObject* const, DSObject* const);
-    int     (*GetHashCode)  (const DSObject* const);
-    void    (*Dispose)      (const DSObject* const);
-    int     (*CompareTo)    (const DSComparable* const, const DSComparable* const);
-    int     (*IntValue)     (const DSLong* const);
-    long    (*LongValue)    (const DSLong* const);
-    float   (*FloatValue)   (const DSLong* const);
-    double  (*DoubleValue)  (const DSLong* const);
-    char    (*CharValue)    (const DSLong* const);
-    short   (*ShortValue)   (const DSLong* const);
+DSLong* NewDSLong(long const value);
+DSLong* DSLong_init(DSLong* const this, const long value);
+DSLong* DSLong_alloc();
 
+char*   overload ToString(const DSLong* const);
+int     overload CompareTo(const DSLong* const, const DSLong* const);
+int     overload IntValue(const DSLong* const);
+long    overload LongValue(const DSLong* const);
+float   overload IntegerValue(const DSLong* const);
+double  overload DoubleValue(const DSLong* const);
+char    overload CharValue(const DSLong* const);
+short   overload ShortValue(const DSLong* const);
+
+typedef char*   (*DSLongToString)       (const DSLong* const);
+typedef int     (*DSLongCompareTo)      (const DSLong* const, const DSLong* const);
+typedef int     (*DSLongIntValue)       (const DSLong* const);
+typedef long    (*DSLongLongValue)      (const DSLong* const);
+typedef float   (*DSLongFloatValue)     (const DSLong* const);
+typedef double  (*DSLongDoubleValue)    (const DSLong* const);
+typedef char    (*DSLongCharValue)      (const DSLong* const);
+typedef short   (*DSLongShortValue)     (const DSLong* const);
+
+/**
+ * Integer vtable with overrides
+ */
+vtable (DSLong)
+{
+    DSLongToString           ToString;
+    DSObjectEquals              Equals;
+    DSObjectGetHashCode         GetHashCode;
+    DSObjectDispose             Dispose;
+    DSLongCompareTo          CompareTo;
+    DSLongIntValue           IntValue;
+    DSLongLongValue          LongValue;
+    DSLongFloatValue         IntegerValue;
+    DSLongDoubleValue        DoubleValue;
+    DSLongCharValue          CharValue;
+    DSLongShortValue         ShortValue;
 };
+
+
+
 
 class (DSLong) {
     DSLong*   (*Create) (long);
 };
 
-DSLong* NewDSLong(const long value);
-DSLong* DSLong_init(DSLong* const this, const long value);
-DSLong* DSLong_alloc();
-long DSLongParseLong(char *const, int);
-int DSLong_CompareTo(const DSLong* const, const DSLong* const);
-int DSLong_IntValue(const DSLong* const);
-long DSLong_LongValue(const DSLong* const);
-float DSLong_FloatValue(const DSLong* const);
-double DSLong_DoubleValue(const DSLong* const);
-char DSLong_CharValue(const DSLong* const);
-short DSLong_ShortValue(const DSLong* const);
-char* DSLong_ToString(const DSLong* const);
 
 #endif _DSLONG_H_

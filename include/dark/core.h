@@ -60,7 +60,7 @@ typedef unsigned char UChar;
  * This allows you to put arbitrary structures in
  * collections like Hashmap, Vector, and List.
  */
-typedef void* Any;
+// typedef void* Any;
 
 /**
  * _Bool - Really?
@@ -124,6 +124,8 @@ typedef enum
  */
 #define join(...) STR_JOIN(PP_NARG(__VA_ARGS__), __VA_ARGS__)
 char* STR_JOIN(int count, ...);
+
+#define $Join(...) $DSString.Join(PP_NARG(__VA_ARGS__), __VA_ARGS__)
 
 
 /**

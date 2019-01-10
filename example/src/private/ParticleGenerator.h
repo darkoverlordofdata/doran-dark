@@ -16,7 +16,7 @@ $method( Equals,             DSObject_Equals, "B@:@@" );
 $method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
 $method( Dispose,            DSObject_Dispose, "v@:v" );
 
-$method( Update,             Update, "v@:f@i!" );
+$method( Update,             (ParticleGeneratorUpdate)Update, "v@:f@i!" );
 $method( Draw,               (ParticleGeneratorDraw)Draw, "v@:@" );
 
 $end;

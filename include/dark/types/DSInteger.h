@@ -36,8 +36,10 @@ SOFTWARE.
 #define INTEGER_SIZE       (INTEGER_BYTES * CHAR_BIT)
 #define INTEGER_TYPE       (TYPE_LONG)
 
-#define IsDSInteger(x) (x->isa == &$DSInteger)
-#define AsDSInteger(x) (IsDSInteger(x) ? (DSInteger*)x : nullptr)
+#define IsDSInteger(object) _Generic((object), DSInteger*: true, default: false)
+#define AsDSInteger(object) _Generic((object),                          \
+                            DSInteger*: (DSInteger *)object,            \
+                            default: nullptr)
 
 /**
  * Object class
@@ -48,39 +50,50 @@ ivar (DSInteger)
     int value;
 };
 
-/**
- * Object metaclass
- */
-vtable (DSInteger) {
-    char*   (*ToString)     (const DSInteger* const);
-    bool    (*Equals)       (const DSObject* const, DSObject* const);
-    int     (*GetHashCode)  (const DSObject* const);
-    void    (*Dispose)      (DSObject* const);
-    int     (*CompareTo)    (const DSComparable* const, const DSComparable* const);
-    int     (*IntValue)     (const DSInteger* const);
-    long    (*LongValue)    (const DSInteger* const);
-    float   (*FloatValue)   (const DSInteger* const);
-    double  (*DoubleValue)  (const DSInteger* const);
-    char    (*CharValue)    (const DSInteger* const);
-    short   (*ShortValue)   (const DSInteger* const);
 
+DSInteger* NewDSInteger(int const value);
+DSInteger* DSInteger_init(DSInteger* const this, const int value);
+DSInteger* DSInteger_alloc();
+
+char*   overload ToString(const DSInteger* const);
+int     overload CompareTo(const DSInteger* const, const DSInteger* const);
+int     overload IntValue(const DSInteger* const);
+long    overload LongValue(const DSInteger* const);
+float   overload IntegerValue(const DSInteger* const);
+double  overload DoubleValue(const DSInteger* const);
+char    overload CharValue(const DSInteger* const);
+short   overload ShortValue(const DSInteger* const);
+
+typedef char*   (*DSIntegerToString)       (const DSInteger* const);
+typedef int     (*DSIntegerCompareTo)      (const DSInteger* const, const DSInteger* const);
+typedef int     (*DSIntegerIntValue)       (const DSInteger* const);
+typedef long    (*DSIntegerLongValue)      (const DSInteger* const);
+typedef float   (*DSIntegerFloatValue)     (const DSInteger* const);
+typedef double  (*DSIntegerDoubleValue)    (const DSInteger* const);
+typedef char    (*DSIntegerCharValue)      (const DSInteger* const);
+typedef short   (*DSIntegerShortValue)     (const DSInteger* const);
+
+/**
+ * Integer vtable with overrides
+ */
+vtable (DSInteger)
+{
+    DSIntegerToString           ToString;
+    DSObjectEquals              Equals;
+    DSObjectGetHashCode         GetHashCode;
+    DSObjectDispose             Dispose;
+    DSIntegerCompareTo          CompareTo;
+    DSIntegerIntValue           IntValue;
+    DSIntegerLongValue          LongValue;
+    DSIntegerFloatValue         IntegerValue;
+    DSIntegerDoubleValue        DoubleValue;
+    DSIntegerCharValue          CharValue;
+    DSIntegerShortValue         ShortValue;
 };
 
 class (DSInteger) {
     DSInteger*(*Create) (int value);
 };
 
-DSInteger* NewDSInteger(const int value);
-DSInteger* DSInteger_init(DSInteger* const this, const int value);
-DSInteger* DSInteger_alloc();
-int DSInteger_ParseInt(const char *const, const int);
-int DSInteger_CompareTo(const DSInteger* const, const DSInteger* const);
-int DSInteger_IntValue(const DSInteger* const);
-long DSInteger_LongValue(const DSInteger* const);
-float DSInteger_FloatValue(const DSInteger* const);
-double DSInteger_DoubleValue(const DSInteger* const);
-char DSInteger_CharValue(const DSInteger* const);
-short DSInteger_ShortValue(const DSInteger* const);
-char* DSInteger_ToString(const DSInteger* const);
 
 #endif _DSINTEGER_H_

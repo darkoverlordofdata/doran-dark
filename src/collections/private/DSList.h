@@ -38,5 +38,7 @@ $method(Iterate,            (DSListForEach)ForEach, "i@:@@");
 $ivar(length, sizeof(int), "i");
 $ivar(head, sizeof(void*), "^");
 
+$DSList.Create = NewDSList;
+
 $end;
 

@@ -43,4 +43,6 @@ $ivar(length, sizeof(int), "i");
 $ivar(data, sizeof(void*), "^");
 $ivar(capacity, sizeof(int), "i");
 
+$DSArray.Create = NewDSArray;
+
 $end;

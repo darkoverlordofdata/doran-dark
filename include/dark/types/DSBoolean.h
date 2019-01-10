@@ -32,8 +32,10 @@ SOFTWARE.
 #define BOOLEAN_SIZE       (BOOLEAN_BYTES * CHAR_BIT)
 #define BOOLEAN_TYPE       (TYPE_BOOLEAN)
 
-#define IsDSBoolean(x) (x->isa == &$DSBoolean)
-#define AsDSBoolean(x) (IsDSBoolean(x) ? (DSBoolean *)x : nullptr)
+#define IsDSBoolean(object) _Generic((object), DSBoolean*: true, default: false)
+#define AsDSBoolean(object) _Generic((object),                          \
+                            DSBoolean*: (DSBoolean *)object,            \
+                            default: nullptr)
 
 /**
  * DSBoolean instance variables
@@ -54,8 +56,8 @@ int     overload CompareTo(const DSBoolean* const, const DSBoolean* const);
 bool    BoolValue(const DSBoolean* const);
 bool    ParseBool(const char *const);
 
-typedef int     (*DSBooleanCompareTo)  (const DSBoolean* const, const DSBoolean* const);
-typedef char*   (*DSBooleanToString)  (const DSBoolean* const);
+typedef int     (*DSBooleanCompareTo)   (const DSBoolean* const, const DSBoolean* const);
+typedef char*   (*DSBooleanToString)    (const DSBoolean* const);
 
 /**
  * DSBoolean vtable

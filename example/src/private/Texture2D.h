@@ -20,8 +20,8 @@ $method( ToString,          (Texture2DToString)ToString, "$@:v" );
 $method( Equals,            DSObject_Equals, "B@:@@" );
 $method( GetHashCode,       DSObject_GetHashCode, "l@:v" );
 $method( Dispose,           DSObject_Dispose, "v@:v" );
-$method( Generate,          Generate, "v@:II*" );
-$method( Bind,              Bind, "v@:@" );
+$method( Generate,          (Texture2DGenerate)Generate, "v@:II*" );
+$method( Bind,              (Texture2DBind)Bind, "v@:@" );
 
 $end;
 

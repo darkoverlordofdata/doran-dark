@@ -29,6 +29,9 @@ SOFTWARE.
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
+
+void DSvfprintf(FILE* stream, char* format, va_list arg);
+
 /**
  * DSLog
  * 
@@ -39,9 +42,9 @@ static inline void DSLog (char* format, ...) {
 
     va_list args;
     va_start(args, format);
-    vfprintf(stderr, format, args);
-    fprintf(stderr, "\n");
+    DSvfprintf(stderr, format, args);
     va_end(args);
+    fprintf(stderr, "\n");
 }
 
 #endif _DSLOG_H_ 

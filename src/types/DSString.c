@@ -36,7 +36,7 @@ static DSException(IndexOutOfBounds);
  * @param value of long
  * 
  */
-DSString* $(const char* const str) {
+DSString* NewDSString(const char* const str) {
     return DSString_init(DSString_alloc(), str); 
 }
 
@@ -53,7 +53,7 @@ DSString* DSString_alloc() {
     return DSMalloc(getDSStringSize());
 }
 
-void DSString_GetChars(const DSString* this, char* dst, int dstBegin) {
+void overload GetChars(const DSString* this, char* dst, int dstBegin) {
     memcpy(dst+dstBegin, this->value, this->length);
 }
 
@@ -66,7 +66,7 @@ void DSString_GetChars(const DSString* this, char* dst, int dstBegin) {
  *         +1 x is true
  *         -1 y is true
  */
-int DSString_Compare(const char* x, const char* y) {
+int overload Compare(const char* x, const char* y) {
     return strcmp(x, y);
 }
 
@@ -76,15 +76,19 @@ int DSString_Compare(const char* x, const char* y) {
  * @param   other  String to be compared
  * @return same as String_Compare
  */
-int DSString_CompareTo(const DSString* const this, const DSString* const other) {
-    return DSString_Compare(this->value, other->value);
+int overload CompareTo(const DSString* const this, const DSString* const other) {
+    return Compare(this->value, other->value);
 }
 
-int DSString_CompareToIgnoreCase(const DSString* this, const DSString* str) {
+bool overload Equals(const DSString* const this, const DSString* const other) {
+    return Compare(this->value, other->value) == 0;
+}
+
+int overload CompareToIgnoreCase(const DSString* this, const DSString* str) {
     return strcmpi(this->value, str->value);
 }
 
-DSString* DSString_Concatc(const DSString* this, const char* other) {
+DSString* overload Concatc(const DSString* this, const char* other) {
     int length = strlen(other);
     if (length == 0) return this;
     int len = this->length;
@@ -96,7 +100,7 @@ DSString* DSString_Concatc(const DSString* this, const char* other) {
 
 }
 
-DSString* DSString_Concat(const DSString* this, const DSString* other) {
+DSString* overload Concat(const DSString* this, const DSString* other) {
     if (other->length == 0)
         return this;
 
@@ -108,47 +112,47 @@ DSString* DSString_Concat(const DSString* this, const DSString* other) {
     return result;
 }
 
-bool DSString_Contains(const DSString* this, const DSString* s) {
+bool overload Contains(const DSString* this, const DSString* s) {
     return _vptr(this)->IndexOf(this, s, 0) > -1;
 }
 
-DSString* DSString_CopyOf(const DSString* this) {
+DSString* overload CopyOf(const DSString* this) {
     return $DSString.Create(this->value);
 }
 
-bool DSString_EndsWith(const DSString* this, const DSString* suffix) {
+bool overload EndsWith(const DSString* this, const DSString* suffix) {
     char* offset = this->value + this->length - suffix->length;
     return !strcmp(offset, suffix);
 }
 
-bool DSString_StartsWith(const DSString* this, const DSString* prefix, const int offset) {
+bool overload StartsWith(const DSString* this, const DSString* prefix, const int offset) {
     char* c = strstr(this->value+offset, prefix->value);
     return c == (this->value+offset) ? true : false;
 }
 
-char* DSString_GetBytes(const DSString* this) {
+char* overload GetBytes(const DSString* this) {
     return strdup(this->value);
 }
 
-int DSString_IndexOf(const DSString* this, const DSString* str, const int offset) {
+int overload IndexOf(const DSString* this, const DSString* str, const int offset) {
     char* c = strstr(this->value+offset, str->value);
     return c == nullptr ? 0 : c - this->value;
 }
 
-int DSString_LastIndexOf(const DSString* this, const DSString* str, const int offset) {
+int overload LastIndexOf(const DSString* this, const DSString* str, const int offset) {
     char* c = strrstr(this->value+offset, str->value);
     return c == nullptr ? 0 : c - this->value;
 }
 
-DSString* DSString_ToUpperCase(const DSString* this) {
+DSString* overload ToUpperCase(const DSString* this) {
     return $DSString.Create(strupr(this->value));
 }
 
-DSString* DSString_ToLowerCase(const DSString* this) {
+DSString* overload ToLowerCase(const DSString* this) {
     return $DSString.Create(strlwr(this->value));
 }
 
-DSString* DSString_Trim(const DSString* this) {
+DSString* overload Trim(const DSString* this) {
     int len = this->length;
     int start = 0;
     while ((start < len) && (this->value[start] <= ' ')) {
@@ -167,12 +171,12 @@ int overload Length(const DSString* const this)
     return this->length;
 }
 
-bool DSString_IsEmpty(const DSString* const this)
+bool overload IsEmpty(const DSString* const this)
 {
     return this->length == 0;
 }
 
-char DSString_CharAt(const DSString* const this, const int index)
+char overload CharAt(const DSString* const this, const int index)
 {
     printf("string %d,%d %s\n", index, this->length, this->value);
     if (index < 0 || index >= this->length)
@@ -181,19 +185,15 @@ char DSString_CharAt(const DSString* const this, const int index)
 }
  
 
-char* DSString_ToString(const DSString* const this)
+char* overload ToString(const DSString* const this)
 {
     return this->value;
-}
-
-void DSString_Dispose(DSString* const this)
-{
 }
 
 
 
 __attribute__((__format__ (__printf__, 1, 2)))
-DSString* DSString_Format(const char* format, ...) {
+DSString* overload Format(const char* format, ...) {
     va_list args1;
     va_list args2;
     
@@ -208,3 +208,41 @@ DSString* DSString_Format(const char* format, ...) {
     va_end(args2);
     return $DSString.Create(str);
 }
+
+/**
+ * join strings
+ * 
+ * @param count of strings
+ * @param ... list of DSString*'s
+ * @returns all DSStrings concantenated together.
+ */
+DSString* StringJoin(int count, ...)
+{
+    int size = 0;
+    va_list args1;
+    va_start(args1, count);
+    va_list args2;
+    va_copy(args2, args1);  
+
+    /**
+     * Caclulate length of the result string
+     */
+    for (int i = 0; i < count; ++i) {
+        DSString* str = va_arg(args1, DSString*);
+        size += Length(str);
+    }
+    va_end(args1);
+    char* result = DSCalloc((size+1),  sizeof(char));
+
+    /**
+     * Now build the result string
+     */
+    for (int i = 0; i < count; ++i) {
+        // DSString* str = va_arg(args2, DSString*);
+        DSObject* str = va_arg(args2, DSObject*);
+        strcat(result, ToString(str));
+    }
+    va_end(args2);
+    return $DSString.Create(result);
+}
+

@@ -13,8 +13,11 @@
 
 #include "GameObject.h"
 
-#define IsBallObject(x) (x->isa == &$BallObject)
-#define AsBallObject(x) (IsBallObject(x) ? (BallObject*)x : nullptr)
+#define IsBallObject(object) _Generic((object), BallObject*: true, default: false)
+#define AsBallObject(object) _Generic((object),                          \
+                            BallObject*: (BallObject *)object,           \
+                            default: nullptr)
+
 
 // BallObject holds the state of the Ball object inheriting
 // relevant state data from GameObject. Contains some extra
@@ -36,35 +39,37 @@ ivar (BallObject) {
     bool    Stuck;
 };
 
-typedef char*   (*BallObjectToString)  (const BallObject* const);
-typedef void    (*BallObjectDraw)  (BallObject* const, SpriteRenderer*);
-
-
-class (BallObject) {
-    BallObject*  (*Create) (Vec2 Position, float Radius, Vec2 Velocity, Texture2D* Sprite);
-};
-
-vtable (BallObject) {
-    char*   (*ToString) (const BallObject* const);
-    bool    (*Equals) (DSObject* const, DSObject* const);
-    int     (*GetHashCode) (DSObject* const);
-    void    (*Dispose) (DSObject* const);
-    void    (*Draw) (BallObject* const, SpriteRenderer* renderer);
-
-    // Moves the ball, keeping it constrained within the window bounds (except bottom edge); returns new position
-    void    (*Move)         (BallObject* const, const GLfloat dt, const GLuint window_width);
-    // Resets the ball to original state with given position and velocity
-    void    (*Reset)        (BallObject* const, const Vec2 position, const Vec2 velocity);
-    
-};
+BallObject* NewBallObject(Vec2 Position, float Radius, Vec2 Velocity, Texture2D* Sprite);
+BallObject* BallObject_init(BallObject* this, Vec2 Position, float Radius, Vec2 Velocity, Texture2D* Sprite);
+BallObject* BallObject_alloc();
 
 /**
  * BallObject API
  */
-void overload Draw(BallObject* const, SpriteRenderer* renderer);
-void overload Move(BallObject* const, const GLfloat dt, const GLuint window_width);
-void overload Reset(BallObject*, const Vec2 position, const Vec2 velocity);
-char* overload ToString(const BallObject* const this);
-BallObject* NewBallObject(Vec2 Position, float Radius, Vec2 Velocity, Texture2D* Sprite);
-BallObject* BallObject_alloc();
-BallObject* BallObject_init(BallObject* this, Vec2 Position, float Radius, Vec2 Velocity, Texture2D* Sprite);
+char*   overload ToString(const BallObject* const);
+void    overload Draw(BallObject* const, const SpriteRenderer*);
+void    overload Move(BallObject* const, const GLfloat, const GLuint);
+void    overload Reset(BallObject* const, const Vec2, const Vec2);
+
+
+typedef char*   (*BallObjectToString)   (const BallObject* const);
+typedef void    (*BallObjectDraw)       (BallObject* const, const SpriteRenderer*);
+typedef void    (*BallObjectMove)       (BallObject* const, const GLfloat, const GLuint);
+typedef void    (*BallObjectReset)      (BallObject* const, const Vec2, const Vec2);
+
+
+
+vtable (BallObject) {
+    BallObjectToString      ToString;
+    DSObjectEquals          Equals;
+    DSObjectGetHashCode     GetHashCode;
+    DSObjectDispose         Dispose;
+    BallObjectDraw          Draw;
+    BallObjectMove          Move;
+    BallObjectReset         Reset;
+};
+
+class (BallObject) {
+    BallObject*  (*Create) (Vec2, float, Vec2, Texture2D*);
+};
+

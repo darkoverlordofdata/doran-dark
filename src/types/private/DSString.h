@@ -23,33 +23,39 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
+DSString* StringJoin(int count, ...);
+
+
 $implementation( DSString );
 
-$method( ToString,           DSString_ToString, "$@:v" );
-$method( Equals,             DSObject_Equals, "B@:@@" );
+$override( ToString,         (DSStringToString)ToString, "$@:v" );
+$override( Equals,           (DSStringEquals)Equals, "B@:@@" );
 $method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
 $method( Dispose,            DSObject_Dispose, "v@:v" );
-$method( CompareTo,          DSString_CompareTo, "i@:@" );
-$method( Dispose,            DSString_Dispose, "v@:v" );
-$method( Length,             Length, "i@:v" );
-$method( IsEmpty,            DSString_IsEmpty, "B@:v" );    
-$method( CharAt,             DSString_CharAt, "c@:i" );
-$method( CompareToIgnoreCase, DSString_CompareToIgnoreCase, "@:" );    
-$method( Concat,             DSString_Concat, "v@:$" );
-$method( Concatc,            DSString_Concatc, "v@:c" );
-$method( Contains,           DSString_Contains, "B@:$" );
-$method( CopyOf,             DSString_CopyOf, "$@:v" );
-$method( EndsWith,           DSString_EndsWith, "B@:$" );
-$method( StartsWith,         DSString_StartsWith, "B@:$" );
-$method( GetBytes,           DSString_GetBytes, "b@:*" );
-$method( IndexOf,            DSString_IndexOf, "i@:$" );
-$method( LastIndexOf,        DSString_LastIndexOf, "i@:$" );
-$method( ToLowerCase,        DSString_ToLowerCase, "$@:v" );
-$method( ToUpperCase,        DSString_ToUpperCase, "$@:v" );
-$method( Trim,               DSString_Trim, "$@:v" );
+$override( CompareTo,        (DSStringCompareTo)CompareTo, "i@:@" );
+$method( Length,             (DSStringLength)Length, "i@:v" );
+$method( IsEmpty,            (DSStringIsEmpty)IsEmpty, "B@:v" );    
+$method( CharAt,             (DSStringCharAt)CharAt, "c@:i" );
+$method( CompareToIgnoreCase, (DSStringCompareToIgnoreCase)CompareToIgnoreCase, "@:" );    
+$method( Concat,             (DSStringConcat)Concat, "v@:$" );
+$method( Concatc,            (DSStringConcatc)Concatc, "v@:c" );
+$method( Contains,           (DSStringContains)Contains, "B@:$" );
+$method( CopyOf,             (DSStringCopyOf)CopyOf, "$@:v" );
+$method( EndsWith,           (DSStringEndsWith)EndsWith, "B@:$" );
+$method( StartsWith,         (DSStringStartsWith)StartsWith, "B@:$" );
+$method( GetBytes,           (DSStringGetBytes)GetBytes, "b@:*" );
+$method( IndexOf,            (DSStringIndexOf)IndexOf, "i@:$" );
+$method( LastIndexOf,        (DSStringLastIndexOf)LastIndexOf, "i@:$" );
+$method( ToLowerCase,        (DSStringToLowerCase)ToLowerCase, "$@:v" );
+$method( ToUpperCase,        (DSStringToUpperCase)ToUpperCase, "$@:v" );
+$method( Trim,               (DSStringTrim)Trim, "$@:v" );
 
 $ivar( value, sizeof( char* ), "*" );
 $ivar( length, sizeof( int ), "i" );
+
+$DSString.Create = NewDSString;
+$DSString.Join = StringJoin;
+
 
 $end;
 

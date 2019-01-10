@@ -58,7 +58,7 @@ BallObject* BallObject_alloc() {
  * 
  * @param renderer to draw sprite with
  */
-void overload Draw(BallObject* const this, SpriteRenderer* renderer)
+void overload Draw(BallObject* const this, const SpriteRenderer* renderer)
 {
     Draw(renderer, this->Sprite, this->Position, this->Size, this->Rotation, this->Color);
 }

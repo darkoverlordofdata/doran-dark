@@ -82,13 +82,13 @@ DSStringBuilder* DSStringBuilder_alloc() {
 /*
  * sb_empty returns non-zero if the given StringBuilder is empty.
  */
-int DSStringBuilder_Empty(const DSStringBuilder* this)
+int overload Empty(const DSStringBuilder* this)
 {
 	return (this->root == nullptr);
 }
 
 
-int DSStringBuilder_Appendc(DSStringBuilder* this, const char c)
+int overload Appendc(DSStringBuilder* this, const char c)
 {
 	char str[2] = { c, 0 };
 	return _vptr(this)->Append(this, str);
@@ -96,7 +96,7 @@ int DSStringBuilder_Appendc(DSStringBuilder* this, const char c)
 /*
  * sb_append adds a copy of the given string to a StringBuilder.
  */
-int DSStringBuilder_Append(DSStringBuilder* this, const char *str)
+int overload Append(DSStringBuilder* this, const char *str)
 {
 	int	length = 0;
 	struct StringFragment * frag = nullptr;
@@ -127,7 +127,7 @@ int DSStringBuilder_Append(DSStringBuilder* this, const char *str)
  * sb_appendf adds a copy of the given formatted string to a StringBuilder.
  */
 __attribute__((__format__ (__printf__, 2, 3)))
-int DSStringBuilder_Appendf(DSStringBuilder* this, const char *format, ...)
+int overload Appendf(DSStringBuilder* this, const char *format, ...)
 {
 	const int MAX_FRAG_LENGTH = 4096;
 	int len = 0;
@@ -141,7 +141,7 @@ int DSStringBuilder_Appendf(DSStringBuilder* this, const char *format, ...)
 	if (0 > len)
 		return DSOutOfMemoryException("StringBuilder::Append");
 
-	return DSStringBuilder_Append(this, buf);
+	return Append(this, buf);
 }
 
 /*
@@ -152,7 +152,7 @@ int DSStringBuilder_Appendf(DSStringBuilder* this, const char *format, ...)
  * The StringBuilder is not modified by this function and can therefore continue
  * to be used.
  */
-DSString* DSStringBuilder_Concat(const DSStringBuilder* this)
+DSString* overload Concat(const DSStringBuilder* this)
 {
 	char *buf = nullptr;
 	char *c = nullptr;
@@ -176,7 +176,7 @@ DSString* DSStringBuilder_Concat(const DSStringBuilder* this)
  * sb_reset resets the given StringBuilder, freeing all previously appended
  * strings.
  */
-void DSStringBuilder_Reset(DSStringBuilder* this)
+void overload Reset(DSStringBuilder* this)
 {
 	StringFragment* frag = nullptr;
 	StringFragment* next = nullptr;
@@ -190,13 +190,13 @@ void DSStringBuilder_Reset(DSStringBuilder* this)
 /*
  * sb_free frees the given StringBuilder and all of its appended strings.
  */
-void DSStringBuilder_Dispose(DSStringBuilder* this)
+void overload Dispose(DSStringBuilder* this)
 {
-	DSStringBuilder_Reset(this);
+	Reset(this);
 }
 
 
-char* DSStringBuilder_ToString(const DSStringBuilder* this)
+char* overload ToString(const DSStringBuilder* this)
 {
     return "dark.StringBuilder";
 }

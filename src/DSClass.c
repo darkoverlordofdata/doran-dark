@@ -26,6 +26,7 @@ SOFTWARE.
 #include <dark/DSClass.h>
 #include <dark/DSObject.h>
 
+bool InstanceOf(Class class, DSObject* obj);
 /**
  * Define the DSClass implementation
  */
@@ -50,5 +51,15 @@ void __attribute__((constructor(101))) DSClassBoot()
      */
     objc_register_builtins();
 
+}
+
+bool InstanceOf(Class class, DSObject* obj) {
+    Class isa = obj->isa; 
+    
+    while (isa != class) {
+        isa = isa->super_class;
+        if (isa == nullptr) return false;
+    }
+    return true;
 }
 

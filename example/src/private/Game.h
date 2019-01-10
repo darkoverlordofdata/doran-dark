@@ -17,14 +17,14 @@ $method( Equals,             DSObject_Equals, "B@:@@" );
 $method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
 $method( Dispose,            DSObject_Dispose, "v@:v" );
 
-$method( Start,              Start, "@@:v" );
-$method( ProcessInput,       ProcessInput, "@@:v" ); 
-$method( Update,             Update, "@@:f" );
-$method( Render,             Render, "@@:f" );
-$method( DoCollisions,       DoCollisions, "@@:v" );
-$method( ResetLevel,         ResetLevel, "@@:v" );
-$method( ResetPlayer,        ResetPlayer, "@@:v" );
-$method( SetKey,             SetKey, "@@:iB" );
-$method( SetState,           SetState, "@@:i" );
+$method( Start,              (GameStart)Start, "@@:v" );
+$method( ProcessInput,       (GameProcessInput)ProcessInput, "@@:v" ); 
+$method( Update,             (GameUpdate)Update, "@@:f" );
+$method( Render,             (GameRender)Render, "@@:f" );
+$method( DoCollisions,       (GameDoCollisions)DoCollisions, "@@:v" );
+$method( ResetLevel,         (GameResetLevel)ResetLevel, "@@:v" );
+$method( ResetPlayer,        (GameResetPlayer)ResetPlayer, "@@:v" );
+$method( SetKey,             (GameSetKey)SetKey, "@@:iB" );
+$method( SetState,           (GameSetState)SetState, "@@:i" );
 
 $end;

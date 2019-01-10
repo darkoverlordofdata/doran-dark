@@ -52,7 +52,7 @@ DSArray* overload NewDSArray(int count, ...) {
     va_list args;
     va_start(args, count);
     for (int i=0; i<count; i++)
-        v->data[i] = va_arg(args, Any);
+        v->data[i] = va_arg(args, DSObject*);
     va_end(args);
     v->length = count;
     return v;
@@ -71,7 +71,7 @@ DSArray* DSArray_init(DSArray* const this, int capacity)
     this->isa = getDSArrayIsa();
     this->capacity = capacity == 0 ? ARRAY_INIT_CAPACITY : capacity;
     this->length = 0;
-    this->data = DSCalloc(this->capacity, sizeof(Any));
+    this->data = DSCalloc(this->capacity, sizeof(DSObject*));
     return this;
 }
 
@@ -96,7 +96,7 @@ void Resize(DSArray* const this, int capacity)
     printf("vector_resize: %d to %d\n", this->capacity, capacity);
     #endif
 
-    void **data = DSRealloc(this->data, sizeof(Any) * capacity);
+    void **data = DSRealloc(this->data, sizeof(DSObject*) * capacity);
     if (data) {
         this->data = data;
         this->capacity = capacity;
@@ -108,7 +108,7 @@ void Resize(DSArray* const this, int capacity)
  * 
  * @param item the data to add
  */
-void overload Add(DSArray* const this, const Any item)
+void overload Add(DSArray* const this, const DSObject* item)
 {
     if (this->capacity == this->length) {
         _vptr(this)->Resize(this, this->capacity * 2);
@@ -122,7 +122,7 @@ void overload Add(DSArray* const this, const Any item)
  * @param index to add at
  * @param item the data to add
  */
-void Set(DSArray* const this, int index, const Any item)
+void Set(DSArray* const this, int index, const DSObject* item)
 {
     if (index >= 0 && index < this->length)
         this->data[index] = item;
@@ -133,7 +133,7 @@ void Set(DSArray* const this, int index, const Any item)
  * 
  * @param index to get
  */
-Any Get(const DSArray* const this, int index)
+DSObject* Get(const DSArray* const this, int index)
 {
     if (index >= 0 && index < this->length)
         return this->data[index];
@@ -183,7 +183,7 @@ bool overload IsEmpty(const DSArray* const this)
     return this->length <= 0;
 }
 
-bool overload Contains(const DSArray* const this, Any item)
+bool overload Contains(const DSArray* const this, DSObject* item)
 {
     return false;   
 }

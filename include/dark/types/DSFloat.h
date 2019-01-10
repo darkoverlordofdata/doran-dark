@@ -34,8 +34,11 @@ SOFTWARE.
 #define FLOAT_SIZE       (FLOAT_BYTES * CHAR_BIT)
 #define FLOAT_TYPE       (TYPE_FLOAT)
 
-#define IsDSFloat(x) (x->isa == &DSFloatClass)
-#define AsDSFloat(x) (IsDSFloat(x) ? (DSFloat*)x : nullptr)
+#define IsDSFloat(object) _Generic((object), DSFloat*: true, default: false)
+#define AsDSFloat(object) _Generic((object),                               \
+                            DSFloat*: (DSFloat *)object,                  \
+                            default: nullptr)
+
 
 /**
  * Object class
@@ -46,38 +49,49 @@ ivar (DSFloat)
     float value;
 };
 
+DSFloat* NewDSFloat(float const value);
+DSFloat* DSFloat_init(DSFloat* const this, const float value);
+DSFloat* DSFloat_alloc();
+
+char*   overload ToString(const DSFloat* const);
+int     overload CompareTo(const DSFloat* const, const DSFloat* const);
+int     overload IntValue(const DSFloat* const);
+long    overload LongValue(const DSFloat* const);
+float   overload FloatValue(const DSFloat* const);
+double  overload DoubleValue(const DSFloat* const);
+char    overload CharValue(const DSFloat* const);
+short   overload ShortValue(const DSFloat* const);
+
+typedef char*   (*DSFloatToString)       (const DSFloat* const);
+typedef int     (*DSFloatCompareTo)      (const DSFloat* const, const DSFloat* const);
+typedef int     (*DSFloatIntValue)       (const DSFloat* const);
+typedef long    (*DSFloatLongValue)      (const DSFloat* const);
+typedef float   (*DSFloatFloatValue)     (const DSFloat* const);
+typedef double  (*DSFloatDoubleValue)    (const DSFloat* const);
+typedef char    (*DSFloatCharValue)      (const DSFloat* const);
+typedef short   (*DSFloatShortValue)     (const DSFloat* const);
+
 /**
- * Object metaclass
+ * Float vtable with overrides
  */
 vtable (DSFloat)
 {
-    char*   (*ToString)     (const DSFloat* const);
-    bool    (*Equals)       (const DSObject* const, DSObject* const);
-    int     (*GetHashCode)  (const DSObject* const);
-    void    (*Dispose)      (DSObject* const);
-    int     (*CompareTo)    (const DSComparable* const, const DSComparable* const);
-    int     (*IntValue)     (const DSFloat* const);
-    long    (*LongValue)    (const DSFloat* const);
-    float   (*FloatValue)   (const DSFloat* const);
-    double  (*DoubleValue)  (const DSFloat* const);
-    char    (*CharValue)    (const DSFloat* const);
-    short   (*ShortValue)   (const DSFloat* const);
-
+    DSFloatToString             ToString;
+    DSObjectEquals              Equals;
+    DSObjectGetHashCode         GetHashCode;
+    DSObjectDispose             Dispose;
+    DSFloatCompareTo            CompareTo;
+    DSFloatIntValue             IntValue;
+    DSFloatLongValue            LongValue;
+    DSFloatFloatValue           FloatValue;
+    DSFloatDoubleValue          DoubleValue;
+    DSFloatCharValue            CharValue;
+    DSFloatShortValue           ShortValue;
 };
+
 
 class (DSFloat) {
     DSFloat*  (*Create) (float value);
 };
 
-DSFloat* NewDSFloat(const float value);
-DSFloat* DSFloat_init(DSFloat* const this, const float value);
-DSFloat* DSFloat_alloc();
-int DSFloat_CompareTo(const DSFloat* const, const DSFloat* const);
-int DSFloat_IntValue(const DSFloat* const);
-long DSFloat_LongValue(const DSFloat* const);
-float DSFloat_FloatValue(const DSFloat* const);
-double DSFloat_DoubleValue(const DSFloat* const);
-char DSFloat_CharValue(const DSFloat* const);
-short DSFloat_ShortValue(const DSFloat* const);
-char* DSFloat_ToString(const DSFloat* const);
 #endif _DSFLOAT_H_

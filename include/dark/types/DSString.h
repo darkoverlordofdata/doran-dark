@@ -31,8 +31,10 @@ SOFTWARE.
 
 #define STRING_TYPE       (TYPE_STRING)
 
-#define IsDSString(x) (x->isa == &$DSString)
-#define AsDSString(x) (IsDSString(x) ? (DSString *)x : nullptr)
+#define IsDSString(object) _Generic((object), DSString*: true, default: false)
+#define AsDSString(object) _Generic((object),                           \
+                            DSString*: (DSString *)object,              \
+                            default: nullptr)
 
 /**
  * Object class
@@ -43,64 +45,89 @@ ivar (DSString) {
     int length;
 };
 
+DSString* NewDSString(const char* const value);
+DSString* DSString_init(DSString* const this, const char* value);
+DSString* DSString_alloc();
+
+char*       overload ToString(const DSString* const);
+bool        overload Equals(const DSString* const, const DSString* const);
+int         overload CompareTo(const DSString* const this, const DSString* const other);
+int         overload Compare(const char* x, const char* y);
+int         overload CompareToIgnoreCase(const DSString* this, const DSString* other);
+DSString*   overload Concat(const DSString* this, const DSString* str);
+DSString*   overload Concatc(const DSString* this, const char* str);
+bool        overload Contains(const DSString* this, const DSString* str);
+DSString*   overload CopyOf(const DSString* this);
+bool        overload EndsWith(const DSString* this, const DSString* suffix);
+bool        overload StartsWith(const DSString* this, const DSString* prefix, const int offset);
+char*       overload GetBytes(const DSString* this);
+int         overload IndexOf(const DSString* this, const DSString* str, const int fromIndex);
+int         overload LastIndexOf(const DSString* this, const DSString* str, const int fromIndex);
+DSString*   overload ToUpperCase(const DSString* this);
+DSString*   overload ToLowerCase(const DSString* this);
+DSString*   overload Trim(const DSString* this);
+int         overload Length(const DSString* const);
+bool        overload IsEmpty(const DSString* const this);
+char        overload CharAt(const DSString* const this, const int index);
+__attribute__((__format__ (__printf__, 1, 2)))
+DSString*   overload Format(const char* format, ...);
+
+typedef char*       (*DSStringToString) (const DSString* const);
+typedef bool        (*DSStringEquals)   (const DSString* const, const DSString* const);
+typedef int         (*DSStringCompareTo)(const DSString* const this, const DSString* const other);
+typedef int         (*DSStringCompare)  (const char* x, const char* y);
+typedef int         (*DSStringCompareToIgnoreCase)(const DSString* this, const DSString* other);
+typedef DSString*   (*DSStringConcat)   (const DSString* this, const DSString* str);
+typedef DSString*   (*DSStringConcatc)  (const DSString* this, const char* str);
+typedef bool        (*DSStringContains) (const DSString* this, const DSString* str);
+typedef DSString*   (*DSStringCopyOf)   (const DSString* this);
+typedef bool        (*DSStringEndsWith) (const DSString* this, const DSString* suffix);
+typedef bool        (*DSStringStartsWith)(const DSString* this, const DSString* prefix, const int offset);
+typedef char*       (*DSStringGetBytes) (const DSString* this);
+typedef int         (*DSStringIndexOf)  (const DSString* this, const DSString* str, const int fromIndex);
+typedef int         (*DSStringLastIndexOf)(const DSString* this, const DSString* str, const int fromIndex);
+typedef DSString*   (*DSStringToUpperCase)(const DSString* this);
+typedef DSString*   (*DSStringToLowerCase)(const DSString* this);
+typedef DSString*   (*DSStringTrim)     (const DSString* this);
+typedef int         (*DSStringLength)   (const DSString* const);
+typedef bool        (*DSStringIsEmpty)  (const DSString* const this);
+typedef char        (*DSStringCharAt)   (const DSString* const this, const int index);
+__attribute__((__format__ (__printf__, 1, 2)))
+typedef DSString*   (*DSStringFormat)   (const char* format, ...);
+
 /**
  * Object metaclass
  */
 vtable (DSString) {
-    char*   (*ToString) (const DSString* const);
-    bool    (*Equals) (const DSObject* const, const DSObject* const);
-    int     (*GetHashCode) (const DSObject* const);
-    void    (*Dispose) (DSObject* const);
-    int     (*CompareTo) (const DSComparable* const, const DSComparable* const);
-    int     (*Length) (const DSString* const);
-    bool    (*IsEmpty) (const DSString* const);
-    char    (*CharAt) (const DSString* const, int index);
-    int     (*CompareToIgnoreCase) (const DSString* const, const DSString* const);
-    DSString* (*Concat) (const DSString* const, const DSString* str);
-    DSString* (*Concatc) (const DSString* const, const char* str);
-    bool    (*Contains) (const DSString* const, const DSString* str);
-    DSString* (*CopyOf) (const DSString* const);
-    bool    (*EndsWith) (const DSString* const, const DSString* suffix);
-    bool    (*StartsWith) (const DSString* const, const DSString* prefix, const int offset);
-    char*   (*GetBytes) (const DSString* const);
-    int     (*IndexOf) (const DSString* const, const DSString* str, const int fromIndex);
-    int     (*LastIndexOf) (const DSString* const, const DSString* str, const int fromIndex);
-    DSString* (*ToUpperCase) (const DSString* const);
-    DSString* (*ToLowerCase) (const DSString* const);
-    DSString* (*Trim) (const DSString* const);
-
-} $$;
+    DSStringToString            ToString;
+    DSStringEquals              Equals;
+    DSObjectGetHashCode         GetHashCode;
+    DSObjectDispose             Dispose;
+    DSStringCompareTo           CompareTo;
+    DSStringLength              Length;
+    DSStringIsEmpty             IsEmpty;
+    DSStringCharAt              CharAt;
+    DSStringCompareToIgnoreCase CompareToIgnoreCase;
+    DSStringConcat              Concat;
+    DSStringConcatc             Concatc;
+    DSStringContains            Contains;
+    DSStringCopyOf              CopyOf;
+    DSStringEndsWith            EndsWith;
+    DSStringStartsWith          StartsWith;
+    DSStringGetBytes            GetBytes;
+    DSStringIndexOf             IndexOf;
+    DSStringLastIndexOf         LastIndexOf;
+    DSStringToUpperCase         ToUpperCase;
+    DSStringToLowerCase         ToLowerCase;
+    DSStringTrim                Trim;
+    
+};
 
 class (DSString) {
     DSString* (*Create) (char* value);
+    DSString* (*Join) (int count, ...);
 };
 
 
-DSString* $(const char* const value);
-DSString* DSString_init(DSString* const this, const char* value);
-DSString* DSString_alloc();
-void DSString_Dispose(DSString* const this);
-int DSString_Compare(const char* x, const char* y);
-int DSString_CompareTo(const DSString* const this, const DSString* const other);
-int DSString_CompareToIgnoreCase(const DSString* this, const DSString* other);
-DSString* DSString_Concat(const DSString* this, const DSString* str);
-DSString* DSString_Concatc(const DSString* this, const char* str);
-bool DSString_Contains(const DSString* this, const DSString* str);
-DSString* DSString_CopyOf(const DSString* this);
-bool DSString_EndsWith(const DSString* this, const DSString* suffix);
-bool DSString_StartsWith(const DSString* this, const DSString* prefix, const int offset);
-char* DSString_GetBytes(const DSString* this);
-int DSString_IndexOf(const DSString* this, const DSString* str, const int fromIndex);
-int DSString_LastIndexOf(const DSString* this, const DSString* str, const int fromIndex);
-DSString* DSString_ToUpperCase(const DSString* this);
-DSString* DSString_ToLowerCase(const DSString* this);
-DSString* DSString_Trim(const DSString* this);
-int overload Length(const DSString* const);
-bool DSString_IsEmpty(const DSString* const this);
-char DSString_CharAt(const DSString* const this, const int index);
-char* DSString_ToString(const DSString* const);
-
-__attribute__((__format__ (__printf__, 1, 2)))
-DSString* DSString_Format(const char* format, ...);
 
 #endif _DSSTRING_H_

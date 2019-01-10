@@ -63,18 +63,18 @@ SOFTWARE.
  *  warning: only 1 $implementation per main file due to vptr scoping
  */
 #define $implementation(T)                                              \
-static inline struct T##_vtable* _vptr(T* this) {                        \
-    return (struct T##_vtable*)this->isa->vtable;                        \
+static inline struct T##_vtable* _vptr(T* this) {                       \
+    return (struct T##_vtable*)this->isa->vtable;                       \
 }                                                                       \
-static int _##T##_size = -1;                                            \
-static int get##T##Size() {                                             \
+int _##T##_size = -1;                                            \
+int get##T##Size() {                                             \
     _##T##_size = _##T##_size > 0                                       \
         ? _##T##_size                                                   \
         : class_getAlignedInstanceSize(objc_getClass(#T));              \
     return _##T##_size;                                                 \
 }                                                                       \
-static Class _##T##_isa = nullptr;                                      \
-static Class get##T##Isa() {                                            \
+Class _##T##_isa = nullptr;                                      \
+Class get##T##Isa() {                                            \
     _##T##_isa = _##T##_isa != nullptr                                  \
         ? _##T##_isa                                                    \
         : objc_getClass(#T);                                            \
@@ -84,7 +84,7 @@ Class T##Implementation(Class super);                                   \
 Class T##Implementation(Class super)                                    \
 {                                                                       \
     int k = 0;                                                          \
-    IMP* vt = &T##_vtable;                                               \
+    IMP* vt = &T##_vtable;                                              \
     char* class_name = #T;                                              \
     Class isa = objc_allocateClassPair(super, #T, 0);                   \
     isa->vtable = &vt[0];               
@@ -159,5 +159,69 @@ Class T##Implementation(Class super)                                    \
 // #define new(T, ...) T##_init(T##_alloc(), ## __VA_ARGS__)
 
 #define auto __auto_type
+#define var __auto_type
+#define instanceof(class, obj) InstanceOf(get##class##Isa(), obj)
+
+#define $(T) _Generic((T),                                              \
+                                                                        \
+        _Bool:              $DSBoolean.Create,                          \
+        char:               $DSChar.Create,                             \
+        signed char:        $DSChar.Create,                             \
+        const char *:       $DSString.Create,                           \
+        char *:             $DSString.Create,                           \
+        short int:          $DSShort.Create,                            \
+        unsigned short int: $DSShort.Create,                            \
+        unsigned int:       $DSInteger.Create,                          \
+        long int:           $DSLong.Create,                             \
+        unsigned long int:  $DSLong.Create,                             \
+        int:                $DSInteger.Create,                          \
+        float:              $DSFloat.Create,                            \
+        double:             $DSDouble.Create,                           \
+        default:            $DSString.Create)(T)
+
+
+#define typeof(T) _Generic((T),        /* wrap a primitive type */      \
+                                                                        \
+        _Bool: "bool",                                                  \
+        unsigned char: "unsigned char",                                 \
+        char: "char",                                                   \
+        signed char: "signed char",                                     \
+        short int: "short int",                                         \
+        unsigned short int: "unsigned short int",                       \
+        int: "int",                                                     \
+        unsigned int: "unsigned int",                                   \
+        long int: "long int",                                           \
+        unsigned long int: "unsigned long int",                         \
+        long long int: "long long int",                                 \
+        unsigned long long int: "unsigned long long int",               \
+        float: "float",                                                 \
+        double: "double",                                               \
+        long double: "long double",                                     \
+        char *: "pointer to char",                                      \
+        void *: "pointer to void",                                      \
+        int *: "pointer to int",                                        \
+        const char *: "const pointer to char",                          \
+        DSObject *: "DSObject",                                         \
+        DSComparable * : "DSComparable",                                \
+        DSBoolean *: "DSBoolean",                                       \
+        DSChar *: "DSChar",                                             \
+        DSDouble *: "DSDouble",                                         \
+        DSFloat *: "DSFloat",                                           \
+        DSInteger *: "DSInteger",                                       \
+        DSLong *: "DSLong",                                             \
+        DSNumber *: "DSNumber",                                         \
+        DSShort *: "DSShort",                                           \
+        DSString *: "DSString",                                         \
+        DSStringBuilder *: "DSStringBuilder",                           \
+        DSArray *: "DSArray",                                           \
+        DSHashmap *: "DSHashmap",                                       \
+        DSList *: "DSList",                                             \
+        DSClass : "DSClass",                                            \                                               
+        default: "unknown")
+
+        // Vec2 : "Vec2",                                                  \
+        // Vec3 : "Vec3",                                                  \
+        // Vec4 : "Vec4",                                                  \
+        // Matrix : "Matrix",                                              \
 
 #endif _DSCLASS_H_ 

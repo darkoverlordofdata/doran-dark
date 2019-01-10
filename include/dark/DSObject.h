@@ -30,8 +30,17 @@ SOFTWARE.
 
 #define OBJECT_TYPE       (TYPE_OBJECT)
 
-#define IsDSObject(x) (x->isa == &DSObjectVTable)
-#define AsDSObject(x) (IsDSObject(x) ? (DSObject *)x : nullptr)
+#define IsDSObject(object) _Generic((object), DSObject*: true, default: false)
+#define AsDSObject(object) _Generic((object),                           \
+                            DSObject*: (DSObject *)object,              \
+                            default: nullptr)
+
+
+#define IsDSClass(object) _Generic((object), DSClass*: true, default: false)
+#define AsDSClass(object) _Generic((object),                            \
+                            DSClass*: (DSClass *)object,                \
+                            default: nullptr)
+
 /**
  * DSObject ivar
  */
@@ -40,6 +49,33 @@ SOFTWARE.
 ivar (DSObject) {
     Class isa;
 };
+ivar (DSClass) {
+    Class isa;
+};
+
+// typedef DSObject* Any;
+DSObject* NewDSObject();
+DSObject* DSObject_init(DSObject* const);
+DSObject* DSObject_Dtor(DSObject*);
+
+const char* overload ToString(const DSObject* const);
+bool overload Equals(const DSObject* const, const DSObject* const);
+int overload GetHashCode(const DSObject* const);
+void overload Dispose(DSObject* const);
+bool ReferenceEquals(const DSObject* const, const DSObject* const);
+bool InstanceEquals(const DSObject* const, const DSObject* const);
+
+bool DSObject_Equals(DSObject* const, DSObject* const);
+void DSObject_Dispose(DSObject* const);
+const char *DSObject_ToString(const DSObject* const);
+int DSObject_GetHashCode(const DSObject* const);
+
+/**
+ * API Function Templates
+ */
+Class GetClass(const DSObject* const);
+char* GetClassName(const DSObject* const);
+
 /** 
  * DSObject Interface
  */
@@ -71,6 +107,7 @@ vtable (DSObject) {
 // struct $DSObject $DSObject;
 // struct $DSObject {
 class (DSObject) {
+    DSObject* Empty;
     DSObjectCreate          Create;
     DSObjectReferenceEquals ReferenceEquals;
     DSObjectInstanceEquals  InstanceEquals;
@@ -84,9 +121,9 @@ class (DSObject) {
  * Class ivar
  * 
  */
-ivar (DSClass) {
-    Class isa;
-};
+// ivar (DSClass) {
+//     Class isa;
+// };
 /** 
  * DSClass Interface
  */
@@ -108,26 +145,6 @@ vtable (DSClass) {
 };
 
 
-/**
- * API Function Templates
- */
-Class GetClass(const DSObject* const);
-char* GetClassName(const DSObject* const);
-bool ReferenceEquals(const DSObject* const, const DSObject* const);
-bool InstanceEquals(const DSObject* const, const DSObject* const);
-bool DSObject_Equals(DSObject* const, DSObject* const);
-void DSObject_Dispose(DSObject* const);
-const char *DSObject_ToString(const DSObject* const);
-int DSObject_GetHashCode(const DSObject* const);
-
-const char* overload ToString(const DSObject* const);
-bool overload Equals(const DSObject* const, const DSObject* const);
-int overload GetHashCode(const DSObject* const);
-void overload Dispose(DSObject* const);
-
-DSObject* NewDSObject();
-DSObject* DSObject_init(DSObject* const);
-DSObject* DSObject_Dtor(DSObject*);
 
 
 #endif _DSOBJECT_H_ 

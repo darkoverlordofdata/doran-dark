@@ -35,8 +35,11 @@ SOFTWARE.
 #define NUMBER_MIN_RADIX 2
 #define NUMBER_MAX_RADIX 36
 
-#define IsDSNumber(x) (x->isa == &$DSNumber)
-#define AsDSNumber(x) (IsDSNumber(x) ? (DSNumber *)x : nullptr)
+#define IsDSNumber(object) _Generic((object), DSNumber*: true, default: false)
+#define AsDSNumber(object) _Generic((object),                           \
+                            DSNumber*: (DSNumber *)object,              \
+                            default: nullptr)
+
 
 /**
  * Object class
@@ -44,6 +47,17 @@ SOFTWARE.
 ivar (DSNumber) {
     Class isa;
 };
+
+char*   overload ToString(const DSNumber* const);
+int     overload CompareTo(const DSNumber* const, const DSNumber* const);
+int     overload IntValue(const DSNumber* const);
+long    overload LongValue(const DSNumber* const);
+float   overload IntegerValue(const DSNumber* const);
+double  overload DoubleValue(const DSNumber* const);
+char    overload CharValue(const DSNumber* const);
+short   overload ShortValue(const DSNumber* const);
+
+// long    overload LongValue(const void* const);
 
 typedef int     (*DSNumberCompareTo)  (const DSNumber* const, const DSNumber* const);
 typedef char*   (*DSNumberToString)  (const DSNumber* const);

@@ -144,17 +144,17 @@ Texture2D* GetTexture(char* name)
     return tex;
 }
 
-Clear1(Any item, Any data)
-{
-    Shader* s = data;
-    glDeleteProgram(s->Id);
-}
+// Clear1(Any item, Any data)
+// {
+//     Shader* s = data;
+//     glDeleteProgram(s->Id);
+// }
 
-Clear2(Any item, Any data)
-{
-    Texture2D* t = data;
-    glDeleteTextures(1, &t->Id);
-}
+// Clear2(Any item, Any data)
+// {
+//     Texture2D* t = data;
+//     glDeleteTextures(1, &t->Id);
+// }
 
 void Dtor(struct ResourceManager * this)
 {

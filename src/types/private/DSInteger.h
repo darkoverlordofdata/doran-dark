@@ -25,19 +25,21 @@ SOFTWARE.
 ******************************************************************/
 $implementation( DSInteger );
 
-$method( ToString,           DSInteger_ToString, "$@:v" );
+$override( ToString,         (DSIntegerToString)ToString, "$@:v" );
 $method( Equals,             DSObject_Equals, "B@:@@" );
 $method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
 $method( Dispose,            DSObject_Dispose, "v@:v" );
-$method( CompareTo,          DSInteger_CompareTo, "i@:@" );
-$method( IntValue,           DSInteger_IntValue, "i@:v" );
-$method( LongValue,          DSInteger_LongValue, "l@:v" );
-$method( FloatValue,         DSInteger_FloatValue, "f@:v" );
-$method( DoubleValue,        DSInteger_DoubleValue, "d@:v" );
-$method( CharValue,          DSInteger_CharValue, "c@:v" );
-$method( ShortValue,         DSInteger_ShortValue, "s@:v" );
+$override( CompareTo,        (DSIntegerCompareTo)CompareTo, "i@:@" );
+$override( IntValue,         (DSIntegerIntValue)IntValue, "i@:v" );
+$override( LongValue,        (DSIntegerLongValue)LongValue, "l@:v" );
+$override( FloatValue,       (DSIntegerFloatValue)FloatValue, "f@:v" );
+$override( DoubleValue,      (DSIntegerDoubleValue)DoubleValue, "d@:v" );
+$override( CharValue,        (DSIntegerCharValue)CharValue, "c@:v" );
+$override( ShortValue,       (DSIntegerShortValue)ShortValue, "s@:v" );
 
 $ivar( value, sizeof( int ), "i" );
+
+$DSInteger.Create = NewDSInteger;
 
 $end;
 

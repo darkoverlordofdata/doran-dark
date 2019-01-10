@@ -14,8 +14,10 @@
 #include "Texture.h"
 #include "SpriteRenderer.h"
 
-#define IsGameObject(x) (x->isa == &GameObjectClass)
-#define AsGameObject(x) (IsGameObject(x) ? (GameObject*)x : nullptr)
+#define IsGameObject(object) _Generic((object), GameObject*: true, default: false)
+#define AsGameObject(object) _Generic((object),                          \
+                            GameObject*: (GameObject *)object,           \
+                            default: nullptr)
 
 /** Default values */
 static const Vec2 GAME_OBJECT_POSITION = { 0.0f, 0.0f };
@@ -41,31 +43,27 @@ ivar (GameObject)
 
 };
 
-typedef char*   (*GameObjectToString)  (const GameObject* const);
-typedef void    (*GameObjectDraw)  (GameObject* const, SpriteRenderer*);
+GameObject* GameObject_init(GameObject* const this, char* name, Vec2 Position, Vec2 Size, Texture2D* Sprite, Vec3 Color);
+GameObject* GameObject_alloc();
+GameObject* NewGameObject(char* name, Vec2 Position, Vec2 Size, Texture2D* Sprite, Vec3 Color);
+
+char*   overload ToString(const GameObject* const);
+void    overload Draw(GameObject*, SpriteRenderer* renderer);
+
+typedef char*   (*GameObjectToString)   (const GameObject* const);
+typedef void    (*GameObjectDraw)       (GameObject* const, SpriteRenderer*);
+
+
+vtable (GameObject)
+{
+    GameObjectToString      ToString;
+    DSObjectEquals          Equals;
+    DSObjectGetHashCode     GetHashCode;
+    DSObjectDispose         Dispose;
+    GameObjectDraw          Draw;
+};
 
 class (GameObject) {
     GameObject*  (*Create) (char* name, Vec2 Position, Vec2 Size, Texture2D* Sprite, Vec3 Color);
 };
-
-vtable (GameObject)
-{
-    char*   (*ToString) (const GameObject* const);
-    bool    (*Equals)   (DSObject* const, DSObject* const);
-    int     (*GetHashCode) (DSObject* const);
-    void    (*Dispose)  (DSObject* const);
-
-    // Draw sprite
-    void    (*Draw)     (GameObject* const, SpriteRenderer* renderer);
-    
-};
-
-/**
- * GameObject API
- */
-void overload Draw(GameObject*, SpriteRenderer* renderer);
-char* overload ToString(const GameObject*);
-GameObject* GameObject_init(GameObject* const this, char* name, Vec2 Position, Vec2 Size, Texture2D* Sprite, Vec3 Color);
-GameObject* GameObject_alloc();
-GameObject* NewGameObject(char* name, Vec2 Position, Vec2 Size, Texture2D* Sprite, Vec3 Color);
 

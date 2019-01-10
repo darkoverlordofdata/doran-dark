@@ -73,7 +73,7 @@ short DSParseShort(char const *const s, int const radix)
  *         +1 x < y
  *         -1 x > y
  */
-short DSShort_Compare(const short x, const short y) {
+short overload Compare(const short x, const short y) {
     return (x < y) ? -1 : (( x == y ) ? 0 : 1);
 }
 
@@ -83,54 +83,54 @@ short DSShort_Compare(const short x, const short y) {
  * @param   other  Short to be compared
  * @return same as DSShort_Compare
  */
-int DSShort_CompareTo(const DSShort* this, const DSShort* other) {
-    return DSShort_Compare(this->value, other->value);
+int overload CompareTo(const DSShort* this, const DSShort* other) {
+    return Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int DSShort_IntValue(const DSShort* const this) {
+int overload IntValue(const DSShort* const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-long DSShort_LongValue(const DSShort* const this) {
+long overload LongValue(const DSShort* const this) {
     return (long)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-float DSShort_FloatValue(const DSShort* const this) {
+float overload FloatValue(const DSShort* const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-double DSShort_DoubleValue(const DSShort* const this) {
+double overload DoubleValue(const DSShort* const this) {
     return (double)this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-char DSShort_CharValue(const DSShort* const this) {
+char overload CharValue(const DSShort* const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-short DSShort_ShortValue(const DSShort* const this) {
+short overload ShortValue(const DSShort* const this) {
     return (short)this->value;
 }
 
 
-char* DSShort_ToString(const DSShort* const this)
+char* overload ToString(const DSShort* const this)
 {
     static char str[20];
     sprintf(str, "%d", this->value);
