@@ -48,39 +48,56 @@ ivar (DSArray) {
     int capacity;
 };
 
+/**
+ * Array API
+ */
+DSArray* overload NewDSArray(void);
+DSArray* overload NewDSArray(int);
+DSArray* DSArray_init(DSArray* const this, int capacity);
+DSArray* DSArray_alloc();
+DSArray* Array_Variadic(int, ...);
 
-typedef int     (*DSArrayLength)    (const DSArray* const);
-typedef void    (*DSArrayResize)    (const DSArray* const, int);
-typedef void    (*DSArrayAdd)       (DSArray* const, const DSObject*);
-typedef void    (*DSArraySet)       (const DSArray* const, int, const DSObject*);
-typedef DSObject*     (*DSArrayGet)       (const DSArray* const, int);
-typedef void    (*DSArrayRemove)    (const DSArray* const, int);
-typedef void    (*DSArrayDispose)   (DSArray* const);
-typedef void    (*DSArrayClear)     (const DSArray* const);
-typedef bool    (*DSArrayIsEmpty)   (const DSArray* const);
-typedef bool    (*DSArrayContains)  (const DSArray* const, const DSObject*);
+char*   overload ToString(const DSArray* const);
+void    overload Dispose(DSArray* const);
+int     overload Length(const DSArray* const);
+bool    overload IsEmpty(DSArray* const);
+bool    overload Contains(DSArray* const, DSObject*);
+void    overload Clear(DSArray* const);
+void    overload Add(DSArray* const, const DSObject*);
+void    overload Remove(DSArray* const, int);
+void    overload Resize(DSArray* const, int);
+void    overload Set(DSArray* const, int, const DSObject*);
+DSObject* overload Get(DSArray* const, int);
+
 typedef char*   (*DSArrayToString)  (const DSArray* const);
+typedef void    (*DSArrayDispose)   (DSArray* const);
+typedef int     (*DSArrayLength)    (const DSArray* const);
+typedef bool    (*DSArrayIsEmpty)   (DSArray* const);
+typedef bool    (*DSArrayContains)  (DSArray* const, const DSObject*);
+typedef void    (*DSArrayClear)     (DSArray* const);
+typedef void    (*DSArrayAdd)       (DSArray* const, const DSObject*);
+typedef void    (*DSArrayRemove)    (DSArray* const, int);
+typedef void    (*DSArrayResize)    (DSArray* const, int);
+typedef void    (*DSArraySet)       (DSArray* const, int, const DSObject*);
+typedef DSObject*     (*DSArrayGet)       (DSArray* const, int);
 
 /**
  * Array metaclass
  */
 vtable (DSArray) {
-    char*   (*ToString)     (const DSArray* const);
-    bool    (*Equals)       (const DSObject* const, struct Object  *const);
-    int     (*GetHashCode)  (const DSObject* const);
-    void    (*Dispose)      (DSObject* const);
-
-    int     (*Length)       (const DSArray* const);
-    bool    (*IsEmpty)      (const DSArray* const);
-    bool    (*Contains)     (const DSArray* const, DSObject*);
-    void    (*Clear)        (DSArray* const);
-    void    (*Add)          (DSArray* const, const DSObject*);
-    void    (*Remove)       (DSArray* const, int);
-
-    void    (*Resize)       (DSArray* const, int);
-    void    (*Set)          (DSArray* const, int, DSObject*);
-    DSObject*     (*Get)          (const DSArray* const, int);
-    
+    DSArrayToString         ToString;
+    DSObjectEquals          Equals;
+    DSObjectGetHashCode     GetHashCode;
+    DSObjectDispose         Dispose;
+    DSArrayLength           Length;
+    DSArrayIsEmpty          IsEmpty;
+    DSArrayContains         Contains;
+    DSArrayClear            Clear;
+    DSArrayAdd              Add;
+    DSArrayRemove           Remove;
+    DSArrayResize           Resize;
+    DSArraySet              Set;
+    DSArrayGet              Get;    
 };
 
 class (DSArray) {
@@ -88,27 +105,6 @@ class (DSArray) {
 };
 
 
-/**
- * Array API
- */
-DSArray* overload NewDSArray(void);
-DSArray* overload NewDSArray(int);
-
-char* overload ToString(const DSArray* const);
-void overload Dispose(DSArray* const);
-int overload Length(const DSArray* const);
-bool overload IsEmpty(const DSArray* const);
-bool overload Contains(const DSArray* const, DSObject*);
-void overload Clear(DSArray* const);
-void overload Add(DSArray* const, const DSObject*);
-void overload Remove(DSArray* const, int);
-void Resize(DSArray* const, int);
-void Set(DSArray* const, int, const DSObject*);
-DSObject* Get(const DSArray* const, int);
-DSArray* DSArray_init(DSArray* const this, int capacity);
-DSArray* DSArray_alloc();
-
-DSArray* Array_Variadic(int, ...);
 
 /**
  *  Array v = Array_From(1, 2, 4, 8);

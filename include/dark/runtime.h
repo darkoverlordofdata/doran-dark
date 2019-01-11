@@ -384,7 +384,7 @@ static inline UInt64 typeid(id obj) { return (UInt64)obj->isa; }
  *	  _(d, $setObject, anObject, $forKey, $("foo"));
  * 
  */
-id _(id this, SEL _cmd, ...);
+// id _(id this, SEL _cmd, ...);
 
 /** builtin selectors */
 extern SEL $alloc;

@@ -150,7 +150,6 @@ Class T##Implementation(Class super)                                    \
  */
 #define $vptr(T) ((struct T##_vtable*)(this->isa->vtable))
 
-
 // DSChar* NewDSChar(char value) { 
 //     return DSChar_init(DSChar_alloc(), value); 
 // }
@@ -158,9 +157,10 @@ Class T##Implementation(Class super)                                    \
 #define new(T, args...) T##_init(T##_alloc(), ## args)
 // #define new(T, ...) T##_init(T##_alloc(), ## __VA_ARGS__)
 
-#define auto __auto_type
+// #define auto __auto_type
 #define var __auto_type
 #define instanceof(class, obj) InstanceOf(get##class##Isa(), obj)
+#define of(class) (Class)get##class##Isa()
 
 #define $(T) _Generic((T),                                              \
                                                                         \

@@ -38,26 +38,22 @@ ivar (BallObject) {
     float   Radius;
     bool    Stuck;
 };
-
+/**
+ * BallObject API
+ */
 BallObject* NewBallObject(Vec2 Position, float Radius, Vec2 Velocity, Texture2D* Sprite);
 BallObject* BallObject_init(BallObject* this, Vec2 Position, float Radius, Vec2 Velocity, Texture2D* Sprite);
 BallObject* BallObject_alloc();
 
-/**
- * BallObject API
- */
 char*   overload ToString(const BallObject* const);
 void    overload Draw(BallObject* const, const SpriteRenderer*);
 void    overload Move(BallObject* const, const GLfloat, const GLuint);
 void    overload Reset(BallObject* const, const Vec2, const Vec2);
 
-
 typedef char*   (*BallObjectToString)   (const BallObject* const);
 typedef void    (*BallObjectDraw)       (BallObject* const, const SpriteRenderer*);
 typedef void    (*BallObjectMove)       (BallObject* const, const GLfloat, const GLuint);
 typedef void    (*BallObjectReset)      (BallObject* const, const Vec2, const Vec2);
-
-
 
 vtable (BallObject) {
     BallObjectToString      ToString;

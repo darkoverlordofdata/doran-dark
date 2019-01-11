@@ -24,7 +24,9 @@ ivar (SpriteRenderer) {
     Shader* shader; 
     GLuint VAO;
 };
-
+/**
+ * SpriteRenderer API
+ */
 SpriteRenderer*     NewSpriteRenderer(Shader* shader);
 SpriteRenderer*     SpriteRenderer_init(SpriteRenderer* const this, Shader* shader);
 SpriteRenderer*     SpriteRenderer_alloc();

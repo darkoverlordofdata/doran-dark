@@ -42,7 +42,9 @@ ivar (GameObject)
     char*       Name;
 
 };
-
+/**
+ * GameObject API
+ */
 GameObject* GameObject_init(GameObject* const this, char* name, Vec2 Position, Vec2 Size, Texture2D* Sprite, Vec3 Color);
 GameObject* GameObject_alloc();
 GameObject* NewGameObject(char* name, Vec2 Position, Vec2 Size, Texture2D* Sprite, Vec3 Color);

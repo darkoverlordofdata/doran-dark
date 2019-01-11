@@ -81,16 +81,12 @@ DSArray* DSArray_alloc() {
 
 
 
-int overload Length(const DSArray* const this)
-{
-    return this->length;
-}
 /**
  * Resize the vector
  * 
  * @param capacity the new size
  */
-void Resize(DSArray* const this, int capacity)
+void overload Resize(DSArray* const this, int capacity)
 {
     #ifdef DEBUG_ON
     printf("vector_resize: %d to %d\n", this->capacity, capacity);
@@ -122,7 +118,7 @@ void overload Add(DSArray* const this, const DSObject* item)
  * @param index to add at
  * @param item the data to add
  */
-void Set(DSArray* const this, int index, const DSObject* item)
+void overload Set(DSArray* const this, int index, const DSObject* item)
 {
     if (index >= 0 && index < this->length)
         this->data[index] = item;
@@ -133,7 +129,7 @@ void Set(DSArray* const this, int index, const DSObject* item)
  * 
  * @param index to get
  */
-DSObject* Get(const DSArray* const this, int index)
+DSObject* overload Get(DSArray* const this, int index)
 {
     if (index >= 0 && index < this->length)
         return this->data[index];
@@ -178,16 +174,20 @@ void overload Clear(DSArray* const this)
     this->length = 0;
 }
 
-bool overload IsEmpty(const DSArray* const this)
+bool overload IsEmpty(DSArray* const this)
 {
     return this->length <= 0;
 }
 
-bool overload Contains(const DSArray* const this, DSObject* item)
+bool overload Contains(DSArray* const this, DSObject* item)
 {
     return false;   
 }
 
+int overload Length(const DSArray* const this)
+{
+    return this->length;
+}
 
 /**
  * ToString

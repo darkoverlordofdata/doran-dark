@@ -41,8 +41,8 @@ void __attribute__((constructor)) ApplicationLoader()
     objc_registerClassPair(GameImplementation(obj));
     objc_registerClassPair(GameLevelImplementation(obj));
     objc_registerClassPair(ParticleGeneratorImplementation(obj));
-    objc_registerClassPair(ResourceManagerImplementation(obj));
     objc_registerClassPair(ShaderImplementation(obj));
     objc_registerClassPair(SpriteRendererImplementation(obj));
     objc_registerClassPair(Texture2DImplementation(obj));
+    objc_registerClassPair(ResourceManagerImplementation(obj));
 }

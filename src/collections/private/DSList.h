@@ -28,12 +28,14 @@ $implementation(DSList)
 $method(ToString,           (DSListToString)ToString, "@@:v");
 $method(Equals,             DSObject_Equals, "B@:@@");
 $method(GetHashCode,        DSObject_GetHashCode, "l@:v");
-$method(Dispose,            (DSListDispose)Dispose, "v@:v");
+$method(Dispose,            DSObject_Dispose, "v@:v");
 $method(Length,             (DSListLength)Length, "i@:v");
+// $method(IsEmpty,            (DSListIsEmpty)IsEmpty, "B@:v");
+// $method(Clear,              (DSListClear)Clear, "v@:v");
 $method(Add,                (DSListAdd)Add, "@@:*");
 $method(Remove,             (DSListRemove)Remove, "i@:*");
 $method(Insert,             (DSListInsert)Insert, "i@:*@");
-$method(Iterate,            (DSListForEach)ForEach, "i@:@@");
+$method(Iterate,            (DSListIterate)Iterate, "i@:@@");
 
 $ivar(length, sizeof(int), "i");
 $ivar(head, sizeof(void*), "^");
@@ -41,4 +43,3 @@ $ivar(head, sizeof(void*), "^");
 $DSList.Create = NewDSList;
 
 $end;
-

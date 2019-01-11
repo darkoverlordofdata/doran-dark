@@ -34,6 +34,7 @@ SOFTWARE.
  * consider upgrade to https://github.com/DavidLeeds/hashmap
  * 
  */
+static DSException(InvalidType);
 
 #define INITIAL_SIZE (256)
 #define MAX_CHAIN_LENGTH (8)
@@ -169,18 +170,28 @@ unsigned int overload HashInt(DSHashmap* const this, char* keystring)
 	return key % this->tableSize;
 }
 
+
 /**
- * Default Constructor
+ * Typed Constructor
  */
-DSHashmap* NewDSHashmap() { 
-    return DSHashmap_init(DSHashmap_alloc()); 
+DSHashmap* NewDSHashmap(Class typ) {
+    DSHashmap* this = DSHashmap_init(DSHashmap_alloc(), typ);
+    DSLog("B NewDSHashmap Check for %x", this->typeOf);
+    return this;
 }
 
-DSHashmap* DSHashmap_init(DSHashmap* const this)
+
+// DSHashmap* DSHashmap_init(DSHashmap* const this, Class typ)
+DSHashmap* DSHashmap_init(DSHashmap* const this, ...)
 {
     DSObject_init(this);
+    va_list args;
+    va_start(args, this);
+    Class typ = va_arg(args, Class);
+    va_end(args);                                                
+ 
     this->isa = getDSHashmapIsa();
-
+    this->typeOf = typ;
     this->data = DSCalloc(INITIAL_SIZE, sizeof(DSHashmapNode));
 	this->tableSize = INITIAL_SIZE;
 	this->size = 0;
@@ -256,6 +267,9 @@ int overload Rehash(DSHashmap* const this)
  */
 int overload Put(DSHashmap* const this, char* key, DSObject* value)
 {
+    if ((this->typeOf) && !InstanceOf(this->typeOf, value)) 
+        throw(DSInvalidTypeException("Expected %s", this->typeOf->name));
+        
 	/* Find a place to put our value */
 	int index = Hash(this, key);
 	while (index == MAP_FULL)
@@ -334,6 +348,7 @@ int overload ForEach(DSHashmap* const this, DSHashmap_Iterator f, DSObject* item
 
 /*
  * Remove an element with that key from the map
+ * Return MAP_OK or MAP_MISSING.
  */
 int overload Remove(DSHashmap* const this, char* key)
 {

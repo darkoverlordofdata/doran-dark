@@ -35,7 +35,9 @@ ivar (Texture2D)
     GLuint FilterMin;       // Filtering mode if texture pixels < screen pixels
     GLuint FilterMag;       // Filtering mode if texture pixels > screen pixels
 };
-
+/**
+ * Texture2D API
+ */
 Texture2D* NewTexture2D(int InternalFormat, int ImageFormat, char* path);
 Texture2D* Texture2D_init(Texture2D* const this, int InternalFormat, int ImageFormat, char* path);
 Texture2D* Texture2D_alloc();

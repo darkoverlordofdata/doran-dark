@@ -118,7 +118,6 @@ short overload ShortValue(const DSChar* const this) {
  */
 char* overload ToString(const DSChar* const this)
 {
-    DSLog("DSChar ToString");
     static char str[2];
     sprintf(str, "%c", this->value);
     return str;

@@ -75,7 +75,6 @@ int overload Compare(bool x, bool y) {
  * @return same as Boolean_Compare
  */
 int overload CompareTo(const DSBoolean*  const this, const DSBoolean*  const other) {
-    DSLog("CompareTo");
     return Compare(this->value, other->value);
 }
 

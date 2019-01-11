@@ -68,11 +68,9 @@ GameLevel* overload Load(
     {
         while (fscanf(fstream, "%d%c", &i, &c) != EOF)
         {
-            // Add(row, (void*)i);
             Add(row, $(i));
             if (c == '\n')
             {
-                // Add(tileData, (void*)row);
                 Add(tileData, row);
                 row = new(DSArray, 20);
             }
@@ -147,7 +145,6 @@ static void init(
         {
             // Check block type from level data (2D level array)
             DSArray* row = tileData->data[y];
-            // int blockType = (int)(row->data[x]);
             int blockType = IntValue((DSInteger*)(row->data[x]));
 
             Vec2 pos = { unit_width * x, unit_height * y };

@@ -35,6 +35,7 @@ SOFTWARE.
 #include <string.h>
 #include <assert.h>
 #include <stdarg.h>
+#include <stdbool.h>
 
 void* DSMalloc(size_t);
 void* DSRealloc(void*, size_t);
@@ -52,28 +53,21 @@ typedef int32_t Int32;
 typedef uint32_t UInt32;
 typedef int64_t Int64;
 typedef uint64_t UInt64;
-typedef unsigned int UInt;
-typedef unsigned char UChar;
-
-/*
- * Any is a generic pointer.  
- * This allows you to put arbitrary structures in
- * collections like Hashmap, Vector, and List.
- */
-// typedef void* Any;
+typedef unsigned int uint;
+typedef unsigned char uchar;
 
 /**
- * _Bool - Really?
+ * Redefine true and false 
+ * such that true and false are bool, not int.
  */
-#ifndef bool
-typedef enum { false, true } bool;
-#endif 
+#undef true
+#undef false
+static const _Bool false = 0;
+static const _Bool true  = 1;
 
 #define YES true
 #define NO false
-/**
- *  STOP YELLING AT YOUR COMPUTER
- */
+
 #ifndef nullptr
 #define nullptr NULL
 #endif
@@ -127,6 +121,37 @@ char* STR_JOIN(int count, ...);
 
 #define $Join(...) $DSString.Join(PP_NARG(__VA_ARGS__), __VA_ARGS__)
 
+//http://huoc.org/conditionals-constants-c11-generic.html
+/**
+ *  MACRO DEFAULT
+ *      define default arguments
+ */
+struct _default_arg_;
+#define __DEFAULT__ ((struct _default_arg_ *)NULL)
+#define DEFAULT(arg, _default_val_)                                            \
+        _Generic((arg),                                                 \
+            struct _default_arg_ *: _default_val_,                                   \
+            default: (arg))
+
+
+// int foobar(int, int, int);
+// #define foobar(x, ...)                                                  \
+//         foobar_((x), ##__VA_ARGS__, __DEFAULT__, __DEFAULT__)
+// #define foobar_(x, z, t, ...)                                           \
+//         (foobar)((x), DEFAULT((z), 42), DEFAULT((t), 36))
+// int (foobar)(int x, int y, int z) {
+//     DSLog("foobar x:%d", x);
+//     DSLog("foobar y:%d", y);
+//     DSLog("foobar z:%d", z);
+//     // DSLog("foobar w:%d", w);
+//     return 0;
+// }
+
+/**
+ *  MACRO __FILENAME__
+ *      extracts the filename from the path
+ */
+#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 
 /**
  *  MACRO DSException
@@ -142,11 +167,13 @@ _Noreturn long DS##name##Exception(const char* msg, ...)                        
     va_list args;                                                       \
     va_start(args, msg);                                                \
     fprintf(stderr, #name);                                             \
-    fprintf(stderr, "Exception: ");                                     \
+    fprintf(stderr, "Exception (%s:%i) ", __FILENAME__, __LINE__); \
     vfprintf(stderr, msg, args);                                        \
     fprintf(stderr, "\n");                                              \
     va_end(args);                                                       \
     exit(99);                                                           \
 }
+
+#define throw(x) x
 
 #endif _CORE_H

@@ -44,7 +44,9 @@ ivar (ParticleGenerator) {
     Texture2D* texture;
     GLuint VAO;
 };
-
+/**
+ * ParticleGenerator API
+ */
 ParticleGenerator* NewParticleGenerator(Shader* shader, Texture2D* texture, int amount);
 ParticleGenerator* ParticleGenerator_alloc();
 ParticleGenerator* ParticleGenerator_init(ParticleGenerator* const this, Shader* shader, Texture2D* texture, int amount);
@@ -52,10 +54,6 @@ ParticleGenerator* ParticleGenerator_init(ParticleGenerator* const this, Shader*
 char*   overload ToString(const ParticleGenerator* const);
 void    overload Update(ParticleGenerator*, GLfloat, GameObject*, GLuint, Vec2);
 void    overload Draw(ParticleGenerator*);
-
-static  void    init(ParticleGenerator*);
-static  GLuint  firstUnusedParticle(ParticleGenerator*);
-static  void    respawnParticle(ParticleGenerator*, struct Particle, GameObject*, Vec2);
 
 typedef char*   (*ParticleGeneratorToString)    (const ParticleGenerator* const);
 typedef void    (*ParticleGeneratorUpdate)      (ParticleGenerator*, GLfloat, GameObject*, GLuint, Vec2);
@@ -75,4 +73,8 @@ class (ParticleGenerator) {
 };
 
 
+/** private */
+static  void    init(ParticleGenerator*);
+static  GLuint  firstUnusedParticle(ParticleGenerator*);
+static  void    respawnParticle(ParticleGenerator*, struct Particle, GameObject*, Vec2);
 

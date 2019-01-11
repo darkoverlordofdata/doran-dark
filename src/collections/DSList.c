@@ -71,7 +71,7 @@ DSListNode* NewDSListNode(DSObject* data, DSListNode* next)
  * @param comp function to compare for insertion
  * 
  */
-int Insert(DSList* const this, DSObject* data, DSList_Compare comp) //int (*comp)(DSObject*, DSObject*))
+int overload Insert(DSList* const this, DSObject* data, DSList_Compare comp)
 {
     if (this->head == nullptr) {
         this->head = NewDSListNode(data, nullptr);
@@ -133,7 +133,7 @@ DSObject* overload Remove(DSList* const this)
  * @param iter function to call for each iteration
  * 
  */
-void overload ForEach(DSList* const this, void (^iter)(DSObject*))
+void overload Iterate(DSList* const this, void (^iter)(DSObject*))
 {
     for (DSListNode* curr = this->head; curr != nullptr; curr = curr->next) {
         iter(curr->data);
@@ -159,7 +159,7 @@ void overload Dispose(DSList* const this)
 /**
  * Number of items in vector
  */
-int overload Length(const DSList* const this)
+int overload Length(DSList* const this)
 {
     return this->length;
 }

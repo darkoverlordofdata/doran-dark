@@ -10,15 +10,6 @@
         T data[];       \
     }
 
-// struct qvec_base {
-//     size_t cap, len;
-// };
-
-// #define qvec(T)             \
-//     struct qvec_##T {       \
-//         struct qvec_base;   \
-//         T data[];           \
-//     }    
 
 #define qvec_new(T)                                                           \
 ({                                                                            \
@@ -67,37 +58,6 @@
     }                                   \
     printf("]\n");                      \
  })
-
-#define getType(T) _Generic((T),        /* Get the name of a type */             \
-                                                                                  \
-        _Bool: "_Bool",                  unsigned char: "unsigned char",          \
-         char: "char",                     signed char: "signed char",            \
-    short int: "short int",         unsigned short int: "unsigned short int",     \
-          int: "int",                     unsigned int: "unsigned int",           \
-     long int: "long int",           unsigned long int: "unsigned long int",      \
-long long int: "long long int", unsigned long long int: "unsigned long long int", \
-        float: "float",                         double: "double",                 \
-  long double: "long double",                   char *: "pointer to char",        \
-       void *: "pointer to void",                int *: "pointer to int",         \
-       DSLong *: "DSLong",  \
-       const char *: "const pointer to char", \
-      default: "other")
-
-
- void bye(DSLong** x) {
-    DSLog("Bye!");
-}
-
-#define myNew(T, xs...) ({ \
-    const T _xs[] = {xs}; \
-    _xs; \
-})
-
-typedef struct {
-    int x, y;
-} Tuple;
-
-
 
      qvec(int) *iv = qvec_new(int);
     qvec_push(iv, 5);

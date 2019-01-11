@@ -22,7 +22,7 @@ ivar (Collision)
  * @param dir direction from
  * @param Vec2 difference point
  */
-Collision* NewCollision(bool isTrue, Direction dir, Vec2 vec)
+Collision* CollisionTuple(bool isTrue, Direction dir, Vec2 vec)
 {
     Collision* this = DSMalloc(sizeof(Collision));
     this->first = isTrue;
@@ -314,9 +314,9 @@ static Collision* CheckCollision(
     difference = closest - center;
     
     if (glm_length(difference) < one->Radius) // not <= since in that case a collision also occurs when object one exactly touches object two, which they are at the end of each collision resolution stage.
-        return NewCollision(true, ArrayDirection(difference), difference);
+        return CollisionTuple(true, ArrayDirection(difference), difference);
     else
-        return NewCollision(false, UP, (Vec2){ 0, 0 });
+        return CollisionTuple(false, UP, (Vec2){ 0, 0 });
 }
 
 

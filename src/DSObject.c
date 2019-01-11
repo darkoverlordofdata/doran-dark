@@ -111,9 +111,8 @@ const char *DSClass_ToString(const DSClass* const this)
  */
 bool overload Equals(const DSObject* const this, const DSObject* const that)
 {
-    DSLog("DSObject Equals");
-    return this == that;
-    // return _vptr(this)->Equals(this, that);
+    // return this == that;
+    return _vptr(this)->Equals(this, that);
 }
 /**
  * virtual Equals method

@@ -26,7 +26,9 @@
 ivar (ResourceManager) {
     Class isa;
 };
-
+/**
+ * ResourceManager API
+ */
 ResourceManager* NewResourceManager();
 ResourceManager* ResourceManager_init(ResourceManager* this);
 ResourceManager* ResourceManager_alloc();

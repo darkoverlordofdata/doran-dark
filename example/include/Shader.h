@@ -25,7 +25,9 @@ ivar (Shader) {
     Class isa;
     GLuint Id; 
 };
-
+/**
+ * Shader API
+ */
 Shader* Shader_init(Shader* const this);
 Shader* Shader_alloc();
 Shader* NewShader();

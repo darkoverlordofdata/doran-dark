@@ -40,7 +40,9 @@ ivar (GameLevel)
     Class isa;
     DSArray* Bricks;
 };
-
+/**
+ * GameLevel API
+ */
 GameLevel* NewGameLevel(const GLchar *file, int levelWidth, int levelHeight);
 GameLevel* GameLevel_init(GameLevel* const this, const GLchar *file, int levelWidth, int levelHeight);
 GameLevel* GameLevel_alloc();
@@ -49,9 +51,6 @@ char*       overload ToString(const GameLevel*);
 GameLevel*  overload Load(GameLevel*, const GLchar*, int, int);
 void        overload Draw(GameLevel* const, SpriteRenderer*);
 bool        overload IsCompleted(GameLevel*);
-
-static 
-void        init(GameLevel *const this, DSArray*, GLuint, GLuint);
 
 typedef char*       (*GameLevelToString)    (const GameLevel* const);
 typedef GameLevel*  (*GameLevelLoad)        (GameLevel*, const GLchar*, int, int);
@@ -73,4 +72,8 @@ vtable (GameLevel)
 class (GameLevel) {
     GameLevel*  (*Create) (const GLchar *file, int levelWidth, int levelHeight);
 };
+
+/** private */
+static 
+void        init(GameLevel *const this, DSArray*, GLuint, GLuint);
 

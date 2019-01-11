@@ -52,8 +52,7 @@ static const GLfloat BALL_RADIUS = 12.5f;
 // Game holds all game-related state and functionality.
 // Combines all game-related data into a single class for
 // easy access to each of the components and manageability.
-ivar (Game)
-{
+ivar (Game) {
     Class isa;
     GameState State;	
     bool Keys[1024];
@@ -62,7 +61,9 @@ ivar (Game)
     DSArray* Levels; 
     GLuint Level;    
 };    
-
+/**
+ * Game API
+ */
 Game* NewGame(int Width, int Height);
 Game* Game_alloc();
 Game* Game_init(Game* const this, int, int);
@@ -93,8 +94,7 @@ typedef void    (*GameSetState)     (Game* const, GameState state);
  * Metadata for the Game class:
  * attributes, vtable, class members
  */
-vtable (Game)
-{
+vtable (Game) {
     GameToString            ToString;
     DSObjectEquals          Equals;
     DSObjectGetHashCode     GetHashCode;

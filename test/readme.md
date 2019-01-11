@@ -1,8 +1,8 @@
-# daran-dark tdd
+# doran-dark tdd
 
 ## install
 
-after installing doran-dark, reopen the doran-dark/test folder in vdcode, or 
+after installing doran-dark, reopen the doran-dark/test folder in vscode, or 
 
     cd test
 
@@ -14,7 +14,7 @@ then
     ./configure
 
 the install --link may print some ugly messages as it tries to process the recursive disk structure, but it worked.
-from there, use cake tools in vscode, or 
+from there, use cmake tools in vscode, or 
 
     cd build
     make
