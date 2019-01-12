@@ -15,6 +15,10 @@
   "files": [
     "src/darkunit.c",
     "src/main.c",
+    "src/demo.c",
+    "src/printf.c",
+    "src/TestTypes.vala",
+    "src/unit.vala"
   ],
   "packages": [],
   "includes": null,
@@ -28,10 +32,8 @@
     "VERSION": "0.0.1",
     "RELEASE_NAME": "unit"
   },
-  "definitions": [
-  ],
-  "symbols": [
-  ],
+  "definitions": [],
+  "symbols": [],
   "copy": "..",
   "vapidir": null,
   "console": false

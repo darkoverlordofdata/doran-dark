@@ -41,10 +41,11 @@ list ( APPEND C_SOURCES src/main.c )
 # Libs: 
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lm" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lBlocksRuntime" )
-
-set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w -std=c99 -O3" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fblocks" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -LC:/msys64/mingw64/bin" )
+
+set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w -std=c99 -O3" )
+
 
 # definitions 
 
@@ -57,7 +58,7 @@ add_executable ( ${PROJECT_NAME} ${C_SOURCES} ${RESOURCES} )
 add_custom_command(TARGET ${PROJECT_NAME} 
                    POST_BUILD COMMAND 
                    ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}> .. )
-target_link_libraries ( ${PROJECT_NAME} m BlocksRuntime gc )
+target_link_libraries ( ${PROJECT_NAME} m BlocksRuntime gc  )
 install (TARGETS ${PROJECT_NAME} RUNTIME DESTINATION . )
 
 include (CPack)

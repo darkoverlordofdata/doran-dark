@@ -42,7 +42,7 @@
     ".lib/dark/include"
   ],
   "libraries": [
-    "gc",
+    "gc"
   ],
   "options": {
     "VERSION": "0.0.1",
