@@ -55,7 +55,7 @@ SOFTWARE.
 #include <dark/types/DSStringBuilder.h>
 #include "private/DSStringBuilder.h"
 /* 
- * Throws OutOfMemoryException:
+ * throws OutOfMemoryException:
  */
 // static DSException(OutOfMemory);
 /* 
@@ -107,7 +107,7 @@ int overload Append(DSStringBuilder* this, const char *str)
 	length = strlen(str);
 	frag = (StringFragment*) DSCalloc(1, sizeof(struct StringFragment));
 	if (nullptr == frag)
-		Throw DSOutOfMemoryException("StringBuilder::Append");
+		throw DSOutOfMemoryException("StringBuilder::Append");
 
 	frag->next = nullptr;
 	frag->length = length;
@@ -139,7 +139,7 @@ int overload Appendf(DSStringBuilder* this, const char *format, ...)
 	va_end(args);
 
 	if (0 > len)
-		Throw DSOutOfMemoryException("StringBuilder::Append");
+		throw DSOutOfMemoryException("StringBuilder::Append");
 
 	return Append(this, buf);
 }

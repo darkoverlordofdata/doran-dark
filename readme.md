@@ -24,6 +24,8 @@ a port of the breakout game from learnopengl.com
 ## Why?
 C is simple. It compiles fast. I didn't like Borland C++ 2.0 when it came out - too 'gimicky'. It's gotten better, but I still think it has a noisy syntax. 
 
+Some will say - just use C++. But do we tell Boost users that they should just code in C#?
+
 > "C makes it easy to shoot yourself in the foot; C++ makes it harder, but when you do it blows your whole leg off" -- Bjarne Stroustrup
 
 ## example

@@ -208,7 +208,7 @@ struct exception_context { \
 
 #define init_exception_context(ec) ((void)((ec)->penv = 0))
 
-#define try \
+#define Try \
   { \
     jmp_buf *exception__prev, exception__env; \
     exception__prev = the_exception_context->penv; \
@@ -228,8 +228,8 @@ struct exception_context { \
   if (!the_exception_context->caught || action) { } \
   else
 
-#define catch(e) exception__catch(((e) = the_exception_context->v.etmp, 0))
-#define catch_anonymous exception__catch(0)
+#define Catch(e) exception__catch(((e) = the_exception_context->v.etmp, 0))
+#define Catch_anonymous exception__catch(0)
 
 /* Try ends with do, and Catch begins with while(0) and ends with     */
 /* else, to ensure that Try/Catch syntax is similar to if/else        */
@@ -240,7 +240,7 @@ struct exception_context { \
 /* Most compilers should still recognize that the condition is always */
 /* false and avoid generating code for it.                            */
 
-#define throw \
+#define Throw \
   for (;; longjmp(*the_exception_context->penv, 1)) \
     the_exception_context->v.etmp =
 

@@ -6,6 +6,8 @@
 #include "darkunit.h"
 #include "main.h"
 
+void DSHashmap_dtor(void* this);
+
 void TestHashMap();
 char keys[12][7] = {
     "key1", "key2", "AbCdEf",
@@ -21,35 +23,40 @@ int (foobar)(int x, int y, int z) {
     return 0;
 }
 
-
 int main(int argc, char **argv) {
-  DSException* e;
+
+    DSException* e;
 
     DSLog("** DaRKSTEP Test** \n");
 
     int xx = foobar(1);
 
-    var l = $(420L);
-    var m = $(420L); 
-    var b = $(true); 
-    var s = $("Frodo");
-    var c = $('c');
-    var ary = new(DSArray, 0);
-    var lst = new(DSList);
-    // var hsh = new(DSHashmap, of(DSBoolean));
-    // var hsh = new(DSHashmap);
-    var hsh = new(DSHashmap, of(DSNumber));
-    var zhsh = new(DSHashmap, of(DSBoolean));
+    auto l = $(420L);
+    auto m = $(420L); 
+    auto b = $(true); 
+    auto s = $("Frodo");
+    auto c = $('c');
+    auto ary = new(DSArray, 0);
+    auto lst = new(DSList);
+    auto hsh = new(DSHashmap, of(DSNumber));
+    {
+        DSHashmap* dispose(DSHashmap_dtor) zhsh = new(DSHashmap, of(DSBoolean));
 
-    Try Put(zhsh, "forodo", l);
-    Catch (e) DSLog(e->msg);
-
-
+        try {
+            // Adding a long to a collection of DSBoolean -
+            // should throw an exception
+            Put(zhsh, "test", l);
+        }
+        catch (e)  {
+            DSLog(e->msg);
+        }
+        DSLog("end of block");
+    }// dtor is called here as it goes out of scope
+    DSLog("after end of block");
 
     for (int i=0; i<12; i++) {
         Put(hsh, keys[i], $(i+420));
     }
-
 
     Add(ary, $(0));
     Add(ary, $(1));

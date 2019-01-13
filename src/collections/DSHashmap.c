@@ -179,16 +179,15 @@ DSHashmap* NewDSHashmap(Class typ) {
     return this;
 }
 
-
-// DSHashmap* DSHashmap_init(DSHashmap* const this, Class typ)
-DSHashmap* DSHashmap_init(DSHashmap* const this, ...)
+DSHashmap* DSHashmap_init(DSHashmap* const this, Class typ)
+// DSHashmap* DSHashmap_init(DSHashmap* const this, ...)
 {
     DSObject_init(this);
-    va_list args;
-    va_start(args, this);
-    Class typ = va_arg(args, Class);
-    va_end(args);                                                
- 
+    // va_list args;
+    // va_start(args, this);
+    // Class typ = va_arg(args, Class);
+    // va_end(args);          
+
     this->isa = getDSHashmapIsa();
     this->typeOf = typ;
     this->data = DSCalloc(INITIAL_SIZE, sizeof(DSHashmapNode));
@@ -268,7 +267,7 @@ int overload Rehash(DSHashmap* const this)
 int overload Put(DSHashmap* const this, char* key, DSObject* value)
 {
     if ((this->typeOf) && !InstanceOf(this->typeOf, value)) 
-        Throw DSInvalidTypeException(this->typeOf->name);
+        throw DSInvalidTypeException(this->typeOf->name);
 
 	/* Find a place to put our value */
 	int index = Hash(this, key);
@@ -380,9 +379,13 @@ int overload Remove(DSHashmap* const this, char* key)
 	return MAP_MISSING;
 }
 
+void DSHashmap_dtor(void* this) {
+    Dispose((DSHashmap*)this);
+}
 /* Deallocate the hashmap */
 void overload Dispose(DSHashmap* const this)
 {
+    DSLog("WTF - dispose?");
 	// delete(this->data);
 }
 

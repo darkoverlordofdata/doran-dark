@@ -37,12 +37,14 @@ SOFTWARE.
 #include <stdbool.h>
 #include "cexcept.h"
 
+typedef void (*IDispose)(void* const, void* const);
 
 void* DSMalloc(size_t);
 void* DSRealloc(void*, size_t);
 void* DSCalloc(size_t, size_t);
 void DSFree(void*);
 void DSCollect();
+
 /**
  * Friendlier type names
  */
@@ -72,6 +74,11 @@ static const _Bool true  = 1;
 #ifndef nullptr
 #define nullptr NULL
 #endif
+
+/** type inference */
+#define var __auto_type
+#define auto __auto_type
+
 
 typedef enum 
 {
@@ -190,12 +197,25 @@ typedef struct DSException {
     DSExceptionType type;
     const char *msg;
 };
+
 /**
  *  MACRO overload
  *      method overload 
  */
 #define overload __attribute__((overloadable))
 
+/**
+ *  MACRO dispose
+ *      set destructor method 
+ */
+#define dispose(fn)   __attribute__((cleanup(fn)))
+
+
+// static inline void fclosep(FILE **fp) { if (*fp) fclose(*fp); }
+// #define auto_close __attribute__((cleanup(fclosep)))
+/** 
+ * Exceptions 
+ */
 define_exception_type(DSException*);
 extern struct exception_context the_exception_context[1];
 

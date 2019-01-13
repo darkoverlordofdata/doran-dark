@@ -58,6 +58,6 @@ void Collection_Add(DSCollection* const this, DSObject* data)
 }
 void DSCollection_Add(DSCollection* const this, DSObject* data)
 {
-    Throw DSAbstractMethodException("Collection_Add");
+    throw DSAbstractMethodException("Collection_Add");
 }
 

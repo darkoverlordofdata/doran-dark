@@ -26,7 +26,7 @@ SOFTWARE.
 #include <dark/types/DSShort.h>
 #include "private/DSShort.h"
 /* 
- * Throws NumberFormatException:
+ * throws NumberFormatException:
  */
 // static DSException(NumberFormat);
 /**
@@ -60,7 +60,7 @@ short DSParseShort(char const *const s, int const radix)
 {
     long i = DSParseLong(s, radix);
     if (i < SHORT_MIN_VALUE || i > SHORT_MAX_VALUE)
-        Throw DSNumberFormatException(s, radix);
+        throw DSNumberFormatException(s, radix);
     return (short)i;
 }
 

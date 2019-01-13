@@ -71,8 +71,8 @@ ivar (DSHashmap) {
 /**
  * Hashmap API
  */
-// DSHashmap*  DSHashmap_init(DSHashmap* const this, Class typ);
-DSHashmap*  DSHashmap_init(DSHashmap* const this, ...);
+DSHashmap*  DSHashmap_init(DSHashmap* const this, Class typ);
+// DSHashmap*  DSHashmap_init(DSHashmap* const this, ...);
 DSHashmap*  DSHashmap_alloc();
 DSHashmap*  NewDSHashmap(Class typ);
 

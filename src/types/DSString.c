@@ -26,7 +26,7 @@ SOFTWARE.
 #include <dark/types/DSString.h>
 #include "private/DSString.h"
 /* 
- * Throws IndexOutOfBoundsException:
+ * throws IndexOutOfBoundsException:
  */
 // static DSException(IndexOutOfBounds);
 /**
@@ -180,7 +180,7 @@ char overload CharAt(const DSString* const this, const int index)
 {
     printf("string %d,%d %s\n", index, this->length, this->value);
     if (index < 0 || index >= this->length)
-        Throw DSIndexOutOfBoundsException(index);
+        throw DSIndexOutOfBoundsException(index);
     return this->value[index];
 }
  

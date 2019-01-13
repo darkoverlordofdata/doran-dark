@@ -26,7 +26,7 @@ SOFTWARE.
 #include <dark/types/DSInteger.h>
 #include "private/DSInteger.h"
 /* 
- * Throws: NumberFormatException
+ * throws: NumberFormatException
  */
 // static DSException(NumberFormat);
 /* 
@@ -60,7 +60,7 @@ DSInteger* DSInteger_alloc() {
 int DSParseInt(const char* const s, const int radix) {
     long i = DSParseLong(s, radix);
     if (i < INTEGER_MIN_VALUE || i > INTEGER_MAX_VALUE)
-        Throw DSNumberFormatException(s, radix);
+        throw DSNumberFormatException(s, radix);
     return (int)i;
 }
 

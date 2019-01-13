@@ -26,7 +26,7 @@ SOFTWARE.
 #include <dark/types/DSDouble.h>
 #include "private/DSDouble.h"
 /* 
- * Throws NumberFormatException:
+ * throws NumberFormatException:
  */
 // static DSException(NumberFormat);
 
@@ -62,10 +62,10 @@ double DSParseDouble(char const *const s) {
     double result = strtod(s, endptr);
 
     if (errno != 0)
-        Throw DSNumberFormatException(s);
+        throw DSNumberFormatException(s);
 
     if (s == endptr || *endptr != '\0')
-        Throw DSNumberFormatException(s);
+        throw DSNumberFormatException(s);
 
     return result;
 }

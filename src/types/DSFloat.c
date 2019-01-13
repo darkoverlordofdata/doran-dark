@@ -26,7 +26,7 @@ SOFTWARE.
 #include <dark/types/DSFloat.h>
 #include "private/DSFloat.h"
 /* 
- * Throws NumberFormatException:
+ * throws NumberFormatException:
  */
 // static DSException(NumberFormat);
 /**
@@ -63,7 +63,7 @@ float DSParseFloat(const char* s)
     
     double d = DSParseDouble(s);
     if (d < FLOAT_MIN_VALUE || d > FLOAT_MAX_VALUE)
-        Throw DSNumberFormatException(s);
+        throw DSNumberFormatException(s);
     return (float)d;
 }
 

@@ -27,21 +27,68 @@ SOFTWARE.
 #include <dark/DSClass.h>
 #include <stdlib.h>
 #include <gc.h>
+/**
+ * free the memory for this ptr
+ */
+// void DS_free(TClass cls) 
+void DSFree(void* ptr) 
+{
+    GC_FREE(ptr);
+}
 
+/**
+ * malloc size bytes
+ */
+void* DSMalloc(size_t size)
+{
+    void* ptr = GC_MALLOC(size);
+    return ptr;
+}
+
+/**
+ * realloc size bytes from old pointer
+ */
+void* DSRealloc(void * old, size_t new_size)
+{
+    return GC_REALLOC(old, new_size);
+}
+
+
+/**
+ * malloc num * size bytes
+ */
+void* DSCalloc(size_t num, size_t size)
+{
+    return GC_MALLOC(num * size);
+}
+
+/**
+ * Explicitly force a garbage collection.
+ */
+void DSCollect()
+{
+    GC_gcollect();
+}
+
+// void GC_REGISTER_FINALIZER(...)
+/**
+ *  start the garbage collector
+ */
+void __attribute__((constructor(101))) DSGCStart()
+{
+    GC_INIT();
+    GC_enable_incremental();
+}
+
+/**
+ *  stop the garbage collector
+ */
+void __attribute__((destructor)) DSGCStop()
+{
+}
 /** 
-
-Excaptions:
-
-NumberFormat        DSDouble
-                    DSFloat
-                    DSInteger
-                    DSLong
-                    DSShort
-
-
-*/
-
-
+ * Exceptions 
+ */
 struct exception_context the_exception_context[1];
 
 DSException* DSAbstractMethodException(const char* name) {
@@ -83,64 +130,5 @@ DSException* overload DSNumberFormatException(const char* raw, const int radix) 
     return e;
 }
 
-/**
- * free the memory for this ptr
- */
-// void DS_free(TClass cls) 
-void DSFree(void* ptr) 
-{
-    GC_FREE(ptr);
-}
 
-/**
- * malloc size bytes
- */
-void* DSMalloc(size_t size)
-{
-    void* ptr = GC_MALLOC(size);
-    return ptr;
-}
-
-/**
- * realloc size bytes from old pointer
- */
-void* DSRealloc(void * old, size_t new_size)
-{
-    void* ptr = GC_REALLOC(old, new_size);
-    return ptr;
-
-}
-
-/**
- * malloc num * size bytes
- */
-void* DSCalloc(size_t num, size_t size)
-{
-    void* ptr = GC_MALLOC(num * size);
-    return ptr;
-}
-
-/**
- * Explicitly force a garbage collection.
- */
-void DSCollect()
-{
-    GC_gcollect();
-}
-
-/**
- *  start the garbage collector
- */
-void __attribute__((constructor(101))) DSGCStart()
-{
-    GC_INIT();
-    GC_enable_incremental();
-}
-
-/**
- *  stop the garbage collector
- */
-void __attribute__((destructor)) DSGCStop()
-{
-}
 

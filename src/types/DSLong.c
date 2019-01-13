@@ -26,7 +26,7 @@ SOFTWARE.
 #include <dark/types/DSLong.h>
 #include "private/DSLong.h"
 /* 
- * Throws LongFormatException:
+ * throws LongFormatException:
  */
 // static DSException(NumberFormat);
 /**
@@ -64,10 +64,10 @@ long DSParseLong(const char* const s, const int radix)
     long result = strtol(s, endptr, radix);
 
     if (errno != 0)
-        Throw DSNumberFormatException(s, radix);
+        throw DSNumberFormatException(s, radix);
 
     if (s == endptr || *endptr != '\0')
-        Throw DSNumberFormatException(s, radix);
+        throw DSNumberFormatException(s, radix);
 
     return result;
 }
