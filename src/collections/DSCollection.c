@@ -29,7 +29,7 @@ SOFTWARE.
 /**
  * Generic Collection implementation
  */
-static DSException(AbstractMethod);
+// static DSException(AbstractMethod);
 /**
  * Initialize a new Array
  */
@@ -58,6 +58,6 @@ void Collection_Add(DSCollection* const this, DSObject* data)
 }
 void DSCollection_Add(DSCollection* const this, DSObject* data)
 {
-    DSAbstractMethodException("Collection_Add");
+    Throw DSAbstractMethodException("Collection_Add");
 }
 

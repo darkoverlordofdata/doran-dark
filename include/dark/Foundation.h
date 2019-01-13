@@ -45,6 +45,11 @@ static const int MajorVersion = 0;
 static const int MinorVersion = 0;
 static const int BuildVersion = 1;
 
+// #include "cexcept.h"
+// define_exception_type(int);
+// extern struct exception_context the_exception_context[1];
+
+#include "core.h"
 #include "hashmap.h"
 #include "DSLog.h"
 #include "DSClass.h"
@@ -63,6 +68,7 @@ static const int BuildVersion = 1;
 #include "types/DSInteger.h"
 #include "types/DSLong.h"
 #include "types/DSShort.h"
+
 
 // #include "collections/DSCollection.h"
 // #include "io/DSFile.h"

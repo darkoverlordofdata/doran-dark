@@ -13,7 +13,7 @@
 #include <errno.h>
 
 
-#include "hashmap.h"
+#include "hashmap/hashmap.h"
 
 void* DSMalloc(size_t);
 void* DSRealloc(void*, size_t);

@@ -40,19 +40,12 @@ SOFTWARE.
     struct T
 
 #define vtable(T)                                                       \
-    struct T##_vtable T##_vtable;                                         \
+    struct T##_vtable T##_vtable;                                       \
     struct T##_vtable
 
 #define class(T)                                                        \
     struct $##T $##T;                                                   \
     struct $##T
-
-/**
- *  MACRO overload
- *      method overload 
- */
-#define overload __attribute__((overloadable))
-
 
 /**
  *  MACRO $implementation
@@ -66,15 +59,15 @@ SOFTWARE.
 static inline struct T##_vtable* _vptr(T* this) {                       \
     return (struct T##_vtable*)this->isa->vtable;                       \
 }                                                                       \
-int _##T##_size = -1;                                            \
-int get##T##Size() {                                             \
+int _##T##_size = -1;                                                   \
+int get##T##Size() {                                                    \
     _##T##_size = _##T##_size > 0                                       \
         ? _##T##_size                                                   \
         : class_getAlignedInstanceSize(objc_getClass(#T));              \
     return _##T##_size;                                                 \
 }                                                                       \
-Class _##T##_isa = nullptr;                                      \
-Class get##T##Isa() {                                            \
+Class _##T##_isa = nullptr;                                             \
+Class get##T##Isa() {                                                   \
     _##T##_isa = _##T##_isa != nullptr                                  \
         ? _##T##_isa                                                    \
         : objc_getClass(#T);                                            \

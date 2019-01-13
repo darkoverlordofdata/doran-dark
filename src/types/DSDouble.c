@@ -28,7 +28,7 @@ SOFTWARE.
 /* 
  * Throws NumberFormatException:
  */
-static DSException(NumberFormat);
+// static DSException(NumberFormat);
 
 /**
  * Constructor
@@ -62,12 +62,10 @@ double DSParseDouble(char const *const s) {
     double result = strtod(s, endptr);
 
     if (errno != 0)
-        return DSNumberFormatException(
-            "Invalid input. Value:\"%s\"", s);
+        Throw DSNumberFormatException(s);
 
     if (s == endptr || *endptr != '\0')
-        return DSNumberFormatException(
-            "Invalid input. Value:\"%s\"", s);
+        Throw DSNumberFormatException(s);
 
     return result;
 }

@@ -28,7 +28,7 @@ SOFTWARE.
 /* 
  * Throws IndexOutOfBoundsException:
  */
-static DSException(IndexOutOfBounds);
+// static DSException(IndexOutOfBounds);
 /**
  * Constructor
  * create a new long
@@ -180,7 +180,7 @@ char overload CharAt(const DSString* const this, const int index)
 {
     printf("string %d,%d %s\n", index, this->length, this->value);
     if (index < 0 || index >= this->length)
-        return DSIndexOutOfBoundsException("at index %d", index);
+        Throw DSIndexOutOfBoundsException(index);
     return this->value[index];
 }
  
@@ -189,8 +189,6 @@ char* overload ToString(const DSString* const this)
 {
     return this->value;
 }
-
-
 
 __attribute__((__format__ (__printf__, 1, 2)))
 DSString* overload Format(const char* format, ...) {

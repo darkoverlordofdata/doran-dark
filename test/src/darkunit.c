@@ -49,8 +49,9 @@ static void sighandler(int signum) {
 		case SIGTERM: error("Program Terminated"); break;
 	}
 	/* generate core dump */
-	signal(signum, SIG_DFL);
+	// signal(signum, SIG_DFL);
 	// kill(getpid(), signum);
+	exit(0);
 }
 /**
  * Set some fatal error traps

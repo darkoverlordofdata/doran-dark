@@ -14,7 +14,6 @@ char keys[12][7] = {
     "keyA", "keyB", "keyC",
 };
 
-
 int (foobar)(int x, int y, int z) {
     DSLog("foobar x:%d", x);
     DSLog("foobar y:%d", y);
@@ -22,13 +21,13 @@ int (foobar)(int x, int y, int z) {
     return 0;
 }
 
+
 int main(int argc, char **argv) {
+  DSException* e;
 
     DSLog("** DaRKSTEP Test** \n");
 
     int xx = foobar(1);
-    // return 0;
-
 
     var l = $(420L);
     var m = $(420L); 
@@ -40,6 +39,12 @@ int main(int argc, char **argv) {
     // var hsh = new(DSHashmap, of(DSBoolean));
     // var hsh = new(DSHashmap);
     var hsh = new(DSHashmap, of(DSNumber));
+    var zhsh = new(DSHashmap, of(DSBoolean));
+
+    Try Put(zhsh, "forodo", l);
+    Catch (e) DSLog(e->msg);
+
+
 
     for (int i=0; i<12; i++) {
         Put(hsh, keys[i], $(i+420));

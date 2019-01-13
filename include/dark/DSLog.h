@@ -30,8 +30,6 @@ SOFTWARE.
 #include <stdio.h>
 #include <stdarg.h>
 
-void DSvfprintf(FILE* stream, char* format, va_list arg);
-
 /**
  * DSLog
  * 

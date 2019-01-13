@@ -28,7 +28,7 @@ SOFTWARE.
 /* 
  * Throws NumberFormatException:
  */
-static DSException(NumberFormat);
+// static DSException(NumberFormat);
 /**
  * Constructor
  * create a new Short
@@ -60,8 +60,7 @@ short DSParseShort(char const *const s, int const radix)
 {
     long i = DSParseLong(s, radix);
     if (i < SHORT_MIN_VALUE || i > SHORT_MAX_VALUE)
-        return DSNumberFormatException(
-            "Value out of range. Value:\"%s\" Radix: %d", s, radix);
+        Throw DSNumberFormatException(s, radix);
     return (short)i;
 }
 

@@ -34,7 +34,6 @@ SOFTWARE.
  * consider upgrade to https://github.com/DavidLeeds/hashmap
  * 
  */
-static DSException(InvalidType);
 
 #define INITIAL_SIZE (256)
 #define MAX_CHAIN_LENGTH (8)
@@ -262,14 +261,15 @@ int overload Rehash(DSHashmap* const this)
 	return MAP_OK;
 }
 
+
 /*
  * Add a pointer to the hashmap with some key
  */
 int overload Put(DSHashmap* const this, char* key, DSObject* value)
 {
     if ((this->typeOf) && !InstanceOf(this->typeOf, value)) 
-        throw(DSInvalidTypeException("Expected %s", this->typeOf->name));
-        
+        Throw DSInvalidTypeException(this->typeOf->name);
+
 	/* Find a place to put our value */
 	int index = Hash(this, key);
 	while (index == MAP_FULL)

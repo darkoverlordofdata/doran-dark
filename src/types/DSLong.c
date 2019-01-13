@@ -28,7 +28,7 @@ SOFTWARE.
 /* 
  * Throws LongFormatException:
  */
-static DSException(LongFormat);
+// static DSException(NumberFormat);
 /**
  * Constructor
  * create a new Long
@@ -64,12 +64,10 @@ long DSParseLong(const char* const s, const int radix)
     long result = strtol(s, endptr, radix);
 
     if (errno != 0)
-        return DSLongFormatException(
-            "Invalid input. Value:\"%s\" Radix: %d", s, radix);
+        Throw DSNumberFormatException(s, radix);
 
     if (s == endptr || *endptr != '\0')
-        return DSLongFormatException(
-            "Invalid input. Value:\"%s\" Radix: %d", s, radix);
+        Throw DSNumberFormatException(s, radix);
 
     return result;
 }

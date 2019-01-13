@@ -28,7 +28,7 @@ SOFTWARE.
  * Abstract Comparable
  */
 
-static DSException(AbstractMethod);
+// static DSException(AbstractMethod);
 
 $implementation(DSComparable);
 $method(ToString,           (DSComparableToString)ToString, "$@:v");
@@ -55,7 +55,7 @@ int overload CompareTo(const DSComparable* const this, const DSComparable* const
 }
 
 int DSComparable_CompareTo(const DSComparable* const this, const DSComparable* const other) {
-    return DSAbstractMethodException("Comparable_CompareTo");
+    Throw DSAbstractMethodException("Comparable_CompareTo");
 }
 
 char* overload ToString(const DSComparable* const this) {

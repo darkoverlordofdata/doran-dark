@@ -33,9 +33,10 @@ SOFTWARE.
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <assert.h>
 #include <stdarg.h>
 #include <stdbool.h>
+#include "cexcept.h"
+
 
 void* DSMalloc(size_t);
 void* DSRealloc(void*, size_t);
@@ -121,6 +122,8 @@ char* STR_JOIN(int count, ...);
 
 #define $Join(...) $DSString.Join(PP_NARG(__VA_ARGS__), __VA_ARGS__)
 
+
+
 //http://huoc.org/conditionals-constants-c11-generic.html
 /**
  *  MACRO DEFAULT
@@ -162,7 +165,7 @@ struct _default_arg_;
  */
 #define DSException(name) static inline                                 \
 __attribute__((__format__ (__printf__, 1, 2)))                          \
-_Noreturn long DS##name##Exception(const char* msg, ...)                          \
+_Noreturn long DS##name##Exception(const char* msg, ...)                \
 {                                                                       \
     va_list args;                                                       \
     va_start(args, msg);                                                \
@@ -174,6 +177,36 @@ _Noreturn long DS##name##Exception(const char* msg, ...)                        
     exit(99);                                                           \
 }
 
-#define throw(x) x
+typedef enum DSExceptionType { 
+    AbstractMethodException, 
+    InvalidTypeException, 
+    IndexOutOfBoundsException, 
+    OutOfMemoryException,
+    NumberFormatException
+} DSExceptionType;
+
+typedef struct DSException DSException;
+typedef struct DSException {
+    DSExceptionType type;
+    const char *msg;
+};
+/**
+ *  MACRO overload
+ *      method overload 
+ */
+#define overload __attribute__((overloadable))
+
+define_exception_type(DSException*);
+extern struct exception_context the_exception_context[1];
+
+DSException* DSAbstractMethodException(const char*);
+DSException* DSInvalidTypeException(const char*);
+DSException* DSIndexOutOfBoundsException(const int);
+DSException* DSOutOfMemoryException(const char*);
+DSException* overload DSNumberFormatException(const char*);
+DSException* overload DSNumberFormatException(const char*, const int);
+
+void DSvfprintf(FILE*, const char*, va_list);
+int DSvsnprintf(char*, size_t, const char*, va_list);
 
 #endif _CORE_H

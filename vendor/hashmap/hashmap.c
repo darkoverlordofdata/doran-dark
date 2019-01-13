@@ -12,7 +12,15 @@
 #include <ctype.h>
 #include <errno.h>
 
-#include "hashmap.h"
+
+#include "hashmap/hashmap.h"
+
+void* DSMalloc(size_t);
+void* DSRealloc(void*, size_t);
+void* DSCalloc(size_t, size_t);
+void DSFree(void*);
+void DSCollect();
+
 
 #ifndef HASHMAP_NOASSERT
 #include <assert.h>
@@ -194,7 +202,7 @@ static int hashmap_rehash(struct hashmap *map, size_t new_size)
     HASHMAP_ASSERT(new_size >= HASHMAP_SIZE_MIN);
     HASHMAP_ASSERT((new_size & (new_size - 1)) == 0);
 
-    new_table = (struct hashmap_entry *)calloc(new_size,
+    new_table = (struct hashmap_entry *)DSCalloc(new_size,
         sizeof(struct hashmap_entry));
     if (!new_table) {
         return -ENOMEM;
@@ -280,7 +288,7 @@ int hashmap_init(struct hashmap *map, size_t (*hash_func)(const void *),
     map->table_size_init = initial_size;
     map->table_size = initial_size;
     map->num_entries = 0;
-    map->table = (struct hashmap_entry *)calloc(initial_size,
+    map->table = (struct hashmap_entry *)DSCalloc(initial_size,
         sizeof(struct hashmap_entry));
     if (!map->table) {
         return -ENOMEM;

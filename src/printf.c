@@ -4,67 +4,39 @@
 
 char* convert(unsigned int, int);       //Convert integer number into octal, hex, etc.
 
-void DSvfprintf(FILE* stream, char* format, va_list _args) 
-{ 
-    char *traverse; 
-    unsigned int i; 
-    char *s; 
-    DSObject* object;
-
-    //Module 1: Initializing printf's arguments 
-    va_list arg; 
-    va_copy(arg, _args);
+char* DSsprintf(const char* format, ...) 
+{
+    va_list args1;
+    va_list args2;
     
-    for(traverse = format; *traverse != '\0'; traverse++) 
-    { 
+    va_start(args1, format);
+    va_copy(args2, args1);  
 
-        while( *traverse != '%' ) 
-        { 
-            if (*traverse == '\0') return;
-            fputc(*traverse, stream);
-            traverse++; 
-        } 
-        
-        traverse++; 
-        
-        //Module 2: Fetching and executing arguments
-        switch(*traverse) 
-        { 
-            case 'c' : i = va_arg(arg,int);     //Fetch char argument
-                        fputc(i, stream);
-                        break; 
-                        
-            case 'd' : i = va_arg(arg,int);         //Fetch Decimal/Integer argument
-                        if(i<0) 
-                        { 
-                            i = -i;
-                            fputc('-', stream); 
-                        } 
-                        fputs(convert(i,10), stream);
-                        break; 
-                        
-            case 'o': i = va_arg(arg,unsigned int); //Fetch Octal representation
-                        fputs(convert(i,8), stream);
-                        break; 
-                        
-            case 's': s = va_arg(arg,char *);       //Fetch string
-                        fputs(s, stream); 
-                        break; 
-                        
-            case 'x': i = va_arg(arg,unsigned int); //Fetch Hexadecimal representation
-                        fputs(convert(i,16), stream);
-                        break; 
+    int len = DSvsnprintf(nullptr, 0, format, args1);
+    va_end(args1);
+    if (len == 0) return "";
+    char* str = DSCalloc((len+1), sizeof(char));
+    len = DSvsnprintf(str, len+1, format, args2);
+    va_end(args2);
+    return str;
+}
 
-            case '$': i = va_arg(arg,DSObject *);   // Fetch DaRKSTEP object
-                        object = (DSObject*)i;
-                        fputs(ToString(object), stream);
-                        break;
-        }   
-    } 
+void DSvfprintf(FILE* stream, const char* format, va_list _args) 
+{
+    va_list args1;
+    va_list args2;
     
-    //Module 3: Closing argument list to necessary clean-up
-    va_end(arg); 
-} 
+    va_copy(args1, _args);
+    va_copy(args2, _args);  
+
+    int len = DSvsnprintf(nullptr, 0, format, args1);
+    va_end(args1);
+    char* str = DSCalloc((len+1), sizeof(char));
+    len = DSvsnprintf(str, len+1, format, args2);
+    va_end(args2);
+    fputs(str, stream);
+    return;
+}
 
 char *convert(unsigned int num, int base) 
 { 
@@ -83,3 +55,88 @@ char *convert(unsigned int num, int base)
     
     return(ptr); 
 }
+
+
+int DSvsnprintf(char* str, size_t n, const char* format, va_list _args)  
+{
+    char *traverse; 
+    unsigned int i; 
+    char *s;
+    char *cvt;
+    char *dst = str;
+    DSObject* object;
+    bool canWrite = (str != nullptr);
+    int length = 0;
+    int l;
+
+    //Module 1: Initializing printf's arguments 
+    va_list arg; 
+    va_copy(arg, _args);
+    
+    for(traverse = format; *traverse != '\0'; traverse++) 
+    { 
+
+        while( *traverse != '%' ) 
+        { 
+            if (*traverse == '\0') return length;
+            if (canWrite) *dst++ = *traverse;
+            traverse++; 
+            length++;
+        } 
+        
+        traverse++; 
+        
+        //Module 2: Fetching and executing arguments
+        switch(*traverse) 
+        { 
+            case 'c' : i = va_arg(arg,int);     //Fetch char argument
+                        if (canWrite) *dst++ = i;
+                        length++;
+                        break; 
+                        
+            case 'd' : i = va_arg(arg,int);         //Fetch Decimal/Integer argument
+                        if(i<0) 
+                        { 
+                            i = -i;
+                            if (canWrite) *dst++ = '-';
+                            length++;
+                        } 
+                        cvt = convert(i,10);
+                        l = strlen(cvt);
+                        if (canWrite) dst = strncpy(dst, cvt, l) + l;
+                        length += l;
+                        break; 
+                        
+            case 'o': i = va_arg(arg,unsigned int); //Fetch Octal representation
+                        cvt = convert(i,8);
+                        l = strlen(cvt);
+                        if (canWrite) dst = strncpy(dst, cvt, l) + l;
+                        length += l;
+                        break; 
+                        
+            case 's': s = va_arg(arg,char *);       //Fetch string
+                        l = strlen(s);
+                        if (canWrite) dst = strncpy(dst, s, l) + l;
+                        length += l;
+                        break; 
+                        
+            case 'x': i = va_arg(arg,unsigned int); //Fetch Hexadecimal representation
+                        cvt = convert(i,16);
+                        l = strlen(cvt);
+                        if (canWrite) dst = strncpy(dst, cvt, l) + l;
+                        length += l;
+                        break; 
+
+            case '$': i = va_arg(arg,DSObject *);   // Fetch DaRKSTEP object
+                        object = (DSObject*)i;
+                        l = strlen(ToString(object));
+                        if (canWrite) dst = strncpy(dst, ToString(object), l) + l;
+                        length += l;
+                        break;
+        }   
+    } 
+    
+    //Module 3: Closing argument list to necessary clean-up
+    va_end(arg); 
+}
+

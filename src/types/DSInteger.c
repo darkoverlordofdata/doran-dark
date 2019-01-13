@@ -28,7 +28,7 @@ SOFTWARE.
 /* 
  * Throws: NumberFormatException
  */
-static DSException(NumberFormat);
+// static DSException(NumberFormat);
 /* 
  * Constructor
  * create a new Integer
@@ -60,8 +60,7 @@ DSInteger* DSInteger_alloc() {
 int DSParseInt(const char* const s, const int radix) {
     long i = DSParseLong(s, radix);
     if (i < INTEGER_MIN_VALUE || i > INTEGER_MAX_VALUE)
-        return DSNumberFormatException(
-            "Value out of range. Value:\"%s\" Radix: %d", s, radix);
+        Throw DSNumberFormatException(s, radix);
     return (int)i;
 }
 

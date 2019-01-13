@@ -28,6 +28,61 @@ SOFTWARE.
 #include <stdlib.h>
 #include <gc.h>
 
+/** 
+
+Excaptions:
+
+NumberFormat        DSDouble
+                    DSFloat
+                    DSInteger
+                    DSLong
+                    DSShort
+
+
+*/
+
+
+struct exception_context the_exception_context[1];
+
+DSException* DSAbstractMethodException(const char* name) {
+    DSException* e = DSCalloc(1, sizeof(DSException));
+    e->type = AbstractMethodException;
+    e->msg = DSsprintf("AbstractMethodException %s", name);
+    return e;
+}
+DSException* DSInvalidTypeException(const char* expected) {
+    DSException* e = DSCalloc(1, sizeof(DSException));
+    e->type = InvalidTypeException;
+    e->msg = DSsprintf("InvalidTypeException: expected %s", expected);
+    return e;
+}
+DSException* DSIndexOutOfBoundsException(const int index) {
+    DSException* e = DSCalloc(1, sizeof(DSException));
+    e->type = IndexOutOfBoundsException;
+    e->msg = DSsprintf("IndexOutOfBoundsException at index %d", index);
+    return e;
+}
+DSException* DSOutOfMemoryException(const char* name) {
+    DSException* e = DSCalloc(1, sizeof(DSException));
+    e->type = OutOfMemoryException;
+    e->msg = DSsprintf("OutOfMemoryException %s", name);
+    return e;
+}
+
+DSException* overload DSNumberFormatException(const char* raw) {
+    DSException* e = DSCalloc(1, sizeof(DSException));
+    e->type = NumberFormatException;
+    e->msg = DSsprintf("NumberFormatException Invalid input. Value:\"%s\"", raw);
+    return e;
+}
+
+DSException* overload DSNumberFormatException(const char* raw, const int radix) {
+    DSException* e = DSCalloc(1, sizeof(DSException));
+    e->type = NumberFormatException;
+    e->msg = DSsprintf("NumberFormatException Invalid input. Value:\"%s\", Radix: %d", raw, radix);
+    return e;
+}
+
 /**
  * free the memory for this ptr
  */

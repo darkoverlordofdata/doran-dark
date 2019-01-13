@@ -44,7 +44,7 @@ set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lBlocksRuntime" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fblocks" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -LC:/msys64/mingw64/bin" )
 
-set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w -std=c99 -O3" )
+set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w -std=c99 -O3 ")
 
 
 # definitions 

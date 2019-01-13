@@ -28,7 +28,7 @@ SOFTWARE.
 /* 
  * Throws NumberFormatException:
  */
-static DSException(NumberFormat);
+// static DSException(NumberFormat);
 /**
  * Constructor
  * create a new Float
@@ -63,8 +63,7 @@ float DSParseFloat(const char* s)
     
     double d = DSParseDouble(s);
     if (d < FLOAT_MIN_VALUE || d > FLOAT_MAX_VALUE)
-        return DSNumberFormatException(
-            "Value out of range. Value:\"%s\"", s);
+        Throw DSNumberFormatException(s);
     return (float)d;
 }
 

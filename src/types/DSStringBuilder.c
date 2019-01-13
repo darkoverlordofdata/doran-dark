@@ -57,7 +57,7 @@ SOFTWARE.
 /* 
  * Throws OutOfMemoryException:
  */
-static DSException(OutOfMemory);
+// static DSException(OutOfMemory);
 /* 
  * Constructor
  * create a new StringBuilder
@@ -107,7 +107,7 @@ int overload Append(DSStringBuilder* this, const char *str)
 	length = strlen(str);
 	frag = (StringFragment*) DSCalloc(1, sizeof(struct StringFragment));
 	if (nullptr == frag)
-		return DSOutOfMemoryException("StringBuilder::Append");
+		Throw DSOutOfMemoryException("StringBuilder::Append");
 
 	frag->next = nullptr;
 	frag->length = length;
@@ -139,7 +139,7 @@ int overload Appendf(DSStringBuilder* this, const char *format, ...)
 	va_end(args);
 
 	if (0 > len)
-		return DSOutOfMemoryException("StringBuilder::Append");
+		Throw DSOutOfMemoryException("StringBuilder::Append");
 
 	return Append(this, buf);
 }
