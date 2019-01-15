@@ -73,7 +73,7 @@ typedef char*   (*DSArrayToString)  (const DSArray* const);
 typedef void    (*DSArrayDispose)   (DSArray* const);
 typedef int     (*DSArrayLength)    (const DSArray* const);
 typedef bool    (*DSArrayIsEmpty)   (DSArray* const);
-typedef bool    (*DSArrayContains)  (DSArray* const, const DSObject*);
+typedef bool    (*DSArrayContains)  (DSArray* const,  DSObject*);
 typedef void    (*DSArrayClear)     (DSArray* const);
 typedef void    (*DSArrayAdd)       (DSArray* const, const DSObject*);
 typedef void    (*DSArrayRemove)    (DSArray* const, int);

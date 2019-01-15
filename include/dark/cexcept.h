@@ -244,5 +244,18 @@ struct exception_context { \
   for (;; longjmp(*the_exception_context->penv, 1)) \
     the_exception_context->v.etmp =
 
+/*
+ *  Finally is a bit different. This clause is executed whether or not 
+ * an exception was caught. Use for riia.
+ */
+#define finally \
+      while (the_exception_context->caught = 0, \
+             the_exception_context->caught); \
+    } \
+    else { \
+      the_exception_context->caught = 1; \
+    } \
+    the_exception_context->penv = exception__prev; \
+  } 
 
 #endif /* CEXCEPT_H */

@@ -10,9 +10,6 @@ void overload ForEach(DSList* const this, void (^iter)(DSString*))
     }
 }
 
-// #define instanceof(class, obj) InstanceOf(get##class##Isa(), obj)
-// #define T(class) get##class##Isa()
-
 int main(int argc, char **argv) {
 
     DSLog("Hello World");

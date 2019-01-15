@@ -40,6 +40,9 @@ list ( APPEND CSOURCE .lib/dark/src/types/DSLong.c )
 list ( APPEND CSOURCE .lib/dark/src/types/DSShort.c )
 list ( APPEND CSOURCE .lib/dark/src/types/DSString.c )
 list ( APPEND CSOURCE .lib/dark/src/types/DSStringBuilder.c )
+list ( APPEND CSOURCE .lib/dark/src/Functional/Either.c )
+list ( APPEND CSOURCE .lib/dark/src/Functional/Option.c )
+list ( APPEND CSOURCE .lib/dark/src/Functional/Maybe.c )
 
 # Vala Sources:
 

@@ -23,53 +23,48 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include "darkunit.h"
+#include <dark/Functional/Maybe.h>
 
-test_stats tests;
+ivar (Maybe) {
+    DSObject* value;
+};
 
-/**
- * print a section title
- */
-void Describe(char* desc, void (^lambda)())
-{
-	printf("%s\n======================================\n\n", desc);
-	lambda();
+const DSObject* _(const Maybe* const this) {
+    return this->value;
 }
 
-/**
- * Handle fatal errors
- */
-static void sighandler(int signum) {
-	switch(signum) {
-		case SIGABRT: 	error("Program Aborted");		break;
-		case SIGFPE: 	error("Division by Zero");		break;
-		case SIGILL: 	error("Illegal Instruction"); 	break;
-		case SIGINT: 	error("Program Interrupted"); 	break;
-		case SIGSEGV: 	error("Segmentation fault"); 	break;
-		case SIGTERM:	error("Program Terminated"); 	break;
-	}
-	signal(SIGABRT, sighandler);
-	signal(SIGFPE, sighandler);
-	signal(SIGILL, sighandler);
-	signal(SIGINT, sighandler);
-	signal(SIGSEGV, sighandler);
-	signal(SIGTERM, sighandler);
-	/* generate core dump */
-	// signal(signum, SIG_DFL);
-	// kill(getpid(), signum);
-	exit(0);
+Maybe* Nothing() {
+    const auto this = alloc(Maybe);
+    this->value = nullptr;
 }
-/**
- * Set some fatal error traps
- */
-void __attribute__((constructor)) DarkUnit()
-{
-	signal(SIGABRT, sighandler);
-	signal(SIGFPE, sighandler);
-	signal(SIGILL, sighandler);
-	signal(SIGINT, sighandler);
-	signal(SIGSEGV, sighandler);
-	signal(SIGTERM, sighandler);
+
+Maybe* Just(DSObject* x) {
+    const auto this = alloc(Maybe);
+    this->value = x;
+    return this;
+}
+
+Maybe* ret(DSObject* this) {
+    return Just(this);
+}
+
+Maybe* overload Just(int x) {
+    const auto this = alloc(Maybe);
+    this->value = x;
+    return this;
+}
+
+Maybe* overload ret(int value) {
 
 }
 
+Maybe* bind(Maybe* this,  Maybe* (*func)(Maybe*)) {
+    if (this->value == nullptr) 
+        return Nothing();
+    else
+        return func(_(this));
+}
+
+bool IsNothing(const Maybe* this) {
+    return _(this) == nullptr;
+}

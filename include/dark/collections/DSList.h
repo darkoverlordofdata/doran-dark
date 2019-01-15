@@ -59,7 +59,7 @@ DSList* NewDSList();
 char*   overload ToString(const DSList* const);
 int     overload Length(DSList* const);
 bool    overload IsEmpty(DSList* const);
-bool    overload Contains(DSList* const);
+bool    overload Contains(DSList* const, DSObject*);
 void    overload Clear(DSList* const);
 void    overload Add(DSList* const, DSObject*);
 DSObject* overload Remove(DSList* const);

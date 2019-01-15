@@ -14,13 +14,14 @@
   "source": "src",
   "files": [
     "src/BallObject.c",
-    "src/Game.c",
+    "src/Boot.c",
     "src/GameLevel.c",
+    "src/Game.c",
     "src/GameObject.c",
     "src/main.c",
     "src/ParticleGenerator.c",
-    "src/ResourceManager.c",
     "src/Shader.c",
+    "src/ResourceManager.c",
     "src/SpriteRenderer.c",
     "src/stb.c",
     "src/Texture.c"
@@ -37,15 +38,17 @@
     "opengl32",
     "m",
     "BlocksRuntime",
-    "-fblocks",
-    "-LC:/msys64/mingw64/bin"
+    "gc"
   ],
   "options": {
     "VERSION": "0.0.1",
     "RELEASE_NAME": "example"
   },
   "definitions": [],
-  "symbols": [],
+  "symbols": [
+    "-fblocks",
+    "-LC:/msys64/mingw64/bin"
+  ],
   "copy": "..",
   "vapidir": "/src/vapis",
   "console": false

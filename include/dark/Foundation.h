@@ -54,6 +54,10 @@ static const int BuildVersion = 1;
 #include "DSLog.h"
 #include "DSClass.h"
 #include "DSObject.h"
+#include "Functional/Either.h"
+#include "Functional/Option.h"
+#include "Functional/Maybe.h"
+
 #include "DSComparable.h"
 #include "collections/DSArray.h"
 #include "collections/DSHashmap.h"

@@ -23,53 +23,61 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include "darkunit.h"
-
-test_stats tests;
+#include <dark/Functional/Option.h>
+#include <signal.h>
+ivar (Option) {
+	bool none;
+	DSObject* value;
+};
 
 /**
- * print a section title
+ * Option `monad`
+ * 
+ * A container/collection that can hold either 0 or 1 object
+ * 
  */
-void Describe(char* desc, void (^lambda)())
-{
-	printf("%s\n======================================\n\n", desc);
-	lambda();
+Option* NewOption(DSObject* value) {
+    if (value == nullptr) {
+        printf("Invalid - Option cannot be null\n");
+        raise(SIGSEGV);
+    }
+    const auto this = alloc(Option);
+    this->value = value;
+    return this;
 }
 
-/**
- * Handle fatal errors
- */
-static void sighandler(int signum) {
-	switch(signum) {
-		case SIGABRT: 	error("Program Aborted");		break;
-		case SIGFPE: 	error("Division by Zero");		break;
-		case SIGILL: 	error("Illegal Instruction"); 	break;
-		case SIGINT: 	error("Program Interrupted"); 	break;
-		case SIGSEGV: 	error("Segmentation fault"); 	break;
-		case SIGTERM:	error("Program Terminated"); 	break;
-	}
-	signal(SIGABRT, sighandler);
-	signal(SIGFPE, sighandler);
-	signal(SIGILL, sighandler);
-	signal(SIGINT, sighandler);
-	signal(SIGSEGV, sighandler);
-	signal(SIGTERM, sighandler);
-	/* generate core dump */
-	// signal(signum, SIG_DFL);
-	// kill(getpid(), signum);
-	exit(0);
+DSObject* overload Some(Option* this) {
+    return this->value;
 }
-/**
- * Set some fatal error traps
- */
-void __attribute__((constructor)) DarkUnit()
-{
-	signal(SIGABRT, sighandler);
-	signal(SIGFPE, sighandler);
-	signal(SIGILL, sighandler);
-	signal(SIGINT, sighandler);
-	signal(SIGSEGV, sighandler);
-	signal(SIGTERM, sighandler);
 
+int overload Length(Option* this) {
+    return this->value != nullptr ? 1 : 0;
+}
+
+void overload ForEach(Option* const this, void (^iter)(DSObject*)) {
+    iter(this->value);
+}
+
+bool overload IsEmpty(Option* this) {
+    return this->value == nullptr ? true : false;
+}
+ 
+DSObject* overload Bind(Option* this, Option* (^func)(Option*)) {
+    return this->value != nullptr ? func(this->value) : None; 
+}
+
+DSObject* overload Bind(Option* this, Option* (*func)(Option*)) {
+    return this->value != nullptr ? func(this->value) : None; 
+}
+
+DSObject* Return(Option* this) {
+    return this->value != nullptr ? NewOption(this->value) : None;
+}
+
+Option* None;
+
+static void __attribute__((constructor())) OptionBoot() {
+    None = alloc(Option);
+    None->value = nullptr;
 }
 

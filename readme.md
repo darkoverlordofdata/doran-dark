@@ -24,9 +24,16 @@ a port of the breakout game from learnopengl.com
 ## Why?
 C is simple. It compiles fast. I didn't like Borland C++ 2.0 when it came out - too 'gimicky'. It's gotten better, but I still think it has a noisy syntax. 
 
-Some will say - just use C++. But do we tell Boost users that they should just code in C#?
+This library is adequate for non-critical use. Probably 1/2 the internet runs or did run on hacks that emulate classes in javascript.
 
 > "C makes it easy to shoot yourself in the foot; C++ makes it harder, but when you do it blows your whole leg off" -- Bjarne Stroustrup
+
+## pacman dependancies
+    mingw64/mingw-w64-x86_64-libblocksruntime 0.4.1-1 [installed]
+        compiler-rt Blocks runtime library for Clang (mingw-w64)
+
+    mingw64/mingw-w64-x86_64-gc 7.6.8-1 [installed]
+        A garbage collector for C and C++ (mingw-w64)
 
 ## example
 ```c

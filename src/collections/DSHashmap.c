@@ -23,7 +23,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include <dark/collections/DSHashmap.h>
+#include <dark/Foundation.h>
 #include "private/DSHashmap.h"
 /* 
  * Generic Hashmap implementation
@@ -252,9 +252,10 @@ int overload Rehash(DSHashmap* const this)
         if (curr[i].inUse == 0)
             continue;
             
-		int status = Put(this, curr[i].key, curr[i].data);
-		if (status != MAP_OK)
-			return status;
+		Either* status = Put(this, curr[i].key, curr[i].data);
+        if (!IsRight(status)) return GetLeft(status);
+		// if (status != MAP_OK)
+		// 	return status;
 	}
 	// delete(curr);
 	return MAP_OK;
@@ -264,10 +265,12 @@ int overload Rehash(DSHashmap* const this)
 /*
  * Add a pointer to the hashmap with some key
  */
-int overload Put(DSHashmap* const this, char* key, DSObject* value)
+Either* overload Put(DSHashmap* const this, char* key, DSObject* value)
 {
     if ((this->typeOf) && !InstanceOf(this->typeOf, value)) 
-        throw DSInvalidTypeException(this->typeOf->name);
+        return Left($("InvalidType"));
+        // throw DSInvalidTypeException(this->typeOf->name);
+        // throw DSException(InvalidType, this->typeOf->name);
 
 	/* Find a place to put our value */
 	int index = Hash(this, key);
@@ -286,7 +289,9 @@ int overload Put(DSHashmap* const this, char* key, DSObject* value)
 	this->data[index].inUse = 1;
 	this->size++; 
 
-	return MAP_OK;
+    return Right($(MAP_OK));
+
+	// return MAP_OK;
 }
 
 

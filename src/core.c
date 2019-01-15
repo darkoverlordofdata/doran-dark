@@ -97,10 +97,10 @@ DSException* DSAbstractMethodException(const char* name) {
     e->msg = DSsprintf("AbstractMethodException %s", name);
     return e;
 }
-DSException* DSInvalidTypeException(const char* expected) {
+DSException* (DSInvalidTypeException)(const char* file, const char* func, const int line, const char* expected) {
     DSException* e = DSCalloc(1, sizeof(DSException));
     e->type = InvalidTypeException;
-    e->msg = DSsprintf("InvalidTypeException: expected %s", expected);
+    e->msg = DSsprintf("InvalidTypeException: expected %s in %s at %s:%d", expected, file, func, line);
     return e;
 }
 DSException* DSIndexOutOfBoundsException(const int index) {

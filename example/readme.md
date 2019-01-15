@@ -4,12 +4,12 @@
 
 after installing doran-dark, reopen the doran-dark/test folder in vscode, or 
 
+    bower link
     cd test
 
 then
 
-    doran update
-    rm ./lib/dark
+    mkdir ./.lib
     doran install --link dark
     ./configure
 

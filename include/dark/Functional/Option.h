@@ -23,53 +23,16 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include "darkunit.h"
+#pragma once
+#include "../DSObject.h"
 
-test_stats tests;
+typedef struct Option Option;
+typedef struct DSObject DSObject;
 
-/**
- * print a section title
- */
-void Describe(char* desc, void (^lambda)())
-{
-	printf("%s\n======================================\n\n", desc);
-	lambda();
-}
-
-/**
- * Handle fatal errors
- */
-static void sighandler(int signum) {
-	switch(signum) {
-		case SIGABRT: 	error("Program Aborted");		break;
-		case SIGFPE: 	error("Division by Zero");		break;
-		case SIGILL: 	error("Illegal Instruction"); 	break;
-		case SIGINT: 	error("Program Interrupted"); 	break;
-		case SIGSEGV: 	error("Segmentation fault"); 	break;
-		case SIGTERM:	error("Program Terminated"); 	break;
-	}
-	signal(SIGABRT, sighandler);
-	signal(SIGFPE, sighandler);
-	signal(SIGILL, sighandler);
-	signal(SIGINT, sighandler);
-	signal(SIGSEGV, sighandler);
-	signal(SIGTERM, sighandler);
-	/* generate core dump */
-	// signal(signum, SIG_DFL);
-	// kill(getpid(), signum);
-	exit(0);
-}
-/**
- * Set some fatal error traps
- */
-void __attribute__((constructor)) DarkUnit()
-{
-	signal(SIGABRT, sighandler);
-	signal(SIGFPE, sighandler);
-	signal(SIGILL, sighandler);
-	signal(SIGINT, sighandler);
-	signal(SIGSEGV, sighandler);
-	signal(SIGTERM, sighandler);
-
-}
+Option* 	NewOption(DSObject* value);
+DSObject* 	overload Some(Option* this);
+int         overload Length(Option* this);
+void        overload ForEach(Option* const this, void (^iter)(DSObject*));
+bool        overload IsEmpty(Option* this);
+extern      Option*	None;
 

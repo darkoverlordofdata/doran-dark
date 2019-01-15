@@ -4,6 +4,12 @@
 
 char* convert(unsigned int, int);       //Convert integer number into octal, hex, etc.
 
+// C program for implementation of ftoa() 
+#include<stdio.h> 
+#include<math.h> 
+
+
+__attribute__((__format__ (__printf__, 1, 2)))                          \
 char* DSsprintf(const char* format, ...) 
 {
     va_list args1;
@@ -60,7 +66,9 @@ char *convert(unsigned int num, int base)
 int DSvsnprintf(char* str, size_t n, const char* format, va_list _args)  
 {
     char *traverse; 
+    char result[40];
     unsigned int i; 
+    double f;
     char *s;
     char *cvt;
     char *dst = str;
@@ -94,6 +102,14 @@ int DSvsnprintf(char* str, size_t n, const char* format, va_list _args)
                         length++;
                         break; 
                         
+            case 'f' : f = va_arg(arg,double);
+                        // printf("double value = %f\n", f);
+                        sprintf(result, "%f", f);
+                        l = strlen(result);
+                        if (canWrite) dst = strncpy(dst, result, l) + 1;
+                        length += l;
+                        break;
+
             case 'd' : i = va_arg(arg,int);         //Fetch Decimal/Integer argument
                         if(i<0) 
                         { 

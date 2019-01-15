@@ -23,13 +23,12 @@ int (foobar)(int x, int y, int z) {
     return 0;
 }
 
+void Test(DSHashmap* zhsh);
+void Test2(DSHashmap* zhsh);
+
 int main(int argc, char **argv) {
 
-    DSException* e;
-
     DSLog("** DaRKSTEP Test** \n");
-
-    int xx = foobar(1);
 
     auto l = $(420L);
     auto m = $(420L); 
@@ -39,24 +38,24 @@ int main(int argc, char **argv) {
     auto ary = new(DSArray, 0);
     auto lst = new(DSList);
     auto hsh = new(DSHashmap, of(DSNumber));
-    {
-        DSHashmap* dispose(DSHashmap_dtor) zhsh = new(DSHashmap, of(DSBoolean));
 
-        try {
-            // Adding a long to a collection of DSBoolean -
-            // should throw an exception
-            Put(zhsh, "test", l);
+    {   // riia:
+        DSHashmap* dtor(DSHashmap_dtor) zhsh = new(DSHashmap, of(DSBoolean));
+
+        auto res = Put(zhsh, "test", $(430L));
+        if (IsRight(res)) {
+            DSLog("Put Succeeded");
+        } else {
+            DSLog("Error: %$", GetLeft(res));
         }
-        catch (e)  {
-            DSLog(e->msg);
-        }
-        DSLog("end of block");
+        Test(zhsh);
     }// dtor is called here as it goes out of scope
-    DSLog("after end of block");
+
 
     for (int i=0; i<12; i++) {
         Put(hsh, keys[i], $(i+420));
     }
+
 
     Add(ary, $(0));
     Add(ary, $(1));
@@ -128,4 +127,19 @@ int main(int argc, char **argv) {
     return tests.failed;
 }
 
+/**
+ * Deprecated error handling:
+ */
+void Test(DSHashmap* zhsh) {
+    DSException* e;
+    try {
+        // Adding a long to a collection of DSBoolean -
+        // should throw an exception
+        auto res = Put(zhsh, "test", $(430L));
+        if (!IsRight(res)) throw DSInvalidTypeException(ToString(GetLeft(res)));
+    }
+    catch (e)  {
+        DSLog(e->msg);
+    }
+}
 

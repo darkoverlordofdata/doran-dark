@@ -13,6 +13,7 @@ No effort has been made to be compatible with c++. Come on - if you are using c+
 ### VTables
 Currently, I'm loading vtables for each class at startup. Selectors are overloadable and so are resolved at compile time. The only run time part is the startup logic.
 
+Possibly...
 It would simplify coding to do it more like apple - lookup the selector at runtime. this means no overloading needed, no method mapping logic in startup. 
 
     IMP(id this, SEL cmd, ...)
@@ -20,6 +21,5 @@ It would simplify coding to do it more like apple - lookup the selector at runti
 I could use the vtable to cache the function pointers after they are found. This also would make late-binding more natural.
 
 ### Exceptions
-macros work ok - that's all c++ had at first. cexcept is simple and liteweight. [cexcept.h 2.0.1 (2008-Jul-19-Sat)](http://www.nicemice.net/cexcept/)
+macros work ok - that's all c++ had at first. cexcept is simple and liteweight. [cexcept.h 2.0.1 (2008-Jul-19-Sat)](http://www.nicemice.net/cexcept/). It's a valid alternative, but I'm leaning towards using an Either object.
 
-only try/catch, no finally. C++ has no finally either, it's assumed you use another riia strategy. In c, I can use the cleanup attribute and scope just like 'using'.

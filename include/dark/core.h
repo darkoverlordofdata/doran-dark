@@ -170,19 +170,23 @@ struct _default_arg_;
  * this just prints the message on the stderr
  * and then returns 0/NULL
  */
-#define DSException(name) static inline                                 \
-__attribute__((__format__ (__printf__, 1, 2)))                          \
-_Noreturn long DS##name##Exception(const char* msg, ...)                \
-{                                                                       \
-    va_list args;                                                       \
-    va_start(args, msg);                                                \
-    fprintf(stderr, #name);                                             \
-    fprintf(stderr, "Exception (%s:%i) ", __FILENAME__, __LINE__); \
-    vfprintf(stderr, msg, args);                                        \
-    fprintf(stderr, "\n");                                              \
-    va_end(args);                                                       \
-    exit(99);                                                           \
-}
+// #define DSException(name) static inline                                 \
+// __attribute__((__format__ (__printf__, 1, 2)))                          \
+// _Noreturn long DS##name##Exception(const char* msg, ...)                \
+// {                                                                       \
+//     va_list args;                                                       \
+//     va_start(args, msg);                                                \
+//     fprintf(stderr, #name);                                             \
+//     fprintf(stderr, "Exception (%s:%i) ", __FILENAME__, __LINE__); \
+//     vfprintf(stderr, msg, args);                                        \
+//     fprintf(stderr, "\n");                                              \
+//     va_end(args);                                                       \
+//     exit(99);                                                           \
+// }
+
+#define DSException(name, ...) DS##name##Exception(__FILENAME__, __func__, __LINE__, ##__VA_ARGS__)
+#define DSInvalidTypeException(name) (DSInvalidTypeException) \
+                                        (__FILENAME__, __func__, __LINE__, name)
 
 typedef enum DSExceptionType { 
     AbstractMethodException, 
@@ -205,14 +209,11 @@ typedef struct DSException {
 #define overload __attribute__((overloadable))
 
 /**
- *  MACRO dispose
+ *  MACRO dtor
  *      set destructor method 
  */
-#define dispose(fn)   __attribute__((cleanup(fn)))
+#define dtor(fn) __attribute__((cleanup(fn)))
 
-
-// static inline void fclosep(FILE **fp) { if (*fp) fclose(*fp); }
-// #define auto_close __attribute__((cleanup(fclosep)))
 /** 
  * Exceptions 
  */
@@ -220,7 +221,7 @@ define_exception_type(DSException*);
 extern struct exception_context the_exception_context[1];
 
 DSException* DSAbstractMethodException(const char*);
-DSException* DSInvalidTypeException(const char*);
+DSException* (DSInvalidTypeException)(const char*, const char*, const int, const char*);
 DSException* DSIndexOutOfBoundsException(const int);
 DSException* DSOutOfMemoryException(const char*);
 DSException* overload DSNumberFormatException(const char*);

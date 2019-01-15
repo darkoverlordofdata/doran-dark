@@ -23,53 +23,68 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include "darkunit.h"
+//https://www.shellblade.net/monad.html
+#include <dark/Functional/Maybe.h>
 
-test_stats tests;
+/** 
+ * I'm not sure that generics are needed. Monad binding is 
+ * useful in Haskel because it't not procedureal. But c is, 
+ * so bind is not so useful, instead it's just awkward.
+ * 
+*/
+#ifdef __MAYBE_GENERICS__
+ivar (Maybe) {
+    union {
+        int Int;
+        long Long;
+        short Short;
+        float Float;
+        double Double;
+        char Char;
+        bool Bool;
+        char* Str;
+        void* Ptr;
+        DSObject* value;
+    };
+};
 
-/**
- * print a section title
- */
-void Describe(char* desc, void (^lambda)())
-{
-	printf("%s\n======================================\n\n", desc);
-	lambda();
+__Maybe__(int, Int);
+__Maybe__(long, Long);
+__Maybe__(short, Short);
+__Maybe__(float, Float);
+__Maybe__(double, Double);
+__Maybe__(char, Char);
+__Maybe__(bool, Bool);
+__Maybe__(char*, Str);
+__Maybe__(void*, Ptr);
+#else
+ivar (Maybe) {
+    DSObject* value;
+};
+#endif
+
+Maybe* Nothing() {
+    const auto this = alloc(Maybe);
+    this->value = nullptr;
 }
 
-/**
- * Handle fatal errors
- */
-static void sighandler(int signum) {
-	switch(signum) {
-		case SIGABRT: 	error("Program Aborted");		break;
-		case SIGFPE: 	error("Division by Zero");		break;
-		case SIGILL: 	error("Illegal Instruction"); 	break;
-		case SIGINT: 	error("Program Interrupted"); 	break;
-		case SIGSEGV: 	error("Segmentation fault"); 	break;
-		case SIGTERM:	error("Program Terminated"); 	break;
-	}
-	signal(SIGABRT, sighandler);
-	signal(SIGFPE, sighandler);
-	signal(SIGILL, sighandler);
-	signal(SIGINT, sighandler);
-	signal(SIGSEGV, sighandler);
-	signal(SIGTERM, sighandler);
-	/* generate core dump */
-	// signal(signum, SIG_DFL);
-	// kill(getpid(), signum);
-	exit(0);
-}
-/**
- * Set some fatal error traps
- */
-void __attribute__((constructor)) DarkUnit()
-{
-	signal(SIGABRT, sighandler);
-	signal(SIGFPE, sighandler);
-	signal(SIGILL, sighandler);
-	signal(SIGINT, sighandler);
-	signal(SIGSEGV, sighandler);
-	signal(SIGTERM, sighandler);
-
+Maybe* Just(DSObject* x) {
+    const auto this = alloc(Maybe);
+    this->value = x;
+    return this;
 }
 
+Maybe* ret(DSObject* this) {
+    return Just(this);
+}
+
+Maybe* bind(Maybe* this,  Maybe* (*func)(Maybe*)) {
+    if (this->value == nullptr) 
+        return Nothing();
+    else
+        return func(this->value);
+}
+
+bool IsNothing(const Maybe* this) {
+    return this->value == nullptr;
+}

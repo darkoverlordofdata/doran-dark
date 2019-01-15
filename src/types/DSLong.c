@@ -61,7 +61,7 @@ long DSParseLong(const char* const s, const int radix)
 {
     errno = 0;
     char* endptr;
-    long result = strtol(s, endptr, radix);
+    long result = strtol(s, &endptr, radix);
 
     if (errno != 0)
         throw DSNumberFormatException(s, radix);

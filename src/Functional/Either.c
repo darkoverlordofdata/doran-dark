@@ -23,53 +23,74 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include "darkunit.h"
-
-test_stats tests;
+#include <dark/Functional/Either.h>
+/**
+ * Either `monad`
+ * 
+ * A container similar to a tuple [A, B]
+ * Except that it can only contain A or B, not both.
+ * By convention the right value represents valid results
+ * while the left value represents an error condition.
+ * 
+ */
+ivar (Either) {
+	DSObject* left;
+	DSObject* right;
+	bool isLeft;
+};
 
 /**
- * print a section title
+ * Is it right or left?
  */
-void Describe(char* desc, void (^lambda)())
-{
-	printf("%s\n======================================\n\n", desc);
-	lambda();
+bool overload IsRight(Either* this) { 
+	return !this->isLeft; 
 }
 
 /**
- * Handle fatal errors
+ * get the right member
  */
-static void sighandler(int signum) {
-	switch(signum) {
-		case SIGABRT: 	error("Program Aborted");		break;
-		case SIGFPE: 	error("Division by Zero");		break;
-		case SIGILL: 	error("Illegal Instruction"); 	break;
-		case SIGINT: 	error("Program Interrupted"); 	break;
-		case SIGSEGV: 	error("Segmentation fault"); 	break;
-		case SIGTERM:	error("Program Terminated"); 	break;
-	}
-	signal(SIGABRT, sighandler);
-	signal(SIGFPE, sighandler);
-	signal(SIGILL, sighandler);
-	signal(SIGINT, sighandler);
-	signal(SIGSEGV, sighandler);
-	signal(SIGTERM, sighandler);
-	/* generate core dump */
-	// signal(signum, SIG_DFL);
-	// kill(getpid(), signum);
-	exit(0);
+DSObject* overload GetRight(Either* this) { 
+	return this->right; 
 }
-/**
- * Set some fatal error traps
- */
-void __attribute__((constructor)) DarkUnit()
-{
-	signal(SIGABRT, sighandler);
-	signal(SIGFPE, sighandler);
-	signal(SIGILL, sighandler);
-	signal(SIGINT, sighandler);
-	signal(SIGSEGV, sighandler);
-	signal(SIGTERM, sighandler);
 
+/**
+ * get the left member
+ */
+DSObject* overload GetLeft(Either* this) { 
+	return this->left; 
 }
+
+/**
+ * Private constructor
+ * Only Left & Right are allowed.
+ */
+static Either* NewEither(DSObject* a, DSObject* b) {
+    const auto this = alloc(Either);
+	this->left = a;
+	this->right = b;
+	this->isLeft = a != nullptr;
+	return this;
+}
+
+/**
+ * Left Public constructor
+ */
+Either* overload Left(DSObject* value) { 
+	return NewEither(value, nullptr); 
+}
+
+/**
+ * Right Public constructor
+ */
+Either* overload Right(DSObject* value) { 
+	return NewEither(nullptr, value); 
+}
+
+Either* overload Map(Either* this, Either* (*func)(Either*)) {
+	if (this->isLeft)
+		return this;
+	else
+		return func(this);
+}
+
 
