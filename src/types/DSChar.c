@@ -33,7 +33,7 @@ SOFTWARE.
  * 
  */
 DSChar* NewDSChar(const char value) { 
-    return DSChar_init(DSChar_alloc(), value); 
+    return DSChar_init(alloc(DSChar), value); 
 }
 
 DSChar* DSChar_init(DSChar* const this, const char value)
@@ -42,10 +42,6 @@ DSChar* DSChar_init(DSChar* const this, const char value)
     this->isa = getDSCharIsa();
     this->value = value;
     return this;
-}
-
-DSChar* DSChar_alloc() {
-    return DSMalloc(getDSCharSize());
 }
 
 /**

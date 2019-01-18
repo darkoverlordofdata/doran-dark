@@ -29,48 +29,34 @@ SOFTWARE.
 #include <stdio.h>
 #include <string.h>
 #include <signal.h>
+#include <dark/Foundation.h>
 #include <Block.h>
-/**
- * Inspired by [MinUnit](http://www.jera.com/techinfo/jtns/jtn002.html)
- * 
- * Compiler/linker flags needed to enable c99 lambda's:
- * 
- *  -LC:/msys64/mingw64/bin
- *  -lBlocksRuntime -fblocks
- * 
- */
-typedef struct test_stats {
-    int total;
-    int failed;
-    int passed;
-} test_stats;
-test_stats tests;
 
 void Describe(char* desc, void (^lambda)());
+void It(char* desc, void (^lambda)());
+int Summary();
 
-#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
+int TestCountInc();
+int TestFailInc();
+int TestPassInc();
 
-#define error(MSG, ...) { \
-    printf("[ERROR] (%s:%s:%i) ", __FILENAME__, __func__, __LINE__); \
-    printf(MSG, ##__VA_ARGS__); }
-
-#define It(desc, test) do { \
-    printf("%s - ", desc); \
-    int r=test(); \
-    tests.total++; \
-    if (r) tests.failed++; \
-    else tests.passed++; \
-} while(0)
-
-#define Expect(test) do { \
-    if (!(test)) { \
-        printf(" failed (%s:%i)\n", __FILENAME__, __LINE__); \
-        return 1; \
-    } else { \
-        printf(" passed \n"); \
-        return 0; \
-    } \
-} while(0)
-
+/**
+ *  MACRO Expect
+ *      this is done as a macro so we can display the
+ *      actual source file location for each failure.
+ *  
+ *      'test' must be an expression that resolves to true or false
+ */
+#define Expect(test)                                                    \
+({                                                                      \
+    if (!(test)) {                                                      \
+        DSLog(" failed (%s:%i)", __FILENAME__, __LINE__);               \
+	    TestPassInc();                                                  \
+    } else {                                                            \
+        DSLog(" passed");                                               \
+	    TestFailInc();                                                  \
+    }                                                                   \
+    TestCountInc();                                                     \
+})
 
 #endif _DARKUNIT_H_

@@ -21,7 +21,8 @@ BallObject* NewBallObject(
     float Radius, 
     Vec2 Velocity, 
     Texture2D* Sprite) {
-    return BallObject_init(BallObject_alloc(), Position, Radius, Velocity, Sprite); 
+    return BallObject_init(alloc(BallObject), Position, Radius, Velocity, Sprite); 
+    // return BallObject_init(BallObject_alloc(), Position, Radius, Velocity, Sprite); 
 }
 
 

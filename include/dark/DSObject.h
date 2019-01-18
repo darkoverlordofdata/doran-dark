@@ -30,11 +30,6 @@ SOFTWARE.
 
 #define OBJECT_TYPE       (TYPE_OBJECT)
 
-#define IsDSObject(object) _Generic((object), DSObject*: true, default: false)
-#define AsDSObject(object) _Generic((object),                           \
-                            DSObject*: (DSObject *)object,              \
-                            default: nullptr)
-
 
 #define IsDSClass(object) _Generic((object), DSClass*: true, default: false)
 #define AsDSClass(object) _Generic((object),                            \
@@ -44,8 +39,6 @@ SOFTWARE.
 /**
  * DSObject ivar
  */
-// typedef struct DSObject DSObject;
-// struct DSObject {
 ivar (DSObject) {
     Class isa;
 };
@@ -53,7 +46,6 @@ ivar (DSClass) {
     Class isa;
 };
 
-// typedef DSObject* Any;
 DSObject* NewDSObject();
 DSObject* DSObject_init(DSObject* const);
 DSObject* DSObject_Dtor(DSObject*);
@@ -90,13 +82,11 @@ typedef bool    (*DSObjectInstanceEquals)   (const DSObject* const, const DSObje
  * DSObject Vtable
  * 
  */
-// struct DSObjectVTable DSObjectVTable;
-// struct DSObjectVTable {
 vtable (DSObject) {
-    DSObjectToString        ToString;
-    DSObjectEquals          Equals;
-    DSObjectGetHashCode     GetHashCode;
-    DSObjectDispose         Dispose;
+    const DSObjectToString        ToString;
+    const DSObjectEquals          Equals;
+    const DSObjectGetHashCode     GetHashCode;
+    const DSObjectDispose         Dispose;
 };
 
 

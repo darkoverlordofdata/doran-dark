@@ -36,11 +36,9 @@ SOFTWARE.
  * @param value of float
  * 
  */
-
 DSFloat* NewDSFloat(const float value) { 
-    return DSFloat_init(DSFloat_alloc(), value); 
+    return DSFloat_init(alloc(DSFloat), value); 
 }
-
 
 DSFloat* DSFloat_init(DSFloat* const this, const float value)
 {
@@ -50,11 +48,6 @@ DSFloat* DSFloat_init(DSFloat* const this, const float value)
     return this;
 }
 
-DSFloat* DSFloat_alloc() {
-    return DSMalloc(getDSFloatSize());
-}
-
-
 /**
  * Returns a primitive float value parsed from input string. 
  */
@@ -63,7 +56,7 @@ float DSParseFloat(const char* s)
     
     double d = DSParseDouble(s);
     if (d < FLOAT_MIN_VALUE || d > FLOAT_MAX_VALUE)
-        throw DSNumberFormatException(s);
+        throw DSNumberFormatException(s, Source);
     return (float)d;
 }
 

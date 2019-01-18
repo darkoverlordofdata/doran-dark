@@ -55,40 +55,31 @@ DSInteger* NewDSInteger(int const value);
 DSInteger* DSInteger_init(DSInteger* const this, const int value);
 DSInteger* DSInteger_alloc();
 
-char*   overload ToString(const DSInteger* const);
-int     overload CompareTo(const DSInteger* const, const DSInteger* const);
-int     overload IntValue(const DSInteger* const);
-long    overload LongValue(const DSInteger* const);
-float   overload IntegerValue(const DSInteger* const);
-double  overload DoubleValue(const DSInteger* const);
-char    overload CharValue(const DSInteger* const);
-short   overload ShortValue(const DSInteger* const);
-
-typedef char*   (*DSIntegerToString)       (const DSInteger* const);
-typedef int     (*DSIntegerCompareTo)      (const DSInteger* const, const DSInteger* const);
-typedef int     (*DSIntegerIntValue)       (const DSInteger* const);
-typedef long    (*DSIntegerLongValue)      (const DSInteger* const);
-typedef float   (*DSIntegerFloatValue)     (const DSInteger* const);
-typedef double  (*DSIntegerDoubleValue)    (const DSInteger* const);
-typedef char    (*DSIntegerCharValue)      (const DSInteger* const);
-typedef short   (*DSIntegerShortValue)     (const DSInteger* const);
+method (DSInteger, ToString,        char*, (const DSInteger* const));
+method (DSInteger, CompareTo,       int, (const DSInteger* const, const DSInteger* const));
+method (DSInteger, IntValue,        int, (const DSInteger* const));
+method (DSInteger, LongValue,       long, (const DSInteger* const));
+method (DSInteger, FloatValue,      float, (const DSInteger* const));
+method (DSInteger, DoubleValue,     double, (const DSInteger* const));
+method (DSInteger, CharValue,       char, (const DSInteger* const));
+method (DSInteger, ShortValue,      short, (const DSInteger* const));
 
 /**
  * Integer vtable with overrides
  */
 vtable (DSInteger)
 {
-    DSIntegerToString           ToString;
-    DSObjectEquals              Equals;
-    DSObjectGetHashCode         GetHashCode;
-    DSObjectDispose             Dispose;
-    DSIntegerCompareTo          CompareTo;
-    DSIntegerIntValue           IntValue;
-    DSIntegerLongValue          LongValue;
-    DSIntegerFloatValue         IntegerValue;
-    DSIntegerDoubleValue        DoubleValue;
-    DSIntegerCharValue          CharValue;
-    DSIntegerShortValue         ShortValue;
+    const DSIntegerToString           ToString;
+    const DSObjectEquals              Equals;
+    const DSObjectGetHashCode         GetHashCode;
+    const DSObjectDispose             Dispose;
+    const DSIntegerCompareTo          CompareTo;
+    const DSIntegerIntValue           IntValue;
+    const DSIntegerLongValue          LongValue;
+    const DSIntegerFloatValue         FloatValue;
+    const DSIntegerDoubleValue        DoubleValue;
+    const DSIntegerCharValue          CharValue;
+    const DSIntegerShortValue         ShortValue;
 };
 
 class (DSInteger) {

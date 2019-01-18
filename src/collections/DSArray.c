@@ -25,17 +25,28 @@ SOFTWARE.
 ******************************************************************/
 #include <dark/Foundation.h>
 #include "private/DSArray.h"
+
 /**
  * new Array
  * 
  * allocates room for capacity, sets used to 0
  * 
- * @param capacity initial max size of vector
+ * @param typeOf type constraint for items in array
+ * @param capacity initial max size of vectorO
  * 
  */
-DSArray* overload NewDSArray(int capacity) {
-    return DSArray_init(DSArray_alloc(), capacity);
+DSArray* overload NewDSArray(void) {
+    return NewDSArray(nullptr, 0);
 }
+
+DSArray* overload NewDSArray(Class typeOf) {
+    return NewDSArray(typeOf, 0);
+}
+
+DSArray* overload NewDSArray(Class typeOf, int capacity) {
+    return DSArray_init(alloc(DSArray), typeOf, capacity);
+}
+
 
 /**
  * new Array
@@ -48,25 +59,30 @@ DSArray* overload NewDSArray(int capacity) {
  * 
  */
 DSArray* overload NewDSArray(int count, ...) {
-    DSArray* v = DSArray_init(DSArray_alloc(), count);
+    DSArray* this = DSArray_init(alloc(DSArray), nullptr, count);
     va_list args;
     va_start(args, count);
     for (int i=0; i<count; i++)
-        v->data[i] = va_arg(args, DSObject*);
+        this->data[i] = va_arg(args, DSObject*);
+    DSObject* elem = this->data[0];
+    this->typeOf = elem->isa;
     va_end(args);
-    v->length = count;
-    return v;
+    this->length = count;
+    return this;
 }
 
-DSArray* overload NewDSArray(void) {
-    return DSArray_init(DSArray_alloc(), 4);
+
+DSArray* overload DSArray_init(DSArray* const this) {
+    return DSArray_init(this, nullptr);
 }
 
+DSArray* overload DSArray_init(DSArray* const this, Class typeOf) {
+    return DSArray_init(this, nullptr, 0);
+}
 /**
  * Default Constructor
  */
-DSArray* DSArray_init(DSArray* const this, int capacity)
-{
+DSArray* overload DSArray_init(DSArray* const this, Class typeOf, int capacity) {
     DSObject_init(this);
     this->isa = getDSArrayIsa();
     this->capacity = capacity == 0 ? ARRAY_INIT_CAPACITY : capacity;
@@ -74,12 +90,6 @@ DSArray* DSArray_init(DSArray* const this, int capacity)
     this->data = DSCalloc(this->capacity, sizeof(DSObject*));
     return this;
 }
-
-DSArray* DSArray_alloc() {
-    return DSMalloc(getDSArraySize());
-}
-
-
 
 /**
  * Resize the vector
@@ -104,8 +114,11 @@ void overload Resize(DSArray* const this, int capacity)
  * 
  * @param item the data to add
  */
-void overload Add(DSArray* const this, const DSObject* item)
+Either* overload Add(DSArray* const this, const DSObject* item)
 {
+    if ((this->typeOf) && !InstanceOf(this->typeOf, item)) 
+        return Left($("InvalidType"));
+
     if (this->capacity == this->length) {
         _vptr(this)->Resize(this, this->capacity * 2);
     }
@@ -118,8 +131,11 @@ void overload Add(DSArray* const this, const DSObject* item)
  * @param index to add at
  * @param item the data to add
  */
-void overload Set(DSArray* const this, int index, const DSObject* item)
+Either* overload Set(DSArray* const this, int index, const DSObject* item)
 {
+    if ((this->typeOf) && !InstanceOf(this->typeOf, item)) 
+        return Left($("InvalidType"));
+
     if (index >= 0 && index < this->length)
         this->data[index] = item;
 }

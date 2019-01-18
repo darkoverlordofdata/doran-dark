@@ -53,40 +53,32 @@ DSLong* NewDSLong(long const value);
 DSLong* DSLong_init(DSLong* const this, const long value);
 DSLong* DSLong_alloc();
 
-char*   overload ToString(const DSLong* const);
-int     overload CompareTo(const DSLong* const, const DSLong* const);
-int     overload IntValue(const DSLong* const);
-long    overload LongValue(const DSLong* const);
-float   overload IntegerValue(const DSLong* const);
-double  overload DoubleValue(const DSLong* const);
-char    overload CharValue(const DSLong* const);
-short   overload ShortValue(const DSLong* const);
+method (DSLong, ToString,        char*, (const DSLong* const));
+method (DSLong, CompareTo,       int, (const DSLong* const, const DSLong* const));
+method (DSLong, IntValue,        int, (const DSLong* const));
+method (DSLong, LongValue,       long, (const DSLong* const));
+method (DSLong, FloatValue,      float, (const DSLong* const));
+method (DSLong, DoubleValue,     double, (const DSLong* const));
+method (DSLong, CharValue,       char, (const DSLong* const));
+method (DSLong, ShortValue,      short, (const DSLong* const));
 
-typedef char*   (*DSLongToString)       (const DSLong* const);
-typedef int     (*DSLongCompareTo)      (const DSLong* const, const DSLong* const);
-typedef int     (*DSLongIntValue)       (const DSLong* const);
-typedef long    (*DSLongLongValue)      (const DSLong* const);
-typedef float   (*DSLongFloatValue)     (const DSLong* const);
-typedef double  (*DSLongDoubleValue)    (const DSLong* const);
-typedef char    (*DSLongCharValue)      (const DSLong* const);
-typedef short   (*DSLongShortValue)     (const DSLong* const);
 
 /**
  * Integer vtable with overrides
  */
 vtable (DSLong)
 {
-    DSLongToString           ToString;
-    DSObjectEquals              Equals;
-    DSObjectGetHashCode         GetHashCode;
-    DSObjectDispose             Dispose;
-    DSLongCompareTo          CompareTo;
-    DSLongIntValue           IntValue;
-    DSLongLongValue          LongValue;
-    DSLongFloatValue         IntegerValue;
-    DSLongDoubleValue        DoubleValue;
-    DSLongCharValue          CharValue;
-    DSLongShortValue         ShortValue;
+    const DSLongToString           ToString;
+    const DSObjectEquals           Equals;
+    const DSObjectGetHashCode      GetHashCode;
+    const DSObjectDispose          Dispose;
+    const DSLongCompareTo          CompareTo;
+    const DSLongIntValue           IntValue;
+    const DSLongLongValue          LongValue;
+    const DSLongFloatValue         FloatValue;
+    const DSLongDoubleValue        DoubleValue;
+    const DSLongCharValue          CharValue;
+    const DSLongShortValue         ShortValue;
 };
 
 

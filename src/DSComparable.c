@@ -55,7 +55,7 @@ int overload CompareTo(const DSComparable* const this, const DSComparable* const
 }
 
 int DSComparable_CompareTo(const DSComparable* const this, const DSComparable* const other) {
-    throw DSAbstractMethodException("Comparable_CompareTo");
+    throw DSAbstractMethodException("Comparable_CompareTo", Source);
 }
 
 char* overload ToString(const DSComparable* const this) {

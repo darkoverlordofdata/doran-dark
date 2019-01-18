@@ -1,37 +1,8 @@
-/*******************************************************************
-** This code is part of the Dark Framework.
-**
-MIT License
-
-Copyright (c) 2018 Dark Overlord of Data
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-******************************************************************/
 #pragma once
-#ifndef _FILE_SYSTEM_H_
-#define _FILE_SYSTEM_H_
-#include <stdio.h>
-#include "../Object.h"
-#include "../types/StringBuilder.h"
-#include "File.h"
 
-cyclic_reference(File);
+#include <stdio.h>
+#include "../types.h"
+#include "DSFile.h"
 
 #define BA_EXISTS    0xffff
 #define BA_FIFO      0x1000
@@ -48,54 +19,86 @@ cyclic_reference(File);
 #define SPACE_FREE   1
 #define SPACE_USABLE 2
 
+typedef struct DSFile DSFile;
 
-class (FileSystem)
-{
-    Class isa;
-    char*       (*ToString)(Object const);
-    bool        (*Equals)(Object const, Object const);
-    int         (*GetHashCode)(Object const);
-    void        (*Dispose) (Object const);
+static bool fsIsSlash(char c);
+static bool fsIsLetter(char c);
+static DSString* fsSlashify(DSString* p);
+static DSString* fsGetUserPath();
+static DSString* fsGetDrive(DSString* path);
+static int fsDriveIndex(char d);
+static DSString* fsGetDriveDirectory(char drive);
+static char fsGetSeparator();
+static char fsGetPathSeparator();
+static int fsNormalizePrefix(DSString* path, int len, DSStringBuilder* sb);
+static DSString* fsNormalize2(DSString* path, int len, int off);
+static DSString* fsNormalize(DSString* path);
+static int fsPrefixLength(DSString* path);
+static DSString* fsResolve(DSString* parent, DSString* child);
+static DSString* fsGetDefaultParent();
+static DSString* fsFromURIPath(DSString* path);
+static bool fsIsAbsolute(DSFile* f);
+static DSString* fsResolveFile(DSFile* f);
+static DSString* fsCanonicalize(DSString* path);
+static int GetBooleanAttributes(DSFile* f);
+static bool fsCheckAccess(DSFile* f, int access);
+static bool fsSetPermission(DSFile* f, int access, bool enable, bool owneronly);
+static long fsGetLastModifiedTime(DSFile* f);
+static long fsGetLength(DSFile* f);
+static bool fsCreateFileExclusively(DSString* path);
+static bool fsDelete(DSFile* f);
+static DSString* fsList(DSFile* f);
+static bool fsCreateDirectory(DSFile* f);
+static bool fsRename(DSFile* f1, DSFile* f2);
+static bool fsSetLastModifiedTime(DSFile* f, long time);
+static DSString* fsSetReadOnly(DSFile* f);
+static DSFile* fsListRoots();
+static int fsCompare(DSFile* f1, DSFile* f2);
+static int fsHashCode(DSFile* f);
 
-    char                slash;
-    char                semicolon;
-    char                altSlash;
-    char*               slashString;
-    char*               semicolonString;
-    char*               altSlashString;
-    String              (*Slashify) (FileSystem const, String path);
-    String              (*GetUserPath) (FileSystem const);
-    String              (*GetDrive) (FileSystem const, String path);
-    int                 (*DriveIndex) (FileSystem const, char drive);
-    String              (*GetDriveDirectory) (FileSystem const, char drive);
-    char                (*GetSeparator) (FileSystem const);
-    char                (*GetPathSeparator) (FileSystem const);
-    String              (*Normalize) (FileSystem const, String path);
-    int                 (*PrefixLength) (FileSystem const, String path);
-    String              (*Resolve) (FileSystem const, String parent, String child);
-    String              (*GetDefaultParent) (FileSystem const);
-    String              (*FromURIPath) (FileSystem const, String path);
-    bool                (*IsAbsolute) (FileSystem const, File f);
-    String              (*ResolveFile) (FileSystem const, File f);
-    String              (*Canonicalize) (FileSystem const, String path);
-    int                 (*GetBooleanAttributes) (FileSystem const, File f);
-    bool                (*CheckAccess) (FileSystem const, File f, int access);
-    bool                (*SetPermission) (FileSystem const, File f, int access, bool enable, bool owneronly);
-    long                (*GetLastModifiedTime) (FileSystem const, File f);
-    long                (*GetLength) (FileSystem const, File f);
-    bool                (*CreateFileExclusively) (FileSystem const, String path);
-    bool                (*Delete) (FileSystem const, File f);
-    String*             (*List) (FileSystem const, File f);
-    bool                (*CreateDirectory) (FileSystem const, File f);
-    bool                (*Rename) (FileSystem const, File f1, File f2);
-    bool                (*SetLastModifiedTime) (FileSystem const, File f, long time);
-    String*             (*SetReadOnly) (FileSystem const, File const);
-    File*               (*ListRoots) (FileSystem const);
-    int                 (*Compare) (FileSystem const, File f1, File f2);
-    int                 (*HashCode) (FileSystem const, File f);
+typedef struct DSFileSystem DSFileSystem;
+const DSFileSystem fs;
 
-
+struct DSFileSystem {
+    const char slash;
+    const char semicolon;
+    const char altSlash;
+    const char* slashString;
+    const char* semicolonString;
+    const char* altSlashString;
+    const bool (*isSlash)(char c);
+    const bool (*isLetter)(char c);
+    const DSString* (*Slashify)(DSString* p);
+    const DSString* (*GetUserPath)();
+    const DSString* (*GetDrive)(DSString* path);
+    const int (*DriveIndex)(char d);
+    const DSString* (*GetDriveDirectory)(char drive);
+    const char (*GetSeparator)();
+    const char (*GetPathSeparator)();
+    const int (*NormalizePrefix)(DSString* path, int len, DSStringBuilder* sb);
+    const DSString* (*Normalize2)(DSString* path, int len, int off);
+    const DSString* (*Normalize)(DSString* path);
+    const int (*PrefixLength)(DSString* path);
+    const DSString* (*Resolve)(DSString* parent, DSString* child);
+    const DSString* (*GetDefaultParent)();
+    const DSString* (*FromURIPath)(DSString* path);
+    const bool (*IsAbsolute)(DSFile* f);
+    const DSString* (*ResolveFile)(DSFile* f);
+    const DSString* (*Canonicalize)(DSString* path);
+    const int (*GetBooleanAttributes)(DSFile* f);
+    const bool (*CheckAccess)(DSFile* f, int access);
+    const bool (*SetPermission)(DSFile* f, int access, bool enable, bool owneronly);
+    const long (*GetLastModifiedTime)(DSFile* f);
+    const long (*GetLength)(DSFile* f);
+    const bool (*CreateFileExclusively)(DSString* path);
+    const bool (*Delete)(DSFile* f);
+    const DSString* (*List)(DSFile* f);
+    const bool (*CreateDirectory)(DSFile* f);
+    const bool (*Rename)(DSFile* f1, DSFile* f2);
+    const bool (*SetLastModifiedTime)(DSFile* f, long time);
+    const DSString* (*SetReadOnly)(DSFile* f);
+    const DSFile* (*ListRoots)();
+    const int (*Compare)(DSFile* f1, DSFile* f2);
+    const int (*HashCode)(DSFile* f);
 };
 
-
-#endif _FILE_SYSTEM_H_ 

@@ -44,60 +44,54 @@ SOFTWARE.
 ivar (DSArray) {
     Class isa;
     int length;
+    Class typeOf;
     void **data;
     int capacity;
 };
+
 
 /**
  * Array API
  */
 DSArray* overload NewDSArray(void);
-DSArray* overload NewDSArray(int);
-DSArray* DSArray_init(DSArray* const this, int capacity);
-DSArray* DSArray_alloc();
+DSArray* overload NewDSArray(Class);
+DSArray* overload NewDSArray(Class, int);
+DSArray* overload DSArray_init(DSArray* const this);
+DSArray* overload DSArray_init(DSArray* const this, Class typeOf);
+DSArray* overload DSArray_init(DSArray* const this, Class typeOf, int capacity);
 DSArray* Array_Variadic(int, ...);
 
-char*   overload ToString(const DSArray* const);
-void    overload Dispose(DSArray* const);
-int     overload Length(const DSArray* const);
-bool    overload IsEmpty(DSArray* const);
-bool    overload Contains(DSArray* const, DSObject*);
-void    overload Clear(DSArray* const);
-void    overload Add(DSArray* const, const DSObject*);
-void    overload Remove(DSArray* const, int);
-void    overload Resize(DSArray* const, int);
-void    overload Set(DSArray* const, int, const DSObject*);
-DSObject* overload Get(DSArray* const, int);
+method (DSArray, ToString,  char*,      (const DSArray* const) );
+method (DSArray, Dispose,   void,       (DSArray* const) );
+method (DSArray, Length,    int,        (const DSArray* const) );
+method (DSArray, IsEmpty,   bool,       (DSArray* const) );
+method (DSArray, Contains,  bool,       (DSArray* const, DSObject*) );
+method (DSArray, Clear,     void,       (DSArray* const) );
+method (DSArray, Add,       Either*,    (DSArray* const, const DSObject*) );
+method (DSArray, Remove,    void,       (DSArray* const, int) );
+method (DSArray, Resize,    void,       (DSArray* const, int) );
+method (DSArray, Set,       Either*,    (DSArray* const, int, const DSObject*) );
+method (DSArray, Get,       DSObject*,  (DSArray* const, int) );
 
-typedef char*   (*DSArrayToString)  (const DSArray* const);
-typedef void    (*DSArrayDispose)   (DSArray* const);
-typedef int     (*DSArrayLength)    (const DSArray* const);
-typedef bool    (*DSArrayIsEmpty)   (DSArray* const);
-typedef bool    (*DSArrayContains)  (DSArray* const,  DSObject*);
-typedef void    (*DSArrayClear)     (DSArray* const);
-typedef void    (*DSArrayAdd)       (DSArray* const, const DSObject*);
-typedef void    (*DSArrayRemove)    (DSArray* const, int);
-typedef void    (*DSArrayResize)    (DSArray* const, int);
-typedef void    (*DSArraySet)       (DSArray* const, int, const DSObject*);
-typedef DSObject*     (*DSArrayGet)       (DSArray* const, int);
+typedef DSArray*    (*DSArrayNew)   (Class, int);
 
 /**
  * Array metaclass
  */
 vtable (DSArray) {
-    DSArrayToString         ToString;
-    DSObjectEquals          Equals;
-    DSObjectGetHashCode     GetHashCode;
-    DSObjectDispose         Dispose;
-    DSArrayLength           Length;
-    DSArrayIsEmpty          IsEmpty;
-    DSArrayContains         Contains;
-    DSArrayClear            Clear;
-    DSArrayAdd              Add;
-    DSArrayRemove           Remove;
-    DSArrayResize           Resize;
-    DSArraySet              Set;
-    DSArrayGet              Get;    
+    const DSArrayToString         ToString;
+    const DSObjectEquals          Equals;
+    const DSObjectGetHashCode     GetHashCode;
+    const DSObjectDispose         Dispose;
+    const DSArrayLength           Length;
+    const DSArrayIsEmpty          IsEmpty;
+    const DSArrayContains         Contains;
+    const DSArrayClear            Clear;
+    const DSArrayAdd              Add;
+    const DSArrayRemove           Remove;
+    const DSArrayResize           Resize;
+    const DSArraySet              Set;
+    const DSArrayGet              Get;    
 };
 
 class (DSArray) {

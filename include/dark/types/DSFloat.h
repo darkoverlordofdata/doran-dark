@@ -53,40 +53,32 @@ DSFloat* NewDSFloat(float const value);
 DSFloat* DSFloat_init(DSFloat* const this, const float value);
 DSFloat* DSFloat_alloc();
 
-char*   overload ToString(const DSFloat* const);
-int     overload CompareTo(const DSFloat* const, const DSFloat* const);
-int     overload IntValue(const DSFloat* const);
-long    overload LongValue(const DSFloat* const);
-float   overload FloatValue(const DSFloat* const);
-double  overload DoubleValue(const DSFloat* const);
-char    overload CharValue(const DSFloat* const);
-short   overload ShortValue(const DSFloat* const);
+method (DSFloat, ToString,        char*, (const DSFloat* const));
+method (DSFloat, CompareTo,       int, (const DSFloat* const, const DSFloat* const));
+method (DSFloat, IntValue,        int, (const DSFloat* const));
+method (DSFloat, LongValue,       long, (const DSFloat* const));
+method (DSFloat, FloatValue,      float, (const DSFloat* const));
+method (DSFloat, DoubleValue,     double, (const DSFloat* const));
+method (DSFloat, CharValue,       char, (const DSFloat* const));
+method (DSFloat, ShortValue,      short, (const DSFloat* const));
 
-typedef char*   (*DSFloatToString)       (const DSFloat* const);
-typedef int     (*DSFloatCompareTo)      (const DSFloat* const, const DSFloat* const);
-typedef int     (*DSFloatIntValue)       (const DSFloat* const);
-typedef long    (*DSFloatLongValue)      (const DSFloat* const);
-typedef float   (*DSFloatFloatValue)     (const DSFloat* const);
-typedef double  (*DSFloatDoubleValue)    (const DSFloat* const);
-typedef char    (*DSFloatCharValue)      (const DSFloat* const);
-typedef short   (*DSFloatShortValue)     (const DSFloat* const);
 
 /**
  * Float vtable with overrides
  */
 vtable (DSFloat)
 {
-    DSFloatToString             ToString;
-    DSObjectEquals              Equals;
-    DSObjectGetHashCode         GetHashCode;
-    DSObjectDispose             Dispose;
-    DSFloatCompareTo            CompareTo;
-    DSFloatIntValue             IntValue;
-    DSFloatLongValue            LongValue;
-    DSFloatFloatValue           FloatValue;
-    DSFloatDoubleValue          DoubleValue;
-    DSFloatCharValue            CharValue;
-    DSFloatShortValue           ShortValue;
+    const DSFloatToString             ToString;
+    const DSObjectEquals              Equals;
+    const DSObjectGetHashCode         GetHashCode;
+    const DSObjectDispose             Dispose;
+    const DSFloatCompareTo            CompareTo;
+    const DSFloatIntValue             IntValue;
+    const DSFloatLongValue            LongValue;
+    const DSFloatFloatValue           FloatValue;
+    const DSFloatDoubleValue          DoubleValue;
+    const DSFloatCharValue            CharValue;
+    const DSFloatShortValue           ShortValue;
 };
 
 

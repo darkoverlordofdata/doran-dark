@@ -26,14 +26,14 @@ SOFTWARE.
 #pragma once
 #include "../DSObject.h"
 
-typedef struct Maybe Maybe;
-
-Maybe* Nothing();
-Maybe* Just(DSObject*);
-Maybe* ret(DSObject*);
-Maybe* bind(Maybe*,  Maybe* (*func)(Maybe*));
-bool IsNothing(const Maybe*);
-
+/** 
+ * I'm not sure that generics are needed. Monad binding is 
+ * useful in Haskel because is't not procedural. But c is, 
+ * so bind is not so useful, instead it's just awkward.
+ * 
+*/
+// #define __MAYBE_GENERICS__
+#ifdef __MAYBE_GENERICS__
 /**
  *  <G>enerics Generator
  * 
@@ -46,6 +46,20 @@ Maybe* overload Just(type x) {                                          \
 }                                                                       \
 type name##Maybe(Maybe* this) { return this->name; }                    \
 Maybe* overload ret(type value) { return Just(value); }
+#endif
+
+
+typedef struct Maybe Maybe;
+
+/**
+ * Maybe - 
+ * not a DSObject.
+ */
+Maybe* Nothing();
+Maybe* Just(DSObject*);
+Maybe* ret(DSObject*);
+Maybe* bind(Maybe*,  Maybe* (*func)(Maybe*));
+bool IsNothing(const Maybe*);
 
 
 /**

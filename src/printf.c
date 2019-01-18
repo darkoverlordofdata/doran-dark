@@ -1,12 +1,11 @@
-#include <dark/Foundation.h>
 #include <stdio.h> 
-#include <stdarg.h>                      
+#include <stdarg.h>
+#include <math.h> 
+#include <dark/Foundation.h>
+
 
 char* convert(unsigned int, int);       //Convert integer number into octal, hex, etc.
 
-// C program for implementation of ftoa() 
-#include<stdio.h> 
-#include<math.h> 
 
 
 __attribute__((__format__ (__printf__, 1, 2)))                          \

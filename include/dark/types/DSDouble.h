@@ -52,40 +52,31 @@ DSDouble* NewDSDouble(double const value);
 DSDouble* DSDouble_init(DSDouble* const this, const double value);
 DSDouble* DSDouble_alloc();
 
-char*   overload ToString(const DSDouble* const);
-int     overload CompareTo(const DSDouble* const, const DSDouble* const);
-int     overload IntValue(const DSDouble* const);
-long    overload LongValue(const DSDouble* const);
-float   overload FloatValue(const DSDouble* const);
-double  overload DoubleValue(const DSDouble* const);
-char    overload CharValue(const DSDouble* const);
-short   overload ShortValue(const DSDouble* const);
-
-typedef char*   (*DSDoubleToString)       (const DSDouble* const);
-typedef int     (*DSDoubleCompareTo)      (const DSDouble* const, const DSDouble* const);
-typedef int     (*DSDoubleIntValue)       (const DSDouble* const);
-typedef long    (*DSDoubleLongValue)      (const DSDouble* const);
-typedef float   (*DSDoubleFloatValue)     (const DSDouble* const);
-typedef double  (*DSDoubleDoubleValue)    (const DSDouble* const);
-typedef char    (*DSDoubleCharValue)      (const DSDouble* const);
-typedef short   (*DSDoubleShortValue)     (const DSDouble* const);
+method (DSDouble, ToString,        char*,    (const DSDouble* const));
+method (DSDouble, CompareTo,       int,      (const DSDouble* const, const DSDouble* const));
+method (DSDouble, IntValue,        int,      (const DSDouble* const));
+method (DSDouble, LongValue,       long,     (const DSDouble* const));
+method (DSDouble, FloatValue,      float,    (const DSDouble* const));
+method (DSDouble, DoubleValue,     double,   (const DSDouble* const));
+method (DSDouble, CharValue,       char,     (const DSDouble* const));
+method (DSDouble, ShortValue,      short,    (const DSDouble* const));
 
 /**
  * Double vtable with overrides
  */
 vtable (DSDouble)
 {
-    DSDoubleToString            ToString;
-    DSObjectEquals              Equals;
-    DSObjectGetHashCode         GetHashCode;
-    DSObjectDispose             Dispose;
-    DSDoubleCompareTo           CompareTo;
-    DSDoubleIntValue            IntValue;
-    DSDoubleLongValue           LongValue;
-    DSDoubleFloatValue          FloatValue;
-    DSDoubleDoubleValue         DoubleValue;
-    DSDoubleCharValue           CharValue;
-    DSDoubleShortValue          ShortValue;
+    const DSDoubleToString            ToString;
+    const DSObjectEquals              Equals;
+    const DSObjectGetHashCode         GetHashCode;
+    const DSObjectDispose             Dispose;
+    const DSDoubleCompareTo           CompareTo;
+    const DSDoubleIntValue            IntValue;
+    const DSDoubleLongValue           LongValue;
+    const DSDoubleFloatValue          FloatValue;
+    const DSDoubleDoubleValue         DoubleValue;
+    const DSDoubleCharValue           CharValue;
+    const DSDoubleShortValue          ShortValue;
 };
 
 /**

@@ -41,43 +41,8 @@
 #ifndef _FOUNDATION_H_
 #define _FOUNDATION_H_
 
-static const int MajorVersion = 0; 
-static const int MinorVersion = 0;
-static const int BuildVersion = 1;
-
-// #include "cexcept.h"
-// define_exception_type(int);
-// extern struct exception_context the_exception_context[1];
-
-#include "core.h"
-#include "hashmap.h"
-#include "DSLog.h"
-#include "DSClass.h"
-#include "DSObject.h"
-#include "Functional/Either.h"
-#include "Functional/Option.h"
-#include "Functional/Maybe.h"
-
-#include "DSComparable.h"
-#include "collections/DSArray.h"
-#include "collections/DSHashmap.h"
-#include "collections/DSList.h"
-#include "types/DSNumber.h"
-#include "types/DSBoolean.h"
-#include "types/DSString.h"
-#include "types/DSStringBuilder.h"
-#include "types/DSChar.h"
-#include "types/DSDouble.h"
-#include "types/DSFloat.h"
-#include "types/DSInteger.h"
-#include "types/DSLong.h"
-#include "types/DSShort.h"
-
-
-// #include "collections/DSCollection.h"
-// #include "io/DSFile.h"
-// #include "io/DSFileSystem.h"
-
-
+#include "types.h"
+#include "io/DSFile.h"
+#include "io/DSFileSystem.h"
 
 #endif _FOUNDATION_H_

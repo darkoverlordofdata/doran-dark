@@ -71,49 +71,35 @@ ivar (DSHashmap) {
 /**
  * Hashmap API
  */
-DSHashmap*  DSHashmap_init(DSHashmap* const this, Class typ);
-// DSHashmap*  DSHashmap_init(DSHashmap* const this, ...);
+DSHashmap*  overload DSHashmap_init(DSHashmap* const);
+DSHashmap*  overload DSHashmap_init(DSHashmap* const, Class);
 DSHashmap*  DSHashmap_alloc();
-DSHashmap*  NewDSHashmap(Class typ);
+DSHashmap*  NewDSHashmap(Class);
 
-char*       overload ToString(const DSHashmap* const);
-void        overload Dispose(DSHashmap* const);
-int         overload Length(const DSHashmap* const);
-uint        overload HashInt(DSHashmap* const, char*);
-int         overload Hash(DSHashmap* const, char*);
-int         overload Rehash(DSHashmap* const);
-Either*     overload Put(DSHashmap* const, char*, DSObject*);
-DSObject*   overload Get(DSHashmap* const, char*);
-int         overload ForEach(DSHashmap* const, DSHashmap_Iterator, DSObject*);
-int         overload Remove(DSHashmap* const, char*);
-
-
-/** Interface */
-typedef char*       (*DSHashmapToString)    (const DSHashmap* const);
-typedef void        (*DSHashmapDispose)     (DSHashmap* const);
-typedef int         (*DSHashmapLength)      (const DSHashmap* const);
-typedef int         (*DSHashmapRemove)      (DSHashmap* const, char*);
-typedef int         (*DSHashmapForEach)     (DSHashmap* const, DSHashmap_Iterator, DSObject*);
-typedef Either*     (*DSHashmapPut)         (DSHashmap* const, int, const DSObject*);
-typedef DSObject*   (*DSHashmapGet)         (DSHashmap* const, char*);
-typedef uint        (*DSHashmapHashInt)     (DSHashmap* const, char*);
-typedef int         (*DSHashmapHash)        (DSHashmap* const, char*);
-typedef int         (*DSHashmapRehash)      (DSHashmap* const);
-
+method (DSHashmap, ToString,    char*,      (const DSHashmap* const) );
+method (DSHashmap, Dispose,     void,       (DSHashmap* const) );
+method (DSHashmap, Length,      int,        (const DSHashmap* const) );
+method (DSHashmap, HashInt,     uint,       (DSHashmap* const, char*) );
+method (DSHashmap, Hash,        int,        (DSHashmap* const, char*) );
+method (DSHashmap, Rehash,      int,        (DSHashmap* const) );
+method (DSHashmap, Put,         Either*,    (DSHashmap* const, char*, DSObject*) );
+method (DSHashmap, Get,         DSObject*,  (DSHashmap* const, char*) );
+method (DSHashmap, ForEach,     int,        (DSHashmap* const, DSHashmap_Iterator, DSObject*) );
+method (DSHashmap, Remove,      int,        (DSHashmap* const, char*) );
 
 vtable (DSHashmap) {
-    DSHashmapToString       ToString;
-    DSObjectEquals          Equals;
-    DSObjectGetHashCode     GetHashCode;
-    DSHashmapDispose        Dispose;
-    DSHashmapLength         Length;
-    DSHashmapRemove         Remove;
-    DSHashmapForEach        ForEach;
-    DSHashmapPut            Put;
-    DSHashmapGet            Get;
-    DSHashmapHashInt        HashInt;
-    DSHashmapHash           Hash;
-    DSHashmapRehash         Rehash;
+    const DSHashmapToString       ToString;
+    const DSObjectEquals          Equals;
+    const DSObjectGetHashCode     GetHashCode;
+    const DSHashmapDispose        Dispose;
+    const DSHashmapLength         Length;
+    const DSHashmapRemove         Remove;
+    const DSHashmapForEach        ForEach;
+    const DSHashmapPut            Put;
+    const DSHashmapGet            Get;
+    const DSHashmapHashInt        HashInt;
+    const DSHashmapHash           Hash;
+    const DSHashmapRehash         Rehash;
 } ;
 
 class (DSHashmap) {

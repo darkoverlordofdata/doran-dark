@@ -38,9 +38,8 @@ SOFTWARE.
  */
 
 DSInteger* NewDSInteger(const int value) { 
-    return DSInteger_init(DSInteger_alloc(), value); 
+    return DSInteger_init(alloc(DSInteger), value); 
 }
-
 
 DSInteger* DSInteger_init(DSInteger* const this, const int value)
 {
@@ -50,17 +49,13 @@ DSInteger* DSInteger_init(DSInteger* const this, const int value)
     return this;
 }
 
-DSInteger* DSInteger_alloc() {
-    return DSMalloc(getDSIntegerSize());
-}
-
 /**
  * Returns a primitive integer value parsed from input string. 
  */
 int DSParseInt(const char* const s, const int radix) {
     long i = DSParseLong(s, radix);
     if (i < INTEGER_MIN_VALUE || i > INTEGER_MAX_VALUE)
-        throw DSNumberFormatException(s, radix);
+        throw DSNumberFormatException(s, radix, Source);
     return (int)i;
 }
 

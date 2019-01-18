@@ -37,8 +37,7 @@ SOFTWARE.
 typedef int (*DSList_Compare) (DSObject*, DSObject*);
 typedef void (^DSList_Iterator) (DSObject*);
 
-ivar (DSListNode)
-{
+ivar (DSListNode) {
     DSObject* data;
     DSListNode* next;
 };
@@ -46,6 +45,7 @@ ivar (DSListNode)
 ivar (DSList) {
     Class isa;
     int length;
+    Class typeOf;
     DSListNode* head;
 };
 
@@ -53,43 +53,34 @@ ivar (DSList) {
  * List API
  */
 DSList* DSList_alloc();
-DSList* DSList_init(DSList* const this);
+DSList* overload DSList_init(DSList* const this);
+DSList* overload DSList_init(DSList* const this, Class typeOf);
 DSList* NewDSList();
 
-char*   overload ToString(const DSList* const);
-int     overload Length(DSList* const);
-bool    overload IsEmpty(DSList* const);
-bool    overload Contains(DSList* const, DSObject*);
-void    overload Clear(DSList* const);
-void    overload Add(DSList* const, DSObject*);
-DSObject* overload Remove(DSList* const);
-int     overload Insert(DSList* const, DSObject*, DSList_Compare);
-void    overload Iterate(DSList* const, DSList_Iterator);
+method (DSList, ToString,   char*,      (const DSList* const) );
+method (DSList, Length,     int,        (DSList* const) );
+method (DSList, IsEmpty,    bool,       (DSList* const) );
+method (DSList, Contains,   bool,       (DSList* const, DSObject*) );
+method (DSList, Clear,      void,       (DSList* const) );
+method (DSList, Add,        Either*,    (DSList* const, DSObject*) );
+method (DSList, Remove,     DSObject*,  (DSList* const) );
+method (DSList, Insert,     Either*,    (DSList* const, DSObject*, DSList_Compare) );
+method (DSList, Iterate,    void,       (DSList* const, DSList_Iterator) );
 
-/** Interface */
-typedef char*   (*DSListToString)   (const DSList* const);
-typedef int     (*DSListLength)     (DSList* const);
-typedef bool    (*DSListIsEmpty)    (DSList* const);
-typedef bool    (*DSListContains)   (DSList* const, DSObject*);
-typedef void    (*DSListClear)      (DSList* const);
-typedef void    (*DSListAdd)        (DSList* const, DSObject*);
-typedef DSObject*     (*DSListRemove)     (DSList* const);
-typedef void    (*DSListInsert)     (DSList* const, DSObject*, DSList_Compare);
-typedef int     (*DSListIterate)    (DSList* const, DSList_Iterator, DSObject*);
 
 vtable (DSList) {
-    DSListToString          ToString;
-    DSObjectEquals          Equals;
-    DSObjectGetHashCode     GetHashCode;
-    DSObjectDispose         Dispose;
-    DSListLength            Length;
-    DSListIsEmpty           IsEmpty;
-    DSListContains          Contains;
-    DSListClear             Clear;
-    DSListAdd               Add;
-    DSListRemove            Remove;
-    DSListInsert            Insert;
-    DSListIterate           Iterate;
+    const DSListToString          ToString;
+    const DSObjectEquals          Equals;
+    const DSObjectGetHashCode     GetHashCode;
+    const DSObjectDispose         Dispose;
+    const DSListLength            Length;
+    const DSListIsEmpty           IsEmpty;
+    const DSListContains          Contains;
+    const DSListClear             Clear;
+    const DSListAdd               Add;
+    const DSListRemove            Remove;
+    const DSListInsert            Insert;
+    const DSListIterate           Iterate;
 };
 
 class (DSList) {

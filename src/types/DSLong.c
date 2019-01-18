@@ -38,7 +38,7 @@ SOFTWARE.
  */
 
 DSLong* NewDSLong(const long value) { 
-    return DSLong_init(DSLong_alloc(), value); 
+    return DSLong_init(alloc(DSLong), value); 
 }
 
 DSLong* DSLong_init(DSLong* const this, const long value)
@@ -48,11 +48,6 @@ DSLong* DSLong_init(DSLong* const this, const long value)
     this->value = value;
     return this;
 }
-
-DSLong* DSLong_alloc() {
-    return DSMalloc(getDSLongSize());
-}
-
 
 /**
  * Returns a primitive long value parsed from input string. 
@@ -64,10 +59,10 @@ long DSParseLong(const char* const s, const int radix)
     long result = strtol(s, &endptr, radix);
 
     if (errno != 0)
-        throw DSNumberFormatException(s, radix);
+        throw DSNumberFormatException(s, radix, Source);
 
     if (s == endptr || *endptr != '\0')
-        throw DSNumberFormatException(s, radix);
+        throw DSNumberFormatException(s, radix, Source);
 
     return result;
 }

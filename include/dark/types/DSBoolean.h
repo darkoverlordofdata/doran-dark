@@ -49,26 +49,25 @@ DSBoolean* NewDSBoolean(const bool value);
 DSBoolean* DSBoolean_init(DSBoolean* this, const bool value);
 DSBoolean* DSBoolean_alloc();
 
-char*   overload ToString(const DSBoolean* const);
-int     overload Compare(const bool, const bool);
-int     overload CompareTo(const DSBoolean* const, const DSBoolean* const);
+method (DSBoolean, ToString,     char*, (const DSBoolean* const));
+method (DSBoolean, CompareTo,    int, (const DSBoolean* const, const DSBoolean* const));
 
+int     overload Compare(const bool, const bool);
 bool    BoolValue(const DSBoolean* const);
 bool    ParseBool(const char *const);
 
-typedef int     (*DSBooleanCompareTo)   (const DSBoolean* const, const DSBoolean* const);
-typedef char*   (*DSBooleanToString)    (const DSBoolean* const);
+
 
 /**
  * DSBoolean vtable
  */
 vtable (DSBoolean) {
-    DSBooleanToString       ToString;
-    DSObjectEquals          Equals;
-    DSObjectGetHashCode     GetHashCode;
-    DSObjectDispose         Dispose;
-    DSBooleanCompareTo      CompareTo;
-    bool    (*ParseBool)    (const char *const);    
+    const DSBooleanToString       ToString;
+    const DSObjectEquals          Equals;
+    const DSObjectGetHashCode     GetHashCode;
+    const DSObjectDispose         Dispose;
+    const DSBooleanCompareTo      CompareTo;
+    const bool    (*ParseBool)    (const char *const);    
 };
 
 /**

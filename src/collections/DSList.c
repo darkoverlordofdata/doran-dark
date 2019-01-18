@@ -28,21 +28,22 @@ SOFTWARE.
 /**
  * Constructor
  */
-DSList* NewDSList() { 
-    return DSList_init(DSList_alloc()); 
+DSList* NewDSList(Class typeOf) { 
+    return DSList_init(alloc(DSList)); 
 }
 
-DSList* DSList_init(DSList* const this)
+DSList* overload DSList_init(DSList* const this)
+{
+    return DSList_init(this, nullptr);
+}
+DSList* overload DSList_init(DSList* const this, Class typeOf)
 {
     DSObject_init(this);
     this->isa = getDSListIsa();
+    this->typeOf = typeOf;
     this->head = nullptr;
 
     return this;
-}
-
-DSList* DSList_alloc() {
-    return DSMalloc(getDSListSize());
 }
 
 /**
@@ -61,7 +62,7 @@ DSListNode* DSListNode_init(DSListNode* const this, DSObject* data, DSListNode* 
 
 DSListNode* NewDSListNode(DSObject* data, DSListNode* next)
 {
-    return DSListNode_init(DSList_alloc(), data, next);
+    return DSListNode_init(alloc(DSList), data, next);
 }
 
 /**
@@ -71,11 +72,14 @@ DSListNode* NewDSListNode(DSObject* data, DSListNode* next)
  * @param comp function to compare for insertion
  * 
  */
-int overload Insert(DSList* const this, DSObject* data, DSList_Compare comp)
+Either* overload Insert(DSList* const this, DSObject* data, DSList_Compare comp)
 {
+    if ((this->typeOf) && !InstanceOf(this->typeOf, data)) 
+        return Left($("InvalidType"));
+
     if (this->head == nullptr) {
         this->head = NewDSListNode(data, nullptr);
-        return 1;
+        return Right($(1));
     }
 
     // Find spot in linked list to insert new node
@@ -92,7 +96,7 @@ int overload Insert(DSList* const this, DSObject* data, DSList_Compare comp)
         prev->next = NewDSListNode(data, curr);
 
     this->length++;
-    return 1;
+    return Right($(1));
 }
 
 /**
@@ -101,8 +105,12 @@ int overload Insert(DSList* const this, DSObject* data, DSList_Compare comp)
  * @param data to insert
  * 
  */
-void overload Add(DSList* const this, DSObject* data)
+Either* overload Add(DSList* const this, DSObject* data)
 {
+    if ((this->typeOf) && !InstanceOf(this->typeOf, data)) 
+        return Left($("InvalidType"));
+
+
     if (this->head == nullptr) {
         this->head = NewDSListNode(data, nullptr);
     }

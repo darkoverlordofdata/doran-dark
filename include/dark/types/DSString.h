@@ -99,27 +99,27 @@ typedef DSString*   (*DSStringFormat)   (const char* format, ...);
  * Object metaclass
  */
 vtable (DSString) {
-    DSStringToString            ToString;
-    DSStringEquals              Equals;
-    DSObjectGetHashCode         GetHashCode;
-    DSObjectDispose             Dispose;
-    DSStringCompareTo           CompareTo;
-    DSStringLength              Length;
-    DSStringIsEmpty             IsEmpty;
-    DSStringCharAt              CharAt;
-    DSStringCompareToIgnoreCase CompareToIgnoreCase;
-    DSStringConcat              Concat;
-    DSStringConcatc             Concatc;
-    DSStringContains            Contains;
-    DSStringCopyOf              CopyOf;
-    DSStringEndsWith            EndsWith;
-    DSStringStartsWith          StartsWith;
-    DSStringGetBytes            GetBytes;
-    DSStringIndexOf             IndexOf;
-    DSStringLastIndexOf         LastIndexOf;
-    DSStringToUpperCase         ToUpperCase;
-    DSStringToLowerCase         ToLowerCase;
-    DSStringTrim                Trim;
+    const DSStringToString            ToString;
+    const DSStringEquals              Equals;
+    const DSObjectGetHashCode         GetHashCode;
+    const DSObjectDispose             Dispose;
+    const DSStringCompareTo           CompareTo;
+    const DSStringLength              Length;
+    const DSStringIsEmpty             IsEmpty;
+    const DSStringCharAt              CharAt;
+    const DSStringCompareToIgnoreCase CompareToIgnoreCase;
+    const DSStringConcat              Concat;
+    const DSStringConcatc             Concatc;
+    const DSStringContains            Contains;
+    const DSStringCopyOf              CopyOf;
+    const DSStringEndsWith            EndsWith;
+    const DSStringStartsWith          StartsWith;
+    const DSStringGetBytes            GetBytes;
+    const DSStringIndexOf             IndexOf;
+    const DSStringLastIndexOf         LastIndexOf;
+    const DSStringToUpperCase         ToUpperCase;
+    const DSStringToLowerCase         ToLowerCase;
+    const DSStringTrim                Trim;
     
 };
 

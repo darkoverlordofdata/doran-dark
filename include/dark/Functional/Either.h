@@ -29,9 +29,17 @@ SOFTWARE.
 typedef struct Either Either;
 typedef struct DSObject DSObject;
 
+/**
+ * Either - 
+ * not a DSObject.
+ */
 bool 		overload IsRight(Either* this);
 DSObject* 	overload GetRight(Either* this);
 DSObject* 	overload GetLeft(Either* this);
 Either* 	overload Left(DSObject* value);
 Either* 	overload Right(DSObject* value);
 Either* 	overload Map(Either* this, Either* (*func)(Either*));
+
+
+// 
+// Error | Ok

@@ -38,19 +38,14 @@ SOFTWARE.
  * 
  */
 DSDouble* NewDSDouble(const double value) { 
-    return DSDouble_init(DSDouble_alloc(), value); 
+    return DSDouble_init(alloc(DSDouble), value); 
 }
-
 
 DSDouble* DSDouble_init(DSDouble* const this, const double value) {
     DSNumber_init(this);
     this->isa = getDSDoubleIsa();
     this->value = value;
     return this;
-}
-
-DSDouble* DSDouble_alloc() {
-    return DSMalloc(getDSDoubleSize());
 }
 
 /**
@@ -62,10 +57,10 @@ double DSParseDouble(char const *const s) {
     double result = strtod(s, endptr);
 
     if (errno != 0)
-        throw DSNumberFormatException(s);
+        throw DSNumberFormatException(s, Source);
 
     if (s == endptr || *endptr != '\0')
-        throw DSNumberFormatException(s);
+        throw DSNumberFormatException(s, Source);
 
     return result;
 }

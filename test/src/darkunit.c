@@ -24,52 +24,87 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include "darkunit.h"
-
+/**
+ * DarkUnit TDD
+ * 
+ */
+static void sighandler(int signum);
+static void resethandlers();
+typedef struct test_stats {
+    int total;
+    int failed;
+    int passed;
+} test_stats;
 test_stats tests;
 
+int TestCountInc() { return tests.total++; }
+int TestFailInc()  { return tests.failed++; }
+int TestPassInc()  { return tests.passed++; }
+
 /**
- * print a section title
+ * Describe
+ * @param desc title of section
+ * @lambda the section code
+ * 
+ * print a section title & execute
  */
-void Describe(char* desc, void (^lambda)())
-{
-	printf("%s\n======================================\n\n", desc);
+void Describe(char* desc, void (^lambda)()) {
+	DSLog("%s\n======================================\n", desc);
 	lambda();
+}
+
+/**
+ * It
+ * @param desc title of test
+ * @lambda the test code
+ * 
+ * print a test title & execute
+ */
+void It(char* desc, void (^lambda)()) {
+    printf("%s - ", desc);
+	lambda();
+}
+
+/**
+ * print summary info
+ */
+int Summary() {
+    DSLog("Tests run: %d", tests.total);
+    DSLog("Tests passed: %d", tests.passed);
+    DSLog("Tests failed: %d", tests.failed);
+	return tests.failed;
 }
 
 /**
  * Handle fatal errors
  */
-static void sighandler(int signum) {
-	switch(signum) {
-		case SIGABRT: 	error("Program Aborted");		break;
-		case SIGFPE: 	error("Division by Zero");		break;
-		case SIGILL: 	error("Illegal Instruction"); 	break;
-		case SIGINT: 	error("Program Interrupted"); 	break;
-		case SIGSEGV: 	error("Segmentation fault"); 	break;
-		case SIGTERM:	error("Program Terminated"); 	break;
-	}
+static void resethandlers() {
 	signal(SIGABRT, sighandler);
 	signal(SIGFPE, sighandler);
 	signal(SIGILL, sighandler);
 	signal(SIGINT, sighandler);
 	signal(SIGSEGV, sighandler);
 	signal(SIGTERM, sighandler);
-	/* generate core dump */
-	// signal(signum, SIG_DFL);
-	// kill(getpid(), signum);
+}
+/**
+ * Handled fatal error
+ */
+static void sighandler(int signum) {
+	switch(signum) {
+		case SIGABRT: 	DSLog("Program Aborted");		break;
+		case SIGFPE: 	DSLog("Division by Zero");		break;
+		case SIGILL: 	DSLog("Illegal Instruction"); 	break;
+		case SIGINT: 	DSLog("Program Interrupted"); 	break;
+		case SIGSEGV: 	DSLog("Segmentation fault"); 	break;
+		case SIGTERM:	DSLog("Program Terminated"); 	break;
+	}
+	resethandlers();
 	exit(0);
 }
 /**
  * Set some fatal error traps
  */
-void __attribute__((constructor)) DarkUnit()
-{
-	signal(SIGABRT, sighandler);
-	signal(SIGFPE, sighandler);
-	signal(SIGILL, sighandler);
-	signal(SIGINT, sighandler);
-	signal(SIGSEGV, sighandler);
-	signal(SIGTERM, sighandler);
-
+void __attribute__((constructor)) DarkUnit() {
+	resethandlers();
 }
 

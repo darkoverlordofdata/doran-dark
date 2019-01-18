@@ -64,7 +64,7 @@ SOFTWARE.
  * 
  */
 DSStringBuilder* NewDSStringBuilder() { 
-	return DSStringBuilder_init(DSStringBuilder_alloc()); 
+	return DSStringBuilder_init(alloc(DSStringBuilder)); 
 }
 
 DSStringBuilder* DSStringBuilder_init(DSStringBuilder* const this)
@@ -73,11 +73,6 @@ DSStringBuilder* DSStringBuilder_init(DSStringBuilder* const this)
     this->isa = getDSStringBuilderIsa(); 
 	return this;
 }
-
-DSStringBuilder* DSStringBuilder_alloc() {
-    return DSMalloc(getDSStringBuilderSize());
-}
-
 
 /*
  * sb_empty returns non-zero if the given StringBuilder is empty.
@@ -107,7 +102,7 @@ int overload Append(DSStringBuilder* this, const char *str)
 	length = strlen(str);
 	frag = (StringFragment*) DSCalloc(1, sizeof(struct StringFragment));
 	if (nullptr == frag)
-		throw DSOutOfMemoryException("StringBuilder::Append");
+		throw DSOutOfMemoryException("StringBuilder::Append", Source);
 
 	frag->next = nullptr;
 	frag->length = length;
@@ -139,7 +134,7 @@ int overload Appendf(DSStringBuilder* this, const char *format, ...)
 	va_end(args);
 
 	if (0 > len)
-		throw DSOutOfMemoryException("StringBuilder::Append");
+		throw DSOutOfMemoryException("StringBuilder::Append", Source);
 
 	return Append(this, buf);
 }

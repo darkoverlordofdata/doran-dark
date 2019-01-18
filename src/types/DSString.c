@@ -37,7 +37,7 @@ SOFTWARE.
  * 
  */
 DSString* NewDSString(const char* const str) {
-    return DSString_init(DSString_alloc(), str); 
+    return DSString_init(alloc(DSString), str); 
 }
 
 DSString* DSString_init(DSString* const this, const char* value)
@@ -47,10 +47,6 @@ DSString* DSString_init(DSString* const this, const char* value)
     this->value = strdup(value);
     this->length = strlen(value);
     return this;
-}
-
-DSString* DSString_alloc() {
-    return DSMalloc(getDSStringSize());
 }
 
 void overload GetChars(const DSString* this, char* dst, int dstBegin) {
@@ -180,7 +176,7 @@ char overload CharAt(const DSString* const this, const int index)
 {
     printf("string %d,%d %s\n", index, this->length, this->value);
     if (index < 0 || index >= this->length)
-        throw DSIndexOutOfBoundsException(index);
+        throw DSIndexOutOfBoundsException(index, Source);
     return this->value[index];
 }
  

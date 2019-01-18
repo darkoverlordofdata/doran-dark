@@ -52,42 +52,33 @@ DSChar* NewDSChar(const char value);
 DSChar* DSChar_alloc();
 DSChar* DSChar_init(DSChar* const this, const char value);
 
-char*   overload ToString(const DSChar* const);
 int     overload Compare(const char x, const char y);
-int     overload CompareTo(const DSChar* const, const DSChar* const);
-int     overload IntValue(const DSChar* const);
-long    overload LongValue(const DSChar* const);
-float   overload FloatValue(const DSChar* const);
-double  overload DoubleValue(const DSChar* const);
-char    overload CharValue(const DSChar* const);
-short   overload ShortValue(const DSChar* const);
 
-
-typedef char*   (*DSCharToString)       (const DSChar* const);
-typedef int     (*DSCharCompareTo)      (const DSChar* const, const DSChar* const);
-typedef int     (*DSCharIntValue)       (const DSChar* const);
-typedef long    (*DSCharLongValue)      (const DSChar* const);
-typedef float   (*DSCharFloatValue)     (const DSChar* const);
-typedef double  (*DSCharDoubleValue)    (const DSChar* const);
-typedef char    (*DSCharCharValue)      (const DSChar* const);
-typedef short   (*DSCharShortValue)     (const DSChar* const);
+method (DSChar, ToString,        char*, (const DSChar* const));
+method (DSChar, CompareTo,       int, (const DSChar* const, const DSChar* const));
+method (DSChar, IntValue,        int, (const DSChar* const));
+method (DSChar, LongValue,       long, (const DSChar* const));
+method (DSChar, FloatValue,      float, (const DSChar* const));
+method (DSChar, DoubleValue,     double, (const DSChar* const));
+method (DSChar, CharValue,       char, (const DSChar* const));
+method (DSChar, ShortValue,      short, (const DSChar* const));
 
 /**
  * Char vtable with overrides
  */
 vtable (DSChar)
 {
-    DSCharToString          ToString;
-    DSObjectEquals          Equals;
-    DSObjectGetHashCode     GetHashCode;
-    DSObjectDispose         Dispose;
-    DSCharCompareTo         CompareTo;
-    DSCharIntValue          IntValue;
-    DSCharLongValue         LongValue;
-    DSCharFloatValue        FloatValue;
-    DSCharDoubleValue       DoubleValue;
-    DSCharCharValue         CharValue;
-    DSCharShortValue        ShortValue;
+    const DSCharToString          ToString;
+    const DSObjectEquals          Equals;
+    const DSObjectGetHashCode     GetHashCode;
+    const DSObjectDispose         Dispose;
+    const DSCharCompareTo         CompareTo;
+    const DSCharIntValue          IntValue;
+    const DSCharLongValue         LongValue;
+    const DSCharFloatValue        FloatValue;
+    const DSCharDoubleValue       DoubleValue;
+    const DSCharCharValue         CharValue;
+    const DSCharShortValue        ShortValue;
 };
 
 class (DSChar) {

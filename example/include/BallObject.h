@@ -13,9 +13,10 @@
 
 #include "GameObject.h"
 
+
 #define IsBallObject(object) _Generic((object), BallObject*: true, default: false)
-#define AsBallObject(object) _Generic((object),                          \
-                            BallObject*: (BallObject *)object,           \
+#define AsBallObject(object) _Generic((object),                         \
+                            BallObject*: (BallObject *)object,          \
                             default: nullptr)
 
 

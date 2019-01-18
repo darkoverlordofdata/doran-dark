@@ -107,16 +107,16 @@ typedef int         (*DSStringBuilderEmpty)     (const DSStringBuilder* sb);
  * StringBuilder metaclass
  */
 vtable (DSStringBuilder) {
-    DSObjectToString        ToString;
-    DSObjectEquals          Equals;
-    DSObjectGetHashCode     GetHashCode;
-    DSStringBuilderDispose  Dispose;
-    DSStringBuilderEmpty    Empty;        
-    DSStringBuilderAppend   Append;
-    DSStringBuilderAppendc  Appendc;
-    DSStringBuilderAppendf  Appendf;
-    DSStringBuilderConcat   Concat;
-    DSStringBuilderReset    Reset;
+    const DSObjectToString        ToString;
+    const DSObjectEquals          Equals;
+    const DSObjectGetHashCode     GetHashCode;
+    const DSStringBuilderDispose  Dispose;
+    const DSStringBuilderEmpty    Empty;        
+    const DSStringBuilderAppend   Append;
+    const DSStringBuilderAppendc  Appendc;
+    const DSStringBuilderAppendf  Appendf;
+    const DSStringBuilderConcat   Concat;
+    const DSStringBuilderReset    Reset;
 };
 
 class (DSStringBuilder) {

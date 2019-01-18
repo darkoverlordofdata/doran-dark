@@ -33,18 +33,13 @@ SOFTWARE.
  * 
  */
 DSBoolean* NewDSBoolean(const bool value) { 
-    return DSBoolean_init(DSBoolean_alloc(), value); 
-}
+    return DSBoolean_init(alloc(DSBoolean), value); }
 
 DSBoolean* DSBoolean_init(DSBoolean* this, const bool value) {
     DSComparable_init(this);
     this->isa = getDSBooleanIsa();
     this->value = value;
     return this;
-}
-
-DSBoolean* DSBoolean_alloc() {
-    return DSMalloc(getDSBooleanSize());
 }
 
 bool ParseBool(const char * const s) {

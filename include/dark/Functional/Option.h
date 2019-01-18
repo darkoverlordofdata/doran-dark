@@ -29,6 +29,10 @@ SOFTWARE.
 typedef struct Option Option;
 typedef struct DSObject DSObject;
 
+/**
+ * Option - 
+ * not a DSObject.
+ */
 Option* 	NewOption(DSObject* value);
 DSObject* 	overload Some(Option* this);
 int         overload Length(Option* this);

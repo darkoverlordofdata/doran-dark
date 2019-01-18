@@ -31,10 +31,6 @@ SOFTWARE.
  * Define the DSObject implementation
  */
 $implementation(DSObject);
-// $method(ToString,           DSObject_ToString, "$@:v");
-// $method(Equals,             DSObject_Equals, "B@:@@");
-// $method(GetHashCode,        DSObject_GetHashCode, "l@:v");
-// $method(Dispose,            DSObject_Dispose, "v@:v");
 $method(ToString,           ToString, "$@:v");
 $method(Equals,             Equals, "B@:@@");
 $method(GetHashCode,        GetHashCode, "l@:v");
@@ -52,10 +48,6 @@ $end;
 DSObject* DSObject_init(DSObject* this) {
     this->isa = getDSObjectIsa();
     return this;
-}
-
-DSObject* DSObject_alloc() {
-    return DSMalloc(getDSObjectSize());
 }
 
 bool ReferenceEquals(const DSObject* const objA, const DSObject* const objB)
@@ -148,7 +140,7 @@ char* GetClassName(const DSObject* const this)
 
 DSObject* NewDSObject() 
 { 
-    return DSObject_init(DSObject_alloc()); 
+    return DSObject_init(alloc(DSObject)); 
 }
 
 

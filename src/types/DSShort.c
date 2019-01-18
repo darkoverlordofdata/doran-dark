@@ -37,7 +37,7 @@ SOFTWARE.
  * 
  */
 DSShort* NewDSShort(const short value) { 
-    return DSShort_init(objc_getClass("DSShort"), value); 
+    return DSShort_init(alloc(DSShort), value); 
 }
 
 DSShort* DSShort_init(DSShort* const this, const short value)
@@ -48,11 +48,6 @@ DSShort* DSShort_init(DSShort* const this, const short value)
     return this;
 }
 
-DSShort* DSShort_alloc() {
-    return DSMalloc(getDSShortSize());
-}
-
-
 /**
  * Returns a primitive short value parsed from input string. 
  */
@@ -60,7 +55,7 @@ short DSParseShort(char const *const s, int const radix)
 {
     long i = DSParseLong(s, radix);
     if (i < SHORT_MIN_VALUE || i > SHORT_MAX_VALUE)
-        throw DSNumberFormatException(s, radix);
+        throw DSNumberFormatException(s, radix, Source);
     return (short)i;
 }
 

@@ -35,7 +35,12 @@ SOFTWARE.
 #include <string.h>
 #include <stdarg.h>
 #include <stdbool.h>
-#include "cexcept.h"
+/**
+ *  MACRO overload
+ *      method overload 
+ */
+#define overload __attribute__((overloadable))
+
 
 typedef void (*IDispose)(void* const, void* const);
 
@@ -44,6 +49,10 @@ void* DSRealloc(void*, size_t);
 void* DSCalloc(size_t, size_t);
 void DSFree(void*);
 void DSCollect();
+
+__attribute__((__format__ (__printf__, 1, 2)))                          \
+char* DSsprintf(const char* format, ...);
+
 
 /**
  * Friendlier type names
@@ -163,71 +172,79 @@ struct _default_arg_;
  */
 #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 
-/**
- *  MACRO DSException
- *      Pseudo Exception
- * 
- * this just prints the message on the stderr
- * and then returns 0/NULL
- */
-// #define DSException(name) static inline                                 \
-// __attribute__((__format__ (__printf__, 1, 2)))                          \
-// _Noreturn long DS##name##Exception(const char* msg, ...)                \
-// {                                                                       \
-//     va_list args;                                                       \
-//     va_start(args, msg);                                                \
-//     fprintf(stderr, #name);                                             \
-//     fprintf(stderr, "Exception (%s:%i) ", __FILENAME__, __LINE__); \
-//     vfprintf(stderr, msg, args);                                        \
-//     fprintf(stderr, "\n");                                              \
-//     va_end(args);                                                       \
-//     exit(99);                                                           \
-// }
-
-#define DSException(name, ...) DS##name##Exception(__FILENAME__, __func__, __LINE__, ##__VA_ARGS__)
-#define DSInvalidTypeException(name) (DSInvalidTypeException) \
-                                        (__FILENAME__, __func__, __LINE__, name)
-
-typedef enum DSExceptionType { 
-    AbstractMethodException, 
-    InvalidTypeException, 
-    IndexOutOfBoundsException, 
-    OutOfMemoryException,
-    NumberFormatException
-} DSExceptionType;
-
-typedef struct DSException DSException;
-typedef struct DSException {
-    DSExceptionType type;
-    const char *msg;
-};
-
-/**
- *  MACRO overload
- *      method overload 
- */
-#define overload __attribute__((overloadable))
-
-/**
- *  MACRO dtor
- *      set destructor method 
- */
-#define dtor(fn) __attribute__((cleanup(fn)))
-
-/** 
- * Exceptions 
- */
-define_exception_type(DSException*);
-extern struct exception_context the_exception_context[1];
-
-DSException* DSAbstractMethodException(const char*);
-DSException* (DSInvalidTypeException)(const char*, const char*, const int, const char*);
-DSException* DSIndexOutOfBoundsException(const int);
-DSException* DSOutOfMemoryException(const char*);
-DSException* overload DSNumberFormatException(const char*);
-DSException* overload DSNumberFormatException(const char*, const int);
 
 void DSvfprintf(FILE*, const char*, va_list);
 int DSvsnprintf(char*, size_t, const char*, va_list);
+
+// /**
+//  *  MACRO $
+//  *      Wrap a primitive type in a DSObject*
+//  */
+// #define $(T) _Generic((T),                                              \
+//                                                                         \
+//         _Bool:              $DSBoolean.Create,                          \
+//         char:               $DSChar.Create,                             \
+//         signed char:        $DSChar.Create,                             \
+//         const char *:       $DSString.Create,                           \
+//         char *:             $DSString.Create,                           \
+//         short int:          $DSShort.Create,                            \
+//         unsigned short int: $DSShort.Create,                            \
+//         unsigned int:       $DSInteger.Create,                          \
+//         long int:           $DSLong.Create,                             \
+//         unsigned long int:  $DSLong.Create,                             \
+//         int:                $DSInteger.Create,                          \
+//         float:              $DSFloat.Create,                            \
+//         double:             $DSDouble.Create,                           \
+//         default:            $DSString.Create)(T)
+
+
+// /**
+//  *  MACRO typeof
+//  *      return the typename of T
+//  */
+// #define typeof(T) _Generic((T),        /* wrap a primitive type */      \
+//                                                                         \
+//         _Bool: "bool",                                                  \
+//         unsigned char: "unsigned char",                                 \
+//         char: "char",                                                   \
+//         signed char: "signed char",                                     \
+//         short int: "short int",                                         \
+//         unsigned short int: "unsigned short int",                       \
+//         int: "int",                                                     \
+//         unsigned int: "unsigned int",                                   \
+//         long int: "long int",                                           \
+//         unsigned long int: "unsigned long int",                         \
+//         long long int: "long long int",                                 \
+//         unsigned long long int: "unsigned long long int",               \
+//         float: "float",                                                 \
+//         double: "double",                                               \
+//         long double: "long double",                                     \
+//         char *: "pointer to char",                                      \
+//         void *: "pointer to void",                                      \
+//         int *: "pointer to int",                                        \
+//         const char *: "const pointer to char",                          \
+//         DSObject *: "DSObject",                                         \
+//         DSComparable * : "DSComparable",                                \
+//         DSBoolean *: "DSBoolean",                                       \
+//         DSChar *: "DSChar",                                             \
+//         DSDouble *: "DSDouble",                                         \
+//         DSFloat *: "DSFloat",                                           \
+//         DSInteger *: "DSInteger",                                       \
+//         DSLong *: "DSLong",                                             \
+//         DSNumber *: "DSNumber",                                         \
+//         DSShort *: "DSShort",                                           \
+//         DSString *: "DSString",                                         \
+//         DSStringBuilder *: "DSStringBuilder",                           \
+//         DSArray *: "DSArray",                                           \
+//         DSHashmap *: "DSHashmap",                                       \
+//         DSList *: "DSList",                                             \
+//         DSClass : "DSClass",                                            \                                               
+//         default: "unknown")
+
+//         // Vec2 : "Vec2",                                                  \
+//         // Vec3 : "Vec3",                                                  \
+//         // Vec4 : "Vec4",                                                  \
+//         // Matrix : "Matrix",                                              \
+
 
 #endif _CORE_H

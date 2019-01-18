@@ -23,41 +23,36 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#pragma once
-#ifndef _DSCOMPARABLE_H_
-#define _DSCOMPARABLE_H_
-#include "DSObject.h"
-#include "DSException.h"
+#include <dark/DSException.h>
 
-#define IsDSComparable(object) _Generic((object), DSComparable*: true, default: false)
-#define AsDSComparable(object) _Generic((object),                   \
-                            DSComparable*: (DSComparable *)object,  \
-                            default: nullptr)
+$implementation(DSException);
+$override( ToString,         (DSExceptionToString)ToString, "$@:v" );
+$method( Equals,             DSObject_Equals, "B@:@@" );
+$method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
+$method( Dispose,            DSObject_Dispose, "v@:v" );
+$end;
+/** 
+ * Exceptions 
+ */
+struct exception_context the_exception_context[1];
 
 /**
- * DSComparable Class
+ * Returns the string value of this DSException
  */
-ivar (DSComparable) {
-    Class isa;
-};
+char* overload ToString(const DSException* const this) {
+    return this->msg;
+}
 
-typedef DSComparable* (*DSComparableCreate) ();
-typedef char*   (*DSComparableToString)  (const DSComparable* const);
-typedef int     (*DSComparableCompareTo)  (const DSComparable* const, const DSComparable* const);
+DSException* NewDSException(DSExceptionType type, char* msg) {
+    DSException* this = alloc(DSException);
+    return DSException_init(this, type, msg);
+}
 
-/**
- * DSComparable Vtable
- */
-vtable (DSComparable) {
-    const char*   (*ToString)     (const DSComparable* const);
-    const bool    (*Equals)       (const DSObject* const, DSObject* const);
-    const int     (*GetHashCode)  (const DSObject* const);
-    const void    (*Dispose)      (const DSObject* const);
-    const int     (*CompareTo)    (const DSComparable* const, const DSComparable* const);
-};
+DSException* DSException_init(DSException* this, DSExceptionType type, char* msg) {
+    DSObject_init(this);
+    this->isa = getDSExceptionIsa();
+    this->type = type;
+    this->msg = msg;
+    return this;
+}
 
-
-int overload CompareTo(const DSComparable* const, const DSComparable* const);
-char* overload ToString(const DSComparable* const this);
-
-#endif _DSCOMPARABLE_H_

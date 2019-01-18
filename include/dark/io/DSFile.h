@@ -26,46 +26,82 @@ SOFTWARE.
 #pragma once
 #ifndef _FILE_H_
 #define _FILE_H_
-#include <stdio.h>
-#include "../Comparable.h"
-#include "../types/String.h"
-#include "FileSystem.h"
+#include "../types.h"
+#include "DSFileSystem.h"
 
-cyclic_reference(FileSystem);
-
+typedef struct DSFileSystem DSFileSystem;
 typedef enum { PS_UNCHECKED, PS_INVALID, PS_CHECKED } PathStatus;
 
-class (File)
-{
+
+ivar (DSFile) {
     Class isa;
-    char*       (*ToString)(Object const);
-    bool        (*Equals)(Object const, Object const);
-    int         (*GetHashCode)(Object const);
-    void        (*Dispose) (Object const);
-    int         (*CompareTo) (Comparable const, Comparable other);
-    FileSystem          fs;
-    String              path;   
+    DSString*           path;   
     PathStatus          status;
     int                 prefixLength;
-    bool                (*IsInvalid) (File const);
-    int                 (*GetPrefixLength) (File const);
-    String              (*GetName) (File const);
-    String              (*GetParent) (File const);
-    File                (*GetParentFile) (File const);
-    String              (*GetPath) (File const);
-    bool                (*IsAbsolute) (File const);
-    String              (*GetAbsolutePath) (File const);
-    File                (*GetAbsoluteFile) (File const);
-    String              (*GetCanonicalPath) (File const);
-    File                (*GetCanonicalFile) (File const);
-    bool                (*CanRead) (File const);
-    bool                (*CanWrite) (File const);
-    bool                (*Exists) (File const);
-    bool                (*IsDirectory) (File const);
-    bool                (*IsFile) (File const);
-    long                (*GetLength) (File const);
-    String*             (*List) (File const);
+
 };
 
+
+DSFile* overload NewDSFile(const char*);
+DSFile* overload NewDSFile(const char*, const char*);
+DSFile* overload DSFile_init(DSFile* this, const char*);
+DSFile* overload DSFile_init(DSFile* this, const char*, const char*);
+DSFile* overload DSFile_init(DSFile* this, DSFile*, const char*);
+
+method (DSFile, ToString,           char*,      (const DSFile* const) );
+method (DSFile, CompareTo,          int,        (DSFile* const, DSFile* other) );
+method (DSFile, IsInvalid,          bool,       (DSFile* const) );
+method (DSFile, GetPrefixLength,    int,        (DSFile* const) );
+method (DSFile, GetName,            DSString*,  (DSFile* const) );
+method (DSFile, GetParent,          DSString*,  (DSFile* const) );
+method (DSFile, GetParentFile,      DSFile*,    (DSFile* const) );
+method (DSFile, GetPath,            DSString*,  (DSFile* const) );
+method (DSFile, IsAbsolute,         bool,       (DSFile* const) );
+method (DSFile, GetAbsolutePath,    DSString*,  (DSFile* const) );
+method (DSFile, GetAbsoluteFile,    DSFile*,    (DSFile* const) );
+method (DSFile, GetCanonicalPath,   DSString*,  (DSFile* const) );
+method (DSFile, GetCanonicalFile,   DSFile*,    (DSFile* const) );
+method (DSFile, CanRead,            bool,       (DSFile* const) );
+method (DSFile, CanWrite,           bool,       (DSFile* const) );
+method (DSFile, Exists,             bool,       (DSFile* const) );
+method (DSFile, IsDirectory,        bool,       (DSFile* const) );
+method (DSFile, IsFile,             bool,       (DSFile* const) );
+method (DSFile, GetLength,          long,       (DSFile* const) );
+method (DSFile, List,               DSString*,  (DSFile* const) );
+
+vtable (DSFile) {
+    const DSFileToString              ToString;
+    const DSObjectEquals              Equals;
+    const DSObjectGetHashCode         GetHashCode;
+    const DSObjectDispose             Dispose;
+    const DSFileCompareTo             CompareTo;
+    const DSFileIsInvalid             IsInvalid;
+    const DSFileGetPrefixLength       GetPrefixLength;
+    const DSFileGetName               GetName;
+    const DSFileGetParent             GetParent;
+    const DSFileGetParentFile         GetParentFile;
+    const DSFileGetPath               GetPath;
+    const DSFileIsAbsolute            IsAbsolute;
+    const DSFileGetAbsolutePath       GetAbsolutePath;
+    const DSFileGetAbsoluteFile       GetAbsoluteFile;
+    const DSFileGetCanonicalPath      GetCanonicalPath;
+    const DSFileGetCanonicalFile      GetCanonicalFile;
+    const DSFileCanRead               CanRead;
+    const DSFileCanWrite              CanWrite;
+    const DSFileExists                Exists;
+    const DSFileIsDirectory           IsDirectory;
+    const DSFileIsFile                IsFile;
+    const DSFileGetLength             GetLength;
+    const DSFileList                  List;
+};
+
+class (DSFile) {
+    DSFile*(*Create) (const char*);
+    // DSFileSystem* fs;
+    char SeparatorChar;
+    char* Separator;
+    char PathSeparatorChar;
+    char* PathSeparator;
+};
 
 #endif _FILE_H_ 

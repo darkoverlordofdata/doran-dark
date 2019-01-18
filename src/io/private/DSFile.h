@@ -23,41 +23,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#pragma once
-#ifndef _DSCOMPARABLE_H_
-#define _DSCOMPARABLE_H_
-#include "DSObject.h"
-#include "DSException.h"
+$implementation( DSFile );
 
-#define IsDSComparable(object) _Generic((object), DSComparable*: true, default: false)
-#define AsDSComparable(object) _Generic((object),                   \
-                            DSComparable*: (DSComparable *)object,  \
-                            default: nullptr)
+$override( ToString,         (DSFileToString)ToString, "$@:v" );
+$method( Equals,             DSObject_Equals, "B@:@@" );
+$method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
+$method( Dispose,            DSObject_Dispose, "v@:v" );
+$override( CompareTo,        (DSFileCompareTo)CompareTo, "i@:@" );
 
-/**
- * DSComparable Class
- */
-ivar (DSComparable) {
-    Class isa;
-};
+// $DSFile.fs = new(DSFileSystem);
 
-typedef DSComparable* (*DSComparableCreate) ();
-typedef char*   (*DSComparableToString)  (const DSComparable* const);
-typedef int     (*DSComparableCompareTo)  (const DSComparable* const, const DSComparable* const);
-
-/**
- * DSComparable Vtable
- */
-vtable (DSComparable) {
-    const char*   (*ToString)     (const DSComparable* const);
-    const bool    (*Equals)       (const DSObject* const, DSObject* const);
-    const int     (*GetHashCode)  (const DSObject* const);
-    const void    (*Dispose)      (const DSObject* const);
-    const int     (*CompareTo)    (const DSComparable* const, const DSComparable* const);
-};
-
-
-int overload CompareTo(const DSComparable* const, const DSComparable* const);
-char* overload ToString(const DSComparable* const this);
-
-#endif _DSCOMPARABLE_H_
+$end;

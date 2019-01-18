@@ -7,6 +7,7 @@ clang c11 with extensions:
 * __attribute__((ext_vector_type(n)))
 * __attribute__((overloadable))
 * __attribute__((constructor(n)))
+* __attribute__((cleaup(destructor)))
 
 
 ### testing
@@ -22,18 +23,15 @@ clang c11 with extensions:
 a port of the breakout game from learnopengl.com
 
 ## Why?
-C is simple. It compiles fast. I didn't like Borland C++ 2.0 when it came out - too 'gimicky'. It's gotten better, but I still think it has a noisy syntax. 
+I want a new C. C is simple. It compiles fast. I didn't like Borland C++ 2.0 when it came out - too 'gimicky'. It's gotten better, but I still think it has a noisy syntax. 
 
 This library is adequate for non-critical use. Probably 1/2 the internet runs or did run on hacks that emulate classes in javascript.
 
 > "C makes it easy to shoot yourself in the foot; C++ makes it harder, but when you do it blows your whole leg off" -- Bjarne Stroustrup
 
-## pacman dependancies
-    mingw64/mingw-w64-x86_64-libblocksruntime 0.4.1-1 [installed]
-        compiler-rt Blocks runtime library for Clang (mingw-w64)
-
-    mingw64/mingw-w64-x86_64-gc 7.6.8-1 [installed]
-        A garbage collector for C and C++ (mingw-w64)
+## dependancies
+    pacman -S mingw-w64-x86_64-libblocksruntime
+    pacman -S mingw-w64-x86_64-gc
 
 ## example
 ```c
@@ -80,4 +78,30 @@ int main(int argc, char **argv) {
 
 ```
 
+## example
+Some contrived error handling
 
+```c
+Either* Try(DSObject* (^lambda)(void)) {
+    DSException* e;
+    try {
+        return Right(lambda());
+    } catch (e) {
+        return Left($(e->msg));
+    }
+}
+
+...
+    auto answer = Try(^{
+         return (DSObject*)$(DSParseDouble("frodo")); 
+    });
+
+    if (IsRight(answer)) {
+        DSLog("answer = %$", GetRight(answer));
+    } else {
+        DSLog("error is %$", GetLeft(answer));
+    }
+
+```
+
+> error is NumberFormatException Invalid input. Value:"frodo"

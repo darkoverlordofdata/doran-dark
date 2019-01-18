@@ -51,40 +51,32 @@ DSShort* NewDSShort(short const value);
 DSShort* DSShort_init(DSShort* const this, const short value);
 DSShort* DSShort_alloc();
 
-char*   overload ToString(const DSShort* const);
-int     overload CompareTo(const DSShort* const, const DSShort* const);
-int     overload IntValue(const DSShort* const);
-long    overload LongValue(const DSShort* const);
-float   overload IntegerValue(const DSShort* const);
-double  overload DoubleValue(const DSShort* const);
-char    overload CharValue(const DSShort* const);
-short   overload ShortValue(const DSShort* const);
+method (DSShort, ToString,        char*, (const DSShort* const));
+method (DSShort, CompareTo,       int, (const DSShort* const, const DSShort* const));
+method (DSShort, IntValue,        int, (const DSShort* const));
+method (DSShort, LongValue,       long, (const DSShort* const));
+method (DSShort, FloatValue,      float, (const DSShort* const));
+method (DSShort, DoubleValue,     double, (const DSShort* const));
+method (DSShort, CharValue,       char, (const DSShort* const));
+method (DSShort, ShortValue,      short, (const DSShort* const));
 
-typedef char*   (*DSShortToString)       (const DSShort* const);
-typedef int     (*DSShortCompareTo)      (const DSShort* const, const DSShort* const);
-typedef int     (*DSShortIntValue)       (const DSShort* const);
-typedef long    (*DSShortLongValue)      (const DSShort* const);
-typedef float   (*DSShortFloatValue)     (const DSShort* const);
-typedef double  (*DSShortDoubleValue)    (const DSShort* const);
-typedef char    (*DSShortCharValue)      (const DSShort* const);
-typedef short   (*DSShortShortValue)     (const DSShort* const);
 
 /**
  * Integer vtable with overrides
  */
 vtable (DSShort)
 {
-    DSShortToString           ToString;
-    DSObjectEquals              Equals;
-    DSObjectGetHashCode         GetHashCode;
-    DSObjectDispose             Dispose;
-    DSShortCompareTo          CompareTo;
-    DSShortIntValue           IntValue;
-    DSShortLongValue          LongValue;
-    DSShortFloatValue         IntegerValue;
-    DSShortDoubleValue        DoubleValue;
-    DSShortCharValue          CharValue;
-    DSShortShortValue         ShortValue;
+    const DSShortToString         ToString;
+    const DSObjectEquals          Equals;
+    const DSObjectGetHashCode     GetHashCode;
+    const DSObjectDispose         Dispose;
+    const DSShortCompareTo        CompareTo;
+    const DSShortIntValue         IntValue;
+    const DSShortLongValue        LongValue;
+    const DSShortFloatValue       FloatValue;
+    const DSShortDoubleValue      DoubleValue;
+    const DSShortCharValue        CharValue;
+    const DSShortShortValue       ShortValue;
 };
 
 

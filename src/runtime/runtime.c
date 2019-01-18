@@ -84,6 +84,9 @@ void objc_register_builtins() {
     Class cls;
     objc_registerClassPair(cls = DSClassImplementation(obj));
 
+    /** DSException */
+    objc_registerClassPair(DSExceptionImplementation(obj));
+
     /** DSCollection */
     // Class col;
     // objc_registerClassPair(col = DSCollectionImplementation(obj));
@@ -110,6 +113,10 @@ void objc_register_builtins() {
 
     objc_registerClassPair(DSStringImplementation(obj));
     objc_registerClassPair(DSStringBuilderImplementation(obj));
+
+    // objc_registerClassPair(DSFileSystemImplementation(obj));
+    // objc_registerClassPair(DSFileImplementation(cmp));
+
 
 
 }

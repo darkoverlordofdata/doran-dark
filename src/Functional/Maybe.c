@@ -26,12 +26,6 @@ SOFTWARE.
 //https://www.shellblade.net/monad.html
 #include <dark/Functional/Maybe.h>
 
-/** 
- * I'm not sure that generics are needed. Monad binding is 
- * useful in Haskel because it't not procedureal. But c is, 
- * so bind is not so useful, instead it's just awkward.
- * 
-*/
 #ifdef __MAYBE_GENERICS__
 ivar (Maybe) {
     union {

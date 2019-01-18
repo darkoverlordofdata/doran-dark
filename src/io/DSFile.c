@@ -23,7 +23,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include <dark/io/File.h>
+#include <dark/io/DSFile.h>
+#include "private/DSFile.h"
 /* 
  * File implementation
  */
@@ -38,27 +39,69 @@ static bool isLetter(char c) {
 }
 
 /**
- * prepend a shash onto a string
+ * prepend a slash onto a string
  */
 // static char* slashify(char* p) {
 //     if ((strlen(p) > 0) && (p[0] != slash)) return join(slashString, p);
 //     else return p;
 // }
 
-char* File_ToString(File const this)
-{
-    return "dark.io.File";
+int overload GetPrefixLength(DSFile* const this) {
+    return this->prefixLength;
+}
+
+DSString* overload GetPath(DSFile* const this) {
+    return this->path;
+}
+char* overload ToString(const DSFile* const this) {
+    // return this->name;
+    return "";
+}
+
+int overload CompareTo(DSFile* const this, DSFile* other) {
+    return 0;
 }
 
 /**
  * Initialize a new File
  */
-File File_init(File const this)
-{
-    Number_init(this);
+DSFile* overload DSFile_init(DSFile* const this, const char* path) {
+    DSComparable_init(this);
+    this->isa = getDSFileIsa();
+    this->path = fs.Normalize(path);
+    this->prefixLength = fs.PrefixLength(this->path);
+    return this;
+}
 
-    this->ToString      = File_ToString;
+DSFile* overload DSFile_init(DSFile* const this, const char* parent, const char* child) {
+    DSComparable_init(this);
+    this->isa = getDSFileIsa();
+    if (!strcmp("", parent)) {
+        this->path = fs.Resolve(fs.GetDefaultParent(), 
+                        fs.Normalize(child));
+    } else {
+        this->path = fs.Resolve(fs.Normalize(parent), 
+                        fs.Normalize(child));
+    }
+    this->prefixLength = fs.PrefixLength(this->path);
+    return this;
+}
 
+DSFile* overload DSFile_init(DSFile* const this, DSFile* parent, const char* child) {
+    DSComparable_init(this);
+    this->isa = getDSFileIsa();
+    if (parent->path != nullptr) {
+        if (!strcmp("", parent->path)) {
+        this->path = fs.Resolve(fs.GetDefaultParent(), 
+                        fs.Normalize(child));
+        } else {
+        this->path = fs.Resolve(parent->path, 
+                        fs.Normalize(child));
+        }
+    } else {
+        this->path = fs.Normalize(child);
+    }
+    this->prefixLength = fs.PrefixLength(this->path);
     return this;
 }
 
@@ -67,8 +110,10 @@ File File_init(File const this)
  * 
  * 
  */
-File File_New()
-{
-    return File_init(class_alloc(File));
+DSFile* overload DSFile_New(const char* path) {
+    return DSFile_init(alloc(DSFile), path);
 }
 
+DSFile* overload DSFile_New(const char* parent, const char* child) {
+    return DSFile_init(alloc(DSFile), parent, child);
+}

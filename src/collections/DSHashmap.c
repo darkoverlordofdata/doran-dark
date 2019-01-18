@@ -173,35 +173,27 @@ unsigned int overload HashInt(DSHashmap* const this, char* keystring)
 /**
  * Typed Constructor
  */
-DSHashmap* NewDSHashmap(Class typ) {
-    DSHashmap* this = DSHashmap_init(DSHashmap_alloc(), typ);
-    DSLog("B NewDSHashmap Check for %x", this->typeOf);
+DSHashmap* NewDSHashmap(Class typeOf) {
+    DSHashmap* this = DSHashmap_init(alloc(DSHashmap), typeOf);
     return this;
 }
 
-DSHashmap* DSHashmap_init(DSHashmap* const this, Class typ)
-// DSHashmap* DSHashmap_init(DSHashmap* const this, ...)
+DSHashmap* overload DSHashmap_init(DSHashmap* const this)
+{
+    return DSHashmap_init(this, nullptr);
+}
+DSHashmap* overload DSHashmap_init(DSHashmap* const this, Class typeOf)
 {
     DSObject_init(this);
-    // va_list args;
-    // va_start(args, this);
-    // Class typ = va_arg(args, Class);
-    // va_end(args);          
 
     this->isa = getDSHashmapIsa();
-    this->typeOf = typ;
+    this->typeOf = typeOf;
     this->data = DSCalloc(INITIAL_SIZE, sizeof(DSHashmapNode));
 	this->tableSize = INITIAL_SIZE;
 	this->size = 0;
 
     return this;
 }
-
-DSHashmap* DSHashmap_alloc() {
-    return DSMalloc(getDSHashmapSize());
-}
-
-
 
 /*
  * Return the integer of the location in data
@@ -267,11 +259,9 @@ int overload Rehash(DSHashmap* const this)
  */
 Either* overload Put(DSHashmap* const this, char* key, DSObject* value)
 {
-    if ((this->typeOf) && !InstanceOf(this->typeOf, value)) 
-        return Left($("InvalidType"));
-        // throw DSInvalidTypeException(this->typeOf->name);
-        // throw DSException(InvalidType, this->typeOf->name);
-
+    if ((this->typeOf) && !InstanceOf(this->typeOf, value))  {
+        return Left(DSInvalidTypeException(this->typeOf->name, Source));
+    }
 	/* Find a place to put our value */
 	int index = Hash(this, key);
 	while (index == MAP_FULL)
