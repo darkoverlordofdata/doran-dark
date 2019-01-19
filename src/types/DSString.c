@@ -174,7 +174,7 @@ bool overload IsEmpty(const DSString* const this)
 
 char overload CharAt(const DSString* const this, const int index)
 {
-    printf("string %d,%d %s\n", index, this->length, this->value);
+    // printf("string %d,%d %s\n", index, this->length, this->value);
     if (index < 0 || index >= this->length)
         throw DSIndexOutOfBoundsException(index, Source);
     return this->value[index];

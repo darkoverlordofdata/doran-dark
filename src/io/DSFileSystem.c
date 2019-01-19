@@ -117,7 +117,6 @@ static DSString* fsNormalize2(DSString* path, int len, int off) {
     if (len == 0) return path;
     if (off < 3) off = 0;
     int src;
-    // char fsSlash = fsSlash;
     DSString* tmp;
     auto sb = new(DSStringBuilder);
 
@@ -163,6 +162,10 @@ static DSString* fsNormalize2(DSString* path, int len, int off) {
  * Normalize path
  */
 static DSString* fsNormalize(DSString* path) {
+
+    if (path->isa != getDSStringIsa()) return nullptr;
+
+
     int n = path->length;
     char fsSlash = fsSlash;
     char fsAltSlash = fsAltSlash;
@@ -224,11 +227,10 @@ static DSString* fsResolve(DSString* parent, DSString* child) {
             return parent;
         }
     }
-
     if (parent->value[pn - 1] == fsSlash)
         parentEnd--;
 
-    int len = parentEnd - cn - childStart;
+    int len = parentEnd + cn - childStart;
     char* theChars = nullptr;
     if (child->value[childStart] == fsSlash) {
         theChars = DSMalloc (len * sizeof(char));
@@ -238,8 +240,9 @@ static DSString* fsResolve(DSString* parent, DSString* child) {
         theChars = DSMalloc ((len+1) * sizeof(char));
         memcpy(theChars, parent->value, parentEnd);
         theChars[parentEnd] = fsSlash;
-        memcpy(theChars+parentEnd+1, child->value+childStart, cn);
+        memcpy(theChars+parentEnd, child->value+childStart, cn);
     }
+
     return $(theChars);
 }
 

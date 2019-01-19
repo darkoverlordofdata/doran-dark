@@ -3,6 +3,7 @@
         {
             "name": "Win32",
             "includePath": [
+                "${workspaceFolder}/src",
                 "${workspaceFolder}/.lib/dark/src/vendor",
                 "${workspaceFolder}/.lib/dark/include",
                 "C:/msys64/mingw64/include"

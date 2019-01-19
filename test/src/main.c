@@ -98,8 +98,16 @@ int main(int argc, char **argv) {
     });
     DSLog("Done");
 
-    DSLog("GetDefaultParent = %$", fs.GetDefaultParent());
-    
+
+    auto child = fs.Normalize($("src/main.c"));
+    // auto child = fs.Normalize("src/main.c");
+    auto parent = fs.GetDefaultParent();
+    auto path = fs.Resolve(parent, child);
+    DSLog("Resolve = %$", path);
+
+
+    DSLog("Neg %d", -10);
+    DSLog("float %f", 3.1415f);
     return Summary();
 }
 

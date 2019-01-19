@@ -86,7 +86,8 @@ int overload Empty(const DSStringBuilder* this)
 int overload Appendc(DSStringBuilder* this, const char c)
 {
 	char str[2] = { c, 0 };
-	return _vptr(this)->Append(this, str);
+	auto x = _vptr(this)->Append(this, str);
+	return x;
 }
 /*
  * sb_append adds a copy of the given string to a StringBuilder.
