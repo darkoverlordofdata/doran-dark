@@ -51,10 +51,10 @@ int TestPassInc();
 ({                                                                      \
     if (!(test)) {                                                      \
         DSLog(" failed (%s:%i)", __FILENAME__, __LINE__);               \
-	    TestPassInc();                                                  \
+	    TestFailInc();                                                  \
     } else {                                                            \
         DSLog(" passed");                                               \
-	    TestFailInc();                                                  \
+	    TestPassInc();                                                  \
     }                                                                   \
     TestCountInc();                                                     \
 })

@@ -47,12 +47,12 @@ static long fsGetLastModifiedTime(DSFile* f);
 static long fsGetLength(DSFile* f);
 static bool fsCreateFileExclusively(DSString* path);
 static bool fsDelete(DSFile* f);
-static DSString* fsList(DSFile* f);
+static DSString** fsList(DSFile* f);
 static bool fsCreateDirectory(DSFile* f);
 static bool fsRename(DSFile* f1, DSFile* f2);
 static bool fsSetLastModifiedTime(DSFile* f, long time);
 static DSString* fsSetReadOnly(DSFile* f);
-static DSFile* fsListRoots();
+static DSFile** fsListRoots();
 static int fsCompare(DSFile* f1, DSFile* f2);
 static int fsHashCode(DSFile* f);
 
@@ -66,6 +66,8 @@ struct DSFileSystem {
     const char* slashString;
     const char* semicolonString;
     const char* altSlashString;
+    const bool UseCanonCaches;
+    const bool UseCanonPrefixCache;
     const bool (*isSlash)(char c);
     const bool (*isLetter)(char c);
     const DSString* (*Slashify)(DSString* p);
@@ -92,12 +94,12 @@ struct DSFileSystem {
     const long (*GetLength)(DSFile* f);
     const bool (*CreateFileExclusively)(DSString* path);
     const bool (*Delete)(DSFile* f);
-    const DSString* (*List)(DSFile* f);
+    const DSString** (*List)(DSFile* f);
     const bool (*CreateDirectory)(DSFile* f);
     const bool (*Rename)(DSFile* f1, DSFile* f2);
     const bool (*SetLastModifiedTime)(DSFile* f, long time);
     const DSString* (*SetReadOnly)(DSFile* f);
-    const DSFile* (*ListRoots)();
+    const DSFile** (*ListRoots)();
     const int (*Compare)(DSFile* f1, DSFile* f2);
     const int (*HashCode)(DSFile* f);
 };

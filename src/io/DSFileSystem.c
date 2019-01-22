@@ -25,6 +25,7 @@ SOFTWARE.
 ******************************************************************/
 #include <stdio.h>
 #include <dark/io/DSFileSystem.h>
+#include <sys/stat.h>
 
 static char fsSlash;
 static char fsSemicolon;
@@ -163,22 +164,22 @@ static DSString* fsNormalize2(DSString* path, int len, int off) {
  */
 static DSString* fsNormalize(DSString* path) {
 
-    if (path->isa != getDSStringIsa()) return nullptr;
-
+    // if (path->isa != getDSStringIsa()) return nullptr;
 
     int n = path->length;
-    char fsSlash = fsSlash;
-    char fsAltSlash = fsAltSlash;
     char prev = 0;
 
     for (int i = 0; i < n; i++) {
         char c = CharAt(path, i);
-        if (c == fsAltSlash) 
+        if (c == fsAltSlash) {
             return fsNormalize2(path, n, (prev == fsSlash) ? i - 1 : i);
-        if ((c == fsSlash) && (prev == fsSlash) && i > 1)
+        }
+        if ((c == fsSlash) && (prev == fsSlash) && i > 1) {
             return fsNormalize2(path, n, i - 1);
-        if ((c == ':') && (i > 1))
+        }
+        if ((c == ':') && (i > 1)) {
             return fsNormalize2(path, n, 0);
+        }
         prev = c;
     }
     if (prev == fsSlash) return fsNormalize2(path, n, n - 1);
@@ -186,17 +187,22 @@ static DSString* fsNormalize(DSString* path) {
 }
 
 static int fsPrefixLength(DSString* path) {
-    char fsSlash = fsSlash;
     int n = path->length;
     if (n == 0) return 0;
-    char c0 = path->value[0];
-    char c1 = (n > 1) ? path->value[1] : 0;
+    int c0 = CharAt(path, 0);
+    int c1 = (n > 1) ? CharAt(path, 1) : 0;
+    if (c0 == fsAltSlash) { // MSys2 : /c/Program Files/
+        if ((n > 2) && CharAt(path, 2) == fsAltSlash) {
+            return 3;
+        }
+        return 1;
+    }
     if (c0 == fsSlash) {
         if (c1 == fsSlash) return 2;
         return 1;
     }
     if (fsIsLetter(c0) && (c1 == ':')) {
-        if ((n > 2) && (path->value[2] == fsSlash))
+        if ((n > 2) && (CharAt(path, 2) == fsSlash))
             return 3;
         return 2;
     }
@@ -209,30 +215,28 @@ static DSString* fsResolve(DSString* parent, DSString* child) {
     int cn = child->length;
     if (cn == 0) return parent;
 
-    char fsSlash = fsSlash;
-
     DSString* c = child;
     int childStart = 0;
     int parentEnd = pn;
 
-    if ((cn > 1) && (c->value[0] == fsSlash)) {
-        if (c->value[1] == fsSlash) {
+    if ((cn > 1) && (CharAt(c, 0) == fsSlash)) {
+        if (CharAt(c, 1) == fsSlash) {
             childStart = 2;
         } else {
             childStart = 1;
         }
         if (cn == childStart) {
-            if (parent->value[pn - 1] == fsSlash)
+            if (CharAt(parent, pn - 1) == fsSlash)
                 return $(strndup(parent->value, pn-1));
             return parent;
         }
     }
-    if (parent->value[pn - 1] == fsSlash)
+    if (CharAt(parent, pn - 1) == fsSlash)
         parentEnd--;
 
     int len = parentEnd + cn - childStart;
     char* theChars = nullptr;
-    if (child->value[childStart] == fsSlash) {
+    if (CharAt(child, childStart) == fsSlash) {
         theChars = DSMalloc (len * sizeof(char));
         memcpy(theChars, parent->value, parentEnd);
         memcpy(theChars+parentEnd, child->value+childStart, cn);
@@ -252,13 +256,13 @@ static DSString* fsGetDefaultParent() {
 
 static DSString* fsFromURIPath(DSString* path) {
     int length = path->length;
-    char* p, buf = strndup(path->value, length);
+    char* p = strndup(path->value, length);
     if ((length > 2) && (p[2] == ':')) {
         p++;
         length--;
         if ((length > 3) && (p[length - 1] == '/'))
             length--;
-    } else if ((length > 1) &&  (p[length - 1] == '/')) {
+    } else if ((length > 1) && (p[length - 1] == '/')) {
         length--;
     }
     p[length-1] = 0;
@@ -317,57 +321,108 @@ static DSString* fsResolveFile(DSFile* f) {
 }
 
 static DSString* fsCanonicalize(DSString* path) {
+    int len = Length(path);
+    if (len == 2) {
+        if (fsIsLetter(CharAt(path, 0)) &&
+        (CharAt(path, 1) == ':')) {
+
+            char c = CharAt(path, 0);
+            if ((c >= 'A') && (c <= 'Z'))
+                return path;
+            char p[2] = { CharAt(path, 0)-32, 0 };
+            return $(join(p, &path->value[1]));
+
+        } else if ((len == 3) &&
+        (fsIsLetter(CharAt(path, 0))) &&
+        (CharAt(path, 1) == ':') &&
+        (CharAt(path, 2) == '\\')) {
+
+            char c = ChatAt(path, 0);
+            if ((c >= 'A') && (c <= 'Z'))
+                return path;
+            char p[2] = { CharAt(path, 0)-32, 0 };
+            return $(join(p, &path->value[1]));
+        }
+    }
+    if (!fs.UseCanonCaches) {
+        return path;
+    } else {
+        return path;
+    }
 
 }
+
 static int fsGetBooleanAttributes(DSFile* f) {
-
+    struct stat sbuf;
+    if (stat(ToString(GetPath(f)), &sbuf) < 0) return 0;
+    return sbuf.st_mode;
 }
+
 static bool fsCheckAccess(DSFile* f, int access) {
-
+    struct stat sbuf;
+    if (stat(ToString(GetPath(f)), &sbuf) < 0) return 0;
+    return ((sbuf.st_size & access) != 0);
 }
+
 static bool fsSetPermission(DSFile* f, int access, bool enable, bool owneronly) {
 
 }
+
 static long fsGetLastModifiedTime(DSFile* f) {
 
 }
-static long fsGetLength(DSFile* f) {
 
+static long fsGetLength(DSFile* f) {
+    struct stat sbuf;
+    if (stat(ToString(GetPath(f)), &sbuf) < 0) return 0;
+    return sbuf.st_size;
 }
+
 static bool fsCreateFileExclusively(DSString* path) {
 
 }
+
 static bool fsDelete(DSFile* f) {
 
 }
-static DSString* fsList(DSFile* f) {
+
+static DSString** fsList(DSFile* f) {
 
 }
+
 static bool fsCreateDirectory(DSFile* f) {
 
 }
+
 static bool fsRename(DSFile* f1, DSFile* f2) {
 
 }
+
 static bool fsSetLastModifiedTime(DSFile* f, long time) {
 
 }
+
 static DSString* fsSetReadOnly(DSFile* f) {
 
 }
-static DSFile* fsListRoots() {
+
+static DSFile** fsListRoots() {
 
 }
+
 static int fsCompare(DSFile* f1, DSFile* f2) {
-
+    return CompareTo(GetPath(f1), GetPath(f2));
 }
+
 static int fsHashCode(DSFile* f) {
 
 }
 
-void __attribute__((constructor())) FileSystemInit()
+// void __attribute__((constructor())) 
+
+void DSFileSystemInit()
 {
-    fsSlash = '/';
+    fsSlash = '\\';
     fsSemicolon = ';';
     fsAltSlash = (fsSlash == '\\') ? '/' : '\\';
 
@@ -380,6 +435,7 @@ void __attribute__((constructor())) FileSystemInit()
     fsAltSlashString[0] = fsAltSlash;
     fsAltSlashString[1] = 0;
 
+
     DSFileSystem local = (struct DSFileSystem) 
     {
         .slash = fsSlash,
@@ -390,6 +446,8 @@ void __attribute__((constructor())) FileSystemInit()
         .altSlashString = fsAltSlashString,
         .isSlash = fsIsSlash,
         .isLetter = fsIsLetter,
+        .UseCanonCaches = false,
+        .UseCanonPrefixCache = false,
         .Slashify = fsSlashify,
         .GetUserPath = fsGetUserPath,
         .GetDrive = fsGetDrive,

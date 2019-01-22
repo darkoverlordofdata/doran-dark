@@ -56,6 +56,11 @@ int DSvsnprintf(char* str, size_t n, const char* format, va_list _args)
     va_list arg; 
     va_copy(arg, _args);
     
+    /**
+     * decompose the format string into specifiers.
+     * call sprintf for standard specifiers, and handle
+     * new specifiers.
+     */
     for (current = format; *current != '\0'; current++) { 
 
         while ( *current != '%' ) { 
@@ -69,11 +74,22 @@ int DSvsnprintf(char* str, size_t n, const char* format, va_list _args)
         spec[c++] = *current;
         current++;
 
-        /** collect the specifier */
-        while ((*current != '\0') || (strchr(types, *current)-types+1<0))  {
+        /** 
+         * collect the specifier 
+         * 
+         *  %[flags][width][.precision][length]specifier 
+         * 
+         * Everything between the leading % and the specifier is collected
+         * and passed on to stdlib sprintf. This is done to add a new
+         * specifier, '$' for DaRKSTEP objects.
+         * 
+         */
+        while ((*current != '\0') 
+            && (strchr(types, *current) != nullptr)) {
             spec[c++] = *current;
             current++;
         }
+        /** Back up one, and point to the specifier */
         current--;
 
         switch (*current) { 

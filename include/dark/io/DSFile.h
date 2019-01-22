@@ -67,7 +67,7 @@ method (DSFile, Exists,             bool,       (DSFile* const) );
 method (DSFile, IsDirectory,        bool,       (DSFile* const) );
 method (DSFile, IsFile,             bool,       (DSFile* const) );
 method (DSFile, GetLength,          long,       (DSFile* const) );
-method (DSFile, List,               DSString*,  (DSFile* const) );
+method (DSFile, List,               DSString**, (DSFile* const) );
 
 vtable (DSFile) {
     const DSFileToString              ToString;
@@ -99,9 +99,9 @@ class (DSFile) {
     DSFile*(*Create) (const char*);
     // DSFileSystem* fs;
     char SeparatorChar;
-    char* Separator;
+    char Separator[2];
     char PathSeparatorChar;
-    char* PathSeparator;
+    char PathSeparator[2];
 };
 
 #endif _FILE_H_ 

@@ -25,12 +25,32 @@ SOFTWARE.
 ******************************************************************/
 $implementation( DSFile );
 
-$override( ToString,         (DSFileToString)ToString, "$@:v" );
-$method( Equals,             DSObject_Equals, "B@:@@" );
-$method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
-$method( Dispose,            DSObject_Dispose, "v@:v" );
-$override( CompareTo,        (DSFileCompareTo)CompareTo, "i@:@" );
+$override( ToString,        (DSFileToString)ToString, "$@:v" );
+$method( Equals,            DSObject_Equals, "B@:@@" );
+$method( GetHashCode,       DSObject_GetHashCode, "l@:v" );
+$method( Dispose,           DSObject_Dispose, "v@:v" );
+$override( CompareTo,       (DSFileCompareTo)CompareTo, "i@:@" );
+$method( IsInvalid,         (DSFileIsInvalid)IsInvalid, "B@:v");
+$method( GetName,           (DSFileGetName)GetName, "$@:v" );
+$method( GetParent,         (DSFileGetParent)GetParent, "$@:v" );
+$method( GetParentFile,     (DSFileGetParentFile)GetParentFile, "$@:v" );
+$method( IsAbsolute,        (DSFileIsAbsolute)IsAbsolute, "B@:v" );
+$method( GetAbsolutePath,   (DSFileGetAbsolutePath)GetAbsolutePath, "$@:v" );
+$method( GetAbsoluteFile,   (DSFileGetAbsoluteFile)GetAbsolutePath, "@@:v" );
+$method( GetCanonicalPath,  (DSFileGetCanonicalPath)GetCanonicalPath, "$@:v");
+$method( GetCanonicalFile,  (DSFileGetCanonicalFile)GetCanonicalFile, "@@:v");
+$method( CanRead,           (DSFileCanRead)CanRead, "B@:v");
+$method( CanWrite,          (DSFileCanWrite)CanWrite, "B@:v");
+$method( Exists,            (DSFileExists)Exists, "B@:v");
+$method( IsDirectory,       (DSFileIsDirectory)IsDirectory, "B@:v");
+$method( IsFile,            (DSFileIsFile)IsFile, "B@:v");
+$method( GetLength,         (DSFileGetLength)GetLength, "l@:v");
 
-// $DSFile.fs = new(DSFileSystem);
+$DSFile.SeparatorChar = fs.GetSeparator();
+$DSFile.Separator[0] = $DSFile.SeparatorChar;
+$DSFile.Separator[1] = '\0';
+$DSFile.PathSeparatorChar = fs.GetPathSeparator();
+$DSFile.PathSeparator[0] = $DSFile.PathSeparatorChar;
+$DSFile.PathSeparator[1] =  '\0';
 
 $end;

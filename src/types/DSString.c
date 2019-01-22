@@ -162,6 +162,21 @@ DSString* overload Trim(const DSString* this) {
         : this;    
 }
 
+DSString* overload Substring(const DSString* this, const int index, const int length) {
+    char* result = DSMalloc(length+1);
+    strncpy(result, this->value+index, length);
+    result[length] = '\0';
+    return $DSString.Create(result);
+}
+
+DSString* overload Substring(const DSString* this, const int index) {
+    int length = this->length - index;
+    char* result = DSMalloc(length+1);
+    strncpy(result, this->value+index, length);
+    result[length] = '\0';
+    return $DSString.Create(result);
+}
+
 int overload Length(const DSString* const this) 
 {
     return this->length;

@@ -69,6 +69,8 @@ DSString*   overload Trim(const DSString* this);
 int         overload Length(const DSString* const);
 bool        overload IsEmpty(const DSString* const this);
 char        overload CharAt(const DSString* const this, const int index);
+DSString*   overload Substring(const DSString* const this, const int index);
+DSString*   overload Substring(const DSString* const this, const int index, const int length);
 __attribute__((__format__ (__printf__, 1, 2)))
 DSString*   overload Format(const char* format, ...);
 
@@ -92,6 +94,7 @@ typedef DSString*   (*DSStringTrim)     (const DSString* this);
 typedef int         (*DSStringLength)   (const DSString* const);
 typedef bool        (*DSStringIsEmpty)  (const DSString* const this);
 typedef char        (*DSStringCharAt)   (const DSString* const this, const int index);
+typedef DSString*   (*DSStringSubstring) (const DSString* const this, const int index, const int length);
 __attribute__((__format__ (__printf__, 1, 2)))
 typedef DSString*   (*DSStringFormat)   (const char* format, ...);
 
@@ -99,28 +102,28 @@ typedef DSString*   (*DSStringFormat)   (const char* format, ...);
  * Object metaclass
  */
 vtable (DSString) {
-    const DSStringToString            ToString;
-    const DSStringEquals              Equals;
-    const DSObjectGetHashCode         GetHashCode;
-    const DSObjectDispose             Dispose;
-    const DSStringCompareTo           CompareTo;
-    const DSStringLength              Length;
-    const DSStringIsEmpty             IsEmpty;
-    const DSStringCharAt              CharAt;
-    const DSStringCompareToIgnoreCase CompareToIgnoreCase;
-    const DSStringConcat              Concat;
-    const DSStringConcatc             Concatc;
-    const DSStringContains            Contains;
-    const DSStringCopyOf              CopyOf;
-    const DSStringEndsWith            EndsWith;
-    const DSStringStartsWith          StartsWith;
-    const DSStringGetBytes            GetBytes;
-    const DSStringIndexOf             IndexOf;
-    const DSStringLastIndexOf         LastIndexOf;
-    const DSStringToUpperCase         ToUpperCase;
-    const DSStringToLowerCase         ToLowerCase;
-    const DSStringTrim                Trim;
-    
+    const DSStringToString              ToString;
+    const DSStringEquals                Equals;
+    const DSObjectGetHashCode           GetHashCode;
+    const DSObjectDispose               Dispose;
+    const DSStringCompareTo             CompareTo;
+    const DSStringLength                Length;
+    const DSStringIsEmpty               IsEmpty;
+    const DSStringCharAt                CharAt;
+    const DSStringCompareToIgnoreCase   CompareToIgnoreCase;
+    const DSStringConcat                Concat;
+    const DSStringConcatc               Concatc;
+    const DSStringContains              Contains;
+    const DSStringCopyOf                CopyOf;
+    const DSStringEndsWith              EndsWith;
+    const DSStringStartsWith            StartsWith;
+    const DSStringGetBytes              GetBytes;
+    const DSStringIndexOf               IndexOf;
+    const DSStringLastIndexOf           LastIndexOf;
+    const DSStringToUpperCase           ToUpperCase;
+    const DSStringToLowerCase           ToLowerCase;
+    const DSStringTrim                  Trim;
+    const DSStringSubstring             Substring;
 };
 
 class (DSString) {

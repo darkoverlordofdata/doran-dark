@@ -111,11 +111,11 @@ vtable (DSStringBuilder) {
     const DSObjectEquals          Equals;
     const DSObjectGetHashCode     GetHashCode;
     const DSStringBuilderDispose  Dispose;
-    const DSStringBuilderEmpty    Empty;        
     const DSStringBuilderAppend   Append;
     const DSStringBuilderAppendc  Appendc;
     const DSStringBuilderAppendf  Appendf;
     const DSStringBuilderConcat   Concat;
+    const DSStringBuilderEmpty    Empty;        
     const DSStringBuilderReset    Reset;
 };
 

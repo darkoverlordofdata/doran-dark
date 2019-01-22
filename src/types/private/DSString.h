@@ -49,6 +49,7 @@ $method( LastIndexOf,        (DSStringLastIndexOf)LastIndexOf, "i@:$" );
 $method( ToLowerCase,        (DSStringToLowerCase)ToLowerCase, "$@:v" );
 $method( ToUpperCase,        (DSStringToUpperCase)ToUpperCase, "$@:v" );
 $method( Trim,               (DSStringTrim)Trim, "$@:v" );
+$method( Substring,          (DSStringSubstring)Substring, "$@:ii" );
 
 $ivar( value, sizeof( char* ), "*" );
 $ivar( length, sizeof( int ), "i" );

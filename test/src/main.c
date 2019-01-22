@@ -17,6 +17,8 @@ char keys[12][7] = {
 
 int main(int argc, char **argv) {
 
+    const char* unc = "C:\\Users\\darko\\Documents\\GitHub\\doran-dark\\test\\license.md";
+
     DSLog("** DaRKSTEP Test** \n");
 
     auto l = $(420L);
@@ -28,6 +30,7 @@ int main(int argc, char **argv) {
     auto numArray = new(DSArray);//, of(DSNumber));
     auto numList = new(DSList);//, of(DSNumber));
     auto numHash = new(DSHashmap, of(DSNumber));
+    auto f1 = new(DSFile, unc);
 
     for (int i=0; i<12; i++) {
         Put(numHash, keys[i], $(i+420));
@@ -95,19 +98,26 @@ int main(int argc, char **argv) {
         It("should be a c", ^{
             Expect(LongValue(c) == 99);
         });
+
+        It("File exists", ^{
+            Expect(Exists(f1) == true);
+        });
+
+        It("filename is 'license.md'", ^{
+            Expect(!strcmp(GetName(f1)->value, "license.md"));
+        });
+
+        It("size is 1090 bytes", ^{
+            Expect(GetLength(f1) == 1090);
+        });
+
+        It("canon equals original unc", ^{
+            Expect(!strcmp(GetPath(GetCanonicalFile(f1))->value,unc));
+        });
+        
+
     });
     DSLog("Done");
-
-
-    auto child = fs.Normalize($("src/main.c"));
-    // auto child = fs.Normalize("src/main.c");
-    auto parent = fs.GetDefaultParent();
-    auto path = fs.Resolve(parent, child);
-    DSLog("Resolve = %$", path);
-
-
-    DSLog("Neg %d", -10);
-    DSLog("float %f", 3.1415f);
     return Summary();
 }
 

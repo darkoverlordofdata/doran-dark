@@ -114,8 +114,9 @@ void objc_register_builtins() {
     objc_registerClassPair(DSStringImplementation(obj));
     objc_registerClassPair(DSStringBuilderImplementation(obj));
 
+    DSFileSystemInit();
     // objc_registerClassPair(DSFileSystemImplementation(obj));
-    // objc_registerClassPair(DSFileImplementation(cmp));
+    objc_registerClassPair(DSFileImplementation(cmp));
 
 
 
