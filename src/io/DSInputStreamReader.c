@@ -23,41 +23,48 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include <stdarg.h>
-#include <dark/collections/DSCollection.h>
-#include <dark/collections/private/DSCollection.h>
-/**
- * Generic Collection implementation
- */
-// static DSException(AbstractMethod);
-/**
- * Initialize a new Array
- */
-DSCollection* DSCollection_init(DSCollection* const this)
-{
+#include <dark/io/DSInputStreamReader.h>
+#include <dark/io/private/DSInputStreamReader.h>
+
+overload DSInputStreamReader* DSInputStreamReader_init(DSInputStreamReader* this, DSInputStream* in) {
     DSObject_init(this);
-    this->isa = getDSCollectionIsa();
+    this->isa = getDSInputStreamReaderIsa();
+    this->in = in;
     return this;
 }
 
-/**
- * Number of items in collection
- */
-int overload Length(DSCollection* const this)
-{
-    return _vptr(this)->Length(this);
-}
-int DSCollection_Length(DSCollection* const this)
-{
-    return DSAbstractMethodException("Collection_Length");
+overload const char* ToString(const DSInputStreamReader* const this) {
+    return "DSInputStreamReader";
 }
 
-void Collection_Add(DSCollection* const this, DSObject* data)
-{
-    _vptr(this)->Add(this, data);
-}
-void DSCollection_Add(DSCollection* const this, DSObject* data)
-{
-    throw DSAbstractMethodException("Collection_Add");
+overload int ReadOne(DSInputStreamReader* this) {
+    return ReadOne(this->in);
 }
 
+overload int Read(DSInputStreamReader* this, IOBuff* cbuf, int offset, int length) {
+    return Read(this->in, cbuf, offset, length);
+}
+
+overload long Skip(DSInputStreamReader* this, long n) {
+    return Skip((DSReader*)this, n);
+} 
+
+overload void Close(DSInputStreamReader* this) {
+    Close(this->in);
+}
+
+overload void Mark(DSInputStreamReader* this, int readLimit) {
+    Mark((DSReader*)this, readLimit);
+} 
+
+overload bool MarkSupported(DSInputStreamReader* this) {
+    return MarkSupported((DSReader*)this);
+}
+
+overload void Reset(DSInputStreamReader* this) {
+    Reset((DSReader*)this);
+}
+
+overload bool Ready(DSInputStreamReader* this) {
+    return Ready((DSReader*)this);
+}

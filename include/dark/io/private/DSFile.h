@@ -26,9 +26,9 @@ SOFTWARE.
 $implementation( DSFile );
 
 $override( ToString,        (DSFileToString)ToString, "$@:v" );
-$method( Equals,            DSObject_Equals, "B@:@@" );
-$method( GetHashCode,       DSObject_GetHashCode, "l@:v" );
-$method( Dispose,           DSObject_Dispose, "v@:v" );
+$method( Equals,            (DSObjectEquals)Equals, "B@:@@" );
+$method( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
+$method( Dispose,           (DSObjectDispose)Dispose, "v@:v" );
 $override( CompareTo,       (DSFileCompareTo)CompareTo, "i@:@" );
 $method( IsInvalid,         (DSFileIsInvalid)IsInvalid, "B@:v");
 $method( GetName,           (DSFileGetName)GetName, "$@:v" );

@@ -14,16 +14,16 @@
   "source": "src",
   "files": [
     "src/darkunit.c",
-    "src/main.c",
     "src/demo.c",
-    "src/printf.c",
-    "src/TestTypes.vala",
-    "src/unit.vala"
+    "src/main.c",
+    "src/unit.vala",
+    "src/TestTypes.vala"
   ],
   "packages": [],
   "includes": null,
   "libraries": [
     "m",
+    "gc",
     "BlocksRuntime",
     "-fblocks",
     "-LC:/msys64/mingw64/bin"

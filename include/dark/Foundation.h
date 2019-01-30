@@ -44,5 +44,10 @@
 #include "types.h"
 #include "io/DSFile.h"
 #include "io/DSFileSystem.h"
+#include "io/DSInputStream.h"
+#include "io/DSFileInputStream.h"
+#include "io/DSReader.h"
+#include "io/DSInputStreamReader.h"
+#include "io/DSBufferedReader.h"
 
 #endif _FOUNDATION_H_

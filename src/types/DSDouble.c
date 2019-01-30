@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSDouble.h>
-#include "private/DSDouble.h"
+#include <dark/types/private/DSDouble.h>
 /* 
  * throws NumberFormatException:
  */

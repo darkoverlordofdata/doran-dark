@@ -39,26 +39,8 @@ typedef enum DSExceptionType {
     InvalidTypeException, 
     IndexOutOfBoundsException, 
     OutOfMemoryException,
-    NumberFormatException,
-    NullPointerException,
-    FileNotFoundException,
-    NotSupportedException,
-    IllegalArgumentException
+    NumberFormatException
 } DSExceptionType;
-
-#define $AbstractMethodException    "AbstractMethodException %s %s"
-#define $InvalidTypeException       "InvalidTypeException: expecting %s %s"
-#define $IndexOutOfBoundsException  "IndexOutOfBoundsException at index %d %s"
-#define $OutOfMemoryException       "OutOfMemoryException %s %s"
-#define $NumberFormatException2     "NumberFormatException Invalid input. Value:\"%s\" %s"
-#define $NumberFormatException3     "NumberFormatException Invalid input. Value:\"%s\", Radix: %d %s"
-#define $NullPointerException       "NullPointerException"
-#define $FileNotFoundException      "FileNotFoundException: %s"  
-#define $NotSupportedException      "NotSupportedException: %s"
-#define $IllegalArgumentException   "IllegalArgumentException: %s"
-
-#define AT "in %s method %s at line %d"
-#define Source DSsprintf(AT, __FILENAME__, __func__, __LINE__)
 
 ivar (DSException) {
     Class isa;
@@ -66,11 +48,12 @@ ivar (DSException) {
     const char *msg;
 };
 
-// overload DSException* NewDSException(DSExceptionType, char*);
 DSException* NewDSException(DSExceptionType type, char* msg);
+DSException* DSException_init(DSException* this, DSExceptionType type, char* msg);
 
-ctor (DSException, DSExceptionType, char*);
-method (DSException, ToString, const char*, (const DSException* const) );
+char*   overload ToString(const DSException* const);
+
+typedef char*   (*DSExceptionToString)    (const DSException* const);
 
 vtable (DSException) {
     const DSExceptionToString     ToString;
@@ -79,57 +62,50 @@ vtable (DSException) {
     const DSObjectDispose         Dispose;
 };
 
-define_exception_type(DSException*);
-extern struct exception_context the_exception_context[1];
+class (DSException) {
+    DSException* (*Create)(DSExceptionType type, char* msg);
+};
+
 /** 
- * Builtin Exceptions
+ * Exceptions
  * 
  * Exceptions can be thrown or passed in Either*
  */
+define_exception_type(DSException*);
+extern struct exception_context the_exception_context[1];
+
+#define AT "in %s method %s at line %d"
+#define Source DSsprintf(AT, __FILENAME__, __func__, __LINE__)
+
 static inline DSException* DSInvalidTypeException(const char* name, const char* source) {
-    return NewDSException(InvalidTypeException, DSsprintf($InvalidTypeException, 
-        name, source));
+    return DSException_init(alloc(DSException), InvalidTypeException, 
+        DSsprintf("InvalidTypeException: expecting %s %s", name, source));
 }
 
 static inline DSException* DSAbstractMethodException(const char* name, const char* source) {
-    return NewDSException(AbstractMethodException, DSsprintf($AbstractMethodException, 
-        name, source));
+    return DSException_init(alloc(DSException), AbstractMethodException, 
+        DSsprintf("AbstractMethodException %s %s", name, source));
 }
 
 static inline DSException* DSIndexOutOfBoundsException(const int index, const char* source) {
-    return NewDSException(IndexOutOfBoundsException, DSsprintf($IndexOutOfBoundsException, 
-        index, source));
+    return DSException_init(alloc(DSException), IndexOutOfBoundsException, 
+        DSsprintf("IndexOutOfBoundsException at index %d %s", index, source));
 }
 
 static inline DSException* DSOutOfMemoryException(const char* name, const char* source) {
-    return NewDSException(OutOfMemoryException, DSsprintf($OutOfMemoryException, 
-        name, source));
+    return DSException_init(alloc(DSException), OutOfMemoryException,
+        DSsprintf("OutOfMemoryException %s %s", name, source));
 }
 
 static inline DSException* overload DSNumberFormatException(const char* raw, const char* source) {
-    return NewDSException(NumberFormatException, DSsprintf($NumberFormatException2, 
-        raw, source));
+    return DSException_init(alloc(DSException), NumberFormatException,
+        DSsprintf("NumberFormatException Invalid input. Value:\"%s\" %s", raw, source));
 }
 
 static inline DSException* overload DSNumberFormatException(const char* raw, const int radix, const char* source) {
-    return NewDSException(NumberFormatException, DSsprintf($NumberFormatException3, 
-        raw, radix, source));
+    return DSException_init(alloc(DSException), NumberFormatException,
+        DSsprintf("NumberFormatException Invalid input. Value:\"%s\", Radix: %d %s", raw, radix, source));
 }
 
-static inline DSException* DSNullPointerException(const char* source) {
-    return NewDSException(NullPointerException, DSsprintf($NullPointerException, source));
-}
-
-static inline DSException* DSFileNotFoundException(const char* name, const char* source) {
-    return NewDSException(FileNotFoundException, DSsprintf($FileNotFoundException, name, source));
-}
-
-static inline DSException* DSNotSupportedException(const char* str, const char* source) {
-    return NewDSException(NotSupportedException, DSsprintf($NotSupportedException, str, source));
-}
-
-static inline DSException* DSIllegalArgumentException(const char* str, const char* source) {
-    return NewDSException(IllegalArgumentException, DSsprintf($IllegalArgumentException, str, source));
-}
 
 #endif _DSEXCEPTION_H_

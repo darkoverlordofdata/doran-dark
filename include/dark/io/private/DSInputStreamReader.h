@@ -23,41 +23,18 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include <stdarg.h>
-#include <dark/collections/DSCollection.h>
-#include <dark/collections/private/DSCollection.h>
-/**
- * Generic Collection implementation
- */
-// static DSException(AbstractMethod);
-/**
- * Initialize a new Array
- */
-DSCollection* DSCollection_init(DSCollection* const this)
-{
-    DSObject_init(this);
-    this->isa = getDSCollectionIsa();
-    return this;
-}
+$implementation( DSInputStreamReader );
 
-/**
- * Number of items in collection
- */
-int overload Length(DSCollection* const this)
-{
-    return _vptr(this)->Length(this);
-}
-int DSCollection_Length(DSCollection* const this)
-{
-    return DSAbstractMethodException("Collection_Length");
-}
-
-void Collection_Add(DSCollection* const this, DSObject* data)
-{
-    _vptr(this)->Add(this, data);
-}
-void DSCollection_Add(DSCollection* const this, DSObject* data)
-{
-    throw DSAbstractMethodException("Collection_Add");
-}
-
+$override( ToString,        (DSInputStreamReaderToString)ToString, "$@:v" );
+$method( Equals,            (DSObjectEquals)Equals, "B@:@@" );
+$method( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
+$method( Dispose,           (DSObjectDispose)Dispose, "v@:v" );
+$method( ReadOne,           (DSInputStreamReaderReadOne)ReadOne, "i@:v" );
+$method( Read,              (DSInputStreamReaderRead)Read, "i@:^ii" );
+$method( Skip,              (DSReaderSkip)Skip, "l@:l" );
+$method( Close,             (DSInputStreamReaderClose)Close, "v@:v" );
+$method( Mark,              (DSReaderMark)Mark, "v@:i" );
+$method( MarkSupported,     (DSReaderMarkSupported)MarkSupported, "v@:v" );
+$method( Reset,             (DSReaderReset)Reset, "v@:v" );
+$method( Ready,             (DSReaderReady)Ready, "B@:" );
+$end;

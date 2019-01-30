@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSString.h>
-#include "private/DSString.h"
+#include <dark/types/private/DSString.h>
 /* 
  * throws IndexOutOfBoundsException:
  */

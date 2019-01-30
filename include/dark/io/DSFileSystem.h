@@ -19,6 +19,11 @@
 #define SPACE_FREE   1
 #define SPACE_USABLE 2
 
+ivar (IOBuff) {
+    char* buff;
+    int len;
+};
+
 typedef struct DSFile DSFile;
 
 static bool fsIsSlash(char c);

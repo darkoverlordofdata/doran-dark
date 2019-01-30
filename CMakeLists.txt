@@ -29,6 +29,11 @@ list ( APPEND CSOURCE .lib/dark/src/collections/DSList.c )
 
 list ( APPEND CSOURCE .lib/dark/src/io/DSFileSystem.c )
 list ( APPEND CSOURCE .lib/dark/src/io/DSFile.c )
+# list ( APPEND CSOURCE .lib/dark/src/io/DSInputStream.c )
+# list ( APPEND CSOURCE .lib/dark/src/io/DSFileInputStream.c )
+# list ( APPEND CSOURCE .lib/dark/src/io/DSReader.c )
+# list ( APPEND CSOURCE .lib/dark/src/io/DSInputStreamReader.c )
+# list ( APPEND CSOURCE .lib/dark/src/io/DSBufferedReader.c )
 
 list ( APPEND CSOURCE .lib/dark/src/types/DSBoolean.c )
 list ( APPEND CSOURCE .lib/dark/src/types/DSNumber.c )

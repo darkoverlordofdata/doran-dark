@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/Foundation.h>
-#include "private/DSList.h"
+#include <dark/collections/private/DSList.h>
 /**
  * Constructor
  */

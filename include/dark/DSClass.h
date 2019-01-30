@@ -80,6 +80,8 @@ SOFTWARE.
     type overload name signature;                                       \
     typedef type (*class##name)signature;
 
+#define ctor(class, args...)                                            \
+    class* overload class##_init(class* const, ## args);
 
 /**
  *  MACRO alloc

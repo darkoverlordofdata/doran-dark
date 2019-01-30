@@ -53,7 +53,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSStringBuilder.h>
-#include "private/DSStringBuilder.h"
+#include <dark/types/private/DSStringBuilder.h>
 /* 
  * throws OutOfMemoryException:
  */

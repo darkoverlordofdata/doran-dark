@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSLong.h>
-#include "private/DSLong.h"
+#include <dark/types/private/DSLong.h>
 /* 
  * throws LongFormatException:
  */

@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/Foundation.h>
-#include "private/DSHashmap.h"
+#include <dark/collections/private/DSHashmap.h>
 /* 
  * Generic Hashmap implementation
  * 
