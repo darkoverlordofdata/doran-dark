@@ -32,7 +32,7 @@
 
 Class _calloc_class(size_t size)
 {
-    return (Class) DSCalloc(1, size);
+    return (Class) DScalloc(1, size);
 }
 
 Class class_getSuperclass(Class cls)
@@ -278,7 +278,7 @@ static IMP _class_addMethod(Class cls, SEL name, IMP imp,
     } else {
         // fixme could be faster
         struct objc_method_list *mlist = 
-            (struct objc_method_list *)DSCalloc(sizeof(struct objc_method_list), 1);
+            (struct objc_method_list *)DScalloc(sizeof(struct objc_method_list), 1);
         mlist->method_count = 1;
         mlist->method_list[0].method_name = strdup(name);
         mlist->method_list[0].method_types = strdup(types);
@@ -350,10 +350,10 @@ bool class_addIvar(Class cls, const char *name, size_t size,
 
         // allocate new ivar list
         cls->ivars = (struct objc_ivar_list *)
-            DSCalloc(oldSize+sizeof(struct objc_ivar), 1);
+            DScalloc(oldSize+sizeof(struct objc_ivar), 1);
         if (old) memcpy(cls->ivars, old, oldSize);
         // if (old  &&  malloc_size(old)) free(old);
-        if (old) DSFree(old);
+        if (old) DSfree(old);
         cls->ivars->ivar_count = newCount;
         ivar = &cls->ivars->ivar_list[newCount-1];
 

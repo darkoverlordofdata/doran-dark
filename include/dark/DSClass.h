@@ -87,7 +87,7 @@ SOFTWARE.
  *  MACRO alloc
  *      Allocate memory for ivar struct
  */
-#define alloc(T) (T*)DSMalloc(sizeof(T))
+#define alloc(T) (T*)DSmalloc(sizeof(T))
 
 /**
  *  MACRO new

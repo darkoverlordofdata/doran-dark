@@ -101,7 +101,7 @@ int overload Append(DSStringBuilder* this, const char *str)
 		return this->length;
 
 	length = strlen(str);
-	frag = (StringFragment*) DSCalloc(1, sizeof(struct StringFragment));
+	frag = (StringFragment*) DScalloc(1, sizeof(struct StringFragment));
 	if (nullptr == frag)
 		throw DSOutOfMemoryException("StringBuilder::Append", Source);
 
@@ -154,7 +154,7 @@ DSString* overload Concat(const DSStringBuilder* this)
 	char *c = nullptr;
 	StringFragment* frag = nullptr;
 
-	buf = DSCalloc((this->length + 1), sizeof(char));
+	buf = DScalloc((this->length + 1), sizeof(char));
 	if (nullptr == buf)
 		return nullptr;
 

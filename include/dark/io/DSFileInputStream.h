@@ -27,6 +27,7 @@ SOFTWARE.
 #ifndef _DSFILE_INPUT_STREAM_H_
 #define _DSFILE_INPUT_STREAM_H_
 #include "../types.h"
+#include "DSFile.h"
 #include "DSInputStream.h"
 
 ivar (DSFileInputStream) {
@@ -34,6 +35,9 @@ ivar (DSFileInputStream) {
     FILE* fd;
     bool closed;
 };
+
+ctor (DSFileInputStream, char*);
+ctor (DSFileInputStream, DSFile*);
 
 method (DSFileInputStream, ToString, const char*, (const DSFileInputStream* const) );
 method (DSFileInputStream, ReadOne,         int,    (DSFileInputStream*) );

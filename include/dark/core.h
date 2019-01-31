@@ -35,6 +35,22 @@ SOFTWARE.
 #include <string.h>
 #include <stdarg.h>
 #include <stdbool.h>
+
+#define Min(a, b)                                                       \
+({                                                                      \
+    auto _a = a;                                                        \
+    auto _b = b;                                                        \
+    (_a < _b) ? _a : _b;                                                \
+})
+
+#define Max(a, b)                                                       \
+({                                                                      \
+    auto _a = a;                                                        \
+    auto _b = b;                                                        \
+    (_a > _b) ? _a : _b;                                                \
+})
+
+
 /**
  *  MACRO overload
  *      method overload 
@@ -44,11 +60,11 @@ SOFTWARE.
 
 typedef void (*IDispose)(void* const, void* const);
 
-void* DSMalloc(size_t);
-void* DSRealloc(void*, size_t);
-void* DSCalloc(size_t, size_t);
-void DSFree(void*);
-void DSCollect();
+void* DSmalloc(size_t);
+void* DSrealloc(void*, size_t);
+void* DScalloc(size_t, size_t);
+void DSfree(void*);
+void DScollect();
 
 __attribute__((__format__ (__printf__, 1, 2)))                          \
 char* DSsprintf(const char* format, ...);

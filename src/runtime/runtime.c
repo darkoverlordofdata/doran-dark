@@ -174,7 +174,7 @@ static void _objcTweakMethodListPointerForClass(Class cls)
 
     // Allocate and zero a method list array
     mallocSize   = sizeof(struct objc_method_list *) * initialEntries;
-    ptr	     = (struct objc_method_list **) DSCalloc(1, mallocSize);
+    ptr	     = (struct objc_method_list **) DScalloc(1, mallocSize);
 
     // Insert the existing list into the array
     ptr[initialEntries - 1] = END_OF_METHODS_LIST;
@@ -229,7 +229,7 @@ void _objc_insertMethods(Class cls, struct objc_method_list *mlist, struct objc_
         newSize  = oldSize + sizeof(struct objc_method_list *); // only increase by 1
 
         // Grow the method list array by one.
-        *list = (struct objc_method_list **)DSRealloc(*list, newSize);
+        *list = (struct objc_method_list **)DSrealloc(*list, newSize);
 
         // Zero out addition part of new array
         bzero (&((*list)[endIndex]), newSize - oldSize);

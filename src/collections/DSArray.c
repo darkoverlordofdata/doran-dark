@@ -87,7 +87,7 @@ DSArray* overload DSArray_init(DSArray* const this, Class typeOf, int capacity) 
     this->isa = getDSArrayIsa();
     this->capacity = capacity == 0 ? ARRAY_INIT_CAPACITY : capacity;
     this->length = 0;
-    this->data = DSCalloc(this->capacity, sizeof(DSObject*));
+    this->data = DScalloc(this->capacity, sizeof(DSObject*));
     return this;
 }
 
@@ -102,7 +102,7 @@ void overload Resize(DSArray* const this, int capacity)
     printf("vector_resize: %d to %d\n", this->capacity, capacity);
     #endif
 
-    void **data = DSRealloc(this->data, sizeof(DSObject*) * capacity);
+    void **data = DSrealloc(this->data, sizeof(DSObject*) * capacity);
     if (data) {
         this->data = data;
         this->capacity = capacity;

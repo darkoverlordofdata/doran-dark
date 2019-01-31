@@ -63,7 +63,7 @@ char * strndup (const char *str, size_t size)
 {
   size_t len = strlen(str);
   len = size < len ? size : len;
-  char *result = DSCalloc(len + 1, sizeof(char));
+  char *result = DScalloc(len + 1, sizeof(char));
   return strncpy(result, str, len);
 }
 
@@ -91,7 +91,7 @@ char* STR_JOIN(int count, ...)
         size += strlen(str);
     }
     va_end(args1);
-    char* result = DSCalloc((size+1),  sizeof(char));
+    char* result = DScalloc((size+1),  sizeof(char));
 
     /**
      * Now build the result string

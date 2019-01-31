@@ -212,10 +212,10 @@ DSFile* overload DSFile_init(DSFile* const this, DSFile* parent, const char* chi
  * 
  * 
  */
-DSFile* overload DSFile_New(const char* path) {
+DSFile* overload NewDSFile(const char* path) {
     return DSFile_init(alloc(DSFile), path);
 }
 
-DSFile* overload DSFile_New(const char* parent, const char* child) {
+DSFile* overload NewDSFile(const char* parent, const char* child) {
     return DSFile_init(alloc(DSFile), parent, child);
 }

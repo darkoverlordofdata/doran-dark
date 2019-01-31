@@ -188,7 +188,7 @@ DSHashmap* overload DSHashmap_init(DSHashmap* const this, Class typeOf)
 
     this->isa = getDSHashmapIsa();
     this->typeOf = typeOf;
-    this->data = DSCalloc(INITIAL_SIZE, sizeof(DSHashmapNode));
+    this->data = DScalloc(INITIAL_SIZE, sizeof(DSHashmapNode));
 	this->tableSize = INITIAL_SIZE;
 	this->size = 0;
 
@@ -224,7 +224,7 @@ int overload Hash(DSHashmap* const this, char* key)
  */
 int overload Rehash(DSHashmap* const this)
 {
-    DSHashmapNode* temp = DSCalloc(2 * this->tableSize, sizeof(DSHashmapNode));
+    DSHashmapNode* temp = DScalloc(2 * this->tableSize, sizeof(DSHashmapNode));
     //  allocate(HashmapNode, 2 * this->tableSize);
 
 	if (!temp) return MAP_OMEM;

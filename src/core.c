@@ -31,7 +31,7 @@ SOFTWARE.
  * free the memory for this ptr
  */
 // void DS_free(TClass cls) 
-void DSFree(void* ptr) 
+void DSfree(void* ptr) 
 {
     GC_FREE(ptr);
 }
@@ -39,7 +39,7 @@ void DSFree(void* ptr)
 /**
  * malloc size bytes
  */
-void* DSMalloc(size_t size)
+void* DSmalloc(size_t size)
 {
     void* ptr = GC_MALLOC(size);
     return ptr;
@@ -48,7 +48,7 @@ void* DSMalloc(size_t size)
 /**
  * realloc size bytes from old pointer
  */
-void* DSRealloc(void * old, size_t new_size)
+void* DSrealloc(void * old, size_t new_size)
 {
     return GC_REALLOC(old, new_size);
 }
@@ -57,7 +57,7 @@ void* DSRealloc(void * old, size_t new_size)
 /**
  * malloc num * size bytes
  */
-void* DSCalloc(size_t num, size_t size)
+void* DScalloc(size_t num, size_t size)
 {
     return GC_MALLOC(num * size);
 }
@@ -65,7 +65,7 @@ void* DSCalloc(size_t num, size_t size)
 /**
  * Explicitly force a garbage collection.
  */
-void DSCollect()
+void DScollect()
 {
     GC_gcollect();
 }

@@ -16,7 +16,7 @@ char* DSsprintf(const char* format, ...)
     int len = DSvsnprintf(nullptr, 0, format, args1);
     va_end(args1);
     if (len == 0) return "";
-    char* str = DSCalloc((len+1), sizeof(char));
+    char* str = DScalloc((len+1), sizeof(char));
     len = DSvsnprintf(str, len+1, format, args2);
     va_end(args2);
     return str;
@@ -32,7 +32,7 @@ void DSvfprintf(FILE* stream, const char* format, va_list _args)
 
     int len = DSvsnprintf(nullptr, 0, format, args1);
     va_end(args1);
-    char* str = DSCalloc((len+1), sizeof(char));
+    char* str = DScalloc((len+1), sizeof(char));
     len = DSvsnprintf(str, len+1, format, args2);
     va_end(args2);
     fputs(str, stream);

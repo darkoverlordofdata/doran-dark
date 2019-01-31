@@ -88,7 +88,7 @@ DSString* overload Concatc(const DSString* this, const char* other) {
     int length = strlen(other);
     if (length == 0) return this;
     int len = this->length;
-    char* str = DSCalloc((len+length+1), sizeof(char));
+    char* str = DScalloc((len+length+1), sizeof(char));
     strncpy(str, this->value, len);
     strncpy(str+len, other, length);
     DSString* result = $DSString.Create(str);
@@ -101,7 +101,7 @@ DSString* overload Concat(const DSString* this, const DSString* other) {
         return this;
 
     int len = this->length;
-    char* str = DSCalloc((len+other->length+1), sizeof(char));
+    char* str = DScalloc((len+other->length+1), sizeof(char));
     strncpy(str, this->value, len);
     strncpy(str+len, other->value, other->length);
     DSString* result = $DSString.Create(str);
@@ -163,7 +163,7 @@ DSString* overload Trim(const DSString* this) {
 }
 
 DSString* overload Substring(const DSString* this, const int index, const int length) {
-    char* result = DSMalloc(length+1);
+    char* result = DSmalloc(length+1);
     strncpy(result, this->value+index, length);
     result[length] = '\0';
     return $DSString.Create(result);
@@ -171,7 +171,7 @@ DSString* overload Substring(const DSString* this, const int index, const int le
 
 DSString* overload Substring(const DSString* this, const int index) {
     int length = this->length - index;
-    char* result = DSMalloc(length+1);
+    char* result = DSmalloc(length+1);
     strncpy(result, this->value+index, length);
     result[length] = '\0';
     return $DSString.Create(result);
@@ -212,7 +212,7 @@ DSString* overload Format(const char* format, ...) {
     int len = vsnprintf(nullptr, 0, format, args1);
     va_end(args1);
     if (len == 0) return $DSString.Create("");
-    char* str = DSCalloc((len+1), sizeof(char));
+    char* str = DScalloc((len+1), sizeof(char));
     len = vsnprintf(str, len+1, format, args2);
     va_end(args2);
     return $DSString.Create(str);
@@ -241,7 +241,7 @@ DSString* StringJoin(int count, ...)
         size += Length(str);
     }
     va_end(args1);
-    char* result = DSCalloc((size+1),  sizeof(char));
+    char* result = DScalloc((size+1),  sizeof(char));
 
     /**
      * Now build the result string
