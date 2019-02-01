@@ -14,9 +14,9 @@
  * @param shader to use for rendering
  * 
  */
-SpriteRenderer* NewSpriteRenderer(Shader* shader) { 
-    return SpriteRenderer_init(SpriteRenderer_alloc(), shader);
-}
+// SpriteRenderer* NewSpriteRenderer(Shader* shader) { 
+//     return SpriteRenderer_init(SpriteRenderer_alloc(), shader);
+// }
 
 SpriteRenderer*  SpriteRenderer_init(
     SpriteRenderer* const this, 
@@ -29,9 +29,9 @@ SpriteRenderer*  SpriteRenderer_init(
     return this;
 }
 
-SpriteRenderer* SpriteRenderer_alloc() {
-    return DSMalloc(getSpriteRendererSize());
-}
+// SpriteRenderer* SpriteRenderer_alloc() {
+//     return DSMalloc(getSpriteRendererSize());
+// }
 
 /**
  * Draw

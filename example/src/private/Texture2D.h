@@ -17,9 +17,9 @@ $ivar( FilterMin,       sizeof( GLuint ), "I" );
 $ivar( FilterMag,       sizeof( GLuint ), "I" );
 
 $method( ToString,          (Texture2DToString)ToString, "$@:v" );
-$method( Equals,            DSObject_Equals, "B@:@@" );
-$method( GetHashCode,       DSObject_GetHashCode, "l@:v" );
-$method( Dispose,           DSObject_Dispose, "v@:v" );
+$method( Equals,            (DSObjectEquals)Equals, "B@:@@" );
+$method( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
+$method( Dispose,           (DSObjectDispose)Dispose, "v@:v" );
 $method( Generate,          (Texture2DGenerate)Generate, "v@:II*" );
 $method( Bind,              (Texture2DBind)Bind, "v@:@" );
 

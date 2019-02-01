@@ -24,19 +24,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/Foundation.h>
-#include <dark/collections/private/DSList.h>
+#include <dark/collections/implementation/DSList.h>
 /**
  * Constructor
  */
-DSList* NewDSList(Class typeOf) { 
-    return DSList_init(alloc(DSList)); 
-}
-
-DSList* overload DSList_init(DSList* const this)
+overload DSList* DSList_init(DSList* const this)
 {
     return DSList_init(this, nullptr);
 }
-DSList* overload DSList_init(DSList* const this, Class typeOf)
+
+overload DSList* DSList_init(DSList* const this, Class typeOf)
 {
     DSObject_init(this);
     this->isa = getDSListIsa();
@@ -72,7 +69,7 @@ DSListNode* NewDSListNode(DSObject* data, DSListNode* next)
  * @param comp function to compare for insertion
  * 
  */
-Either* overload Insert(DSList* const this, DSObject* data, DSList_Compare comp)
+overload Either* Insert(DSList* const this, DSObject* data, DSList_Compare comp)
 {
     if ((this->typeOf) && !InstanceOf(this->typeOf, data)) 
         return Left($("InvalidType"));
@@ -105,7 +102,7 @@ Either* overload Insert(DSList* const this, DSObject* data, DSList_Compare comp)
  * @param data to insert
  * 
  */
-Either* overload Add(DSList* const this, DSObject* data)
+overload Either* Add(DSList* const this, DSObject* data)
 {
     if ((this->typeOf) && !InstanceOf(this->typeOf, data)) 
         return Left($("InvalidType"));
@@ -123,7 +120,7 @@ Either* overload Add(DSList* const this, DSObject* data)
 /**
  * Remove item at end of list
  */
-DSObject* overload Remove(DSList* const this)
+overload DSObject* Remove(DSList* const this)
 {
     DSListNode* head = this->head;
 
@@ -141,7 +138,7 @@ DSObject* overload Remove(DSList* const this)
  * @param iter function to call for each iteration
  * 
  */
-void overload Iterate(DSList* const this, void (^iter)(DSObject*))
+overload void Iterate(DSList* const this, void (^iter)(DSObject*))
 {
     for (DSListNode* curr = this->head; curr != nullptr; curr = curr->next) {
         iter(curr->data);
@@ -151,7 +148,7 @@ void overload Iterate(DSList* const this, void (^iter)(DSObject*))
 /**
  * Free list
  */
-void overload Dispose(DSList* const this)
+overload void Dispose(DSList* const this)
 {
     // ListNode curr = this->head;
     // ListNode next;
@@ -167,7 +164,7 @@ void overload Dispose(DSList* const this)
 /**
  * Number of items in vector
  */
-int overload Length(DSList* const this)
+overload int Length(DSList* const this)
 {
     return this->length;
 }
@@ -175,7 +172,7 @@ int overload Length(DSList* const this)
 /**
  * ToString
  */
-char* overload ToString(const DSList* const this)
+overload char* ToString(const DSList* const this)
 {
     return "dark.collections.List";
 }

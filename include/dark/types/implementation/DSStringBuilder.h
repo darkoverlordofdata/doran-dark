@@ -54,9 +54,9 @@ SOFTWARE.
 ******************************************************************/
 $implementation( DSStringBuilder );
 
-$method( ToString, 		    DSObject_ToString, "$@:v" );
-$method( Equals,            DSObject_Equals, "B@:@@" );
-$method( GetHashCode,       DSObject_GetHashCode, "l@:v" );
+$method( ToString, 		    (DSStringBuilderToString)ToString, "$@:v" );
+$method( Equals,            (DSObjectEquals)Equals, "B@:@@" );
+$method( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
 $override( Dispose, 		(DSStringBuilderDispose)Dispose, "v@:v" );
 $method( Append,			(DSStringBuilderAppend)Append, "i@:v" );
 $method( Appendc, 			(DSStringBuilderAppendc)Appendc, "i@:c" );
@@ -68,8 +68,6 @@ $method( Reset, 			(DSStringBuilderReset)Reset, "v@:v" );
 $ivar( root, sizeof( id ), "^" );
 $ivar( trunk, sizeof( id ), "^" );
 $ivar( length, sizeof( int ), "i" );
-
-$DSStringBuilder.Create = NewDSStringBuilder;
 
 $end;
 

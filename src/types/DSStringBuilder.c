@@ -53,11 +53,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSStringBuilder.h>
-#include <dark/types/private/DSStringBuilder.h>
-/* 
- * throws OutOfMemoryException:
- */
-// static DSException(OutOfMemory);
+#include <dark/types/implementation/DSStringBuilder.h>
 /* 
  * Constructor
  * create a new StringBuilder
@@ -165,7 +161,7 @@ DSString* overload Concat(const DSStringBuilder* this)
 	}
 
 	*c = '\0';
-	return $DSString.Create(buf);
+	return NewDSString(buf);
 }
 
 /*

@@ -23,23 +23,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-$implementation( DSLong );
+$implementation(DSCollection)
 
-$override( ToString,         (DSLongToString)ToString, "$@:v" );
-$method( Equals,             DSObject_Equals, "B@:@@" );
-$method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
-$method( Dispose,            DSObject_Dispose, "v@:v" );
-$override( CompareTo,        (DSLongCompareTo)CompareTo, "i@:@" );
-$override( IntValue,         (DSLongIntValue)IntValue, "i@:v" );
-$override( LongValue,        (DSLongLongValue)LongValue, "l@:v" );
-$override( FloatValue,       (DSLongFloatValue)FloatValue, "f@:v" );
-$override( DoubleValue,      (DSLongDoubleValue)DoubleValue, "d@:v" );
-$override( CharValue,        (DSLongCharValue)CharValue, "c@:v" );
-$override( ShortValue,       (DSLongShortValue)ShortValue, "s@:v" );
-
-$ivar( value, sizeof( long ), "l" );
-
-$DSLong.Create = NewDSLong;
+$method(ToString,           DSObject_ToString, "$@:v");
+$method(Equals,             DSObject_Equals, "B@:@@");
+$method(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
+$method(Dispose,            DSObject_Dispose, "v@:v");
 
 $end;
 

@@ -11,9 +11,9 @@
 /**
  * ResourceManager
  */
-ResourceManager* NewResourceManager() { 
-    return ResourceManager_init(ResourceManager_alloc());
-}
+// ResourceManager* NewResourceManager() { 
+//     return ResourceManager_init(ResourceManager_alloc());
+// }
 
 ResourceManager* ResourceManager_init(ResourceManager* this) {
     DSObject_init(this); 
@@ -21,9 +21,9 @@ ResourceManager* ResourceManager_init(ResourceManager* this) {
     return this;
 }
 
-ResourceManager* ResourceManager_alloc() {
-    return DSMalloc(getResourceManagerSize());
-}
+// ResourceManager* ResourceManager_alloc() {
+//     return DSMalloc(getResourceManagerSize());
+// }
 
 /**
  * loadShaderFromFile
@@ -176,7 +176,7 @@ static char* rdbuf(FILE* f)
     fseek(f, 0L, SEEK_END);
     long s = ftell(f);
     rewind(f);
-    char* buf = DSCalloc(1, s+1);
+    char* buf = DScalloc(1, s+1);
     buf[s] = '\0';
 
     if (buf != nullptr)

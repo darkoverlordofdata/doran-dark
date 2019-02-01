@@ -25,7 +25,7 @@ SOFTWARE.
 ******************************************************************/
 #include <stdarg.h>
 #include <dark/collections/DSCollection.h>
-#include <dark/collections/private/DSCollection.h>
+#include <dark/collections/implementation/DSCollection.h>
 /**
  * Generic Collection implementation
  */
@@ -43,7 +43,7 @@ DSCollection* DSCollection_init(DSCollection* const this)
 /**
  * Number of items in collection
  */
-int overload Length(DSCollection* const this)
+overload int Length(DSCollection* const this)
 {
     return _vptr(this)->Length(this);
 }

@@ -23,12 +23,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-$implementation(DSCollection)
-
-$method(ToString,           DSObject_ToString, "$@:v");
-$method(Equals,             DSObject_Equals, "B@:@@");
-$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
-$method(Dispose,            DSObject_Dispose, "v@:v");
-
+/**
+ * Define the DSClass implementation
+ */
+$implementation(DSClass);
+$method(ToString,           (DSObjectToString)ToString, "$@:v");
+$method(Equals,             (DSObjectEquals)Equals, "B@:@@");
+$method(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
+$method(Dispose,            (DSObjectDispose)Dispose, "v@:v");
+$method(ReferenceEquals,    ReferenceEquals, "@:v");
+$method(InstanceEquals,     InstanceEquals, "$@:v");
 $end;
-

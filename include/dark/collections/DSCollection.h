@@ -36,8 +36,15 @@ SOFTWARE.
  */
 ivar (DSCollection) {
     Class isa;
+    Class typeOf;
+    int length;
+    void* ptr;
 };
 
+ctor (DSCollection);
+method (DSCollection, ToString,  char*,      (const DSCollection* const) );
+method (DSCollection, Dispose,   void,       (DSCollection* const) );
+method (DSCollection, Length,    int,        (const DSCollection* const) );
 
 /**
  * Collection metaclass
@@ -48,19 +55,6 @@ vtable (DSCollection) {
     int     (*GetHashCode) (DSObject* const);
     void    (*Dispose) (DSObject* const);
 };
-
-class (DSCollection) {
-    DSCollection*  (*Create) ();
-};
-
-/**
- * Collection API
- */
-int overload Length(DSCollection* const);
-void overload Add(DSCollection* const, DSObject*);
-DSCollection* DSCollection_init(DSCollection* const);
-int DSCollection_Length(DSCollection* const);
-void DSCollection_Add(DSCollection* const, DSObject*);
 
 /**
  * AddAll

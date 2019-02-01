@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/io/DSInputStreamReader.h>
-#include <dark/io/private/DSInputStreamReader.h>
+#include <dark/io/implementation/DSInputStreamReader.h>
 
 overload DSInputStreamReader* DSInputStreamReader_init(DSInputStreamReader* this, DSInputStream* in) {
     DSObject_init(this);

@@ -127,7 +127,6 @@ vtable (DSString) {
 };
 
 class (DSString) {
-    DSString* (*Create) (char* value);
     DSString* (*Join) (int count, ...);
 };
 

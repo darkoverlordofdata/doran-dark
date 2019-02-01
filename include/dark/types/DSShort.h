@@ -79,9 +79,4 @@ vtable (DSShort)
     const DSShortShortValue       ShortValue;
 };
 
-
-class (DSShort) {
-    DSShort*  (*Create) (short value);
-};
-
 #endif _DSSHORT_H_

@@ -81,9 +81,4 @@ vtable (DSFloat)
     const DSFloatShortValue           ShortValue;
 };
 
-
-class (DSFloat) {
-    DSFloat*  (*Create) (float value);
-};
-
 #endif _DSFLOAT_H_

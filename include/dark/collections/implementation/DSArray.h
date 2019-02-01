@@ -26,8 +26,8 @@ SOFTWARE.
 $implementation(DSArray);
 
 $method(ToString,           (DSArrayToString)ToString, "@@:v");
-$method(Equals,             DSObject_Equals, "B@:@@");
-$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
+$method(Equals,             (DSObjectEquals)Equals, "B@:@@");
+$method(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
 $method(Dispose,            (DSArrayDispose)Dispose, "v@:v");
 $method(Length,             (DSArrayLength)Length, "i@:v");
 $method(IsEmpty,            (DSArrayIsEmpty)IsEmpty, "B@:v");
@@ -39,10 +39,9 @@ $method(Resize,             (DSArrayResize)Resize, "v@:i");
 $method(Set,                (DSArraySet)Set, "v@:i@");
 $method(Get,                (DSArrayGet)Get, "@@:i");
 
+$ivar(typeof, sizeof(id), "@");
 $ivar(length, sizeof(int), "i");
 $ivar(data, sizeof(void*), "^");
 $ivar(capacity, sizeof(int), "i");
-
-$DSArray.Create = (DSArrayNew)NewDSArray;
 
 $end;

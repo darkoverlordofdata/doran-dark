@@ -79,27 +79,29 @@ static const int BuildVersion = 1;
  */
 #define $(T) _Generic((T),                                              \
                                                                         \
-        _Bool:              $DSBoolean.Create,                          \
-        char:               $DSChar.Create,                             \
-        signed char:        $DSChar.Create,                             \
-        const char *:       $DSString.Create,                           \
-        char *:             $DSString.Create,                           \
-        short int:          $DSShort.Create,                            \
-        unsigned short int: $DSShort.Create,                            \
-        unsigned int:       $DSInteger.Create,                          \
-        long int:           $DSLong.Create,                             \
-        unsigned long int:  $DSLong.Create,                             \
-        int:                $DSInteger.Create,                          \
-        float:              $DSFloat.Create,                            \
-        double:             $DSDouble.Create,                           \
-        default:            $DSString.Create)(T)
+        _Bool:              NewDSBoolean,                               \
+        char:               NewDSChar,                                  \
+        signed char:        NewDSChar,                                  \
+        const char *:       NewDSString,                                \
+        char *:             NewDSString,                                \
+        short int:          NewDSShort,                                 \
+        unsigned short int: NewDSShort,                                 \
+        unsigned int:       NewDSInteger,                               \
+        long int:           NewDSLong,                                  \
+        unsigned long int:  NewDSLong,                                  \
+        int:                NewDSInteger,                               \
+        float:              NewDSFloat,                                 \
+        double:             NewDSDouble,                                \
+        default:            NewDSString)(T)
+
 
 
 /**
  *  MACRO typeof
  *      return the typename of T
  */
-#define typeof(T) _Generic((T),        /* wrap a primitive type */      \
+#define typeof(T) \
+    _Generic((T),        /* wrap a primitive type */      \
                                                                         \
         _Bool: "bool",                                                  \
         unsigned char: "unsigned char",                                 \
@@ -142,6 +144,5 @@ static const int BuildVersion = 1;
         // Vec3 : "Vec3",                                                  \
         // Vec4 : "Vec4",                                                  \
         // Matrix : "Matrix",                                              \
-
 
 #endif _TYPES_H

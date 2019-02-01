@@ -8,9 +8,9 @@ $implementation( Shader );
 $ivar( Id, sizeof( GLuint ), "I" );
 
 $method( ToString,           (ShaderToString)ToString, "$@:v" );
-$method( Equals,             DSObject_Equals, "B@:@@" );
-$method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
-$method( Dispose,            DSObject_Dispose, "v@:v" );
+$method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
+$method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+$method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
 
 $method( Use,                (ShaderUse)Use, "@@:v" );
 $method( Compile,            (ShaderCompile)Compile, "@@:**" );

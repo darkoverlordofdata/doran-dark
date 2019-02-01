@@ -18,32 +18,41 @@ copies or substantial portions of the Software.
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LI  ABLE FOR ANY CLAIM, DAMAGES OR OTHER
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include <dark/DSClass.h>
-#include <dark/DSObject.h>
-#include <dark/implementation/DSClass.h>
+$implementation( DSBoolean );
 
-bool InstanceOf(Class class, DSObject* obj);
+$override( ToString,         (DSBooleanToString)ToString, "$@:v" );
+$method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
+$method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+$method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
+$override( CompareTo,        (DSBooleanCompareTo)CompareTo, "i@:@" );
+$method( BoolValue,          BoolValue, "B@:v" );
+
+$ivar( value, sizeof( int ), "B" );
 
 /** 
- * Initialize the runtime object system 
- * Classes must be loaded before they can be used
+ * Static constructor
+ * set class properties 
+ * 
  */
-void __attribute__((constructor(101))) ObjcRegisterBuiltins()  {
-    objc_register_builtins();
-}
+static DSBoolean True;
+True.isa = isa; 
+True.value = true;
 
-bool InstanceOf(Class class, DSObject* obj) {
-    Class isa = obj->isa; 
+static DSBoolean False;
+False.isa = isa;
+False.value = false;
+
+$DSBoolean.Bytes = BOOLEAN_BYTES;
+$DSBoolean.Size = BOOLEAN_SIZE;
+$DSBoolean.Type = BOOLEAN_TYPE;
+$DSBoolean.True = &True;
+$DSBoolean.False = &False;
+$DSBoolean.ParseBool = ParseBool;
+$DSBoolean.Compare = Compare;
     
-    while (isa != class) {
-        isa = isa->super_class;
-        if (isa == nullptr) return false;
-    }
-    return true;
-}
-
+$end;

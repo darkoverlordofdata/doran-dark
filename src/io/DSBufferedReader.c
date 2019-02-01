@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/io/DSBufferedReader.h>
-#include <dark/io/private/DSBufferedReader.h>
+#include <dark/io/implementation/DSBufferedReader.h>
 
 /** Maximum skip-buffer size */
 const int defaultCharBufferSize = 8192;

@@ -24,7 +24,7 @@ ivar (Collision)
  */
 Collision* CollisionTuple(bool isTrue, Direction dir, Vec2 vec)
 {
-    Collision* this = DSMalloc(sizeof(Collision));
+    Collision* this = DSmalloc(sizeof(Collision));
     this->first = isTrue;
     this->second = dir;
     this->third = vec;
@@ -38,9 +38,9 @@ Collision* CollisionTuple(bool isTrue, Direction dir, Vec2 vec)
  * @param Height of screen
  * 
  */
-Game* NewGame(int Width, int Height) { 
-    return Game_init(Game_alloc(), Width, Height); 
-}
+// Game* NewGame(int Width, int Height) { 
+//     return Game_init(Game_alloc(), Width, Height); 
+// }
 
 Game* Game_init(
     Game* const this, 
@@ -49,6 +49,7 @@ Game* Game_init(
 {
 	DSObject_init(this);
     this->isa = getGameIsa();
+    // DSArray_init()
     this->Levels = new(DSArray, 4);
     this->Level = 0;
     this->State = GAME_ACTIVE;
@@ -57,9 +58,9 @@ Game* Game_init(
     return this;
 }
 
-Game* Game_alloc() {
-    return DSMalloc(getGameSize());
-}
+// Game* Game_alloc() {
+//     return DSMalloc(getGameSize());
+// }
 
 const Vec2 ZERO = { 0, 0 };
 const Vec3 WHITE = { 1, 1, 1 };
@@ -105,10 +106,10 @@ void overload Start(Game* this)
     Renderer = new(SpriteRenderer, $ResourceManager.GetShader("sprite"));
     // Load levels
 
-    Add(this->Levels, NewGameLevel("levels/one.lvl", this->Width, this->Height * 0.5));
-    Add(this->Levels, NewGameLevel("levels/two.lvl", this->Width, this->Height * 0.5));
-    Add(this->Levels, NewGameLevel("levels/three.lvl", this->Width, this->Height * 0.5));
-    Add(this->Levels, NewGameLevel("levels/four.lvl", this->Width, this->Height * 0.5));
+    Add(this->Levels, new (GameLevel, "levels/one.lvl", this->Width, this->Height * 0.5));
+    Add(this->Levels, new (GameLevel, "levels/two.lvl", this->Width, this->Height * 0.5));
+    Add(this->Levels, new (GameLevel, "levels/three.lvl", this->Width, this->Height * 0.5));
+    Add(this->Levels, new (GameLevel, "levels/four.lvl", this->Width, this->Height * 0.5));
 
     // Configure game objects
     Vec2 playerPos = (Vec2){ this->Width / 2 - PLAYER_SIZE.x / 2, this->Height - PLAYER_SIZE.y };
@@ -135,7 +136,7 @@ void overload Update(Game* this, GLfloat dt)
         ResetLevel(this);
         ResetPlayer(this);
     }
-    DSCollect();
+    DScollect();
 }
 
 

@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSChar.h>
-#include <dark/types/private/DSChar.h>
+#include <dark/types/implementation/DSChar.h>
 /**
  * Constructor
  * create a new Char

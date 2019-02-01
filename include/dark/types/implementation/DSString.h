@@ -30,8 +30,8 @@ $implementation( DSString );
 
 $override( ToString,         (DSStringToString)ToString, "$@:v" );
 $override( Equals,           (DSStringEquals)Equals, "B@:@@" );
-$method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
-$method( Dispose,            DSObject_Dispose, "v@:v" );
+$method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+$method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
 $override( CompareTo,        (DSStringCompareTo)CompareTo, "i@:@" );
 $method( Length,             (DSStringLength)Length, "i@:v" );
 $method( IsEmpty,            (DSStringIsEmpty)IsEmpty, "B@:v" );    
@@ -54,9 +54,7 @@ $method( Substring,          (DSStringSubstring)Substring, "$@:ii" );
 $ivar( value, sizeof( char* ), "*" );
 $ivar( length, sizeof( int ), "i" );
 
-$DSString.Create = NewDSString;
 $DSString.Join = StringJoin;
-
 
 $end;
 

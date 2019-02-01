@@ -13,9 +13,9 @@ $ivar( "Levels",    sizeof( id ), "@" );
 $ivar( "Level",     sizeof( GLuint ), "I" );
 
 $method( ToString,           (GameToString)ToString, "$@:v" );
-$method( Equals,             DSObject_Equals, "B@:@@" );
-$method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
-$method( Dispose,            DSObject_Dispose, "v@:v" );
+$method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
+$method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+$method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
 
 $method( Start,              (GameStart)Start, "@@:v" );
 $method( ProcessInput,       (GameProcessInput)ProcessInput, "@@:v" ); 

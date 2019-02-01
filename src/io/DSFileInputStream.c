@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/io/DSFileInputStream.h>
-#include <dark/io/private/DSFileInputStream.h>
+#include <dark/io/implementation/DSFileInputStream.h>
 
 overload DSFileInputStream* DSFileInputStream_init(DSFileInputStream* const this, char* name) {
     return DSFileInputStream_init(this, (name != nullptr ? NewDSFile(name) : nullptr));

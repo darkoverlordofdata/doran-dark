@@ -23,14 +23,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include <dark/DSException1.h>
-
-$implementation(DSException);
-$override( ToString,         (DSExceptionToString)ToString, "$@:v" );
-$method( Equals,             DSObject_Equals, "B@:@@" );
-$method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
-$method( Dispose,            DSObject_Dispose, "v@:v" );
-$end;
+#include <dark/DSException.h>
+#include <dark/implementation/DSException.h>
 /** 
  * Exceptions 
  */
@@ -39,7 +33,7 @@ struct exception_context the_exception_context[1];
 /**
  * Returns the string value of this DSException
  */
-char* overload ToString(const DSException* const this) {
+const char* overload ToString(const DSException* const this) {
     return this->msg;
 }
 
@@ -48,7 +42,7 @@ DSException* NewDSException(DSExceptionType type, char* msg) {
     return DSException_init(this, type, msg);
 }
 
-DSException* DSException_init(DSException* this, DSExceptionType type, char* msg) {
+DSException* overload DSException_init(DSException* this, DSExceptionType type, char* msg) {
     DSObject_init(this);
     this->isa = getDSExceptionIsa();
     this->type = type;

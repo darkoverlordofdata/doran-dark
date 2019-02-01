@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSShort.h>
-#include <dark/types/private/DSShort.h>
+#include <dark/types/implementation/DSShort.h>
 /* 
  * throws NumberFormatException:
  */

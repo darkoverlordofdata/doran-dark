@@ -57,11 +57,6 @@ void overload Dispose(DSObject* const);
 bool ReferenceEquals(const DSObject* const, const DSObject* const);
 bool InstanceEquals(const DSObject* const, const DSObject* const);
 
-bool DSObject_Equals(DSObject* const, DSObject* const);
-void DSObject_Dispose(DSObject* const);
-const char *DSObject_ToString(const DSObject* const);
-int DSObject_GetHashCode(const DSObject* const);
-
 /**
  * API Function Templates
  */

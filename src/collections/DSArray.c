@@ -24,30 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/Foundation.h>
-#include <dark/collections/private/DSArray.h>
-
-/**
- * new Array
- * 
- * allocates room for capacity, sets used to 0
- * 
- * @param typeOf type constraint for items in array
- * @param capacity initial max size of vectorO
- * 
- */
-DSArray* overload NewDSArray(void) {
-    return NewDSArray(nullptr, 0);
-}
-
-DSArray* overload NewDSArray(Class typeOf) {
-    return NewDSArray(typeOf, 0);
-}
-
-DSArray* overload NewDSArray(Class typeOf, int capacity) {
-    return DSArray_init(alloc(DSArray), typeOf, capacity);
-}
-
-
+#include <dark/collections/implementation/DSArray.h>
 /**
  * new Array
  * 
@@ -58,7 +35,7 @@ DSArray* overload NewDSArray(Class typeOf, int capacity) {
  * @param ... list of initial values
  * 
  */
-DSArray* overload NewDSArray(int count, ...) {
+overload DSArray* DSArrayFrom(int count, ...) {
     DSArray* this = DSArray_init(alloc(DSArray), nullptr, count);
     va_list args;
     va_start(args, count);
@@ -71,18 +48,31 @@ DSArray* overload NewDSArray(int count, ...) {
     return this;
 }
 
-
-DSArray* overload DSArray_init(DSArray* const this) {
+/**
+ * new Array
+ * 
+ * allocates room for capacity, sets used to 0
+ * 
+ * @param typeOf type constraint for items in array
+ * @param capacity initial max size of vectorO
+ * 
+ */
+overload DSArray* DSArray_init(DSArray* const this) {
     return DSArray_init(this, nullptr);
 }
 
-DSArray* overload DSArray_init(DSArray* const this, Class typeOf) {
+overload DSArray* DSArray_init(DSArray* const this, int capacity) {
+    return DSArray_init(this, nullptr, capacity);
+}
+
+
+overload DSArray* DSArray_init(DSArray* const this, Class typeOf) {
     return DSArray_init(this, nullptr, 0);
 }
 /**
  * Default Constructor
  */
-DSArray* overload DSArray_init(DSArray* const this, Class typeOf, int capacity) {
+overload DSArray* DSArray_init(DSArray* const this, Class typeOf, int capacity) {
     DSObject_init(this);
     this->isa = getDSArrayIsa();
     this->capacity = capacity == 0 ? ARRAY_INIT_CAPACITY : capacity;
@@ -96,7 +86,7 @@ DSArray* overload DSArray_init(DSArray* const this, Class typeOf, int capacity) 
  * 
  * @param capacity the new size
  */
-void overload Resize(DSArray* const this, int capacity)
+overload void Resize(DSArray* const this, int capacity)
 {
     #ifdef DEBUG_ON
     printf("vector_resize: %d to %d\n", this->capacity, capacity);
@@ -114,7 +104,7 @@ void overload Resize(DSArray* const this, int capacity)
  * 
  * @param item the data to add
  */
-Either* overload Add(DSArray* const this, const DSObject* item)
+overload Either* Add(DSArray* const this, const DSObject* item)
 {
     if ((this->typeOf) && !InstanceOf(this->typeOf, item)) 
         return Left($("InvalidType"));
@@ -131,7 +121,7 @@ Either* overload Add(DSArray* const this, const DSObject* item)
  * @param index to add at
  * @param item the data to add
  */
-Either* overload Set(DSArray* const this, int index, const DSObject* item)
+overload Either* Set(DSArray* const this, int index, const DSObject* item)
 {
     if ((this->typeOf) && !InstanceOf(this->typeOf, item)) 
         return Left($("InvalidType"));
@@ -145,7 +135,7 @@ Either* overload Set(DSArray* const this, int index, const DSObject* item)
  * 
  * @param index to get
  */
-DSObject* overload Get(DSArray* const this, int index)
+overload DSObject* Get(DSArray* const this, int index)
 {
     if (index >= 0 && index < this->length)
         return this->data[index];
@@ -157,7 +147,7 @@ DSObject* overload Get(DSArray* const this, int index)
  * 
  * @param index to delete
  */
-void overload Remove(DSArray* const this, int index)
+overload void Remove(DSArray* const this, int index)
 {
     if (index < 0 || index >= this->length)
         return;
@@ -178,29 +168,29 @@ void overload Remove(DSArray* const this, int index)
 /**
  * Free the vector
  */
-void overload Dispose(DSArray* const this)
+overload void Dispose(DSArray* const this)
 {
     // delete(this->data);
 }
 
-void overload Clear(DSArray* const this)
+overload void Clear(DSArray* const this)
 {
     for (int i=0; i < this->length; i++)
         this->data[i] = nullptr;
     this->length = 0;
 }
 
-bool overload IsEmpty(DSArray* const this)
+overload bool IsEmpty(DSArray* const this)
 {
     return this->length <= 0;
 }
 
-bool overload Contains(DSArray* const this, DSObject* item)
+overload bool Contains(DSArray* const this, DSObject* item)
 {
     return false;   
 }
 
-int overload Length(const DSArray* const this)
+overload int Length(const DSArray* const this)
 {
     return this->length;
 }
@@ -208,7 +198,7 @@ int overload Length(const DSArray* const this)
 /**
  * ToString
  */
-char* overload ToString(const DSArray* const this)
+overload char* ToString(const DSArray* const this)
 {
     return "dark.collections.Array";
 }

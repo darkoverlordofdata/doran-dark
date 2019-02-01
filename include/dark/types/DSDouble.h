@@ -79,13 +79,4 @@ vtable (DSDouble)
     const DSDoubleShortValue          ShortValue;
 };
 
-/**
- * Double class methods & vars
- */
-class (DSDouble) {
-    DSDouble* (*Create) (double value);
-};
-
-
-
 #endif _DSDOUBLE_H_

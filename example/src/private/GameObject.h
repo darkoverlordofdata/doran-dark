@@ -16,9 +16,9 @@ $ivar( Sprite,      sizeof( GLfloat ), "@" );
 $ivar( Name,        sizeof( GLchar* ), "*" );
 
 $method( ToString,           (GameObjectToString)ToString, "$@:v" );
-$method( Equals,             DSObject_Equals, "B@:@@" );
-$method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
-$method( Dispose,            DSObject_Dispose, "v@:v" );
+$method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
+$method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+$method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
 
 $method( Draw,               (GameObjectDraw)Draw, "v@:@" );
 

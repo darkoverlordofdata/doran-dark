@@ -15,16 +15,16 @@
   "files": [
     "src/BallObject.c",
     "src/Boot.c",
-    "src/GameLevel.c",
     "src/Game.c",
+    "src/GameLevel.c",
     "src/GameObject.c",
     "src/main.c",
     "src/ParticleGenerator.c",
-    "src/Shader.c",
     "src/ResourceManager.c",
+    "src/Shader.c",
     "src/SpriteRenderer.c",
-    "src/stb.c",
-    "src/Texture.c"
+    "src/Texture.c",
+    "src/stb.c"
   ],
   "packages": null,
   "includes": [

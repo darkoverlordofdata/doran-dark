@@ -82,9 +82,4 @@ vtable (DSInteger)
     const DSIntegerShortValue         ShortValue;
 };
 
-class (DSInteger) {
-    DSInteger*(*Create) (int value);
-};
-
-
 #endif _DSINTEGER_H_

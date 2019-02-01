@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSBoolean.h>
-#include <dark/types/private/DSBoolean.h>
+#include <dark/types/implementation/DSBoolean.h>
 /**
  * Constructor
  * create a new DSBoolean

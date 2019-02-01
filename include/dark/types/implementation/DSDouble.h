@@ -18,32 +18,26 @@ copies or substantial portions of the Software.
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LI  ABLE FOR ANY CLAIM, DAMAGES OR OTHER
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-#include <dark/DSClass.h>
-#include <dark/DSObject.h>
-#include <dark/implementation/DSClass.h>
+$implementation( DSDouble );
 
-bool InstanceOf(Class class, DSObject* obj);
+$override( ToString,         (DSDoubleToString)ToString, "$@:v" );
+$method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
+$method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+$method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
+$override( CompareTo,        (DSDoubleCompareTo)CompareTo, "i@:@" );
+$override( IntValue,         (DSDoubleIntValue)IntValue, "i@:v" );
+$override( LongValue,        (DSDoubleLongValue)LongValue, "l@:v" );
+$override( FloatValue,       (DSDoubleFloatValue)FloatValue, "f@:v" );
+$override( DoubleValue,      (DSDoubleDoubleValue)DoubleValue, "d@:v" );
+$override( CharValue,        (DSDoubleCharValue)CharValue, "c@:v" );
+$override( ShortValue,       (DSDoubleShortValue)ShortValue, "s@:v" );
 
-/** 
- * Initialize the runtime object system 
- * Classes must be loaded before they can be used
- */
-void __attribute__((constructor(101))) ObjcRegisterBuiltins()  {
-    objc_register_builtins();
-}
+$ivar( value, sizeof( double ), "d" );
 
-bool InstanceOf(Class class, DSObject* obj) {
-    Class isa = obj->isa; 
-    
-    while (isa != class) {
-        isa = isa->super_class;
-        if (isa == nullptr) return false;
-    }
-    return true;
-}
+$end;
 

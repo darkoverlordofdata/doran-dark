@@ -49,9 +49,9 @@ BallObject* BallObject_init(
     return this;
 }
 
-BallObject* BallObject_alloc() {
-    return DSMalloc(getBallObjectSize());
-}
+// BallObject* BallObject_alloc() {
+//     return DSMalloc(getBallObjectSize());
+// }
 
 
 /**

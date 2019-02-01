@@ -85,6 +85,9 @@ DSStringBuilder* NewDSStringBuilder();
 DSStringBuilder* DSStringBuilder_init(DSStringBuilder* const this);
 DSStringBuilder* DSStringBuilder_alloc();
 
+method (DSStringBuilder, ToString,        char*, (const DSStringBuilder* const));
+
+
 __attribute__((__format__ (__printf__, 2, 3)))
 int         overload Appendf(DSStringBuilder* sb, const char *format, ...);
 int         overload Appendc(DSStringBuilder* sb, const char c);
@@ -107,20 +110,16 @@ typedef int         (*DSStringBuilderEmpty)     (const DSStringBuilder* sb);
  * StringBuilder metaclass
  */
 vtable (DSStringBuilder) {
-    const DSObjectToString        ToString;
-    const DSObjectEquals          Equals;
-    const DSObjectGetHashCode     GetHashCode;
-    const DSStringBuilderDispose  Dispose;
-    const DSStringBuilderAppend   Append;
-    const DSStringBuilderAppendc  Appendc;
-    const DSStringBuilderAppendf  Appendf;
-    const DSStringBuilderConcat   Concat;
-    const DSStringBuilderEmpty    Empty;        
-    const DSStringBuilderReset    Reset;
-};
-
-class (DSStringBuilder) {
-    DSStringBuilder*(*Create) ();
+    const DSStringBuilderToString   ToString;
+    const DSObjectEquals            Equals;
+    const DSObjectGetHashCode       GetHashCode;
+    const DSStringBuilderDispose    Dispose;
+    const DSStringBuilderAppend     Append;
+    const DSStringBuilderAppendc    Appendc;
+    const DSStringBuilderAppendf    Appendf;
+    const DSStringBuilderConcat     Concat;
+    const DSStringBuilderEmpty      Empty;        
+    const DSStringBuilderReset      Reset;
 };
 
 #endif _DSSTRING_BUILDER_H_

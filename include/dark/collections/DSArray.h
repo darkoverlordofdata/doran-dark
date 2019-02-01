@@ -43,23 +43,16 @@ SOFTWARE.
 
 ivar (DSArray) {
     Class isa;
-    int length;
     Class typeOf;
+    int length;
     void **data;
     int capacity;
 };
 
-
-/**
- * Array API
- */
-DSArray* overload NewDSArray(void);
-DSArray* overload NewDSArray(Class);
-DSArray* overload NewDSArray(Class, int);
-DSArray* overload DSArray_init(DSArray* const this);
-DSArray* overload DSArray_init(DSArray* const this, Class typeOf);
-DSArray* overload DSArray_init(DSArray* const this, Class typeOf, int capacity);
-DSArray* Array_Variadic(int, ...);
+ctor (DSArray);
+ctor (DSArray, int);
+ctor (DSArray, Class);
+ctor (DSArray, Class, int);
 
 method (DSArray, ToString,  char*,      (const DSArray* const) );
 method (DSArray, Dispose,   void,       (DSArray* const) );
@@ -73,11 +66,6 @@ method (DSArray, Resize,    void,       (DSArray* const, int) );
 method (DSArray, Set,       Either*,    (DSArray* const, int, const DSObject*) );
 method (DSArray, Get,       DSObject*,  (DSArray* const, int) );
 
-typedef DSArray*    (*DSArrayNew)   (Class, int);
-
-/**
- * Array metaclass
- */
 vtable (DSArray) {
     const DSArrayToString         ToString;
     const DSObjectEquals          Equals;
@@ -93,33 +81,5 @@ vtable (DSArray) {
     const DSArraySet              Set;
     const DSArrayGet              Get;    
 };
-
-class (DSArray) {
-    DSArray*  (*Create) (int);
-};
-
-
-
-/**
- *  Array v = Array_From(1, 2, 4, 8);
- * 
- *      expands to:
- *          Array_Variadic(4, 1, 2, 4, 8);
- *  
- */
-#define Array_From(...) Array_Variadic(PP_NARG(__VA_ARGS__), __VA_ARGS__)
-
-/**
- * Vala vararg is broken... it passes the args as is followed by a null.
- * So you can't pass 0 or null as an argument.
- * So we count the args, and ignore the trailing null.
- * 
- *  Array v = Array_Vala(1, 2, 4, 8, NULL);
- * 
- *      expands to:
- *          Array_Variadic(4, 1, 2, 4, 8, NULL);
- *  
- */
-#define Array_Vala(...) Array_Variadic(PP_NARG(__VA_ARGS__)-1, __VA_ARGS__)
 
 #endif _DSARRAY_H_

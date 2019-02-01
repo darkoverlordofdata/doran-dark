@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSInteger.h>
-#include <dark/types/private/DSInteger.h>
+#include <dark/types/implementation/DSInteger.h>
 /* 
  * throws: NumberFormatException
  */

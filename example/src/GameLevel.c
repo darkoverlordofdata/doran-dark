@@ -13,12 +13,12 @@
 /**
  * GameLevel
  */
-GameLevel* NewGameLevel(
-    const GLchar *file, 
-    int levelWidth, 
-    int levelHeight) { 
-    return GameLevel_init(GameLevel_alloc(), file, levelWidth, levelHeight); 
-}
+// GameLevel* NewGameLevel(
+//     const GLchar *file, 
+//     int levelWidth, 
+//     int levelHeight) { 
+//     return GameLevel_init(GameLevel_alloc(), file, levelWidth, levelHeight); 
+// }
 
 GameLevel* GameLevel_init(
     GameLevel* const this, 
@@ -33,9 +33,9 @@ GameLevel* GameLevel_init(
     return this;
 }
 
-GameLevel* GameLevel_alloc() {
-    return DSMalloc(getGameLevelSize());
-}
+// GameLevel* GameLevel_alloc() {
+//     return DSMalloc(getGameLevelSize());
+// }
 
 /**
  * Load 

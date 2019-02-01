@@ -30,16 +30,16 @@ endif ()
 
 list ( APPEND C_SOURCES src/BallObject.c )
 list ( APPEND C_SOURCES src/Boot.c )
-list ( APPEND C_SOURCES src/GameLevel.c )
 list ( APPEND C_SOURCES src/Game.c )
+list ( APPEND C_SOURCES src/GameLevel.c )
 list ( APPEND C_SOURCES src/GameObject.c )
 list ( APPEND C_SOURCES src/main.c )
 list ( APPEND C_SOURCES src/ParticleGenerator.c )
-list ( APPEND C_SOURCES src/Shader.c )
 list ( APPEND C_SOURCES src/ResourceManager.c )
+list ( APPEND C_SOURCES src/Shader.c )
 list ( APPEND C_SOURCES src/SpriteRenderer.c )
-list ( APPEND C_SOURCES src/stb.c )
 list ( APPEND C_SOURCES src/Texture.c )
+list ( APPEND C_SOURCES src/stb.c )
 #
 #   application includes
 #

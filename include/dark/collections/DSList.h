@@ -44,29 +44,19 @@ ivar (DSListNode) {
 
 ivar (DSList) {
     Class isa;
-    int length;
     Class typeOf;
+    int length;
     DSListNode* head;
 };
 
-/**
- * List API
- */
-DSList* DSList_alloc();
-DSList* overload DSList_init(DSList* const this);
-DSList* overload DSList_init(DSList* const this, Class typeOf);
-DSList* NewDSList();
-
+ctor (DSList);
+ctor (DSList, Class);
 method (DSList, ToString,   char*,      (const DSList* const) );
 method (DSList, Length,     int,        (DSList* const) );
-method (DSList, IsEmpty,    bool,       (DSList* const) );
-method (DSList, Contains,   bool,       (DSList* const, DSObject*) );
-method (DSList, Clear,      void,       (DSList* const) );
 method (DSList, Add,        Either*,    (DSList* const, DSObject*) );
 method (DSList, Remove,     DSObject*,  (DSList* const) );
 method (DSList, Insert,     Either*,    (DSList* const, DSObject*, DSList_Compare) );
 method (DSList, Iterate,    void,       (DSList* const, DSList_Iterator) );
-
 
 vtable (DSList) {
     const DSListToString          ToString;
@@ -74,18 +64,10 @@ vtable (DSList) {
     const DSObjectGetHashCode     GetHashCode;
     const DSObjectDispose         Dispose;
     const DSListLength            Length;
-    const DSListIsEmpty           IsEmpty;
-    const DSListContains          Contains;
-    const DSListClear             Clear;
     const DSListAdd               Add;
     const DSListRemove            Remove;
     const DSListInsert            Insert;
     const DSListIterate           Iterate;
 };
-
-class (DSList) {
-    DSList*   (*Create) ();
-};
-
 
 #endif _DSLIST_H_ 

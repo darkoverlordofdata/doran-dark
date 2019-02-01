@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/io/DSFile.h>
-#include <dark/io/private/DSFile.h>
+#include <dark/io/implementation/DSFile.h>
 /* 
  * File implementation
  */

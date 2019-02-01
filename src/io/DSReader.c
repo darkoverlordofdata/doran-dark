@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/io/DSReader.h>
-#include <dark/io/private/DSReader.h>
+#include <dark/io/implementation/DSReader.h>
 
 /** Maximum skip-buffer size */
 static const int maxSkipBufferSize = 8192;

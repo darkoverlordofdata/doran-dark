@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/Foundation.h>
-#include <dark/collections/private/DSHashmap.h>
+#include <dark/collections/implementation/DSHashmap.h>
 /* 
  * Generic Hashmap implementation
  * 
@@ -170,19 +170,12 @@ unsigned int overload HashInt(DSHashmap* const this, char* keystring)
 }
 
 
-/**
- * Typed Constructor
- */
-DSHashmap* NewDSHashmap(Class typeOf) {
-    DSHashmap* this = DSHashmap_init(alloc(DSHashmap), typeOf);
-    return this;
-}
-
-DSHashmap* overload DSHashmap_init(DSHashmap* const this)
+overload DSHashmap* DSHashmap_init(DSHashmap* const this)
 {
     return DSHashmap_init(this, nullptr);
 }
-DSHashmap* overload DSHashmap_init(DSHashmap* const this, Class typeOf)
+
+overload DSHashmap* DSHashmap_init(DSHashmap* const this, Class typeOf)
 {
     DSObject_init(this);
 
@@ -190,7 +183,7 @@ DSHashmap* overload DSHashmap_init(DSHashmap* const this, Class typeOf)
     this->typeOf = typeOf;
     this->data = DScalloc(INITIAL_SIZE, sizeof(DSHashmapNode));
 	this->tableSize = INITIAL_SIZE;
-	this->size = 0;
+	this->length = 0;
 
     return this;
 }
@@ -199,10 +192,10 @@ DSHashmap* overload DSHashmap_init(DSHashmap* const this, Class typeOf)
  * Return the integer of the location in data
  * to store the point to the item, or MAP_FULL.
  */
-int overload Hash(DSHashmap* const this, char* key)
+overload int Hash(DSHashmap* const this, char* key)
 {
 	/* If full, return immediately */
-	if (this->size >= (this->tableSize/2)) return MAP_FULL;
+	if (this->length >= (this->tableSize/2)) return MAP_FULL;
 	/* Find the best index */
 	int curr = HashInt(this, key);
 	/* Linear probing */
@@ -222,7 +215,7 @@ int overload Hash(DSHashmap* const this, char* key)
 /*
  * Doubles the size of the hashmap, and rehashes all the elements
  */
-int overload Rehash(DSHashmap* const this)
+overload int Rehash(DSHashmap* const this)
 {
     DSHashmapNode* temp = DScalloc(2 * this->tableSize, sizeof(DSHashmapNode));
     //  allocate(HashmapNode, 2 * this->tableSize);
@@ -236,7 +229,7 @@ int overload Rehash(DSHashmap* const this)
 	/* Update the size */
 	int old_size = this->tableSize;
 	this->tableSize = 2 * this->tableSize;
-	this->size = 0;
+	this->length = 0;
 
 	/* Rehash the elements */
 	for (int i = 0; i < old_size; i++)
@@ -257,7 +250,7 @@ int overload Rehash(DSHashmap* const this)
 /*
  * Add a pointer to the hashmap with some key
  */
-Either* overload Put(DSHashmap* const this, char* key, DSObject* value)
+overload Either* Put(DSHashmap* const this, char* key, DSObject* value)
 {
     if ((this->typeOf) && !InstanceOf(this->typeOf, value))  {
         return Left(DSInvalidTypeException(this->typeOf->name, Source));
@@ -277,7 +270,7 @@ Either* overload Put(DSHashmap* const this, char* key, DSObject* value)
 	this->data[index].data = value;
 	this->data[index].key = key;
 	this->data[index].inUse = 1;
-	this->size++; 
+	this->length++; 
 
     return Right($(MAP_OK));
 
@@ -289,7 +282,7 @@ Either* overload Put(DSHashmap* const this, char* key, DSObject* value)
 /*
  * Get your pointer out of the hashmap with a key
  */
-DSObject* overload Get(DSHashmap* const this, char* key)
+overload DSObject* Get(DSHashmap* const this, char* key)
 {
     DSObject* result;
 	/* Find data location */
@@ -318,7 +311,7 @@ DSObject* overload Get(DSHashmap* const this, char* key)
  * additional DSObject* argument is passed to the function as its first
  * argument and the hashmap element is the second.
  */
-int overload ForEach(DSHashmap* const this, DSHashmap_Iterator f, DSObject* item) 
+overload int ForEach(DSHashmap* const this, DSHashmap_Iterator f, DSObject* item) 
 {
 	/* On empty hashmap, return immediately */
 	if (Length(this) <= 0)
@@ -344,7 +337,7 @@ int overload ForEach(DSHashmap* const this, DSHashmap_Iterator f, DSObject* item
  * Remove an element with that key from the map
  * Return MAP_OK or MAP_MISSING.
  */
-int overload Remove(DSHashmap* const this, char* key)
+overload int Remove(DSHashmap* const this, char* key)
 {
 	/* Find key */
 	int curr = HashInt(this, key);
@@ -363,7 +356,7 @@ int overload Remove(DSHashmap* const this, char* key)
                 this->data[curr].key = nullptr;
 
                 /* Reduce the size */
-                this->size--;
+                this->length--;
                 return MAP_OK;
             }
 		}
@@ -378,19 +371,19 @@ void DSHashmap_dtor(void* this) {
     Dispose((DSHashmap*)this);
 }
 /* Deallocate the hashmap */
-void overload Dispose(DSHashmap* const this)
+overload void Dispose(DSHashmap* const this)
 {
     DSLog("WTF - dispose?");
 	// delete(this->data);
 }
 
 /* Return the length of the hashmap */
-int overload Length(const DSHashmap* const this)
+overload int Length(const DSHashmap* const this)
 {
-    return this->size;
+    return this->length;
 }
 
-char* overload ToString(const DSHashmap* const this)
+overload char* ToString(const DSHashmap* const this)
 {
     return "dark.collections.Hashmap";
 }

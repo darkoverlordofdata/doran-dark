@@ -18,9 +18,9 @@ $ivar( Radius,      sizeof( float ), "f" );
 $ivar( Stuck,       sizeof( bool ), "B" );
 
 $method( ToString,      (BallObjectToString)ToString, "$@:v" );
-$method( Equals,        DSObject_Equals, "B@:@@" );
-$method( GetHashCode,   DSObject_GetHashCode, "l@:v" );
-$method( Dispose,       DSObject_Dispose, "v@:v" );
+$method( Equals,        (DSObjectEquals)Equals, "B@:@@" );
+$method( GetHashCode,   (DSObjectGetHashCode)GetHashCode, "l@:v" );
+$method( Dispose,       (DSObjectDispose)Dispose, "v@:v" );
 
 $method( Draw,          (BallObjectDraw)Draw, "v@:@" );
 $method( Move,          (BallObjectMove)Move, "v@:iI" );

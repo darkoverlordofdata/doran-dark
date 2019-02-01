@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/io/DSInputStream.h>
-#include <dark/io/private/DSInputStream.h>
+#include <dark/io/implementation/DSInputStream.h>
 
 overload DSInputStream* DSInputStream_init(DSInputStream* const this) 
 {

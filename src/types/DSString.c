@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSString.h>
-#include <dark/types/private/DSString.h>
+#include <dark/types/implementation/DSString.h>
 /* 
  * throws IndexOutOfBoundsException:
  */
@@ -91,7 +91,7 @@ DSString* overload Concatc(const DSString* this, const char* other) {
     char* str = DScalloc((len+length+1), sizeof(char));
     strncpy(str, this->value, len);
     strncpy(str+len, other, length);
-    DSString* result = $DSString.Create(str);
+    DSString* result = NewDSString(str);
     return result;
 
 }
@@ -104,7 +104,7 @@ DSString* overload Concat(const DSString* this, const DSString* other) {
     char* str = DScalloc((len+other->length+1), sizeof(char));
     strncpy(str, this->value, len);
     strncpy(str+len, other->value, other->length);
-    DSString* result = $DSString.Create(str);
+    DSString* result = NewDSString(str);
     return result;
 }
 
@@ -113,7 +113,7 @@ bool overload Contains(const DSString* this, const DSString* s) {
 }
 
 DSString* overload CopyOf(const DSString* this) {
-    return $DSString.Create(this->value);
+    return NewDSString(this->value);
 }
 
 bool overload EndsWith(const DSString* this, const DSString* suffix) {
@@ -141,11 +141,11 @@ int overload LastIndexOf(const DSString* this, const DSString* str, const int of
 }
 
 DSString* overload ToUpperCase(const DSString* this) {
-    return $DSString.Create(strupr(this->value));
+    return NewDSString(strupr(this->value));
 }
 
 DSString* overload ToLowerCase(const DSString* this) {
-    return $DSString.Create(strlwr(this->value));
+    return NewDSString(strlwr(this->value));
 }
 
 DSString* overload Trim(const DSString* this) {
@@ -158,7 +158,7 @@ DSString* overload Trim(const DSString* this) {
         len--;
     }
     return ((start > 0) || (len < this->length)) 
-        ? $DSString.Create(strndup(this->value+start, len-start))
+        ? NewDSString(strndup(this->value+start, len-start))
         : this;    
 }
 
@@ -166,7 +166,7 @@ DSString* overload Substring(const DSString* this, const int index, const int le
     char* result = DSmalloc(length+1);
     strncpy(result, this->value+index, length);
     result[length] = '\0';
-    return $DSString.Create(result);
+    return NewDSString(result);
 }
 
 DSString* overload Substring(const DSString* this, const int index) {
@@ -174,7 +174,7 @@ DSString* overload Substring(const DSString* this, const int index) {
     char* result = DSmalloc(length+1);
     strncpy(result, this->value+index, length);
     result[length] = '\0';
-    return $DSString.Create(result);
+    return NewDSString(result);
 }
 
 int overload Length(const DSString* const this) 
@@ -211,11 +211,11 @@ DSString* overload Format(const char* format, ...) {
 
     int len = vsnprintf(nullptr, 0, format, args1);
     va_end(args1);
-    if (len == 0) return $DSString.Create("");
+    if (len == 0) return NewDSString("");
     char* str = DScalloc((len+1), sizeof(char));
     len = vsnprintf(str, len+1, format, args2);
     va_end(args2);
-    return $DSString.Create(str);
+    return NewDSString(str);
 }
 
 /**
@@ -252,6 +252,6 @@ DSString* StringJoin(int count, ...)
         strcat(result, ToString(str));
     }
     va_end(args2);
-    return $DSString.Create(result);
+    return NewDSString(result);
 }
 

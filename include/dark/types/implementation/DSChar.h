@@ -23,23 +23,20 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-$implementation( DSFloat );
+$implementation( DSChar );
 
-$override( ToString,         (DSFloatToString)ToString, "$@:v" );
-$method( Equals,             DSObject_Equals, "B@:@@" );
-$method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
-$method( Dispose,            DSObject_Dispose, "v@:v" );
-$override( CompareTo,        (DSFloatCompareTo)CompareTo, "i@:@" );
-$override( IntValue,         (DSFloatIntValue)IntValue, "i@:v" );
-$override( LongValue,        (DSFloatLongValue)LongValue, "l@:v" );
-$override( FloatValue,       (DSFloatFloatValue)FloatValue, "f@:v" );
-$override( DoubleValue,      (DSFloatDoubleValue)DoubleValue, "d@:v" );
-$override( CharValue,        (DSFloatCharValue)CharValue, "c@:v" );
-$override( ShortValue,       (DSFloatShortValue)ShortValue, "s@:v" );
+$override( ToString,         (DSCharToString)ToString, "$@:v" );
+$method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
+$method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+$method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
+$override( CompareTo,        (DSCharCompareTo)CompareTo, "i@:@" );
+$override( IntValue,         (DSCharIntValue)IntValue, "i@:v" );
+$override( LongValue,        (DSCharLongValue)LongValue, "l@:v" );
+$override( FloatValue,       (DSCharFloatValue)FloatValue, "f@:v" );
+$override( DoubleValue,      (DSCharDoubleValue)DoubleValue, "d@:v" );
+$override( CharValue,        (DSCharCharValue)CharValue, "c@:v" );
+$override( ShortValue,       (DSCharShortValue)ShortValue, "s@:v" );
 
-$ivar( value, sizeof( float ), "f" );
-
-$DSFloat.Create = NewDSFloat;
+$ivar( value, sizeof( char ), "c" );
 
 $end;
-

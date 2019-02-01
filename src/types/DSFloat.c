@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSFloat.h>
-#include <dark/types/private/DSFloat.h>
+#include <dark/types/implementation/DSFloat.h>
 /* 
  * throws NumberFormatException:
  */

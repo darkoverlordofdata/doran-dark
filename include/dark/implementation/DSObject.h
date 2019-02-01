@@ -23,23 +23,18 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-$implementation(DSList)
+/**
+ * Define the DSObject implementation
+ */
+$implementation(DSObject);
+$method(ToString,           ToString, "$@:v");
+$method(Equals,             Equals, "B@:@@");
+$method(GetHashCode,        GetHashCode, "l@:v");
+$method(Dispose,            Dispose, "v@:v");
+$method(ReferenceEquals,    ReferenceEquals, "@:v");
+$method(InstanceEquals,     InstanceEquals, "$@:v");
 
-$method(ToString,           (DSListToString)ToString, "@@:v");
-$method(Equals,             DSObject_Equals, "B@:@@");
-$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
-$method(Dispose,            DSObject_Dispose, "v@:v");
-$method(Length,             (DSListLength)Length, "i@:v");
-// $method(IsEmpty,            (DSListIsEmpty)IsEmpty, "B@:v");
-// $method(Clear,              (DSListClear)Clear, "v@:v");
-$method(Add,                (DSListAdd)Add, "@@:*");
-$method(Remove,             (DSListRemove)Remove, "i@:*");
-$method(Insert,             (DSListInsert)Insert, "i@:*@");
-$method(Iterate,            (DSListIterate)Iterate, "i@:@@");
-
-$ivar(length, sizeof(int), "i");
-$ivar(head, sizeof(void*), "^");
-
-$DSList.Create = NewDSList;
+$DSObject.Empty = nullptr;
 
 $end;
+

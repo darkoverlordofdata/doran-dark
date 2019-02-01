@@ -11,9 +11,9 @@
 /**
  * Shader
  */
-Shader* NewShader() { 
-    return Shader_init(Shader_alloc());
-}
+// Shader* NewShader() { 
+//     return Shader_init(Shader_alloc());
+// }
 
 
 Shader* Shader_init(Shader* const this)
@@ -23,9 +23,9 @@ Shader* Shader_init(Shader* const this)
     return this;
 }
 
-Shader* Shader_alloc() {
-    return DSMalloc(getShaderSize());
-}
+// Shader* Shader_alloc() {
+//     return DSMalloc(getShaderSize());
+// }
 
 
 const char* VERSION = "#version 300 es\n";

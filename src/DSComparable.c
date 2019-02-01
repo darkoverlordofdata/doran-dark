@@ -24,22 +24,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/DSComparable.h>
+#include <dark/implementation/DSComparable.h>
 /* 
  * Abstract Comparable
  */
-
-// static DSException(AbstractMethod);
-
-$implementation(DSComparable);
-$method(ToString,           (DSComparableToString)ToString, "$@:v");
-$method(Equals,             DSObject_Equals, "B@:@@");
-$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
-$method(Dispose,            DSObject_Dispose, "v@:v");
-$method(ReferenceEquals,    ReferenceEquals, "@:v");
-$method(InstanceEquals,     InstanceEquals, "$@:v");
-$method(CompareTo,          (DSComparableCompareTo)CompareTo, "i@:@");
-$end;
-
 /**
  * Initialize a new DSComparable
  */

@@ -23,37 +23,19 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-$implementation( DSBoolean );
+$implementation( DSNumber ); 
 
-$override( ToString,         (DSBooleanToString)ToString, "$@:v" );
-$method( Equals,             DSObject_Equals, "B@:@@" );
-$method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
-$method( Dispose,            DSObject_Dispose, "v@:v" );
-$override( CompareTo,        (DSBooleanCompareTo)CompareTo, "i@:@" );
-$method( BoolValue,          BoolValue, "B@:v" );
+$virtual( ToString,          (DSNumberToString)ToString, "$@:v" );
+$method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
+$method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+$method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
+$virtual( CompareTo,         (DSNumberCompareTo)CompareTo, "i@:@" );
+$virtual( IntValue,          (DSNumberIntValue)IntValue, "i@:v" );
+$virtual( LongValue,         (DSNumberLongValue)LongValue, "l@:v" );
+$virtual( FloatValue,        (DSNumberFloatValue)FloatValue, "f@:v" );
+$virtual( DoubleValue,       (DSNumberDoubleValue)DoubleValue, "d@:v" );
+$virtual( CharValue,         (DSNumberCharValue)CharValue, "c@:v" );
+$virtual( ShortValue,        (DSNumberShortValue)ShortValue, "s@:v" );
 
-$ivar( value, sizeof( int ), "B" );
-
-/** 
- * Static constructor
- * set class properties 
- * 
- */
-static DSBoolean True;
-True.isa = isa; 
-True.value = true;
-
-static DSBoolean False;
-False.isa = isa;
-False.value = false;
-
-$DSBoolean.Bytes = BOOLEAN_BYTES;
-$DSBoolean.Size = BOOLEAN_SIZE;
-$DSBoolean.Type = BOOLEAN_TYPE;
-$DSBoolean.True = &True;
-$DSBoolean.False = &False;
-$DSBoolean.ParseBool = ParseBool;
-$DSBoolean.Compare = Compare;
-$DSBoolean.Create = NewDSBoolean;
-    
 $end;
+

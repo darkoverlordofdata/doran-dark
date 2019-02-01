@@ -26,8 +26,8 @@ SOFTWARE.
 $implementation(DSHashmap)
 
 $method(ToString,           (DSHashmapToString)ToString, "@@:v");
-$method(Equals,             DSObject_Equals, "B@:@@");
-$method(GetHashCode,        DSObject_GetHashCode, "l@:v");
+$method(Equals,             (DSObjectEquals)Equals, "B@:@@");
+$method(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
 $method(Dispose,            (DSHashmapDispose)Dispose, "v@:v");
 $method(Length,             (DSHashmapLength)Length, "i@:v");
 $method(Remove,             (DSHashmapRemove)Remove, "v@:i");
@@ -38,10 +38,9 @@ $method(HashInt,            (DSHashmapHashInt)HashInt, "I@:*");
 $method(Hash,               (DSHashmapHash)Hash, "i@:*");
 $method(Rehash,             (DSHashmapRehash)Rehash, "i@:v");
 
-$ivar(tableSize, sizeof(int), "i");
-$ivar(size, sizeof(int), "i");
+$ivar(typeof, sizeof(id), "@");
+$ivar(length, sizeof(int), "i");
 $ivar(data, sizeof(id), "^");
-
-// $DSHashmap.Create = NewDSHashmap;
+$ivar(tableSize, sizeof(int), "i");
 
 $end;

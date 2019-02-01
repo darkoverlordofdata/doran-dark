@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSNumber.h>
-#include <dark/types/private/DSNumber.h>
+#include <dark/types/implementation/DSNumber.h>
 /**
  * Abstract class Number
  * Initialize the Number vtable

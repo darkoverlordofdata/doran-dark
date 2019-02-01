@@ -17,14 +17,14 @@
  * @param Sprite to display
  * @param Color tiniting color
  */
-GameObject* NewGameObject(
-    char* name, 
-    Vec2 Position, 
-    Vec2 Size, 
-    Texture2D* Sprite, 
-    Vec3 Color) { 
-    return GameObject_init(GameObject_alloc(), name, Position, Size, Sprite, Color);
-}
+// GameObject* NewGameObject(
+//     char* name, 
+//     Vec2 Position, 
+//     Vec2 Size, 
+//     Texture2D* Sprite, 
+//     Vec3 Color) { 
+//     return GameObject_init(GameObject_alloc(), name, Position, Size, Sprite, Color);
+// }
 
 
 GameObject* GameObject_init(
@@ -48,9 +48,9 @@ GameObject* GameObject_init(
     return this;
 }
 
-GameObject* GameObject_alloc() {
-    return DSMalloc(getGameObjectSize());
-}
+// GameObject* GameObject_alloc() {
+//     return DSMalloc(getGameObjectSize());
+// }
 
 /**
  * Draw

@@ -6,9 +6,9 @@
 $implementation( ResourceManager );
 
 $method( ToString,           (ResourceManagerToString)ToString, "$@:v" );
-$method( Equals,             DSObject_Equals, "B@:@@" );
-$method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
-$method( Dispose,            DSObject_Dispose, "v@:v" );
+$method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
+$method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+$method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
 
 $ResourceManager.Shaders = new(DSHashmap, of(Shader));
 $ResourceManager.Textures = new(DSHashmap, of(Texture2D));

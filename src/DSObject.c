@@ -26,22 +26,7 @@ SOFTWARE.
 #include <dark/DSObject.h>
 #include <dark/DSClass.h>
 #include <dark/DSLog.h>
-
-/**
- * Define the DSObject implementation
- */
-$implementation(DSObject);
-$method(ToString,           ToString, "$@:v");
-$method(Equals,             Equals, "B@:@@");
-$method(GetHashCode,        GetHashCode, "l@:v");
-$method(Dispose,            Dispose, "v@:v");
-$method(ReferenceEquals,    ReferenceEquals, "@:v");
-$method(InstanceEquals,     InstanceEquals, "$@:v");
-
-$DSObject.Empty = nullptr;
-
-$end;
-
+#include <dark/implementation/DSObject.h>
 /**class_getAlignedInstanceSize
  * DSObject constructor
  */
@@ -64,7 +49,8 @@ bool InstanceEquals(const DSObject* const objA, const DSObject* const objB)
     if (objA == nullptr || objB == nullptr) {
         return false;
     }
-    return DSObject_Equals(objA, objB);    
+    // return DSObject_Equals(objA, objB);    
+    return Equals(objA, objB);    
 }
 
 void overload Dispose(DSObject* const this){

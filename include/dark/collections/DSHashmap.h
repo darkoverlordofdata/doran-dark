@@ -62,20 +62,14 @@ ivar (DSHashmapNode) {
  * as well as the data to hold. */
 ivar (DSHashmap) {
     Class isa;
-	int tableSize;
-	int size;
     Class typeOf;
+	int length;
 	DSHashmapNode* data;
+	int tableSize;
 }; 
 
-/**
- * Hashmap API
- */
-DSHashmap*  overload DSHashmap_init(DSHashmap* const);
-DSHashmap*  overload DSHashmap_init(DSHashmap* const, Class);
-DSHashmap*  DSHashmap_alloc();
-DSHashmap*  NewDSHashmap(Class);
-
+ctor (DSHashmap);
+ctor (DSHashmap, Class);
 method (DSHashmap, ToString,    char*,      (const DSHashmap* const) );
 method (DSHashmap, Dispose,     void,       (DSHashmap* const) );
 method (DSHashmap, Length,      int,        (const DSHashmap* const) );
@@ -101,10 +95,6 @@ vtable (DSHashmap) {
     const DSHashmapHash           Hash;
     const DSHashmapRehash         Rehash;
 } ;
-
-class (DSHashmap) {
-    DSHashmap*(*Create) ();
-};
 
 
 #endif _DSHASHMAP_H_

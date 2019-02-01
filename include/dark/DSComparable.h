@@ -41,23 +41,33 @@ ivar (DSComparable) {
     Class isa;
 };
 
-typedef DSComparable* (*DSComparableCreate) ();
-typedef char*   (*DSComparableToString)  (const DSComparable* const);
-typedef int     (*DSComparableCompareTo)  (const DSComparable* const, const DSComparable* const);
+// typedef DSComparable* (*DSComparableCreate) ();
+// typedef char*   (*DSComparableToString)  (const DSComparable* const);
+// typedef int     (*DSComparableCompareTo)  (const DSComparable* const, const DSComparable* const);
+
+method (DSComparable, ToString,        char*,    (const DSComparable* const));
+method (DSComparable, CompareTo,       int,      (const DSComparable* const, const DSComparable* const));
+
 
 /**
  * DSComparable Vtable
  */
 vtable (DSComparable) {
-    const char*   (*ToString)     (const DSComparable* const);
-    const bool    (*Equals)       (const DSObject* const, DSObject* const);
-    const int     (*GetHashCode)  (const DSObject* const);
-    const void    (*Dispose)      (const DSObject* const);
-    const int     (*CompareTo)    (const DSComparable* const, const DSComparable* const);
+    const DSComparableToString      ToString;
+    const DSObjectEquals            Equals;
+    const DSObjectGetHashCode       GetHashCode;
+    const DSObjectDispose           Dispose;
+    const DSComparableCompareTo     CompareTo;
+
+    // const char*   (*ToString)     (const DSComparable* const);
+    // const bool    (*Equals)       (const DSObject* const, DSObject* const);
+    // const int     (*GetHashCode)  (const DSObject* const);
+    // const void    (*Dispose)      (const DSObject* const);
+    // const int     (*CompareTo)    (const DSComparable* const, const DSComparable* const);
 };
 
 
-int overload CompareTo(const DSComparable* const, const DSComparable* const);
-char* overload ToString(const DSComparable* const this);
+// int overload CompareTo(const DSComparable* const, const DSComparable* const);
+// char* overload ToString(const DSComparable* const this);
 
 #endif _DSCOMPARABLE_H_

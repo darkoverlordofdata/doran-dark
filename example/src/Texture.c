@@ -15,9 +15,9 @@
  * @param ImageFormat for binding the image
  * 
  */
-Texture2D* NewTexture2D(int InternalFormat, int ImageFormat, char* path) { 
-    return Texture2D_init(Texture2D_alloc(), InternalFormat, ImageFormat, path);
-}
+// Texture2D* NewTexture2D(int InternalFormat, int ImageFormat, char* path) { 
+//     return Texture2D_init(Texture2D_alloc(), InternalFormat, ImageFormat, path);
+// }
 
 Texture2D* Texture2D_init(
     Texture2D* const this,
@@ -42,9 +42,9 @@ Texture2D* Texture2D_init(
     return this;
 }
 
-Texture2D* Texture2D_alloc() {
-    return DSMalloc(getTexture2DSize());
-}
+// Texture2D* Texture2D_alloc() {
+//     return DSMalloc(getTexture2DSize());
+// }
 
 /**
  * Generate

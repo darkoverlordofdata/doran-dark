@@ -16,12 +16,12 @@
  * @param amount number of particles to generate
  * 
  */
-ParticleGenerator* NewParticleGenerator(
-    Shader* shader, 
-    Texture2D* texture, 
-    int amount) { 
-    return ParticleGenerator_init(ParticleGenerator_alloc(), shader, texture, amount);
-}
+// ParticleGenerator* NewParticleGenerator(
+//     Shader* shader, 
+//     Texture2D* texture, 
+//     int amount) { 
+//     return ParticleGenerator_init(ParticleGenerator_alloc(), shader, texture, amount);
+// }
 
 ParticleGenerator* ParticleGenerator_init(
     ParticleGenerator* const this, 
@@ -38,9 +38,9 @@ ParticleGenerator* ParticleGenerator_init(
     return this;
 }
 
-ParticleGenerator* ParticleGenerator_alloc() {
-    return DSMalloc(getParticleGeneratorSize());
-}
+// ParticleGenerator* ParticleGenerator_alloc() {
+//     return DSMalloc(getParticleGeneratorSize());
+// }
 /**
  * Update
  * 
@@ -129,7 +129,7 @@ static void init(ParticleGenerator* this)
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
     glBindVertexArray(0);
 
-    this->particles = DSMalloc(sizeof(Particle) * this->amount);
+    this->particles = DSmalloc(sizeof(Particle) * this->amount);
 }
 
 // Stores the index of the last particle used (for quick access to next dead particle)

@@ -74,7 +74,6 @@ vtable (DSBoolean) {
  * DSBoolean class methods & vars
  */
 class (DSBoolean) {
-    DSBoolean*(*Create) (bool value);
     int (*Compare) (const bool, const bool);
     bool (*ParseBool) (char const*);
     int  Bytes;

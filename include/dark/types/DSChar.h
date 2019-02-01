@@ -81,9 +81,4 @@ vtable (DSChar)
     const DSCharShortValue        ShortValue;
 };
 
-class (DSChar) {
-    DSChar*(*Create) (char value);
-};
-
-
 #endif _DSCHAR_H_

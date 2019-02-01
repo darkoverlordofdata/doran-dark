@@ -23,23 +23,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
-$implementation( DSInteger );
-
-$override( ToString,         (DSIntegerToString)ToString, "$@:v" );
-$method( Equals,             DSObject_Equals, "B@:@@" );
-$method( GetHashCode,        DSObject_GetHashCode, "l@:v" );
-$method( Dispose,            DSObject_Dispose, "v@:v" );
-$override( CompareTo,        (DSIntegerCompareTo)CompareTo, "i@:@" );
-$override( IntValue,         (DSIntegerIntValue)IntValue, "i@:v" );
-$override( LongValue,        (DSIntegerLongValue)LongValue, "l@:v" );
-$override( FloatValue,       (DSIntegerFloatValue)FloatValue, "f@:v" );
-$override( DoubleValue,      (DSIntegerDoubleValue)DoubleValue, "d@:v" );
-$override( CharValue,        (DSIntegerCharValue)CharValue, "c@:v" );
-$override( ShortValue,       (DSIntegerShortValue)ShortValue, "s@:v" );
-
-$ivar( value, sizeof( int ), "i" );
-
-$DSInteger.Create = NewDSInteger;
-
+$implementation(DSComparable);
+$method(ToString,           (DSComparableToString)ToString, "$@:v");
+$method(Equals,             (DSObjectEquals)Equals, "B@:@@");
+$method(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
+$method(Dispose,            (DSObjectDispose)Dispose, "v@:v");
+$method(ReferenceEquals,    ReferenceEquals, "@:v");
+$method(InstanceEquals,     InstanceEquals, "$@:v");
+$method(CompareTo,          (DSComparableCompareTo)CompareTo, "i@:@");
 $end;
 

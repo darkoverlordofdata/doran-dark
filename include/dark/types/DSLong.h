@@ -81,12 +81,4 @@ vtable (DSLong)
     const DSLongShortValue         ShortValue;
 };
 
-
-
-
-class (DSLong) {
-    DSLong*   (*Create) (long);
-};
-
-
 #endif _DSLONG_H_

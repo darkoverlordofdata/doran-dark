@@ -23,3 +23,12 @@ I could use the vtable to cache the function pointers after they are found. This
 ### Exceptions
 macros work ok - that's all c++ had at first. cexcept is simple and liteweight. [cexcept.h 2.0.1 (2008-Jul-19-Sat)](http://www.nicemice.net/cexcept/). It's a valid alternative, but I'm leaning towards using an Either object.
 
+### boilerplate
+Well, try and find some c/c++ without boilerplate... 
+
+    Each class requires 3 files
+        *.h - typedefs and structs
+        *.c - methods
+        implementation/*.h - class loader code wires up the vtable to the methods
+
+    booting - each class is loaded at runtime using objc_registerClassPair. 
