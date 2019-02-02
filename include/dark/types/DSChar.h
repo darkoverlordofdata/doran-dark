@@ -42,8 +42,7 @@ SOFTWARE.
 /**
  * Char instance variables
  */
-ivar (DSChar) 
-{
+ivar (DSChar) {
     Class isa;
     char value;
 };

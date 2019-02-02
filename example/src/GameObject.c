@@ -8,7 +8,7 @@
 ******************************************************************/
 #include <GameObject.h>
 #include <ResourceManager.h>
-#include "private/GameObject.h"
+#include <implementation/GameObject.h>
 /**
  * Constructor
  * 
@@ -17,16 +17,6 @@
  * @param Sprite to display
  * @param Color tiniting color
  */
-// GameObject* NewGameObject(
-//     char* name, 
-//     Vec2 Position, 
-//     Vec2 Size, 
-//     Texture2D* Sprite, 
-//     Vec3 Color) { 
-//     return GameObject_init(GameObject_alloc(), name, Position, Size, Sprite, Color);
-// }
-
-
 GameObject* GameObject_init(
     GameObject* const this, 
     char* name, 
@@ -48,16 +38,12 @@ GameObject* GameObject_init(
     return this;
 }
 
-// GameObject* GameObject_alloc() {
-//     return DSMalloc(getGameObjectSize());
-// }
-
 /**
  * Draw
  * 
  * @param renderer to draw sprite with
  */
-void overload Draw(
+overload void Draw(
     GameObject* const this, 
     SpriteRenderer* renderer)
 {
@@ -67,7 +53,7 @@ void overload Draw(
 /**
  * ToString
  */
-char* overload ToString(const GameObject* const this)
+overload char* ToString(const GameObject* const this)
 {
     return "GameObject";
 } 

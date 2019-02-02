@@ -49,7 +49,3 @@ vtable (SpriteRenderer) {
     SpriteRendererDraw      Draw;
 };
 
-class (SpriteRenderer) {
-    SpriteRenderer*  (*Create) (Shader* shader);
-};
-

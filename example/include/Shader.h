@@ -82,8 +82,3 @@ vtable (Shader) {
     ShaderSetMatrix         SetMatrix;
 };
 
-class (Shader) {
-    Shader* (*Create) (void);
-};
-
-

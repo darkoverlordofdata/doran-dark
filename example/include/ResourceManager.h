@@ -55,7 +55,6 @@ vtable (ResourceManager) {
 };
 
 class (ResourceManager) {
-    ResourceManager*  (*Create) ();
     DSHashmap* Shaders;
     DSHashmap* Textures;
     // Loads (and generates) a shader program from file loading vertex, fragment (and geometry) shader's source code. If gShaderFile is not nullptr, it also loads a geometry shader

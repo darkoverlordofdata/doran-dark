@@ -9,17 +9,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <GameLevel.h>
-#include "private/GameLevel.h"
+#include <implementation/GameLevel.h>
 /**
  * GameLevel
  */
-// GameLevel* NewGameLevel(
-//     const GLchar *file, 
-//     int levelWidth, 
-//     int levelHeight) { 
-//     return GameLevel_init(GameLevel_alloc(), file, levelWidth, levelHeight); 
-// }
-
 GameLevel* GameLevel_init(
     GameLevel* const this, 
     const GLchar *file, 
@@ -33,10 +26,6 @@ GameLevel* GameLevel_init(
     return this;
 }
 
-// GameLevel* GameLevel_alloc() {
-//     return DSMalloc(getGameLevelSize());
-// }
-
 /**
  * Load 
  * 
@@ -45,7 +34,7 @@ GameLevel* GameLevel_init(
  * @param levelHeight of level in tiles
  * 
  */
-GameLevel* overload Load(
+overload GameLevel* Load(
     GameLevel* const this, 
     const GLchar *file, 
     int levelWidth, 
@@ -89,7 +78,7 @@ GameLevel* overload Load(
  * @param renderer to use
  * 
  */
-void overload Draw(
+overload void Draw(
     GameLevel* const this, 
     SpriteRenderer* renderer)
 {
@@ -107,7 +96,7 @@ void overload Draw(
  * @returns true when complete
  * 
  */
-bool overload IsCompleted(GameLevel* const this)
+overload bool IsCompleted(GameLevel* const this)
 {
     for (int i = 0; i < Length(this->Bricks); i++)
     {
@@ -180,7 +169,7 @@ static void init(
 /**
  * ToString
  */
-char* overload ToString(const GameLevel* const this)
+overload char* ToString(const GameLevel* const this)
 {
     return "GameLevel";
 }

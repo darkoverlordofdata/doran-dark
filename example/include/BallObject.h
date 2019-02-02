@@ -66,7 +66,3 @@ vtable (BallObject) {
     BallObjectReset         Reset;
 };
 
-class (BallObject) {
-    BallObject*  (*Create) (Vec2, float, Vec2, Texture2D*);
-};
-

@@ -13,7 +13,7 @@ $ivar( Rotation,    sizeof( GLfloat ), "f" );
 $ivar( IsSolid,     sizeof( GLfloat ), "B" );
 $ivar( Destroyed,   sizeof( GLfloat ), "B" );
 $ivar( Sprite,      sizeof( GLfloat ), "@" );
-$ivar( Name,        sizeof( GLchar ), "*" );
+$ivar( Name,        sizeof( GLchar* ), "*" );
 $ivar( Radius,      sizeof( float ), "f" );
 $ivar( Stuck,       sizeof( bool ), "B" );
 

@@ -35,13 +35,13 @@ DSObject* DSObject_init(DSObject* this) {
     return this;
 }
 
-bool ReferenceEquals(const DSObject* const objA, const DSObject* const objB)
+bool overload ReferenceEquals(const DSObject* const objA, const DSObject* const objB)
 {
     return objA == objB;
 }
 
 
-bool InstanceEquals(const DSObject* const objA, const DSObject* const objB)
+bool overload InstanceEquals(const DSObject* const objA, const DSObject* const objB)
 {
     if (objA == objB) {
         return true;
@@ -65,7 +65,7 @@ void DSObject_Dispose(DSObject* const this){}
  * Returns the string value of this Object. The default for 
  * a Object is to return the fully qualified name of the class.
  */
-const char* overload ToString(const DSObject* const this)
+char* overload ToString(const DSObject* const this)
 {
     return _vptr(this)->ToString(this);
 }
@@ -110,23 +110,17 @@ int overload GetHashCode(const DSObject* const this)
 /**
  * virtual GetHashCode method
  */
-int DSObject_GetHashCode(const DSObject* const this)
-{
-    return (int)this;
-}
+// int DSObject_GetHashCode(const DSObject* const this)
+// {
+//     return (int)this;
+// }
 
-Class GetClass(const DSObject* const this)
+Class overload GetClass(const DSObject* const this)
 {
     return &this->isa;
 }
-char* GetClassName(const DSObject* const this)
+char* overload GetClassName(const DSObject* const this)
 {
     return this->isa->name;
 }
-
-DSObject* NewDSObject() 
-{ 
-    return DSObject_init(alloc(DSObject)); 
-}
-
 

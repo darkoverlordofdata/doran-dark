@@ -25,10 +25,6 @@ SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSString.h>
 #include <dark/types/implementation/DSString.h>
-/* 
- * throws IndexOutOfBoundsException:
- */
-// static DSException(IndexOutOfBounds);
 /**
  * Constructor
  * create a new long

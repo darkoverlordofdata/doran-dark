@@ -69,10 +69,6 @@ vtable (GameLevel)
     GameLevelIsCompleted    IsCompleted;
 };
 
-class (GameLevel) {
-    GameLevel*  (*Create) (const GLchar *file, int levelWidth, int levelHeight);
-};
-
 /** private */
 static 
 void        init(GameLevel *const this, DSArray*, GLuint, GLuint);

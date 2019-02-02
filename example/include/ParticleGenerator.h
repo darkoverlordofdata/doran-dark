@@ -68,11 +68,6 @@ vtable (ParticleGenerator) {
     ParticleGeneratorDraw       Draw;
 };
 
-class (ParticleGenerator) {
-    ParticleGenerator*  (*Create) (Shader* shader, Texture2D* texture, int amount);
-};
-
-
 /** private */
 static  void    init(ParticleGenerator*);
 static  GLuint  firstUnusedParticle(ParticleGenerator*);

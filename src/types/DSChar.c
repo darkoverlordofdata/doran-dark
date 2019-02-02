@@ -52,7 +52,7 @@ DSChar* DSChar_init(DSChar* const this, const char value)
  *         +1 x < y
  *         -1 x > y
  */
-int overload Compare(const char x, const char y) {
+overload int Compare(const char x, const char y) {
     return (x < y) ? -1 : (( x == y ) ? 0 : 1);
 }
 
@@ -62,49 +62,49 @@ int overload Compare(const char x, const char y) {
  * @param   other  Char to be compared
  * @return same as DSChar_Compare
  */
-int overload CompareTo(const DSChar* const this, const DSChar* const other) {
+overload int CompareTo(const DSChar* const this, const DSChar* const other) {
     return Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int overload IntValue(const DSChar* const this) {
+overload int IntValue(const DSChar* const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-long overload LongValue(const DSChar* const this) {
+overload long LongValue(const DSChar* const this) {
     return (long)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-float overload FloatValue(const DSChar* const this) {
+overload float FloatValue(const DSChar* const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-double overload DoubleValue(const DSChar* const this) {
+overload double DoubleValue(const DSChar* const this) {
     return (double)this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-char overload CharValue(const DSChar* const this) {
+overload char CharValue(const DSChar* const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-short overload ShortValue(const DSChar* const this) {
+overload short ShortValue(const DSChar* const this) {
     return (short)this->value;
 }
 
@@ -112,7 +112,7 @@ short overload ShortValue(const DSChar* const this) {
 /**
  * Returns the string value of this Char
  */
-char* overload ToString(const DSChar* const this)
+overload char* ToString(const DSChar* const this)
 {
     static char str[2];
     sprintf(str, "%c", this->value);

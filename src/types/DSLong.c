@@ -25,10 +25,6 @@ SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSLong.h>
 #include <dark/types/implementation/DSLong.h>
-/* 
- * throws LongFormatException:
- */
-// static DSException(NumberFormat);
 /**
  * Constructor
  * create a new Long
@@ -36,7 +32,6 @@ SOFTWARE.
  * @param value of long
  * 
  */
-
 DSLong* NewDSLong(const long value) { 
     return DSLong_init(alloc(DSLong), value); 
 }

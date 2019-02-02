@@ -45,9 +45,11 @@ ivar (DSArray) {
     Class isa;
     Class typeOf;
     int length;
-    void **data;
+    // void **data;
+    uchar **data;
     int capacity;
 };
+
 
 ctor (DSArray);
 ctor (DSArray, int);

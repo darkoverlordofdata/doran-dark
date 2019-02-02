@@ -64,8 +64,3 @@ vtable (GameObject)
     DSObjectDispose         Dispose;
     GameObjectDraw          Draw;
 };
-
-class (GameObject) {
-    GameObject*  (*Create) (char* name, Vec2 Position, Vec2 Size, Texture2D* Sprite, Vec3 Color);
-};
-

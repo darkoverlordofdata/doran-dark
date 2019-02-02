@@ -73,7 +73,7 @@ double DSParseDouble(char const *const s) {
  *         +1 x < y
  *         -1 x > y
  */
-int overload Compare(const double x, const double y) {
+overload int Compare(const double x, const double y) {
     return (x < y) ? -1 : (( x == y ) ? 0 : 1);
 }
 
@@ -83,53 +83,53 @@ int overload Compare(const double x, const double y) {
  * @param   other  DSDouble to be compared
  * @return same as DSDouble_Compare
  */
-int overload CompareTo(const DSDouble* const this, const DSDouble* const other) {
+overload int CompareTo(const DSDouble* const this, const DSDouble* const other) {
     return Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int overload IntValue(const DSDouble* const this) {
+overload int IntValue(const DSDouble* const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-long overload LongValue(const DSDouble* const this) {
+overload long LongValue(const DSDouble* const this) {
     return (long)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-float overload FloatValue(const DSDouble* const this) {
+overload float FloatValue(const DSDouble* const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-double overload DoubleValue(const DSDouble* const this) {
+overload double DoubleValue(const DSDouble* const this) {
     return this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-char overload CharValue(const DSDouble* const this) {
+overload char CharValue(const DSDouble* const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-short overload ShortValue(const DSDouble* const this) {
+overload short ShortValue(const DSDouble* const this) {
     return (short)this->value;
 }
 
-char* overload ToString(const DSDouble* const this) {
+overload char* ToString(const DSDouble* const this) {
     static char str[20];
     sprintf(str, "%f", this->value);
     return str;

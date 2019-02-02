@@ -26,17 +26,12 @@ SOFTWARE.
 #include <dark/types/DSInteger.h>
 #include <dark/types/implementation/DSInteger.h>
 /* 
- * throws: NumberFormatException
- */
-// static DSException(NumberFormat);
-/* 
  * Constructor
  * create a new Integer
  * 
  * @param value of int
  * 
  */
-
 DSInteger* NewDSInteger(const int value) { 
     return DSInteger_init(alloc(DSInteger), value); 
 }

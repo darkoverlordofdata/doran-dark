@@ -77,8 +77,8 @@ void    overload ResetLevel(Game*);
 void    overload ResetPlayer(Game*);
 void    overload Dispose(Game*);
 void    overload DoCollisions(Game*);
-void    SetKey(Game* this, int key, bool value);
-void    SetState(Game* this, GameState state);
+void    overload SetKey(Game* this, int key, bool value);
+void    overload SetState(Game* this, GameState state);
 
 typedef char*   (*GameToString)     (const Game* const);
 typedef void    (*GameStart)        (Game* const);
@@ -110,6 +110,3 @@ vtable (Game) {
     GameSetState            SetState;
 };
 
-class (Game) {
-    Game*           (*Create) (int, int);
-};

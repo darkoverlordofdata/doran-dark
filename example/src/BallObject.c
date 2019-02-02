@@ -7,25 +7,7 @@
 ** option) any later version.
 ******************************************************************/
 #include <BallObject.h>
-#include "private/BallObject.h"
-/**
- * Create new instance
- * 
- * @param Position initial placement of ball 
- * @param Radius size of ball
- * @param Velocity initial speed of ball
- * @param Sprite to display
- */
-BallObject* NewBallObject(
-    Vec2 Position, 
-    float Radius, 
-    Vec2 Velocity, 
-    Texture2D* Sprite) {
-    return BallObject_init(alloc(BallObject), Position, Radius, Velocity, Sprite); 
-    // return BallObject_init(BallObject_alloc(), Position, Radius, Velocity, Sprite); 
-}
-
-
+#include <implementation/BallObject.h>
 /**
  * BallObject
  * 
@@ -49,17 +31,12 @@ BallObject* BallObject_init(
     return this;
 }
 
-// BallObject* BallObject_alloc() {
-//     return DSMalloc(getBallObjectSize());
-// }
-
-
 /**
  * Draw
  * 
  * @param renderer to draw sprite with
  */
-void overload Draw(BallObject* const this, const SpriteRenderer* renderer)
+overload void Draw(BallObject* const this, const SpriteRenderer* renderer)
 {
     Draw(renderer, this->Sprite, this->Position, this->Size, this->Rotation, this->Color);
 }
@@ -72,7 +49,7 @@ void overload Draw(BallObject* const this, const SpriteRenderer* renderer)
  * @param window_width
  * @returns Vec2 new position
  */
-void overload Move(BallObject* const this, const GLfloat dt, const GLuint window_width)
+overload void Move(BallObject* const this, const GLfloat dt, const GLuint window_width)
 {
     // If not stuck to player board
     if (!this->Stuck)
@@ -105,7 +82,7 @@ void overload Move(BallObject* const this, const GLfloat dt, const GLuint window
  * @param velocity to reset to
  * 
  */
-void overload Reset(BallObject* const this, const Vec2 position, const Vec2 velocity)
+overload void Reset(BallObject* const this, const Vec2 position, const Vec2 velocity)
 {
     this->Position = position;
     this->Velocity = velocity;
@@ -115,7 +92,7 @@ void overload Reset(BallObject* const this, const Vec2 position, const Vec2 velo
 /**
  * ToString
  */
-char* overload ToString(const BallObject*  const this)
+overload char* ToString(const BallObject*  const this)
 {
     return "BallObject";
 }

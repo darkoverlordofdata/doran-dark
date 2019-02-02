@@ -59,7 +59,7 @@ bool ParseBool(const char * const s) {
  *         +1 x is true
  *         -1 y is true
  */
-int overload Compare(bool x, bool y) {
+overload int Compare(bool x, bool y) {
     return (x == y) ? 0 : ( x ? 1 : -1 );
 }
 
@@ -69,7 +69,7 @@ int overload Compare(bool x, bool y) {
  * @param   other  DSBoolean to be compared
  * @return same as Boolean_Compare
  */
-int overload CompareTo(const DSBoolean*  const this, const DSBoolean*  const other) {
+overload int CompareTo(const DSBoolean*  const this, const DSBoolean*  const other) {
     return Compare(this->value, other->value);
 }
 
@@ -83,7 +83,7 @@ bool BoolValue(const DSBoolean*  const this) {
 /**
  * Returns the string value of this DSBoolean
  */
-char* overload ToString(const DSBoolean* const this) {
+overload char* ToString(const DSBoolean* const this) {
     return this->value ? "true" : "false";
 }
 

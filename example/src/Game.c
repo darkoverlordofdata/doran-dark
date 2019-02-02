@@ -7,7 +7,7 @@
 ** option) any later version.
 ******************************************************************/
 #include <Game.h>
-#include "private/Game.h"
+#include <implementation/Game.h>
 /** Defines a Collision Result Tuple */
 ivar (Collision) 
 {
@@ -38,10 +38,6 @@ Collision* CollisionTuple(bool isTrue, Direction dir, Vec2 vec)
  * @param Height of screen
  * 
  */
-// Game* NewGame(int Width, int Height) { 
-//     return Game_init(Game_alloc(), Width, Height); 
-// }
-
 Game* Game_init(
     Game* const this, 
     int Width, 
@@ -58,10 +54,6 @@ Game* Game_init(
     return this;
 }
 
-// Game* Game_alloc() {
-//     return DSMalloc(getGameSize());
-// }
-
 const Vec2 ZERO = { 0, 0 };
 const Vec3 WHITE = { 1, 1, 1 };
 
@@ -71,12 +63,12 @@ static GameObject* Player;
 static BallObject* Ball;
 
 
-void SetKey(Game* this, int key, bool value)
+overload void SetKey(Game* this, int key, bool value)
 {
     this->Keys[key] = value;
 }
 
-void SetState(Game* this, GameState state)
+overload void SetState(Game* this, GameState state)
 {
     this->State = state;
 }
@@ -84,7 +76,7 @@ void SetState(Game* this, GameState state)
 /**
  * Start the game
  */
-void overload Start(Game* this)
+overload void Start(Game* this)
 {
    // Load shaders
     $ResourceManager.LoadShader("shaders/sprite.vs", "shaders/sprite.frag", "sprite");
@@ -123,7 +115,7 @@ void overload Start(Game* this)
  * 
  * @param dt deltat time
  */
-void overload Update(Game* this, GLfloat dt)
+overload void Update(Game* this, GLfloat dt)
 {
     // Update objects
     Move(Ball, dt, this->Width);
@@ -145,7 +137,7 @@ void overload Update(Game* this, GLfloat dt)
  * 
  * @param dt deltat time
  */
-void overload ProcessInput(Game* this, GLfloat dt)
+overload void ProcessInput(Game* this, GLfloat dt)
 {
     if (this->State == GAME_ACTIVE)
     {
@@ -178,7 +170,7 @@ void overload ProcessInput(Game* this, GLfloat dt)
  * Render
  * 
  */
-void overload Render(Game* this)
+overload void Render(Game* this)
 {
     if (this->State == GAME_ACTIVE)
     {
@@ -196,7 +188,7 @@ void overload Render(Game* this)
  * ResetLevel
  * 
  */
-void overload ResetLevel(Game* this)
+overload void ResetLevel(Game* this)
 {
     if (this->Level == 0) {
         GameLevel* level = this->Levels->data[0];
@@ -223,7 +215,7 @@ void overload ResetLevel(Game* this)
  * ResetPlayer
  * 
  */
-void overload ResetPlayer(Game* this)
+overload void ResetPlayer(Game* this)
 {
     Player->Size = PLAYER_SIZE;
     Player->Position = (Vec2){ this->Width / 2 - PLAYER_SIZE.x / 2, this->Height - PLAYER_SIZE.y };
@@ -233,7 +225,7 @@ void overload ResetPlayer(Game* this)
 /**
  * Release game resources
  */
-void overload Dispose(Game* this)
+overload void Dispose(Game* this)
 {
 }
 
@@ -325,7 +317,7 @@ static Collision* CheckCollision(
  * DoCollisions
  * 
  */
-void overload DoCollisions(Game* this)
+overload void DoCollisions(Game* this)
 {
     GameLevel* level = *(this->Levels[this->Level].data);
     DSArray* bricks = level->Bricks;
@@ -393,7 +385,7 @@ void overload DoCollisions(Game* this)
 /**
  * ToString
  */
-char* overload ToString(const Game* const this)
+overload char* ToString(const Game* const this)
 {
     return "Game";
 }

@@ -5,12 +5,12 @@
 
 $implementation( Game );
 
-$ivar( "State",     sizeof( GameState ), "i" );
-$ivar( "Keys",      sizeof( bool ) * 1024, "B" );
-$ivar( "Width",     sizeof( GLuint ), "I" );
-$ivar( "Height",    sizeof( GLuint ), "I" );
-$ivar( "Levels",    sizeof( id ), "@" );
-$ivar( "Level",     sizeof( GLuint ), "I" );
+$ivar( State,     sizeof( GameState ), "i" );
+$ivar( Keys,      sizeof( bool ) * 1024, "B" );
+$ivar( Width,     sizeof( GLuint ), "I" );
+$ivar( Height,    sizeof( GLuint ), "I" );
+$ivar( Levels,    sizeof( id ), "@" );
+$ivar( Level,     sizeof( GLuint ), "I" );
 
 $method( ToString,           (GameToString)ToString, "$@:v" );
 $method( Equals,             (DSObjectEquals)Equals, "B@:@@" );

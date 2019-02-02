@@ -7,17 +7,13 @@
 ** option) any later version.
 ******************************************************************/
 #include <SpriteRenderer.h>
-#include "private/SpriteRenderer.h"
+#include <implementation/SpriteRenderer.h>
 /**
  * SpriteRenderer
  * 
  * @param shader to use for rendering
  * 
  */
-// SpriteRenderer* NewSpriteRenderer(Shader* shader) { 
-//     return SpriteRenderer_init(SpriteRenderer_alloc(), shader);
-// }
-
 SpriteRenderer*  SpriteRenderer_init(
     SpriteRenderer* const this, 
     Shader* shader)
@@ -29,10 +25,6 @@ SpriteRenderer*  SpriteRenderer_init(
     return this;
 }
 
-// SpriteRenderer* SpriteRenderer_alloc() {
-//     return DSMalloc(getSpriteRendererSize());
-// }
-
 /**
  * Draw
  * 
@@ -43,7 +35,7 @@ SpriteRenderer*  SpriteRenderer_init(
  * @param color to tint
  * 
  */
-void overload Draw(
+overload void Draw(
     SpriteRenderer* this, 
     const Texture2D* const texture, 
     const Vec2 position, 
@@ -70,7 +62,7 @@ void overload Draw(
     glBindVertexArray(0);
 }
 
-void overload Dispose(SpriteRenderer* const this)
+overload void Dispose(SpriteRenderer* const this)
 {
     glDeleteVertexArrays(1, this->VAO);
 }
@@ -107,7 +99,7 @@ static void initRenderData(SpriteRenderer* this)
 /**
  * ToString
  */
-char* overload ToString(const SpriteRenderer* const this)
+overload char* ToString(const SpriteRenderer* const this)
 {
     return "SpriteRenderer";
 }

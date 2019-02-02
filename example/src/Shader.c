@@ -7,26 +7,16 @@
 ** option) any later version.
 ******************************************************************/
 #include <Shader.h>
-#include "private/Shader.h"
+#include <implementation/Shader.h>
 /**
  * Shader
  */
-// Shader* NewShader() { 
-//     return Shader_init(Shader_alloc());
-// }
-
-
 Shader* Shader_init(Shader* const this)
 {
 	DSObject_init(this);
     this->isa = getShaderIsa();
     return this;
 }
-
-// Shader* Shader_alloc() {
-//     return DSMalloc(getShaderSize());
-// }
-
 
 const char* VERSION = "#version 300 es\n";
 const char* HEADER = "#\n"
@@ -37,7 +27,7 @@ const char* HEADER = "#\n"
 /**
  * Use shader
  */
-Shader* overload Use(Shader* const this)
+overload Shader* Use(Shader* const this)
 {
     glUseProgram(this->Id);
     return this;
@@ -81,7 +71,7 @@ void overload Compile(
     glDeleteShader(sFragment);
 }
 
-Shader* overload SetFloat(
+overload Shader* SetFloat(
     Shader* const this, 
     const GLchar *name, 
     const GLfloat value) {
@@ -89,7 +79,7 @@ Shader* overload SetFloat(
     return this;
 }
 
-Shader* overload SetInteger(
+overload Shader* SetInteger(
     Shader* const this, 
     const GLchar *name, 
     const GLint value) {
@@ -97,7 +87,7 @@ Shader* overload SetInteger(
     return this;
 }
 
-Shader* overload SetArray2f(
+overload Shader* SetArray2f(
     Shader* const this, 
     const GLchar *name, 
     const GLfloat x, 
@@ -106,7 +96,7 @@ Shader* overload SetArray2f(
     return this;
 }
 
-Shader* overload SetArray2(
+overload Shader* SetArray2(
     Shader* const this, 
     const GLchar *name, 
     const GLfloat* value) {
@@ -114,7 +104,7 @@ Shader* overload SetArray2(
     return this;
 }
 
-Shader* overload SetArray3f(
+overload Shader* SetArray3f(
     Shader* const this, 
     const GLchar *name, 
     const GLfloat x, 
@@ -124,7 +114,7 @@ Shader* overload SetArray3f(
     return this;
 }
 
-Shader* overload SetArray3(
+overload Shader* SetArray3(
     Shader* const this, 
     const GLchar *name, 
     const GLfloat* value) {
@@ -132,7 +122,7 @@ Shader* overload SetArray3(
     return this;
 }
 
-Shader* overload SetArray4f(
+overload Shader* SetArray4f(
     Shader* const this, 
     const GLchar *name, 
     const GLfloat x, 
@@ -143,7 +133,7 @@ Shader* overload SetArray4f(
     return this;
 }
 
-Shader* overload SetArray4(
+overload Shader* SetArray4(
     Shader* const this, 
     const GLchar *name, 
     const GLfloat* value) {
@@ -151,7 +141,7 @@ Shader* overload SetArray4(
     return this;
 }
 
-Shader* overload SetMatrix(
+overload Shader* SetMatrix(
     Shader* const this, 
     const GLchar *name,  
     const GLfloat * matrix) {
@@ -159,7 +149,7 @@ Shader* overload SetMatrix(
     return this;
 }
 
-Shader* overload SetMatrix4(
+overload Shader* SetMatrix4(
     Shader* const this, 
     const GLchar *name,  
     const GLfloat* matrix) {
@@ -200,7 +190,7 @@ static void checkCompileErrors(
 /**
  * ToString
  */
-char* overload ToString(const Shader* const this)
+overload char* ToString(const Shader* const this)
 {
     return "Shader";
 }

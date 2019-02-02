@@ -7,23 +7,15 @@
 ** option) any later version.
 ******************************************************************/
 #include <ResourceManager.h>
-#include "private/ResourceManager.h"
+#include <implementation/ResourceManager.h>
 /**
  * ResourceManager
  */
-// ResourceManager* NewResourceManager() { 
-//     return ResourceManager_init(ResourceManager_alloc());
-// }
-
 ResourceManager* ResourceManager_init(ResourceManager* this) {
     DSObject_init(this); 
     this->isa = getResourceManagerIsa();
     return this;
 }
-
-// ResourceManager* ResourceManager_alloc() {
-//     return DSMalloc(getResourceManagerSize());
-// }
 
 /**
  * loadShaderFromFile

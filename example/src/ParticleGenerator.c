@@ -7,7 +7,7 @@
 ** option) any later version.
 ******************************************************************/
 #include <ParticleGenerator.h>
-#include "private/ParticleGenerator.h"
+#include <implementation/ParticleGenerator.h>
 /**
  * ParticleGenerator
  * 
@@ -16,13 +16,6 @@
  * @param amount number of particles to generate
  * 
  */
-// ParticleGenerator* NewParticleGenerator(
-//     Shader* shader, 
-//     Texture2D* texture, 
-//     int amount) { 
-//     return ParticleGenerator_init(ParticleGenerator_alloc(), shader, texture, amount);
-// }
-
 ParticleGenerator* ParticleGenerator_init(
     ParticleGenerator* const this, 
     Shader* shader, 
@@ -38,9 +31,6 @@ ParticleGenerator* ParticleGenerator_init(
     return this;
 }
 
-// ParticleGenerator* ParticleGenerator_alloc() {
-//     return DSMalloc(getParticleGeneratorSize());
-// }
 /**
  * Update
  * 
@@ -50,7 +40,7 @@ ParticleGenerator* ParticleGenerator_init(
  * @param offset to display from
  * 
  */
-void overload Update(
+overload void Update(
     ParticleGenerator* this, 
     GLfloat dt, 
     GameObject* object, 
@@ -80,7 +70,7 @@ void overload Update(
  * Render all particles
  * 
  */
-void overload Draw(ParticleGenerator* this)
+overload void Draw(ParticleGenerator* this)
 {
     // Use additive blending to give it a 'glow' effect
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
@@ -172,7 +162,7 @@ static void respawnParticle(
 /**
  * ToString
  */
-char* overload ToString(const ParticleGenerator* const this)
+overload char* ToString(const ParticleGenerator* const this)
 {
     return "ParticleGenerator";
 }

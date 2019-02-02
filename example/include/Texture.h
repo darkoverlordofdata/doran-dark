@@ -59,7 +59,3 @@ vtable (Texture2D) {
     Texture2DBind           Bind;
 };
 
-class (Texture2D) {
-    Texture2D*  (*Create) (int InternalFormat, int ImageFormat, char* path);
-};
-

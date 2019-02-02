@@ -46,37 +46,18 @@ ivar (DSClass) {
     Class isa;
 };
 
-DSObject* NewDSObject();
 DSObject* DSObject_init(DSObject* const);
 DSObject* DSObject_Dtor(DSObject*);
 
-const char* overload ToString(const DSObject* const);
-bool overload Equals(const DSObject* const, const DSObject* const);
-int overload GetHashCode(const DSObject* const);
-void overload Dispose(DSObject* const);
-bool ReferenceEquals(const DSObject* const, const DSObject* const);
-bool InstanceEquals(const DSObject* const, const DSObject* const);
+method (DSObject, ToString,         char*,  (const DSObject* const) );
+method (DSObject, Equals,           bool,   (const DSObject* const, const DSObject* const) );
+method (DSObject, GetHashCode,      int,    (const DSObject* const) );
+method (DSObject, Dispose,          void,   (DSObject* const) );
+method (DSObject, ReferenceEquals,  bool,   (const DSObject* const, const DSObject* const) );
+method (DSObject, InstanceEquals,   bool,   (const DSObject* const, const DSObject* const) );
+method (DSObject, GetClass,         Class,  (const DSObject* const) );
+method (DSObject, GetClassName,     char*,  (const DSObject* const) );
 
-/**
- * API Function Templates
- */
-Class GetClass(const DSObject* const);
-char* GetClassName(const DSObject* const);
-
-/** 
- * DSObject Interface
- */
-typedef DSObject* (*DSObjectCreate) ();
-typedef char*   (*DSObjectToString)     (const DSObject* const);
-typedef bool    (*DSObjectEquals)       (const DSObject* const, const DSObject* const);
-typedef int     (*DSObjectGetHashCode)  (const DSObject* const);
-typedef void    (*DSObjectDispose)      (DSObject* const);
-typedef bool    (*DSObjectReferenceEquals)  (const DSObject* const, const DSObject* const);
-typedef bool    (*DSObjectInstanceEquals)   (const DSObject* const, const DSObject* const);
-/**
- * DSObject Vtable
- * 
- */
 vtable (DSObject) {
     const DSObjectToString        ToString;
     const DSObjectEquals          Equals;
@@ -89,11 +70,8 @@ vtable (DSObject) {
  * DSObject Class Methods & Variables
  * 
  */
-// struct $DSObject $DSObject;
-// struct $DSObject {
 class (DSObject) {
     DSObject* Empty;
-    DSObjectCreate          Create;
     DSObjectReferenceEquals ReferenceEquals;
     DSObjectInstanceEquals  InstanceEquals;
 };
@@ -101,35 +79,16 @@ class (DSObject) {
 //=======================================================================//
 //              Which came first, the Class or the Object?               //          
 //=======================================================================//
-
-/**
- * Class ivar
- * 
- */
-// ivar (DSClass) {
-//     Class isa;
-// };
-/** 
- * DSClass Interface
- */
-typedef DSClass* (*DSClassCreate) ();
 typedef char*   (*DSClassToString)  (const DSClass* const);
 typedef bool    (*DSClassEquals) (const DSClass* const, const DSClass* const);
 typedef int     (*DSClassGetHashCode) (const DSClass* const);
 typedef void    (*DSClassDispose) (DSClass* const);
-typedef bool    (*DSClassReferenceEquals) (const DSClass* const, const DSClass* const);
-typedef bool    (*DSClassInstanceEquals) (const DSClass* const, const DSClass* const);
-/**
- * DSClass vtable
- */
+
 vtable (DSClass) {
     DSClassToString        ToString;
     DSClassEquals          Equals;
     DSClassGetHashCode     GetHashCode;
     DSClassDispose         Dispose;
 };
-
-
-
 
 #endif _DSOBJECT_H_ 

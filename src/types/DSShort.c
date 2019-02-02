@@ -25,10 +25,6 @@ SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSShort.h>
 #include <dark/types/implementation/DSShort.h>
-/* 
- * throws NumberFormatException:
- */
-// static DSException(NumberFormat);
 /**
  * Constructor
  * create a new Short

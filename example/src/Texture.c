@@ -7,7 +7,7 @@
 ** option) any later version.
 ******************************************************************/
 #include <Texture.h>
-#include "private/Texture2D.h"
+#include <implementation/Texture2D.h>
 /**
  * Texture2D
  * 
@@ -15,10 +15,6 @@
  * @param ImageFormat for binding the image
  * 
  */
-// Texture2D* NewTexture2D(int InternalFormat, int ImageFormat, char* path) { 
-//     return Texture2D_init(Texture2D_alloc(), InternalFormat, ImageFormat, path);
-// }
-
 Texture2D* Texture2D_init(
     Texture2D* const this,
     int InternalFormat,
@@ -42,10 +38,6 @@ Texture2D* Texture2D_init(
     return this;
 }
 
-// Texture2D* Texture2D_alloc() {
-//     return DSMalloc(getTexture2DSize());
-// }
-
 /**
  * Generate
  * 
@@ -54,7 +46,7 @@ Texture2D* Texture2D_init(
  * @param data bitmap data
  * 
  */
-void overload Generate(
+overload void Generate(
     Texture2D* const this, 
     const GLuint width, 
     const GLuint height, 
@@ -74,7 +66,7 @@ void overload Generate(
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void overload Bind(Texture2D*  this)
+overload void Bind(Texture2D*  this)
 {
     glBindTexture(GL_TEXTURE_2D, this->Id);
 }
@@ -82,7 +74,7 @@ void overload Bind(Texture2D*  this)
 /**
  * ToString
  */
-char* overload ToString(const Texture2D* const this)
+overload char* ToString(const Texture2D* const this)
 {
     return "Texture2D";
 }
