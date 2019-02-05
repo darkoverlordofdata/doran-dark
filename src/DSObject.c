@@ -35,13 +35,13 @@ DSObject* DSObject_init(DSObject* this) {
     return this;
 }
 
-bool overload ReferenceEquals(const DSObject* const objA, const DSObject* const objB)
+overload bool ReferenceEquals(const DSObject* const objA, const DSObject* const objB)
 {
     return objA == objB;
 }
 
 
-bool overload InstanceEquals(const DSObject* const objA, const DSObject* const objB)
+overload bool InstanceEquals(const DSObject* const objA, const DSObject* const objB)
 {
     if (objA == objB) {
         return true;
@@ -53,7 +53,7 @@ bool overload InstanceEquals(const DSObject* const objA, const DSObject* const o
     return Equals(objA, objB);    
 }
 
-void overload Dispose(DSObject* const this){
+overload void Dispose(DSObject* const this){
     return _vptr(this)->Dispose(this);
 }
 /**
@@ -65,7 +65,7 @@ void DSObject_Dispose(DSObject* const this){}
  * Returns the string value of this Object. The default for 
  * a Object is to return the fully qualified name of the class.
  */
-char* overload ToString(const DSObject* const this)
+overload char* ToString(const DSObject* const this)
 {
     return _vptr(this)->ToString(this);
 }
@@ -76,50 +76,29 @@ const char *DSObject_ToString(const DSObject* const this)
 {
     return "DSObject";
 }
-/**
- * virtual ToString method
- */
-const char *DSClass_ToString(const DSClass* const this)
-{
-    return "DSClass";
-}
 
 /**
  * Compare to another object
  */
-bool overload Equals(const DSObject* const this, const DSObject* const that)
+overload bool Equals(const DSObject* const this, const DSObject* const that)
 {
     // return this == that;
     return _vptr(this)->Equals(this, that);
-}
-/**
- * virtual Equals method
- */
-bool DSObject_Equals(DSObject* const this, DSObject* const that)
-{
-    return this == that;
 }
 
 /**
  * Get's the hashcode for this object. Default is the object's address in memory,
  */
-int overload GetHashCode(const DSObject* const this)
+overload int GetHashCode(const DSObject* const this)
 {
     return _vptr(this)->GetHashCode(this);
 }
-/**
- * virtual GetHashCode method
- */
-// int DSObject_GetHashCode(const DSObject* const this)
-// {
-//     return (int)this;
-// }
 
-Class overload GetClass(const DSObject* const this)
+overload Class GetClass(const DSObject* const this)
 {
     return &this->isa;
 }
-char* overload GetClassName(const DSObject* const this)
+overload char* GetClassName(const DSObject* const this)
 {
     return this->isa->name;
 }

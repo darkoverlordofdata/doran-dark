@@ -58,7 +58,7 @@ void overload GetChars(const DSString* this, char* dst, int dstBegin) {
  *         +1 x is true
  *         -1 y is true
  */
-int overload Compare(const char* x, const char* y) {
+overload int Compare(const char* x, const char* y) {
     return strcmp(x, y);
 }
 
@@ -68,19 +68,19 @@ int overload Compare(const char* x, const char* y) {
  * @param   other  String to be compared
  * @return same as String_Compare
  */
-int overload CompareTo(const DSString* const this, const DSString* const other) {
+overload int CompareTo(const DSString* const this, const DSString* const other) {
     return Compare(this->value, other->value);
 }
 
-bool overload Equals(const DSString* const this, const DSString* const other) {
+overload bool Equals(const DSString* const this, const DSString* const other) {
     return Compare(this->value, other->value) == 0;
 }
 
-int overload CompareToIgnoreCase(const DSString* this, const DSString* str) {
+overload int CompareToIgnoreCase(const DSString* this, const DSString* str) {
     return strcmpi(this->value, str->value);
 }
 
-DSString* overload Concatc(const DSString* this, const char* other) {
+overload DSString* Concatc(const DSString* this, const char* other) {
     int length = strlen(other);
     if (length == 0) return this;
     int len = this->length;
@@ -92,7 +92,7 @@ DSString* overload Concatc(const DSString* this, const char* other) {
 
 }
 
-DSString* overload Concat(const DSString* this, const DSString* other) {
+overload DSString* Concat(const DSString* this, const DSString* other) {
     if (other->length == 0)
         return this;
 
@@ -104,47 +104,47 @@ DSString* overload Concat(const DSString* this, const DSString* other) {
     return result;
 }
 
-bool overload Contains(const DSString* this, const DSString* s) {
+overload bool Contains(const DSString* this, const DSString* s) {
     return _vptr(this)->IndexOf(this, s, 0) > -1;
 }
 
-DSString* overload CopyOf(const DSString* this) {
+overload DSString* CopyOf(const DSString* this) {
     return NewDSString(this->value);
 }
 
-bool overload EndsWith(const DSString* this, const DSString* suffix) {
+overload bool EndsWith(const DSString* this, const DSString* suffix) {
     char* offset = this->value + this->length - suffix->length;
     return !strcmp(offset, suffix);
 }
 
-bool overload StartsWith(const DSString* this, const DSString* prefix, const int offset) {
+overload bool StartsWith(const DSString* this, const DSString* prefix, const int offset) {
     char* c = strstr(this->value+offset, prefix->value);
     return c == (this->value+offset) ? true : false;
 }
 
-char* overload GetBytes(const DSString* this) {
+overload char* GetBytes(const DSString* this) {
     return strdup(this->value);
 }
 
-int overload IndexOf(const DSString* this, const DSString* str, const int offset) {
+overload int IndexOf(const DSString* this, const DSString* str, const int offset) {
     char* c = strstr(this->value+offset, str->value);
     return c == nullptr ? 0 : c - this->value;
 }
 
-int overload LastIndexOf(const DSString* this, const DSString* str, const int offset) {
+overload int LastIndexOf(const DSString* this, const DSString* str, const int offset) {
     char* c = strrstr(this->value+offset, str->value);
     return c == nullptr ? 0 : c - this->value;
 }
 
-DSString* overload ToUpperCase(const DSString* this) {
+overload DSString* ToUpperCase(const DSString* this) {
     return NewDSString(strupr(this->value));
 }
 
-DSString* overload ToLowerCase(const DSString* this) {
+overload DSString* ToLowerCase(const DSString* this) {
     return NewDSString(strlwr(this->value));
 }
 
-DSString* overload Trim(const DSString* this) {
+overload DSString* Trim(const DSString* this) {
     int len = this->length;
     int start = 0;
     while ((start < len) && (this->value[start] <= ' ')) {
@@ -158,14 +158,14 @@ DSString* overload Trim(const DSString* this) {
         : this;    
 }
 
-DSString* overload Substring(const DSString* this, const int index, const int length) {
+overload DSString* Substring(const DSString* this, const int index, const int length) {
     char* result = DSmalloc(length+1);
     strncpy(result, this->value+index, length);
     result[length] = '\0';
     return NewDSString(result);
 }
 
-DSString* overload Substring(const DSString* this, const int index) {
+overload DSString* Substring(const DSString* this, const int index) {
     int length = this->length - index;
     char* result = DSmalloc(length+1);
     strncpy(result, this->value+index, length);
@@ -173,17 +173,17 @@ DSString* overload Substring(const DSString* this, const int index) {
     return NewDSString(result);
 }
 
-int overload Length(const DSString* const this) 
+overload int Length(const DSString* const this) 
 {
     return this->length;
 }
 
-bool overload IsEmpty(const DSString* const this)
+overload bool IsEmpty(const DSString* const this)
 {
     return this->length == 0;
 }
 
-char overload CharAt(const DSString* const this, const int index)
+overload char CharAt(const DSString* const this, const int index)
 {
     // printf("string %d,%d %s\n", index, this->length, this->value);
     if (index < 0 || index >= this->length)
@@ -192,13 +192,13 @@ char overload CharAt(const DSString* const this, const int index)
 }
  
 
-char* overload ToString(const DSString* const this)
+overload char* ToString(const DSString* const this)
 {
     return this->value;
 }
 
 __attribute__((__format__ (__printf__, 1, 2)))
-DSString* overload Format(const char* format, ...) {
+overload DSString* Format(const char* format, ...) {
     va_list args1;
     va_list args2;
     

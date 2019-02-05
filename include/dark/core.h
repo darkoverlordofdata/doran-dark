@@ -35,6 +35,7 @@ SOFTWARE.
 #include <string.h>
 #include <stdarg.h>
 #include <stdbool.h>
+#include <gc.h>
 
 #define Min(a, b)                                                       \
 ({                                                                      \
@@ -60,11 +61,11 @@ SOFTWARE.
 
 typedef void (*IDispose)(void* const, void* const);
 
-void* DSmalloc(size_t);
-void* DSrealloc(void*, size_t);
-void* DScalloc(size_t, size_t);
-void DSfree(void*);
-void DScollect();
+#define DSfree(ptr) GC_FREE(ptr)
+#define DSmalloc(size) GC_MALLOC(size)
+#define DSrealloc(old, new_size) GC_REALLOC(old, new_size)
+#define DScalloc(num, size) GC_MALLOC(num * size)
+#define DScollect() GC_gcollect()
 
 __attribute__((__format__ (__printf__, 1, 2)))                          \
 char* DSsprintf(const char* format, ...);

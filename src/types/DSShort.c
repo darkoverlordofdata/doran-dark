@@ -63,7 +63,7 @@ short DSParseShort(char const *const s, int const radix)
  *         +1 x < y
  *         -1 x > y
  */
-short overload Compare(const short x, const short y) {
+overload int Compare(const short x, const short y) {
     return (x < y) ? -1 : (( x == y ) ? 0 : 1);
 }
 
@@ -73,54 +73,54 @@ short overload Compare(const short x, const short y) {
  * @param   other  Short to be compared
  * @return same as DSShort_Compare
  */
-int overload CompareTo(const DSShort* this, const DSShort* other) {
+overload int CompareTo(const DSShort* this, const DSShort* other) {
     return Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int overload IntValue(const DSShort* const this) {
+overload int IntValue(const DSShort* const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-long overload LongValue(const DSShort* const this) {
+overload long LongValue(const DSShort* const this) {
     return (long)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-float overload FloatValue(const DSShort* const this) {
+overload float FloatValue(const DSShort* const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-double overload DoubleValue(const DSShort* const this) {
+overload double DoubleValue(const DSShort* const this) {
     return (double)this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-char overload CharValue(const DSShort* const this) {
+overload char CharValue(const DSShort* const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-short overload ShortValue(const DSShort* const this) {
+overload short ShortValue(const DSShort* const this) {
     return (short)this->value;
 }
 
 
-char* overload ToString(const DSShort* const this)
+overload char* ToString(const DSShort* const this)
 {
     static char str[20];
     sprintf(str, "%d", this->value);

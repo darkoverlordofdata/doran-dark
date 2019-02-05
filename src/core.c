@@ -27,54 +27,8 @@ SOFTWARE.
 #include <dark/DSClass.h>
 #include <stdlib.h>
 #include <gc.h>
-/**
- * free the memory for this ptr
- */
-// void DS_free(TClass cls) 
-void DSfree(void* ptr) 
-{
-    GC_FREE(ptr);
-}
 
-/**
- * malloc size bytes
- */
-void* DSmalloc(size_t size)
-{
-    void* ptr = GC_MALLOC(size);
-    return ptr;
-}
-
-/**
- * realloc size bytes from old pointer
- */
-void* DSrealloc(void * old, size_t new_size)
-{
-    return GC_REALLOC(old, new_size);
-}
-
-
-/**
- * malloc num * size bytes
- */
-void* DScalloc(size_t num, size_t size)
-{
-    return GC_MALLOC(num * size);
-}
-
-/**
- * Explicitly force a garbage collection.
- */
-void DScollect()
-{
-    GC_gcollect();
-}
-
-// void GC_REGISTER_FINALIZER(...)
-/**
- *  start the garbage collector
- */
-void __attribute__((constructor(101))) DSGCStart()
+void __attribute__((constructor(101))) dark_core_start()
 {
     GC_INIT();
     GC_enable_incremental();
@@ -83,6 +37,6 @@ void __attribute__((constructor(101))) DSGCStart()
 /**
  *  stop the garbage collector
  */
-void __attribute__((destructor)) DSGCStop()
+void __attribute__((destructor)) dark_core_stop()
 {
 }

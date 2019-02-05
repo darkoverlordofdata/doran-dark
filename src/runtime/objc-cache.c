@@ -32,12 +32,12 @@
 * than realloc.  This avoids the need to check for NULL caches in the
 * messenger.
 ***********************************************************************/
-struct objc_cache _objc_empty_cache =
-{
-    0,        // mask
-    0,        // occupied
-    { NULL }  // buckets
-};
+// struct objc_cache _objc_empty_cache =
+// {
+//     0,        // mask
+//     0,        // occupied
+//     { NULL }  // buckets
+// };
 
 /**
  * No cache. I'm storing a vtable in each Class object in it's place.

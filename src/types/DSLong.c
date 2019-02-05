@@ -70,7 +70,7 @@ long DSParseLong(const char* const s, const int radix)
  *         +1 x < y
  *         -1 x > y
  */
-int overload Compare(const long x, const long y) {
+overload int Compare(const long x, const long y) {
     return (x < y) ? -1 : (( x == y ) ? 0 : 1);
 }
 
@@ -80,58 +80,58 @@ int overload Compare(const long x, const long y) {
  * @param   other  Long to be compared
  * @return same as DSLong_Compare
  */
-int overload CompareTo(const DSLong* const this, const DSLong* const other) {
+overload int CompareTo(const DSLong* const this, const DSLong* const other) {
     return Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int overload IntValue(const DSLong* const this) {
+overload int IntValue(const DSLong* const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-long overload LongValue(const DSLong* const this) {
+overload long LongValue(const DSLong* const this) {
     return (long)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-float overload FloatValue(const DSLong* const this) {
+overload float FloatValue(const DSLong* const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-double overload DoubleValue(const DSLong* const this) {
+overload double DoubleValue(const DSLong* const this) {
     return (double)this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-char overload CharValue(const DSLong* const this) {
+overload char CharValue(const DSLong* const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-short overload ShortValue(const DSLong* const this) {
+overload short ShortValue(const DSLong* const this) {
     return (short)this->value;
 }
 
-bool overload Equals(const DSLong* const this, const DSLong* const other)
+overload bool Equals(const DSLong* const this, const DSLong* const other)
 {
     return this->value == other->value;
 }
 
-char* overload ToString(const DSLong* const this)
+overload char* ToString(const DSLong* const this)
 {
     static char str[20];
     sprintf(str, "%d", this->value);

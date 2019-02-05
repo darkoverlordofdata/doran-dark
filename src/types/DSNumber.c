@@ -45,53 +45,53 @@ DSNumber* DSNumber_init(DSNumber* const this)
  *         +1 this < other
  *         -1 this > other
  */
-int overload CompareTo(const DSNumber* this, const DSNumber* const other) {
+overload int CompareTo(const DSNumber* this, const DSNumber* const other) {
     return _vptr(this)->CompareTo(this, other);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-int overload IntValue(const DSNumber* const this) {
+overload int IntValue(const DSNumber* const this) {
     return _vptr(this)->IntValue(this);
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-long overload LongValue(const DSNumber* const this) {
+overload long LongValue(const DSNumber* const this) {
     return _vptr(this)->LongValue(this);
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-float overload FloatValue(const DSNumber* const this) {
+overload float FloatValue(const DSNumber* const this) {
     return _vptr(this)->FloatValue(this);
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-double overload DoubleValue(const DSNumber* const this) {
+overload double DoubleValue(const DSNumber* const this) {
     return _vptr(this)->DoubleValue(this);
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-char overload CharValue(const DSNumber* const this) {
+overload char CharValue(const DSNumber* const this) {
     return _vptr(this)->CharValue(this);
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-short overload ShortValue(const DSNumber* const this) {
+overload short ShortValue(const DSNumber* const this) {
     return _vptr(this)->ShortValue(this);
 }
 
-char* overload ToString(const DSNumber* const this) {
+overload char* ToString(const DSNumber* const this) {
     return _vptr(this)->ToString(this);
 }
 

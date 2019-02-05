@@ -73,13 +73,13 @@ DSStringBuilder* DSStringBuilder_init(DSStringBuilder* const this)
 /*
  * sb_empty returns non-zero if the given StringBuilder is empty.
  */
-int overload Empty(const DSStringBuilder* this)
+overload int Empty(const DSStringBuilder* this)
 {
 	return (this->root == nullptr);
 }
 
 
-int overload Appendc(DSStringBuilder* this, const char c)
+overload int Appendc(DSStringBuilder* this, const char c)
 {
 	char str[2] = { c, 0 };
 	auto x = _vptr(this)->Append(this, str);
@@ -88,7 +88,7 @@ int overload Appendc(DSStringBuilder* this, const char c)
 /*
  * sb_append adds a copy of the given string to a StringBuilder.
  */
-int overload Append(DSStringBuilder* this, const char *str)
+overload int Append(DSStringBuilder* this, const char *str)
 {
 	int	length = 0;
 	struct StringFragment * frag = nullptr;
@@ -119,7 +119,7 @@ int overload Append(DSStringBuilder* this, const char *str)
  * sb_appendf adds a copy of the given formatted string to a StringBuilder.
  */
 __attribute__((__format__ (__printf__, 2, 3)))
-int overload Appendf(DSStringBuilder* this, const char *format, ...)
+overload int Appendf(DSStringBuilder* this, const char *format, ...)
 {
 	const int MAX_FRAG_LENGTH = 4096;
 	int len = 0;
@@ -144,7 +144,7 @@ int overload Appendf(DSStringBuilder* this, const char *format, ...)
  * The StringBuilder is not modified by this function and can therefore continue
  * to be used.
  */
-DSString* overload Concat(const DSStringBuilder* this)
+overload DSString* Concat(const DSStringBuilder* this)
 {
 	char *buf = nullptr;
 	char *c = nullptr;
@@ -168,7 +168,7 @@ DSString* overload Concat(const DSStringBuilder* this)
  * sb_reset resets the given StringBuilder, freeing all previously appended
  * strings.
  */
-void overload Reset(DSStringBuilder* this)
+overload void Reset(DSStringBuilder* this)
 {
 	StringFragment* frag = nullptr;
 	StringFragment* next = nullptr;
@@ -182,15 +182,16 @@ void overload Reset(DSStringBuilder* this)
 /*
  * sb_free frees the given StringBuilder and all of its appended strings.
  */
-void overload Dispose(DSStringBuilder* this)
+overload void Dispose(DSStringBuilder* this)
 {
 	Reset(this);
 }
 
 
-char* overload ToString(const DSStringBuilder* this)
+overload char* ToString(const DSStringBuilder* this)
 {
-    return "dark.StringBuilder";
+	return Concat(this);
+    // return "dark.StringBuilder";
 }
 
 

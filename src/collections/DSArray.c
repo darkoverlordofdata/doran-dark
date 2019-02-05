@@ -65,7 +65,6 @@ overload DSArray* DSArray_init(DSArray* const this, int capacity) {
     return DSArray_init(this, nullptr, capacity);
 }
 
-
 overload DSArray* DSArray_init(DSArray* const this, Class typeOf) {
     return DSArray_init(this, nullptr, 0);
 }
@@ -110,7 +109,7 @@ overload Either* Add(DSArray* const this, const DSObject* item)
         return Left($("InvalidType"));
 
     if (this->capacity == this->length) {
-        _vptr(this)->Resize(this, this->capacity * 2);
+        Resize(this, this->capacity * 2);
     }
     this->data[this->length++] = item;
 }
@@ -162,7 +161,7 @@ overload void Remove(DSArray* const this, int index)
     this->length--;
 
     if (this->length > 0 && this->length == this->capacity / 4)
-        _vptr(this)->Resize(this, this->capacity / 2);
+        Resize(this, this->capacity / 2);
 }
 
 /**

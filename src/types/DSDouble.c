@@ -25,11 +25,6 @@ SOFTWARE.
 ******************************************************************/
 #include <dark/types/DSDouble.h>
 #include <dark/types/implementation/DSDouble.h>
-/* 
- * throws NumberFormatException:
- */
-// static DSException(NumberFormat);
-
 /**
  * Constructor
  * create a new DSDouble

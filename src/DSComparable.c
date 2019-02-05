@@ -38,20 +38,12 @@ DSComparable* DSComparable_init(DSComparable* const this)
     return this;
 }
 
-int overload CompareTo(const DSComparable* const this, const DSComparable* const other) {
+overload int CompareTo(const DSComparable* const this, const DSComparable* const other) {
     return _vptr(this)->CompareTo(this, other);
 }
 
-int DSComparable_CompareTo(const DSComparable* const this, const DSComparable* const other) {
-    throw DSAbstractMethodException("Comparable_CompareTo", Source);
-}
-
-char* overload ToString(const DSComparable* const this) {
+overload char* ToString(const DSComparable* const this) {
     return "dark.DSComparable";
-}
-
-char* DSComparable_ToString(const DSComparable* const this) {
-    _vptr(this)->ToString(this);
 }
 
 
