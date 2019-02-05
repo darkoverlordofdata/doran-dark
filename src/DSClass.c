@@ -29,14 +29,6 @@ SOFTWARE.
 
 bool InstanceOf(Class class, DSObject* obj);
 
-/** 
- * Initialize the runtime object system 
- * Classes must be loaded before they can be used
- */
-void __attribute__((constructor(101))) ObjcRegisterBuiltins()  {
-    objc_register_builtins();
-}
-
 bool InstanceOf(Class class, DSObject* obj) {
     Class isa = obj->isa; 
     

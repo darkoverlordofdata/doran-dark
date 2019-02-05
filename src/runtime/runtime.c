@@ -64,59 +64,52 @@ void _objc_init_class_hash(void)
 
 }
 
-void objc_register_builtins() {
 
+/** 
+ * load framework builtin classes 
+ */
+void objc_loadBuiltins() {
 
     if (!class_hash) _objc_init_class_hash();
-    /** 
-     * register framework classes 
-     * 
-     * apple goes through segments here and links in pre-compiled classes.
-     * as i'm not using compiled objective-c, the 'prebuilt' classes
-     * will be fabricated instead of loaded.
-     */
 
     /** DSObject */
     Class obj;
-    objc_registerClassPair(obj = DSObjectImplementation(Nil));
+    objc_registerClassPair(obj = objc_loadDSObject(Nil));
 
     /** DSClass */
     Class cls;
-    objc_registerClassPair(cls = DSClassImplementation(obj));
+    objc_registerClassPair(cls = objc_loadDSClass(obj));
 
     /** DSException */
-    objc_registerClassPair(DSExceptionImplementation(obj));
+    objc_registerClassPair(objc_loadDSException(obj));
 
     /** DSCollection */
-    // Class col;
-    // objc_registerClassPair(col = DSCollectionImplementation(obj));
-
-    objc_registerClassPair(DSArrayImplementation(obj));
-    objc_registerClassPair(DSListImplementation(obj));
-    objc_registerClassPair(DSHashmapImplementation(obj));
+    objc_registerClassPair(objc_loadDSArray(obj));
+    objc_registerClassPair(objc_loadDSList(obj));
+    objc_registerClassPair(objc_loadDSHashmap(obj));
 
     /** DSComparable */
     Class cmp;
-    objc_registerClassPair(cmp = DSComparableImplementation(obj));
+    objc_registerClassPair(cmp = objc_loadDSComparable(obj));
 
-    objc_registerClassPair(DSBooleanImplementation(cmp));
+    objc_registerClassPair(objc_loadDSBoolean(cmp));
 
     Class num;
-    objc_registerClassPair(num = DSNumberImplementation(cmp));
+    objc_registerClassPair(num = objc_loadDSNumber(cmp));
 
-    objc_registerClassPair(DSCharImplementation(num));
-    objc_registerClassPair(DSDoubleImplementation(num));
-    objc_registerClassPair(DSFloatImplementation(num));
-    objc_registerClassPair(DSIntegerImplementation(num));
-    objc_registerClassPair(DSLongImplementation(num));
-    objc_registerClassPair(DSShortImplementation(num));
+    objc_registerClassPair(objc_loadDSChar(num));
+    objc_registerClassPair(objc_loadDSDouble(num));
+    objc_registerClassPair(objc_loadDSFloat(num));
+    objc_registerClassPair(objc_loadDSInteger(num));
+    objc_registerClassPair(objc_loadDSLong(num));
+    objc_registerClassPair(objc_loadDSShort(num));
 
-    objc_registerClassPair(DSStringImplementation(obj));
-    objc_registerClassPair(DSStringBuilderImplementation(obj));
+    objc_registerClassPair(objc_loadDSString(obj));
+    objc_registerClassPair(objc_loadDSStringBuilder(obj));
 
     DSFileSystemInit();
-    // objc_registerClassPair(DSFileSystemImplementation(obj));
-    objc_registerClassPair(DSFileImplementation(cmp));
+    // objc_registerClassPair(DSFileSystem(obj));
+    objc_registerClassPair(objc_loadDSFile(cmp));
 
 
 

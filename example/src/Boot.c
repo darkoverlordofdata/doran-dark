@@ -36,13 +36,13 @@ void __attribute__((constructor)) ApplicationLoader()
     Class obj = objc_getClass("DSObject");
     Class gameObj;
 
-    objc_registerClassPair(gameObj = GameObjectImplementation(obj));
-    objc_registerClassPair(BallObjectImplementation(gameObj));
-    objc_registerClassPair(GameImplementation(obj));
-    objc_registerClassPair(GameLevelImplementation(obj));
-    objc_registerClassPair(ParticleGeneratorImplementation(obj));
-    objc_registerClassPair(ShaderImplementation(obj));
-    objc_registerClassPair(SpriteRendererImplementation(obj));
-    objc_registerClassPair(Texture2DImplementation(obj));
-    objc_registerClassPair(ResourceManagerImplementation(obj));
+    objc_registerClassPair(gameObj = objc_loadGameObject(obj));
+    objc_registerClassPair(objc_loadBallObject(gameObj));
+    objc_registerClassPair(objc_loadGame(obj));
+    objc_registerClassPair(objc_loadGameLevel(obj));
+    objc_registerClassPair(objc_loadParticleGenerator(obj));
+    objc_registerClassPair(objc_loadShader(obj));
+    objc_registerClassPair(objc_loadSpriteRenderer(obj));
+    objc_registerClassPair(objc_loadTexture2D(obj));
+    objc_registerClassPair(objc_loadResourceManager(obj));
 }

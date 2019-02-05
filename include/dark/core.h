@@ -37,6 +37,10 @@ SOFTWARE.
 #include <stdbool.h>
 #include <gc.h>
 
+/**
+ *  MACRO Min
+ *      cache results of calculation in pocket scope 
+ */
 #define Min(a, b)                                                       \
 ({                                                                      \
     auto _a = a;                                                        \
@@ -44,6 +48,10 @@ SOFTWARE.
     (_a < _b) ? _a : _b;                                                \
 })
 
+/**
+ *  MACRO Max
+ *      cache results of calculation in pocket scope 
+ */
 #define Max(a, b)                                                       \
 ({                                                                      \
     auto _a = a;                                                        \
@@ -51,15 +59,11 @@ SOFTWARE.
     (_a > _b) ? _a : _b;                                                \
 })
 
-
 /**
  *  MACRO overload
  *      method overload 
  */
 #define overload __attribute__((overloadable))
-
-
-typedef void (*IDispose)(void* const, void* const);
 
 #define DSfree(ptr) GC_FREE(ptr)
 #define DSmalloc(size) GC_MALLOC(size)
@@ -67,35 +71,6 @@ typedef void (*IDispose)(void* const, void* const);
 #define DScalloc(num, size) GC_MALLOC(num * size)
 #define DScollect() GC_gcollect()
 
-__attribute__((__format__ (__printf__, 1, 2)))                          \
-char* DSsprintf(const char* format, ...);
-
-
-/**
- * Friendlier type names
- */
-typedef int8_t Int8;
-typedef uint8_t UInt8;
-typedef int16_t Int16;
-typedef uint16_t UInt16;
-typedef int32_t Int32;
-typedef uint32_t UInt32;
-typedef int64_t Int64;
-typedef uint64_t UInt64;
-typedef unsigned int uint;
-typedef unsigned char uchar;
-
-/**
- * Redefine true and false 
- * such that true and false are bool, not int.
- */
-#undef true
-#undef false
-static const _Bool false = 0;
-static const _Bool true  = 1;
-
-#define YES true
-#define NO false
 
 #ifndef nullptr
 #define nullptr NULL
@@ -105,21 +80,11 @@ static const _Bool true  = 1;
 #define var __auto_type
 #define auto __auto_type
 
-
-typedef enum 
-{
-    TYPE_BOOLEAN,
-    TYPE_CHAR,
-    TYPE_INT,
-    TYPE_LONG,
-    TYPE_SHORT,
-    TYPE_FLOAT,
-    TYPE_DOUBLE,
-    TYPE_STRING,
-    TYPE_ARRAY,
-    TYPE_OBJECT
-
-} TYPES;
+/**
+ *  MACRO __FILENAME__
+ *      extracts the filename from the path
+ */
+#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 
 /**
  *  MACRO NARG
@@ -151,7 +116,6 @@ typedef enum
  *      String.join(..)
  */
 #define join(...) STR_JOIN(PP_NARG(__VA_ARGS__), __VA_ARGS__)
-char* STR_JOIN(int count, ...);
 
 #define $Join(...) $DSString.Join(PP_NARG(__VA_ARGS__), __VA_ARGS__)
 
@@ -164,9 +128,9 @@ char* STR_JOIN(int count, ...);
  */
 struct _default_arg_;
 #define __DEFAULT__ ((struct _default_arg_ *)NULL)
-#define DEFAULT(arg, _default_val_)                                            \
+#define DEFAULT(arg, _default_val_)                                     \
         _Generic((arg),                                                 \
-            struct _default_arg_ *: _default_val_,                                   \
+            struct _default_arg_ *: _default_val_,                      \
             default: (arg))
 
 
@@ -184,84 +148,52 @@ struct _default_arg_;
 // }
 
 /**
- *  MACRO __FILENAME__
- *      extracts the filename from the path
+ * Redefine true and false for use with _Generic,
+ * such that true and false match bool, not int.
  */
-#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
+#undef true
+#undef false
+#define true (_Bool)1
+#define false (_Bool)0
+#define YES true
+#define NO false
 
+typedef enum 
+{
+    TYPE_BOOLEAN,
+    TYPE_CHAR,
+    TYPE_INT,
+    TYPE_LONG,
+    TYPE_SHORT,
+    TYPE_FLOAT,
+    TYPE_DOUBLE,
+    TYPE_STRING,
+    TYPE_ARRAY,
+    TYPE_OBJECT
 
+} TYPES;
+
+/**
+ * Friendlier type names
+ */
+typedef int8_t Int8;
+typedef uint8_t UInt8;
+typedef int16_t Int16;
+typedef uint16_t UInt16;
+typedef int32_t Int32;
+typedef uint32_t UInt32;
+typedef int64_t Int64;
+typedef uint64_t UInt64;
+typedef unsigned int uint;
+typedef unsigned char uchar;
+
+typedef void (*IDispose)(void* const, void* const);
+
+char* STR_JOIN(int count, ...);
+
+__attribute__((__format__ (__printf__, 1, 2)))                          \
+char* DSsprintf(const char* format, ...);
 void DSvfprintf(FILE*, const char*, va_list);
 int DSvsnprintf(char*, size_t, const char*, va_list);
-
-// /**
-//  *  MACRO $
-//  *      Wrap a primitive type in a DSObject*
-//  */
-// #define $(T) _Generic((T),                                              \
-//                                                                         \
-//         _Bool:              $DSBoolean.Create,                          \
-//         char:               $DSChar.Create,                             \
-//         signed char:        $DSChar.Create,                             \
-//         const char *:       $DSString.Create,                           \
-//         char *:             $DSString.Create,                           \
-//         short int:          $DSShort.Create,                            \
-//         unsigned short int: $DSShort.Create,                            \
-//         unsigned int:       $DSInteger.Create,                          \
-//         long int:           $DSLong.Create,                             \
-//         unsigned long int:  $DSLong.Create,                             \
-//         int:                $DSInteger.Create,                          \
-//         float:              $DSFloat.Create,                            \
-//         double:             $DSDouble.Create,                           \
-//         default:            $DSString.Create)(T)
-
-
-// /**
-//  *  MACRO typeof
-//  *      return the typename of T
-//  */
-// #define typeof(T) _Generic((T),        /* wrap a primitive type */      \
-//                                                                         \
-//         _Bool: "bool",                                                  \
-//         unsigned char: "unsigned char",                                 \
-//         char: "char",                                                   \
-//         signed char: "signed char",                                     \
-//         short int: "short int",                                         \
-//         unsigned short int: "unsigned short int",                       \
-//         int: "int",                                                     \
-//         unsigned int: "unsigned int",                                   \
-//         long int: "long int",                                           \
-//         unsigned long int: "unsigned long int",                         \
-//         long long int: "long long int",                                 \
-//         unsigned long long int: "unsigned long long int",               \
-//         float: "float",                                                 \
-//         double: "double",                                               \
-//         long double: "long double",                                     \
-//         char *: "pointer to char",                                      \
-//         void *: "pointer to void",                                      \
-//         int *: "pointer to int",                                        \
-//         const char *: "const pointer to char",                          \
-//         DSObject *: "DSObject",                                         \
-//         DSComparable * : "DSComparable",                                \
-//         DSBoolean *: "DSBoolean",                                       \
-//         DSChar *: "DSChar",                                             \
-//         DSDouble *: "DSDouble",                                         \
-//         DSFloat *: "DSFloat",                                           \
-//         DSInteger *: "DSInteger",                                       \
-//         DSLong *: "DSLong",                                             \
-//         DSNumber *: "DSNumber",                                         \
-//         DSShort *: "DSShort",                                           \
-//         DSString *: "DSString",                                         \
-//         DSStringBuilder *: "DSStringBuilder",                           \
-//         DSArray *: "DSArray",                                           \
-//         DSHashmap *: "DSHashmap",                                       \
-//         DSList *: "DSList",                                             \
-//         DSClass : "DSClass",                                            \                                               
-//         default: "unknown")
-
-//         // Vec2 : "Vec2",                                                  \
-//         // Vec3 : "Vec3",                                                  \
-//         // Vec4 : "Vec4",                                                  \
-//         // Matrix : "Matrix",                                              \
-
 
 #endif _CORE_H

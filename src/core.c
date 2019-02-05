@@ -28,15 +28,16 @@ SOFTWARE.
 #include <stdlib.h>
 #include <gc.h>
 
-void __attribute__((constructor(101))) dark_core_start()
+void __attribute__((constructor(101))) __objc_load()
 {
     GC_INIT();
     GC_enable_incremental();
+    objc_loadBuiltins();
 }
 
 /**
  *  stop the garbage collector
  */
-void __attribute__((destructor)) dark_core_stop()
+void __attribute__((destructor)) __objc_unload()
 {
 }

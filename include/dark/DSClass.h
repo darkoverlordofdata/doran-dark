@@ -136,8 +136,8 @@ Class get##T##Isa() {                                                   \
         : objc_getClass(#T);                                            \
     return _##T##_isa;                                                  \
 }                                                                       \
-Class T##Implementation(Class super);                                   \
-Class T##Implementation(Class super)                                    \
+Class objc_load##T(Class super);                                        \
+Class objc_load##T(Class super)                                         \
 {                                                                       \
     int k = 0;                                                          \
     IMP* vt = &T##_vtable;                                              \
