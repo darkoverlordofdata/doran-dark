@@ -27,6 +27,8 @@ SOFTWARE.
 #include <dark/DSClass.h>
 #include <stdlib.h>
 #include <gc.h>
+#include <ctype.h>
+#include <stddef.h>
 
 void __attribute__((constructor(101))) __objc_load()
 {
@@ -41,3 +43,49 @@ void __attribute__((constructor(101))) __objc_load()
 void __attribute__((destructor)) __objc_unload()
 {
 }
+
+#if UNIX
+int strcmpi (const char *s1, const char *s2)
+{
+  const unsigned char *p1 = (const unsigned char *) s1;
+  const unsigned char *p2 = (const unsigned char *) s2;
+  unsigned char c1, c2;
+
+  if (p1 == p2)
+    return 0;
+
+  do
+    {
+      c1 = tolower (*p1++);
+      c2 = tolower (*p2++);
+      if (c1 == '\0')
+	break;
+    }
+  while (c1 == c2);
+  
+  return c1 - c2;
+}
+#endif
+
+
+#if UNIX
+strlwr(char *str)
+{
+  char *s;
+
+  for(s = str; *s; s++)
+    *s = tolower((unsigned char)*s);
+  return str;
+}
+#endif
+
+#if UNIX
+strupr(char *str)
+{
+  char *s;
+
+  for(s = str; *s; s++)
+    *s = toupper((unsigned char)*s);
+  return str;
+}
+#endif

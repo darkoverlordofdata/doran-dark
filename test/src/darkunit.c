@@ -61,7 +61,8 @@ void Describe(char* desc, void (^lambda)()) {
  * print a test title & execute
  */
 void It(char* desc, void (^lambda)()) {
-    printf("%s - ", desc);
+    fprintf(stdout, "%s - ", desc);
+	fflush(stdout);
 	lambda();
 }
 
