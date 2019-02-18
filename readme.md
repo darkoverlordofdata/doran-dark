@@ -1,13 +1,24 @@
 # DaRKSTEP
 
-NeXTSTEP-like object system entirely in c11 with clang extensions. This is not objective-c, this is c. Instead of method lists, I'm using vtables. Instead of messages, I'm using the selector as a generic function.
+A NeXTSTEP-like object system entirely in c11 with clang extensions. This is not objective-c, this is c. Instead of method lists, I'm using vtables. Instead of messages, I'm using the selector as a generic function.
 
-clang c11 with extensions:
+clang c11, using extensions:
 * BlocksRuntime
 * __attribute__((ext_vector_type(n)))
 * __attribute__((overloadable))
 * __attribute__((constructor(n)))
 * __attribute__((cleaup(destructor)))
+
+## Why?
+'I want a new C' - catchy. Maybe I'll write a song. C is simple. It compiles fast. I didn't like Borland C++ 2.0 when it came out - too 'gimicky'. It's gotten better, but I still think it has a noisy syntax. 
+
+This library is adequate for non-critical use. Probably 1/2 the internet runs or did run on hacks that emulate classes in javascript.
+
+The initial idea was to replace GLib - I like vala as a language, but the more I look at GLib and GPL, the less I like it. But it works great standalone. So I can see using it along side vala. Perhaps I'll return to replacing GLib at some point.
+
+> "C makes it easy to shoot yourself in the foot; C++ makes it harder, but when you do it blows your whole leg off" -- Bjarne Stroustrup
+
+
 
 
 ### testing
@@ -21,13 +32,6 @@ clang c11 with extensions:
 
 ### example
 a port of the breakout game from learnopengl.com
-
-## Why?
-I want a new C. C is simple. It compiles fast. I didn't like Borland C++ 2.0 when it came out - too 'gimicky'. It's gotten better, but I still think it has a noisy syntax. 
-
-This library is adequate for non-critical use. Probably 1/2 the internet runs or did run on hacks that emulate classes in javascript.
-
-> "C makes it easy to shoot yourself in the foot; C++ makes it harder, but when you do it blows your whole leg off" -- Bjarne Stroustrup
 
 ## dependancies (windows)
     pacman -S mingw-w64-x86_64-libblocksruntime
