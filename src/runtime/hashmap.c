@@ -231,12 +231,12 @@ static int hashmap_rehash(struct hashmap *map, size_t new_size)
         new_entry->key = entry->key;
         new_entry->data = entry->data;
     }
-    free(old_table);
+    GC_FREE(old_table);
     return 0;
 revert:
     map->table_size = old_size;
     map->table = old_table;
-    free(new_table);
+    GC_FREE(new_table);
     return -EINVAL;
 }
 
@@ -312,7 +312,7 @@ void hashmap_destroy(struct hashmap *map)
         return;
     }
     hashmap_free_keys(map);
-    free(map->table);
+    GC_FREE(map->table);
     memset(map, 0, sizeof(*map));
 }
 
@@ -629,7 +629,7 @@ int hashmap_compare_string(const void *a, const void *b)
 }
 
 /*
- * Default key allocation function for string keys.  Use free() for the
+ * Default key allocation function for string keys.  Use GC_FREE() for the
  * key_free_func.
  */
 void *hashmap_alloc_key_string(const void *key)

@@ -26,6 +26,7 @@ SOFTWARE.
 #pragma once
 #ifndef _DSBOOLEAN_H_
 #define _DSBOOLEAN_H_
+#include <limits.h>
 #include "../DSComparable.h"
 
 #define BOOLEAN_BYTES      (sizeof(char))

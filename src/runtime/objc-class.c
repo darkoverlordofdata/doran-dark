@@ -188,8 +188,9 @@ void objc_registerClassPair(Class cls)
 
     if (NX_hashmap_get(class_hash, cls->name) == nullptr) {
         NX_hashmap_put(class_hash, cls->name, cls);
-        NX_hashmap_put(class_hash, cls->name, cls);
-        Class kls = NX_hashmap_get(class_hash, cls->name);
+        #ifdef  DEBUG
+        _objc_inform("objc_registerClassPair: class '%s'", cls->name);
+        #endif
     }
 }
 

@@ -29,9 +29,13 @@ This library is adequate for non-critical use. Probably 1/2 the internet runs or
 
 > "C makes it easy to shoot yourself in the foot; C++ makes it harder, but when you do it blows your whole leg off" -- Bjarne Stroustrup
 
-## dependancies
+## dependancies (windows)
     pacman -S mingw-w64-x86_64-libblocksruntime
     pacman -S mingw-w64-x86_64-gc
+
+## dependancies (linux)
+    sudo apt install libblocksruntime-dev
+    sudo apt install libgc-dev
 
 ## example
 ```c

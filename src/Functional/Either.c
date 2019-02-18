@@ -29,8 +29,8 @@ SOFTWARE.
  * 
  * A container similar to a tuple [A, B]
  * Except that it can only contain A or B, not both.
- * By convention the right value represents valid results
- * while the left value represents an error condition.
+ * By convention the right value (A) represents valid results
+ * while the left value (B) represents an error condition.
  * 
  */
 ivar (Either) {

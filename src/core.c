@@ -32,7 +32,7 @@ void __attribute__((constructor(101))) __objc_load()
 {
     GC_INIT();
     GC_enable_incremental();
-    objc_loadBuiltins();
+    objc_loadFramework();
 }
 
 /**

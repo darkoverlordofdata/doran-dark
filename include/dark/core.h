@@ -35,6 +35,7 @@ SOFTWARE.
 #include <string.h>
 #include <stdarg.h>
 #include <stdbool.h>
+#include <errno.h>
 #include <gc.h>
 
 /**

@@ -46,7 +46,6 @@ SEL $set = "Set";
 SEL $get = "Get";
 SEL $clear = "Clear";
 
-
 /* NX_hashmap interface for Class objects */
 HASHMAP_FUNCS_CREATE(NX, const char, struct objc_class)
 
@@ -60,59 +59,48 @@ void _objc_init_class_hash(void)
         return;
     class_hash = &_class_hash;
     hashmap_init(class_hash, hashmap_hash_string, hashmap_compare_string, 0);
-
-
 }
 
 
 /** 
  * load framework builtin classes 
  */
-void objc_loadBuiltins() {
+void objc_loadFramework() 
+{
+    _objc_init_class_hash();
 
-    if (!class_hash) _objc_init_class_hash();
-
-    /** DSObject */
+    /** register DSObject */
     Class obj;
     objc_registerClassPair(obj = objc_loadDSObject(Nil));
 
-    /** DSClass */
+    /** register DSClass */
     Class cls;
     objc_registerClassPair(cls = objc_loadDSClass(obj));
 
-    /** DSException */
-    objc_registerClassPair(objc_loadDSException(obj));
-
-    /** DSCollection */
-    objc_registerClassPair(objc_loadDSArray(obj));
-    objc_registerClassPair(objc_loadDSList(obj));
-    objc_registerClassPair(objc_loadDSHashmap(obj));
-
-    /** DSComparable */
+    /** register DSComparable */
     Class cmp;
     objc_registerClassPair(cmp = objc_loadDSComparable(obj));
 
-    objc_registerClassPair(objc_loadDSBoolean(cmp));
-
+    /** register DSNumber */
     Class num;
     objc_registerClassPair(num = objc_loadDSNumber(cmp));
 
+    objc_registerClassPair(objc_loadDSException(obj));
+    objc_registerClassPair(objc_loadDSArray(obj));
+    objc_registerClassPair(objc_loadDSList(obj));
+    objc_registerClassPair(objc_loadDSHashmap(obj));
+    objc_registerClassPair(objc_loadDSBoolean(cmp));
     objc_registerClassPair(objc_loadDSChar(num));
     objc_registerClassPair(objc_loadDSDouble(num));
     objc_registerClassPair(objc_loadDSFloat(num));
     objc_registerClassPair(objc_loadDSInteger(num));
     objc_registerClassPair(objc_loadDSLong(num));
     objc_registerClassPair(objc_loadDSShort(num));
-
     objc_registerClassPair(objc_loadDSString(obj));
     objc_registerClassPair(objc_loadDSStringBuilder(obj));
-
     DSFileSystemInit();
     // objc_registerClassPair(DSFileSystem(obj));
     objc_registerClassPair(objc_loadDSFile(cmp));
-
-
-
 }
 
 /***********************************************************************
@@ -156,7 +144,7 @@ static void _objcTweakMethodListPointerForClass(Class cls)
 {    
     struct objc_method_list *	originalList;
     const int					initialEntries = 4;
-    size_t							mallocSize;
+    size_t						mallocSize;
     struct objc_method_list **	ptr;
 
     // Do nothing if methodLists is already an array.
