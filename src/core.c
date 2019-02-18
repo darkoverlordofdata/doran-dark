@@ -44,7 +44,7 @@ void __attribute__((destructor)) __objc_unload()
 {
 }
 
-#if UNIX
+#ifndef _WIN64
 int strcmpi (const char *s1, const char *s2)
 {
   const unsigned char *p1 = (const unsigned char *) s1;
@@ -68,7 +68,7 @@ int strcmpi (const char *s1, const char *s2)
 #endif
 
 
-#if UNIX
+#ifndef _WIN64
 strlwr(char *str)
 {
   char *s;
@@ -79,7 +79,7 @@ strlwr(char *str)
 }
 #endif
 
-#if UNIX
+#ifndef _WIN64
 strupr(char *str)
 {
   char *s;

@@ -41,15 +41,15 @@ static inline void _objc_inform(const char *fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	#if UNIX
+	#ifndef _WIN64
 	vprintf(fmt, args);
-	#else
+	#else 
 	_vcprintf(fmt, args);
 	#endif
 	va_end(args);
-	#if UNIX
+	#ifndef _WIN64
 	printf("\n");
-	#else
+	#else 
 	_cprintf("\n");
 	#endif
 }
