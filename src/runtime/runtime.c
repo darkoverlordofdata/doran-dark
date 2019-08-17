@@ -23,7 +23,24 @@
  */
 #include <stdio.h>
 #include <dark/DSClass.h>
-#include <dark/DSLog.h>
+#include <dark/DSObject.h>
+#include <dark/DSComparable.h>
+
+#include <dark/types/DSBoolean.h>
+#include <dark/types/DSChar.h>
+#include <dark/types/DSDouble.h>
+#include <dark/types/DSFloat.h>
+#include <dark/types/DSInteger.h>
+#include <dark/types/DSLong.h>
+#include <dark/types/DSNumber.h>
+#include <dark/types/DSShort.h>
+#include <dark/types/DSString.h>
+#include <dark/types/DSStringBuilder.h>
+#include <dark/io/DSFile.h>
+#include <dark/io/DSFileSystem.h>
+#include <dark/collections/DSArray.h>
+#include <dark/collections/DSHashmap.h>
+#include <dark/collections/DSList.h>
 #include <dark/runtime.h>
 
 /** builtin selectors */
@@ -99,7 +116,7 @@ void objc_loadFramework()
     objc_registerClassPair(objc_loadDSString(obj));
     objc_registerClassPair(objc_loadDSStringBuilder(obj));
     DSFileSystemInit();
-    // objc_registerClassPair(DSFileSystem(obj));
+    // objc_registerClassPair(objc_loadDSFileSystem(obj));
     objc_registerClassPair(objc_loadDSFile(cmp));
 }
 

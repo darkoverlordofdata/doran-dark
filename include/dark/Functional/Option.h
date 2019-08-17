@@ -24,6 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #pragma once
+#include <signal.h>
 #include "../DSObject.h"
 
 typedef struct Option Option;
@@ -33,10 +34,67 @@ typedef struct DSObject DSObject;
  * Option - 
  * not a DSObject.
  */
-Option* 	NewOption(DSObject* value);
-DSObject* 	overload Some(Option* this);
-int         overload Length(Option* this);
-void        overload ForEach(Option* const this, void (^iter)(DSObject*));
-bool        overload IsEmpty(Option* this);
-extern      Option*	None;
+// Option* 	NewOption(DSObject* value);
+// DSObject* 	overload Some(Option* this);
+// int         overload Length(Option* this);
+// void        overload ForEach(Option* const this, void (^iter)(DSObject*));
+// bool        overload IsEmpty(Option* this);
+// extern      Option*	None;
+
+IVAR (Option) {
+	bool none;
+	DSObject* value;
+};
+
+static Option* None;
+
+
+/**
+ * Option `monad`
+ * 
+ * A container/collection that can hold either 0 or 1 object
+ * 
+ */
+static inline Option* NewOption(DSObject* value) {
+    if (value == nullptr) {
+        printf("Invalid - Option cannot be null\n");
+        raise(SIGSEGV);
+    }
+    const auto this = alloc(Option);
+    this->value = value;
+    return this;
+}
+
+static inline overload DSObject* Some(Option* this) {
+    return this->value;
+}
+
+static inline overload int Length(Option* this) {
+    return this->value != nullptr ? 1 : 0;
+}
+
+static inline overload void ForEach(Option* const this, void (^iter)(DSObject*)) {
+    iter(this->value);
+}
+
+static inline overload bool IsEmpty(Option* this) {
+    return this->value == nullptr ? true : false;
+}
+ 
+static inline overload DSObject* Bind(Option* this, Option* (^func)(Option*)) {
+    return this->value != nullptr ? func(this->value) : None; 
+}
+
+static inline overload DSObject* Bind(Option* this, Option* (*func)(Option*)) {
+    return this->value != nullptr ? func(this->value) : None; 
+}
+
+static inline DSObject* Return(Option* this) {
+    return this->value != nullptr ? NewOption(this->value) : None;
+}
+
+static void __attribute__((constructor())) OptionBoot() {
+    None = alloc(Option);
+    None->value = nullptr;
+}
 

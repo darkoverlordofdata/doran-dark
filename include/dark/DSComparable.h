@@ -37,37 +37,54 @@ SOFTWARE.
 /**
  * DSComparable Class
  */
-ivar (DSComparable) {
+IVAR (DSComparable) {
     Class isa;
 };
 
-// typedef DSComparable* (*DSComparableCreate) ();
-// typedef char*   (*DSComparableToString)  (const DSComparable* const);
-// typedef int     (*DSComparableCompareTo)  (const DSComparable* const, const DSComparable* const);
-
-method (DSComparable, ToString,        char*,    (const DSComparable* const));
-method (DSComparable, CompareTo,       int,      (const DSComparable* const, const DSComparable* const));
+METHOD (DSComparable, ToString,        char*,    (const DSComparable* const));
+METHOD (DSComparable, CompareTo,       int,      (const DSComparable* const, const DSComparable* const));
 
 
 /**
  * DSComparable Vtable
  */
-vtable (DSComparable) {
+VTABLE (DSComparable) {
     const DSComparableToString      ToString;
     const DSObjectEquals            Equals;
     const DSObjectGetHashCode       GetHashCode;
     const DSObjectDispose           Dispose;
     const DSComparableCompareTo     CompareTo;
-
-    // const char*   (*ToString)     (const DSComparable* const);
-    // const bool    (*Equals)       (const DSObject* const, DSObject* const);
-    // const int     (*GetHashCode)  (const DSObject* const);
-    // const void    (*Dispose)      (const DSObject* const);
-    // const int     (*CompareTo)    (const DSComparable* const, const DSComparable* const);
 };
 
+DEF_VPTR(DSComparable);
 
-// int overload CompareTo(const DSComparable* const, const DSComparable* const);
-// char* overload ToString(const DSComparable* const this);
+//=======================================================================//
+//              I M P L E M E N T A T I O N                              //          
+//=======================================================================//
+
+static inline DSComparable* DSComparable_init(DSComparable* const this)
+{
+    DSObject_init(this);
+    this->isa = objc_getClass("DSComparable");
+    return this;
+}
+
+static inline overload int CompareTo(const DSComparable* const this, const DSComparable* const other) {
+    return getVptr(DSComparable)->CompareTo(this, other);
+}
+
+static inline overload char* ToString(const DSComparable* const this) {
+    return "dark.DSComparable";
+}
+
+VTABLE_BIND(DSComparable);
+VTABLE_METHOD(ToString,           (DSComparableToString)ToString, "$@:v");
+VTABLE_METHOD(Equals,             (DSObjectEquals)Equals, "B@:@@");
+VTABLE_METHOD(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
+VTABLE_METHOD(Dispose,            (DSObjectDispose)Dispose, "v@:v");
+VTABLE_METHOD(ReferenceEquals,    ReferenceEquals, "@:v");
+VTABLE_METHOD(InstanceEquals,     InstanceEquals, "$@:v");
+VTABLE_METHOD(CompareTo,          (DSComparableCompareTo)CompareTo, "i@:@");
+VTABLE_METHODIZE;
 
 #endif _DSCOMPARABLE_H_

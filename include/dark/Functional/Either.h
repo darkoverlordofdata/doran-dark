@@ -29,16 +29,87 @@ SOFTWARE.
 typedef struct Either Either;
 typedef struct DSObject DSObject;
 
+// /**
+//  * Either - 
+//  * not a DSObject.
+//  */
+// bool 		overload IsRight(Either* this);
+// DSObject* 	overload GetRight(Either* this);
+// DSObject* 	overload GetLeft(Either* this);
+// Either* 	overload Left(DSObject* value);
+// Either* 	overload Right(DSObject* value);
+// Either* 	overload Map(Either* this, Either* (*func)(Either*));
+
 /**
- * Either - 
- * not a DSObject.
+ * Either `monad`
+ * 
+ * A container similar to a tuple [A, B]
+ * Except that it can only contain A or B, not both.
+ * By convention the right value (A) represents valid results
+ * while the left value (B) represents an error condition.
+ * 
  */
-bool 		overload IsRight(Either* this);
-DSObject* 	overload GetRight(Either* this);
-DSObject* 	overload GetLeft(Either* this);
-Either* 	overload Left(DSObject* value);
-Either* 	overload Right(DSObject* value);
-Either* 	overload Map(Either* this, Either* (*func)(Either*));
+IVAR (Either) {
+	DSObject* left;
+	DSObject* right;
+	bool isLeft;
+};
+
+/**
+ * Is it right or left?
+ */
+static inline overload bool IsRight(Either* this) { 
+	return !this->isLeft; 
+}
+
+/**
+ * get the right member
+ */
+static inline overload DSObject* GetRight(Either* this) { 
+	return this->right; 
+}
+
+/**
+ * get the left member
+ */
+static inline overload DSObject* GetLeft(Either* this) { 
+	return this->left; 
+}
+
+/**
+ * Private constructor
+ * Only Left & Right are allowed.
+ */
+static inline Either* NewEither(DSObject* a, DSObject* b) {
+    const auto this = alloc(Either);
+	this->left = a;
+	this->right = b;
+	this->isLeft = a != nullptr;
+	return this;
+}
+
+/**
+ * Left Public constructor
+ */
+static inline overload Either* Left(DSObject* value) { 
+	return NewEither(value, nullptr); 
+}
+
+/**
+ * Right Public constructor
+ */
+static inline overload Either* Right(DSObject* value) { 
+	return NewEither(nullptr, value); 
+}
+
+static inline overload Either* Map(Either* this, Either* (*func)(Either*)) {
+	if (this->isLeft)
+		return this;
+	else
+		return func(this);
+}
+
+
 
 
 // 

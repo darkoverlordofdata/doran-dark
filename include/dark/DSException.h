@@ -60,19 +60,16 @@ typedef enum DSExceptionType {
 #define AT "in %s method %s at line %d"
 #define Source DSsprintf(AT, __FILENAME__, __func__, __LINE__)
 
-ivar (DSException) {
+IVAR (DSException) {
     Class isa;
     DSExceptionType type;
     const char *msg;
 };
 
-// overload DSException* NewDSException(DSExceptionType, char*);
-DSException* NewDSException(DSExceptionType type, char* msg);
+CTOR (DSException, DSExceptionType, char*);
+METHOD (DSException, ToString, const char*, (const DSException* const) );
 
-ctor (DSException, DSExceptionType, char*);
-method (DSException, ToString, const char*, (const DSException* const) );
-
-vtable (DSException) {
+VTABLE (DSException) {
     const DSExceptionToString     ToString;
     const DSObjectEquals          Equals;
     const DSObjectGetHashCode     GetHashCode;
@@ -80,7 +77,33 @@ vtable (DSException) {
 };
 
 define_exception_type(DSException*);
-extern struct exception_context the_exception_context[1];
+
+/** 
+ * Exceptions 
+ */
+struct exception_context the_exception_context[1];
+
+/**
+ * Returns the string value of this DSException
+ */
+static inline overload const char* ToString(const DSException* const this) {
+    return this->msg;
+}
+
+static inline DSException* NewDSException(DSExceptionType type, char* msg) {
+    DSException* this = alloc(DSException);
+    return DSException_init(this, type, msg);
+}
+
+static inline DSException* overload DSException_init(DSException* this, DSExceptionType type, char* msg) {
+    DSObject_init(this);
+    this->isa = objc_getClass("DSException");
+    this->type = type;
+    this->msg = msg;
+    return this;
+}
+
+// extern struct exception_context the_exception_context[1];
 /** 
  * Builtin Exceptions
  * 
@@ -131,5 +154,15 @@ static inline DSException* DSNotSupportedException(const char* str, const char* 
 static inline DSException* DSIllegalArgumentException(const char* str, const char* source) {
     return NewDSException(IllegalArgumentException, DSsprintf($IllegalArgumentException, str, source));
 }
+
+
+
+VTABLE_BIND(DSException);
+VTABLE_OVERRIDE( ToString,         (DSExceptionToString)ToString, "$@:v" );
+VTABLE_METHOD( Equals,             (DSObjectEquals)Equals, "B@:@@" );
+VTABLE_METHOD( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+VTABLE_METHOD( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
+VTABLE_METHODIZE;
+
 
 #endif _DSEXCEPTION_H_

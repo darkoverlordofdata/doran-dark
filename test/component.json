@@ -3,7 +3,9 @@
   "name": "unit",
   "template": "c",
   "version": "0.0.1",
-  "vala": "0.26",
+  "vala": "17",
+  "c": "11",
+  "cpp": "17",
   "authors": [],
   "description": "doran-dark tdd",
   "license": "MIT",
@@ -13,28 +15,28 @@
   },
   "source": "src",
   "files": [
+    "src/TestTypes.vala",
     "src/darkunit.c",
-    "src/demo.c",
     "src/main.c",
-    "src/unit.vala",
-    "src/TestTypes.vala"
+    "src/unit.vala"
   ],
   "packages": [],
   "includes": null,
   "libraries": [
     "m",
     "gc",
-    "BlocksRuntime",
-    "-fblocks",
-    "-LC:/msys64/mingw64/bin"
+    "BlocksRuntime"
   ],
   "options": {
     "VERSION": "0.0.1",
     "RELEASE_NAME": "unit"
   },
   "definitions": [],
-  "symbols": [],
+  "symbols": [
+    "-fblocks"
+  ],
   "copy": "..",
   "vapidir": null,
-  "console": false
+  "console": false,
+  "links": null
 }

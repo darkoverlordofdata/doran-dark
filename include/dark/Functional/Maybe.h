@@ -39,52 +39,72 @@ SOFTWARE.
  * 
  */
 #define __Maybe__(type, name)                                           \
-Maybe* overload Just(type x) {                                          \
+static inline overload Maybe* Just(type x) {                                          \
     const auto this = alloc(Maybe);                                     \
     this->name = x;                                                     \
     return this;                                                        \
 }                                                                       \
 type name##Maybe(Maybe* this) { return this->name; }                    \
-Maybe* overload ret(type value) { return Just(value); }
+static inline overload Maybe* ret(type value) { return Just(value); }
 #endif
 
 
 typedef struct Maybe Maybe;
 
-/**
- * Maybe - 
- * not a DSObject.
- */
-Maybe* Nothing();
-Maybe* Just(DSObject*);
-Maybe* ret(DSObject*);
-Maybe* bind(Maybe*,  Maybe* (*func)(Maybe*));
-bool IsNothing(const Maybe*);
 
+#ifdef __MAYBE_GENERICS__
+ivar (Maybe) {
+    union {
+        int Int;
+        long Long;
+        short Short;
+        float Float;
+        double Double;
+        char Char;
+        bool Bool;
+        char* Str;
+        void* Ptr;
+        DSObject* value;
+    };
+};
 
-/**
- * 
- * 
-#define MaybeOp(type, name, code) Maybe* overload name(type x) code
+__Maybe__(int, Int);
+__Maybe__(long, Long);
+__Maybe__(short, Short);
+__Maybe__(float, Float);
+__Maybe__(double, Double);
+__Maybe__(char, Char);
+__Maybe__(bool, Bool);
+__Maybe__(char*, Str);
+__Maybe__(void*, Ptr);
+#else
+ivar (Maybe) {
+    DSObject* value;
+};
+#endif
 
-MaybeOp(int, inc, { return Just(x+1); })
-MaybeOp(int, dec, { return Just(x-1); })
+static inline Maybe* Nothing() {
+    const auto this = alloc(Maybe);
+    this->value = nullptr;
+}
 
-...
-    auto a = bind(bind(ret(2), inc), inc);
-    DSLog("inc = %d", IntMaybe(a));
+static inline Maybe* Just(DSObject* x) {
+    const auto this = alloc(Maybe);
+    this->value = x;
+    return this;
+}
 
-    auto bb = bind(bind(ret(IntMaybe(a)), dec), dec);
-    DSLog("dec = %d", IntMaybe(bb));
+static inline Maybe* ret(DSObject* this) {
+    return Just(this);
+}
 
- * 
- * 
- */
-/**
- * 
-     return bind(bind(bind(GetCompany(Music, "4ad.com"),
-            ^(company){ return GetBand(company); }),   
-                ^(band){ return GetMember(band); }), 
-                    ^(member){ return GetRole(member); });
+static inline Maybe* bind(Maybe* this,  Maybe* (*func)(Maybe*)) {
+    if (this->value == nullptr) 
+        return Nothing();
+    else
+        return func(this->value);
+}
 
-*/
+static inline bool IsNothing(const Maybe* this) {
+    return this->value == nullptr;
+}

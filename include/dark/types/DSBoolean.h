@@ -37,32 +37,21 @@ SOFTWARE.
 #define AsDSBoolean(object) _Generic((object),                          \
                             DSBoolean*: (DSBoolean *)object,            \
                             default: nullptr)
-
 /**
  * DSBoolean instance variables
  */
-ivar (DSBoolean) {
+IVAR (DSBoolean) {
     Class isa;
     bool value;
 };
 
-DSBoolean* NewDSBoolean(const bool value);
-DSBoolean* DSBoolean_init(DSBoolean* this, const bool value);
-DSBoolean* DSBoolean_alloc();
-
-method (DSBoolean, ToString,     char*, (const DSBoolean* const));
-method (DSBoolean, CompareTo,    int, (const DSBoolean* const, const DSBoolean* const));
-
-int     overload Compare(const bool, const bool);
-bool    BoolValue(const DSBoolean* const);
-bool    ParseBool(const char *const);
-
-
+METHOD (DSBoolean, ToString,     char*, (const DSBoolean* const));
+METHOD (DSBoolean, CompareTo,    int, (const DSBoolean* const, const DSBoolean* const));
 
 /**
- * DSBoolean vtable
+ * DSBoolean VTABLE
  */
-vtable (DSBoolean) {
+VTABLE (DSBoolean) {
     const DSBooleanToString       ToString;
     const DSObjectEquals          Equals;
     const DSObjectGetHashCode     GetHashCode;
@@ -83,5 +72,106 @@ class (DSBoolean) {
     DSBoolean* True;
     DSBoolean* False;
 };
+DEF_VPTR(DSBoolean);
+
+/**
+ * Constructor
+ * create a new DSBoolean
+ * 
+ * @param value of bool
+ * 
+ */
+static inline DSBoolean* DSBoolean_init(DSBoolean* this, const bool value) {
+    DSComparable_init(this);
+    this->isa = objc_getClass("DSBoolean");
+    this->value = value;
+    return this;
+}
+
+static inline DSBoolean* NewDSBoolean(const bool value) { 
+    return DSBoolean_init(alloc(DSBoolean), value); }
+
+static inline bool ParseBool(const char * const s) {
+    if (!strcmpi("y", s) 
+    ||  !strcmpi("yes", s) 
+    ||  !strcmpi("t", s) 
+    ||  !strcmpi("true", s)) return true;
+    else return false;
+}
+
+/**
+ * Compare two boolean primitives.
+ *
+ * @param  x DSBoolean to compare
+ * @param  y DSBoolean to compare
+ * @return  0 x == y
+ *         +1 x is true
+ *         -1 y is true
+ */
+static inline overload int Compare(bool x, bool y) {
+    return (x == y) ? 0 : ( x ? 1 : -1 );
+}
+
+/**
+ * Compares two DSBoolean objects .
+ *
+ * @param   other  DSBoolean to be compared
+ * @return same as Boolean_Compare
+ */
+static inline overload int CompareTo(const DSBoolean*  const this, const DSBoolean*  const other) {
+    return Compare(this->value, other->value);
+}
+
+/**
+ * Returns the value of this value cast as an int
+ */
+static inline bool BoolValue(const DSBoolean*  const this) {
+    return (bool)this->value;
+}
+
+/**
+ * Returns the string value of this DSBoolean
+ */
+static inline overload char* ToString(const DSBoolean* const this) {
+    return this->value ? "true" : "false";
+}
+
+
+
+
+
+VTABLE_BIND( DSBoolean );
+
+VTABLE_OVERRIDE( ToString,         (DSBooleanToString)ToString, "$@:v" );
+VTABLE_METHOD( Equals,             (DSObjectEquals)Equals, "B@:@@" );
+VTABLE_METHOD( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+VTABLE_METHOD( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
+VTABLE_OVERRIDE( CompareTo,        (DSBooleanCompareTo)CompareTo, "i@:@" );
+VTABLE_METHOD( BoolValue,          BoolValue, "B@:v" );
+
+VTABLE_IVAR( value, sizeof( int ), "B" );
+
+/** 
+ * Static constructor
+ * set class properties 
+ * 
+ */
+static DSBoolean True;
+True.isa = isa; 
+True.value = true;
+
+static DSBoolean False;
+False.isa = isa;
+False.value = false;
+
+$DSBoolean.Bytes = BOOLEAN_BYTES;
+$DSBoolean.Size = BOOLEAN_SIZE;
+$DSBoolean.Type = BOOLEAN_TYPE;
+$DSBoolean.True = &True;
+$DSBoolean.False = &False;
+$DSBoolean.ParseBool = ParseBool;
+$DSBoolean.Compare = Compare;
+    
+VTABLE_METHODIZE;
 
 #endif // _DSBOOLEAN_H_

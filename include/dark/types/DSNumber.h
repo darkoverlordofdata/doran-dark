@@ -44,23 +44,23 @@ SOFTWARE.
 /**
  * Object class
  */
-ivar (DSNumber) {
+IVAR (DSNumber) {
     Class isa;
 };
 
-method (DSNumber, ToString,        char*, (const DSNumber* const));
-method (DSNumber, CompareTo,       int, (const DSNumber* const, const DSNumber* const));
-method (DSNumber, IntValue,        int, (const DSNumber* const));
-method (DSNumber, LongValue,       long, (const DSNumber* const));
-method (DSNumber, FloatValue,      float, (const DSNumber* const));
-method (DSNumber, DoubleValue,     double, (const DSNumber* const));
-method (DSNumber, CharValue,       char, (const DSNumber* const));
-method (DSNumber, ShortValue,      short, (const DSNumber* const));
+METHOD (DSNumber, ToString,        char*, (const DSNumber* const));
+METHOD (DSNumber, CompareTo,       int, (const DSNumber* const, const DSNumber* const));
+METHOD (DSNumber, IntValue,        int, (const DSNumber* const));
+METHOD (DSNumber, LongValue,       long, (const DSNumber* const));
+METHOD (DSNumber, FloatValue,      float, (const DSNumber* const));
+METHOD (DSNumber, DoubleValue,     double, (const DSNumber* const));
+METHOD (DSNumber, CharValue,       char, (const DSNumber* const));
+METHOD (DSNumber, ShortValue,      short, (const DSNumber* const));
 
 /**
  * Object metaclass
  */
-vtable (DSNumber) {
+VTABLE (DSNumber) {
     const DSNumberToString         ToString;
     const DSObjectEquals          Equals;
     const DSObjectGetHashCode     GetHashCode;
@@ -77,5 +77,97 @@ vtable (DSNumber) {
 class (DSNumber) {
     DSNumber* (*Create) ();
 };
+
+DEF_VPTR(DSNumber);
+/**
+ * Abstract class Number
+ * Initialize the Number vtable
+ * all methods are virtual
+ */
+static inline DSNumber* DSNumber_init(DSNumber* const this)
+{
+    DSComparable_init(this);
+    this->isa = objc_getClass("DSNumber");
+    return this;
+}
+
+/**
+ * Compares two Number objects.
+ *
+ * @param   other  Short to be compared
+ * @return  0 this == other
+ *         +1 this < other
+ *         -1 this > other
+ */
+static inline overload int CompareTo(const DSNumber* this, const DSNumber* const other) {
+    return getVptr(DSNumber)->CompareTo(this, other);
+}
+
+/**
+ * Returns the value of this value cast as an int
+ */
+static inline overload int IntValue(const DSNumber* const this) {
+    return getVptr(DSNumber)->IntValue(this);
+}
+
+/**
+ * Returns the value of this value cast as a long
+ */
+static inline overload long LongValue(const DSNumber* const this) {
+    return getVptr(DSNumber)->LongValue(this);
+}
+
+/**
+ * Returns the value of this value cast as a float
+ */
+static inline overload float FloatValue(const DSNumber* const this) {
+    return getVptr(DSNumber)->FloatValue(this);
+}
+
+/**
+ * Returns the value of this value cast as a double
+ */
+static inline overload double DoubleValue(const DSNumber* const this) {
+    return getVptr(DSNumber)->DoubleValue(this);
+}
+
+/**
+ * Returns the value of this value cast as a char
+ */
+static inline overload char CharValue(const DSNumber* const this) {
+    return getVptr(DSNumber)->CharValue(this);
+}
+
+/**
+ * Returns the value of this value cast as a short
+ */
+static inline overload short ShortValue(const DSNumber* const this) {
+    return getVptr(DSNumber)->ShortValue(this);
+}
+
+static inline overload char* ToString(const DSNumber* const this) {
+    return getVptr(DSNumber)->ToString(this);
+}
+
+
+
+
+
+VTABLE_BIND( DSNumber ); 
+
+VTABLE_VIRTUAL( ToString,          (DSNumberToString)ToString, "$@:v" );
+VTABLE_METHOD( Equals,             (DSObjectEquals)Equals, "B@:@@" );
+VTABLE_METHOD( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+VTABLE_METHOD( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
+VTABLE_VIRTUAL( CompareTo,         (DSNumberCompareTo)CompareTo, "i@:@" );
+VTABLE_VIRTUAL( IntValue,          (DSNumberIntValue)IntValue, "i@:v" );
+VTABLE_VIRTUAL( LongValue,         (DSNumberLongValue)LongValue, "l@:v" );
+VTABLE_VIRTUAL( FloatValue,        (DSNumberFloatValue)FloatValue, "f@:v" );
+VTABLE_VIRTUAL( DoubleValue,       (DSNumberDoubleValue)DoubleValue, "d@:v" );
+VTABLE_VIRTUAL( CharValue,         (DSNumberCharValue)CharValue, "c@:v" );
+VTABLE_VIRTUAL( ShortValue,        (DSNumberShortValue)ShortValue, "s@:v" );
+
+VTABLE_METHODIZE
+
 
 #endif _DSNUMBER_H_

@@ -48,11 +48,23 @@ SOFTWARE.
     typedef struct T T;                                                 \
     struct T
 
+#define IVAR(T)                                                         \
+    typedef struct T T;                                                 \
+    struct T
+
 #define vtable(T)                                                       \
     struct T##_vtable T##_vtable;                                       \
     struct T##_vtable
 
+#define VTABLE(T)                                                       \
+    struct T##_vtable T##_vtable;                                       \
+    struct T##_vtable
+
 #define class(T)                                                        \
+    struct $##T $##T;                                                   \
+    struct $##T
+
+#define CLASS(T)                                                        \
     struct $##T $##T;                                                   \
     struct $##T
 
@@ -74,15 +86,25 @@ SOFTWARE.
  *      vtable (DSObjec) {
  *          DSObjectToString ToString;
  *          ...
+    type overload name signature;                                       \
  * 
  */
-#define method(class, name, type, signature)                            \
-    type overload name signature;                                       \
-    typedef type (*class##name)signature;
+#define method(T, name, type, signature)                                \
+    overload type name signature;                                       \
+    typedef type (*T##name)signature;
 
-#define ctor(class, args...)                                            \
-    class* overload class##_init(class* const, ## args);
+#define METHOD(T, name, type, signature)                                \
+    static inline overload type name signature;                         \
+    typedef type (*T##name)signature;
 
+#define TYPEDEF(T, name, type, signature)                                \
+    typedef type (*T##name)signature;
+
+#define ctor(T, args...)                                                \
+    overload T* T##_init(T* const, ## args);
+
+#define CTOR(T, args...)                                                \
+    static inline overload T* T##_init(T* const, ## args);
 /**
  *  MACRO alloc
  *      Allocate memory for ivar struct
@@ -105,13 +127,49 @@ SOFTWARE.
  *  MACRO instanceof
  *      Check of an object is an instance of a class
  */
-#define instanceof(class, obj) InstanceOf(get##class##Isa(), obj)
+#define instanceof(class, obj) InstanceOf(objc_getClass(#class), obj)
 
 /**
  *  MACRO of
  *      type constraint
  */
-#define of(class) (Class)get##class##Isa()
+#define of(class) (Class)objc_getClass(#class)
+
+#define DEF_VPTR(T)                                                    \
+static inline struct T##_vtable* T##_vptr(T* this) {                    \
+    return (struct T##_vtable*)this->isa->vtable;                       \
+}
+
+#define getVptr(T) T##_vptr(this)
+
+#define VTABLE_BIND(T)                                                 \
+static inline Class objc_load##T(Class super)                           \
+{                                                                       \
+    int k = 0;                                                          \
+    IMP* vt = &T##_vtable;                                              \
+    char* class_name = #T;                                              \
+    Class isa = objc_allocateClassPair(super, #T, 0);                   \
+    isa->vtable = &vt[0];               
+
+
+#define VTABLE_METHOD(name, imp, type)                                  \
+    class_addMethod(isa, #name, imp, type);                             \
+    vt[k++] = imp; 
+
+#define VTABLE_OVERRIDE(name, imp, type)                                      \
+    class_addMethod(isa, #name, imp, type);                             \
+    vt[k++] = imp; 
+
+#define VTABLE_VIRTUAL(name, imp, type)                                       \
+    class_addMethod(isa, #name, imp, type);                             \
+    vt[k++] = imp; 
+
+#define VTABLE_IVAR(name, len, type)                                          \
+    class_addIvar(isa, #name, len, log2(len), type);
+
+#define VTABLE_METHODIZE                                                      \
+    return methodizeClass(isa);                                         \
+}
 
 /**
  * Note! These remaining macros are used 
@@ -145,12 +203,11 @@ Class objc_load##T(Class super)                                         \
     Class isa = objc_allocateClassPair(super, #T, 0);                   \
     isa->vtable = &vt[0];               
     
-
 /**
- *  MACRO $method
+ *  MACRO VTABLE_METHOD
  *      
  */
-#define $method(name, imp, type)                                        \
+#define VTABLE_METHOD(name, imp, type)                                        \
     class_addMethod(isa, #name, imp, type);                             \
     vt[k++] = imp; 
 
