@@ -42,24 +42,24 @@ SOFTWARE.
 /**
  * Char instance variables
  */
-IVAR (DSChar) {
+type (DSChar) {
     Class isa;
     char value;
 };
 
-METHOD (DSChar, ToString,        char*, (const DSChar* const));
-METHOD (DSChar, CompareTo,       int, (const DSChar* const, const DSChar* const));
-METHOD (DSChar, IntValue,        int, (const DSChar* const));
-METHOD (DSChar, LongValue,       long, (const DSChar* const));
-METHOD (DSChar, FloatValue,      float, (const DSChar* const));
-METHOD (DSChar, DoubleValue,     double, (const DSChar* const));
-METHOD (DSChar, CharValue,       char, (const DSChar* const));
-METHOD (DSChar, ShortValue,      short, (const DSChar* const));
+def_method (DSChar, ToString,        char*, (const DSChar* const));
+def_method (DSChar, CompareTo,       int, (const DSChar* const, const DSChar* const));
+def_method (DSChar, IntValue,        int, (const DSChar* const));
+def_method (DSChar, LongValue,       long, (const DSChar* const));
+def_method (DSChar, FloatValue,      float, (const DSChar* const));
+def_method (DSChar, DoubleValue,     double, (const DSChar* const));
+def_method (DSChar, CharValue,       char, (const DSChar* const));
+def_method (DSChar, ShortValue,      short, (const DSChar* const));
 
 /**
- * Char VTABLE with overrides
+ * Char vtable with overrides
  */
-VTABLE (DSChar)
+vtable (DSChar)
 {
     const DSCharToString          ToString;
     const DSObjectEquals          Equals;
@@ -73,7 +73,7 @@ VTABLE (DSChar)
     const DSCharCharValue         CharValue;
     const DSCharShortValue        ShortValue;
 };
-DEF_VPTR(DSChar);
+vtable_ptr(DSChar);
 
 /**
  * Constructor
@@ -82,7 +82,7 @@ DEF_VPTR(DSChar);
  * @param value of char
  * 
  */
-static inline DSChar* DSChar_init(DSChar* const this, const char value)
+proc DSChar* DSChar_init(DSChar* const this, const char value)
 {
     DSNumber_init(this);
     this->isa = objc_getClass("DSChar");
@@ -90,7 +90,7 @@ static inline DSChar* DSChar_init(DSChar* const this, const char value)
     return this;
 }
 
-static inline DSChar* NewDSChar(const char value) { 
+proc DSChar* NewDSChar(const char value) { 
     return DSChar_init(alloc(DSChar), value); 
 }
 
@@ -102,7 +102,7 @@ static inline DSChar* NewDSChar(const char value) {
  *         +1 x < y
  *         -1 x > y
  */
-static inline overload int Compare(const char x, const char y) {
+method int Compare(const char x, const char y) {
     return (x < y) ? -1 : (( x == y ) ? 0 : 1);
 }
 
@@ -112,49 +112,49 @@ static inline overload int Compare(const char x, const char y) {
  * @param   other  Char to be compared
  * @return same as DSChar_Compare
  */
-static inline overload int CompareTo(const DSChar* const this, const DSChar* const other) {
+method int CompareTo(const DSChar* const this, const DSChar* const other) {
     return Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-static inline overload int IntValue(const DSChar* const this) {
+method int IntValue(const DSChar* const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-static inline overload long LongValue(const DSChar* const this) {
+method long LongValue(const DSChar* const this) {
     return (long)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-static inline overload float FloatValue(const DSChar* const this) {
+method float FloatValue(const DSChar* const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-static inline overload double DoubleValue(const DSChar* const this) {
+method double DoubleValue(const DSChar* const this) {
     return (double)this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-static inline overload char CharValue(const DSChar* const this) {
+method char CharValue(const DSChar* const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-static inline overload short ShortValue(const DSChar* const this) {
+method short ShortValue(const DSChar* const this) {
     return (short)this->value;
 }
 
@@ -162,7 +162,7 @@ static inline overload short ShortValue(const DSChar* const this) {
 /**
  * Returns the string value of this Char
  */
-static inline overload char* ToString(const DSChar* const this)
+method char* ToString(const DSChar* const this)
 {
     static char str[2];
     sprintf(str, "%c", this->value);
@@ -171,22 +171,22 @@ static inline overload char* ToString(const DSChar* const this)
 
 
 
-VTABLE_BIND( DSChar );
-VTABLE_OVERRIDE( ToString,         (DSCharToString)ToString, "$@:v" );
-VTABLE_METHOD( Equals,             (DSObjectEquals)Equals, "B@:@@" );
-VTABLE_METHOD( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
-VTABLE_METHOD( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
-VTABLE_OVERRIDE( CompareTo,        (DSCharCompareTo)CompareTo, "i@:@" );
-VTABLE_OVERRIDE( IntValue,         (DSCharIntValue)IntValue, "i@:v" );
-VTABLE_OVERRIDE( LongValue,        (DSCharLongValue)LongValue, "l@:v" );
-VTABLE_OVERRIDE( FloatValue,       (DSCharFloatValue)FloatValue, "f@:v" );
-VTABLE_OVERRIDE( DoubleValue,      (DSCharDoubleValue)DoubleValue, "d@:v" );
-VTABLE_OVERRIDE( CharValue,        (DSCharCharValue)CharValue, "c@:v" );
-VTABLE_OVERRIDE( ShortValue,       (DSCharShortValue)ShortValue, "s@:v" );
+class_bind( DSChar );
+class_override( ToString,         (DSCharToString)ToString, "$@:v" );
+class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
+class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+class_method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
+class_override( CompareTo,        (DSCharCompareTo)CompareTo, "i@:@" );
+class_override( IntValue,         (DSCharIntValue)IntValue, "i@:v" );
+class_override( LongValue,        (DSCharLongValue)LongValue, "l@:v" );
+class_override( FloatValue,       (DSCharFloatValue)FloatValue, "f@:v" );
+class_override( DoubleValue,      (DSCharDoubleValue)DoubleValue, "d@:v" );
+class_override( CharValue,        (DSCharCharValue)CharValue, "c@:v" );
+class_override( ShortValue,       (DSCharShortValue)ShortValue, "s@:v" );
 
-VTABLE_IVAR( value, sizeof( char ), "c" );
+class_member( value, sizeof( char ), "c" );
 
-VTABLE_METHODIZE
+class_methodize
 
 
 #endif _DSCHAR_H_

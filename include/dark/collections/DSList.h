@@ -38,28 +38,28 @@ SOFTWARE.
 typedef int (*DSList_Compare) (DSObject*, DSObject*);
 typedef void (^DSList_Iterator) (DSObject*);
 
-IVAR (DSListNode) {
+type (DSListNode) {
     DSObject* data;
     DSListNode* next;
 };
 
-IVAR (DSList) {
+type (DSList) {
     Class isa;
     Class typeOf;
     int length;
     DSListNode* head;
 };
 
-CTOR (DSList);
-CTOR (DSList, Class);
-METHOD (DSList, ToString,   char*,      (const DSList* const) );
-METHOD (DSList, Length,     int,        (DSList* const) );
-METHOD (DSList, Add,        Either*,    (DSList* const, DSObject*) );
-METHOD (DSList, Remove,     DSObject*,  (DSList* const) );
-METHOD (DSList, Insert,     Either*,    (DSList* const, DSObject*, DSList_Compare) );
-METHOD (DSList, Iterate,    void,       (DSList* const, DSList_Iterator) );
+def_ctor (DSList);
+def_ctor (DSList, Class);
+def_method (DSList, ToString,   char*,      (const DSList* const) );
+def_method (DSList, Length,     int,        (DSList* const) );
+def_method (DSList, Add,        Either*,    (DSList* const, DSObject*) );
+def_method (DSList, Remove,     DSObject*,  (DSList* const) );
+def_method (DSList, Insert,     Either*,    (DSList* const, DSObject*, DSList_Compare) );
+def_method (DSList, Iterate,    void,       (DSList* const, DSList_Iterator) );
 
-VTABLE (DSList) {
+vtable (DSList) {
     const DSListToString          ToString;
     const DSObjectEquals          Equals;
     const DSObjectGetHashCode     GetHashCode;
@@ -71,13 +71,13 @@ VTABLE (DSList) {
     const DSListIterate           Iterate;
 };
 
-DEF_VPTR(DSList);
-static inline overload DSList* DSList_init(DSList* const this)
+vtable_ptr(DSList);
+method DSList* DSList_init(DSList* const this)
 {
     return DSList_init(this, nullptr);
 }
 
-static inline overload DSList* DSList_init(DSList* const this, Class typeOf)
+method DSList* DSList_init(DSList* const this, Class typeOf)
 {
     DSObject_init(this);
     this->isa = objc_getClass("DSList");
@@ -94,14 +94,14 @@ static inline overload DSList* DSList_init(DSList* const this, Class typeOf)
  * @param next node in list
  * 
  */
-static inline DSListNode* DSListNode_init(DSListNode* const this, DSObject* data, DSListNode* next)
+proc DSListNode* DSListNode_init(DSListNode* const this, DSObject* data, DSListNode* next)
 {
     this->data = data;
     this->next = next;
     return this;
 }
 
-static inline DSListNode* NewDSListNode(DSObject* data, DSListNode* next)
+proc DSListNode* NewDSListNode(DSObject* data, DSListNode* next)
 {
     return DSListNode_init(alloc(DSList), data, next);
 }
@@ -113,7 +113,7 @@ static inline DSListNode* NewDSListNode(DSObject* data, DSListNode* next)
  * @param comp function to compare for insertion
  * 
  */
-static inline overload Either* Insert(DSList* const this, DSObject* data, DSList_Compare comp)
+method Either* Insert(DSList* const this, DSObject* data, DSList_Compare comp)
 {
     if ((this->typeOf) && !InstanceOf(this->typeOf, data)) 
         return Left(NewDSString("InvalidType"));
@@ -146,7 +146,7 @@ static inline overload Either* Insert(DSList* const this, DSObject* data, DSList
  * @param data to insert
  * 
  */
-static inline overload Either* Add(DSList* const this, DSObject* data)
+method Either* Add(DSList* const this, DSObject* data)
 {
     if ((this->typeOf) && !InstanceOf(this->typeOf, data)) 
         return Left(NewDSString("InvalidType"));
@@ -164,7 +164,7 @@ static inline overload Either* Add(DSList* const this, DSObject* data)
 /**
  * Remove item at end of list
  */
-static inline overload DSObject* Remove(DSList* const this)
+method DSObject* Remove(DSList* const this)
 {
     DSListNode* head = this->head;
 
@@ -182,7 +182,7 @@ static inline overload DSObject* Remove(DSList* const this)
  * @param iter function to call for each iteration
  * 
  */
-static inline overload void Iterate(DSList* const this, void (^iter)(DSObject*))
+method void Iterate(DSList* const this, void (^iter)(DSObject*))
 {
     for (DSListNode* curr = this->head; curr != nullptr; curr = curr->next) {
         iter(curr->data);
@@ -192,7 +192,7 @@ static inline overload void Iterate(DSList* const this, void (^iter)(DSObject*))
 /**
  * Free list
  */
-static inline overload void Dispose(DSList* const this)
+method void Dispose(DSList* const this)
 {
     // ListNode curr = this->head;
     // ListNode next;
@@ -208,7 +208,7 @@ static inline overload void Dispose(DSList* const this)
 /**
  * Number of items in vector
  */
-static inline overload int Length(DSList* const this)
+method int Length(DSList* const this)
 {
     return this->length;
 }
@@ -216,29 +216,29 @@ static inline overload int Length(DSList* const this)
 /**
  * ToString
  */
-static inline overload char* ToString(const DSList* const this)
+method char* ToString(const DSList* const this)
 {
     return "dark.collections.List";
 }
 
 
 
-VTABLE_BIND(DSList)
+class_bind(DSList)
 
-VTABLE_METHOD(ToString,           (DSListToString)ToString, "@@:v");
-VTABLE_METHOD(Equals,             (DSObjectEquals)Equals, "B@:@@");
-VTABLE_METHOD(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
-VTABLE_METHOD(Dispose,            (DSObjectDispose)Dispose, "v@:v");
-VTABLE_METHOD(Length,             (DSListLength)Length, "i@:v");
-VTABLE_METHOD(Add,                (DSListAdd)Add, "@@:*");
-VTABLE_METHOD(Remove,             (DSListRemove)Remove, "i@:*");
-VTABLE_METHOD(Insert,             (DSListInsert)Insert, "i@:*@");
-VTABLE_METHOD(Iterate,            (DSListIterate)Iterate, "i@:@@");
+class_method(ToString,           (DSListToString)ToString, "@@:v");
+class_method(Equals,             (DSObjectEquals)Equals, "B@:@@");
+class_method(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
+class_method(Dispose,            (DSObjectDispose)Dispose, "v@:v");
+class_method(Length,             (DSListLength)Length, "i@:v");
+class_method(Add,                (DSListAdd)Add, "@@:*");
+class_method(Remove,             (DSListRemove)Remove, "i@:*");
+class_method(Insert,             (DSListInsert)Insert, "i@:*@");
+class_method(Iterate,            (DSListIterate)Iterate, "i@:@@");
 
-VTABLE_IVAR(typeof, sizeof(id), "@");
-VTABLE_IVAR(length, sizeof(int), "i");
-VTABLE_IVAR(head, sizeof(void*), "^");
+class_member(typeof, sizeof(id), "@");
+class_member(length, sizeof(int), "i");
+class_member(head, sizeof(void*), "^");
 
-VTABLE_METHODIZE;
+class_methodize;
 
 #endif _DSLIST_H_ 

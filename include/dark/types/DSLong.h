@@ -43,26 +43,26 @@ SOFTWARE.
 /**
  * Object class
  */
-IVAR (DSLong) 
+type (DSLong) 
 {
     Class isa;
     long value;
 };
 
-METHOD (DSLong, ToString,        char*, (const DSLong* const));
-METHOD (DSLong, CompareTo,       int, (const DSLong* const, const DSLong* const));
-METHOD (DSLong, IntValue,        int, (const DSLong* const));
-METHOD (DSLong, LongValue,       long, (const DSLong* const));
-METHOD (DSLong, FloatValue,      float, (const DSLong* const));
-METHOD (DSLong, DoubleValue,     double, (const DSLong* const));
-METHOD (DSLong, CharValue,       char, (const DSLong* const));
-METHOD (DSLong, ShortValue,      short, (const DSLong* const));
+def_method (DSLong, ToString,        char*, (const DSLong* const));
+def_method (DSLong, CompareTo,       int, (const DSLong* const, const DSLong* const));
+def_method (DSLong, IntValue,        int, (const DSLong* const));
+def_method (DSLong, LongValue,       long, (const DSLong* const));
+def_method (DSLong, FloatValue,      float, (const DSLong* const));
+def_method (DSLong, DoubleValue,     double, (const DSLong* const));
+def_method (DSLong, CharValue,       char, (const DSLong* const));
+def_method (DSLong, ShortValue,      short, (const DSLong* const));
 
 
 /**
- * Integer VTABLE with overrides
+ * Integer vtable with overrides
  */
-VTABLE (DSLong)
+vtable (DSLong)
 {
     const DSLongToString           ToString;
     const DSObjectEquals           Equals;
@@ -76,7 +76,7 @@ VTABLE (DSLong)
     const DSLongCharValue          CharValue;
     const DSLongShortValue         ShortValue;
 };
-DEF_VPTR(DSLong);
+vtable_ptr(DSLong);
 /**
  * Constructor
  * create a new Long
@@ -84,7 +84,7 @@ DEF_VPTR(DSLong);
  * @param value of long
  * 
  */
-static inline DSLong* DSLong_init(DSLong* const this, const long value)
+proc DSLong* DSLong_init(DSLong* const this, const long value)
 {
     DSNumber_init(this);
     this->isa = objc_getClass("DSLong");
@@ -92,14 +92,14 @@ static inline DSLong* DSLong_init(DSLong* const this, const long value)
     return this;
 }
 
-static inline DSLong* NewDSLong(const long value) { 
+proc DSLong* NewDSLong(const long value) { 
     return DSLong_init(alloc(DSLong), value); 
 }
 
 /**
  * Returns a primitive long value parsed from input string. 
  */
-static inline long DSParseLong(const char* const s, const int radix)
+proc long DSParseLong(const char* const s, const int radix)
 {
     errno = 0;
     char* endptr;
@@ -122,7 +122,7 @@ static inline long DSParseLong(const char* const s, const int radix)
  *         +1 x < y
  *         -1 x > y
  */
-static inline overload int Compare(const long x, const long y) {
+method int Compare(const long x, const long y) {
     return (x < y) ? -1 : (( x == y ) ? 0 : 1);
 }
 
@@ -132,81 +132,81 @@ static inline overload int Compare(const long x, const long y) {
  * @param   other  Long to be compared
  * @return same as DSLong_Compare
  */
-static inline overload int CompareTo(const DSLong* const this, const DSLong* const other) {
+method int CompareTo(const DSLong* const this, const DSLong* const other) {
     return Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-static inline overload int IntValue(const DSLong* const this) {
+method int IntValue(const DSLong* const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-static inline overload long LongValue(const DSLong* const this) {
+method long LongValue(const DSLong* const this) {
     return (long)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-static inline overload float FloatValue(const DSLong* const this) {
+method float FloatValue(const DSLong* const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-static inline overload double DoubleValue(const DSLong* const this) {
+method double DoubleValue(const DSLong* const this) {
     return (double)this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-static inline overload char CharValue(const DSLong* const this) {
+method char CharValue(const DSLong* const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-static inline overload short ShortValue(const DSLong* const this) {
+method short ShortValue(const DSLong* const this) {
     return (short)this->value;
 }
 
-static inline overload bool Equals(const DSLong* const this, const DSLong* const other)
+method bool Equals(const DSLong* const this, const DSLong* const other)
 {
     return this->value == other->value;
 }
 
-static inline overload char* ToString(const DSLong* const this)
+method char* ToString(const DSLong* const this)
 {
     static char str[20];
     sprintf(str, "%d", this->value);
     return str;
 }
 
-VTABLE_BIND( DSLong );
+class_bind( DSLong );
 
-VTABLE_OVERRIDE( ToString,         (DSLongToString)ToString, "$@:v" );
-VTABLE_METHOD( Equals,             (DSObjectEquals)Equals, "B@:@@" );
-VTABLE_METHOD( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
-VTABLE_METHOD( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
-VTABLE_OVERRIDE( CompareTo,        (DSLongCompareTo)CompareTo, "i@:@" );
-VTABLE_OVERRIDE( IntValue,         (DSLongIntValue)IntValue, "i@:v" );
-VTABLE_OVERRIDE( LongValue,        (DSLongLongValue)LongValue, "l@:v" );
-VTABLE_OVERRIDE( FloatValue,       (DSLongFloatValue)FloatValue, "f@:v" );
-VTABLE_OVERRIDE( DoubleValue,      (DSLongDoubleValue)DoubleValue, "d@:v" );
-VTABLE_OVERRIDE( CharValue,        (DSLongCharValue)CharValue, "c@:v" );
-VTABLE_OVERRIDE( ShortValue,       (DSLongShortValue)ShortValue, "s@:v" );
+class_override( ToString,         (DSLongToString)ToString, "$@:v" );
+class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
+class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+class_method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
+class_override( CompareTo,        (DSLongCompareTo)CompareTo, "i@:@" );
+class_override( IntValue,         (DSLongIntValue)IntValue, "i@:v" );
+class_override( LongValue,        (DSLongLongValue)LongValue, "l@:v" );
+class_override( FloatValue,       (DSLongFloatValue)FloatValue, "f@:v" );
+class_override( DoubleValue,      (DSLongDoubleValue)DoubleValue, "d@:v" );
+class_override( CharValue,        (DSLongCharValue)CharValue, "c@:v" );
+class_override( ShortValue,       (DSLongShortValue)ShortValue, "s@:v" );
 
-VTABLE_IVAR( value, sizeof( long ), "l" );
+class_member( value, sizeof( long ), "l" );
 
-VTABLE_METHODIZE
+class_methodize
 
 
 #endif _DSLONG_H_

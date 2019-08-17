@@ -40,18 +40,18 @@ SOFTWARE.
 /**
  * DSBoolean instance variables
  */
-IVAR (DSBoolean) {
+type (DSBoolean) {
     Class isa;
     bool value;
 };
 
-METHOD (DSBoolean, ToString,     char*, (const DSBoolean* const));
-METHOD (DSBoolean, CompareTo,    int, (const DSBoolean* const, const DSBoolean* const));
+def_method (DSBoolean, ToString,     char*, (const DSBoolean* const));
+def_method (DSBoolean, CompareTo,    int, (const DSBoolean* const, const DSBoolean* const));
 
 /**
- * DSBoolean VTABLE
+ * DSBoolean vtable
  */
-VTABLE (DSBoolean) {
+vtable (DSBoolean) {
     const DSBooleanToString       ToString;
     const DSObjectEquals          Equals;
     const DSObjectGetHashCode     GetHashCode;
@@ -72,7 +72,7 @@ class (DSBoolean) {
     DSBoolean* True;
     DSBoolean* False;
 };
-DEF_VPTR(DSBoolean);
+vtable_ptr(DSBoolean);
 
 /**
  * Constructor
@@ -81,17 +81,17 @@ DEF_VPTR(DSBoolean);
  * @param value of bool
  * 
  */
-static inline DSBoolean* DSBoolean_init(DSBoolean* this, const bool value) {
+proc DSBoolean* DSBoolean_init(DSBoolean* this, const bool value) {
     DSComparable_init(this);
     this->isa = objc_getClass("DSBoolean");
     this->value = value;
     return this;
 }
 
-static inline DSBoolean* NewDSBoolean(const bool value) { 
+proc DSBoolean* NewDSBoolean(const bool value) { 
     return DSBoolean_init(alloc(DSBoolean), value); }
 
-static inline bool ParseBool(const char * const s) {
+proc bool ParseBool(const char * const s) {
     if (!strcmpi("y", s) 
     ||  !strcmpi("yes", s) 
     ||  !strcmpi("t", s) 
@@ -108,7 +108,7 @@ static inline bool ParseBool(const char * const s) {
  *         +1 x is true
  *         -1 y is true
  */
-static inline overload int Compare(bool x, bool y) {
+method int Compare(bool x, bool y) {
     return (x == y) ? 0 : ( x ? 1 : -1 );
 }
 
@@ -118,21 +118,21 @@ static inline overload int Compare(bool x, bool y) {
  * @param   other  DSBoolean to be compared
  * @return same as Boolean_Compare
  */
-static inline overload int CompareTo(const DSBoolean*  const this, const DSBoolean*  const other) {
+method int CompareTo(const DSBoolean*  const this, const DSBoolean*  const other) {
     return Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-static inline bool BoolValue(const DSBoolean*  const this) {
+proc bool BoolValue(const DSBoolean*  const this) {
     return (bool)this->value;
 }
 
 /**
  * Returns the string value of this DSBoolean
  */
-static inline overload char* ToString(const DSBoolean* const this) {
+method char* ToString(const DSBoolean* const this) {
     return this->value ? "true" : "false";
 }
 
@@ -140,16 +140,16 @@ static inline overload char* ToString(const DSBoolean* const this) {
 
 
 
-VTABLE_BIND( DSBoolean );
+class_bind( DSBoolean );
 
-VTABLE_OVERRIDE( ToString,         (DSBooleanToString)ToString, "$@:v" );
-VTABLE_METHOD( Equals,             (DSObjectEquals)Equals, "B@:@@" );
-VTABLE_METHOD( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
-VTABLE_METHOD( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
-VTABLE_OVERRIDE( CompareTo,        (DSBooleanCompareTo)CompareTo, "i@:@" );
-VTABLE_METHOD( BoolValue,          BoolValue, "B@:v" );
+class_override( ToString,         (DSBooleanToString)ToString, "$@:v" );
+class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
+class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+class_method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
+class_override( CompareTo,        (DSBooleanCompareTo)CompareTo, "i@:@" );
+class_method( BoolValue,          BoolValue, "B@:v" );
 
-VTABLE_IVAR( value, sizeof( int ), "B" );
+class_member( value, sizeof( int ), "B" );
 
 /** 
  * Static constructor
@@ -172,6 +172,6 @@ $DSBoolean.False = &False;
 $DSBoolean.ParseBool = ParseBool;
 $DSBoolean.Compare = Compare;
     
-VTABLE_METHODIZE;
+class_methodize;
 
 #endif // _DSBOOLEAN_H_

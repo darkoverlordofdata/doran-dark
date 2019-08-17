@@ -41,7 +41,7 @@ typedef struct DSObject DSObject;
 // bool        overload IsEmpty(Option* this);
 // extern      Option*	None;
 
-IVAR (Option) {
+type (Option) {
 	bool none;
 	DSObject* value;
 };
@@ -55,7 +55,7 @@ static Option* None;
  * A container/collection that can hold either 0 or 1 object
  * 
  */
-static inline Option* NewOption(DSObject* value) {
+proc Option* NewOption(DSObject* value) {
     if (value == nullptr) {
         printf("Invalid - Option cannot be null\n");
         raise(SIGSEGV);
@@ -65,31 +65,31 @@ static inline Option* NewOption(DSObject* value) {
     return this;
 }
 
-static inline overload DSObject* Some(Option* this) {
+method DSObject* Some(Option* this) {
     return this->value;
 }
 
-static inline overload int Length(Option* this) {
+method int Length(Option* this) {
     return this->value != nullptr ? 1 : 0;
 }
 
-static inline overload void ForEach(Option* const this, void (^iter)(DSObject*)) {
+method void ForEach(Option* const this, void (^iter)(DSObject*)) {
     iter(this->value);
 }
 
-static inline overload bool IsEmpty(Option* this) {
+method bool IsEmpty(Option* this) {
     return this->value == nullptr ? true : false;
 }
  
-static inline overload DSObject* Bind(Option* this, Option* (^func)(Option*)) {
+method DSObject* Bind(Option* this, Option* (^func)(Option*)) {
     return this->value != nullptr ? func(this->value) : None; 
 }
 
-static inline overload DSObject* Bind(Option* this, Option* (*func)(Option*)) {
+method DSObject* Bind(Option* this, Option* (*func)(Option*)) {
     return this->value != nullptr ? func(this->value) : None; 
 }
 
-static inline DSObject* Return(Option* this) {
+proc DSObject* Return(Option* this) {
     return this->value != nullptr ? NewOption(this->value) : None;
 }
 

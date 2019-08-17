@@ -35,7 +35,7 @@ static const int UNMARKED = -1;
 static const int defaultCharBufferSize = 8192;
 static const int defaultExpectedLineLength = 80;
 
-IVAR (DSBufferedReader) {
+type (DSBufferedReader) {
     Class isa;
     DSReader* in;
     IOBuff cb;
@@ -47,21 +47,21 @@ IVAR (DSBufferedReader) {
     bool markedSkipLF;
 };
 
-CTOR (DSBufferedReader, DSReader*);
-CTOR (DSBufferedReader, DSReader*, int);
+def_ctor (DSBufferedReader, DSReader*);
+def_ctor (DSBufferedReader, DSReader*, int);
 
-METHOD (DSBufferedReader, ToString, const char*, (const DSBufferedReader* const) );
-METHOD (DSBufferedReader, ReadOne,         int,    (DSBufferedReader*) );
-METHOD (DSBufferedReader, Read,            int,    (DSBufferedReader*, IOBuff*, int, int) );
-METHOD (DSBufferedReader, Skip,            long,   (DSBufferedReader*, long) );
-METHOD (DSBufferedReader, Close,           void,   (DSBufferedReader*) );
-METHOD (DSBufferedReader, Mark,            void,   (DSBufferedReader*, int) );
-METHOD (DSBufferedReader, MarkSupported,   bool,   (DSBufferedReader*) );
-METHOD (DSBufferedReader, Reset,           void,   (DSBufferedReader*) );
-METHOD (DSBufferedReader, Ready,           bool,   (DSBufferedReader*) );
-METHOD (DSBufferedReader, ReadLine,        DSString*, (DSBufferedReader*, bool) );
+def_method (DSBufferedReader, ToString, const char*, (const DSBufferedReader* const) );
+def_method (DSBufferedReader, ReadOne,         int,    (DSBufferedReader*) );
+def_method (DSBufferedReader, Read,            int,    (DSBufferedReader*, IOBuff*, int, int) );
+def_method (DSBufferedReader, Skip,            long,   (DSBufferedReader*, long) );
+def_method (DSBufferedReader, Close,           void,   (DSBufferedReader*) );
+def_method (DSBufferedReader, Mark,            void,   (DSBufferedReader*, int) );
+def_method (DSBufferedReader, MarkSupported,   bool,   (DSBufferedReader*) );
+def_method (DSBufferedReader, Reset,           void,   (DSBufferedReader*) );
+def_method (DSBufferedReader, Ready,           bool,   (DSBufferedReader*) );
+def_method (DSBufferedReader, ReadLine,        DSString*, (DSBufferedReader*, bool) );
 
-VTABLE (DSBufferedReader) {
+vtable (DSBufferedReader) {
     const DSBufferedReaderToString      ToString;
     const DSObjectEquals                Equals;
     const DSObjectGetHashCode           GetHashCode;
@@ -77,13 +77,13 @@ VTABLE (DSBufferedReader) {
     const DSBufferedReaderReadLine      ReadLine;
 };
 
-DEF_VPTR(DSBufferedReader);
+vtable_ptr(DSBufferedReader);
 
-static inline overload DSBufferedReader* DSBufferedReader_init(DSBufferedReader* const this, DSReader* in) {
+method DSBufferedReader* DSBufferedReader_init(DSBufferedReader* const this, DSReader* in) {
     DSBufferedReader_init(this, in, defaultCharBufferSize);
 }
 
-static inline overload DSBufferedReader* DSBufferedReader_init(DSBufferedReader* const this, DSReader* in, int sz) {
+method DSBufferedReader* DSBufferedReader_init(DSBufferedReader* const this, DSReader* in, int sz) {
     DSReader_init(this);
     this->isa = objc_getClass("DSBufferedReader");
     this->markedChar = UNMARKED;
@@ -99,11 +99,11 @@ static inline overload DSBufferedReader* DSBufferedReader_init(DSBufferedReader*
     return this;
 }
 
-static inline void EnsureOpen(const DSBufferedReader* const this) {
+proc void EnsureOpen(const DSBufferedReader* const this) {
     if (this->in == nullptr) throw DSIllegalArgumentException("Stream closed", Source);
 }
 
-static inline void Fill(DSBufferedReader* const this) {
+proc void Fill(DSBufferedReader* const this) {
     int dst;
     if (this->markedChar <= UNMARKED) {
         dst = 0;
@@ -140,11 +140,11 @@ static inline void Fill(DSBufferedReader* const this) {
     }
  }
 
-static inline overload const char* ToString(const DSBufferedReader* const this) {
+method const char* ToString(const DSBufferedReader* const this) {
     return "DSBufferedReader";
 }
 
-static inline overload int ReadOne(DSBufferedReader* this) {
+method int ReadOne(DSBufferedReader* this) {
     EnsureOpen(this);
     for (;;) {
         if (this->nextChar >= this->nChars) {
@@ -163,7 +163,7 @@ static inline overload int ReadOne(DSBufferedReader* this) {
     }
 }
 
-static inline overload static int Read1(DSBufferedReader* this, IOBuff* cbuf, int off, int len) {
+method static int Read1(DSBufferedReader* this, IOBuff* cbuf, int off, int len) {
     if (this->nextChar >= this->nChars) {
         /* If the requested length is at least as large as the buffer, and
             if there is no mark/reset activity, and if line feeds are not
@@ -193,7 +193,7 @@ static inline overload static int Read1(DSBufferedReader* this, IOBuff* cbuf, in
 
 }
 
-static inline overload int Read(DSBufferedReader* this, IOBuff* cbuf, int off, int len) {
+method int Read(DSBufferedReader* this, IOBuff* cbuf, int off, int len) {
     if (len==0) len = cbuf->len-off;
     EnsureOpen(this);
     if ((off < 0) || (off > cbuf->len) || (len < 0) ||
@@ -213,11 +213,11 @@ static inline overload int Read(DSBufferedReader* this, IOBuff* cbuf, int off, i
     return n;
 }
 
-static inline overload DSString* ReadLine(DSBufferedReader* this) {
+method DSString* ReadLine(DSBufferedReader* this) {
     ReadLine(this, false);
 }
 
-static inline overload DSString* ReadLine(DSBufferedReader* this, bool ignoreLF) {
+method DSString* ReadLine(DSBufferedReader* this, bool ignoreLF) {
     DSStringBuilder* s = nullptr;
     int startChar;
 
@@ -277,7 +277,7 @@ static inline overload DSString* ReadLine(DSBufferedReader* this, bool ignoreLF)
     }
 }
 
-static inline overload long Skip(DSBufferedReader* this, long n)  {
+method long Skip(DSBufferedReader* this, long n)  {
     if (n < 0L) {
         throw DSIllegalArgumentException("skip value is negative", Source);
     }
@@ -308,7 +308,7 @@ static inline overload long Skip(DSBufferedReader* this, long n)  {
     return n - r;
 }
 
-static inline overload bool Ready(DSBufferedReader* this) {
+method bool Ready(DSBufferedReader* this) {
     EnsureOpen(this);
 
     /*
@@ -331,11 +331,11 @@ static inline overload bool Ready(DSBufferedReader* this) {
     return (this->nextChar < this->nChars) || Ready(this->in);
 }
 
-static inline overload bool MarkSupported(DSBufferedReader* this) {
+method bool MarkSupported(DSBufferedReader* this) {
     return true;
 }
 
-static inline overload void Mark(DSBufferedReader* this, int readAheadLimit) {
+method void Mark(DSBufferedReader* this, int readAheadLimit) {
     if (readAheadLimit < 0) {
         throw DSIllegalArgumentException("Read-ahead limit < 0", Source);
     }
@@ -345,7 +345,7 @@ static inline overload void Mark(DSBufferedReader* this, int readAheadLimit) {
     this->markedSkipLF = this->skipLF;
 }
 
-static inline overload void Reset(DSBufferedReader* this) {
+method void Reset(DSBufferedReader* this) {
     EnsureOpen(this);
     if (this->markedChar < 0)
         throw DSIllegalArgumentException((this->markedChar == INVALIDATED)
@@ -355,7 +355,7 @@ static inline overload void Reset(DSBufferedReader* this) {
     this->skipLF = this->markedSkipLF;
 }
 
-static inline overload void Close(DSBufferedReader* this) {
+method void Close(DSBufferedReader* this) {
     if (this->in == nullptr)
         return;
     try {
@@ -367,19 +367,19 @@ static inline overload void Close(DSBufferedReader* this) {
 }
 
 
-VTABLE_BIND( DSBufferedReader );
-VTABLE_OVERRIDE( ToString,        (DSBufferedReaderToString)ToString, "$@:v" );
-VTABLE_METHOD( Equals,            (DSObjectEquals)Equals, "B@:@@" );
-VTABLE_METHOD( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
-VTABLE_METHOD( Dispose,           (DSObjectDispose)Dispose, "v@:v" );
-VTABLE_METHOD( ReadOne,           (DSBufferedReaderReadOne)ReadOne, "i@:v" );
-VTABLE_METHOD( Read,              (DSBufferedReaderRead)Read, "i@:^ii" );
-VTABLE_METHOD( Skip,              (DSBufferedReaderSkip)Skip, "l@:l" );
-VTABLE_METHOD( Close,             (DSBufferedReaderClose)Close, "v@:v" );
-VTABLE_METHOD( Mark,              (DSBufferedReaderMark)Mark, "v@:i" );
-VTABLE_METHOD( MarkSupported,     (DSBufferedReaderMarkSupported)MarkSupported, "v@:v" );
-VTABLE_METHOD( Reset,             (DSBufferedReaderReset)Reset, "v@:v" );
-VTABLE_METHOD( Ready,             (DSBufferedReaderReady)Ready, "B@:" );
-VTABLE_METHOD( ReadLine,          (DSBufferedReaderReadLine)ReadLine, "$@:B" );
-VTABLE_METHODIZE;
+class_bind( DSBufferedReader );
+class_override( ToString,        (DSBufferedReaderToString)ToString, "$@:v" );
+class_method( Equals,            (DSObjectEquals)Equals, "B@:@@" );
+class_method( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
+class_method( Dispose,           (DSObjectDispose)Dispose, "v@:v" );
+class_method( ReadOne,           (DSBufferedReaderReadOne)ReadOne, "i@:v" );
+class_method( Read,              (DSBufferedReaderRead)Read, "i@:^ii" );
+class_method( Skip,              (DSBufferedReaderSkip)Skip, "l@:l" );
+class_method( Close,             (DSBufferedReaderClose)Close, "v@:v" );
+class_method( Mark,              (DSBufferedReaderMark)Mark, "v@:i" );
+class_method( MarkSupported,     (DSBufferedReaderMarkSupported)MarkSupported, "v@:v" );
+class_method( Reset,             (DSBufferedReaderReset)Reset, "v@:v" );
+class_method( Ready,             (DSBufferedReaderReady)Ready, "B@:" );
+class_method( ReadLine,          (DSBufferedReaderReadLine)ReadLine, "$@:B" );
+class_methodize;
 #endif _DS_BUFFERED_READER_H_

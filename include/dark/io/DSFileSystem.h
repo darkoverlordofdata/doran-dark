@@ -20,50 +20,50 @@
 #define SPACE_FREE   1
 #define SPACE_USABLE 2
 
-IVAR (IOBuff) {
+type (IOBuff) {
     char* buff;
     int len;
 };
 
 typedef struct DSFile DSFile;
 
-static inline overload int GetPrefixLength(DSFile* const this);
-static inline overload DSString* GetPath(DSFile* const this);
+method int GetPrefixLength(DSFile* const this);
+method DSString* GetPath(DSFile* const this);
 
-static inline bool fsIsSlash(char c);
-static inline bool fsIsLetter(char c);
-static inline DSString* fsSlashify(DSString* p);
-static inline DSString* fsGetUserPath();
-static inline DSString* fsGetDrive(DSString* path);
-static inline int fsDriveIndex(char d);
-static inline DSString* fsGetDriveDireCTORy(char drive);
-static inline char fsGetSeparator();
-static inline char fsGetPathSeparator();
-static inline int fsNormalizePrefix(DSString* path, int len, DSStringBuilder* sb);
-static inline DSString* fsNormalize2(DSString* path, int len, int off);
-static inline DSString* fsNormalize(DSString* path);
-static inline int fsPrefixLength(DSString* path);
-static inline DSString* fsResolve(DSString* parent, DSString* child);
-static inline DSString* fsGetDefaultParent();
-static inline DSString* fsFromURIPath(DSString* path);
-static inline bool fsIsAbsolute(DSFile* f);
-static inline DSString* fsResolveFile(DSFile* f);
-static inline DSString* fsCanonicalize(DSString* path);
-static inline int GetBooleanAttributes(DSFile* f);
-static inline bool fsCheckAccess(DSFile* f, int access);
-static inline bool fsSetPermission(DSFile* f, int access, bool enable, bool owneronly);
-static inline long fsGetLastModifiedTime(DSFile* f);
-static inline long fsGetLength(DSFile* f);
-static inline bool fsCreateFileExclusively(DSString* path);
-static inline bool fsDelete(DSFile* f);
-static inline DSString** fsList(DSFile* f);
-static inline bool fsCreateDireCTORy(DSFile* f);
-static inline bool fsRename(DSFile* f1, DSFile* f2);
-static inline bool fsSetLastModifiedTime(DSFile* f, long time);
-static inline DSString* fsSetReadOnly(DSFile* f);
-static inline DSFile** fsListRoots();
-static inline int fsCompare(DSFile* f1, DSFile* f2);
-static inline int fsHashCode(DSFile* f);
+proc bool fsIsSlash(char c);
+proc bool fsIsLetter(char c);
+proc DSString* fsSlashify(DSString* p);
+proc DSString* fsGetUserPath();
+proc DSString* fsGetDrive(DSString* path);
+proc int fsDriveIndex(char d);
+proc DSString* fsGetDriveDireCTORy(char drive);
+proc char fsGetSeparator();
+proc char fsGetPathSeparator();
+proc int fsNormalizePrefix(DSString* path, int len, DSStringBuilder* sb);
+proc DSString* fsNormalize2(DSString* path, int len, int off);
+proc DSString* fsNormalize(DSString* path);
+proc int fsPrefixLength(DSString* path);
+proc DSString* fsResolve(DSString* parent, DSString* child);
+proc DSString* fsGetDefaultParent();
+proc DSString* fsFromURIPath(DSString* path);
+proc bool fsIsAbsolute(DSFile* f);
+proc DSString* fsResolveFile(DSFile* f);
+proc DSString* fsCanonicalize(DSString* path);
+proc int GetBooleanAttributes(DSFile* f);
+proc bool fsCheckAccess(DSFile* f, int access);
+proc bool fsSetPermission(DSFile* f, int access, bool enable, bool owneronly);
+proc long fsGetLastModifiedTime(DSFile* f);
+proc long fsGetLength(DSFile* f);
+proc bool fsCreateFileExclusively(DSString* path);
+proc bool fsDelete(DSFile* f);
+proc DSString** fsList(DSFile* f);
+proc bool fsCreateDireCTORy(DSFile* f);
+proc bool fsRename(DSFile* f1, DSFile* f2);
+proc bool fsSetLastModifiedTime(DSFile* f, long time);
+proc DSString* fsSetReadOnly(DSFile* f);
+proc DSFile** fsListRoots();
+proc int fsCompare(DSFile* f1, DSFile* f2);
+proc int fsHashCode(DSFile* f);
 
 typedef struct DSFileSystem DSFileSystem;
 const DSFileSystem fs;
@@ -120,41 +120,41 @@ static char fsSlashString[2];
 static char fsSemicolonString[2];
 static char fsAltSlashString[2];
 
-static inline bool fsIsSlash(char c) {
+proc bool fsIsSlash(char c) {
     return (c == '\\') || (c == '/');
 }
 
-static inline bool fsIsLetter(char c) {
+proc bool fsIsLetter(char c) {
     return ((c >= 'a') && (c <= 'z')) || ((c >= 'A') && (c <= 'Z'));
 }
 
 /**
  * prepend a shash onto a string
  */
-static inline DSString* fsSlashify(DSString* p) {
+proc DSString* fsSlashify(DSString* p) {
     if ((Length(p)>0) && CharAt(p, 0) != fsSlash) 
         return Concatc(p, fsSlashString);    
     else return p;
 }
 
-static inline DSString* fsGetUserPath() {
+proc DSString* fsGetUserPath() {
     DSString* user = $(".");
     DSString* result = fsNormalize(user);
     return result;
 }
 
-static inline DSString* fsGetDrive(DSString* path) {
+proc DSString* fsGetDrive(DSString* path) {
     int p1 = fsPrefixLength(path);
     return (p1 == 3) ? $(strndup(path->value, 2)) : nullptr;
 }
 
-static inline int fsDriveIndex(char d) {
+proc int fsDriveIndex(char d) {
     if ((d >= 'a') && (d <= 'z')) return d - 'a';
     if ((d >= 'A') && (d <= 'Z')) return d - 'A';
     return -1;
 }
 
-static inline DSString* fsGetDriveDireCTORy(char drive) {
+proc DSString* fsGetDriveDireCTORy(char drive) {
     int i = fsDriveIndex(drive);
     if (i < 0) return nullptr;
     return nullptr;
@@ -166,15 +166,15 @@ static inline DSString* fsGetDriveDireCTORy(char drive) {
 }
 
 
-static inline char fsGetSeparator() {
+proc char fsGetSeparator() {
     return fsSlash;
 }
 
-static inline char fsGetPathSeparator() {
+proc char fsGetPathSeparator() {
     return fsSemicolon;
 }
 
-static inline int fsNormalizePrefix(DSString* path, int len, DSStringBuilder* sb) {
+proc int fsNormalizePrefix(DSString* path, int len, DSStringBuilder* sb) {
     int src = 0;
     while ((src < len) && fsIsSlash(path->value[src])) src++;
     char c = 0;
@@ -200,7 +200,7 @@ static inline int fsNormalizePrefix(DSString* path, int len, DSStringBuilder* sb
 /**
  * Normalize a chunk of the pathname
  */
-static inline DSString* fsNormalize2(DSString* path, int len, int off) {
+proc DSString* fsNormalize2(DSString* path, int len, int off) {
     if (len == 0) return path;
     if (off < 3) off = 0;
     int src;
@@ -248,7 +248,7 @@ static inline DSString* fsNormalize2(DSString* path, int len, int off) {
 /**
  * Normalize path
  */
-static inline DSString* fsNormalize(DSString* path) {
+proc DSString* fsNormalize(DSString* path) {
 
     // if (path->isa != getDSStringIsa()) return nullptr;
 
@@ -272,7 +272,7 @@ static inline DSString* fsNormalize(DSString* path) {
     return path;
 }
 
-static inline int fsPrefixLength(DSString* path) {
+proc int fsPrefixLength(DSString* path) {
     int n = path->length;
     if (n == 0) return 0;
     int c0 = CharAt(path, 0);
@@ -295,7 +295,7 @@ static inline int fsPrefixLength(DSString* path) {
     return 0;
 }
 
-static inline DSString* fsResolve(DSString* parent, DSString* child) {
+proc DSString* fsResolve(DSString* parent, DSString* child) {
     int pn = parent->length;
     if (pn == 0) return child;
     int cn = child->length;
@@ -336,11 +336,11 @@ static inline DSString* fsResolve(DSString* parent, DSString* child) {
     return $(theChars);
 }
 
-static inline DSString* fsGetDefaultParent() {
+proc DSString* fsGetDefaultParent() {
     return $(fsSlashString);
 }
 
-static inline DSString* fsFromURIPath(DSString* path) {
+proc DSString* fsFromURIPath(DSString* path) {
     int length = path->length;
     char* p = strndup(path->value, length);
     if ((length > 2) && (p[2] == ':')) {
@@ -356,13 +356,13 @@ static inline DSString* fsFromURIPath(DSString* path) {
     return result;
 }
 
-static inline bool fsIsAbsolute(DSFile* f) {
+proc bool fsIsAbsolute(DSFile* f) {
     int p1 = GetPrefixLength(f);
     return  (((p1 == 2) && (GetPath(f)->value[0] == fsSlash))
             || p1 == 3);
 }
 
-static inline DSString* fsResolveFile(DSFile* f) {
+proc DSString* fsResolveFile(DSFile* f) {
     DSString* path = GetPath(f);
     int p1 = GetPrefixLength(f);
     if ((p1 == 2) && path->value[0] == fsSlash)
@@ -406,7 +406,7 @@ static inline DSString* fsResolveFile(DSFile* f) {
     return nullptr; //InternalIOErrorException("Unresolvable path: %s", path->value);
 }
 
-static inline DSString* fsCanonicalize(DSString* path) {
+proc DSString* fsCanonicalize(DSString* path) {
     int len = Length(path);
     if (len == 2) {
         if (fsIsLetter(CharAt(path, 0)) &&
@@ -438,76 +438,76 @@ static inline DSString* fsCanonicalize(DSString* path) {
 
 }
 
-static inline int fsGetBooleanAttributes(DSFile* f) {
+proc int fsGetBooleanAttributes(DSFile* f) {
     struct stat sbuf;
     if (stat(ToString(GetPath(f)), &sbuf) < 0) return 0;
     return sbuf.st_mode;
 }
 
-static inline bool fsCheckAccess(DSFile* f, int access) {
+proc bool fsCheckAccess(DSFile* f, int access) {
     struct stat sbuf;
     if (stat(ToString(GetPath(f)), &sbuf) < 0) return 0;
     return ((sbuf.st_size & access) != 0);
 }
 
-static inline bool fsSetPermission(DSFile* f, int access, bool enable, bool owneronly) {
+proc bool fsSetPermission(DSFile* f, int access, bool enable, bool owneronly) {
 
 }
 
-static inline long fsGetLastModifiedTime(DSFile* f) {
+proc long fsGetLastModifiedTime(DSFile* f) {
 
 }
 
-static inline long fsGetLength(DSFile* f) {
+proc long fsGetLength(DSFile* f) {
     struct stat sbuf;
     if (stat(ToString(GetPath(f)), &sbuf) < 0) return 0;
     return sbuf.st_size;
 }
 
-static inline bool fsCreateFileExclusively(DSString* path) {
+proc bool fsCreateFileExclusively(DSString* path) {
 
 }
 
-static inline bool fsDelete(DSFile* f) {
+proc bool fsDelete(DSFile* f) {
 
 }
 
-static inline DSString** fsList(DSFile* f) {
+proc DSString** fsList(DSFile* f) {
 
 }
 
-static inline bool fsCreateDireCTORy(DSFile* f) {
+proc bool fsCreateDireCTORy(DSFile* f) {
 
 }
 
-static inline bool fsRename(DSFile* f1, DSFile* f2) {
+proc bool fsRename(DSFile* f1, DSFile* f2) {
 
 }
 
-static inline bool fsSetLastModifiedTime(DSFile* f, long time) {
+proc bool fsSetLastModifiedTime(DSFile* f, long time) {
 
 }
 
-static inline DSString* fsSetReadOnly(DSFile* f) {
+proc DSString* fsSetReadOnly(DSFile* f) {
 
 }
 
-static inline DSFile** fsListRoots() {
+proc DSFile** fsListRoots() {
 
 }
 
-static inline int fsCompare(DSFile* f1, DSFile* f2) {
+proc int fsCompare(DSFile* f1, DSFile* f2) {
     return CompareTo(GetPath(f1), GetPath(f2));
     return 0;
 }
 
-static inline int fsHashCode(DSFile* f) {
+proc int fsHashCode(DSFile* f) {
 
 }
 
 // void __attribute__((construCTOR())) 
 
-static inline void DSFileSystemInit()
+proc void DSFileSystemInit()
 {
     fsSlash = '\\';
     fsSemicolon = ';';

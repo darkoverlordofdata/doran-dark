@@ -37,18 +37,14 @@ SOFTWARE.
 
 /**
  * 3 global tuples are created for each Class:
- *  ivar    DSOject         - Instance Variables
+ *  type    DSOject         - Instance Variables
  *  vtable  DSObjectVTable  - Instance Methods
  *  class   $DSObject       - Class Methods/Variables
  * 
  * An ivar whose 1st member is an 'isa' is a class of that isa type,
  * and it becomes the object definition for a DaRKSTEP object. 
  */
-#define ivar(T)                                                         \
-    typedef struct T T;                                                 \
-    struct T
-
-#define IVAR(T)                                                         \
+#define type(T)                                                         \
     typedef struct T T;                                                 \
     struct T
 
@@ -56,55 +52,30 @@ SOFTWARE.
     struct T##_vtable T##_vtable;                                       \
     struct T##_vtable
 
-#define VTABLE(T)                                                       \
-    struct T##_vtable T##_vtable;                                       \
-    struct T##_vtable
-
 #define class(T)                                                        \
     struct $##T $##T;                                                   \
     struct $##T
 
-#define CLASS(T)                                                        \
-    struct $##T $##T;                                                   \
-    struct $##T
+#define proc static inline
+
+#define method proc overload
 
 /**
- *  MACRO method
- *      map overloaded function to a fully resolved typedef
- * 
- *  example:
- * 
- *      method (DSObject, ToString, char*, (const DSObject*) );
- * 
- *  will create a both a forward declaration and typedef:
- *  
- *      char* overload ToString(const DSObject*);
- *      typedef char* (*DSObjectToString)(const DSObject*);
- * 
- *  These two definitions are then mapped in the vtable as
- *      
- *      vtable (DSObjec) {
- *          DSObjectToString ToString;
- *          ...
-    type overload name signature;                                       \
+ *  MACRO def_method
+ *      declarations for method
  * 
  */
-#define method(T, name, type, signature)                                \
-    overload type name signature;                                       \
+#define def_method(T, name, type, signature)                                \
+    method type name signature;                                             \
     typedef type (*T##name)signature;
 
-#define METHOD(T, name, type, signature)                                \
-    static inline overload type name signature;                         \
-    typedef type (*T##name)signature;
-
-#define TYPEDEF(T, name, type, signature)                                \
-    typedef type (*T##name)signature;
-
-#define ctor(T, args...)                                                \
-    overload T* T##_init(T* const, ## args);
-
-#define CTOR(T, args...)                                                \
-    static inline overload T* T##_init(T* const, ## args);
+/**
+ *  MACRO def_ctor
+ *      declarations for constructor
+ * 
+ */
+#define def_ctor(T, args...)                                                \
+    method T* T##_init(T* const, ## args);
 /**
  *  MACRO alloc
  *      Allocate memory for ivar struct
@@ -135,126 +106,52 @@ SOFTWARE.
  */
 #define of(class) (Class)objc_getClass(#class)
 
-#define DEF_VPTR(T)                                                    \
-static inline struct T##_vtable* T##_vptr(T* this) {                    \
-    return (struct T##_vtable*)this->isa->vtable;                       \
-}
-
-#define getVptr(T) T##_vptr(this)
-
-#define VTABLE_BIND(T)                                                 \
-static inline Class objc_load##T(Class super)                           \
-{                                                                       \
-    int k = 0;                                                          \
-    IMP* vt = &T##_vtable;                                              \
-    char* class_name = #T;                                              \
-    Class isa = objc_allocateClassPair(super, #T, 0);                   \
-    isa->vtable = &vt[0];               
-
-
-#define VTABLE_METHOD(name, imp, type)                                  \
-    class_addMethod(isa, #name, imp, type);                             \
-    vt[k++] = imp; 
-
-#define VTABLE_OVERRIDE(name, imp, type)                                      \
-    class_addMethod(isa, #name, imp, type);                             \
-    vt[k++] = imp; 
-
-#define VTABLE_VIRTUAL(name, imp, type)                                       \
-    class_addMethod(isa, #name, imp, type);                             \
-    vt[k++] = imp; 
-
-#define VTABLE_IVAR(name, len, type)                                          \
-    class_addIvar(isa, #name, len, log2(len), type);
-
-#define VTABLE_METHODIZE                                                      \
-    return methodizeClass(isa);                                         \
-}
-
 /**
  * Note! These remaining macros are used 
  * to load runtime class definitions
- * 
+ * and build the vtable 
  * 
  *  MACRO $implementation
  *      start a class definition- create objects
  *      defines the inline vptr accessor
  *      defines lazy accessors for class size and reference
  * 
- *  warning: only 1 $implementation per file due to vptr scoping
  */
-#define $implementation(T)                                              \
-static inline struct T##_vtable* _vptr(T* this) {                       \
+#define vtable_ptr(T)                                                   \
+proc struct T##_vtable* T##_vptr(T* this) {                             \
     return (struct T##_vtable*)this->isa->vtable;                       \
-}                                                                       \
-Class _##T##_isa = nullptr;                                             \
-Class get##T##Isa() {                                                   \
-    _##T##_isa = _##T##_isa != nullptr                                  \
-        ? _##T##_isa                                                    \
-        : objc_getClass(#T);                                            \
-    return _##T##_isa;                                                  \
-}                                                                       \
-Class objc_load##T(Class super);                                        \
-Class objc_load##T(Class super)                                         \
+}
+
+#define get_vptr(T) T##_vptr(this)
+
+#define class_bind(T)                                                   \
+proc Class objc_load##T(Class super)                                    \
 {                                                                       \
     int k = 0;                                                          \
     IMP* vt = &T##_vtable;                                              \
     char* class_name = #T;                                              \
     Class isa = objc_allocateClassPair(super, #T, 0);                   \
     isa->vtable = &vt[0];               
-    
-/**
- *  MACRO VTABLE_METHOD
- *      
- */
-#define VTABLE_METHOD(name, imp, type)                                        \
+
+
+#define class_method(name, imp, type)                                   \
     class_addMethod(isa, #name, imp, type);                             \
     vt[k++] = imp; 
 
-/**
- *  MACRO $virtual method
- *      this just documents that this is a virtual method
- */
-#define $virtual(name, imp, type)                                       \
+#define class_override(name, imp, type)                                 \
     class_addMethod(isa, #name, imp, type);                             \
     vt[k++] = imp; 
 
-/**
- *  MACRO $override method
- *      this just documents that this is a overriden method
- *      
- */
-#define $override(name, imp, type)                                      \
+#define vtable_virtual(name, imp, type)                                 \
     class_addMethod(isa, #name, imp, type);                             \
     vt[k++] = imp; 
 
-/**
- *  MACRO $ivar
- *      
- */
-#define $ivar(name, len, type)                                          \
+#define class_member(name, len, type)                                   \
     class_addIvar(isa, #name, len, log2(len), type);
 
-/**
- *  MACRO $isa method
- *      
- */
-#define $class_method(name, imp, type)                                  \
-    class_addMethod(GETMETA(isa), #name, imp, type);                    \
-
-/**
- *  MACRO  $isa ivar
- *      
- */
-#define $class_ivar(name, len, type)                                    \
-    class_addIvar(GETMETA(isa), #name, len, log2(len), type);
-
-/**
- *  MACRO $end
- *      wrap up class definitions     
- */
-#define $end                                                            \
+#define class_methodize                                                 \
     return methodizeClass(isa);                                         \
 }
+
 
 #endif _DSCLASS_H_ 

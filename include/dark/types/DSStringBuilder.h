@@ -58,7 +58,7 @@ SOFTWARE.
 #include <string.h>
 #include "DSString.h"
 
-IVAR (StringFragment)
+type (StringFragment)
 {
 	StringFragment * next;
 	int length;
@@ -74,31 +74,31 @@ IVAR (StringFragment)
 /**
  * StringBuilder class
  */
-IVAR (DSStringBuilder) {
+type (DSStringBuilder) {
     Class isa;
 	StringFragment* root;
 	StringFragment* trunk;
 	int length;
 };
 
-METHOD (DSStringBuilder, ToString,        char*, (const DSStringBuilder* const));
+def_method (DSStringBuilder, ToString,        char*, (const DSStringBuilder* const));
 
-static inline overload 
+method 
 __attribute__((__format__ (__printf__, 2, 3)))
 int Appendf(DSStringBuilder* sb, const char *format, ...);
 typedef int (*DSStringBuilderAppendf)   (DSStringBuilder* sb, const char *format, ...);
 
-METHOD (DSStringBuilder, Appendc, 	int, (DSStringBuilder* sb, const char c));
-METHOD (DSStringBuilder, Append,	int, (DSStringBuilder* sb, const char *str));
-METHOD (DSStringBuilder, Concat,	DSString*, (const DSStringBuilder* sb));
-METHOD (DSStringBuilder, Reset,		void, (DSStringBuilder* sb));
-METHOD (DSStringBuilder, Empty,		int, (const DSStringBuilder* sb));
-METHOD (DSStringBuilder, Dispose,	void, (DSStringBuilder* const));
+def_method (DSStringBuilder, Appendc, 	int, (DSStringBuilder* sb, const char c));
+def_method (DSStringBuilder, Append,	int, (DSStringBuilder* sb, const char *str));
+def_method (DSStringBuilder, Concat,	DSString*, (const DSStringBuilder* sb));
+def_method (DSStringBuilder, Reset,		void, (DSStringBuilder* sb));
+def_method (DSStringBuilder, Empty,		int, (const DSStringBuilder* sb));
+def_method (DSStringBuilder, Dispose,	void, (DSStringBuilder* const));
 
 /**
  * StringBuilder metaclass
  */
-VTABLE (DSStringBuilder) {
+vtable (DSStringBuilder) {
     const DSStringBuilderToString   ToString;
     const DSObjectEquals            Equals;
     const DSObjectGetHashCode       GetHashCode;
@@ -111,43 +111,43 @@ VTABLE (DSStringBuilder) {
     const DSStringBuilderReset      Reset;
 };
 
-DEF_VPTR(DSStringBuilder);
+vtable_ptr(DSStringBuilder);
 
 /* 
  * Constructor
  * create a new StringBuilder
  * 
  */
-static inline DSStringBuilder* DSStringBuilder_init(DSStringBuilder* const this)
+proc DSStringBuilder* DSStringBuilder_init(DSStringBuilder* const this)
 {
     DSObject_init(this);
     this->isa = objc_getClass("DSStringBuilder"); 
 	return this;
 }
 
-static inline DSStringBuilder* NewDSStringBuilder() { 
+proc DSStringBuilder* NewDSStringBuilder() { 
 	return DSStringBuilder_init(alloc(DSStringBuilder)); 
 }
 
 /*
  * sb_empty returns non-zero if the given StringBuilder is empty.
  */
-static inline overload int Empty(const DSStringBuilder* this)
+method int Empty(const DSStringBuilder* this)
 {
 	return (this->root == nullptr);
 }
 
 
-static inline overload int Appendc(DSStringBuilder* this, const char c)
+method int Appendc(DSStringBuilder* this, const char c)
 {
 	char str[2] = { c, 0 };
-	auto x = getVptr(DSStringBuilder)->Append(this, str);
+	auto x = get_vptr(DSStringBuilder)->Append(this, str);
 	return x;
 }
 /*
  * sb_append adds a copy of the given string to a StringBuilder.
  */
-static inline overload int Append(DSStringBuilder* this, const char *str)
+method int Append(DSStringBuilder* this, const char *str)
 {
 	int	length = 0;
 	struct StringFragment * frag = nullptr;
@@ -177,7 +177,7 @@ static inline overload int Append(DSStringBuilder* this, const char *str)
 /*
  * sb_appendf adds a copy of the given formatted string to a StringBuilder.
  */
-static inline overload 
+method 
 __attribute__((__format__ (__printf__, 2, 3)))
 int Appendf(DSStringBuilder* this, const char *format, ...)
 {
@@ -204,7 +204,7 @@ int Appendf(DSStringBuilder* this, const char *format, ...)
  * The StringBuilder is not modified by this function and can therefore continue
  * to be used.
  */
-static inline overload DSString* Concat(const DSStringBuilder* this)
+method DSString* Concat(const DSStringBuilder* this)
 {
 	char *buf = nullptr;
 	char *c = nullptr;
@@ -228,7 +228,7 @@ static inline overload DSString* Concat(const DSStringBuilder* this)
  * sb_reset resets the given StringBuilder, freeing all previously appended
  * strings.
  */
-static inline overload void Reset(DSStringBuilder* this)
+method void Reset(DSStringBuilder* this)
 {
 	StringFragment* frag = nullptr;
 	StringFragment* next = nullptr;
@@ -242,13 +242,13 @@ static inline overload void Reset(DSStringBuilder* this)
 /*
  * sb_free frees the given StringBuilder and all of its appended strings.
  */
-static inline overload void Dispose(DSStringBuilder* this)
+method void Dispose(DSStringBuilder* this)
 {
 	Reset(this);
 }
 
 
-static inline overload char* ToString(const DSStringBuilder* this)
+method char* ToString(const DSStringBuilder* this)
 {
 	return Concat(this);
     // return "dark.StringBuilder";
@@ -257,24 +257,24 @@ static inline overload char* ToString(const DSStringBuilder* this)
 
 
 
-VTABLE_BIND( DSStringBuilder );
+class_bind( DSStringBuilder );
 
-VTABLE_METHOD( ToString, 		    (DSStringBuilderToString)ToString, "$@:v" );
-VTABLE_METHOD( Equals,            (DSObjectEquals)Equals, "B@:@@" );
-VTABLE_METHOD( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
-VTABLE_OVERRIDE( Dispose, 		(DSStringBuilderDispose)Dispose, "v@:v" );
-VTABLE_METHOD( Append,			(DSStringBuilderAppend)Append, "i@:v" );
-VTABLE_METHOD( Appendc, 			(DSStringBuilderAppendc)Appendc, "i@:c" );
-VTABLE_METHOD( Appendf, 			(DSStringBuilderAppendf)Appendf, "i@:c." );
-VTABLE_METHOD( Concat, 			(DSStringBuilderConcat)Concat, "$@:v" );
-VTABLE_METHOD( Empty, 			(DSStringBuilderEmpty)Empty, "B@:v" );
-VTABLE_METHOD( Reset, 			(DSStringBuilderReset)Reset, "v@:v" );
+class_method( ToString, 		    (DSStringBuilderToString)ToString, "$@:v" );
+class_method( Equals,            (DSObjectEquals)Equals, "B@:@@" );
+class_method( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
+class_override( Dispose, 		(DSStringBuilderDispose)Dispose, "v@:v" );
+class_method( Append,			(DSStringBuilderAppend)Append, "i@:v" );
+class_method( Appendc, 			(DSStringBuilderAppendc)Appendc, "i@:c" );
+class_method( Appendf, 			(DSStringBuilderAppendf)Appendf, "i@:c." );
+class_method( Concat, 			(DSStringBuilderConcat)Concat, "$@:v" );
+class_method( Empty, 			(DSStringBuilderEmpty)Empty, "B@:v" );
+class_method( Reset, 			(DSStringBuilderReset)Reset, "v@:v" );
 
-VTABLE_IVAR( root, sizeof( id ), "^" );
-VTABLE_IVAR( trunk, sizeof( id ), "^" );
-VTABLE_IVAR( length, sizeof( int ), "i" );
+class_member( root, sizeof( id ), "^" );
+class_member( trunk, sizeof( id ), "^" );
+class_member( length, sizeof( int ), "i" );
 
-VTABLE_METHODIZE
+class_methodize
 
 
 #endif _DSSTRING_BUILDER_H_

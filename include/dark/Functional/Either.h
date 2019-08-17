@@ -49,7 +49,7 @@ typedef struct DSObject DSObject;
  * while the left value (B) represents an error condition.
  * 
  */
-IVAR (Either) {
+type (Either) {
 	DSObject* left;
 	DSObject* right;
 	bool isLeft;
@@ -58,21 +58,21 @@ IVAR (Either) {
 /**
  * Is it right or left?
  */
-static inline overload bool IsRight(Either* this) { 
+method bool IsRight(Either* this) { 
 	return !this->isLeft; 
 }
 
 /**
  * get the right member
  */
-static inline overload DSObject* GetRight(Either* this) { 
+method DSObject* GetRight(Either* this) { 
 	return this->right; 
 }
 
 /**
  * get the left member
  */
-static inline overload DSObject* GetLeft(Either* this) { 
+method DSObject* GetLeft(Either* this) { 
 	return this->left; 
 }
 
@@ -80,7 +80,7 @@ static inline overload DSObject* GetLeft(Either* this) {
  * Private constructor
  * Only Left & Right are allowed.
  */
-static inline Either* NewEither(DSObject* a, DSObject* b) {
+proc Either* NewEither(DSObject* a, DSObject* b) {
     const auto this = alloc(Either);
 	this->left = a;
 	this->right = b;
@@ -91,18 +91,18 @@ static inline Either* NewEither(DSObject* a, DSObject* b) {
 /**
  * Left Public constructor
  */
-static inline overload Either* Left(DSObject* value) { 
+method Either* Left(DSObject* value) { 
 	return NewEither(value, nullptr); 
 }
 
 /**
  * Right Public constructor
  */
-static inline overload Either* Right(DSObject* value) { 
+method Either* Right(DSObject* value) { 
 	return NewEither(nullptr, value); 
 }
 
-static inline overload Either* Map(Either* this, Either* (*func)(Either*)) {
+method Either* Map(Either* this, Either* (*func)(Either*)) {
 	if (this->isLeft)
 		return this;
 	else

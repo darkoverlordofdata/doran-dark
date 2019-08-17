@@ -39,13 +39,13 @@ SOFTWARE.
  * 
  */
 #define __Maybe__(type, name)                                           \
-static inline overload Maybe* Just(type x) {                                          \
+method Maybe* Just(type x) {                                          \
     const auto this = alloc(Maybe);                                     \
     this->name = x;                                                     \
     return this;                                                        \
 }                                                                       \
 type name##Maybe(Maybe* this) { return this->name; }                    \
-static inline overload Maybe* ret(type value) { return Just(value); }
+method Maybe* ret(type value) { return Just(value); }
 #endif
 
 
@@ -53,7 +53,7 @@ typedef struct Maybe Maybe;
 
 
 #ifdef __MAYBE_GENERICS__
-IVAR (Maybe) {
+type (Maybe) {
     union {
         int Int;
         long Long;
@@ -78,33 +78,33 @@ __Maybe__(bool, Bool);
 __Maybe__(char*, Str);
 __Maybe__(void*, Ptr);
 #else
-IVAR (Maybe) {
+type (Maybe) {
     DSObject* value;
 };
 #endif
 
-static inline Maybe* Nothing() {
+proc Maybe* Nothing() {
     const auto this = alloc(Maybe);
     this->value = nullptr;
 }
 
-static inline Maybe* Just(DSObject* x) {
+proc Maybe* Just(DSObject* x) {
     const auto this = alloc(Maybe);
     this->value = x;
     return this;
 }
 
-static inline Maybe* ret(DSObject* this) {
+proc Maybe* ret(DSObject* this) {
     return Just(this);
 }
 
-static inline Maybe* bind(Maybe* this,  Maybe* (*func)(Maybe*)) {
+proc Maybe* bind(Maybe* this,  Maybe* (*func)(Maybe*)) {
     if (this->value == nullptr) 
         return Nothing();
     else
         return func(this->value);
 }
 
-static inline bool IsNothing(const Maybe* this) {
+proc bool IsNothing(const Maybe* this) {
     return this->value == nullptr;
 }

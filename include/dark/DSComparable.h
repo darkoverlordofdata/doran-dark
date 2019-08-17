@@ -37,18 +37,18 @@ SOFTWARE.
 /**
  * DSComparable Class
  */
-IVAR (DSComparable) {
+type (DSComparable) {
     Class isa;
 };
 
-METHOD (DSComparable, ToString,        char*,    (const DSComparable* const));
-METHOD (DSComparable, CompareTo,       int,      (const DSComparable* const, const DSComparable* const));
+def_method (DSComparable, ToString,        char*,    (const DSComparable* const));
+def_method (DSComparable, CompareTo,       int,      (const DSComparable* const, const DSComparable* const));
 
 
 /**
  * DSComparable Vtable
  */
-VTABLE (DSComparable) {
+vtable (DSComparable) {
     const DSComparableToString      ToString;
     const DSObjectEquals            Equals;
     const DSObjectGetHashCode       GetHashCode;
@@ -56,35 +56,35 @@ VTABLE (DSComparable) {
     const DSComparableCompareTo     CompareTo;
 };
 
-DEF_VPTR(DSComparable);
+vtable_ptr(DSComparable);
 
 //=======================================================================//
 //              I M P L E M E N T A T I O N                              //          
 //=======================================================================//
 
-static inline DSComparable* DSComparable_init(DSComparable* const this)
+proc DSComparable* DSComparable_init(DSComparable* const this)
 {
     DSObject_init(this);
     this->isa = objc_getClass("DSComparable");
     return this;
 }
 
-static inline overload int CompareTo(const DSComparable* const this, const DSComparable* const other) {
-    return getVptr(DSComparable)->CompareTo(this, other);
+method int CompareTo(const DSComparable* const this, const DSComparable* const other) {
+    return get_vptr(DSComparable)->CompareTo(this, other);
 }
 
-static inline overload char* ToString(const DSComparable* const this) {
+method char* ToString(const DSComparable* const this) {
     return "dark.DSComparable";
 }
 
-VTABLE_BIND(DSComparable);
-VTABLE_METHOD(ToString,           (DSComparableToString)ToString, "$@:v");
-VTABLE_METHOD(Equals,             (DSObjectEquals)Equals, "B@:@@");
-VTABLE_METHOD(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
-VTABLE_METHOD(Dispose,            (DSObjectDispose)Dispose, "v@:v");
-VTABLE_METHOD(ReferenceEquals,    ReferenceEquals, "@:v");
-VTABLE_METHOD(InstanceEquals,     InstanceEquals, "$@:v");
-VTABLE_METHOD(CompareTo,          (DSComparableCompareTo)CompareTo, "i@:@");
-VTABLE_METHODIZE;
+class_bind(DSComparable);
+class_method(ToString,           (DSComparableToString)ToString, "$@:v");
+class_method(Equals,             (DSObjectEquals)Equals, "B@:@@");
+class_method(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
+class_method(Dispose,            (DSObjectDispose)Dispose, "v@:v");
+class_method(ReferenceEquals,    ReferenceEquals, "@:v");
+class_method(InstanceEquals,     InstanceEquals, "$@:v");
+class_method(CompareTo,          (DSComparableCompareTo)CompareTo, "i@:@");
+class_methodize;
 
 #endif _DSCOMPARABLE_H_

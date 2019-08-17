@@ -77,7 +77,7 @@
         int (*func)(const key_type *, data_type *, void *);             \
         void *arg;                                                      \
     };                                                                  \
-    static inline int __##name##_hashmap_foreach_callback(              \
+    proc int __##name##_hashmap_foreach_callback(              \
             const void *key, void *data, void *arg)                     \
     {                                                                   \
         struct __##name##_hashmap_foreach_state *s =                    \

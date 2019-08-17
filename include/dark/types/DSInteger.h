@@ -44,26 +44,26 @@ SOFTWARE.
 /**
  * Object class
  */
-IVAR (DSInteger) 
+type (DSInteger) 
 {
     Class isa;
     int value;
 };
 
 
-METHOD (DSInteger, ToString,        char*, (const DSInteger* const));
-METHOD (DSInteger, CompareTo,       int, (const DSInteger* const, const DSInteger* const));
-METHOD (DSInteger, IntValue,        int, (const DSInteger* const));
-METHOD (DSInteger, LongValue,       long, (const DSInteger* const));
-METHOD (DSInteger, FloatValue,      float, (const DSInteger* const));
-METHOD (DSInteger, DoubleValue,     double, (const DSInteger* const));
-METHOD (DSInteger, CharValue,       char, (const DSInteger* const));
-METHOD (DSInteger, ShortValue,      short, (const DSInteger* const));
+def_method (DSInteger, ToString,        char*, (const DSInteger* const));
+def_method (DSInteger, CompareTo,       int, (const DSInteger* const, const DSInteger* const));
+def_method (DSInteger, IntValue,        int, (const DSInteger* const));
+def_method (DSInteger, LongValue,       long, (const DSInteger* const));
+def_method (DSInteger, FloatValue,      float, (const DSInteger* const));
+def_method (DSInteger, DoubleValue,     double, (const DSInteger* const));
+def_method (DSInteger, CharValue,       char, (const DSInteger* const));
+def_method (DSInteger, ShortValue,      short, (const DSInteger* const));
 
 /**
- * Integer VTABLE with overrides
+ * Integer vtable with overrides
  */
-VTABLE (DSInteger)
+vtable (DSInteger)
 {
     const DSIntegerToString           ToString;
     const DSObjectEquals              Equals;
@@ -77,7 +77,7 @@ VTABLE (DSInteger)
     const DSIntegerCharValue          CharValue;
     const DSIntegerShortValue         ShortValue;
 };
-DEF_VPTR(DSInteger);
+vtable_ptr(DSInteger);
 /* 
  * Constructor
  * create a new Integer
@@ -85,7 +85,7 @@ DEF_VPTR(DSInteger);
  * @param value of int
  * 
  */
-static inline DSInteger* DSInteger_init(DSInteger* const this, const int value)
+proc DSInteger* DSInteger_init(DSInteger* const this, const int value)
 {
     DSNumber_init(this);
     this->isa = objc_getClass("DSInteger");
@@ -93,14 +93,14 @@ static inline DSInteger* DSInteger_init(DSInteger* const this, const int value)
     return this;
 }
 
-static inline DSInteger* NewDSInteger(const int value) { 
+proc DSInteger* NewDSInteger(const int value) { 
     return DSInteger_init(alloc(DSInteger), value); 
 }
 
 /**
  * Returns a primitive integer value parsed from input string. 
  */
-static inline int DSParseInt(const char* const s, const int radix) {
+proc int DSParseInt(const char* const s, const int radix) {
     long i = DSParseLong(s, radix);
     if (i < INTEGER_MIN_VALUE || i > INTEGER_MAX_VALUE)
         throw DSNumberFormatException(s, radix, Source);
@@ -115,7 +115,7 @@ static inline int DSParseInt(const char* const s, const int radix) {
  *        +1 x < y
  *        -1 x > y
  */
-static inline overload int Compare(const int x, const int y) {
+method int Compare(const int x, const int y) {
     return (x < y) ? -1 : (( x == y ) ? 0 : 1);
 }
 
@@ -125,77 +125,77 @@ static inline overload int Compare(const int x, const int y) {
  * @param   other  Integer to be compared
  * @return same as DSInteger_Compare
  */
-static inline overload int CompareTo(const DSInteger* this, const DSInteger* other) {
+method int CompareTo(const DSInteger* this, const DSInteger* other) {
     return Compare(this->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-static inline overload int IntValue(const DSInteger* const this) {
+method int IntValue(const DSInteger* const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-static inline overload long LongValue(const DSInteger* const this) {
+method long LongValue(const DSInteger* const this) {
     return (int)this->value;
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-static inline overload float FloatValue(const DSInteger* const this) {
+method float FloatValue(const DSInteger* const this) {
     return (float)this->value;
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-static inline overload double DoubleValue(const DSInteger* const this) {
+method double DoubleValue(const DSInteger* const this) {
     return (double)this->value;
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-static inline overload char CharValue(const DSInteger* const this) {
+method char CharValue(const DSInteger* const this) {
     return (char)this->value;
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-static inline overload short ShortValue(const DSInteger* const this) {
+method short ShortValue(const DSInteger* const this) {
     return (short)this->value;
 }
 
 
-static inline overload char* ToString(const DSInteger* const this)
+method char* ToString(const DSInteger* const this)
 {
     static char str[20];
     sprintf(str, "%d", this->value);
     return str;
 }
 
-VTABLE_BIND( DSInteger );
+class_bind( DSInteger );
 
-VTABLE_OVERRIDE( ToString,         (DSIntegerToString)ToString, "$@:v" );
-VTABLE_METHOD( Equals,             (DSObjectEquals)Equals, "B@:@@" );
-VTABLE_METHOD( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
-VTABLE_METHOD( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
-VTABLE_OVERRIDE( CompareTo,        (DSIntegerCompareTo)CompareTo, "i@:@" );
-VTABLE_OVERRIDE( IntValue,         (DSIntegerIntValue)IntValue, "i@:v" );
-VTABLE_OVERRIDE( LongValue,        (DSIntegerLongValue)LongValue, "l@:v" );
-VTABLE_OVERRIDE( FloatValue,       (DSIntegerFloatValue)FloatValue, "f@:v" );
-VTABLE_OVERRIDE( DoubleValue,      (DSIntegerDoubleValue)DoubleValue, "d@:v" );
-VTABLE_OVERRIDE( CharValue,        (DSIntegerCharValue)CharValue, "c@:v" );
-VTABLE_OVERRIDE( ShortValue,       (DSIntegerShortValue)ShortValue, "s@:v" );
+class_override( ToString,         (DSIntegerToString)ToString, "$@:v" );
+class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
+class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+class_method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
+class_override( CompareTo,        (DSIntegerCompareTo)CompareTo, "i@:@" );
+class_override( IntValue,         (DSIntegerIntValue)IntValue, "i@:v" );
+class_override( LongValue,        (DSIntegerLongValue)LongValue, "l@:v" );
+class_override( FloatValue,       (DSIntegerFloatValue)FloatValue, "f@:v" );
+class_override( DoubleValue,      (DSIntegerDoubleValue)DoubleValue, "d@:v" );
+class_override( CharValue,        (DSIntegerCharValue)CharValue, "c@:v" );
+class_override( ShortValue,       (DSIntegerShortValue)ShortValue, "s@:v" );
 
-VTABLE_IVAR( value, sizeof( int ), "i" );
+class_member( value, sizeof( int ), "i" );
 
-VTABLE_METHODIZE
+class_methodize
 
 
 #endif _DSINTEGER_H_

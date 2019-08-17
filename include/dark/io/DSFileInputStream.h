@@ -30,23 +30,23 @@ SOFTWARE.
 #include "DSFile.h"
 #include "DSInputStream.h"
 
-IVAR (DSFileInputStream) {
+type (DSFileInputStream) {
     Class isa;
     FILE* fd;
     bool closed;
 };
 
-CTOR (DSFileInputStream, char*);
-CTOR (DSFileInputStream, DSFile*);
+def_ctor (DSFileInputStream, char*);
+def_ctor (DSFileInputStream, DSFile*);
 
-METHOD (DSFileInputStream, ToString, const char*, (const DSFileInputStream* const) );
-METHOD (DSFileInputStream, ReadOne,         int,    (DSFileInputStream*) );
-METHOD (DSFileInputStream, Read,            int,    (DSFileInputStream*, IOBuff*, int, int) );
-METHOD (DSFileInputStream, Skip,            long,   (DSFileInputStream*, long) );
-METHOD (DSFileInputStream, Available,       int,    (DSFileInputStream*) );
-METHOD (DSFileInputStream, Close,           void,   (DSFileInputStream*) );
+def_method (DSFileInputStream, ToString, const char*, (const DSFileInputStream* const) );
+def_method (DSFileInputStream, ReadOne,         int,    (DSFileInputStream*) );
+def_method (DSFileInputStream, Read,            int,    (DSFileInputStream*, IOBuff*, int, int) );
+def_method (DSFileInputStream, Skip,            long,   (DSFileInputStream*, long) );
+def_method (DSFileInputStream, Available,       int,    (DSFileInputStream*) );
+def_method (DSFileInputStream, Close,           void,   (DSFileInputStream*) );
 
-VTABLE (DSFileInputStream) {
+vtable (DSFileInputStream) {
     const DSFileInputStreamToString     ToString;
     const DSObjectEquals                Equals;
     const DSObjectGetHashCode           GetHashCode;
@@ -61,13 +61,13 @@ VTABLE (DSFileInputStream) {
     const DSFileInputStreamAvailable    Available;
 };
 
-DEF_VPTR(DSFileInputStream);
+vtable_ptr(DSFileInputStream);
 
-static inline overload DSFileInputStream* DSFileInputStream_init(DSFileInputStream* const this, char* name) {
+method DSFileInputStream* DSFileInputStream_init(DSFileInputStream* const this, char* name) {
     return DSFileInputStream_init(this, (name != nullptr ? NewDSFile(name) : nullptr));
 }
 
-static inline overload DSFileInputStream* DSFileInputStream_init(DSFileInputStream* const this, DSFile* file) 
+method DSFileInputStream* DSFileInputStream_init(DSFileInputStream* const this, DSFile* file) 
 {
     DSObject_init(this);
     this->isa = objc_getClass("DSFileInputStream");
@@ -84,15 +84,15 @@ static inline overload DSFileInputStream* DSFileInputStream_init(DSFileInputStre
     return this;
 }
 
-static inline overload const char* ToString(const DSFileInputStream* const this) {
+method const char* ToString(const DSFileInputStream* const this) {
     return "DSFileInputStream";
 }
 
-static inline overload int ReadOne(DSFileInputStream* this) {
+method int ReadOne(DSFileInputStream* this) {
     return fgetc(this->fd);
 }
 
-static inline overload int Read(DSFileInputStream* this, IOBuff* buf, int offset, int len) {
+method int Read(DSFileInputStream* this, IOBuff* buf, int offset, int len) {
     if (len <= 0)
         len = buf->len;
     if (buf->len <= 0 && len <= 0) 
@@ -109,7 +109,7 @@ static inline overload int Read(DSFileInputStream* this, IOBuff* buf, int offset
     return nread;
 }
 
-static inline overload long Skip(DSFileInputStream* this, long n)  {
+method long Skip(DSFileInputStream* this, long n)  {
     long i=0;
     for (; i<n; i++)
         if (ReadOne(this) < 0)
@@ -117,27 +117,27 @@ static inline overload long Skip(DSFileInputStream* this, long n)  {
     return i;
 }
 
-static inline overload int Available(DSFileInputStream* this) {
+method int Available(DSFileInputStream* this) {
     return 1;
 }
 
-static inline overload void Close(DSFileInputStream* this) {
+method void Close(DSFileInputStream* this) {
     this->fd = nullptr;
 }
 
 
-VTABLE_BIND( DSFileInputStream );
-VTABLE_OVERRIDE( ToString,        (DSFileInputStreamToString)ToString, "$@:v" );
-VTABLE_METHOD( Equals,            (DSObjectEquals)Equals, "B@:@@" );
-VTABLE_METHOD( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
-VTABLE_METHOD( Dispose,           (DSObjectDispose)Dispose, "v@:v" );
-VTABLE_METHOD( ReadOne,           (DSFileInputStreamReadOne)ReadOne, "i@:v" );
-VTABLE_METHOD( Read,              (DSFileInputStreamRead)Read, "i@:^ii" );
-VTABLE_METHOD( Skip,              (DSFileInputStreamSkip)Skip, "l@:l" );
-VTABLE_METHOD( Close,             (DSFileInputStreamClose)Close, "v@:v" );
-VTABLE_METHOD( Mark,              (DSInputStreamMark)Mark, "v@:i" );
-VTABLE_METHOD( MarkSupported,     (DSInputStreamMarkSupported)MarkSupported, "v@:v" );
-VTABLE_METHOD( Reset,             (DSInputStreamReset)Reset, "v@:v" );
-VTABLE_METHOD( Available,         (DSFileInputStreamAvailable)Available, "B@:" );
-VTABLE_METHODIZE;
+class_bind( DSFileInputStream );
+class_override( ToString,        (DSFileInputStreamToString)ToString, "$@:v" );
+class_method( Equals,            (DSObjectEquals)Equals, "B@:@@" );
+class_method( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
+class_method( Dispose,           (DSObjectDispose)Dispose, "v@:v" );
+class_method( ReadOne,           (DSFileInputStreamReadOne)ReadOne, "i@:v" );
+class_method( Read,              (DSFileInputStreamRead)Read, "i@:^ii" );
+class_method( Skip,              (DSFileInputStreamSkip)Skip, "l@:l" );
+class_method( Close,             (DSFileInputStreamClose)Close, "v@:v" );
+class_method( Mark,              (DSInputStreamMark)Mark, "v@:i" );
+class_method( MarkSupported,     (DSInputStreamMarkSupported)MarkSupported, "v@:v" );
+class_method( Reset,             (DSInputStreamReset)Reset, "v@:v" );
+class_method( Available,         (DSFileInputStreamAvailable)Available, "B@:" );
+class_methodize;
 #endif _DSFILE_INPUT_STREAM_H_

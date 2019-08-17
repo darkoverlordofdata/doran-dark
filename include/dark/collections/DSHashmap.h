@@ -53,7 +53,7 @@ SOFTWARE.
 typedef int (^DSHashmap_Iterator)(DSObject*, DSObject*);
 
 /* We need to keep keys and values */
-IVAR (DSHashmapNode) {
+type (DSHashmapNode) {
 	char* key;
 	int inUse;
 	DSObject* data;
@@ -61,7 +61,7 @@ IVAR (DSHashmapNode) {
 
 /* A hashmap has some maximum size and current size,
  * as well as the data to hold. */
-IVAR (DSHashmap) {
+type (DSHashmap) {
     Class isa;
     Class typeOf;
 	int length;
@@ -69,20 +69,20 @@ IVAR (DSHashmap) {
 	int tableSize;
 }; 
 
-CTOR (DSHashmap);
-CTOR (DSHashmap, Class);
-METHOD (DSHashmap, ToString,    char*,      (const DSHashmap* const) );
-METHOD (DSHashmap, Dispose,     void,       (DSHashmap* const) );
-METHOD (DSHashmap, Length,      int,        (const DSHashmap* const) );
-METHOD (DSHashmap, HashInt,     uint,       (DSHashmap* const, char*) );
-METHOD (DSHashmap, Hash,        int,        (DSHashmap* const, char*) );
-METHOD (DSHashmap, Rehash,      int,        (DSHashmap* const) );
-METHOD (DSHashmap, Put,         int,        (DSHashmap* const, char*, DSObject*) );
-METHOD (DSHashmap, Get,         DSObject*,  (DSHashmap* const, char*) );
-METHOD (DSHashmap, ForEach,     int,        (DSHashmap* const, DSHashmap_Iterator, DSObject*) );
-METHOD (DSHashmap, Remove,      int,        (DSHashmap* const, char*) );
+def_ctor (DSHashmap);
+def_ctor (DSHashmap, Class);
+def_method (DSHashmap, ToString,    char*,      (const DSHashmap* const) );
+def_method (DSHashmap, Dispose,     void,       (DSHashmap* const) );
+def_method (DSHashmap, Length,      int,        (const DSHashmap* const) );
+def_method (DSHashmap, HashInt,     uint,       (DSHashmap* const, char*) );
+def_method (DSHashmap, Hash,        int,        (DSHashmap* const, char*) );
+def_method (DSHashmap, Rehash,      int,        (DSHashmap* const) );
+def_method (DSHashmap, Put,         int,        (DSHashmap* const, char*, DSObject*) );
+def_method (DSHashmap, Get,         DSObject*,  (DSHashmap* const, char*) );
+def_method (DSHashmap, ForEach,     int,        (DSHashmap* const, DSHashmap_Iterator, DSObject*) );
+def_method (DSHashmap, Remove,      int,        (DSHashmap* const, char*) );
 
-VTABLE (DSHashmap) {
+vtable (DSHashmap) {
     const DSHashmapToString       ToString;
     const DSObjectEquals          Equals;
     const DSObjectGetHashCode     GetHashCode;
@@ -97,7 +97,7 @@ VTABLE (DSHashmap) {
     const DSHashmapRehash         Rehash;
 } ;
 
-DEF_VPTR (DSHashmap);
+vtable_ptr (DSHashmap);
 
 /* 
  * Generic Hashmap implementation
@@ -212,7 +212,7 @@ static unsigned long crc32_tab[] = {
    };
 
 /* Return a 32-bit CRC of the contents of the buffer. */
-static inline unsigned long crc32(const unsigned char *s, unsigned int len)
+proc unsigned long crc32(const unsigned char *s, unsigned int len)
 {
     unsigned long crc32val = 0;
     for (unsigned int i = 0;  i < len;  i ++)
@@ -223,7 +223,7 @@ static inline unsigned long crc32(const unsigned char *s, unsigned int len)
 /*
  * Hashing function for a string
  */
-static inline overload unsigned int HashInt(DSHashmap* const this, char* keystring)
+method unsigned int HashInt(DSHashmap* const this, char* keystring)
 {
     unsigned long key = crc32((unsigned char*)(keystring), strlen(keystring));
 
@@ -244,12 +244,12 @@ static inline overload unsigned int HashInt(DSHashmap* const this, char* keystri
 }
 
 
-static inline overload DSHashmap* DSHashmap_init(DSHashmap* const this)
+method DSHashmap* DSHashmap_init(DSHashmap* const this)
 {
     return DSHashmap_init(this, nullptr);
 }
 
-static inline overload DSHashmap* DSHashmap_init(DSHashmap* const this, Class typeOf)
+method DSHashmap* DSHashmap_init(DSHashmap* const this, Class typeOf)
 {
     DSObject_init(this);
 
@@ -266,7 +266,7 @@ static inline overload DSHashmap* DSHashmap_init(DSHashmap* const this, Class ty
  * Return the integer of the location in data
  * to store the point to the item, or MAP_FULL.
  */
-static inline overload int Hash(DSHashmap* const this, char* key)
+method int Hash(DSHashmap* const this, char* key)
 {
 	/* If full, return immediately */
 	if (this->length >= (this->tableSize/2)) return MAP_FULL;
@@ -289,7 +289,7 @@ static inline overload int Hash(DSHashmap* const this, char* key)
 /*
  * Doubles the size of the hashmap, and rehashes all the elements
  */
-static inline overload int Rehash(DSHashmap* const this)
+method int Rehash(DSHashmap* const this)
 {
     DSHashmapNode* temp = DScalloc(2 * this->tableSize, sizeof(DSHashmapNode));
     //  allocate(HashmapNode, 2 * this->tableSize);
@@ -323,7 +323,7 @@ static inline overload int Rehash(DSHashmap* const this)
 /*
  * Add a pointer to the hashmap with some key
  */
-static inline overload int Put(DSHashmap* const this, char* key, DSObject* value)
+method int Put(DSHashmap* const this, char* key, DSObject* value)
 {
     if ((this->typeOf) && !InstanceOf(this->typeOf, value))  {
         return Left(DSInvalidTypeException(this->typeOf->name, Source));
@@ -355,7 +355,7 @@ static inline overload int Put(DSHashmap* const this, char* key, DSObject* value
 /*
  * Get your pointer out of the hashmap with a key
  */
-static inline overload DSObject* Get(DSHashmap* const this, char* key)
+method DSObject* Get(DSHashmap* const this, char* key)
 {
     DSObject* result;
 	/* Find data location */
@@ -384,7 +384,7 @@ static inline overload DSObject* Get(DSHashmap* const this, char* key)
  * additional DSObject* argument is passed to the function as its first
  * argument and the hashmap element is the second.
  */
-static inline overload int ForEach(DSHashmap* const this, DSHashmap_Iterator f, DSObject* item) 
+method int ForEach(DSHashmap* const this, DSHashmap_Iterator f, DSObject* item) 
 {
 	/* On empty hashmap, return immediately */
 	if (Length(this) <= 0)
@@ -410,7 +410,7 @@ static inline overload int ForEach(DSHashmap* const this, DSHashmap_Iterator f, 
  * Remove an element with that key from the map
  * Return MAP_OK or MAP_MISSING.
  */
-static inline overload int Remove(DSHashmap* const this, char* key)
+method int Remove(DSHashmap* const this, char* key)
 {
 	/* Find key */
 	int curr = HashInt(this, key);
@@ -440,49 +440,49 @@ static inline overload int Remove(DSHashmap* const this, char* key)
 	return MAP_MISSING;
 }
 
-static inline void DSHashmap_dtor(void* this) {
+proc void DSHashmap_dtor(void* this) {
     Dispose((DSHashmap*)this);
 }
 /* Deallocate the hashmap */
-static inline overload void Dispose(DSHashmap* const this)
+method void Dispose(DSHashmap* const this)
 {
     printf("WTF - dispose?\n");
 	// delete(this->data);
 }
 
 /* Return the length of the hashmap */
-static inline overload int Length(const DSHashmap* const this)
+method int Length(const DSHashmap* const this)
 {
     return this->length;
 }
 
-static inline overload char* ToString(const DSHashmap* const this)
+method char* ToString(const DSHashmap* const this)
 {
     return "dark.collections.Hashmap";
 }
 
 
 
-VTABLE_BIND(DSHashmap)
+class_bind(DSHashmap)
 
-VTABLE_METHOD(ToString,           (DSHashmapToString)ToString, "@@:v");
-VTABLE_METHOD(Equals,             (DSObjectEquals)Equals, "B@:@@");
-VTABLE_METHOD(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
-VTABLE_METHOD(Dispose,            (DSHashmapDispose)Dispose, "v@:v");
-VTABLE_METHOD(Length,             (DSHashmapLength)Length, "i@:v");
-VTABLE_METHOD(Remove,             (DSHashmapRemove)Remove, "v@:i");
-VTABLE_METHOD(ForEach,            (DSHashmapForEach)ForEach, "i@:@@");
-VTABLE_METHOD(Put,                (DSHashmapPut)Put, "i@:*@");
-VTABLE_METHOD(Get,                (DSHashmapGet)Get, "@@:*");
-VTABLE_METHOD(HashInt,            (DSHashmapHashInt)HashInt, "I@:*");
-VTABLE_METHOD(Hash,               (DSHashmapHash)Hash, "i@:*");
-VTABLE_METHOD(Rehash,             (DSHashmapRehash)Rehash, "i@:v");
+class_method(ToString,           (DSHashmapToString)ToString, "@@:v");
+class_method(Equals,             (DSObjectEquals)Equals, "B@:@@");
+class_method(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
+class_method(Dispose,            (DSHashmapDispose)Dispose, "v@:v");
+class_method(Length,             (DSHashmapLength)Length, "i@:v");
+class_method(Remove,             (DSHashmapRemove)Remove, "v@:i");
+class_method(ForEach,            (DSHashmapForEach)ForEach, "i@:@@");
+class_method(Put,                (DSHashmapPut)Put, "i@:*@");
+class_method(Get,                (DSHashmapGet)Get, "@@:*");
+class_method(HashInt,            (DSHashmapHashInt)HashInt, "I@:*");
+class_method(Hash,               (DSHashmapHash)Hash, "i@:*");
+class_method(Rehash,             (DSHashmapRehash)Rehash, "i@:v");
 
-VTABLE_IVAR(typeof, sizeof(id), "@");
-VTABLE_IVAR(length, sizeof(int), "i");
-VTABLE_IVAR(data, sizeof(id), "^");
-VTABLE_IVAR(tableSize, sizeof(int), "i");
+class_member(typeof, sizeof(id), "@");
+class_member(length, sizeof(int), "i");
+class_member(data, sizeof(id), "^");
+class_member(tableSize, sizeof(int), "i");
 
-VTABLE_METHODIZE;
+class_methodize;
 
 #endif _DSHASHMAP_H_

@@ -60,16 +60,16 @@ typedef enum DSExceptionType {
 #define AT "in %s method %s at line %d"
 #define Source DSsprintf(AT, __FILENAME__, __func__, __LINE__)
 
-IVAR (DSException) {
+type (DSException) {
     Class isa;
     DSExceptionType type;
     const char *msg;
 };
 
-CTOR (DSException, DSExceptionType, char*);
-METHOD (DSException, ToString, const char*, (const DSException* const) );
+def_ctor (DSException, DSExceptionType, char*);
+def_method (DSException, ToString, const char*, (const DSException* const) );
 
-VTABLE (DSException) {
+vtable (DSException) {
     const DSExceptionToString     ToString;
     const DSObjectEquals          Equals;
     const DSObjectGetHashCode     GetHashCode;
@@ -86,16 +86,16 @@ struct exception_context the_exception_context[1];
 /**
  * Returns the string value of this DSException
  */
-static inline overload const char* ToString(const DSException* const this) {
+method const char* ToString(const DSException* const this) {
     return this->msg;
 }
 
-static inline DSException* NewDSException(DSExceptionType type, char* msg) {
+proc DSException* NewDSException(DSExceptionType type, char* msg) {
     DSException* this = alloc(DSException);
     return DSException_init(this, type, msg);
 }
 
-static inline DSException* overload DSException_init(DSException* this, DSExceptionType type, char* msg) {
+proc DSException* overload DSException_init(DSException* this, DSExceptionType type, char* msg) {
     DSObject_init(this);
     this->isa = objc_getClass("DSException");
     this->type = type;
@@ -109,60 +109,60 @@ static inline DSException* overload DSException_init(DSException* this, DSExcept
  * 
  * Exceptions can be thrown or passed in Either*
  */
-static inline DSException* DSInvalidTypeException(const char* name, const char* source) {
+proc DSException* DSInvalidTypeException(const char* name, const char* source) {
     return NewDSException(InvalidTypeException, DSsprintf($InvalidTypeException, 
         name, source));
 }
 
-static inline DSException* DSAbstractMethodException(const char* name, const char* source) {
+proc DSException* DSAbstractMethodException(const char* name, const char* source) {
     return NewDSException(AbstractMethodException, DSsprintf($AbstractMethodException, 
         name, source));
 }
 
-static inline DSException* DSIndexOutOfBoundsException(const int index, const char* source) {
+proc DSException* DSIndexOutOfBoundsException(const int index, const char* source) {
     return NewDSException(IndexOutOfBoundsException, DSsprintf($IndexOutOfBoundsException, 
         index, source));
 }
 
-static inline DSException* DSOutOfMemoryException(const char* name, const char* source) {
+proc DSException* DSOutOfMemoryException(const char* name, const char* source) {
     return NewDSException(OutOfMemoryException, DSsprintf($OutOfMemoryException, 
         name, source));
 }
 
-static inline DSException* overload DSNumberFormatException(const char* raw, const char* source) {
+proc DSException* overload DSNumberFormatException(const char* raw, const char* source) {
     return NewDSException(NumberFormatException, DSsprintf($NumberFormatException2, 
         raw, source));
 }
 
-static inline DSException* overload DSNumberFormatException(const char* raw, const int radix, const char* source) {
+proc DSException* overload DSNumberFormatException(const char* raw, const int radix, const char* source) {
     return NewDSException(NumberFormatException, DSsprintf($NumberFormatException3, 
         raw, radix, source));
 }
 
-static inline DSException* DSNullPointerException(const char* source) {
+proc DSException* DSNullPointerException(const char* source) {
     return NewDSException(NullPointerException, DSsprintf($NullPointerException, source));
 }
 
-static inline DSException* DSFileNotFoundException(const char* name, const char* source) {
+proc DSException* DSFileNotFoundException(const char* name, const char* source) {
     return NewDSException(FileNotFoundException, DSsprintf($FileNotFoundException, name, source));
 }
 
-static inline DSException* DSNotSupportedException(const char* str, const char* source) {
+proc DSException* DSNotSupportedException(const char* str, const char* source) {
     return NewDSException(NotSupportedException, DSsprintf($NotSupportedException, str, source));
 }
 
-static inline DSException* DSIllegalArgumentException(const char* str, const char* source) {
+proc DSException* DSIllegalArgumentException(const char* str, const char* source) {
     return NewDSException(IllegalArgumentException, DSsprintf($IllegalArgumentException, str, source));
 }
 
 
 
-VTABLE_BIND(DSException);
-VTABLE_OVERRIDE( ToString,         (DSExceptionToString)ToString, "$@:v" );
-VTABLE_METHOD( Equals,             (DSObjectEquals)Equals, "B@:@@" );
-VTABLE_METHOD( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
-VTABLE_METHOD( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
-VTABLE_METHODIZE;
+class_bind(DSException);
+class_override( ToString,         (DSExceptionToString)ToString, "$@:v" );
+class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
+class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+class_method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
+class_methodize;
 
 
 #endif _DSEXCEPTION_H_

@@ -31,23 +31,23 @@ SOFTWARE.
 #include "DSReader.h"
 #include "DSInputStream.h"
 
-IVAR (DSInputStreamReader) {
+type (DSInputStreamReader) {
     Class isa;
     DSInputStream* in;
 };
 
-CTOR (DSInputStreamReader, DSInputStream*);
-METHOD (DSInputStreamReader, ToString, const char*, (const DSInputStreamReader* const) );
-METHOD (DSInputStreamReader, ReadOne,         int,    (DSInputStreamReader*) );
-METHOD (DSInputStreamReader, Read,            int,    (DSInputStreamReader*, IOBuff*, int, int) );
-METHOD (DSInputStreamReader, Skip,            long,   (DSInputStreamReader*, long) );
-METHOD (DSInputStreamReader, Close,           void,   (DSInputStreamReader*) );
-METHOD (DSInputStreamReader, Mark,            void,   (DSInputStreamReader*, int) );
-METHOD (DSInputStreamReader, MarkSupported,   bool,   (DSInputStreamReader*) );
-METHOD (DSInputStreamReader, Reset,           void,   (DSInputStreamReader*) );
-METHOD (DSInputStreamReader, Ready,           bool,   (DSInputStreamReader*) );
+def_ctor (DSInputStreamReader, DSInputStream*);
+def_method (DSInputStreamReader, ToString, const char*, (const DSInputStreamReader* const) );
+def_method (DSInputStreamReader, ReadOne,         int,    (DSInputStreamReader*) );
+def_method (DSInputStreamReader, Read,            int,    (DSInputStreamReader*, IOBuff*, int, int) );
+def_method (DSInputStreamReader, Skip,            long,   (DSInputStreamReader*, long) );
+def_method (DSInputStreamReader, Close,           void,   (DSInputStreamReader*) );
+def_method (DSInputStreamReader, Mark,            void,   (DSInputStreamReader*, int) );
+def_method (DSInputStreamReader, MarkSupported,   bool,   (DSInputStreamReader*) );
+def_method (DSInputStreamReader, Reset,           void,   (DSInputStreamReader*) );
+def_method (DSInputStreamReader, Ready,           bool,   (DSInputStreamReader*) );
 
-VTABLE (DSInputStreamReader) {
+vtable (DSInputStreamReader) {
     const DSInputStreamReaderToString       ToString;
     const DSObjectEquals                    Equals;
     const DSObjectGetHashCode               GetHashCode;
@@ -62,63 +62,63 @@ VTABLE (DSInputStreamReader) {
     const DSInputStreamReaderReady          Ready;
 };
 
-DEF_VPTR(DSInputStreamReader);
-static inline overload DSInputStreamReader* DSInputStreamReader_init(DSInputStreamReader* this, DSInputStream* in) {
+vtable_ptr(DSInputStreamReader);
+method DSInputStreamReader* DSInputStreamReader_init(DSInputStreamReader* this, DSInputStream* in) {
     DSObject_init(this);
     this->isa = objc_getClass("DSInputStreamReader");
     this->in = in;
     return this;
 }
 
-static inline overload const char* ToString(const DSInputStreamReader* const this) {
+method const char* ToString(const DSInputStreamReader* const this) {
     return "DSInputStreamReader";
 }
 
-static inline overload int ReadOne(DSInputStreamReader* this) {
+method int ReadOne(DSInputStreamReader* this) {
     return ReadOne(this->in);
 }
 
-static inline overload int Read(DSInputStreamReader* this, IOBuff* cbuf, int offset, int length) {
+method int Read(DSInputStreamReader* this, IOBuff* cbuf, int offset, int length) {
     return Read(this->in, cbuf, offset, length);
 }
 
-static inline overload long Skip(DSInputStreamReader* this, long n) {
+method long Skip(DSInputStreamReader* this, long n) {
     return Skip((DSReader*)this, n);
 } 
 
-static inline overload void Close(DSInputStreamReader* this) {
+method void Close(DSInputStreamReader* this) {
     Close(this->in);
 }
 
-static inline overload void Mark(DSInputStreamReader* this, int readLimit) {
+method void Mark(DSInputStreamReader* this, int readLimit) {
     Mark((DSReader*)this, readLimit);
 } 
 
-static inline overload bool MarkSupported(DSInputStreamReader* this) {
+method bool MarkSupported(DSInputStreamReader* this) {
     return MarkSupported((DSReader*)this);
 }
 
-static inline overload void Reset(DSInputStreamReader* this) {
+method void Reset(DSInputStreamReader* this) {
     Reset((DSReader*)this);
 }
 
-static inline overload bool Ready(DSInputStreamReader* this) {
+method bool Ready(DSInputStreamReader* this) {
     return Ready((DSReader*)this);
 }
 
 
-VTABLE_BIND( DSInputStreamReader );
-VTABLE_OVERRIDE( ToString,        (DSInputStreamReaderToString)ToString, "$@:v" );
-VTABLE_METHOD( Equals,            (DSObjectEquals)Equals, "B@:@@" );
-VTABLE_METHOD( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
-VTABLE_METHOD( Dispose,           (DSObjectDispose)Dispose, "v@:v" );
-VTABLE_METHOD( ReadOne,           (DSInputStreamReaderReadOne)ReadOne, "i@:v" );
-VTABLE_METHOD( Read,              (DSInputStreamReaderRead)Read, "i@:^ii" );
-VTABLE_METHOD( Skip,              (DSReaderSkip)Skip, "l@:l" );
-VTABLE_METHOD( Close,             (DSInputStreamReaderClose)Close, "v@:v" );
-VTABLE_METHOD( Mark,              (DSReaderMark)Mark, "v@:i" );
-VTABLE_METHOD( MarkSupported,     (DSReaderMarkSupported)MarkSupported, "v@:v" );
-VTABLE_METHOD( Reset,             (DSReaderReset)Reset, "v@:v" );
-VTABLE_METHOD( Ready,             (DSReaderReady)Ready, "B@:" );
-VTABLE_METHODIZE;
+class_bind( DSInputStreamReader );
+class_override( ToString,        (DSInputStreamReaderToString)ToString, "$@:v" );
+class_method( Equals,            (DSObjectEquals)Equals, "B@:@@" );
+class_method( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
+class_method( Dispose,           (DSObjectDispose)Dispose, "v@:v" );
+class_method( ReadOne,           (DSInputStreamReaderReadOne)ReadOne, "i@:v" );
+class_method( Read,              (DSInputStreamReaderRead)Read, "i@:^ii" );
+class_method( Skip,              (DSReaderSkip)Skip, "l@:l" );
+class_method( Close,             (DSInputStreamReaderClose)Close, "v@:v" );
+class_method( Mark,              (DSReaderMark)Mark, "v@:i" );
+class_method( MarkSupported,     (DSReaderMarkSupported)MarkSupported, "v@:v" );
+class_method( Reset,             (DSReaderReset)Reset, "v@:v" );
+class_method( Ready,             (DSReaderReady)Ready, "B@:" );
+class_methodize;
 #endif _DS_INPUT_STREAM_READER_H_

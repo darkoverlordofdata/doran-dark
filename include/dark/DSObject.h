@@ -40,20 +40,20 @@ SOFTWARE.
 /**
  * DSObject ivar
  */
-IVAR (DSObject) {
+type (DSObject) {
     Class isa;
 };
 
-METHOD (DSObject, ToString,         char*,  (const DSObject* const) );
-METHOD (DSObject, Equals,           bool,   (const DSObject* const, const DSObject* const) );
-METHOD (DSObject, GetHashCode,      int,    (const DSObject* const) );
-METHOD (DSObject, Dispose,          void,   (DSObject* const) );
-METHOD (DSObject, ReferenceEquals,  bool,   (const DSObject* const, const DSObject* const) );
-METHOD (DSObject, InstanceEquals,   bool,   (const DSObject* const, const DSObject* const) );
-METHOD (DSObject, GetClass,         Class,  (const DSObject* const) );
-METHOD (DSObject, GetClassName,     char*,  (const DSObject* const) );
+def_method (DSObject, ToString,         char*,  (const DSObject* const) );
+def_method (DSObject, Equals,           bool,   (const DSObject* const, const DSObject* const) );
+def_method (DSObject, GetHashCode,      int,    (const DSObject* const) );
+def_method (DSObject, Dispose,          void,   (DSObject* const) );
+def_method (DSObject, ReferenceEquals,  bool,   (const DSObject* const, const DSObject* const) );
+def_method (DSObject, InstanceEquals,   bool,   (const DSObject* const, const DSObject* const) );
+def_method (DSObject, GetClass,         Class,  (const DSObject* const) );
+def_method (DSObject, GetClassName,     char*,  (const DSObject* const) );
 
-VTABLE (DSObject) 
+vtable (DSObject) 
 {
     const DSObjectToString        ToString;
     const DSObjectEquals          Equals;
@@ -65,27 +65,30 @@ VTABLE (DSObject)
  * DSObject Class Methods & Variables
  * 
  */
-CLASS (DSObject) 
+class (DSObject) 
 {
     DSObject* Empty;
     DSObjectReferenceEquals ReferenceEquals;
     DSObjectInstanceEquals  InstanceEquals;
 };
 
-IVAR (DSClass) {
+type (DSClass) {
     Class isa;
 };
+
+#define TYPEDEF(T, name, type, signature)                                \
+    typedef type (*T##name)signature;
 
 //=======================================================================//
 //              Which came first, the Class or the Object?               //          
 //=======================================================================//
-TYPEDEF (DSClass, ToString,         char*,  (const DSClass* const) );
-TYPEDEF (DSClass, Equals,           bool,   (const DSClass* const, const DSClass* const) );
-TYPEDEF (DSClass, GetHashCode,      int,    (const DSClass* const) );
-TYPEDEF (DSClass, Dispose,          void,   (DSClass* const) );
+typedef char* (*DSClassToString)(const DSClass* const);
+typedef _Bool (*DSClassEquals)(const DSClass* const, const DSClass* const);
+typedef int (*DSClassGetHashCode)(const DSClass* const);
+typedef void (*DSClassDispose)(DSClass* const);
 
 
-VTABLE (DSClass) 
+vtable (DSClass) 
 {
     const DSClassToString        ToString;
     const DSClassEquals          Equals;
@@ -93,14 +96,14 @@ VTABLE (DSClass)
     const DSClassDispose         Dispose;
 };
 
-DEF_VPTR(DSObject);
+vtable_ptr(DSObject);
 
 //=======================================================================//
 //              I M P L E M E N T A T I O N                              //          
 //=======================================================================//
 // bool InstanceOf(Class class, DSObject* obj);
 
-static inline bool InstanceOf(Class class, DSObject* obj) {
+proc bool InstanceOf(Class class, DSObject* obj) {
     Class isa = obj->isa; 
     
     while (isa != class) {
@@ -113,18 +116,18 @@ static inline bool InstanceOf(Class class, DSObject* obj) {
 /**
  * DSObject constructor
  */
-static inline DSObject* DSObject_init(DSObject* this) {
+proc DSObject* DSObject_init(DSObject* this) {
     this->isa = objc_getClass("DSObject");
     return this;
 }
 
-static inline overload bool ReferenceEquals(const DSObject* const objA, const DSObject* const objB)
+method bool ReferenceEquals(const DSObject* const objA, const DSObject* const objB)
 {
     return objA == objB;
 }
 
 
-static inline overload bool InstanceEquals(const DSObject* const objA, const DSObject* const objB)
+method bool InstanceEquals(const DSObject* const objA, const DSObject* const objB)
 {
     if (objA == objB) {
         return true;
@@ -136,27 +139,27 @@ static inline overload bool InstanceEquals(const DSObject* const objA, const DSO
     return Equals(objA, objB);    
 }
 
-static inline overload void Dispose(DSObject* const this)
+method void Dispose(DSObject* const this)
 {
-    return getVptr(DSObject)->Dispose(this);
+    return get_vptr(DSObject)->Dispose(this);
 }
 /**
  * virtual Dispose method
  */
-static inline void DSObject_Dispose(DSObject* const this){}
+proc void DSObject_Dispose(DSObject* const this){}
 
 /**
  * Returns the string value of this Object. The default for 
  * a Object is to return the fully qualified name of the class.
  */
-static inline overload char* ToString(const DSObject* const this)
+method char* ToString(const DSObject* const this)
 {
-    return getVptr(DSObject)->ToString(this);
+    return get_vptr(DSObject)->ToString(this);
 }
 /**
  * virtual ToString method
  */
-static inline const char *DSObject_ToString(const DSObject* const this)
+proc const char *DSObject_ToString(const DSObject* const this)
 {
     return "DSObject";
 }
@@ -164,60 +167,59 @@ static inline const char *DSObject_ToString(const DSObject* const this)
 /**
  * Compare to another object
  */
-static inline overload bool Equals(const DSObject* const this, const DSObject* const that)
+method bool Equals(const DSObject* const this, const DSObject* const that)
 {
     // return this == that;
-    return getVptr(DSObject)->Equals(this, that);
+    return get_vptr(DSObject)->Equals(this, that);
 }
 
 /**
  * Get's the hashcode for this object. Default is the object's address in memory,
  */
-static inline overload int GetHashCode(const DSObject* const this)
+method int GetHashCode(const DSObject* const this)
 {
-    return getVptr(DSObject)->GetHashCode(this);
+    return get_vptr(DSObject)->GetHashCode(this);
 }
 
-static inline overload Class GetClass(const DSObject* const this)
+method Class GetClass(const DSObject* const this)
 {
     return &this->isa;
 }
 
-static inline overload char* GetClassName(const DSObject* const this)
+method char* GetClassName(const DSObject* const this)
 {
     return this->isa->name;
 }
 
-VTABLE_BIND(DSClass);
-VTABLE_METHOD(ToString,           (DSObjectToString)ToString, "$@:v");
-VTABLE_METHOD(Equals,             (DSObjectEquals)Equals, "B@:@@");
-VTABLE_METHOD(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
-VTABLE_METHOD(Dispose,            (DSObjectDispose)Dispose, "v@:v");
-VTABLE_METHOD(ReferenceEquals,    ReferenceEquals, "@:v");
-VTABLE_METHOD(InstanceEquals,     InstanceEquals, "$@:v");
-VTABLE_METHODIZE;
+class_bind(DSClass);
+class_method(ToString,           (DSObjectToString)ToString, "$@:v");
+class_method(Equals,             (DSObjectEquals)Equals, "B@:@@");
+class_method(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
+class_method(Dispose,            (DSObjectDispose)Dispose, "v@:v");
+class_method(ReferenceEquals,    ReferenceEquals, "@:v");
+class_method(InstanceEquals,     InstanceEquals, "$@:v");
+class_methodize;
 
 
 /**
  * Build the vtable
  */
-VTABLE_BIND(DSObject);
-VTABLE_METHOD(ToString,           ToString, "$@:v");
-VTABLE_METHOD(Equals,             Equals, "B@:@@");
-VTABLE_METHOD(GetHashCode,        GetHashCode, "l@:v");
-VTABLE_METHOD(Dispose,            Dispose, "v@:v");
-VTABLE_METHOD(ReferenceEquals,    ReferenceEquals, "@:v");
-VTABLE_METHOD(InstanceEquals,     InstanceEquals, "$@:v");
+class_bind(DSObject);
+class_method(ToString,           ToString, "$@:v");
+class_method(Equals,             Equals, "B@:@@");
+class_method(GetHashCode,        GetHashCode, "l@:v");
+class_method(Dispose,            Dispose, "v@:v");
+class_method(ReferenceEquals,    ReferenceEquals, "@:v");
+class_method(InstanceEquals,     InstanceEquals, "$@:v");
 $DSObject.Empty = nullptr;
-VTABLE_METHODIZE;
-// static inline Class objc_loadDSObject(Class super)
+class_methodize;
+// proc Class objc_loadDSObject(Class super)
 // {
 //     int k = 0;
 //     IMP* vt = &DSObject_vtable;
 //     char* class_name = "DSObject";
 //     Class isa = objc_allocateClassPair(super,"DSObject", 0);
 //     isa->vtable = &vt[0];            
-
 //     class_addMethod(isa, "ToString", ToString, "");
 //     vt[k++] = ToString;
 //     class_addMethod(isa, "Equals", Equals, "");

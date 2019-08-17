@@ -44,7 +44,7 @@ SOFTWARE.
                             default: nullptr)
 
 
-IVAR (DSArray) {
+type (DSArray) {
     Class isa;
     Class typeOf;
     int length;
@@ -54,24 +54,24 @@ IVAR (DSArray) {
 };
 
 
-CTOR(DSArray);
-CTOR(DSArray, int);
-CTOR(DSArray, Class);
-CTOR(DSArray, Class, int);
+def_ctor(DSArray);
+def_ctor(DSArray, int);
+def_ctor(DSArray, Class);
+def_ctor(DSArray, Class, int);
 
-METHOD (DSArray, ToString,  char*,      (const DSArray* const) );
-METHOD (DSArray, Dispose,   void,       (DSArray* const) );
-METHOD (DSArray, Length,    int,        (const DSArray* const) );
-METHOD (DSArray, IsEmpty,   bool,       (DSArray* const) );
-METHOD (DSArray, Contains,  bool,       (DSArray* const, DSObject*) );
-METHOD (DSArray, Clear,     void,       (DSArray* const) );
-METHOD (DSArray, Add,       Either*,    (DSArray* const, const DSObject*) );
-METHOD (DSArray, Remove,    void,       (DSArray* const, int) );
-METHOD (DSArray, Resize,    void,       (DSArray* const, int) );
-METHOD (DSArray, Set,       Either*,    (DSArray* const, int, const DSObject*) );
-METHOD (DSArray, Get,       DSObject*,  (DSArray* const, int) );
+def_method (DSArray, ToString,  char*,      (const DSArray* const) );
+def_method (DSArray, Dispose,   void,       (DSArray* const) );
+def_method (DSArray, Length,    int,        (const DSArray* const) );
+def_method (DSArray, IsEmpty,   bool,       (DSArray* const) );
+def_method (DSArray, Contains,  bool,       (DSArray* const, DSObject*) );
+def_method (DSArray, Clear,     void,       (DSArray* const) );
+def_method (DSArray, Add,       Either*,    (DSArray* const, const DSObject*) );
+def_method (DSArray, Remove,    void,       (DSArray* const, int) );
+def_method (DSArray, Resize,    void,       (DSArray* const, int) );
+def_method (DSArray, Set,       Either*,    (DSArray* const, int, const DSObject*) );
+def_method (DSArray, Get,       DSObject*,  (DSArray* const, int) );
 
-VTABLE (DSArray) {
+vtable (DSArray) {
     const DSArrayToString         ToString;
     const DSObjectEquals          Equals;
     const DSObjectGetHashCode     GetHashCode;
@@ -87,7 +87,7 @@ VTABLE (DSArray) {
     const DSArrayGet              Get;    
 };
 
-DEF_VPTR(DSArray);
+vtable_ptr(DSArray);
 
 /**
  * new Array
@@ -99,7 +99,7 @@ DEF_VPTR(DSArray);
  * @param ... list of initial values
  * 
  */
-static inline overload DSArray* DSArrayFrom(int count, ...) {
+method DSArray* DSArrayFrom(int count, ...) {
     DSArray* this = DSArray_init(alloc(DSArray), nullptr, count);
     va_list args;
     va_start(args, count);
@@ -121,21 +121,21 @@ static inline overload DSArray* DSArrayFrom(int count, ...) {
  * @param capacity initial max size of vectorO
  * 
  */
-static inline overload DSArray* DSArray_init(DSArray* const this) {
+method DSArray* DSArray_init(DSArray* const this) {
     return DSArray_init(this, nullptr);
 }
 
-static inline overload DSArray* DSArray_init(DSArray* const this, int capacity) {
+method DSArray* DSArray_init(DSArray* const this, int capacity) {
     return DSArray_init(this, nullptr, capacity);
 }
 
-static inline overload DSArray* DSArray_init(DSArray* const this, Class typeOf) {
+method DSArray* DSArray_init(DSArray* const this, Class typeOf) {
     return DSArray_init(this, nullptr, 0);
 }
 /**
  * Default Constructor
  */
-static inline overload DSArray* DSArray_init(DSArray* const this, Class typeOf, int capacity) {
+method DSArray* DSArray_init(DSArray* const this, Class typeOf, int capacity) {
     DSObject_init(this);
     this->isa = objc_getClass("DSArray");
     this->capacity = capacity == 0 ? ARRAY_INIT_CAPACITY : capacity;
@@ -149,7 +149,7 @@ static inline overload DSArray* DSArray_init(DSArray* const this, Class typeOf, 
  * 
  * @param capacity the new size
  */
-static inline overload void Resize(DSArray* const this, int capacity)
+method void Resize(DSArray* const this, int capacity)
 {
     #ifdef DEBUG_ON
     printf("vector_resize: %d to %d\n", this->capacity, capacity);
@@ -167,7 +167,7 @@ static inline overload void Resize(DSArray* const this, int capacity)
  * 
  * @param item the data to add
  */
-static inline overload Either* Add(DSArray* const this, const DSObject* item)
+method Either* Add(DSArray* const this, const DSObject* item)
 {
     if ((this->typeOf) && !InstanceOf(this->typeOf, item)) 
         return Left(NewDSString("InvalidType"));
@@ -184,7 +184,7 @@ static inline overload Either* Add(DSArray* const this, const DSObject* item)
  * @param index to add at
  * @param item the data to add
  */
-static inline overload Either* Set(DSArray* const this, int index, const DSObject* item)
+method Either* Set(DSArray* const this, int index, const DSObject* item)
 {
     if ((this->typeOf) && !InstanceOf(this->typeOf, item)) 
         return Left(NewDSString("InvalidType"));
@@ -198,7 +198,7 @@ static inline overload Either* Set(DSArray* const this, int index, const DSObjec
  * 
  * @param index to get
  */
-static inline overload DSObject* Get(DSArray* const this, int index)
+method DSObject* Get(DSArray* const this, int index)
 {
     if (index >= 0 && index < this->length)
         return this->data[index];
@@ -210,7 +210,7 @@ static inline overload DSObject* Get(DSArray* const this, int index)
  * 
  * @param index to delete
  */
-static inline overload void Remove(DSArray* const this, int index)
+method void Remove(DSArray* const this, int index)
 {
     if (index < 0 || index >= this->length)
         return;
@@ -231,29 +231,29 @@ static inline overload void Remove(DSArray* const this, int index)
 /**
  * Free the vector
  */
-static inline overload void Dispose(DSArray* const this)
+method void Dispose(DSArray* const this)
 {
     // delete(this->data);
 }
 
-static inline overload void Clear(DSArray* const this)
+method void Clear(DSArray* const this)
 {
     for (int i=0; i < this->length; i++)
         this->data[i] = nullptr;
     this->length = 0;
 }
 
-static inline overload bool IsEmpty(DSArray* const this)
+method bool IsEmpty(DSArray* const this)
 {
     return this->length <= 0;
 }
 
-static inline overload bool Contains(DSArray* const this, DSObject* item)
+method bool Contains(DSArray* const this, DSObject* item)
 {
     return false;   
 }
 
-static inline overload int Length(const DSArray* const this)
+method int Length(const DSArray* const this)
 {
     return this->length;
 }
@@ -261,32 +261,32 @@ static inline overload int Length(const DSArray* const this)
 /**
  * ToString
  */
-static inline overload char* ToString(const DSArray* const this)
+method char* ToString(const DSArray* const this)
 {
     return "dark.collections.Array";
 }
 
-VTABLE_BIND(DSArray);
+class_bind(DSArray);
 
-VTABLE_METHOD(ToString,           (DSArrayToString)ToString, "@@:v");
-VTABLE_METHOD(Equals,             (DSObjectEquals)Equals, "B@:@@");
-VTABLE_METHOD(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
-VTABLE_METHOD(Dispose,            (DSArrayDispose)Dispose, "v@:v");
-VTABLE_METHOD(Length,             (DSArrayLength)Length, "i@:v");
-VTABLE_METHOD(IsEmpty,            (DSArrayIsEmpty)IsEmpty, "B@:v");
-VTABLE_METHOD(Contains,           (DSArrayContains)Contains, "B@:@");
-VTABLE_METHOD(Clear,              (DSArrayClear)Clear, "v@:v");
-VTABLE_METHOD(Add,                (DSArrayAdd)Add, "v@:@");
-VTABLE_METHOD(Remove,             (DSArrayRemove)Remove, "v@:i");
-VTABLE_METHOD(Resize,             (DSArrayResize)Resize, "v@:i");
-VTABLE_METHOD(Set,                (DSArraySet)Set, "v@:i@");
-VTABLE_METHOD(Get,                (DSArrayGet)Get, "@@:i");
+class_method(ToString,           (DSArrayToString)ToString, "@@:v");
+class_method(Equals,             (DSObjectEquals)Equals, "B@:@@");
+class_method(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
+class_method(Dispose,            (DSArrayDispose)Dispose, "v@:v");
+class_method(Length,             (DSArrayLength)Length, "i@:v");
+class_method(IsEmpty,            (DSArrayIsEmpty)IsEmpty, "B@:v");
+class_method(Contains,           (DSArrayContains)Contains, "B@:@");
+class_method(Clear,              (DSArrayClear)Clear, "v@:v");
+class_method(Add,                (DSArrayAdd)Add, "v@:@");
+class_method(Remove,             (DSArrayRemove)Remove, "v@:i");
+class_method(Resize,             (DSArrayResize)Resize, "v@:i");
+class_method(Set,                (DSArraySet)Set, "v@:i@");
+class_method(Get,                (DSArrayGet)Get, "@@:i");
 
-VTABLE_IVAR(typeof, sizeof(id), "@");
-VTABLE_IVAR(length, sizeof(int), "i");
-VTABLE_IVAR(data, sizeof(void*), "^");
-VTABLE_IVAR(capacity, sizeof(int), "i");
+class_member(typeof, sizeof(id), "@");
+class_member(length, sizeof(int), "i");
+class_member(data, sizeof(void*), "^");
+class_member(capacity, sizeof(int), "i");
 
-VTABLE_METHODIZE;
+class_methodize;
 
 #endif _DSARRAY_H_

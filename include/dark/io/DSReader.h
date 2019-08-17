@@ -30,25 +30,25 @@ SOFTWARE.
 #include "DSFileSystem.h"
 
 
-IVAR (DSReader) {
+type (DSReader) {
     Class isa;
     IOBuff skipBuffer;
 };
 
 
 
-CTOR (DSReader);
-METHOD (DSReader, ToString, const char*, (const DSReader* const) );
-METHOD (DSReader, ReadOne,         int,    (DSReader*) );
-METHOD (DSReader, Read,            int,    (DSReader*, IOBuff*, int, int) );
-METHOD (DSReader, Skip,            long,   (DSReader*, long) );
-METHOD (DSReader, Close,           void,   (DSReader*) );
-METHOD (DSReader, Mark,            void,   (DSReader*, int) );
-METHOD (DSReader, MarkSupported,   bool,   (DSReader*) );
-METHOD (DSReader, Reset,           void,   (DSReader*) );
-METHOD (DSReader, Ready,           bool,   (DSReader*) );
+def_ctor (DSReader);
+def_method (DSReader, ToString, const char*, (const DSReader* const) );
+def_method (DSReader, ReadOne,         int,    (DSReader*) );
+def_method (DSReader, Read,            int,    (DSReader*, IOBuff*, int, int) );
+def_method (DSReader, Skip,            long,   (DSReader*, long) );
+def_method (DSReader, Close,           void,   (DSReader*) );
+def_method (DSReader, Mark,            void,   (DSReader*, int) );
+def_method (DSReader, MarkSupported,   bool,   (DSReader*) );
+def_method (DSReader, Reset,           void,   (DSReader*) );
+def_method (DSReader, Ready,           bool,   (DSReader*) );
 
-VTABLE (DSReader) {
+vtable (DSReader) {
     const DSReaderToString      ToString;
     const DSObjectEquals        Equals;
     const DSObjectGetHashCode   GetHashCode;
@@ -63,21 +63,21 @@ VTABLE (DSReader) {
     const DSReaderReady         Ready;
 };
 
-DEF_VPTR(DSReader);
+vtable_ptr(DSReader);
 /** Maximum skip-buffer size */
 static const int maxSkipBufferSize = 8192;
 
-static inline overload DSReader* DSReader_init(DSReader* this) {
+method DSReader* DSReader_init(DSReader* this) {
     DSReader_init(this);
     this->isa = objc_getClass("DSReader");
     return this;
 }
 
-static inline overload const char* ToString(const DSReader* const this) {
+method const char* ToString(const DSReader* const this) {
     return "DSReader";
 }
 
-static inline overload int ReadOne(DSReader* this) {
+method int ReadOne(DSReader* this) {
     char cb[2];
     if (Read(this, &cb, 0, 1) == -1)
         return -1;
@@ -85,11 +85,11 @@ static inline overload int ReadOne(DSReader* this) {
         return (int)cb[0];
 }
 
-static inline overload int Read(DSReader* this, IOBuff* buf, int offset, int len) {
-    return getVptr(DSReader)->Read(this, buf, offset, len);
+method int Read(DSReader* this, IOBuff* buf, int offset, int len) {
+    return get_vptr(DSReader)->Read(this, buf, offset, len);
 }
 
-static inline overload long Skip(DSReader* this, long n)  {
+method long Skip(DSReader* this, long n)  {
 
     if (n < 0L)
         throw DSIllegalArgumentException("skip value is negative", Source);
@@ -106,40 +106,40 @@ static inline overload long Skip(DSReader* this, long n)  {
     return n - r;
 }
 
-static inline overload bool Ready(DSReader* this) {
+method bool Ready(DSReader* this) {
     return false;
 }
 
-static inline overload bool MarkSupported(DSReader* this) {
+method bool MarkSupported(DSReader* this) {
     return false;
 }
 
-static inline overload void Mark(DSReader* this, int readLimit) {
+method void Mark(DSReader* this, int readLimit) {
     throw DSNotSupportedException("Mark not supported", Source);
 }
 
-static inline overload void Reset(DSReader* this) {
+method void Reset(DSReader* this) {
     throw DSNotSupportedException("Reset not supported", Source);
 }
 
-static inline overload void Close(DSReader* this) {
-    getVptr(DSReader)->Close(this);
+method void Close(DSReader* this) {
+    get_vptr(DSReader)->Close(this);
 }
 
 
 
-VTABLE_BIND( DSReader );
-VTABLE_OVERRIDE( ToString,        (DSReaderToString)ToString, "$@:v" );
-VTABLE_METHOD( Equals,            (DSObjectEquals)Equals, "B@:@@" );
-VTABLE_METHOD( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
-VTABLE_METHOD( Dispose,           (DSObjectDispose)Dispose, "v@:v" );
-VTABLE_METHOD( ReadOne,           (DSReaderReadOne)ReadOne, "i@:v" );
-VTABLE_METHOD( Read,              (DSReaderRead)Read, "i@:^ii" );
-VTABLE_METHOD( Skip,              (DSReaderSkip)Skip, "l@:l" );
-VTABLE_METHOD( Close,             (DSReaderClose)Close, "v@:v" );
-VTABLE_METHOD( Mark,              (DSReaderMark)Mark, "v@:i" );
-VTABLE_METHOD( MarkSupported,     (DSReaderMarkSupported)MarkSupported, "v@:v" );
-VTABLE_METHOD( Reset,             (DSReaderReset)Reset, "v@:v" );
-VTABLE_METHOD( Ready,             (DSReaderReady)Ready, "B@:" );
-VTABLE_METHODIZE;
+class_bind( DSReader );
+class_override( ToString,        (DSReaderToString)ToString, "$@:v" );
+class_method( Equals,            (DSObjectEquals)Equals, "B@:@@" );
+class_method( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
+class_method( Dispose,           (DSObjectDispose)Dispose, "v@:v" );
+class_method( ReadOne,           (DSReaderReadOne)ReadOne, "i@:v" );
+class_method( Read,              (DSReaderRead)Read, "i@:^ii" );
+class_method( Skip,              (DSReaderSkip)Skip, "l@:l" );
+class_method( Close,             (DSReaderClose)Close, "v@:v" );
+class_method( Mark,              (DSReaderMark)Mark, "v@:i" );
+class_method( MarkSupported,     (DSReaderMarkSupported)MarkSupported, "v@:v" );
+class_method( Reset,             (DSReaderReset)Reset, "v@:v" );
+class_method( Ready,             (DSReaderReady)Ready, "B@:" );
+class_methodize;
 #endif _DSREADER_H_

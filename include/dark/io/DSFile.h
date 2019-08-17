@@ -35,7 +35,7 @@ typedef struct DSFileSystem DSFileSystem;
 typedef enum { PS_UNCHECKED, PS_INVALID, PS_CHECKED } PathStatus;
 
 
-IVAR (DSFile) {
+type (DSFile) {
     Class isa;
     DSString*           path;   
     PathStatus          status;
@@ -44,34 +44,34 @@ IVAR (DSFile) {
 };
 
 
-static inline overload DSFile* NewDSFile(const char*);
-static inline overload DSFile* NewDSFile(const char*, const char*);
-static inline overload DSFile* DSFile_init(DSFile* this, const char*);
-static inline overload DSFile* DSFile_init(DSFile* this, const char*, const char*);
-static inline overload DSFile* DSFile_init(DSFile* this, DSFile*, const char*);
+method DSFile* NewDSFile(const char*);
+method DSFile* NewDSFile(const char*, const char*);
+method DSFile* DSFile_init(DSFile* this, const char*);
+method DSFile* DSFile_init(DSFile* this, const char*, const char*);
+method DSFile* DSFile_init(DSFile* this, DSFile*, const char*);
 
-METHOD (DSFile, ToString,           char*,      (const DSFile* const) );
-METHOD (DSFile, CompareTo,          int,        (DSFile* const, DSFile* other) );
-METHOD (DSFile, IsInvalid,          bool,       (DSFile* const) );
-METHOD (DSFile, GetPrefixLength,    int,        (DSFile* const) );
-METHOD (DSFile, GetName,            DSString*,  (DSFile* const) );
-METHOD (DSFile, GetParent,          DSString*,  (DSFile* const) );
-METHOD (DSFile, GetParentFile,      DSFile*,    (DSFile* const) );
-METHOD (DSFile, GetPath,            DSString*,  (DSFile* const) );
-METHOD (DSFile, IsAbsolute,         bool,       (DSFile* const) );
-METHOD (DSFile, GetAbsolutePath,    DSString*,  (DSFile* const) );
-METHOD (DSFile, GetAbsoluteFile,    DSFile*,    (DSFile* const) );
-METHOD (DSFile, GetCanonicalPath,   DSString*,  (DSFile* const) );
-METHOD (DSFile, GetCanonicalFile,   DSFile*,    (DSFile* const) );
-METHOD (DSFile, CanRead,            bool,       (DSFile* const) );
-METHOD (DSFile, CanWrite,           bool,       (DSFile* const) );
-METHOD (DSFile, Exists,             bool,       (DSFile* const) );
-METHOD (DSFile, IsDireCTORy,        bool,       (DSFile* const) );
-METHOD (DSFile, IsFile,             bool,       (DSFile* const) );
-METHOD (DSFile, GetLength,          long,       (DSFile* const) );
-METHOD (DSFile, List,               DSString**, (DSFile* const) );
+def_method (DSFile, ToString,           char*,      (const DSFile* const) );
+def_method (DSFile, CompareTo,          int,        (DSFile* const, DSFile* other) );
+def_method (DSFile, IsInvalid,          bool,       (DSFile* const) );
+def_method (DSFile, GetPrefixLength,    int,        (DSFile* const) );
+def_method (DSFile, GetName,            DSString*,  (DSFile* const) );
+def_method (DSFile, GetParent,          DSString*,  (DSFile* const) );
+def_method (DSFile, GetParentFile,      DSFile*,    (DSFile* const) );
+def_method (DSFile, GetPath,            DSString*,  (DSFile* const) );
+def_method (DSFile, IsAbsolute,         bool,       (DSFile* const) );
+def_method (DSFile, GetAbsolutePath,    DSString*,  (DSFile* const) );
+def_method (DSFile, GetAbsoluteFile,    DSFile*,    (DSFile* const) );
+def_method (DSFile, GetCanonicalPath,   DSString*,  (DSFile* const) );
+def_method (DSFile, GetCanonicalFile,   DSFile*,    (DSFile* const) );
+def_method (DSFile, CanRead,            bool,       (DSFile* const) );
+def_method (DSFile, CanWrite,           bool,       (DSFile* const) );
+def_method (DSFile, Exists,             bool,       (DSFile* const) );
+def_method (DSFile, IsDireCTORy,        bool,       (DSFile* const) );
+def_method (DSFile, IsFile,             bool,       (DSFile* const) );
+def_method (DSFile, GetLength,          long,       (DSFile* const) );
+def_method (DSFile, List,               DSString**, (DSFile* const) );
 
-VTABLE (DSFile) {
+vtable (DSFile) {
     const DSFileToString              ToString;
     const DSObjectEquals              Equals;
     const DSObjectGetHashCode         GetHashCode;
@@ -106,9 +106,9 @@ class (DSFile) {
     char PathSeparator[2];
 };
 
-DEF_VPTR(DSFile);
+vtable_ptr(DSFile);
 
-static inline overload bool IsInvalid(DSFile* this) {
+method bool IsInvalid(DSFile* this) {
     if (this->status == PS_UNCHECKED) {
         this->status = (this->path == nullptr || !strcmp(this->path, ""))
             ? PS_INVALID 
@@ -118,13 +118,13 @@ static inline overload bool IsInvalid(DSFile* this) {
 
 }
 
-static inline overload DSString* GetName(DSFile* this) {
+method DSString* GetName(DSFile* this) {
     int index = LastIndexOf(this->path, $($DSFile.Separator), 0);
     if (index < this->prefixLength) return Substring(this->path, this->prefixLength);
     return Substring(this->path, index+1);    
 }
 
-static inline overload DSString* GetParent(DSFile* this) {
+method DSString* GetParent(DSFile* this) {
     int index = LastIndexOf(this->path, $($DSFile.Separator), 0);
     if (index < this->prefixLength) {
         if ((this->prefixLength > 0) && (this->path->length > this->prefixLength))
@@ -134,7 +134,7 @@ static inline overload DSString* GetParent(DSFile* this) {
     return Substring(this->path, 0, index);
 }
 
-static inline DSFile* DSFileWithLength(DSString* pathname, int prefixLength) {
+proc DSFile* DSFileWithLength(DSString* pathname, int prefixLength) {
     DSFile* this = alloc(DSFile);
     this->isa = objc_getClass("DSFile");
     this->path = CopyOf(pathname);
@@ -142,68 +142,68 @@ static inline DSFile* DSFileWithLength(DSString* pathname, int prefixLength) {
     return this;
 }
 
-static inline overload DSFile* GetParentFile(DSFile* this) {
+method DSFile* GetParentFile(DSFile* this) {
     auto p = GetParent(this);
     if (p == nullptr) return nullptr;
     return DSFileWithLength(p, this->prefixLength);
 }
 
-static inline overload bool IsAbsolute(DSFile* this) {
+method bool IsAbsolute(DSFile* this) {
     return fs.IsAbsolute(this);
 }
 
-static inline overload DSString* GetAbsolutePath(DSFile* this) {
+method DSString* GetAbsolutePath(DSFile* this) {
     return fs.ResolveFile(this);
 }
 
-static inline overload DSFile* GetAbsoluteFile(DSFile* this) {
+method DSFile* GetAbsoluteFile(DSFile* this) {
     auto absPath = fs.ResolveFile(this);
     return DSFileWithLength(absPath, fs.PrefixLength(absPath));
 }
 
-static inline overload DSString* GetCanonicalPath(DSFile* this) {
+method DSString* GetCanonicalPath(DSFile* this) {
     // if (IsInvalid()) {
     //     throw new IOException.Exception("Invalid file path");
     // }
     return fs.Canonicalize(fs.ResolveFile(this));
 }
 
-static inline overload DSFile* GetCanonicalFile(DSFile* this) {
+method DSFile* GetCanonicalFile(DSFile* this) {
     auto canonPath = GetCanonicalPath(this);
     return DSFileWithLength(canonPath, fs.PrefixLength(canonPath));
 }
 
-static inline overload bool CanWrite(DSFile* this) {
+method bool CanWrite(DSFile* this) {
     if (IsInvalid(this)) return false;
     return fs.CheckAccess(this, ACCESS_WRITE);
 }
  
-static inline overload bool CanRead(DSFile* this) {
+method bool CanRead(DSFile* this) {
     if (IsInvalid(this)) return false;
     return fs.CheckAccess(this, ACCESS_READ);
 }
 
-static inline overload bool Exists(DSFile* this) {
+method bool Exists(DSFile* this) {
     if (IsInvalid(this)) return false;
     return ((fs.GetBooleanAttributes(this) & BA_EXISTS) != 0);
 }
 
-static inline overload bool IsDireCTORy(DSFile* this) {
+method bool IsDireCTORy(DSFile* this) {
     if (IsInvalid(this)) return false;
     return ((fs.GetBooleanAttributes(this) & BA_DIRECTORY) != 0);
 }
 
-static inline overload bool IsFile(DSFile* this) {
+method bool IsFile(DSFile* this) {
     if (IsInvalid(this)) return false;
     return ((fs.GetBooleanAttributes(this) & BA_REGULAR) != 0);
 }
 
-static inline overload long GetLength(DSFile* this) {
+method long GetLength(DSFile* this) {
     if (IsInvalid(this)) return 0L;
 	return fs.GetLength(this);
 }
 
-static inline overload DSString** List(DSFile* this) {
+method DSString** List(DSFile* this) {
     if (IsInvalid(this)) return nullptr;
 	return fs.List(this);
 }
@@ -214,7 +214,7 @@ static inline overload DSString** List(DSFile* this) {
 //     return (c == slash) || (c == altSlash);
 // }
 
-static inline bool isLetter(char c) {
+proc bool isLetter(char c) {
     return ((c >= 'a') && (c <= 'z')) || ((c >= 'A') && (c <= 'Z'));
 }
 
@@ -226,27 +226,27 @@ static inline bool isLetter(char c) {
 //     else return p;
 // }
 
-static inline overload int GetPrefixLength(DSFile* const this) {
+method int GetPrefixLength(DSFile* const this) {
     return this->prefixLength;
 }
 
-static inline overload DSString* GetPath(DSFile* const this) {
+method DSString* GetPath(DSFile* const this) {
     return this->path;
 }
 
-static inline overload char* ToString(const DSFile* const this) {
+method char* ToString(const DSFile* const this) {
     // return this->name;
     return "";
 }
 
-static inline overload int CompareTo(DSFile* const this, DSFile* other) {
+method int CompareTo(DSFile* const this, DSFile* other) {
     return fs.Compare(this, other);
 }
 
 /**
  * Initialize a new File
  */
-static inline overload DSFile* DSFile_init(DSFile* const this, const char* path) {
+method DSFile* DSFile_init(DSFile* const this, const char* path) {
     DSComparable_init(this);
     this->isa = objc_getClass("DSFile");
     this->path = fs.Normalize($(path));
@@ -254,7 +254,7 @@ static inline overload DSFile* DSFile_init(DSFile* const this, const char* path)
     return this;
 }
 
-static inline overload DSFile* DSFile_init(DSFile* const this, const char* parent, const char* child) {
+method DSFile* DSFile_init(DSFile* const this, const char* parent, const char* child) {
     DSComparable_init(this);
     this->isa = objc_getClass("DSFile");
     if (!strcmp("", parent)) {
@@ -268,7 +268,7 @@ static inline overload DSFile* DSFile_init(DSFile* const this, const char* paren
     return this;
 }
 
-static inline overload DSFile* DSFile_init(DSFile* const this, DSFile* parent, const char* child) {
+method DSFile* DSFile_init(DSFile* const this, DSFile* parent, const char* child) {
     DSComparable_init(this);
     this->isa = objc_getClass("DSFile");
     if (parent->path != nullptr) {
@@ -291,35 +291,35 @@ static inline overload DSFile* DSFile_init(DSFile* const this, DSFile* parent, c
  * 
  * 
  */
-static inline overload DSFile* NewDSFile(const char* path) {
+method DSFile* NewDSFile(const char* path) {
     return DSFile_init(alloc(DSFile), path);
 }
 
-static inline overload DSFile* NewDSFile(const char* parent, const char* child) {
+method DSFile* NewDSFile(const char* parent, const char* child) {
     return DSFile_init(alloc(DSFile), parent, child);
 }
 
-VTABLE_BIND( DSFile );
-VTABLE_OVERRIDE( ToString,        (DSFileToString)ToString, "$@:v" );
-VTABLE_METHOD( Equals,            (DSObjectEquals)Equals, "B@:@@" );
-VTABLE_METHOD( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
-VTABLE_METHOD( Dispose,           (DSObjectDispose)Dispose, "v@:v" );
-VTABLE_OVERRIDE( CompareTo,       (DSFileCompareTo)CompareTo, "i@:@" );
-VTABLE_METHOD( IsInvalid,         (DSFileIsInvalid)IsInvalid, "B@:v");
-VTABLE_METHOD( GetName,           (DSFileGetName)GetName, "$@:v" );
-VTABLE_METHOD( GetParent,         (DSFileGetParent)GetParent, "$@:v" );
-VTABLE_METHOD( GetParentFile,     (DSFileGetParentFile)GetParentFile, "$@:v" );
-VTABLE_METHOD( IsAbsolute,        (DSFileIsAbsolute)IsAbsolute, "B@:v" );
-VTABLE_METHOD( GetAbsolutePath,   (DSFileGetAbsolutePath)GetAbsolutePath, "$@:v" );
-VTABLE_METHOD( GetAbsoluteFile,   (DSFileGetAbsoluteFile)GetAbsolutePath, "@@:v" );
-VTABLE_METHOD( GetCanonicalPath,  (DSFileGetCanonicalPath)GetCanonicalPath, "$@:v");
-VTABLE_METHOD( GetCanonicalFile,  (DSFileGetCanonicalFile)GetCanonicalFile, "@@:v");
-VTABLE_METHOD( CanRead,           (DSFileCanRead)CanRead, "B@:v");
-VTABLE_METHOD( CanWrite,          (DSFileCanWrite)CanWrite, "B@:v");
-VTABLE_METHOD( Exists,            (DSFileExists)Exists, "B@:v");
-VTABLE_METHOD( IsDireCTORy,       (DSFileIsDireCTORy)IsDireCTORy, "B@:v");
-VTABLE_METHOD( IsFile,            (DSFileIsFile)IsFile, "B@:v");
-VTABLE_METHOD( GetLength,         (DSFileGetLength)GetLength, "l@:v");
+class_bind( DSFile );
+class_override( ToString,        (DSFileToString)ToString, "$@:v" );
+class_method( Equals,            (DSObjectEquals)Equals, "B@:@@" );
+class_method( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
+class_method( Dispose,           (DSObjectDispose)Dispose, "v@:v" );
+class_override( CompareTo,       (DSFileCompareTo)CompareTo, "i@:@" );
+class_method( IsInvalid,         (DSFileIsInvalid)IsInvalid, "B@:v");
+class_method( GetName,           (DSFileGetName)GetName, "$@:v" );
+class_method( GetParent,         (DSFileGetParent)GetParent, "$@:v" );
+class_method( GetParentFile,     (DSFileGetParentFile)GetParentFile, "$@:v" );
+class_method( IsAbsolute,        (DSFileIsAbsolute)IsAbsolute, "B@:v" );
+class_method( GetAbsolutePath,   (DSFileGetAbsolutePath)GetAbsolutePath, "$@:v" );
+class_method( GetAbsoluteFile,   (DSFileGetAbsoluteFile)GetAbsolutePath, "@@:v" );
+class_method( GetCanonicalPath,  (DSFileGetCanonicalPath)GetCanonicalPath, "$@:v");
+class_method( GetCanonicalFile,  (DSFileGetCanonicalFile)GetCanonicalFile, "@@:v");
+class_method( CanRead,           (DSFileCanRead)CanRead, "B@:v");
+class_method( CanWrite,          (DSFileCanWrite)CanWrite, "B@:v");
+class_method( Exists,            (DSFileExists)Exists, "B@:v");
+class_method( IsDireCTORy,       (DSFileIsDireCTORy)IsDireCTORy, "B@:v");
+class_method( IsFile,            (DSFileIsFile)IsFile, "B@:v");
+class_method( GetLength,         (DSFileGetLength)GetLength, "l@:v");
 
 $DSFile.SeparatorChar = fs.GetSeparator();
 $DSFile.Separator[0] = $DSFile.SeparatorChar;
@@ -328,6 +328,6 @@ $DSFile.PathSeparatorChar = fs.GetPathSeparator();
 $DSFile.PathSeparator[0] = $DSFile.PathSeparatorChar;
 $DSFile.PathSeparator[1] =  '\0';
 
-VTABLE_METHODIZE;
+class_methodize;
 
 #endif _FILE_H_ 

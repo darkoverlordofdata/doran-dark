@@ -44,23 +44,23 @@ SOFTWARE.
 /**
  * Object class
  */
-IVAR (DSNumber) {
+type (DSNumber) {
     Class isa;
 };
 
-METHOD (DSNumber, ToString,        char*, (const DSNumber* const));
-METHOD (DSNumber, CompareTo,       int, (const DSNumber* const, const DSNumber* const));
-METHOD (DSNumber, IntValue,        int, (const DSNumber* const));
-METHOD (DSNumber, LongValue,       long, (const DSNumber* const));
-METHOD (DSNumber, FloatValue,      float, (const DSNumber* const));
-METHOD (DSNumber, DoubleValue,     double, (const DSNumber* const));
-METHOD (DSNumber, CharValue,       char, (const DSNumber* const));
-METHOD (DSNumber, ShortValue,      short, (const DSNumber* const));
+def_method (DSNumber, ToString,        char*, (const DSNumber* const));
+def_method (DSNumber, CompareTo,       int, (const DSNumber* const, const DSNumber* const));
+def_method (DSNumber, IntValue,        int, (const DSNumber* const));
+def_method (DSNumber, LongValue,       long, (const DSNumber* const));
+def_method (DSNumber, FloatValue,      float, (const DSNumber* const));
+def_method (DSNumber, DoubleValue,     double, (const DSNumber* const));
+def_method (DSNumber, CharValue,       char, (const DSNumber* const));
+def_method (DSNumber, ShortValue,      short, (const DSNumber* const));
 
 /**
  * Object metaclass
  */
-VTABLE (DSNumber) {
+vtable (DSNumber) {
     const DSNumberToString         ToString;
     const DSObjectEquals          Equals;
     const DSObjectGetHashCode     GetHashCode;
@@ -78,13 +78,13 @@ class (DSNumber) {
     DSNumber* (*Create) ();
 };
 
-DEF_VPTR(DSNumber);
+vtable_ptr(DSNumber);
 /**
  * Abstract class Number
  * Initialize the Number vtable
  * all methods are virtual
  */
-static inline DSNumber* DSNumber_init(DSNumber* const this)
+proc DSNumber* DSNumber_init(DSNumber* const this)
 {
     DSComparable_init(this);
     this->isa = objc_getClass("DSNumber");
@@ -99,75 +99,75 @@ static inline DSNumber* DSNumber_init(DSNumber* const this)
  *         +1 this < other
  *         -1 this > other
  */
-static inline overload int CompareTo(const DSNumber* this, const DSNumber* const other) {
-    return getVptr(DSNumber)->CompareTo(this, other);
+method int CompareTo(const DSNumber* this, const DSNumber* const other) {
+    return get_vptr(DSNumber)->CompareTo(this, other);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-static inline overload int IntValue(const DSNumber* const this) {
-    return getVptr(DSNumber)->IntValue(this);
+method int IntValue(const DSNumber* const this) {
+    return get_vptr(DSNumber)->IntValue(this);
 }
 
 /**
  * Returns the value of this value cast as a long
  */
-static inline overload long LongValue(const DSNumber* const this) {
-    return getVptr(DSNumber)->LongValue(this);
+method long LongValue(const DSNumber* const this) {
+    return get_vptr(DSNumber)->LongValue(this);
 }
 
 /**
  * Returns the value of this value cast as a float
  */
-static inline overload float FloatValue(const DSNumber* const this) {
-    return getVptr(DSNumber)->FloatValue(this);
+method float FloatValue(const DSNumber* const this) {
+    return get_vptr(DSNumber)->FloatValue(this);
 }
 
 /**
  * Returns the value of this value cast as a double
  */
-static inline overload double DoubleValue(const DSNumber* const this) {
-    return getVptr(DSNumber)->DoubleValue(this);
+method double DoubleValue(const DSNumber* const this) {
+    return get_vptr(DSNumber)->DoubleValue(this);
 }
 
 /**
  * Returns the value of this value cast as a char
  */
-static inline overload char CharValue(const DSNumber* const this) {
-    return getVptr(DSNumber)->CharValue(this);
+method char CharValue(const DSNumber* const this) {
+    return get_vptr(DSNumber)->CharValue(this);
 }
 
 /**
  * Returns the value of this value cast as a short
  */
-static inline overload short ShortValue(const DSNumber* const this) {
-    return getVptr(DSNumber)->ShortValue(this);
+method short ShortValue(const DSNumber* const this) {
+    return get_vptr(DSNumber)->ShortValue(this);
 }
 
-static inline overload char* ToString(const DSNumber* const this) {
-    return getVptr(DSNumber)->ToString(this);
+method char* ToString(const DSNumber* const this) {
+    return get_vptr(DSNumber)->ToString(this);
 }
 
 
 
 
 
-VTABLE_BIND( DSNumber ); 
+class_bind( DSNumber ); 
 
-VTABLE_VIRTUAL( ToString,          (DSNumberToString)ToString, "$@:v" );
-VTABLE_METHOD( Equals,             (DSObjectEquals)Equals, "B@:@@" );
-VTABLE_METHOD( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
-VTABLE_METHOD( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
-VTABLE_VIRTUAL( CompareTo,         (DSNumberCompareTo)CompareTo, "i@:@" );
-VTABLE_VIRTUAL( IntValue,          (DSNumberIntValue)IntValue, "i@:v" );
-VTABLE_VIRTUAL( LongValue,         (DSNumberLongValue)LongValue, "l@:v" );
-VTABLE_VIRTUAL( FloatValue,        (DSNumberFloatValue)FloatValue, "f@:v" );
-VTABLE_VIRTUAL( DoubleValue,       (DSNumberDoubleValue)DoubleValue, "d@:v" );
-VTABLE_VIRTUAL( CharValue,         (DSNumberCharValue)CharValue, "c@:v" );
-VTABLE_VIRTUAL( ShortValue,        (DSNumberShortValue)ShortValue, "s@:v" );
+vtable_virtual( ToString,          (DSNumberToString)ToString, "$@:v" );
+class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
+class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+class_method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
+vtable_virtual( CompareTo,         (DSNumberCompareTo)CompareTo, "i@:@" );
+vtable_virtual( IntValue,          (DSNumberIntValue)IntValue, "i@:v" );
+vtable_virtual( LongValue,         (DSNumberLongValue)LongValue, "l@:v" );
+vtable_virtual( FloatValue,        (DSNumberFloatValue)FloatValue, "f@:v" );
+vtable_virtual( DoubleValue,       (DSNumberDoubleValue)DoubleValue, "d@:v" );
+vtable_virtual( CharValue,         (DSNumberCharValue)CharValue, "c@:v" );
+vtable_virtual( ShortValue,        (DSNumberShortValue)ShortValue, "s@:v" );
 
-VTABLE_METHODIZE
+class_methodize
 
 
 #endif _DSNUMBER_H_
