@@ -55,7 +55,7 @@ static Option* None;
  * A container/collection that can hold either 0 or 1 object
  * 
  */
-proc Option* NewOption(DSObject* value) {
+function Option* NewOption(DSObject* value) {
     if (value == nullptr) {
         printf("Invalid - Option cannot be null\n");
         raise(SIGSEGV);
@@ -89,7 +89,7 @@ method DSObject* Bind(Option* this, Option* (*func)(Option*)) {
     return this->value != nullptr ? func(this->value) : None; 
 }
 
-proc DSObject* Return(Option* this) {
+function DSObject* Return(Option* this) {
     return this->value != nullptr ? NewOption(this->value) : None;
 }
 

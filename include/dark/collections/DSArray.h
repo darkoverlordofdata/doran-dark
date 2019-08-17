@@ -54,22 +54,22 @@ type (DSArray) {
 };
 
 
-def_ctor(DSArray);
-def_ctor(DSArray, int);
-def_ctor(DSArray, Class);
-def_ctor(DSArray, Class, int);
+ctor_proto(DSArray);
+ctor_proto(DSArray, int);
+ctor_proto(DSArray, Class);
+ctor_proto(DSArray, Class, int);
 
-def_method (DSArray, ToString,  char*,      (const DSArray* const) );
-def_method (DSArray, Dispose,   void,       (DSArray* const) );
-def_method (DSArray, Length,    int,        (const DSArray* const) );
-def_method (DSArray, IsEmpty,   bool,       (DSArray* const) );
-def_method (DSArray, Contains,  bool,       (DSArray* const, DSObject*) );
-def_method (DSArray, Clear,     void,       (DSArray* const) );
-def_method (DSArray, Add,       Either*,    (DSArray* const, const DSObject*) );
-def_method (DSArray, Remove,    void,       (DSArray* const, int) );
-def_method (DSArray, Resize,    void,       (DSArray* const, int) );
-def_method (DSArray, Set,       Either*,    (DSArray* const, int, const DSObject*) );
-def_method (DSArray, Get,       DSObject*,  (DSArray* const, int) );
+method_proto (DSArray, ToString,  char*,      (const DSArray* const) );
+method_proto (DSArray, Dispose,   void,       (DSArray* const) );
+method_proto (DSArray, Length,    int,        (const DSArray* const) );
+method_proto (DSArray, IsEmpty,   bool,       (DSArray* const) );
+method_proto (DSArray, Contains,  bool,       (DSArray* const, DSObject*) );
+method_proto (DSArray, Clear,     void,       (DSArray* const) );
+method_proto (DSArray, Add,       Either*,    (DSArray* const, const DSObject*) );
+method_proto (DSArray, Remove,    void,       (DSArray* const, int) );
+method_proto (DSArray, Resize,    void,       (DSArray* const, int) );
+method_proto (DSArray, Set,       Either*,    (DSArray* const, int, const DSObject*) );
+method_proto (DSArray, Get,       DSObject*,  (DSArray* const, int) );
 
 vtable (DSArray) {
     const DSArrayToString         ToString;
@@ -87,7 +87,29 @@ vtable (DSArray) {
     const DSArrayGet              Get;    
 };
 
-vtable_ptr(DSArray);
+class_bind(DSArray);
+
+class_method(ToString,           (DSArrayToString)ToString, "@@:v");
+class_method(Equals,             (DSObjectEquals)Equals, "B@:@@");
+class_method(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
+class_method(Dispose,            (DSArrayDispose)Dispose, "v@:v");
+class_method(Length,             (DSArrayLength)Length, "i@:v");
+class_method(IsEmpty,            (DSArrayIsEmpty)IsEmpty, "B@:v");
+class_method(Contains,           (DSArrayContains)Contains, "B@:@");
+class_method(Clear,              (DSArrayClear)Clear, "v@:v");
+class_method(Add,                (DSArrayAdd)Add, "v@:@");
+class_method(Remove,             (DSArrayRemove)Remove, "v@:i");
+class_method(Resize,             (DSArrayResize)Resize, "v@:i");
+class_method(Set,                (DSArraySet)Set, "v@:i@");
+class_method(Get,                (DSArrayGet)Get, "@@:i");
+
+class_member(typeof, sizeof(id), "@");
+class_member(length, sizeof(int), "i");
+class_member(data, sizeof(void*), "^");
+class_member(capacity, sizeof(int), "i");
+
+class_methodize;
+
 
 /**
  * new Array
@@ -266,27 +288,5 @@ method char* ToString(const DSArray* const this)
     return "dark.collections.Array";
 }
 
-class_bind(DSArray);
-
-class_method(ToString,           (DSArrayToString)ToString, "@@:v");
-class_method(Equals,             (DSObjectEquals)Equals, "B@:@@");
-class_method(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
-class_method(Dispose,            (DSArrayDispose)Dispose, "v@:v");
-class_method(Length,             (DSArrayLength)Length, "i@:v");
-class_method(IsEmpty,            (DSArrayIsEmpty)IsEmpty, "B@:v");
-class_method(Contains,           (DSArrayContains)Contains, "B@:@");
-class_method(Clear,              (DSArrayClear)Clear, "v@:v");
-class_method(Add,                (DSArrayAdd)Add, "v@:@");
-class_method(Remove,             (DSArrayRemove)Remove, "v@:i");
-class_method(Resize,             (DSArrayResize)Resize, "v@:i");
-class_method(Set,                (DSArraySet)Set, "v@:i@");
-class_method(Get,                (DSArrayGet)Get, "@@:i");
-
-class_member(typeof, sizeof(id), "@");
-class_member(length, sizeof(int), "i");
-class_member(data, sizeof(void*), "^");
-class_member(capacity, sizeof(int), "i");
-
-class_methodize;
 
 #endif _DSARRAY_H_

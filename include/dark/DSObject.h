@@ -44,14 +44,14 @@ type (DSObject) {
     Class isa;
 };
 
-def_method (DSObject, ToString,         char*,  (const DSObject* const) );
-def_method (DSObject, Equals,           bool,   (const DSObject* const, const DSObject* const) );
-def_method (DSObject, GetHashCode,      int,    (const DSObject* const) );
-def_method (DSObject, Dispose,          void,   (DSObject* const) );
-def_method (DSObject, ReferenceEquals,  bool,   (const DSObject* const, const DSObject* const) );
-def_method (DSObject, InstanceEquals,   bool,   (const DSObject* const, const DSObject* const) );
-def_method (DSObject, GetClass,         Class,  (const DSObject* const) );
-def_method (DSObject, GetClassName,     char*,  (const DSObject* const) );
+method_proto (DSObject, ToString,         char*,  (const DSObject* const) );
+method_proto (DSObject, Equals,           bool,   (const DSObject* const, const DSObject* const) );
+method_proto (DSObject, GetHashCode,      int,    (const DSObject* const) );
+method_proto (DSObject, Dispose,          void,   (DSObject* const) );
+method_proto (DSObject, ReferenceEquals,  bool,   (const DSObject* const, const DSObject* const) );
+method_proto (DSObject, InstanceEquals,   bool,   (const DSObject* const, const DSObject* const) );
+method_proto (DSObject, GetClass,         Class,  (const DSObject* const) );
+method_proto (DSObject, GetClassName,     char*,  (const DSObject* const) );
 
 vtable (DSObject) 
 {
@@ -96,14 +96,34 @@ vtable (DSClass)
     const DSClassDispose         Dispose;
 };
 
-vtable_ptr(DSObject);
+/**
+ * Put it all together
+ */
+class_bind(DSClass);
+class_method(ToString,           (DSObjectToString)ToString, "$@:v");
+class_method(Equals,             (DSObjectEquals)Equals, "B@:@@");
+class_method(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
+class_method(Dispose,            (DSObjectDispose)Dispose, "v@:v");
+class_method(ReferenceEquals,    ReferenceEquals, "@:v");
+class_method(InstanceEquals,     InstanceEquals, "$@:v");
+class_methodize;
+
+class_bind(DSObject);
+class_method(ToString,           ToString, "$@:v");
+class_method(Equals,             Equals, "B@:@@");
+class_method(GetHashCode,        GetHashCode, "l@:v");
+class_method(Dispose,            Dispose, "v@:v");
+class_method(ReferenceEquals,    ReferenceEquals, "@:v");
+class_method(InstanceEquals,     InstanceEquals, "$@:v");
+$DSObject.Empty = nullptr;
+class_methodize;
 
 //=======================================================================//
 //              I M P L E M E N T A T I O N                              //          
 //=======================================================================//
 // bool InstanceOf(Class class, DSObject* obj);
 
-proc bool InstanceOf(Class class, DSObject* obj) {
+function bool InstanceOf(Class class, DSObject* obj) {
     Class isa = obj->isa; 
     
     while (isa != class) {
@@ -116,7 +136,7 @@ proc bool InstanceOf(Class class, DSObject* obj) {
 /**
  * DSObject constructor
  */
-proc DSObject* DSObject_init(DSObject* this) {
+function DSObject* DSObject_init(DSObject* this) {
     this->isa = objc_getClass("DSObject");
     return this;
 }
@@ -146,7 +166,7 @@ method void Dispose(DSObject* const this)
 /**
  * virtual Dispose method
  */
-proc void DSObject_Dispose(DSObject* const this){}
+function void DSObject_Dispose(DSObject* const this){}
 
 /**
  * Returns the string value of this Object. The default for 
@@ -159,7 +179,7 @@ method char* ToString(const DSObject* const this)
 /**
  * virtual ToString method
  */
-proc const char *DSObject_ToString(const DSObject* const this)
+function const char *DSObject_ToString(const DSObject* const this)
 {
     return "DSObject";
 }
@@ -190,51 +210,6 @@ method char* GetClassName(const DSObject* const this)
 {
     return this->isa->name;
 }
-
-class_bind(DSClass);
-class_method(ToString,           (DSObjectToString)ToString, "$@:v");
-class_method(Equals,             (DSObjectEquals)Equals, "B@:@@");
-class_method(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
-class_method(Dispose,            (DSObjectDispose)Dispose, "v@:v");
-class_method(ReferenceEquals,    ReferenceEquals, "@:v");
-class_method(InstanceEquals,     InstanceEquals, "$@:v");
-class_methodize;
-
-
-/**
- * Build the vtable
- */
-class_bind(DSObject);
-class_method(ToString,           ToString, "$@:v");
-class_method(Equals,             Equals, "B@:@@");
-class_method(GetHashCode,        GetHashCode, "l@:v");
-class_method(Dispose,            Dispose, "v@:v");
-class_method(ReferenceEquals,    ReferenceEquals, "@:v");
-class_method(InstanceEquals,     InstanceEquals, "$@:v");
-$DSObject.Empty = nullptr;
-class_methodize;
-// proc Class objc_loadDSObject(Class super)
-// {
-//     int k = 0;
-//     IMP* vt = &DSObject_vtable;
-//     char* class_name = "DSObject";
-//     Class isa = objc_allocateClassPair(super,"DSObject", 0);
-//     isa->vtable = &vt[0];            
-//     class_addMethod(isa, "ToString", ToString, "");
-//     vt[k++] = ToString;
-//     class_addMethod(isa, "Equals", Equals, "");
-//     vt[k++] = Equals; 
-//     class_addMethod(isa, "GetHashCode", GetHashCode, "");
-//     vt[k++] = GetHashCode; 
-//     class_addMethod(isa, "Dispose", Dispose, "");
-//     vt[k++] = Dispose; 
-//     class_addMethod(isa, "ReferenceEquals", ReferenceEquals, "");
-//     vt[k++] = ReferenceEquals; 
-//     class_addMethod(isa, "InstanceEquals", InstanceEquals, "");
-//     vt[k++] = InstanceEquals; 
-//     $DSObject.Empty = nullptr;
-//     return methodizeClass(isa);
-// }
 
 
 #endif _DSOBJECT_H_ 

@@ -83,28 +83,28 @@ type (Maybe) {
 };
 #endif
 
-proc Maybe* Nothing() {
+function Maybe* Nothing() {
     const auto this = alloc(Maybe);
     this->value = nullptr;
 }
 
-proc Maybe* Just(DSObject* x) {
+function Maybe* Just(DSObject* x) {
     const auto this = alloc(Maybe);
     this->value = x;
     return this;
 }
 
-proc Maybe* ret(DSObject* this) {
+function Maybe* ret(DSObject* this) {
     return Just(this);
 }
 
-proc Maybe* bind(Maybe* this,  Maybe* (*func)(Maybe*)) {
+function Maybe* bind(Maybe* this,  Maybe* (*func)(Maybe*)) {
     if (this->value == nullptr) 
         return Nothing();
     else
         return func(this->value);
 }
 
-proc bool IsNothing(const Maybe* this) {
+function bool IsNothing(const Maybe* this) {
     return this->value == nullptr;
 }

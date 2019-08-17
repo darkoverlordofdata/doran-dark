@@ -80,7 +80,7 @@ method DSObject* GetLeft(Either* this) {
  * Private constructor
  * Only Left & Right are allowed.
  */
-proc Either* NewEither(DSObject* a, DSObject* b) {
+function Either* NewEither(DSObject* a, DSObject* b) {
     const auto this = alloc(Either);
 	this->left = a;
 	this->right = b;

@@ -47,14 +47,14 @@ type (DSShort) {
     short value;
 };
 
-def_method (DSShort, ToString,        char*, (const DSShort* const));
-def_method (DSShort, CompareTo,       int, (const DSShort* const, const DSShort* const));
-def_method (DSShort, IntValue,        int, (const DSShort* const));
-def_method (DSShort, LongValue,       long, (const DSShort* const));
-def_method (DSShort, FloatValue,      float, (const DSShort* const));
-def_method (DSShort, DoubleValue,     double, (const DSShort* const));
-def_method (DSShort, CharValue,       char, (const DSShort* const));
-def_method (DSShort, ShortValue,      short, (const DSShort* const));
+method_proto (DSShort, ToString,        char*, (const DSShort* const));
+method_proto (DSShort, CompareTo,       int, (const DSShort* const, const DSShort* const));
+method_proto (DSShort, IntValue,        int, (const DSShort* const));
+method_proto (DSShort, LongValue,       long, (const DSShort* const));
+method_proto (DSShort, FloatValue,      float, (const DSShort* const));
+method_proto (DSShort, DoubleValue,     double, (const DSShort* const));
+method_proto (DSShort, CharValue,       char, (const DSShort* const));
+method_proto (DSShort, ShortValue,      short, (const DSShort* const));
 
 
 /**
@@ -74,7 +74,22 @@ vtable (DSShort)
     const DSShortCharValue        CharValue;
     const DSShortShortValue       ShortValue;
 };
-vtable_ptr(DSShort);
+
+class_bind( DSShort );
+class_override( ToString,         (DSShortToString)ToString, "$@:v" );
+class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
+class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+class_method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
+class_override( CompareTo,        (DSShortCompareTo)CompareTo, "i@:@" );
+class_override( IntValue,         (DSShortIntValue)IntValue, "i@:v" );
+class_override( LongValue,        (DSShortLongValue)LongValue, "l@:v" );
+class_override( FloatValue,       (DSShortFloatValue)FloatValue, "f@:v" );
+class_override( DoubleValue,      (DSShortDoubleValue)DoubleValue, "d@:v" );
+class_override( CharValue,        (DSShortCharValue)CharValue, "c@:v" );
+class_override( ShortValue,       (DSShortShortValue)ShortValue, "s@:v" );
+class_member( value, sizeof( short ), "s" );
+class_methodize
+
 /**
  * Constructor
  * create a new Short
@@ -82,7 +97,7 @@ vtable_ptr(DSShort);
  * @param value of short
  * 
  */
-proc DSShort* DSShort_init(DSShort* const this, const short value)
+function DSShort* DSShort_init(DSShort* const this, const short value)
 {
     DSNumber_init(this);
     this->isa = objc_getClass("DSShort");
@@ -90,14 +105,14 @@ proc DSShort* DSShort_init(DSShort* const this, const short value)
     return this;
 }
 
-proc DSShort* NewDSShort(const short value) { 
+function DSShort* NewDSShort(const short value) { 
     return DSShort_init(alloc(DSShort), value); 
 }
 
 /**
  * Returns a primitive short value parsed from input string. 
  */
-proc short DSParseShort(char const *const s, int const radix)
+function short DSParseShort(char const *const s, int const radix)
 {
     long i = DSParseLong(s, radix);
     if (i < SHORT_MIN_VALUE || i > SHORT_MAX_VALUE)
@@ -176,25 +191,6 @@ method char* ToString(const DSShort* const this)
     sprintf(str, "%d", this->value);
     return str;
 }
-
-
-class_bind( DSShort );
-
-class_override( ToString,         (DSShortToString)ToString, "$@:v" );
-class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
-class_override( CompareTo,        (DSShortCompareTo)CompareTo, "i@:@" );
-class_override( IntValue,         (DSShortIntValue)IntValue, "i@:v" );
-class_override( LongValue,        (DSShortLongValue)LongValue, "l@:v" );
-class_override( FloatValue,       (DSShortFloatValue)FloatValue, "f@:v" );
-class_override( DoubleValue,      (DSShortDoubleValue)DoubleValue, "d@:v" );
-class_override( CharValue,        (DSShortCharValue)CharValue, "c@:v" );
-class_override( ShortValue,       (DSShortShortValue)ShortValue, "s@:v" );
-
-class_member( value, sizeof( short ), "s" );
-
-class_methodize
 
 
 #endif _DSSHORT_H_

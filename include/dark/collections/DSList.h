@@ -50,14 +50,14 @@ type (DSList) {
     DSListNode* head;
 };
 
-def_ctor (DSList);
-def_ctor (DSList, Class);
-def_method (DSList, ToString,   char*,      (const DSList* const) );
-def_method (DSList, Length,     int,        (DSList* const) );
-def_method (DSList, Add,        Either*,    (DSList* const, DSObject*) );
-def_method (DSList, Remove,     DSObject*,  (DSList* const) );
-def_method (DSList, Insert,     Either*,    (DSList* const, DSObject*, DSList_Compare) );
-def_method (DSList, Iterate,    void,       (DSList* const, DSList_Iterator) );
+ctor_proto (DSList);
+ctor_proto (DSList, Class);
+method_proto (DSList, ToString,   char*,      (const DSList* const) );
+method_proto (DSList, Length,     int,        (DSList* const) );
+method_proto (DSList, Add,        Either*,    (DSList* const, DSObject*) );
+method_proto (DSList, Remove,     DSObject*,  (DSList* const) );
+method_proto (DSList, Insert,     Either*,    (DSList* const, DSObject*, DSList_Compare) );
+method_proto (DSList, Iterate,    void,       (DSList* const, DSList_Iterator) );
 
 vtable (DSList) {
     const DSListToString          ToString;
@@ -71,7 +71,23 @@ vtable (DSList) {
     const DSListIterate           Iterate;
 };
 
-vtable_ptr(DSList);
+class_bind(DSList)
+class_method(ToString,           (DSListToString)ToString, "@@:v");
+class_method(Equals,             (DSObjectEquals)Equals, "B@:@@");
+class_method(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
+class_method(Dispose,            (DSObjectDispose)Dispose, "v@:v");
+class_method(Length,             (DSListLength)Length, "i@:v");
+class_method(Add,                (DSListAdd)Add, "@@:*");
+class_method(Remove,             (DSListRemove)Remove, "i@:*");
+class_method(Insert,             (DSListInsert)Insert, "i@:*@");
+class_method(Iterate,            (DSListIterate)Iterate, "i@:@@");
+
+class_member(typeof, sizeof(id), "@");
+class_member(length, sizeof(int), "i");
+class_member(head, sizeof(void*), "^");
+
+class_methodize;
+
 method DSList* DSList_init(DSList* const this)
 {
     return DSList_init(this, nullptr);
@@ -94,14 +110,14 @@ method DSList* DSList_init(DSList* const this, Class typeOf)
  * @param next node in list
  * 
  */
-proc DSListNode* DSListNode_init(DSListNode* const this, DSObject* data, DSListNode* next)
+function DSListNode* DSListNode_init(DSListNode* const this, DSObject* data, DSListNode* next)
 {
     this->data = data;
     this->next = next;
     return this;
 }
 
-proc DSListNode* NewDSListNode(DSObject* data, DSListNode* next)
+function DSListNode* NewDSListNode(DSObject* data, DSListNode* next)
 {
     return DSListNode_init(alloc(DSList), data, next);
 }
@@ -220,25 +236,5 @@ method char* ToString(const DSList* const this)
 {
     return "dark.collections.List";
 }
-
-
-
-class_bind(DSList)
-
-class_method(ToString,           (DSListToString)ToString, "@@:v");
-class_method(Equals,             (DSObjectEquals)Equals, "B@:@@");
-class_method(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
-class_method(Dispose,            (DSObjectDispose)Dispose, "v@:v");
-class_method(Length,             (DSListLength)Length, "i@:v");
-class_method(Add,                (DSListAdd)Add, "@@:*");
-class_method(Remove,             (DSListRemove)Remove, "i@:*");
-class_method(Insert,             (DSListInsert)Insert, "i@:*@");
-class_method(Iterate,            (DSListIterate)Iterate, "i@:@@");
-
-class_member(typeof, sizeof(id), "@");
-class_member(length, sizeof(int), "i");
-class_member(head, sizeof(void*), "^");
-
-class_methodize;
 
 #endif _DSLIST_H_ 

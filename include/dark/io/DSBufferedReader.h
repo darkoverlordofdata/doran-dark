@@ -47,19 +47,19 @@ type (DSBufferedReader) {
     bool markedSkipLF;
 };
 
-def_ctor (DSBufferedReader, DSReader*);
-def_ctor (DSBufferedReader, DSReader*, int);
+ctor_proto (DSBufferedReader, DSReader*);
+ctor_proto (DSBufferedReader, DSReader*, int);
 
-def_method (DSBufferedReader, ToString, const char*, (const DSBufferedReader* const) );
-def_method (DSBufferedReader, ReadOne,         int,    (DSBufferedReader*) );
-def_method (DSBufferedReader, Read,            int,    (DSBufferedReader*, IOBuff*, int, int) );
-def_method (DSBufferedReader, Skip,            long,   (DSBufferedReader*, long) );
-def_method (DSBufferedReader, Close,           void,   (DSBufferedReader*) );
-def_method (DSBufferedReader, Mark,            void,   (DSBufferedReader*, int) );
-def_method (DSBufferedReader, MarkSupported,   bool,   (DSBufferedReader*) );
-def_method (DSBufferedReader, Reset,           void,   (DSBufferedReader*) );
-def_method (DSBufferedReader, Ready,           bool,   (DSBufferedReader*) );
-def_method (DSBufferedReader, ReadLine,        DSString*, (DSBufferedReader*, bool) );
+method_proto (DSBufferedReader, ToString, const char*, (const DSBufferedReader* const) );
+method_proto (DSBufferedReader, ReadOne,         int,    (DSBufferedReader*) );
+method_proto (DSBufferedReader, Read,            int,    (DSBufferedReader*, IOBuff*, int, int) );
+method_proto (DSBufferedReader, Skip,            long,   (DSBufferedReader*, long) );
+method_proto (DSBufferedReader, Close,           void,   (DSBufferedReader*) );
+method_proto (DSBufferedReader, Mark,            void,   (DSBufferedReader*, int) );
+method_proto (DSBufferedReader, MarkSupported,   bool,   (DSBufferedReader*) );
+method_proto (DSBufferedReader, Reset,           void,   (DSBufferedReader*) );
+method_proto (DSBufferedReader, Ready,           bool,   (DSBufferedReader*) );
+method_proto (DSBufferedReader, ReadLine,        DSString*, (DSBufferedReader*, bool) );
 
 vtable (DSBufferedReader) {
     const DSBufferedReaderToString      ToString;
@@ -77,7 +77,21 @@ vtable (DSBufferedReader) {
     const DSBufferedReaderReadLine      ReadLine;
 };
 
-vtable_ptr(DSBufferedReader);
+class_bind( DSBufferedReader );
+class_override( ToString,        (DSBufferedReaderToString)ToString, "$@:v" );
+class_method( Equals,            (DSObjectEquals)Equals, "B@:@@" );
+class_method( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
+class_method( Dispose,           (DSObjectDispose)Dispose, "v@:v" );
+class_method( ReadOne,           (DSBufferedReaderReadOne)ReadOne, "i@:v" );
+class_method( Read,              (DSBufferedReaderRead)Read, "i@:^ii" );
+class_method( Skip,              (DSBufferedReaderSkip)Skip, "l@:l" );
+class_method( Close,             (DSBufferedReaderClose)Close, "v@:v" );
+class_method( Mark,              (DSBufferedReaderMark)Mark, "v@:i" );
+class_method( MarkSupported,     (DSBufferedReaderMarkSupported)MarkSupported, "v@:v" );
+class_method( Reset,             (DSBufferedReaderReset)Reset, "v@:v" );
+class_method( Ready,             (DSBufferedReaderReady)Ready, "B@:" );
+class_method( ReadLine,          (DSBufferedReaderReadLine)ReadLine, "$@:B" );
+class_methodize;
 
 method DSBufferedReader* DSBufferedReader_init(DSBufferedReader* const this, DSReader* in) {
     DSBufferedReader_init(this, in, defaultCharBufferSize);
@@ -99,11 +113,11 @@ method DSBufferedReader* DSBufferedReader_init(DSBufferedReader* const this, DSR
     return this;
 }
 
-proc void EnsureOpen(const DSBufferedReader* const this) {
+function void EnsureOpen(const DSBufferedReader* const this) {
     if (this->in == nullptr) throw DSIllegalArgumentException("Stream closed", Source);
 }
 
-proc void Fill(DSBufferedReader* const this) {
+function void Fill(DSBufferedReader* const this) {
     int dst;
     if (this->markedChar <= UNMARKED) {
         dst = 0;
@@ -367,19 +381,4 @@ method void Close(DSBufferedReader* this) {
 }
 
 
-class_bind( DSBufferedReader );
-class_override( ToString,        (DSBufferedReaderToString)ToString, "$@:v" );
-class_method( Equals,            (DSObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,           (DSObjectDispose)Dispose, "v@:v" );
-class_method( ReadOne,           (DSBufferedReaderReadOne)ReadOne, "i@:v" );
-class_method( Read,              (DSBufferedReaderRead)Read, "i@:^ii" );
-class_method( Skip,              (DSBufferedReaderSkip)Skip, "l@:l" );
-class_method( Close,             (DSBufferedReaderClose)Close, "v@:v" );
-class_method( Mark,              (DSBufferedReaderMark)Mark, "v@:i" );
-class_method( MarkSupported,     (DSBufferedReaderMarkSupported)MarkSupported, "v@:v" );
-class_method( Reset,             (DSBufferedReaderReset)Reset, "v@:v" );
-class_method( Ready,             (DSBufferedReaderReady)Ready, "B@:" );
-class_method( ReadLine,          (DSBufferedReaderReadLine)ReadLine, "$@:B" );
-class_methodize;
 #endif _DS_BUFFERED_READER_H_

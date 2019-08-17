@@ -47,14 +47,14 @@ type (DSChar) {
     char value;
 };
 
-def_method (DSChar, ToString,        char*, (const DSChar* const));
-def_method (DSChar, CompareTo,       int, (const DSChar* const, const DSChar* const));
-def_method (DSChar, IntValue,        int, (const DSChar* const));
-def_method (DSChar, LongValue,       long, (const DSChar* const));
-def_method (DSChar, FloatValue,      float, (const DSChar* const));
-def_method (DSChar, DoubleValue,     double, (const DSChar* const));
-def_method (DSChar, CharValue,       char, (const DSChar* const));
-def_method (DSChar, ShortValue,      short, (const DSChar* const));
+method_proto (DSChar, ToString,        char*, (const DSChar* const));
+method_proto (DSChar, CompareTo,       int, (const DSChar* const, const DSChar* const));
+method_proto (DSChar, IntValue,        int, (const DSChar* const));
+method_proto (DSChar, LongValue,       long, (const DSChar* const));
+method_proto (DSChar, FloatValue,      float, (const DSChar* const));
+method_proto (DSChar, DoubleValue,     double, (const DSChar* const));
+method_proto (DSChar, CharValue,       char, (const DSChar* const));
+method_proto (DSChar, ShortValue,      short, (const DSChar* const));
 
 /**
  * Char vtable with overrides
@@ -73,7 +73,24 @@ vtable (DSChar)
     const DSCharCharValue         CharValue;
     const DSCharShortValue        ShortValue;
 };
-vtable_ptr(DSChar);
+class_bind( DSChar );
+class_override( ToString,         (DSCharToString)ToString, "$@:v" );
+class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
+class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+class_method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
+class_override( CompareTo,        (DSCharCompareTo)CompareTo, "i@:@" );
+class_override( IntValue,         (DSCharIntValue)IntValue, "i@:v" );
+class_override( LongValue,        (DSCharLongValue)LongValue, "l@:v" );
+class_override( FloatValue,       (DSCharFloatValue)FloatValue, "f@:v" );
+class_override( DoubleValue,      (DSCharDoubleValue)DoubleValue, "d@:v" );
+class_override( CharValue,        (DSCharCharValue)CharValue, "c@:v" );
+class_override( ShortValue,       (DSCharShortValue)ShortValue, "s@:v" );
+
+class_member( value, sizeof( char ), "c" );
+
+class_methodize;
+
+
 
 /**
  * Constructor
@@ -82,7 +99,7 @@ vtable_ptr(DSChar);
  * @param value of char
  * 
  */
-proc DSChar* DSChar_init(DSChar* const this, const char value)
+function DSChar* DSChar_init(DSChar* const this, const char value)
 {
     DSNumber_init(this);
     this->isa = objc_getClass("DSChar");
@@ -90,7 +107,7 @@ proc DSChar* DSChar_init(DSChar* const this, const char value)
     return this;
 }
 
-proc DSChar* NewDSChar(const char value) { 
+function DSChar* NewDSChar(const char value) { 
     return DSChar_init(alloc(DSChar), value); 
 }
 
@@ -168,25 +185,5 @@ method char* ToString(const DSChar* const this)
     sprintf(str, "%c", this->value);
     return str;
 }
-
-
-
-class_bind( DSChar );
-class_override( ToString,         (DSCharToString)ToString, "$@:v" );
-class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
-class_override( CompareTo,        (DSCharCompareTo)CompareTo, "i@:@" );
-class_override( IntValue,         (DSCharIntValue)IntValue, "i@:v" );
-class_override( LongValue,        (DSCharLongValue)LongValue, "l@:v" );
-class_override( FloatValue,       (DSCharFloatValue)FloatValue, "f@:v" );
-class_override( DoubleValue,      (DSCharDoubleValue)DoubleValue, "d@:v" );
-class_override( CharValue,        (DSCharCharValue)CharValue, "c@:v" );
-class_override( ShortValue,       (DSCharShortValue)ShortValue, "s@:v" );
-
-class_member( value, sizeof( char ), "c" );
-
-class_methodize
-
 
 #endif _DSCHAR_H_

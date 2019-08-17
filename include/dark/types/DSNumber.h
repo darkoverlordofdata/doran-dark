@@ -48,14 +48,14 @@ type (DSNumber) {
     Class isa;
 };
 
-def_method (DSNumber, ToString,        char*, (const DSNumber* const));
-def_method (DSNumber, CompareTo,       int, (const DSNumber* const, const DSNumber* const));
-def_method (DSNumber, IntValue,        int, (const DSNumber* const));
-def_method (DSNumber, LongValue,       long, (const DSNumber* const));
-def_method (DSNumber, FloatValue,      float, (const DSNumber* const));
-def_method (DSNumber, DoubleValue,     double, (const DSNumber* const));
-def_method (DSNumber, CharValue,       char, (const DSNumber* const));
-def_method (DSNumber, ShortValue,      short, (const DSNumber* const));
+method_proto (DSNumber, ToString,        char*, (const DSNumber* const));
+method_proto (DSNumber, CompareTo,       int, (const DSNumber* const, const DSNumber* const));
+method_proto (DSNumber, IntValue,        int, (const DSNumber* const));
+method_proto (DSNumber, LongValue,       long, (const DSNumber* const));
+method_proto (DSNumber, FloatValue,      float, (const DSNumber* const));
+method_proto (DSNumber, DoubleValue,     double, (const DSNumber* const));
+method_proto (DSNumber, CharValue,       char, (const DSNumber* const));
+method_proto (DSNumber, ShortValue,      short, (const DSNumber* const));
 
 /**
  * Object metaclass
@@ -78,13 +78,26 @@ class (DSNumber) {
     DSNumber* (*Create) ();
 };
 
-vtable_ptr(DSNumber);
+class_bind( DSNumber ); 
+vtable_virtual( ToString,          (DSNumberToString)ToString, "$@:v" );
+class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
+class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+class_method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
+vtable_virtual( CompareTo,         (DSNumberCompareTo)CompareTo, "i@:@" );
+vtable_virtual( IntValue,          (DSNumberIntValue)IntValue, "i@:v" );
+vtable_virtual( LongValue,         (DSNumberLongValue)LongValue, "l@:v" );
+vtable_virtual( FloatValue,        (DSNumberFloatValue)FloatValue, "f@:v" );
+vtable_virtual( DoubleValue,       (DSNumberDoubleValue)DoubleValue, "d@:v" );
+vtable_virtual( CharValue,         (DSNumberCharValue)CharValue, "c@:v" );
+vtable_virtual( ShortValue,        (DSNumberShortValue)ShortValue, "s@:v" );
+class_methodize
+
 /**
  * Abstract class Number
  * Initialize the Number vtable
  * all methods are virtual
  */
-proc DSNumber* DSNumber_init(DSNumber* const this)
+function DSNumber* DSNumber_init(DSNumber* const this)
 {
     DSComparable_init(this);
     this->isa = objc_getClass("DSNumber");
@@ -148,26 +161,6 @@ method short ShortValue(const DSNumber* const this) {
 method char* ToString(const DSNumber* const this) {
     return get_vptr(DSNumber)->ToString(this);
 }
-
-
-
-
-
-class_bind( DSNumber ); 
-
-vtable_virtual( ToString,          (DSNumberToString)ToString, "$@:v" );
-class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
-vtable_virtual( CompareTo,         (DSNumberCompareTo)CompareTo, "i@:@" );
-vtable_virtual( IntValue,          (DSNumberIntValue)IntValue, "i@:v" );
-vtable_virtual( LongValue,         (DSNumberLongValue)LongValue, "l@:v" );
-vtable_virtual( FloatValue,        (DSNumberFloatValue)FloatValue, "f@:v" );
-vtable_virtual( DoubleValue,       (DSNumberDoubleValue)DoubleValue, "d@:v" );
-vtable_virtual( CharValue,         (DSNumberCharValue)CharValue, "c@:v" );
-vtable_virtual( ShortValue,        (DSNumberShortValue)ShortValue, "s@:v" );
-
-class_methodize
 
 
 #endif _DSNUMBER_H_

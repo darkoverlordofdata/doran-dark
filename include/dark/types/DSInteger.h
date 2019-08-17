@@ -51,14 +51,14 @@ type (DSInteger)
 };
 
 
-def_method (DSInteger, ToString,        char*, (const DSInteger* const));
-def_method (DSInteger, CompareTo,       int, (const DSInteger* const, const DSInteger* const));
-def_method (DSInteger, IntValue,        int, (const DSInteger* const));
-def_method (DSInteger, LongValue,       long, (const DSInteger* const));
-def_method (DSInteger, FloatValue,      float, (const DSInteger* const));
-def_method (DSInteger, DoubleValue,     double, (const DSInteger* const));
-def_method (DSInteger, CharValue,       char, (const DSInteger* const));
-def_method (DSInteger, ShortValue,      short, (const DSInteger* const));
+method_proto (DSInteger, ToString,        char*, (const DSInteger* const));
+method_proto (DSInteger, CompareTo,       int, (const DSInteger* const, const DSInteger* const));
+method_proto (DSInteger, IntValue,        int, (const DSInteger* const));
+method_proto (DSInteger, LongValue,       long, (const DSInteger* const));
+method_proto (DSInteger, FloatValue,      float, (const DSInteger* const));
+method_proto (DSInteger, DoubleValue,     double, (const DSInteger* const));
+method_proto (DSInteger, CharValue,       char, (const DSInteger* const));
+method_proto (DSInteger, ShortValue,      short, (const DSInteger* const));
 
 /**
  * Integer vtable with overrides
@@ -77,7 +77,22 @@ vtable (DSInteger)
     const DSIntegerCharValue          CharValue;
     const DSIntegerShortValue         ShortValue;
 };
-vtable_ptr(DSInteger);
+
+class_bind( DSInteger );
+class_override( ToString,         (DSIntegerToString)ToString, "$@:v" );
+class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
+class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+class_method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
+class_override( CompareTo,        (DSIntegerCompareTo)CompareTo, "i@:@" );
+class_override( IntValue,         (DSIntegerIntValue)IntValue, "i@:v" );
+class_override( LongValue,        (DSIntegerLongValue)LongValue, "l@:v" );
+class_override( FloatValue,       (DSIntegerFloatValue)FloatValue, "f@:v" );
+class_override( DoubleValue,      (DSIntegerDoubleValue)DoubleValue, "d@:v" );
+class_override( CharValue,        (DSIntegerCharValue)CharValue, "c@:v" );
+class_override( ShortValue,       (DSIntegerShortValue)ShortValue, "s@:v" );
+class_member( value, sizeof( int ), "i" );
+class_methodize
+
 /* 
  * Constructor
  * create a new Integer
@@ -85,7 +100,7 @@ vtable_ptr(DSInteger);
  * @param value of int
  * 
  */
-proc DSInteger* DSInteger_init(DSInteger* const this, const int value)
+function DSInteger* DSInteger_init(DSInteger* const this, const int value)
 {
     DSNumber_init(this);
     this->isa = objc_getClass("DSInteger");
@@ -93,14 +108,14 @@ proc DSInteger* DSInteger_init(DSInteger* const this, const int value)
     return this;
 }
 
-proc DSInteger* NewDSInteger(const int value) { 
+function DSInteger* NewDSInteger(const int value) { 
     return DSInteger_init(alloc(DSInteger), value); 
 }
 
 /**
  * Returns a primitive integer value parsed from input string. 
  */
-proc int DSParseInt(const char* const s, const int radix) {
+function int DSParseInt(const char* const s, const int radix) {
     long i = DSParseLong(s, radix);
     if (i < INTEGER_MIN_VALUE || i > INTEGER_MAX_VALUE)
         throw DSNumberFormatException(s, radix, Source);
@@ -178,24 +193,6 @@ method char* ToString(const DSInteger* const this)
     sprintf(str, "%d", this->value);
     return str;
 }
-
-class_bind( DSInteger );
-
-class_override( ToString,         (DSIntegerToString)ToString, "$@:v" );
-class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
-class_override( CompareTo,        (DSIntegerCompareTo)CompareTo, "i@:@" );
-class_override( IntValue,         (DSIntegerIntValue)IntValue, "i@:v" );
-class_override( LongValue,        (DSIntegerLongValue)LongValue, "l@:v" );
-class_override( FloatValue,       (DSIntegerFloatValue)FloatValue, "f@:v" );
-class_override( DoubleValue,      (DSIntegerDoubleValue)DoubleValue, "d@:v" );
-class_override( CharValue,        (DSIntegerCharValue)CharValue, "c@:v" );
-class_override( ShortValue,       (DSIntegerShortValue)ShortValue, "s@:v" );
-
-class_member( value, sizeof( int ), "i" );
-
-class_methodize
 
 
 #endif _DSINTEGER_H_

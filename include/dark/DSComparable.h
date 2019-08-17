@@ -41,8 +41,8 @@ type (DSComparable) {
     Class isa;
 };
 
-def_method (DSComparable, ToString,        char*,    (const DSComparable* const));
-def_method (DSComparable, CompareTo,       int,      (const DSComparable* const, const DSComparable* const));
+method_proto (DSComparable, ToString,        char*,    (const DSComparable* const));
+method_proto (DSComparable, CompareTo,       int,      (const DSComparable* const, const DSComparable* const));
 
 
 /**
@@ -56,13 +56,21 @@ vtable (DSComparable) {
     const DSComparableCompareTo     CompareTo;
 };
 
-vtable_ptr(DSComparable);
+class_bind(DSComparable);
+class_method(ToString,           (DSComparableToString)ToString, "$@:v");
+class_method(Equals,             (DSObjectEquals)Equals, "B@:@@");
+class_method(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
+class_method(Dispose,            (DSObjectDispose)Dispose, "v@:v");
+class_method(ReferenceEquals,    ReferenceEquals, "@:v");
+class_method(InstanceEquals,     InstanceEquals, "$@:v");
+class_method(CompareTo,          (DSComparableCompareTo)CompareTo, "i@:@");
+class_methodize;
 
 //=======================================================================//
 //              I M P L E M E N T A T I O N                              //          
 //=======================================================================//
 
-proc DSComparable* DSComparable_init(DSComparable* const this)
+function DSComparable* DSComparable_init(DSComparable* const this)
 {
     DSObject_init(this);
     this->isa = objc_getClass("DSComparable");
@@ -77,14 +85,5 @@ method char* ToString(const DSComparable* const this) {
     return "dark.DSComparable";
 }
 
-class_bind(DSComparable);
-class_method(ToString,           (DSComparableToString)ToString, "$@:v");
-class_method(Equals,             (DSObjectEquals)Equals, "B@:@@");
-class_method(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
-class_method(Dispose,            (DSObjectDispose)Dispose, "v@:v");
-class_method(ReferenceEquals,    ReferenceEquals, "@:v");
-class_method(InstanceEquals,     InstanceEquals, "$@:v");
-class_method(CompareTo,          (DSComparableCompareTo)CompareTo, "i@:@");
-class_methodize;
 
 #endif _DSCOMPARABLE_H_

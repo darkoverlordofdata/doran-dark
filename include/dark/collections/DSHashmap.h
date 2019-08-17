@@ -69,18 +69,18 @@ type (DSHashmap) {
 	int tableSize;
 }; 
 
-def_ctor (DSHashmap);
-def_ctor (DSHashmap, Class);
-def_method (DSHashmap, ToString,    char*,      (const DSHashmap* const) );
-def_method (DSHashmap, Dispose,     void,       (DSHashmap* const) );
-def_method (DSHashmap, Length,      int,        (const DSHashmap* const) );
-def_method (DSHashmap, HashInt,     uint,       (DSHashmap* const, char*) );
-def_method (DSHashmap, Hash,        int,        (DSHashmap* const, char*) );
-def_method (DSHashmap, Rehash,      int,        (DSHashmap* const) );
-def_method (DSHashmap, Put,         int,        (DSHashmap* const, char*, DSObject*) );
-def_method (DSHashmap, Get,         DSObject*,  (DSHashmap* const, char*) );
-def_method (DSHashmap, ForEach,     int,        (DSHashmap* const, DSHashmap_Iterator, DSObject*) );
-def_method (DSHashmap, Remove,      int,        (DSHashmap* const, char*) );
+ctor_proto (DSHashmap);
+ctor_proto (DSHashmap, Class);
+method_proto (DSHashmap, ToString,    char*,      (const DSHashmap* const) );
+method_proto (DSHashmap, Dispose,     void,       (DSHashmap* const) );
+method_proto (DSHashmap, Length,      int,        (const DSHashmap* const) );
+method_proto (DSHashmap, HashInt,     uint,       (DSHashmap* const, char*) );
+method_proto (DSHashmap, Hash,        int,        (DSHashmap* const, char*) );
+method_proto (DSHashmap, Rehash,      int,        (DSHashmap* const) );
+method_proto (DSHashmap, Put,         int,        (DSHashmap* const, char*, DSObject*) );
+method_proto (DSHashmap, Get,         DSObject*,  (DSHashmap* const, char*) );
+method_proto (DSHashmap, ForEach,     int,        (DSHashmap* const, DSHashmap_Iterator, DSObject*) );
+method_proto (DSHashmap, Remove,      int,        (DSHashmap* const, char*) );
 
 vtable (DSHashmap) {
     const DSHashmapToString       ToString;
@@ -97,7 +97,27 @@ vtable (DSHashmap) {
     const DSHashmapRehash         Rehash;
 } ;
 
-vtable_ptr (DSHashmap);
+class_bind(DSHashmap)
+
+class_method(ToString,           (DSHashmapToString)ToString, "@@:v");
+class_method(Equals,             (DSObjectEquals)Equals, "B@:@@");
+class_method(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
+class_method(Dispose,            (DSHashmapDispose)Dispose, "v@:v");
+class_method(Length,             (DSHashmapLength)Length, "i@:v");
+class_method(Remove,             (DSHashmapRemove)Remove, "v@:i");
+class_method(ForEach,            (DSHashmapForEach)ForEach, "i@:@@");
+class_method(Put,                (DSHashmapPut)Put, "i@:*@");
+class_method(Get,                (DSHashmapGet)Get, "@@:*");
+class_method(HashInt,            (DSHashmapHashInt)HashInt, "I@:*");
+class_method(Hash,               (DSHashmapHash)Hash, "i@:*");
+class_method(Rehash,             (DSHashmapRehash)Rehash, "i@:v");
+
+class_member(typeof, sizeof(id), "@");
+class_member(length, sizeof(int), "i");
+class_member(data, sizeof(id), "^");
+class_member(tableSize, sizeof(int), "i");
+
+class_methodize;
 
 /* 
  * Generic Hashmap implementation
@@ -212,7 +232,7 @@ static unsigned long crc32_tab[] = {
    };
 
 /* Return a 32-bit CRC of the contents of the buffer. */
-proc unsigned long crc32(const unsigned char *s, unsigned int len)
+function unsigned long crc32(const unsigned char *s, unsigned int len)
 {
     unsigned long crc32val = 0;
     for (unsigned int i = 0;  i < len;  i ++)
@@ -440,7 +460,7 @@ method int Remove(DSHashmap* const this, char* key)
 	return MAP_MISSING;
 }
 
-proc void DSHashmap_dtor(void* this) {
+function void DSHashmap_dtor(void* this) {
     Dispose((DSHashmap*)this);
 }
 /* Deallocate the hashmap */
@@ -460,29 +480,5 @@ method char* ToString(const DSHashmap* const this)
 {
     return "dark.collections.Hashmap";
 }
-
-
-
-class_bind(DSHashmap)
-
-class_method(ToString,           (DSHashmapToString)ToString, "@@:v");
-class_method(Equals,             (DSObjectEquals)Equals, "B@:@@");
-class_method(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
-class_method(Dispose,            (DSHashmapDispose)Dispose, "v@:v");
-class_method(Length,             (DSHashmapLength)Length, "i@:v");
-class_method(Remove,             (DSHashmapRemove)Remove, "v@:i");
-class_method(ForEach,            (DSHashmapForEach)ForEach, "i@:@@");
-class_method(Put,                (DSHashmapPut)Put, "i@:*@");
-class_method(Get,                (DSHashmapGet)Get, "@@:*");
-class_method(HashInt,            (DSHashmapHashInt)HashInt, "I@:*");
-class_method(Hash,               (DSHashmapHash)Hash, "i@:*");
-class_method(Rehash,             (DSHashmapRehash)Rehash, "i@:v");
-
-class_member(typeof, sizeof(id), "@");
-class_member(length, sizeof(int), "i");
-class_member(data, sizeof(id), "^");
-class_member(tableSize, sizeof(int), "i");
-
-class_methodize;
 
 #endif _DSHASHMAP_H_

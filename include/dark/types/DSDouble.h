@@ -48,14 +48,14 @@ type (DSDouble)
     double value;
 };
 
-def_method (DSDouble, ToString,        char*,    (const DSDouble* const));
-def_method (DSDouble, CompareTo,       int,      (const DSDouble* const, const DSDouble* const));
-def_method (DSDouble, IntValue,        int,      (const DSDouble* const));
-def_method (DSDouble, LongValue,       long,     (const DSDouble* const));
-def_method (DSDouble, FloatValue,      float,    (const DSDouble* const));
-def_method (DSDouble, DoubleValue,     double,   (const DSDouble* const));
-def_method (DSDouble, CharValue,       char,     (const DSDouble* const));
-def_method (DSDouble, ShortValue,      short,    (const DSDouble* const));
+method_proto (DSDouble, ToString,        char*,    (const DSDouble* const));
+method_proto (DSDouble, CompareTo,       int,      (const DSDouble* const, const DSDouble* const));
+method_proto (DSDouble, IntValue,        int,      (const DSDouble* const));
+method_proto (DSDouble, LongValue,       long,     (const DSDouble* const));
+method_proto (DSDouble, FloatValue,      float,    (const DSDouble* const));
+method_proto (DSDouble, DoubleValue,     double,   (const DSDouble* const));
+method_proto (DSDouble, CharValue,       char,     (const DSDouble* const));
+method_proto (DSDouble, ShortValue,      short,    (const DSDouble* const));
 
 /**
  * Double vtable with overrides
@@ -74,7 +74,23 @@ vtable (DSDouble)
     const DSDoubleCharValue           CharValue;
     const DSDoubleShortValue          ShortValue;
 };
-vtable_ptr(DSDouble);
+
+class_bind( DSDouble );
+class_override( ToString,         (DSDoubleToString)ToString, "$@:v" );
+class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
+class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+class_method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
+class_override( CompareTo,        (DSDoubleCompareTo)CompareTo, "i@:@" );
+class_override( IntValue,         (DSDoubleIntValue)IntValue, "i@:v" );
+class_override( LongValue,        (DSDoubleLongValue)LongValue, "l@:v" );
+class_override( FloatValue,       (DSDoubleFloatValue)FloatValue, "f@:v" );
+class_override( DoubleValue,      (DSDoubleDoubleValue)DoubleValue, "d@:v" );
+class_override( CharValue,        (DSDoubleCharValue)CharValue, "c@:v" );
+class_override( ShortValue,       (DSDoubleShortValue)ShortValue, "s@:v" );
+class_member( value, sizeof( double ), "d" );
+class_methodize
+
+
 /**
  * Constructor
  * create a new DSDouble
@@ -82,21 +98,21 @@ vtable_ptr(DSDouble);
  * @param value of double
  * 
  */
-proc DSDouble* DSDouble_init(DSDouble* const this, const double value) {
+function DSDouble* DSDouble_init(DSDouble* const this, const double value) {
     DSNumber_init(this);
     this->isa = objc_getClass("DSDouble");
     this->value = value;
     return this;
 }
 
-proc DSDouble* NewDSDouble(const double value) { 
+function DSDouble* NewDSDouble(const double value) { 
     return DSDouble_init(alloc(DSDouble), value); 
 }
 
 /**
  * Returns a primitive double value parsed from input string. 
  */
-proc double DSParseDouble(char const *const s) {
+function double DSParseDouble(char const *const s) {
     errno = 0;
     char* endptr;
     double result = strtod(s, endptr);
@@ -179,25 +195,5 @@ method char* ToString(const DSDouble* const this) {
     sprintf(str, "%f", this->value);
     return str;
 }
-
-
-class_bind( DSDouble );
-
-class_override( ToString,         (DSDoubleToString)ToString, "$@:v" );
-class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
-class_override( CompareTo,        (DSDoubleCompareTo)CompareTo, "i@:@" );
-class_override( IntValue,         (DSDoubleIntValue)IntValue, "i@:v" );
-class_override( LongValue,        (DSDoubleLongValue)LongValue, "l@:v" );
-class_override( FloatValue,       (DSDoubleFloatValue)FloatValue, "f@:v" );
-class_override( DoubleValue,      (DSDoubleDoubleValue)DoubleValue, "d@:v" );
-class_override( CharValue,        (DSDoubleCharValue)CharValue, "c@:v" );
-class_override( ShortValue,       (DSDoubleShortValue)ShortValue, "s@:v" );
-
-class_member( value, sizeof( double ), "d" );
-
-class_methodize
-
 
 #endif _DSDOUBLE_H_

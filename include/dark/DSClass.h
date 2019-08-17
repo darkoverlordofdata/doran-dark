@@ -41,7 +41,7 @@ SOFTWARE.
  *  vtable  DSObjectVTable  - Instance Methods
  *  class   $DSObject       - Class Methods/Variables
  * 
- * An ivar whose 1st member is an 'isa' is a class of that isa type,
+ * A type whose 1st member is an 'isa' is a class of that isa type,
  * and it becomes the object definition for a DaRKSTEP object. 
  */
 #define type(T)                                                         \
@@ -56,25 +56,31 @@ SOFTWARE.
     struct $##T $##T;                                                   \
     struct $##T
 
-#define proc static inline
-
-#define method proc overload
+/**
+ * All functions are static inlined
+ */
+#define function static inline
 
 /**
- *  MACRO def_method
- *      declarations for method
+ * Multi-methods are overloadable functions
+ */
+#define method function overload
+
+/**
+ *  MACRO method_proto
+ *      declares the prototype for methods
  * 
  */
-#define def_method(T, name, type, signature)                                \
-    method type name signature;                                             \
+#define method_proto(T, name, type, signature)                          \
+    method type name signature;                                         \
     typedef type (*T##name)signature;
 
 /**
- *  MACRO def_ctor
- *      declarations for constructor
+ *  MACRO ctor_proto
+ *      declares the prototype for constructor
  * 
  */
-#define def_ctor(T, args...)                                                \
+#define ctor_proto(T, args...)                                          \
     method T* T##_init(T* const, ## args);
 /**
  *  MACRO alloc
@@ -107,9 +113,10 @@ SOFTWARE.
 #define of(class) (Class)objc_getClass(#class)
 
 /**
- * Note! These remaining macros are used 
- * to load runtime class definitions
- * and build the vtable 
+ * These remaining macros are used to 
+ * generate the objc_load<DSname> function
+ * used to load runtime class definitions
+ * and build vtables
  * 
  *  MACRO $implementation
  *      start a class definition- create objects
@@ -117,15 +124,13 @@ SOFTWARE.
  *      defines lazy accessors for class size and reference
  * 
  */
-#define vtable_ptr(T)                                                   \
-proc struct T##_vtable* T##_vptr(T* this) {                             \
-    return (struct T##_vtable*)this->isa->vtable;                       \
-}
-
 #define get_vptr(T) T##_vptr(this)
 
 #define class_bind(T)                                                   \
-proc Class objc_load##T(Class super)                                    \
+function struct T##_vtable* T##_vptr(T* this) {                         \
+    return (struct T##_vtable*)this->isa->vtable;                       \
+}                                                                       \
+function Class objc_load##T(Class super)                                \
 {                                                                       \
     int k = 0;                                                          \
     IMP* vt = &T##_vtable;                                              \

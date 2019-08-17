@@ -36,15 +36,15 @@ type (DSFileInputStream) {
     bool closed;
 };
 
-def_ctor (DSFileInputStream, char*);
-def_ctor (DSFileInputStream, DSFile*);
+ctor_proto (DSFileInputStream, char*);
+ctor_proto (DSFileInputStream, DSFile*);
 
-def_method (DSFileInputStream, ToString, const char*, (const DSFileInputStream* const) );
-def_method (DSFileInputStream, ReadOne,         int,    (DSFileInputStream*) );
-def_method (DSFileInputStream, Read,            int,    (DSFileInputStream*, IOBuff*, int, int) );
-def_method (DSFileInputStream, Skip,            long,   (DSFileInputStream*, long) );
-def_method (DSFileInputStream, Available,       int,    (DSFileInputStream*) );
-def_method (DSFileInputStream, Close,           void,   (DSFileInputStream*) );
+method_proto (DSFileInputStream, ToString, const char*, (const DSFileInputStream* const) );
+method_proto (DSFileInputStream, ReadOne,         int,    (DSFileInputStream*) );
+method_proto (DSFileInputStream, Read,            int,    (DSFileInputStream*, IOBuff*, int, int) );
+method_proto (DSFileInputStream, Skip,            long,   (DSFileInputStream*, long) );
+method_proto (DSFileInputStream, Available,       int,    (DSFileInputStream*) );
+method_proto (DSFileInputStream, Close,           void,   (DSFileInputStream*) );
 
 vtable (DSFileInputStream) {
     const DSFileInputStreamToString     ToString;
@@ -61,7 +61,20 @@ vtable (DSFileInputStream) {
     const DSFileInputStreamAvailable    Available;
 };
 
-vtable_ptr(DSFileInputStream);
+class_bind( DSFileInputStream );
+class_override( ToString,        (DSFileInputStreamToString)ToString, "$@:v" );
+class_method( Equals,            (DSObjectEquals)Equals, "B@:@@" );
+class_method( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
+class_method( Dispose,           (DSObjectDispose)Dispose, "v@:v" );
+class_method( ReadOne,           (DSFileInputStreamReadOne)ReadOne, "i@:v" );
+class_method( Read,              (DSFileInputStreamRead)Read, "i@:^ii" );
+class_method( Skip,              (DSFileInputStreamSkip)Skip, "l@:l" );
+class_method( Close,             (DSFileInputStreamClose)Close, "v@:v" );
+class_method( Mark,              (DSInputStreamMark)Mark, "v@:i" );
+class_method( MarkSupported,     (DSInputStreamMarkSupported)MarkSupported, "v@:v" );
+class_method( Reset,             (DSInputStreamReset)Reset, "v@:v" );
+class_method( Available,         (DSFileInputStreamAvailable)Available, "B@:" );
+class_methodize;
 
 method DSFileInputStream* DSFileInputStream_init(DSFileInputStream* const this, char* name) {
     return DSFileInputStream_init(this, (name != nullptr ? NewDSFile(name) : nullptr));
@@ -125,19 +138,4 @@ method void Close(DSFileInputStream* this) {
     this->fd = nullptr;
 }
 
-
-class_bind( DSFileInputStream );
-class_override( ToString,        (DSFileInputStreamToString)ToString, "$@:v" );
-class_method( Equals,            (DSObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,           (DSObjectDispose)Dispose, "v@:v" );
-class_method( ReadOne,           (DSFileInputStreamReadOne)ReadOne, "i@:v" );
-class_method( Read,              (DSFileInputStreamRead)Read, "i@:^ii" );
-class_method( Skip,              (DSFileInputStreamSkip)Skip, "l@:l" );
-class_method( Close,             (DSFileInputStreamClose)Close, "v@:v" );
-class_method( Mark,              (DSInputStreamMark)Mark, "v@:i" );
-class_method( MarkSupported,     (DSInputStreamMarkSupported)MarkSupported, "v@:v" );
-class_method( Reset,             (DSInputStreamReset)Reset, "v@:v" );
-class_method( Available,         (DSFileInputStreamAvailable)Available, "B@:" );
-class_methodize;
 #endif _DSFILE_INPUT_STREAM_H_

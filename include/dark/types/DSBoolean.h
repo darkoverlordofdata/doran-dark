@@ -45,8 +45,8 @@ type (DSBoolean) {
     bool value;
 };
 
-def_method (DSBoolean, ToString,     char*, (const DSBoolean* const));
-def_method (DSBoolean, CompareTo,    int, (const DSBoolean* const, const DSBoolean* const));
+method_proto (DSBoolean, ToString,     char*, (const DSBoolean* const));
+method_proto (DSBoolean, CompareTo,    int, (const DSBoolean* const, const DSBoolean* const));
 
 /**
  * DSBoolean vtable
@@ -72,7 +72,45 @@ class (DSBoolean) {
     DSBoolean* True;
     DSBoolean* False;
 };
-vtable_ptr(DSBoolean);
+function bool ParseBool(const char * const s);
+method int Compare(bool x, bool y);
+function bool BoolValue(const DSBoolean*  const this);
+
+
+/**
+ * Put it all together
+ */
+class_bind( DSBoolean );
+class_override( ToString,         (DSBooleanToString)ToString, "$@:v" );
+class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
+class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+class_method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
+class_override( CompareTo,        (DSBooleanCompareTo)CompareTo, "i@:@" );
+class_method( BoolValue,          BoolValue, "B@:v" );
+class_member( value, sizeof( int ), "B" );
+
+/** 
+ * Static constructor
+ * set class properties 
+ * 
+ */
+static DSBoolean True;
+True.isa = isa; 
+True.value = true;
+
+static DSBoolean False;
+False.isa = isa;
+False.value = false;
+
+$DSBoolean.Bytes = BOOLEAN_BYTES;
+$DSBoolean.Size = BOOLEAN_SIZE;
+$DSBoolean.Type = BOOLEAN_TYPE;
+$DSBoolean.True = &True;
+$DSBoolean.False = &False;
+$DSBoolean.ParseBool = ParseBool;
+$DSBoolean.Compare = Compare;
+    
+class_methodize;
 
 /**
  * Constructor
@@ -81,17 +119,17 @@ vtable_ptr(DSBoolean);
  * @param value of bool
  * 
  */
-proc DSBoolean* DSBoolean_init(DSBoolean* this, const bool value) {
+function DSBoolean* DSBoolean_init(DSBoolean* this, const bool value) {
     DSComparable_init(this);
     this->isa = objc_getClass("DSBoolean");
     this->value = value;
     return this;
 }
 
-proc DSBoolean* NewDSBoolean(const bool value) { 
+function DSBoolean* NewDSBoolean(const bool value) { 
     return DSBoolean_init(alloc(DSBoolean), value); }
 
-proc bool ParseBool(const char * const s) {
+function bool ParseBool(const char * const s) {
     if (!strcmpi("y", s) 
     ||  !strcmpi("yes", s) 
     ||  !strcmpi("t", s) 
@@ -125,7 +163,7 @@ method int CompareTo(const DSBoolean*  const this, const DSBoolean*  const other
 /**
  * Returns the value of this value cast as an int
  */
-proc bool BoolValue(const DSBoolean*  const this) {
+function bool BoolValue(const DSBoolean*  const this) {
     return (bool)this->value;
 }
 
@@ -135,43 +173,5 @@ proc bool BoolValue(const DSBoolean*  const this) {
 method char* ToString(const DSBoolean* const this) {
     return this->value ? "true" : "false";
 }
-
-
-
-
-
-class_bind( DSBoolean );
-
-class_override( ToString,         (DSBooleanToString)ToString, "$@:v" );
-class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
-class_override( CompareTo,        (DSBooleanCompareTo)CompareTo, "i@:@" );
-class_method( BoolValue,          BoolValue, "B@:v" );
-
-class_member( value, sizeof( int ), "B" );
-
-/** 
- * Static constructor
- * set class properties 
- * 
- */
-static DSBoolean True;
-True.isa = isa; 
-True.value = true;
-
-static DSBoolean False;
-False.isa = isa;
-False.value = false;
-
-$DSBoolean.Bytes = BOOLEAN_BYTES;
-$DSBoolean.Size = BOOLEAN_SIZE;
-$DSBoolean.Type = BOOLEAN_TYPE;
-$DSBoolean.True = &True;
-$DSBoolean.False = &False;
-$DSBoolean.ParseBool = ParseBool;
-$DSBoolean.Compare = Compare;
-    
-class_methodize;
 
 #endif // _DSBOOLEAN_H_

@@ -45,28 +45,28 @@ type (DSString) {
     int length;
 };
 
-def_method (DSString, ToString,     char*, (const DSString* const));
-def_method (DSString, Equals,       bool, (const DSString* const, const DSString* const));
-def_method (DSString, CompareTo,    int, (const DSString* const this, const DSString* const other));
-def_method (DSString, Compare,      int, (const char* x, const char* y));
-def_method (DSString, CompareToIgnoreCase,   int, (const DSString* this, const DSString* other));
-def_method (DSString, Concat,       DSString*, (const DSString* this, const DSString* str));
-def_method (DSString, Concatc,      DSString*, (const DSString* this, const char* str));
-def_method (DSString, Contains,     bool, (const DSString* this, const DSString* str));
-def_method (DSString, CopyOf,       DSString*, (const DSString* this));
-def_method (DSString, EndsWith,     bool, (const DSString* this, const DSString* suffix););
-def_method (DSString, StartsWith,   bool, (const DSString* this, const DSString* prefix, const int offset));
-def_method (DSString, GetBytes,     char*, (const DSString* this));
-def_method (DSString, IndexOf,      int, (const DSString* this, const DSString* str, const int fromIndex));
-def_method (DSString, LastIndexOf,  int, (const DSString* this, const DSString* str, const int fromIndex));
-def_method (DSString, ToUpperCase,  DSString*, (const DSString* this));
-def_method (DSString, ToLowerCase,  DSString*, (const DSString* this));
-def_method (DSString, Trim,         DSString*, (const DSString* this));
-def_method (DSString, Length,       int, (const DSString* const));
-def_method (DSString, IsEmpty,      bool, (const DSString* const this));
-def_method (DSString, CharAt,       char, (const DSString* const this, const int index));
-// def_method (DSString, Substring,    DSString*, (const DSString* const this, const int index));
-def_method (DSString, Substring,    DSString*, (const DSString* const this, const int index, const int length));
+method_proto (DSString, ToString,     char*, (const DSString* const));
+method_proto (DSString, Equals,       bool, (const DSString* const, const DSString* const));
+method_proto (DSString, CompareTo,    int, (const DSString* const this, const DSString* const other));
+method_proto (DSString, Compare,      int, (const char* x, const char* y));
+method_proto (DSString, CompareToIgnoreCase,   int, (const DSString* this, const DSString* other));
+method_proto (DSString, Concat,       DSString*, (const DSString* this, const DSString* str));
+method_proto (DSString, Concatc,      DSString*, (const DSString* this, const char* str));
+method_proto (DSString, Contains,     bool, (const DSString* this, const DSString* str));
+method_proto (DSString, CopyOf,       DSString*, (const DSString* this));
+method_proto (DSString, EndsWith,     bool, (const DSString* this, const DSString* suffix););
+method_proto (DSString, StartsWith,   bool, (const DSString* this, const DSString* prefix, const int offset));
+method_proto (DSString, GetBytes,     char*, (const DSString* this));
+method_proto (DSString, IndexOf,      int, (const DSString* this, const DSString* str, const int fromIndex));
+method_proto (DSString, LastIndexOf,  int, (const DSString* this, const DSString* str, const int fromIndex));
+method_proto (DSString, ToUpperCase,  DSString*, (const DSString* this));
+method_proto (DSString, ToLowerCase,  DSString*, (const DSString* this));
+method_proto (DSString, Trim,         DSString*, (const DSString* this));
+method_proto (DSString, Length,       int, (const DSString* const));
+method_proto (DSString, IsEmpty,      bool, (const DSString* const this));
+method_proto (DSString, CharAt,       char, (const DSString* const this, const int index));
+// method_proto (DSString, Substring,    DSString*, (const DSString* const this, const int index));
+method_proto (DSString, Substring,    DSString*, (const DSString* const this, const int index, const int length));
 
 method __attribute__((__format__ (__printf__, 1, 2)))
 DSString*   Format(const char* format, ...);
@@ -103,10 +103,41 @@ class (DSString) {
     DSString* (*Join) (int count, ...);
 };
 
-vtable_ptr(DSString);
+method DSString* StringJoin(int count, ...);
+
+class_bind( DSString );
+class_override( ToString,         (DSStringToString)ToString, "$@:v" );
+class_override( Equals,           (DSStringEquals)Equals, "B@:@@" );
+class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+class_method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
+class_override( CompareTo,        (DSStringCompareTo)CompareTo, "i@:@" );
+class_method( Length,             (DSStringLength)Length, "i@:v" );
+class_method( IsEmpty,            (DSStringIsEmpty)IsEmpty, "B@:v" );    
+class_method( CharAt,             (DSStringCharAt)CharAt, "c@:i" );
+class_method( CompareToIgnoreCase, (DSStringCompareToIgnoreCase)CompareToIgnoreCase, "@:" );    
+class_method( Concat,             (DSStringConcat)Concat, "v@:$" );
+class_method( Concatc,            (DSStringConcatc)Concatc, "v@:c" );
+class_method( Contains,           (DSStringContains)Contains, "B@:$" );
+class_method( CopyOf,             (DSStringCopyOf)CopyOf, "$@:v" );
+class_method( EndsWith,           (DSStringEndsWith)EndsWith, "B@:$" );
+class_method( StartsWith,         (DSStringStartsWith)StartsWith, "B@:$" );
+class_method( GetBytes,           (DSStringGetBytes)GetBytes, "b@:*" );
+class_method( IndexOf,            (DSStringIndexOf)IndexOf, "i@:$" );
+class_method( LastIndexOf,        (DSStringLastIndexOf)LastIndexOf, "i@:$" );
+class_method( ToLowerCase,        (DSStringToLowerCase)ToLowerCase, "$@:v" );
+class_method( ToUpperCase,        (DSStringToUpperCase)ToUpperCase, "$@:v" );
+class_method( Trim,               (DSStringTrim)Trim, "$@:v" );
+class_method( Substring,          (DSStringSubstring)Substring, "$@:ii" );
+class_member( value, sizeof( char* ), "*" );
+class_member( length, sizeof( int ), "i" );
+
+$DSString.Join = StringJoin;
+
+class_methodize
 
 
-// proc DSString* StringJoin(int count, ...);
+
+// function DSString* StringJoin(int count, ...);
 /**
  * Constructor
  * create a new long
@@ -114,7 +145,7 @@ vtable_ptr(DSString);
  * @param value of long
  * 
  */
-proc DSString* DSString_init(DSString* const this, const char* value)
+function DSString* DSString_init(DSString* const this, const char* value)
 {
     DSComparable_init(this);
     this->isa = objc_getClass("DSString");
@@ -123,11 +154,11 @@ proc DSString* DSString_init(DSString* const this, const char* value)
     return this;
 }
 
-proc DSString* NewDSString(const char* const str) {
+function DSString* NewDSString(const char* const str) {
     return DSString_init(alloc(DSString), str); 
 }
 
-proc void GetChars(const DSString* this, char* dst, int dstBegin) {
+function void GetChars(const DSString* this, char* dst, int dstBegin) {
     memcpy(dst+dstBegin, this->value, this->length);
 }
 
@@ -332,41 +363,5 @@ method DSString* StringJoin(int count, ...)
     va_end(args2);
     return NewDSString(result);
 }
-
-
-
-class_bind( DSString );
-
-class_override( ToString,         (DSStringToString)ToString, "$@:v" );
-class_override( Equals,           (DSStringEquals)Equals, "B@:@@" );
-class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
-class_override( CompareTo,        (DSStringCompareTo)CompareTo, "i@:@" );
-class_method( Length,             (DSStringLength)Length, "i@:v" );
-class_method( IsEmpty,            (DSStringIsEmpty)IsEmpty, "B@:v" );    
-class_method( CharAt,             (DSStringCharAt)CharAt, "c@:i" );
-class_method( CompareToIgnoreCase, (DSStringCompareToIgnoreCase)CompareToIgnoreCase, "@:" );    
-class_method( Concat,             (DSStringConcat)Concat, "v@:$" );
-class_method( Concatc,            (DSStringConcatc)Concatc, "v@:c" );
-class_method( Contains,           (DSStringContains)Contains, "B@:$" );
-class_method( CopyOf,             (DSStringCopyOf)CopyOf, "$@:v" );
-class_method( EndsWith,           (DSStringEndsWith)EndsWith, "B@:$" );
-class_method( StartsWith,         (DSStringStartsWith)StartsWith, "B@:$" );
-class_method( GetBytes,           (DSStringGetBytes)GetBytes, "b@:*" );
-class_method( IndexOf,            (DSStringIndexOf)IndexOf, "i@:$" );
-class_method( LastIndexOf,        (DSStringLastIndexOf)LastIndexOf, "i@:$" );
-class_method( ToLowerCase,        (DSStringToLowerCase)ToLowerCase, "$@:v" );
-class_method( ToUpperCase,        (DSStringToUpperCase)ToUpperCase, "$@:v" );
-class_method( Trim,               (DSStringTrim)Trim, "$@:v" );
-class_method( Substring,          (DSStringSubstring)Substring, "$@:ii" );
-
-class_member( value, sizeof( char* ), "*" );
-class_member( length, sizeof( int ), "i" );
-
-$DSString.Join = StringJoin;
-
-class_methodize
-
-
 
 #endif _DSSTRING_H_

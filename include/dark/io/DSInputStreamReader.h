@@ -36,16 +36,16 @@ type (DSInputStreamReader) {
     DSInputStream* in;
 };
 
-def_ctor (DSInputStreamReader, DSInputStream*);
-def_method (DSInputStreamReader, ToString, const char*, (const DSInputStreamReader* const) );
-def_method (DSInputStreamReader, ReadOne,         int,    (DSInputStreamReader*) );
-def_method (DSInputStreamReader, Read,            int,    (DSInputStreamReader*, IOBuff*, int, int) );
-def_method (DSInputStreamReader, Skip,            long,   (DSInputStreamReader*, long) );
-def_method (DSInputStreamReader, Close,           void,   (DSInputStreamReader*) );
-def_method (DSInputStreamReader, Mark,            void,   (DSInputStreamReader*, int) );
-def_method (DSInputStreamReader, MarkSupported,   bool,   (DSInputStreamReader*) );
-def_method (DSInputStreamReader, Reset,           void,   (DSInputStreamReader*) );
-def_method (DSInputStreamReader, Ready,           bool,   (DSInputStreamReader*) );
+ctor_proto (DSInputStreamReader, DSInputStream*);
+method_proto (DSInputStreamReader, ToString, const char*, (const DSInputStreamReader* const) );
+method_proto (DSInputStreamReader, ReadOne,         int,    (DSInputStreamReader*) );
+method_proto (DSInputStreamReader, Read,            int,    (DSInputStreamReader*, IOBuff*, int, int) );
+method_proto (DSInputStreamReader, Skip,            long,   (DSInputStreamReader*, long) );
+method_proto (DSInputStreamReader, Close,           void,   (DSInputStreamReader*) );
+method_proto (DSInputStreamReader, Mark,            void,   (DSInputStreamReader*, int) );
+method_proto (DSInputStreamReader, MarkSupported,   bool,   (DSInputStreamReader*) );
+method_proto (DSInputStreamReader, Reset,           void,   (DSInputStreamReader*) );
+method_proto (DSInputStreamReader, Ready,           bool,   (DSInputStreamReader*) );
 
 vtable (DSInputStreamReader) {
     const DSInputStreamReaderToString       ToString;
@@ -62,7 +62,21 @@ vtable (DSInputStreamReader) {
     const DSInputStreamReaderReady          Ready;
 };
 
-vtable_ptr(DSInputStreamReader);
+class_bind( DSInputStreamReader );
+class_override( ToString,        (DSInputStreamReaderToString)ToString, "$@:v" );
+class_method( Equals,            (DSObjectEquals)Equals, "B@:@@" );
+class_method( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
+class_method( Dispose,           (DSObjectDispose)Dispose, "v@:v" );
+class_method( ReadOne,           (DSInputStreamReaderReadOne)ReadOne, "i@:v" );
+class_method( Read,              (DSInputStreamReaderRead)Read, "i@:^ii" );
+class_method( Skip,              (DSReaderSkip)Skip, "l@:l" );
+class_method( Close,             (DSInputStreamReaderClose)Close, "v@:v" );
+class_method( Mark,              (DSReaderMark)Mark, "v@:i" );
+class_method( MarkSupported,     (DSReaderMarkSupported)MarkSupported, "v@:v" );
+class_method( Reset,             (DSReaderReset)Reset, "v@:v" );
+class_method( Ready,             (DSReaderReady)Ready, "B@:" );
+class_methodize;
+
 method DSInputStreamReader* DSInputStreamReader_init(DSInputStreamReader* this, DSInputStream* in) {
     DSObject_init(this);
     this->isa = objc_getClass("DSInputStreamReader");
@@ -107,18 +121,4 @@ method bool Ready(DSInputStreamReader* this) {
 }
 
 
-class_bind( DSInputStreamReader );
-class_override( ToString,        (DSInputStreamReaderToString)ToString, "$@:v" );
-class_method( Equals,            (DSObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,           (DSObjectDispose)Dispose, "v@:v" );
-class_method( ReadOne,           (DSInputStreamReaderReadOne)ReadOne, "i@:v" );
-class_method( Read,              (DSInputStreamReaderRead)Read, "i@:^ii" );
-class_method( Skip,              (DSReaderSkip)Skip, "l@:l" );
-class_method( Close,             (DSInputStreamReaderClose)Close, "v@:v" );
-class_method( Mark,              (DSReaderMark)Mark, "v@:i" );
-class_method( MarkSupported,     (DSReaderMarkSupported)MarkSupported, "v@:v" );
-class_method( Reset,             (DSReaderReset)Reset, "v@:v" );
-class_method( Ready,             (DSReaderReady)Ready, "B@:" );
-class_methodize;
 #endif _DS_INPUT_STREAM_READER_H_

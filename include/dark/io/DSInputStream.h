@@ -35,15 +35,15 @@ type (DSInputStream) {
     Class isa;
 };
 
-def_method (DSInputStream, ToString, const char*, (const DSInputStream* const) );
-def_method (DSInputStream, ReadOne,         int,    (DSInputStream*) );
-def_method (DSInputStream, Read,            int,    (DSInputStream*, IOBuff*, int, int) );
-def_method (DSInputStream, Skip,            long,   (DSInputStream*, long) );
-def_method (DSInputStream, Available,       int,    (DSInputStream*) );
-def_method (DSInputStream, Close,           void,   (DSInputStream*) );
-def_method (DSInputStream, Mark,            void,   (DSInputStream*, int) );
-def_method (DSInputStream, MarkSupported,   bool,   (DSInputStream*) );
-def_method (DSInputStream, Reset,           void,   (DSInputStream*) );
+method_proto (DSInputStream, ToString, const char*, (const DSInputStream* const) );
+method_proto (DSInputStream, ReadOne,         int,    (DSInputStream*) );
+method_proto (DSInputStream, Read,            int,    (DSInputStream*, IOBuff*, int, int) );
+method_proto (DSInputStream, Skip,            long,   (DSInputStream*, long) );
+method_proto (DSInputStream, Available,       int,    (DSInputStream*) );
+method_proto (DSInputStream, Close,           void,   (DSInputStream*) );
+method_proto (DSInputStream, Mark,            void,   (DSInputStream*, int) );
+method_proto (DSInputStream, MarkSupported,   bool,   (DSInputStream*) );
+method_proto (DSInputStream, Reset,           void,   (DSInputStream*) );
 
 vtable (DSInputStream) {
     const DSInputStreamToString     ToString;
@@ -60,7 +60,20 @@ vtable (DSInputStream) {
     const DSInputStreamAvailable    Available;
 };
 
-vtable_ptr(DSInputStream);
+class_bind( DSInputStream );
+class_override( ToString,        (DSInputStreamToString)ToString, "$@:v" );
+class_method( Equals,            (DSObjectEquals)Equals, "B@:@@" );
+class_method( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
+class_method( Dispose,           (DSObjectDispose)Dispose, "v@:v" );
+class_method( ReadOne,           (DSInputStreamReadOne)ReadOne, "i@:v" );
+class_method( Read,              (DSInputStreamRead)Read, "i@:^ii" );
+class_method( Skip,              (DSInputStreamSkip)Skip, "l@:l" );
+class_method( Close,             (DSInputStreamClose)Close, "v@:v" );
+class_method( Mark,              (DSInputStreamMark)Mark, "v@:i" );
+class_method( MarkSupported,     (DSInputStreamMarkSupported)MarkSupported, "v@:v" );
+class_method( Reset,             (DSInputStreamReset)Reset, "v@:v" );
+class_method( Available,         (DSInputStreamAvailable)Available, "B@:" );
+class_methodize;
 
 method DSInputStream* DSInputStream_init(DSInputStream* const this) 
 {
@@ -148,21 +161,4 @@ method void Reset(DSInputStream* this)
 }
 
 
-
-
-class_bind( DSInputStream );
-
-class_override( ToString,        (DSInputStreamToString)ToString, "$@:v" );
-class_method( Equals,            (DSObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,           (DSObjectDispose)Dispose, "v@:v" );
-class_method( ReadOne,           (DSInputStreamReadOne)ReadOne, "i@:v" );
-class_method( Read,              (DSInputStreamRead)Read, "i@:^ii" );
-class_method( Skip,              (DSInputStreamSkip)Skip, "l@:l" );
-class_method( Close,             (DSInputStreamClose)Close, "v@:v" );
-class_method( Mark,              (DSInputStreamMark)Mark, "v@:i" );
-class_method( MarkSupported,     (DSInputStreamMarkSupported)MarkSupported, "v@:v" );
-class_method( Reset,             (DSInputStreamReset)Reset, "v@:v" );
-class_method( Available,         (DSInputStreamAvailable)Available, "B@:" );
-class_methodize;
 #endif _DSINPUT_STREAM_H_

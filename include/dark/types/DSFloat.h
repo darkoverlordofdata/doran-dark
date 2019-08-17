@@ -49,14 +49,14 @@ type (DSFloat)
     float value;
 };
 
-def_method (DSFloat, ToString,        char*, (const DSFloat* const));
-def_method (DSFloat, CompareTo,       int, (const DSFloat* const, const DSFloat* const));
-def_method (DSFloat, IntValue,        int, (const DSFloat* const));
-def_method (DSFloat, LongValue,       long, (const DSFloat* const));
-def_method (DSFloat, FloatValue,      float, (const DSFloat* const));
-def_method (DSFloat, DoubleValue,     double, (const DSFloat* const));
-def_method (DSFloat, CharValue,       char, (const DSFloat* const));
-def_method (DSFloat, ShortValue,      short, (const DSFloat* const));
+method_proto (DSFloat, ToString,        char*, (const DSFloat* const));
+method_proto (DSFloat, CompareTo,       int, (const DSFloat* const, const DSFloat* const));
+method_proto (DSFloat, IntValue,        int, (const DSFloat* const));
+method_proto (DSFloat, LongValue,       long, (const DSFloat* const));
+method_proto (DSFloat, FloatValue,      float, (const DSFloat* const));
+method_proto (DSFloat, DoubleValue,     double, (const DSFloat* const));
+method_proto (DSFloat, CharValue,       char, (const DSFloat* const));
+method_proto (DSFloat, ShortValue,      short, (const DSFloat* const));
 
 
 /**
@@ -76,7 +76,22 @@ vtable (DSFloat)
     const DSFloatCharValue            CharValue;
     const DSFloatShortValue           ShortValue;
 };
-vtable_ptr(DSFloat);
+
+class_bind( DSFloat );
+class_override( ToString,         (DSFloatToString)ToString, "$@:v" );
+class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
+class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+class_method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
+class_override( CompareTo,        (DSFloatCompareTo)CompareTo, "i@:@" );
+class_override( IntValue,         (DSFloatIntValue)IntValue, "i@:v" );
+class_override( LongValue,        (DSFloatLongValue)LongValue, "l@:v" );
+class_override( FloatValue,       (DSFloatFloatValue)FloatValue, "f@:v" );
+class_override( DoubleValue,      (DSFloatDoubleValue)DoubleValue, "d@:v" );
+class_override( CharValue,        (DSFloatCharValue)CharValue, "c@:v" );
+class_override( ShortValue,       (DSFloatShortValue)ShortValue, "s@:v" );
+class_member( value, sizeof( float ), "f" );
+class_methodize
+
 /**
  * Constructor
  * create a new Float
@@ -84,7 +99,7 @@ vtable_ptr(DSFloat);
  * @param value of float
  * 
  */
-proc DSFloat* DSFloat_init(DSFloat* const this, const float value)
+function DSFloat* DSFloat_init(DSFloat* const this, const float value)
 {
     DSNumber_init(this);
     this->isa = objc_getClass("DSFloat");
@@ -92,14 +107,14 @@ proc DSFloat* DSFloat_init(DSFloat* const this, const float value)
     return this;
 }
 
-proc DSFloat* NewDSFloat(const float value) { 
+function DSFloat* NewDSFloat(const float value) { 
     return DSFloat_init(alloc(DSFloat), value); 
 }
 
 /**
  * Returns a primitive float value parsed from input string. 
  */
-proc float DSParseFloat(const char* s)
+function float DSParseFloat(const char* s)
 {
     
     double d = DSParseDouble(s);
@@ -179,24 +194,6 @@ overload char* ToString(const DSFloat* const this)
     sprintf(str, "%f", this->value);
     return str;
 }
-
-class_bind( DSFloat );
-
-class_override( ToString,         (DSFloatToString)ToString, "$@:v" );
-class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
-class_override( CompareTo,        (DSFloatCompareTo)CompareTo, "i@:@" );
-class_override( IntValue,         (DSFloatIntValue)IntValue, "i@:v" );
-class_override( LongValue,        (DSFloatLongValue)LongValue, "l@:v" );
-class_override( FloatValue,       (DSFloatFloatValue)FloatValue, "f@:v" );
-class_override( DoubleValue,      (DSFloatDoubleValue)DoubleValue, "d@:v" );
-class_override( CharValue,        (DSFloatCharValue)CharValue, "c@:v" );
-class_override( ShortValue,       (DSFloatShortValue)ShortValue, "s@:v" );
-
-class_member( value, sizeof( float ), "f" );
-
-class_methodize
 
 
 #endif _DSFLOAT_H_

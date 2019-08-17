@@ -49,14 +49,14 @@ type (DSLong)
     long value;
 };
 
-def_method (DSLong, ToString,        char*, (const DSLong* const));
-def_method (DSLong, CompareTo,       int, (const DSLong* const, const DSLong* const));
-def_method (DSLong, IntValue,        int, (const DSLong* const));
-def_method (DSLong, LongValue,       long, (const DSLong* const));
-def_method (DSLong, FloatValue,      float, (const DSLong* const));
-def_method (DSLong, DoubleValue,     double, (const DSLong* const));
-def_method (DSLong, CharValue,       char, (const DSLong* const));
-def_method (DSLong, ShortValue,      short, (const DSLong* const));
+method_proto (DSLong, ToString,        char*, (const DSLong* const));
+method_proto (DSLong, CompareTo,       int, (const DSLong* const, const DSLong* const));
+method_proto (DSLong, IntValue,        int, (const DSLong* const));
+method_proto (DSLong, LongValue,       long, (const DSLong* const));
+method_proto (DSLong, FloatValue,      float, (const DSLong* const));
+method_proto (DSLong, DoubleValue,     double, (const DSLong* const));
+method_proto (DSLong, CharValue,       char, (const DSLong* const));
+method_proto (DSLong, ShortValue,      short, (const DSLong* const));
 
 
 /**
@@ -76,7 +76,22 @@ vtable (DSLong)
     const DSLongCharValue          CharValue;
     const DSLongShortValue         ShortValue;
 };
-vtable_ptr(DSLong);
+
+class_bind( DSLong );
+class_override( ToString,         (DSLongToString)ToString, "$@:v" );
+class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
+class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
+class_method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
+class_override( CompareTo,        (DSLongCompareTo)CompareTo, "i@:@" );
+class_override( IntValue,         (DSLongIntValue)IntValue, "i@:v" );
+class_override( LongValue,        (DSLongLongValue)LongValue, "l@:v" );
+class_override( FloatValue,       (DSLongFloatValue)FloatValue, "f@:v" );
+class_override( DoubleValue,      (DSLongDoubleValue)DoubleValue, "d@:v" );
+class_override( CharValue,        (DSLongCharValue)CharValue, "c@:v" );
+class_override( ShortValue,       (DSLongShortValue)ShortValue, "s@:v" );
+class_member( value, sizeof( long ), "l" );
+class_methodize
+
 /**
  * Constructor
  * create a new Long
@@ -84,7 +99,7 @@ vtable_ptr(DSLong);
  * @param value of long
  * 
  */
-proc DSLong* DSLong_init(DSLong* const this, const long value)
+function DSLong* DSLong_init(DSLong* const this, const long value)
 {
     DSNumber_init(this);
     this->isa = objc_getClass("DSLong");
@@ -92,14 +107,14 @@ proc DSLong* DSLong_init(DSLong* const this, const long value)
     return this;
 }
 
-proc DSLong* NewDSLong(const long value) { 
+function DSLong* NewDSLong(const long value) { 
     return DSLong_init(alloc(DSLong), value); 
 }
 
 /**
  * Returns a primitive long value parsed from input string. 
  */
-proc long DSParseLong(const char* const s, const int radix)
+function long DSParseLong(const char* const s, const int radix)
 {
     errno = 0;
     char* endptr;
@@ -189,24 +204,5 @@ method char* ToString(const DSLong* const this)
     sprintf(str, "%d", this->value);
     return str;
 }
-
-class_bind( DSLong );
-
-class_override( ToString,         (DSLongToString)ToString, "$@:v" );
-class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,            (DSObjectDispose)Dispose, "v@:v" );
-class_override( CompareTo,        (DSLongCompareTo)CompareTo, "i@:@" );
-class_override( IntValue,         (DSLongIntValue)IntValue, "i@:v" );
-class_override( LongValue,        (DSLongLongValue)LongValue, "l@:v" );
-class_override( FloatValue,       (DSLongFloatValue)FloatValue, "f@:v" );
-class_override( DoubleValue,      (DSLongDoubleValue)DoubleValue, "d@:v" );
-class_override( CharValue,        (DSLongCharValue)CharValue, "c@:v" );
-class_override( ShortValue,       (DSLongShortValue)ShortValue, "s@:v" );
-
-class_member( value, sizeof( long ), "l" );
-
-class_methodize
-
 
 #endif _DSLONG_H_
