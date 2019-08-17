@@ -61,7 +61,7 @@ vtable (DSFileInputStream) {
     const DSFileInputStreamAvailable    Available;
 };
 
-class_bind( DSFileInputStream );
+class_load( DSFileInputStream );
 class_override( ToString,        (DSFileInputStreamToString)ToString, "$@:v" );
 class_method( Equals,            (DSObjectEquals)Equals, "B@:@@" );
 class_method( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
@@ -74,7 +74,7 @@ class_method( Mark,              (DSInputStreamMark)Mark, "v@:i" );
 class_method( MarkSupported,     (DSInputStreamMarkSupported)MarkSupported, "v@:v" );
 class_method( Reset,             (DSInputStreamReset)Reset, "v@:v" );
 class_method( Available,         (DSFileInputStreamAvailable)Available, "B@:" );
-class_methodize;
+class_fini;
 
 method DSFileInputStream* DSFileInputStream_init(DSFileInputStream* const this, char* name) {
     return DSFileInputStream_init(this, (name != nullptr ? NewDSFile(name) : nullptr));

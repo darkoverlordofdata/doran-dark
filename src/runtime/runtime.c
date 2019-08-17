@@ -39,7 +39,7 @@
 #include <dark/io/DSFile.h>
 #include <dark/io/DSFileSystem.h>
 #include <dark/collections/DSArray.h>
-#include <dark/collections/DSHashmap.h>
+#include <dark/collections/DSMap.h>
 #include <dark/collections/DSList.h>
 #include <dark/runtime.h>
 
@@ -105,7 +105,7 @@ void objc_loadFramework()
     objc_registerClassPair(objc_loadDSException(obj));
     objc_registerClassPair(objc_loadDSArray(obj));
     objc_registerClassPair(objc_loadDSList(obj));
-    objc_registerClassPair(objc_loadDSHashmap(obj));
+    objc_registerClassPair(objc_loadDSMap(obj));
     objc_registerClassPair(objc_loadDSBoolean(cmp));
     objc_registerClassPair(objc_loadDSChar(num));
     objc_registerClassPair(objc_loadDSDouble(num));

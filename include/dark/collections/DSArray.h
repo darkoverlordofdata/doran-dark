@@ -24,13 +24,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #pragma once
-#ifndef _DSARRAY_H_
-#define _DSARRAY_H_
 #include <dark/types.h>
 #include <dark/DSObject.h>
 #include <dark/types/DSString.h>
 #include <dark/Functional/Either.h>
-// #include "DSCollection.h"
 /**
  * An ArrayList based on:
  * @see https://eddmann.com/posts/implementing-a-dynamic-vector-array-in-c/
@@ -87,7 +84,7 @@ vtable (DSArray) {
     const DSArrayGet              Get;    
 };
 
-class_bind(DSArray);
+class_load(DSArray);
 
 class_method(ToString,           (DSArrayToString)ToString, "@@:v");
 class_method(Equals,             (DSObjectEquals)Equals, "B@:@@");
@@ -108,7 +105,7 @@ class_member(length, sizeof(int), "i");
 class_member(data, sizeof(void*), "^");
 class_member(capacity, sizeof(int), "i");
 
-class_methodize;
+class_fini;
 
 
 /**
@@ -287,6 +284,3 @@ method char* ToString(const DSArray* const this)
 {
     return "dark.collections.Array";
 }
-
-
-#endif _DSARRAY_H_

@@ -78,7 +78,7 @@ vtable (DSInteger)
     const DSIntegerShortValue         ShortValue;
 };
 
-class_bind( DSInteger );
+class_load( DSInteger );
 class_override( ToString,         (DSIntegerToString)ToString, "$@:v" );
 class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
 class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
@@ -91,7 +91,7 @@ class_override( DoubleValue,      (DSIntegerDoubleValue)DoubleValue, "d@:v" );
 class_override( CharValue,        (DSIntegerCharValue)CharValue, "c@:v" );
 class_override( ShortValue,       (DSIntegerShortValue)ShortValue, "s@:v" );
 class_member( value, sizeof( int ), "i" );
-class_methodize
+class_fini
 
 /* 
  * Constructor

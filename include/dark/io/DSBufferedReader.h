@@ -77,7 +77,7 @@ vtable (DSBufferedReader) {
     const DSBufferedReaderReadLine      ReadLine;
 };
 
-class_bind( DSBufferedReader );
+class_load( DSBufferedReader );
 class_override( ToString,        (DSBufferedReaderToString)ToString, "$@:v" );
 class_method( Equals,            (DSObjectEquals)Equals, "B@:@@" );
 class_method( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
@@ -91,7 +91,7 @@ class_method( MarkSupported,     (DSBufferedReaderMarkSupported)MarkSupported, "
 class_method( Reset,             (DSBufferedReaderReset)Reset, "v@:v" );
 class_method( Ready,             (DSBufferedReaderReady)Ready, "B@:" );
 class_method( ReadLine,          (DSBufferedReaderReadLine)ReadLine, "$@:B" );
-class_methodize;
+class_fini;
 
 method DSBufferedReader* DSBufferedReader_init(DSBufferedReader* const this, DSReader* in) {
     DSBufferedReader_init(this, in, defaultCharBufferSize);

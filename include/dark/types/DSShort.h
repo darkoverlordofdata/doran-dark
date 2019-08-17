@@ -75,7 +75,7 @@ vtable (DSShort)
     const DSShortShortValue       ShortValue;
 };
 
-class_bind( DSShort );
+class_load( DSShort );
 class_override( ToString,         (DSShortToString)ToString, "$@:v" );
 class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
 class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
@@ -88,7 +88,7 @@ class_override( DoubleValue,      (DSShortDoubleValue)DoubleValue, "d@:v" );
 class_override( CharValue,        (DSShortCharValue)CharValue, "c@:v" );
 class_override( ShortValue,       (DSShortShortValue)ShortValue, "s@:v" );
 class_member( value, sizeof( short ), "s" );
-class_methodize
+class_fini
 
 /**
  * Constructor

@@ -24,8 +24,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #pragma once
-#ifndef _DSCLASS_H_
-#define _DSCLASS_H_
 #include "core.h"
 #include "runtime.h"
 #include <dark/DSLog.h>
@@ -48,10 +46,16 @@ SOFTWARE.
     typedef struct T T;                                                 \
     struct T
 
+/**
+ * Singleton vtable object per Class
+ */
 #define vtable(T)                                                       \
     struct T##_vtable T##_vtable;                                       \
     struct T##_vtable
 
+/**
+ * Singleton class object per Class
+ */
 #define class(T)                                                        \
     struct $##T $##T;                                                   \
     struct $##T
@@ -84,7 +88,7 @@ SOFTWARE.
     method T* T##_init(T* const, ## args);
 /**
  *  MACRO alloc
- *      Allocate memory for ivar struct
+ *      Allocate memory for type struct
  */
 #define alloc(T) (T*)DSmalloc(sizeof(T))
 
@@ -124,9 +128,13 @@ SOFTWARE.
  *      defines lazy accessors for class size and reference
  * 
  */
-#define get_vptr(T) T##_vptr(this)
+#define _vptr(T) T##_vptr(this)
 
-#define class_bind(T)                                                   \
+/**
+ * Return the reference to the vtable
+ * Load the vtable
+ */
+#define class_load(T)                                                   \
 function struct T##_vtable* T##_vptr(T* this) {                         \
     return (struct T##_vtable*)this->isa->vtable;                       \
 }                                                                       \
@@ -138,25 +146,39 @@ function Class objc_load##T(Class super)                                \
     Class isa = objc_allocateClassPair(super, #T, 0);                   \
     isa->vtable = &vt[0];               
 
-
+/**
+ * Add method address to the vtable
+ */
 #define class_method(name, imp, type)                                   \
     class_addMethod(isa, #name, imp, type);                             \
     vt[k++] = imp; 
 
+/**
+ * Add method override address to the vtable
+ */
 #define class_override(name, imp, type)                                 \
     class_addMethod(isa, #name, imp, type);                             \
     vt[k++] = imp; 
 
+/**
+ * Add virtual method address to the vtable
+ */
 #define vtable_virtual(name, imp, type)                                 \
     class_addMethod(isa, #name, imp, type);                             \
     vt[k++] = imp; 
 
+/**
+ * Add member metadata about type
+ */
 #define class_member(name, len, type)                                   \
     class_addIvar(isa, #name, len, log2(len), type);
 
-#define class_methodize                                                 \
-    return methodizeClass(isa);                                         \
+/**
+ * Add vtable to runtime
+ */
+// #define class_fini                                                 \
+//     return methodizeClass(isa);                                         \
+// }
+#define class_fini                                                 \
+    return isa;                                         \
 }
-
-
-#endif _DSCLASS_H_ 

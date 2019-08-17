@@ -30,30 +30,27 @@ SOFTWARE.
  * it under the terms of the MIT license. See LICENSE for details.
  */
 #pragma once
-#ifndef _DSHASHMAP_H_
-#define _DSHASHMAP_H_
 #include <dark/DSObject.h>
 #include <dark/types/DSString.h>
-// #include "DSCollection.h"
 
 #define MAP_MISSING -3  /* No such element */
 #define MAP_FULL -2 	/* Hashmap is full */
 #define MAP_OMEM -1 	/* Out of Memory */
 #define MAP_OK 0 	    /* OK */
 
-#define IsDSHashmap(object) _Generic((object), DSHashmap*: true, default: false)
-#define AsDSHashmap(object) _Generic((object),                          \
-                            DSHashmap*: (DSHashmap *)object,            \
+#define IsDSMap(object) _Generic((object), DSMap*: true, default: false)
+#define AsDSMap(object) _Generic((object),                          \
+                            DSMap*: (DSMap *)object,            \
                             default: nullptr)
 
 /*
  * Iterator is a pointer to a function that can take two DSObject* arguments
  * and return an integer. Returns status code..
  */
-typedef int (^DSHashmap_Iterator)(DSObject*, DSObject*);
+typedef int (^DSMap_Iterator)(DSObject*, DSObject*);
 
 /* We need to keep keys and values */
-type (DSHashmapNode) {
+type (DSMapNode) {
 	char* key;
 	int inUse;
 	DSObject* data;
@@ -61,63 +58,60 @@ type (DSHashmapNode) {
 
 /* A hashmap has some maximum size and current size,
  * as well as the data to hold. */
-type (DSHashmap) {
+type (DSMap) {
     Class isa;
     Class typeOf;
 	int length;
-	DSHashmapNode* data;
+	DSMapNode* data;
 	int tableSize;
 }; 
 
-ctor_proto (DSHashmap);
-ctor_proto (DSHashmap, Class);
-method_proto (DSHashmap, ToString,    char*,      (const DSHashmap* const) );
-method_proto (DSHashmap, Dispose,     void,       (DSHashmap* const) );
-method_proto (DSHashmap, Length,      int,        (const DSHashmap* const) );
-method_proto (DSHashmap, HashInt,     uint,       (DSHashmap* const, char*) );
-method_proto (DSHashmap, Hash,        int,        (DSHashmap* const, char*) );
-method_proto (DSHashmap, Rehash,      int,        (DSHashmap* const) );
-method_proto (DSHashmap, Put,         int,        (DSHashmap* const, char*, DSObject*) );
-method_proto (DSHashmap, Get,         DSObject*,  (DSHashmap* const, char*) );
-method_proto (DSHashmap, ForEach,     int,        (DSHashmap* const, DSHashmap_Iterator, DSObject*) );
-method_proto (DSHashmap, Remove,      int,        (DSHashmap* const, char*) );
+ctor_proto (DSMap);
+ctor_proto (DSMap, Class);
+method_proto (DSMap, ToString,    char*,      (const DSMap* const) );
+method_proto (DSMap, Dispose,     void,       (DSMap* const) );
+method_proto (DSMap, Length,      int,        (const DSMap* const) );
+method_proto (DSMap, HashInt,     uint,       (DSMap* const, char*) );
+method_proto (DSMap, Hash,        int,        (DSMap* const, char*) );
+method_proto (DSMap, Rehash,      int,        (DSMap* const) );
+method_proto (DSMap, Put,         int,        (DSMap* const, char*, DSObject*) );
+method_proto (DSMap, Get,         DSObject*,  (DSMap* const, char*) );
+method_proto (DSMap, ForEach,     int,        (DSMap* const, DSMap_Iterator, DSObject*) );
+method_proto (DSMap, Remove,      int,        (DSMap* const, char*) );
 
-vtable (DSHashmap) {
-    const DSHashmapToString       ToString;
+vtable (DSMap) {
+    const DSMapToString       ToString;
     const DSObjectEquals          Equals;
     const DSObjectGetHashCode     GetHashCode;
-    const DSHashmapDispose        Dispose;
-    const DSHashmapLength         Length;
-    const DSHashmapRemove         Remove;
-    const DSHashmapForEach        ForEach;
-    const DSHashmapPut            Put;
-    const DSHashmapGet            Get;
-    const DSHashmapHashInt        HashInt;
-    const DSHashmapHash           Hash;
-    const DSHashmapRehash         Rehash;
+    const DSMapDispose        Dispose;
+    const DSMapLength         Length;
+    const DSMapRemove         Remove;
+    const DSMapForEach        ForEach;
+    const DSMapPut            Put;
+    const DSMapGet            Get;
+    const DSMapHashInt        HashInt;
+    const DSMapHash           Hash;
+    const DSMapRehash         Rehash;
 } ;
 
-class_bind(DSHashmap)
-
-class_method(ToString,           (DSHashmapToString)ToString, "@@:v");
-class_method(Equals,             (DSObjectEquals)Equals, "B@:@@");
-class_method(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
-class_method(Dispose,            (DSHashmapDispose)Dispose, "v@:v");
-class_method(Length,             (DSHashmapLength)Length, "i@:v");
-class_method(Remove,             (DSHashmapRemove)Remove, "v@:i");
-class_method(ForEach,            (DSHashmapForEach)ForEach, "i@:@@");
-class_method(Put,                (DSHashmapPut)Put, "i@:*@");
-class_method(Get,                (DSHashmapGet)Get, "@@:*");
-class_method(HashInt,            (DSHashmapHashInt)HashInt, "I@:*");
-class_method(Hash,               (DSHashmapHash)Hash, "i@:*");
-class_method(Rehash,             (DSHashmapRehash)Rehash, "i@:v");
-
-class_member(typeof, sizeof(id), "@");
-class_member(length, sizeof(int), "i");
-class_member(data, sizeof(id), "^");
-class_member(tableSize, sizeof(int), "i");
-
-class_methodize;
+class_load(DSMap)
+class_method(ToString,      (DSMapToString)ToString, "@@:v");
+class_method(Equals,        (DSObjectEquals)Equals, "B@:@@");
+class_method(GetHashCode,   (DSObjectGetHashCode)GetHashCode, "l@:v");
+class_method(Dispose,       (DSMapDispose)Dispose, "v@:v");
+class_method(Length,        (DSMapLength)Length, "i@:v");
+class_method(Remove,        (DSMapRemove)Remove, "v@:i");
+class_method(ForEach,       (DSMapForEach)ForEach, "i@:@@");
+class_method(Put,           (DSMapPut)Put, "i@:*@");
+class_method(Get,           (DSMapGet)Get, "@@:*");
+class_method(HashInt,       (DSMapHashInt)HashInt, "I@:*");
+class_method(Hash,          (DSMapHash)Hash, "i@:*");
+class_method(Rehash,        (DSMapRehash)Rehash, "i@:v");
+class_member(typeof,        sizeof(id), "@");
+class_member(length,        sizeof(int), "i");
+class_member(data,          sizeof(id), "^");
+class_member(tableSize,     sizeof(int), "i");
+class_fini;
 
 /* 
  * Generic Hashmap implementation
@@ -243,7 +237,7 @@ function unsigned long crc32(const unsigned char *s, unsigned int len)
 /*
  * Hashing function for a string
  */
-method unsigned int HashInt(DSHashmap* const this, char* keystring)
+method unsigned int HashInt(DSMap* const this, char* keystring)
 {
     unsigned long key = crc32((unsigned char*)(keystring), strlen(keystring));
 
@@ -264,18 +258,18 @@ method unsigned int HashInt(DSHashmap* const this, char* keystring)
 }
 
 
-method DSHashmap* DSHashmap_init(DSHashmap* const this)
+method DSMap* DSMap_init(DSMap* const this)
 {
-    return DSHashmap_init(this, nullptr);
+    return DSMap_init(this, nullptr);
 }
 
-method DSHashmap* DSHashmap_init(DSHashmap* const this, Class typeOf)
+method DSMap* DSMap_init(DSMap* const this, Class typeOf)
 {
     DSObject_init(this);
 
-    this->isa = objc_getClass("DSHashmap");
+    this->isa = objc_getClass("DSMap");
     this->typeOf = typeOf;
-    this->data = DScalloc(INITIAL_SIZE, sizeof(DSHashmapNode));
+    this->data = DScalloc(INITIAL_SIZE, sizeof(DSMapNode));
 	this->tableSize = INITIAL_SIZE;
 	this->length = 0;
 
@@ -286,7 +280,7 @@ method DSHashmap* DSHashmap_init(DSHashmap* const this, Class typeOf)
  * Return the integer of the location in data
  * to store the point to the item, or MAP_FULL.
  */
-method int Hash(DSHashmap* const this, char* key)
+method int Hash(DSMap* const this, char* key)
 {
 	/* If full, return immediately */
 	if (this->length >= (this->tableSize/2)) return MAP_FULL;
@@ -309,15 +303,15 @@ method int Hash(DSHashmap* const this, char* key)
 /*
  * Doubles the size of the hashmap, and rehashes all the elements
  */
-method int Rehash(DSHashmap* const this)
+method int Rehash(DSMap* const this)
 {
-    DSHashmapNode* temp = DScalloc(2 * this->tableSize, sizeof(DSHashmapNode));
+    DSMapNode* temp = DScalloc(2 * this->tableSize, sizeof(DSMapNode));
     //  allocate(HashmapNode, 2 * this->tableSize);
 
 	if (!temp) return MAP_OMEM;
 
 	/* Update the array */
-	DSHashmapNode* curr = this->data;
+	DSMapNode* curr = this->data;
 	this->data = temp;
 
 	/* Update the size */
@@ -343,7 +337,7 @@ method int Rehash(DSHashmap* const this)
 /*
  * Add a pointer to the hashmap with some key
  */
-method int Put(DSHashmap* const this, char* key, DSObject* value)
+method int Put(DSMap* const this, char* key, DSObject* value)
 {
     if ((this->typeOf) && !InstanceOf(this->typeOf, value))  {
         return Left(DSInvalidTypeException(this->typeOf->name, Source));
@@ -375,7 +369,7 @@ method int Put(DSHashmap* const this, char* key, DSObject* value)
 /*
  * Get your pointer out of the hashmap with a key
  */
-method DSObject* Get(DSHashmap* const this, char* key)
+method DSObject* Get(DSMap* const this, char* key)
 {
     DSObject* result;
 	/* Find data location */
@@ -404,7 +398,7 @@ method DSObject* Get(DSHashmap* const this, char* key)
  * additional DSObject* argument is passed to the function as its first
  * argument and the hashmap element is the second.
  */
-method int ForEach(DSHashmap* const this, DSHashmap_Iterator f, DSObject* item) 
+method int ForEach(DSMap* const this, DSMap_Iterator f, DSObject* item) 
 {
 	/* On empty hashmap, return immediately */
 	if (Length(this) <= 0)
@@ -430,7 +424,7 @@ method int ForEach(DSHashmap* const this, DSHashmap_Iterator f, DSObject* item)
  * Remove an element with that key from the map
  * Return MAP_OK or MAP_MISSING.
  */
-method int Remove(DSHashmap* const this, char* key)
+method int Remove(DSMap* const this, char* key)
 {
 	/* Find key */
 	int curr = HashInt(this, key);
@@ -460,25 +454,24 @@ method int Remove(DSHashmap* const this, char* key)
 	return MAP_MISSING;
 }
 
-function void DSHashmap_dtor(void* this) {
-    Dispose((DSHashmap*)this);
+function void DSMap_dtor(void* this) {
+    Dispose((DSMap*)this);
 }
 /* Deallocate the hashmap */
-method void Dispose(DSHashmap* const this)
+method void Dispose(DSMap* const this)
 {
     printf("WTF - dispose?\n");
 	// delete(this->data);
 }
 
 /* Return the length of the hashmap */
-method int Length(const DSHashmap* const this)
+method int Length(const DSMap* const this)
 {
     return this->length;
 }
 
-method char* ToString(const DSHashmap* const this)
+method char* ToString(const DSMap* const this)
 {
     return "dark.collections.Hashmap";
 }
 
-#endif _DSHASHMAP_H_

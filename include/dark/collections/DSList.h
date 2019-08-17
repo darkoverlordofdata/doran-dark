@@ -24,11 +24,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #pragma once
-#ifndef _DSLIST_H_
-#define _DSLIST_H_
 #include <dark/DSObject.h>
 #include <dark/types/DSString.h>
-// #include "DSCollection.h"
 
 #define IsDSList(object) _Generic((object), DSList*: true, default: false)
 #define AsDSList(object) _Generic((object),                             \
@@ -71,7 +68,7 @@ vtable (DSList) {
     const DSListIterate           Iterate;
 };
 
-class_bind(DSList)
+class_load(DSList)
 class_method(ToString,           (DSListToString)ToString, "@@:v");
 class_method(Equals,             (DSObjectEquals)Equals, "B@:@@");
 class_method(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
@@ -86,7 +83,7 @@ class_member(typeof, sizeof(id), "@");
 class_member(length, sizeof(int), "i");
 class_member(head, sizeof(void*), "^");
 
-class_methodize;
+class_fini;
 
 method DSList* DSList_init(DSList* const this)
 {
@@ -237,4 +234,3 @@ method char* ToString(const DSList* const this)
     return "dark.collections.List";
 }
 
-#endif _DSLIST_H_ 

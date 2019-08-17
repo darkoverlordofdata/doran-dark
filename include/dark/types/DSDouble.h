@@ -75,7 +75,7 @@ vtable (DSDouble)
     const DSDoubleShortValue          ShortValue;
 };
 
-class_bind( DSDouble );
+class_load( DSDouble );
 class_override( ToString,         (DSDoubleToString)ToString, "$@:v" );
 class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
 class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
@@ -88,7 +88,7 @@ class_override( DoubleValue,      (DSDoubleDoubleValue)DoubleValue, "d@:v" );
 class_override( CharValue,        (DSDoubleCharValue)CharValue, "c@:v" );
 class_override( ShortValue,       (DSDoubleShortValue)ShortValue, "s@:v" );
 class_member( value, sizeof( double ), "d" );
-class_methodize
+class_fini
 
 
 /**

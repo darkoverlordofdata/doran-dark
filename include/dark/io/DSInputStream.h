@@ -60,7 +60,7 @@ vtable (DSInputStream) {
     const DSInputStreamAvailable    Available;
 };
 
-class_bind( DSInputStream );
+class_load( DSInputStream );
 class_override( ToString,        (DSInputStreamToString)ToString, "$@:v" );
 class_method( Equals,            (DSObjectEquals)Equals, "B@:@@" );
 class_method( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
@@ -73,7 +73,7 @@ class_method( Mark,              (DSInputStreamMark)Mark, "v@:i" );
 class_method( MarkSupported,     (DSInputStreamMarkSupported)MarkSupported, "v@:v" );
 class_method( Reset,             (DSInputStreamReset)Reset, "v@:v" );
 class_method( Available,         (DSInputStreamAvailable)Available, "B@:" );
-class_methodize;
+class_fini;
 
 method DSInputStream* DSInputStream_init(DSInputStream* const this) 
 {
@@ -142,12 +142,12 @@ method int Available(DSInputStream* this)
 
 method void Close(DSInputStream* this)
 {
-    get_vptr(DSInputStream)->Close(this);
+    _vptr(DSInputStream)->Close(this);
 }
 
 method void Mark(DSInputStream* this, int readlimit)
 {
-    get_vptr(DSInputStream)->Mark(this, readlimit);
+    _vptr(DSInputStream)->Mark(this, readlimit);
 }
 
 method bool MarkSupported(DSInputStream* this)

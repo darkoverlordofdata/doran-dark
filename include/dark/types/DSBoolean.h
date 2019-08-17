@@ -80,7 +80,7 @@ function bool BoolValue(const DSBoolean*  const this);
 /**
  * Put it all together
  */
-class_bind( DSBoolean );
+class_load( DSBoolean );
 class_override( ToString,         (DSBooleanToString)ToString, "$@:v" );
 class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
 class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
@@ -110,7 +110,7 @@ $DSBoolean.False = &False;
 $DSBoolean.ParseBool = ParseBool;
 $DSBoolean.Compare = Compare;
     
-class_methodize;
+class_fini;
 
 /**
  * Constructor

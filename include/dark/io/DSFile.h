@@ -106,7 +106,7 @@ class (DSFile) {
     char PathSeparator[2];
 };
 
-class_bind( DSFile );
+class_load( DSFile );
 class_override( ToString,        (DSFileToString)ToString, "$@:v" );
 class_method( Equals,            (DSObjectEquals)Equals, "B@:@@" );
 class_method( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
@@ -135,7 +135,7 @@ $DSFile.PathSeparatorChar = fs.GetPathSeparator();
 $DSFile.PathSeparator[0] = $DSFile.PathSeparatorChar;
 $DSFile.PathSeparator[1] =  '\0';
 
-class_methodize;
+class_fini;
 
 method bool IsInvalid(DSFile* this) {
     if (this->status == PS_UNCHECKED) {

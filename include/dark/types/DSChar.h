@@ -73,7 +73,7 @@ vtable (DSChar)
     const DSCharCharValue         CharValue;
     const DSCharShortValue        ShortValue;
 };
-class_bind( DSChar );
+class_load( DSChar );
 class_override( ToString,         (DSCharToString)ToString, "$@:v" );
 class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
 class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
@@ -88,7 +88,7 @@ class_override( ShortValue,       (DSCharShortValue)ShortValue, "s@:v" );
 
 class_member( value, sizeof( char ), "c" );
 
-class_methodize;
+class_fini;
 
 
 

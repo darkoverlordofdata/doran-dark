@@ -77,7 +77,7 @@ vtable (DSFloat)
     const DSFloatShortValue           ShortValue;
 };
 
-class_bind( DSFloat );
+class_load( DSFloat );
 class_override( ToString,         (DSFloatToString)ToString, "$@:v" );
 class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
 class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
@@ -90,7 +90,7 @@ class_override( DoubleValue,      (DSFloatDoubleValue)DoubleValue, "d@:v" );
 class_override( CharValue,        (DSFloatCharValue)CharValue, "c@:v" );
 class_override( ShortValue,       (DSFloatShortValue)ShortValue, "s@:v" );
 class_member( value, sizeof( float ), "f" );
-class_methodize
+class_fini
 
 /**
  * Constructor

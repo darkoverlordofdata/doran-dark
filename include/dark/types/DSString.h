@@ -105,7 +105,7 @@ class (DSString) {
 
 method DSString* StringJoin(int count, ...);
 
-class_bind( DSString );
+class_load( DSString );
 class_override( ToString,         (DSStringToString)ToString, "$@:v" );
 class_override( Equals,           (DSStringEquals)Equals, "B@:@@" );
 class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
@@ -133,7 +133,7 @@ class_member( length, sizeof( int ), "i" );
 
 $DSString.Join = StringJoin;
 
-class_methodize
+class_fini
 
 
 
@@ -218,7 +218,7 @@ method DSString* Concat(const DSString* this, const DSString* other) {
 }
 
 method bool Contains(const DSString* this, const DSString* s) {
-    return get_vptr(DSString)->IndexOf(this, s, 0) > -1;
+    return _vptr(DSString)->IndexOf(this, s, 0) > -1;
 }
 
 method DSString* CopyOf(const DSString* this) {

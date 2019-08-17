@@ -41,9 +41,9 @@ int main(int argc, char **argv) {
     // DSString** ss = Split(s, " ");
 
 
-    var z = new(DSHashmap);
+    var z = new(DSMap);
 
-    var y = NewDSHashmap($T(DSLong));
+    var y = NewDSMap($T(DSLong));
 
     DSLog("typeof = %s", y->typeOf->name );
 
@@ -66,7 +66,7 @@ Either* Try(DSObject* (^lambda)(void)) {
 /**
  * Deprecated error handling:
  */
-void Test(DSHashmap* zhsh) {
+void Test(DSMap* zhsh) {
     DSException* e;
     try {
         // Adding a long to a collection of DSBoolean -
@@ -94,7 +94,7 @@ void More() {
 
     // riia:
     {   
-        using(DSHashmap) zhsh = new(DSHashmap, of(DSBoolean));
+        using(DSMap) zhsh = new(DSMap, of(DSBoolean));
 
         auto res = Put(zhsh, "test", $(430L));
         if (IsRight(res)) {

@@ -78,7 +78,7 @@ class (DSNumber) {
     DSNumber* (*Create) ();
 };
 
-class_bind( DSNumber ); 
+class_load( DSNumber ); 
 vtable_virtual( ToString,          (DSNumberToString)ToString, "$@:v" );
 class_method( Equals,             (DSObjectEquals)Equals, "B@:@@" );
 class_method( GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v" );
@@ -90,7 +90,7 @@ vtable_virtual( FloatValue,        (DSNumberFloatValue)FloatValue, "f@:v" );
 vtable_virtual( DoubleValue,       (DSNumberDoubleValue)DoubleValue, "d@:v" );
 vtable_virtual( CharValue,         (DSNumberCharValue)CharValue, "c@:v" );
 vtable_virtual( ShortValue,        (DSNumberShortValue)ShortValue, "s@:v" );
-class_methodize
+class_fini
 
 /**
  * Abstract class Number
@@ -113,53 +113,53 @@ function DSNumber* DSNumber_init(DSNumber* const this)
  *         -1 this > other
  */
 method int CompareTo(const DSNumber* this, const DSNumber* const other) {
-    return get_vptr(DSNumber)->CompareTo(this, other);
+    return _vptr(DSNumber)->CompareTo(this, other);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
 method int IntValue(const DSNumber* const this) {
-    return get_vptr(DSNumber)->IntValue(this);
+    return _vptr(DSNumber)->IntValue(this);
 }
 
 /**
  * Returns the value of this value cast as a long
  */
 method long LongValue(const DSNumber* const this) {
-    return get_vptr(DSNumber)->LongValue(this);
+    return _vptr(DSNumber)->LongValue(this);
 }
 
 /**
  * Returns the value of this value cast as a float
  */
 method float FloatValue(const DSNumber* const this) {
-    return get_vptr(DSNumber)->FloatValue(this);
+    return _vptr(DSNumber)->FloatValue(this);
 }
 
 /**
  * Returns the value of this value cast as a double
  */
 method double DoubleValue(const DSNumber* const this) {
-    return get_vptr(DSNumber)->DoubleValue(this);
+    return _vptr(DSNumber)->DoubleValue(this);
 }
 
 /**
  * Returns the value of this value cast as a char
  */
 method char CharValue(const DSNumber* const this) {
-    return get_vptr(DSNumber)->CharValue(this);
+    return _vptr(DSNumber)->CharValue(this);
 }
 
 /**
  * Returns the value of this value cast as a short
  */
 method short ShortValue(const DSNumber* const this) {
-    return get_vptr(DSNumber)->ShortValue(this);
+    return _vptr(DSNumber)->ShortValue(this);
 }
 
 method char* ToString(const DSNumber* const this) {
-    return get_vptr(DSNumber)->ToString(this);
+    return _vptr(DSNumber)->ToString(this);
 }
 
 

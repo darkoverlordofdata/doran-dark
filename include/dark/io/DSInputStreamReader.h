@@ -62,7 +62,7 @@ vtable (DSInputStreamReader) {
     const DSInputStreamReaderReady          Ready;
 };
 
-class_bind( DSInputStreamReader );
+class_load( DSInputStreamReader );
 class_override( ToString,        (DSInputStreamReaderToString)ToString, "$@:v" );
 class_method( Equals,            (DSObjectEquals)Equals, "B@:@@" );
 class_method( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
@@ -75,7 +75,7 @@ class_method( Mark,              (DSReaderMark)Mark, "v@:i" );
 class_method( MarkSupported,     (DSReaderMarkSupported)MarkSupported, "v@:v" );
 class_method( Reset,             (DSReaderReset)Reset, "v@:v" );
 class_method( Ready,             (DSReaderReady)Ready, "B@:" );
-class_methodize;
+class_fini;
 
 method DSInputStreamReader* DSInputStreamReader_init(DSInputStreamReader* this, DSInputStream* in) {
     DSObject_init(this);

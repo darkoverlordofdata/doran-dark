@@ -63,7 +63,7 @@ vtable (DSReader) {
     const DSReaderReady         Ready;
 };
 
-class_bind( DSReader );
+class_load( DSReader );
 class_override( ToString,        (DSReaderToString)ToString, "$@:v" );
 class_method( Equals,            (DSObjectEquals)Equals, "B@:@@" );
 class_method( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
@@ -76,7 +76,7 @@ class_method( Mark,              (DSReaderMark)Mark, "v@:i" );
 class_method( MarkSupported,     (DSReaderMarkSupported)MarkSupported, "v@:v" );
 class_method( Reset,             (DSReaderReset)Reset, "v@:v" );
 class_method( Ready,             (DSReaderReady)Ready, "B@:" );
-class_methodize;
+class_fini;
 
 /** Maximum skip-buffer size */
 static const int maxSkipBufferSize = 8192;
@@ -100,7 +100,7 @@ method int ReadOne(DSReader* this) {
 }
 
 method int Read(DSReader* this, IOBuff* buf, int offset, int len) {
-    return get_vptr(DSReader)->Read(this, buf, offset, len);
+    return _vptr(DSReader)->Read(this, buf, offset, len);
 }
 
 method long Skip(DSReader* this, long n)  {
@@ -137,7 +137,7 @@ method void Reset(DSReader* this) {
 }
 
 method void Close(DSReader* this) {
-    get_vptr(DSReader)->Close(this);
+    _vptr(DSReader)->Close(this);
 }
 
 

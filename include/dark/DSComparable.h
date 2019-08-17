@@ -24,8 +24,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #pragma once
-#ifndef _DSCOMPARABLE_H_
-#define _DSCOMPARABLE_H_
 #include "DSObject.h"
 #include "DSException.h"
 
@@ -56,7 +54,10 @@ vtable (DSComparable) {
     const DSComparableCompareTo     CompareTo;
 };
 
-class_bind(DSComparable);
+/**
+ * Create the class loader
+ */
+class_load(DSComparable);
 class_method(ToString,           (DSComparableToString)ToString, "$@:v");
 class_method(Equals,             (DSObjectEquals)Equals, "B@:@@");
 class_method(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
@@ -64,7 +65,7 @@ class_method(Dispose,            (DSObjectDispose)Dispose, "v@:v");
 class_method(ReferenceEquals,    ReferenceEquals, "@:v");
 class_method(InstanceEquals,     InstanceEquals, "$@:v");
 class_method(CompareTo,          (DSComparableCompareTo)CompareTo, "i@:@");
-class_methodize;
+class_fini;
 
 //=======================================================================//
 //              I M P L E M E N T A T I O N                              //          
@@ -78,12 +79,10 @@ function DSComparable* DSComparable_init(DSComparable* const this)
 }
 
 method int CompareTo(const DSComparable* const this, const DSComparable* const other) {
-    return get_vptr(DSComparable)->CompareTo(this, other);
+    return _vptr(DSComparable)->CompareTo(this, other);
 }
 
 method char* ToString(const DSComparable* const this) {
     return "dark.DSComparable";
 }
 
-
-#endif _DSCOMPARABLE_H_

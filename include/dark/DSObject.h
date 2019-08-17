@@ -99,16 +99,16 @@ vtable (DSClass)
 /**
  * Put it all together
  */
-class_bind(DSClass);
+class_load(DSClass);
 class_method(ToString,           (DSObjectToString)ToString, "$@:v");
 class_method(Equals,             (DSObjectEquals)Equals, "B@:@@");
 class_method(GetHashCode,        (DSObjectGetHashCode)GetHashCode, "l@:v");
 class_method(Dispose,            (DSObjectDispose)Dispose, "v@:v");
 class_method(ReferenceEquals,    ReferenceEquals, "@:v");
 class_method(InstanceEquals,     InstanceEquals, "$@:v");
-class_methodize;
+class_fini;
 
-class_bind(DSObject);
+class_load(DSObject);
 class_method(ToString,           ToString, "$@:v");
 class_method(Equals,             Equals, "B@:@@");
 class_method(GetHashCode,        GetHashCode, "l@:v");
@@ -116,7 +116,7 @@ class_method(Dispose,            Dispose, "v@:v");
 class_method(ReferenceEquals,    ReferenceEquals, "@:v");
 class_method(InstanceEquals,     InstanceEquals, "$@:v");
 $DSObject.Empty = nullptr;
-class_methodize;
+class_fini;
 
 //=======================================================================//
 //              I M P L E M E N T A T I O N                              //          
@@ -161,7 +161,7 @@ method bool InstanceEquals(const DSObject* const objA, const DSObject* const obj
 
 method void Dispose(DSObject* const this)
 {
-    return get_vptr(DSObject)->Dispose(this);
+    return _vptr(DSObject)->Dispose(this);
 }
 /**
  * virtual Dispose method
@@ -174,7 +174,7 @@ function void DSObject_Dispose(DSObject* const this){}
  */
 method char* ToString(const DSObject* const this)
 {
-    return get_vptr(DSObject)->ToString(this);
+    return _vptr(DSObject)->ToString(this);
 }
 /**
  * virtual ToString method
@@ -190,7 +190,7 @@ function const char *DSObject_ToString(const DSObject* const this)
 method bool Equals(const DSObject* const this, const DSObject* const that)
 {
     // return this == that;
-    return get_vptr(DSObject)->Equals(this, that);
+    return _vptr(DSObject)->Equals(this, that);
 }
 
 /**
@@ -198,7 +198,7 @@ method bool Equals(const DSObject* const this, const DSObject* const that)
  */
 method int GetHashCode(const DSObject* const this)
 {
-    return get_vptr(DSObject)->GetHashCode(this);
+    return _vptr(DSObject)->GetHashCode(this);
 }
 
 method Class GetClass(const DSObject* const this)

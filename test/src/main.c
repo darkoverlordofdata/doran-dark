@@ -6,7 +6,7 @@
 #include "darkunit.h"
 #include "main.h"
 
-void DSHashmap_dtor(void* this);
+void DSMap_dtor(void* this);
 
 char keys[12][7] = {
     "key1", "key2", "AbCdEf",
@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
 
     auto numArray = new(DSArray);//, of(DSNumber));
     auto numList = new(DSList);//, of(DSNumber));
-    auto numHash = new(DSHashmap, of(DSNumber));
+    auto numHash = new(DSMap, of(DSNumber));
     auto f1 = new(DSFile, unc);
 
     for (int i=0; i<12; i++) {

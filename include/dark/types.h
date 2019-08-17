@@ -61,7 +61,7 @@ static const int BuildVersion = 1;
 #include "DSException.h"
 #include "DSComparable.h"
 #include "collections/DSArray.h"
-#include "collections/DSHashmap.h"
+#include "collections/DSMap.h"
 #include "collections/DSList.h"
 #include "types/DSNumber.h"
 #include "types/DSBoolean.h"
@@ -135,7 +135,7 @@ static const int BuildVersion = 1;
         DSString *: "DSString",                                         \
         DSStringBuilder *: "DSStringBuilder",                           \
         DSArray *: "DSArray",                                           \
-        DSHashmap *: "DSHashmap",                                       \
+        DSMap *: "DSMap",                                       \
         DSList *: "DSList",                                             \
         DSClass : "DSClass",                                            \                                               
         default: "unknown")

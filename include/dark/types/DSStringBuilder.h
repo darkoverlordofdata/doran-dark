@@ -58,19 +58,18 @@ SOFTWARE.
 #include <string.h>
 #include "DSString.h"
 
-type (StringFragment)
-{
-	StringFragment * next;
-	int length;
-	char* str;
-};
-
 #define IsDSStringBuilder(object) _Generic((object), DSStringBuilder*: true, default: false)
 #define AsDSStringBuilder(object) _Generic((object),                    \
                             DSStringBuilder*: (DSStringBuilder *)object,\
                             default: nullptr)
 
 
+type (StringFragment)
+{
+	StringFragment * next;
+	int length;
+	char* str;
+};
 /**
  * StringBuilder class
  */
@@ -111,7 +110,7 @@ vtable (DSStringBuilder) {
     const DSStringBuilderReset      Reset;
 };
 
-class_bind( DSStringBuilder );
+class_load( DSStringBuilder );
 class_method( ToString, 		    (DSStringBuilderToString)ToString, "$@:v" );
 class_method( Equals,            (DSObjectEquals)Equals, "B@:@@" );
 class_method( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
@@ -125,7 +124,7 @@ class_method( Reset, 			(DSStringBuilderReset)Reset, "v@:v" );
 class_member( root, sizeof( id ), "^" );
 class_member( trunk, sizeof( id ), "^" );
 class_member( length, sizeof( int ), "i" );
-class_methodize
+class_fini
 
 /* 
  * Constructor
@@ -155,7 +154,7 @@ method int Empty(const DSStringBuilder* this)
 method int Appendc(DSStringBuilder* this, const char c)
 {
 	char str[2] = { c, 0 };
-	auto x = get_vptr(DSStringBuilder)->Append(this, str);
+	auto x = _vptr(DSStringBuilder)->Append(this, str);
 	return x;
 }
 /*
