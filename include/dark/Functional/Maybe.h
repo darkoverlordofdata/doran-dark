@@ -53,7 +53,7 @@ typedef struct Maybe Maybe;
 
 
 #ifdef __MAYBE_GENERICS__
-ivar (Maybe) {
+IVAR (Maybe) {
     union {
         int Int;
         long Long;
@@ -78,7 +78,7 @@ __Maybe__(bool, Bool);
 __Maybe__(char*, Str);
 __Maybe__(void*, Ptr);
 #else
-ivar (Maybe) {
+IVAR (Maybe) {
     DSObject* value;
 };
 #endif

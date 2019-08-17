@@ -66,7 +66,7 @@ METHOD (DSFile, GetCanonicalFile,   DSFile*,    (DSFile* const) );
 METHOD (DSFile, CanRead,            bool,       (DSFile* const) );
 METHOD (DSFile, CanWrite,           bool,       (DSFile* const) );
 METHOD (DSFile, Exists,             bool,       (DSFile* const) );
-METHOD (DSFile, IsDirectory,        bool,       (DSFile* const) );
+METHOD (DSFile, IsDireCTORy,        bool,       (DSFile* const) );
 METHOD (DSFile, IsFile,             bool,       (DSFile* const) );
 METHOD (DSFile, GetLength,          long,       (DSFile* const) );
 METHOD (DSFile, List,               DSString**, (DSFile* const) );
@@ -91,7 +91,7 @@ VTABLE (DSFile) {
     const DSFileCanRead               CanRead;
     const DSFileCanWrite              CanWrite;
     const DSFileExists                Exists;
-    const DSFileIsDirectory           IsDirectory;
+    const DSFileIsDireCTORy           IsDireCTORy;
     const DSFileIsFile                IsFile;
     const DSFileGetLength             GetLength;
     const DSFileList                  List;
@@ -188,7 +188,7 @@ static inline overload bool Exists(DSFile* this) {
     return ((fs.GetBooleanAttributes(this) & BA_EXISTS) != 0);
 }
 
-static inline overload bool IsDirectory(DSFile* this) {
+static inline overload bool IsDireCTORy(DSFile* this) {
     if (IsInvalid(this)) return false;
     return ((fs.GetBooleanAttributes(this) & BA_DIRECTORY) != 0);
 }
@@ -317,7 +317,7 @@ VTABLE_METHOD( GetCanonicalFile,  (DSFileGetCanonicalFile)GetCanonicalFile, "@@:
 VTABLE_METHOD( CanRead,           (DSFileCanRead)CanRead, "B@:v");
 VTABLE_METHOD( CanWrite,          (DSFileCanWrite)CanWrite, "B@:v");
 VTABLE_METHOD( Exists,            (DSFileExists)Exists, "B@:v");
-VTABLE_METHOD( IsDirectory,       (DSFileIsDirectory)IsDirectory, "B@:v");
+VTABLE_METHOD( IsDireCTORy,       (DSFileIsDireCTORy)IsDireCTORy, "B@:v");
 VTABLE_METHOD( IsFile,            (DSFileIsFile)IsFile, "B@:v");
 VTABLE_METHOD( GetLength,         (DSFileGetLength)GetLength, "l@:v");
 

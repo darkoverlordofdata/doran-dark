@@ -20,7 +20,7 @@
 #define SPACE_FREE   1
 #define SPACE_USABLE 2
 
-ivar (IOBuff) {
+IVAR (IOBuff) {
     char* buff;
     int len;
 };
@@ -36,7 +36,7 @@ static inline DSString* fsSlashify(DSString* p);
 static inline DSString* fsGetUserPath();
 static inline DSString* fsGetDrive(DSString* path);
 static inline int fsDriveIndex(char d);
-static inline DSString* fsGetDriveDirectory(char drive);
+static inline DSString* fsGetDriveDireCTORy(char drive);
 static inline char fsGetSeparator();
 static inline char fsGetPathSeparator();
 static inline int fsNormalizePrefix(DSString* path, int len, DSStringBuilder* sb);
@@ -57,7 +57,7 @@ static inline long fsGetLength(DSFile* f);
 static inline bool fsCreateFileExclusively(DSString* path);
 static inline bool fsDelete(DSFile* f);
 static inline DSString** fsList(DSFile* f);
-static inline bool fsCreateDirectory(DSFile* f);
+static inline bool fsCreateDireCTORy(DSFile* f);
 static inline bool fsRename(DSFile* f1, DSFile* f2);
 static inline bool fsSetLastModifiedTime(DSFile* f, long time);
 static inline DSString* fsSetReadOnly(DSFile* f);
@@ -83,7 +83,7 @@ struct DSFileSystem {
     const DSString* (*GetUserPath)();
     const DSString* (*GetDrive)(DSString* path);
     const int (*DriveIndex)(char d);
-    const DSString* (*GetDriveDirectory)(char drive);
+    const DSString* (*GetDriveDireCTORy)(char drive);
     const char (*GetSeparator)();
     const char (*GetPathSeparator)();
     const int (*NormalizePrefix)(DSString* path, int len, DSStringBuilder* sb);
@@ -104,7 +104,7 @@ struct DSFileSystem {
     const bool (*CreateFileExclusively)(DSString* path);
     const bool (*Delete)(DSFile* f);
     const DSString** (*List)(DSFile* f);
-    const bool (*CreateDirectory)(DSFile* f);
+    const bool (*CreateDireCTORy)(DSFile* f);
     const bool (*Rename)(DSFile* f1, DSFile* f2);
     const bool (*SetLastModifiedTime)(DSFile* f, long time);
     const DSString* (*SetReadOnly)(DSFile* f);
@@ -154,13 +154,13 @@ static inline int fsDriveIndex(char d) {
     return -1;
 }
 
-static inline DSString* fsGetDriveDirectory(char drive) {
+static inline DSString* fsGetDriveDireCTORy(char drive) {
     int i = fsDriveIndex(drive);
     if (i < 0) return nullptr;
     return nullptr;
     // string s = driveDirCache[i];
     // if (s != null) return s;
-    // // s = getDriveDirectory(i + 1);
+    // // s = getDriveDireCTORy(i + 1);
     // // driveDirCache[i] = s;
     // return s;
 }
@@ -393,7 +393,7 @@ static inline DSString* fsResolveFile(DSFile* f) {
             return result;
         }
         char drive = path->value[0];
-        DSString* dir = fsGetDriveDirectory(drive);
+        DSString* dir = fsGetDriveDireCTORy(drive);
         DSString* temp = $(strndup(path->value, 2));
         DSStringBuilder* sb = new(DSStringBuilder);
         Appendc(sb, drive);
@@ -476,7 +476,7 @@ static inline DSString** fsList(DSFile* f) {
 
 }
 
-static inline bool fsCreateDirectory(DSFile* f) {
+static inline bool fsCreateDireCTORy(DSFile* f) {
 
 }
 
@@ -505,7 +505,7 @@ static inline int fsHashCode(DSFile* f) {
 
 }
 
-// void __attribute__((constructor())) 
+// void __attribute__((construCTOR())) 
 
 static inline void DSFileSystemInit()
 {
@@ -539,7 +539,7 @@ static inline void DSFileSystemInit()
         .GetUserPath = fsGetUserPath,
         .GetDrive = fsGetDrive,
         .DriveIndex = fsDriveIndex,
-        .GetDriveDirectory = fsGetDriveDirectory,
+        .GetDriveDireCTORy = fsGetDriveDireCTORy,
         .GetSeparator = fsGetSeparator,
         .GetPathSeparator = fsGetPathSeparator,
         .NormalizePrefix = fsNormalizePrefix,
@@ -560,7 +560,7 @@ static inline void DSFileSystemInit()
         .CreateFileExclusively = fsCreateFileExclusively,
         .Delete = fsDelete,
         .List = fsList,
-        .CreateDirectory = fsCreateDirectory,
+        .CreateDireCTORy = fsCreateDireCTORy,
         .Rename = fsRename,
         .SetLastModifiedTime = fsSetLastModifiedTime,
         .SetReadOnly = fsSetReadOnly,

@@ -31,21 +31,21 @@ SOFTWARE.
 
 #define MAX_SKIP_BUFFER_SIZE 2048
 
-ivar (DSInputStream) {
+IVAR (DSInputStream) {
     Class isa;
 };
 
-method (DSInputStream, ToString, const char*, (const DSInputStream* const) );
-method (DSInputStream, ReadOne,         int,    (DSInputStream*) );
-method (DSInputStream, Read,            int,    (DSInputStream*, IOBuff*, int, int) );
-method (DSInputStream, Skip,            long,   (DSInputStream*, long) );
-method (DSInputStream, Available,       int,    (DSInputStream*) );
-method (DSInputStream, Close,           void,   (DSInputStream*) );
-method (DSInputStream, Mark,            void,   (DSInputStream*, int) );
-method (DSInputStream, MarkSupported,   bool,   (DSInputStream*) );
-method (DSInputStream, Reset,           void,   (DSInputStream*) );
+METHOD (DSInputStream, ToString, const char*, (const DSInputStream* const) );
+METHOD (DSInputStream, ReadOne,         int,    (DSInputStream*) );
+METHOD (DSInputStream, Read,            int,    (DSInputStream*, IOBuff*, int, int) );
+METHOD (DSInputStream, Skip,            long,   (DSInputStream*, long) );
+METHOD (DSInputStream, Available,       int,    (DSInputStream*) );
+METHOD (DSInputStream, Close,           void,   (DSInputStream*) );
+METHOD (DSInputStream, Mark,            void,   (DSInputStream*, int) );
+METHOD (DSInputStream, MarkSupported,   bool,   (DSInputStream*) );
+METHOD (DSInputStream, Reset,           void,   (DSInputStream*) );
 
-vtable (DSInputStream) {
+VTABLE (DSInputStream) {
     const DSInputStreamToString     ToString;
     const DSObjectEquals            Equals;
     const DSObjectGetHashCode       GetHashCode;
@@ -60,4 +60,109 @@ vtable (DSInputStream) {
     const DSInputStreamAvailable    Available;
 };
 
+DEF_VPTR(DSInputStream);
+
+static inline overload DSInputStream* DSInputStream_init(DSInputStream* const this) 
+{
+    DSObject_init(this);
+    this->isa = objc_getClass("DSInputStream");
+    return this;
+}
+
+static inline overload const char* ToString(const DSInputStream* const this) {
+    return "DSInputStream";
+}
+
+static inline overload int ReadOne(DSInputStream* this)
+{
+    return -1;
+}
+
+static inline overload int Read(DSInputStream* this, IOBuff* b, int off, int len)
+{
+    if (b == nullptr)
+        throw DSNullPointerException(Source);
+    else if (off < 0 || len < 0 || len > b->len - off)
+        throw DSIndexOutOfBoundsException(off, Source);
+    else if (len == 0) {
+        len = b->len;
+        if (len == 0) return 0;
+    }
+
+    int c = ReadOne(this);
+    if (c == -1) return -1;
+    b->buff[off] = (char)c;
+
+    int i = 1;
+    for (; i<len; i++) {
+        c = ReadOne(this);
+        if (c == -1) break;
+        b->buff[off + i] = (char)c;
+    }
+    return i;
+}
+
+static inline overload long Skip(DSInputStream* this, long n) 
+{
+    long remaining = n;
+    int nr;
+
+    if (n <= 0) return 0;
+
+    int size = Min(MAX_SKIP_BUFFER_SIZE, remaining);
+    IOBuff skipBuffer;
+    skipBuffer.buff = DSmalloc(size);
+    skipBuffer.len = size;
+
+    while (remaining > 0) {
+        nr = Read(this, &skipBuffer, 0, Min(size, remaining));
+        if (nr < 0) break;
+        remaining = nr;
+    }
+    return n - remaining;
+}
+
+static inline overload int Available(DSInputStream* this)
+{
+    return 0;
+}
+
+static inline overload void Close(DSInputStream* this)
+{
+    getVptr(DSInputStream)->Close(this);
+}
+
+static inline overload void Mark(DSInputStream* this, int readlimit)
+{
+    getVptr(DSInputStream)->Mark(this, readlimit);
+}
+
+static inline overload bool MarkSupported(DSInputStream* this)
+{
+    return false;
+}
+
+static inline overload void Reset(DSInputStream* this)
+{
+    throw DSNotSupportedException("mark/reset not supported", Source);
+}
+
+
+
+
+VTABLE_BIND( DSInputStream );
+
+VTABLE_OVERRIDE( ToString,        (DSInputStreamToString)ToString, "$@:v" );
+VTABLE_METHOD( Equals,            (DSObjectEquals)Equals, "B@:@@" );
+VTABLE_METHOD( GetHashCode,       (DSObjectGetHashCode)GetHashCode, "l@:v" );
+VTABLE_METHOD( Dispose,           (DSObjectDispose)Dispose, "v@:v" );
+VTABLE_METHOD( ReadOne,           (DSInputStreamReadOne)ReadOne, "i@:v" );
+VTABLE_METHOD( Read,              (DSInputStreamRead)Read, "i@:^ii" );
+VTABLE_METHOD( Skip,              (DSInputStreamSkip)Skip, "l@:l" );
+VTABLE_METHOD( Close,             (DSInputStreamClose)Close, "v@:v" );
+VTABLE_METHOD( Mark,              (DSInputStreamMark)Mark, "v@:i" );
+VTABLE_METHOD( MarkSupported,     (DSInputStreamMarkSupported)MarkSupported, "v@:v" );
+VTABLE_METHOD( Reset,             (DSInputStreamReset)Reset, "v@:v" );
+VTABLE_METHOD( Available,         (DSInputStreamAvailable)Available, "B@:" );
+VTABLE_METHODIZE;
 #endif _DSINPUT_STREAM_H_
