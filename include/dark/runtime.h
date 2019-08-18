@@ -22,7 +22,7 @@
  * @APPLE_LICENSE_HEADER_END@
  */
 #pragma once
-#include <dark/hashmap.h>
+#include <dark/vendor/hashmap/hashmap.h>
 
 #define nil (id)0
 #define Nil (Class)0
