@@ -22,9 +22,7 @@
  * @APPLE_LICENSE_HEADER_END@
  */
 #pragma once
-#ifndef _OBJC_CORE_H_
-#define _OBJC_CORE_H_
-#include "hashmap.h"
+#include <dark/hashmap.h>
 
 #define nil (id)0
 #define Nil (Class)0
@@ -80,6 +78,10 @@ typedef struct objc_object {
 // typedef id (*IMP)(id, SEL, ...);
 typedef id (*IMP)(id, ...);
 
+/**
+ * The internal representation of a class.
+ * The runtime cache's some of this data in DSClass.
+ */
 struct objc_class {
 	Class isa;
 	Class super_class;
@@ -413,5 +415,3 @@ extern SEL $set;
 extern SEL $get;
 extern SEL $clear;
 
-
-#endif _OBJC_CORE_H_ 

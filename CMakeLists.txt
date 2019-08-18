@@ -15,18 +15,7 @@ list ( APPEND INCLUDE .lib/dark/src/vendor )
 list ( APPEND CSOURCE .lib/dark/src/runtime/hashmap.c )
 list ( APPEND CSOURCE .lib/dark/src/runtime/runtime.c )
 list ( APPEND CSOURCE .lib/dark/src/runtime/objc-class.c )
-list ( APPEND CSOURCE .lib/dark/src/core.c )
-list ( APPEND CSOURCE .lib/dark/src/string.c )
-list ( APPEND CSOURCE .lib/dark/src/printf.c )
 
-
-# list ( APPEND CSOURCE .lib/dark/src/io/DSFileSystem.c )
-# list ( APPEND CSOURCE .lib/dark/src/io/DSFile.c )
-# list ( APPEND CSOURCE .lib/dark/src/io/DSInputStream.c )
-# list ( APPEND CSOURCE .lib/dark/src/io/DSFileInputStream.c )
-# list ( APPEND CSOURCE .lib/dark/src/io/DSReader.c )
-# list ( APPEND CSOURCE .lib/dark/src/io/DSInputStreamReader.c )
-# list ( APPEND CSOURCE .lib/dark/src/io/DSBufferedReader.c )
 
 # Vala Sources:
 

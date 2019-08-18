@@ -24,8 +24,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #pragma once
-#ifndef _TYPES_H
-#define _TYPES_H
+#include <stdio.h> 
+#include <stdarg.h>
+#include <math.h> 
+
 /**
  * lowest level internal core types
  */
@@ -35,64 +37,64 @@ static const int BuildVersion = 1;
 /**
  * the core ohject system:
  * 
- * this is the DaRKSTEP DSObject and DSClass
+ * this is the DaRKSTEP Object and DSClass
  */
-#include "core.h"
-#include "hashmap.h"
-#include "DSLog.h"
-#include "DSClass.h"
-#include "DSObject.h"
-
+#include <dark/core.h>
+#include <dark/polyfill.h>
+#include <dark/hashmap.h>
+#include <dark/core/class.h>
+#include <dark/core/object.h>
+#include <dark/printf.h>
 /**
  * functional objects
  * 
  * some opaque helpers
  * Inspired by scala & haskell
  */
-#include "Functional/Either.h"
-#include "Functional/Option.h"
-#include "Functional/Maybe.h"
+#include <dark/functional/either.h>
+#include <dark/functional/option.h>
+#include <dark/functional/maybe.h>
 
 /**
  * base framework
  * 
  * The Dark Overload stdlib
  */
-#include "DSException.h"
-#include "DSComparable.h"
-#include "collections/DSArray.h"
-#include "collections/DSMap.h"
-#include "collections/DSList.h"
-#include "types/DSNumber.h"
-#include "types/DSBoolean.h"
-#include "types/DSString.h"
-#include "types/DSStringBuilder.h"
-#include "types/DSChar.h"
-#include "types/DSDouble.h"
-#include "types/DSFloat.h"
-#include "types/DSInteger.h"
-#include "types/DSLong.h"
-#include "types/DSShort.h"
+#include <dark/core/exception.h>
+#include <dark/core/comparable.h>
+#include <dark/collections/array.h>
+#include <dark/collections/map.h>
+#include <dark/collections/list.h>
+#include <dark/types/number.h>
+#include <dark/types/boolean.h>
+#include <dark/types/string.h>
+#include <dark/types/stringbuilder.h>
+#include <dark/types/char.h>
+#include <dark/types/double.h>
+#include <dark/types/float.h>
+#include <dark/types/integer.h>
+#include <dark/types/long.h>
+#include <dark/types/short.h>
 /**
  *  MACRO $
- *      Wrap a primitive type in a DSObject*
+ *      Wrap a primitive type in a Object*
  */
 #define $(T) _Generic((T),                                              \
                                                                         \
-        _Bool:              NewDSBoolean,                               \
-        char:               NewDSChar,                                  \
-        signed char:        NewDSChar,                                  \
-        const char *:       NewDSString,                                \
-        char *:             NewDSString,                                \
-        short int:          NewDSShort,                                 \
-        unsigned short int: NewDSShort,                                 \
-        unsigned int:       NewDSInteger,                               \
-        long int:           NewDSLong,                                  \
-        unsigned long int:  NewDSLong,                                  \
-        int:                NewDSInteger,                               \
-        float:              NewDSFloat,                                 \
-        double:             NewDSDouble,                                \
-        default:            NewDSString)(T)
+        _Bool:              NewBoolean,                                 \
+        char:               NewChar,                                    \
+        signed char:        NewChar,                                    \
+        const char *:       NewString,                                  \
+        char *:             NewString,                                  \
+        short int:          NewShort,                                   \
+        unsigned short int: NewShort,                                   \
+        unsigned int:       NewInteger,                                 \
+        long int:           NewLong,                                    \
+        unsigned long int:  NewLong,                                    \
+        int:                NewInteger,                                 \
+        float:              NewFloat,                                   \
+        double:             NewDouble,                                  \
+        default:            NewString)(T)
 
 
 
@@ -101,7 +103,7 @@ static const int BuildVersion = 1;
  *      return the typename of T
  */
 #define typeof(T) \
-    _Generic((T),        /* wrap a primitive type */      \
+    _Generic((T),        /* wrap a primitive type */                    \
                                                                         \
         _Bool: "bool",                                                  \
         unsigned char: "unsigned char",                                 \
@@ -122,27 +124,20 @@ static const int BuildVersion = 1;
         void *: "pointer to void",                                      \
         int *: "pointer to int",                                        \
         const char *: "const pointer to char",                          \
-        DSObject *: "DSObject",                                         \
-        DSComparable * : "DSComparable",                                \
-        DSBoolean *: "DSBoolean",                                       \
-        DSChar *: "DSChar",                                             \
-        DSDouble *: "DSDouble",                                         \
-        DSFloat *: "DSFloat",                                           \
-        DSInteger *: "DSInteger",                                       \
-        DSLong *: "DSLong",                                             \
-        DSNumber *: "DSNumber",                                         \
-        DSShort *: "DSShort",                                           \
-        DSString *: "DSString",                                         \
-        DSStringBuilder *: "DSStringBuilder",                           \
-        DSArray *: "DSArray",                                           \
-        DSMap *: "DSMap",                                       \
-        DSList *: "DSList",                                             \
-        DSClass : "DSClass",                                            \                                               
+        Object *: "Object",                                             \
+        Comparable * : "Comparable",                                    \
+        Boolean *: "Boolean",                                           \
+        Char *: "Char",                                                 \
+        Double *: "Double",                                             \
+        Float *: "Float",                                               \
+        Integer *: "Integer",                                           \
+        Long *: "Long",                                                 \
+        Number *: "Number",                                             \
+        Short *: "Short",                                               \
+        String *: "String",                                             \
+        StringBuilder *: "StringBuilder",                               \
+        Array *: "Array",                                               \
+        Map *: "Map",                                                   \
+        List *: "List",                                                 \
         default: "unknown")
 
-        // Vec2 : "Vec2",                                                  \
-        // Vec3 : "Vec3",                                                  \
-        // Vec4 : "Vec4",                                                  \
-        // Matrix : "Matrix",                                              \
-
-#endif _TYPES_H

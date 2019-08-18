@@ -2,11 +2,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <dark/Foundation.h>
-#include <Block.h>
-#include "darkunit.h"
-#include "main.h"
+#include <dark/unit.h>
 
-void DSMap_dtor(void* this);
+void Map_dtor(void* this);
 
 char keys[12][7] = {
     "key1", "key2", "AbCdEf",
@@ -19,7 +17,7 @@ int main(int argc, char **argv) {
 
     const char* unc = "C:\\Users\\darko\\Documents\\GitHub\\doran-dark\\test\\license.md";
 
-    DSLog("** DaRKSTEP Test** \n");
+    Log("** DaRKSTEP Test** \n");
 
     auto l = $(420L);
     auto m = $(420L); 
@@ -27,10 +25,10 @@ int main(int argc, char **argv) {
     auto s = $("Frodo");
     auto c = $('c');
 
-    auto numArray = new(DSArray);//, of(DSNumber));
-    auto numList = new(DSList);//, of(DSNumber));
-    auto numHash = new(DSMap, of(DSNumber));
-    auto f1 = new(DSFile, unc);
+    auto numArray = new(Array);//, of(Number));
+    auto numList = new(List);//, of(Number));
+    auto numHash = new(Map, of(Number));
+    auto f1 = new(File, unc);
 
     for (int i=0; i<12; i++) {
         Put(numHash, keys[i], $(i+420));
@@ -50,12 +48,12 @@ int main(int argc, char **argv) {
 
         It("Should be an error", ^{
             auto r = Put(numHash, "Frodo", $("Baggins"));
-            DSLog(ToString(GetLeft(r)));
-            Expect(!IsRight(r));
+            Log(ToString(getLeft(r)));
+            Expect(!isRight(r));
         });
 
         It("True and True are the same", ^{
-            Expect(CompareTo($DSBoolean.True, $DSBoolean.True) == 0);
+            Expect(CompareTo($Boolean.True, $Boolean.True) == 0);
         });
         
         It("Should be 5", ^{
@@ -75,15 +73,15 @@ int main(int argc, char **argv) {
         });
 
         // It("Should equal another instance", ^{
-        //     Expect(Equals((DSObject*)l, (DSObject*)m));
+        //     Expect(Equals((Object*)l, (Object*)m));
         // });
 
         It("Should be a Long", ^{
-            Expect(Equals($("DSLong"), $(GetClassName(l))));
+            Expect(Equals($("Long"), $(GetClassName(l))));
         });
 
         It("Should be a Boolean", ^{
-            Expect(!strcmp("DSBoolean", GetClassName(b)));
+            Expect(!strcmp("Boolean", GetClassName(b)));
         });
 
         It("Should be true", ^{
@@ -91,7 +89,7 @@ int main(int argc, char **argv) {
         });
 
         // It("keyB is 430", ^{
-        //     DSNumber* n = Get(numHash,"keyB");
+        //     Number* n = Get(numHash,"keyB");
         //     Expect(LongValue(n) == 430);
         // });
 
@@ -117,7 +115,7 @@ int main(int argc, char **argv) {
         
 
     });
-    DSLog("Done");
+    Log("Done");
 
     return 0; //Summary();
 }

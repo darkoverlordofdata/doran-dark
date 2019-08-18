@@ -38,16 +38,13 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ****************************************************************************** */
 #pragma once
-#ifndef _FOUNDATION_H_
-#define _FOUNDATION_H_
 
-#include "types.h"
-#include "io/DSFile.h"
-#include "io/DSFileSystem.h"
-#include "io/DSInputStream.h"
-#include "io/DSFileInputStream.h"
-#include "io/DSReader.h"
-#include "io/DSInputStreamReader.h"
-#include "io/DSBufferedReader.h"
+#include <dark/types.h>
+#include <dark/io/file.h>
+#include <dark/io/filesystem.h>
+#include <dark/io/inputstream.h>
+#include <dark/io/fileinputstream.h>
+#include <dark/io/reader.h>
+#include <dark/io/inputstreamreader.h>
+#include <dark/io/bufferedreader.h>
 
-#endif _FOUNDATION_H_

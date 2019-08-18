@@ -22,26 +22,27 @@
  * @APPLE_LICENSE_HEADER_END@
  */
 #include <stdio.h>
-#include <dark/DSClass.h>
-#include <dark/DSObject.h>
-#include <dark/DSComparable.h>
+#include <dark/core/class.h>
+#include <dark/core/object.h>
+#include <dark/core/comparable.h>
 
-#include <dark/types/DSBoolean.h>
-#include <dark/types/DSChar.h>
-#include <dark/types/DSDouble.h>
-#include <dark/types/DSFloat.h>
-#include <dark/types/DSInteger.h>
-#include <dark/types/DSLong.h>
-#include <dark/types/DSNumber.h>
-#include <dark/types/DSShort.h>
-#include <dark/types/DSString.h>
-#include <dark/types/DSStringBuilder.h>
-#include <dark/io/DSFile.h>
-#include <dark/io/DSFileSystem.h>
-#include <dark/collections/DSArray.h>
-#include <dark/collections/DSMap.h>
-#include <dark/collections/DSList.h>
+#include <dark/types/boolean.h>
+#include <dark/types/char.h>
+#include <dark/types/double.h>
+#include <dark/types/float.h>
+#include <dark/types/integer.h>
+#include <dark/types/long.h>
+#include <dark/types/number.h>
+#include <dark/types/short.h>
+#include <dark/types/string.h>
+#include <dark/types/stringbuilder.h>
+#include <dark/io/file.h>
+#include <dark/io/filesystem.h>
+#include <dark/collections/array.h>
+#include <dark/collections/map.h>
+#include <dark/collections/list.h>
 #include <dark/runtime.h>
+
 
 /** builtin selectors */
 SEL $alloc = "alloc";
@@ -86,38 +87,34 @@ void objc_loadFramework()
 {
     _objc_init_class_hash();
 
-    /** register DSObject */
+    /** register Object */
     Class obj;
-    objc_registerClassPair(obj = objc_loadDSObject(Nil));
+    objc_registerClassPair(obj = objc_loadObject(Nil));
 
-    /** register DSClass */
-    Class cls;
-    objc_registerClassPair(cls = objc_loadDSClass(obj));
-
-    /** register DSComparable */
+    /** register Comparable */
     Class cmp;
-    objc_registerClassPair(cmp = objc_loadDSComparable(obj));
+    objc_registerClassPair(cmp = objc_loadComparable(obj));
 
     /** register DSNumber */
     Class num;
-    objc_registerClassPair(num = objc_loadDSNumber(cmp));
+    objc_registerClassPair(num = objc_loadNumber(cmp));
 
-    objc_registerClassPair(objc_loadDSException(obj));
-    objc_registerClassPair(objc_loadDSArray(obj));
-    objc_registerClassPair(objc_loadDSList(obj));
-    objc_registerClassPair(objc_loadDSMap(obj));
-    objc_registerClassPair(objc_loadDSBoolean(cmp));
-    objc_registerClassPair(objc_loadDSChar(num));
-    objc_registerClassPair(objc_loadDSDouble(num));
-    objc_registerClassPair(objc_loadDSFloat(num));
-    objc_registerClassPair(objc_loadDSInteger(num));
-    objc_registerClassPair(objc_loadDSLong(num));
-    objc_registerClassPair(objc_loadDSShort(num));
-    objc_registerClassPair(objc_loadDSString(obj));
-    objc_registerClassPair(objc_loadDSStringBuilder(obj));
-    DSFileSystemInit();
+    objc_registerClassPair(objc_loadException(obj));
+    objc_registerClassPair(objc_loadArray(obj));
+    objc_registerClassPair(objc_loadList(obj));
+    objc_registerClassPair(objc_loadMap(obj));
+    objc_registerClassPair(objc_loadBoolean(cmp));
+    objc_registerClassPair(objc_loadChar(num));
+    objc_registerClassPair(objc_loadDouble(num));
+    objc_registerClassPair(objc_loadFloat(num));
+    objc_registerClassPair(objc_loadInteger(num));
+    objc_registerClassPair(objc_loadLong(num));
+    objc_registerClassPair(objc_loadShort(num));
+    objc_registerClassPair(objc_loadString(obj));
+    objc_registerClassPair(objc_loadStringBuilder(obj));
+    FileSystemInit();
     // objc_registerClassPair(objc_loadDSFileSystem(obj));
-    objc_registerClassPair(objc_loadDSFile(cmp));
+    objc_registerClassPair(objc_loadFile(cmp));
 }
 
 /***********************************************************************
@@ -272,3 +269,18 @@ Class methodizeClass(Class cls)
     // }
     return cls;
 }
+
+void __attribute__((constructor(101))) __objc_load()
+{
+    GC_INIT();
+    GC_enable_incremental();
+    objc_loadFramework();
+}
+
+/**
+ *  stop the garbage collector
+ */
+void __attribute__((destructor)) __objc_unload()
+{
+}
+

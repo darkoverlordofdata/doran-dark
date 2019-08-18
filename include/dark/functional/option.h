@@ -24,41 +24,63 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #pragma once
-#ifndef _{{ name | ucase }}_H_
-#define _{{ name | ucase }}_H_
-#include "Object.h"
+#include <signal.h>
+#include <dark/core/object.h>
 
-
-#define Is{{ name }}(x) (x->isa == &{{ name }}Class)
-#define As{{ name }}(x) (Is{{ name }}(x) ? ({{ name }} *)x : nullptr)
-
-
-/**
- * Object class
- */
-class ({{ name }}) {
-	const struct {{ name }}Class isa;
+type (Option) {
+	bool none;
+	Object* value;
 };
 
+static Option* None;
+
 
 /**
- * Object metaclass
+ * Option `monad`
+ * 
+ * A container/collection that can hold either 0 or 1 object
+ * 
  */
-struct {{ name }}Class 
-{
-    Class  isa;
-    Class  superclass;
-    char*   name;
-    char*   (*ToString) (const Object* const);
-    bool    (*Equals) (const Object* const, const Object* const);
-    int     (*GetHashCode) (const Object* const);
-    void    (*Dispose) (Object* const);
-    bool    (*ReferenceEquals) (const Object* const, const Object* const);
-    bool    (*InstanceEquals) (const Object* const, const Object* const);
-    Object* (*Create) ();
+function Option* NewOption(Object* value) {
+    if (value == nullptr) {
+        printf("Invalid - Option cannot be null\n");
+        raise(SIGSEGV);
+    }
+    const auto this = alloc(Option);
+    this->value = value;
+    return this;
+}
 
-} {{ name }}Class;
+method Object* Some(Option* this) {
+    return this->value;
+}
 
+method int Length(Option* this) {
+    return this->value != nullptr ? 1 : 0;
+}
 
+method void ForEach(Option* const this, void (^iter)(Object*)) {
+    iter(this->value);
+}
 
-#endif _{{ name | ucase }}_H_
+method bool IsEmpty(Option* this) {
+    return this->value == nullptr ? true : false;
+}
+ 
+method Object* Bind(Option* this, Option* (^func)(Option*)) {
+    return this->value != nullptr ? func(this->value) : None; 
+}
+
+method Object* Bind(Option* this, Option* (*func)(Option*)) {
+    return this->value != nullptr ? func(this->value) : None; 
+}
+
+function Object* Return(Option* this) {
+    return this->value != nullptr ? NewOption(this->value) : None;
+}
+
+static void __attribute__((constructor())) OptionBoot() {
+    None = alloc(Option);
+    None->value = nullptr;
+}
+

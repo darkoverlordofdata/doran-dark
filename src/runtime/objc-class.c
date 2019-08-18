@@ -21,8 +21,7 @@
  * 
  * @APPLE_LICENSE_HEADER_END@
  */
-#include <dark/DSClass.h>
-#include <dark/DSLog.h>
+#include <dark/core/class.h>
 #include <dark/runtime.h>
 
 #define WORD_SHIFT 3UL
@@ -365,7 +364,7 @@ bool class_addIvar(Class cls, const char *name, size_t size,
         // align if necessary
         alignBytes = 1 << alignment;
         misalign = cls->instance_size % alignBytes;
-        // DSObject not internally aligned
+        // Object not internally aligned
         if (misalign) cls->instance_size += (long)(alignBytes - misalign);
 
         // set ivar offset and increase instance size

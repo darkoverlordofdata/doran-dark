@@ -68,18 +68,18 @@
     qvec_free(iv);
 
     auto r = myNew(char, 'a','b', 'c');
-    DSLog("%d %d %d", r[0], r[1], r[2]);
+    Log("%d %d %d", r[0], r[1], r[2]);
 
     size_t qq;
     DSLong* __attribute__((cleanup(bye))) qqq;
 
-    auto x = new(DSBoolean, true);
+    auto x = new(Boolean, true);
 
-    DSLog("Hello World");
-    DSLog("x = %s", ToString(x));
-    DSLog("size_t is a %s", getType(qq));
-    DSLog("DSLong* is a %s", getType(qqq));
+    Log("Hello World");
+    Log("x = %s", ToString(x));
+    Log("size_t is a %s", getType(qq));
+    Log("DSLong* is a %s", getType(qqq));
 
-    DSLog("r is a %s", getType(r));
+    Log("r is a %s", getType(r));
 
     return 0;

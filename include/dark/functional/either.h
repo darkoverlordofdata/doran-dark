@@ -24,41 +24,77 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #pragma once
-#ifndef _{{ name | ucase }}_H_
-#define _{{ name | ucase }}_H_
-#include "Object.h"
+#include <dark/core/object.h>
 
-
-#define Is{{ name }}(x) (x->isa == &{{ name }}Class)
-#define As{{ name }}(x) (Is{{ name }}(x) ? ({{ name }} *)x : nullptr)
-
+typedef struct Either Either;
+typedef struct Object Object;
 
 /**
- * Object class
+ * Either `monad`
+ * 
+ * A container similar to a tuple [A, B]
+ * Except that it can only contain A or B, not both.
+ * By convention the right value (A) represents valid results
+ * while the left value (B) represents an error condition.
+ * 
  */
-class ({{ name }}) {
-	const struct {{ name }}Class isa;
+type (Either) {
+	Object* left;
+	Object* right;
+	bool isLeft;
 };
 
+/**
+ * Is it right or left?
+ */
+method bool isRight(Either* this) { 
+	return !this->isLeft; 
+}
 
 /**
- * Object metaclass
+ * get the right member
  */
-struct {{ name }}Class 
-{
-    Class  isa;
-    Class  superclass;
-    char*   name;
-    char*   (*ToString) (const Object* const);
-    bool    (*Equals) (const Object* const, const Object* const);
-    int     (*GetHashCode) (const Object* const);
-    void    (*Dispose) (Object* const);
-    bool    (*ReferenceEquals) (const Object* const, const Object* const);
-    bool    (*InstanceEquals) (const Object* const, const Object* const);
-    Object* (*Create) ();
+method Object* getRight(Either* this) { 
+	return this->right; 
+}
 
-} {{ name }}Class;
+/**
+ * get the left member
+ */
+method Object* getLeft(Either* this) { 
+	return this->left; 
+}
 
+/**
+ * Private constructor
+ * Only Left & Right are allowed.
+ */
+function Either* NewEither(Object* a, Object* b) {
+    const auto this = alloc(Either);
+	this->left = a;
+	this->right = b;
+	this->isLeft = a != nullptr;
+	return this;
+}
 
+/**
+ * Left Public constructor
+ */
+method Either* left(Object* value) { 
+	return NewEither(value, nullptr); 
+}
 
-#endif _{{ name | ucase }}_H_
+/**
+ * Right Public constructor
+ */
+method Either* right(Object* value) { 
+	return NewEither(nullptr, value); 
+}
+
+method Either* map(Either* this, Either* (*func)(Either*)) {
+	if (this->isLeft)
+		return this;
+	else
+		return func(this);
+}
+

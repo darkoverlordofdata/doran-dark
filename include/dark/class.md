@@ -26,7 +26,7 @@ NSObject looks somewhat like this:
         }
     }
     
-For simplicity, DSObject is flattened out:
+For simplicity, Object is flattened out:
 
     object->isa => class {
         isa	
@@ -46,7 +46,7 @@ For simplicity, DSObject is flattened out:
     ...
     object->ivarN
 
-    This makes DSObject a fragile base class, and the developer is 
+    This makes Object a fragile base class, and the developer is 
     responsible for keeping all the fields in sync between classes
     and their subclasses
     On the upside, this should have better perfomance.

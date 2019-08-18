@@ -1,0 +1,161 @@
+/*******************************************************************
+** This code is part of the Dark Framework.
+**
+MIT License
+
+Copyright (c) 2018 Dark Overlord of Data
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+******************************************************************/
+#pragma once
+#include <limits.h>
+#include <float.h>
+#include <math.h>
+#include <dark/core/object.h>
+#include <dark/core/comparable.h>
+
+#define NUMBER_MIN_RADIX 2
+#define NUMBER_MAX_RADIX 36
+
+#define IsNumber(object) _Generic((object), Number*: true, default: false)
+#define AsNumber(object) _Generic((object),                           \
+                            Number*: (Number *)object,              \
+                            default: nullptr)
+
+
+/**
+ * Object class
+ */
+type (Number) {
+    Class isa;
+};
+
+method_proto (Number, ToString,        char*, (const Number* const));
+method_proto (Number, CompareTo,       int, (const Number* const, const Number* const));
+method_proto (Number, IntValue,        int, (const Number* const));
+method_proto (Number, LongValue,       long, (const Number* const));
+method_proto (Number, FloatValue,      float, (const Number* const));
+method_proto (Number, DoubleValue,     double, (const Number* const));
+method_proto (Number, CharValue,       char, (const Number* const));
+method_proto (Number, ShortValue,      short, (const Number* const));
+
+/**
+ * Object metaclass
+ */
+vtable (Number) {
+    const NumberToString         ToString;
+    const ObjectEquals          Equals;
+    const ObjectGetHashCode     GetHashCode;
+    const ObjectDispose         Dispose;
+    const NumberCompareTo        CompareTo;
+    const NumberIntValue         IntValue;
+    const NumberLongValue        LongValue;
+    const NumberFloatValue       FloatValue;
+    const NumberDoubleValue      DoubleValue;
+    const NumberCharValue        CharValue;
+    const NumberShortValue       ShortValue;
+};
+
+class (Number) {
+    Number* (*Create) ();
+};
+
+class_load( Number ); 
+vtable_virtual( ToString,          (NumberToString)ToString, "$@:v" );
+class_method( Equals,             (ObjectEquals)Equals, "B@:@@" );
+class_method( GetHashCode,        (ObjectGetHashCode)GetHashCode, "l@:v" );
+class_method( Dispose,            (ObjectDispose)Dispose, "v@:v" );
+vtable_virtual( CompareTo,         (NumberCompareTo)CompareTo, "i@:@" );
+vtable_virtual( IntValue,          (NumberIntValue)IntValue, "i@:v" );
+vtable_virtual( LongValue,         (NumberLongValue)LongValue, "l@:v" );
+vtable_virtual( FloatValue,        (NumberFloatValue)FloatValue, "f@:v" );
+vtable_virtual( DoubleValue,       (NumberDoubleValue)DoubleValue, "d@:v" );
+vtable_virtual( CharValue,         (NumberCharValue)CharValue, "c@:v" );
+vtable_virtual( ShortValue,        (NumberShortValue)ShortValue, "s@:v" );
+class_fini
+
+/**
+ * Abstract class Number
+ * Initialize the Number vtable
+ * all methods are virtual
+ */
+function Number* Number_init(Number* const this)
+{
+    Comparable_init(this);
+    this->isa = objc_getClass("Number");
+    return this;
+}
+
+/**
+ * Compares two Number objects.
+ *
+ * @param   other  Short to be compared
+ * @return  0 this == other
+ *         +1 this < other
+ *         -1 this > other
+ */
+method int CompareTo(const Number* this, const Number* const other) {
+    return _vptr(Number)->CompareTo(this, other);
+}
+
+/**
+ * Returns the value of this value cast as an int
+ */
+method int IntValue(const Number* const this) {
+    return _vptr(Number)->IntValue(this);
+}
+
+/**
+ * Returns the value of this value cast as a long
+ */
+method long LongValue(const Number* const this) {
+    return _vptr(Number)->LongValue(this);
+}
+
+/**
+ * Returns the value of this value cast as a float
+ */
+method float FloatValue(const Number* const this) {
+    return _vptr(Number)->FloatValue(this);
+}
+
+/**
+ * Returns the value of this value cast as a double
+ */
+method double DoubleValue(const Number* const this) {
+    return _vptr(Number)->DoubleValue(this);
+}
+
+/**
+ * Returns the value of this value cast as a char
+ */
+method char CharValue(const Number* const this) {
+    return _vptr(Number)->CharValue(this);
+}
+
+/**
+ * Returns the value of this value cast as a short
+ */
+method short ShortValue(const Number* const this) {
+    return _vptr(Number)->ShortValue(this);
+}
+
+method char* ToString(const Number* const this) {
+    return _vptr(Number)->ToString(this);
+}

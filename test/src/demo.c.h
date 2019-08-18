@@ -18,26 +18,26 @@ void overload ForEach(DSList* const this, void (^iter)(DSString*))
 
 int main(int argc, char **argv) {
 
-    DSLog("Hello World");
+    Log("Hello World");
     /**
      * $ wraps primitive values with corresponding Type
      */
     var pi = $(3.1415f);
-    DSLog("pi = %$", pi);
-    DSLog("typeof(pi) = %s", typeof(pi));
+    Log("pi = %$", pi);
+    Log("typeof(pi) = %s", typeof(pi));
 
     DSList* ls = new(DSList);
     Add(ls, $("first"));
     Add(ls, $("second"));
     ForEach(ls, ^(DSString* s) {
-        DSLog("item = %d) %$", Length(s), s);
+        Log("item = %d) %$", Length(s), s);
     });
 
-    DSLog("this string %$", $(20.0f));
+    Log("this string %$", $(20.0f));
 
     var s = $Join($("the "), $("answer "), $("is "), $(42));
-    DSLog("%$", s);
-    DSLog(ToString(s));
+    Log("%$", s);
+    Log(ToString(s));
     // DSString** ss = Split(s, " ");
 
 
@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
 
     var y = NewDSMap($T(DSLong));
 
-    DSLog("typeof = %s", y->typeOf->name );
+    Log("typeof = %s", y->typeOf->name );
 
     return 0;
 }
@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
  * return result as Either::Right 
  * return exception as Either::Left
  */
-Either* Try(DSObject* (^lambda)(void)) {
+Either* Try(Object* (^lambda)(void)) {
     DSException* e;
     try {
         return Right(lambda());
@@ -69,13 +69,13 @@ Either* Try(DSObject* (^lambda)(void)) {
 void Test(DSMap* zhsh) {
     DSException* e;
     try {
-        // Adding a long to a collection of DSBoolean -
+        // Adding a long to a collection of Boolean -
         // should throw an exception
         auto res = Put(zhsh, "test", $(430L));
         if (!IsRight(res)) throw DSInvalidTypeException(ToString(GetLeft(res)));
     }
     catch (e)  {
-        DSLog(e->msg);
+        Log(e->msg);
     }
 }
 
@@ -83,24 +83,24 @@ void Test(DSMap* zhsh) {
 
 void More() {
     auto answer = Try(^{
-         return (DSObject*)$(DSParseDouble("frodo")); 
+         return (Object*)$(DSParseDouble("frodo")); 
     });
 
     if (IsRight(answer)) {
-        DSLog("answer = %$", GetRight(answer));
+        Log("answer = %$", GetRight(answer));
     } else {
-        DSLog("error is %$", GetLeft(answer));
+        Log("error is %$", GetLeft(answer));
     }
 
     // riia:
     {   
-        using(DSMap) zhsh = new(DSMap, of(DSBoolean));
+        using(DSMap) zhsh = new(DSMap, of(Boolean));
 
         auto res = Put(zhsh, "test", $(430L));
         if (IsRight(res)) {
-            DSLog("Put Succeeded");
+            Log("Put Succeeded");
         } else {
-            DSLog("Error: %$", GetLeft(res));
+            Log("Error: %$", GetLeft(res));
         }
         Test(zhsh);
     }// dtor is called here as it goes out of scope
@@ -109,9 +109,9 @@ void More() {
 }
 
 int (foobar)(int x, int y, int z) {
-    DSLog("foobar x:%d", x);
-    DSLog("foobar y:%d", y);
-    DSLog("foobar z:%d", z);
+    Log("foobar x:%d", x);
+    Log("foobar y:%d", y);
+    Log("foobar z:%d", z);
     return 0;
 }
 

@@ -24,8 +24,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #pragma once
-#ifndef _CORE_H
-#define _CORE_H
 /**
  * lowest level internal core dependencies
  */
@@ -37,6 +35,7 @@ SOFTWARE.
 #include <stdbool.h>
 #include <errno.h>
 #include <gc.h>
+#include <math.h> 
 
 /**
  *  MACRO Min
@@ -118,7 +117,7 @@ SOFTWARE.
  */
 #define join(...) STR_JOIN(PP_NARG(__VA_ARGS__), __VA_ARGS__)
 
-#define $Join(...) $DSString.Join(PP_NARG(__VA_ARGS__), __VA_ARGS__)
+#define $Join(...) $String.Join(PP_NARG(__VA_ARGS__), __VA_ARGS__)
 
 
 
@@ -141,10 +140,10 @@ struct _default_arg_;
 // #define foobar_(x, z, t, ...)                                           \
 //         (foobar)((x), DEFAULT((z), 42), DEFAULT((t), 36))
 // int (foobar)(int x, int y, int z) {
-//     DSLog("foobar x:%d", x);
-//     DSLog("foobar y:%d", y);
-//     DSLog("foobar z:%d", z);
-//     // DSLog("foobar w:%d", w);
+//     Log("foobar x:%d", x);
+//     Log("foobar y:%d", y);
+//     Log("foobar z:%d", z);
+//     // Log("foobar w:%d", w);
 //     return 0;
 // }
 
@@ -190,11 +189,19 @@ typedef unsigned char uchar;
 
 typedef void (*IDispose)(void* const, void* const);
 
-char* STR_JOIN(int count, ...);
+static inline char* STR_JOIN(int count, ...);
+__attribute__((__format__ (__printf__, 1, 2)))
+static inline void Log (char* format, ...);
 
-__attribute__((__format__ (__printf__, 1, 2)))                          \
-char* DSsprintf(const char* format, ...);
-void DSvfprintf(FILE*, const char*, va_list);
-int DSvsnprintf(char*, size_t, const char*, va_list);
+static inline __attribute__((__format__ (__printf__, 1, 2))) char* DSsprintf(const char* format, ...);
+static inline void DSvfprintf(FILE*, const char*, va_list);
+static inline int DSvsnprintf(char*, size_t, const char*, va_list);
 
-#endif _CORE_H
+
+static inline char * strrstr(char *str1, char *str2);
+static inline char * strndup (const char *str, size_t size);
+#ifndef _WIN64
+static inline int strcmpi (const char *s1, const char *s2);
+static inline strlwr(char *str);
+static inline strupr(char *str);
+#endif
