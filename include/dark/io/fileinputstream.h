@@ -37,12 +37,12 @@ type (FileInputStream) {
 ctor_proto (FileInputStream, char*);
 ctor_proto (FileInputStream, File*);
 
-method_proto (FileInputStream, ToString, const char*, (const FileInputStream* const) );
-method_proto (FileInputStream, ReadOne,         int,    (FileInputStream*) );
-method_proto (FileInputStream, Read,            int,    (FileInputStream*, IOBuff*, int, int) );
-method_proto (FileInputStream, Skip,            long,   (FileInputStream*, long) );
-method_proto (FileInputStream, Available,       int,    (FileInputStream*) );
-method_proto (FileInputStream, Close,           void,   (FileInputStream*) );
+interface (FileInputStream, ToString, const char*, (const FileInputStream* const) );
+interface (FileInputStream, ReadOne,         int,    (FileInputStream*) );
+interface (FileInputStream, Read,            int,    (FileInputStream*, IOBuff*, int, int) );
+interface (FileInputStream, Skip,            long,   (FileInputStream*, long) );
+interface (FileInputStream, Available,       int,    (FileInputStream*) );
+interface (FileInputStream, Close,           void,   (FileInputStream*) );
 
 vtable (FileInputStream) {
     const FileInputStreamToString     ToString;
@@ -59,20 +59,30 @@ vtable (FileInputStream) {
     const FileInputStreamAvailable    Available;
 };
 
-class_load( FileInputStream );
-class_override( ToString,        (FileInputStreamToString)ToString, "$@:v" );
-class_method( Equals,            (ObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,       (ObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,           (ObjectDispose)Dispose, "v@:v" );
-class_method( ReadOne,           (FileInputStreamReadOne)ReadOne, "i@:v" );
-class_method( Read,              (FileInputStreamRead)Read, "i@:^ii" );
-class_method( Skip,              (FileInputStreamSkip)Skip, "l@:l" );
-class_method( Close,             (FileInputStreamClose)Close, "v@:v" );
-class_method( Mark,              (InputStreamMark)Mark, "v@:i" );
-class_method( MarkSupported,     (InputStreamMarkSupported)MarkSupported, "v@:v" );
-class_method( Reset,             (InputStreamReset)Reset, "v@:v" );
-class_method( Available,         (FileInputStreamAvailable)Available, "B@:" );
-class_fini;
+function vptr(FileInputStream);
+/**
+ * 
+ * Class Loader callback
+ */
+function objc_loadFileInputStream(Class super) 
+{
+    Class cls = createClass(super, FileInputStream);
+    addMethod(cls, FileInputStreamToString, ToString);
+    addMethod(cls, ObjectEquals, Equals);
+    addMethod(cls, ObjectGetHashCode, GetHashCode);
+    addMethod(cls, ObjectDispose, Dispose);
+    addMethod(cls, FileInputStreamReadOne, ReadOne);
+    addMethod(cls, FileInputStreamRead, Read);
+    addMethod(cls, FileInputStreamSkip, Skip);
+    addMethod(cls, FileInputStreamClose, Close);
+    addMethod(cls, InputStreamMark, Mark);
+    addMethod(cls, InputStreamMarkSupported, MarkSupported);
+    addMethod(cls, InputStreamReset, Reset);
+    addMethod(cls, FileInputStreamAvailable, Available);
+    
+    return cls;
+}
+
 
 method FileInputStream* FileInputStream_init(FileInputStream* const this, char* name) {
     return FileInputStream_init(this, (name != nullptr ? NewFile(name) : nullptr));

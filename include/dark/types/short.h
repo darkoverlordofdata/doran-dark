@@ -45,14 +45,14 @@ type (Short) {
     short value;
 };
 
-method_proto (Short, ToString,        char*, (const Short* const));
-method_proto (Short, CompareTo,       int, (const Short* const, const Short* const));
-method_proto (Short, IntValue,        int, (const Short* const));
-method_proto (Short, LongValue,       long, (const Short* const));
-method_proto (Short, FloatValue,      float, (const Short* const));
-method_proto (Short, DoubleValue,     double, (const Short* const));
-method_proto (Short, CharValue,       char, (const Short* const));
-method_proto (Short, ShortValue,      short, (const Short* const));
+interface (Short, ToString,        char*, (const Short* const));
+interface (Short, CompareTo,       int, (const Short* const, const Short* const));
+interface (Short, IntValue,        int, (const Short* const));
+interface (Short, LongValue,       long, (const Short* const));
+interface (Short, FloatValue,      float, (const Short* const));
+interface (Short, DoubleValue,     double, (const Short* const));
+interface (Short, CharValue,       char, (const Short* const));
+interface (Short, ShortValue,      short, (const Short* const));
 
 
 /**
@@ -73,20 +73,28 @@ vtable (Short)
     const ShortShortValue       ShortValue;
 };
 
-class_load( Short );
-class_override( ToString,       (ShortToString)ToString, "$@:v" );
-class_method( Equals,           (ObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,      (ObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,          (ObjectDispose)Dispose, "v@:v" );
-class_override( CompareTo,      (ShortCompareTo)CompareTo, "i@:@" );
-class_override( IntValue,       (ShortIntValue)IntValue, "i@:v" );
-class_override( LongValue,      (ShortLongValue)LongValue, "l@:v" );
-class_override( FloatValue,     (ShortFloatValue)FloatValue, "f@:v" );
-class_override( DoubleValue,    (ShortDoubleValue)DoubleValue, "d@:v" );
-class_override( CharValue,      (ShortCharValue)CharValue, "c@:v" );
-class_override( ShortValue,     (ShortShortValue)ShortValue, "s@:v" );
-class_member( value,            sizeof( short ), "s" );
-class_fini
+function vptr(Short);
+/*
+ *
+ * Class Loader callback
+ */
+function objc_loadShort(Class super) 
+{
+    Class cls = createClass(super, Short);
+    addMethod(cls, ShortToString,       ToString);
+    addMethod(cls, ObjectEquals,        Equals);
+    addMethod(cls, ObjectGetHashCode,   GetHashCode);
+    addMethod(cls, ObjectDispose,       Dispose);
+    addMethod(cls, ShortCompareTo,      CompareTo);
+    addMethod(cls, ShortIntValue,       IntValue);
+    addMethod(cls, ShortLongValue,      LongValue);
+    addMethod(cls, ShortFloatValue,     FloatValue);
+    addMethod(cls, ShortDoubleValue,    DoubleValue);
+    addMethod(cls, ShortCharValue,      CharValue);
+    addMethod(cls, ShortShortValue,     ShortValue);
+    
+    return cls;
+}
 
 /**
  * Constructor

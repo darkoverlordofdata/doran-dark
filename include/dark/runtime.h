@@ -89,6 +89,8 @@ struct objc_class {
 	long version;
 	long info;
 	long instance_size;
+	long ivar_count;
+	long method_count;
 	struct objc_ivar_list *ivars;
 	struct objc_method_list **methodLists;
 	// struct objc_cache *cache; /**  cache is replaced with vtable */
@@ -228,7 +230,8 @@ const char *class_getWeakIvarLayout(Class cls);
 
 id class_createInstance(Class cls, size_t extraBytes);
 
-Class objc_allocateClassPair(Class superclass, const char *name, size_t extraBytes);
+// Class objc_allocateClassPair(Class superclass, const char *name, size_t extraBytes);
+Class objc_allocateClassPair(Class superclass, const char *name, size_t extraBytes, IMP* extVtable);
 void objc_registerClassPair(Class cls);
 Class objc_duplicateClass(Class original, const char *name, size_t extraBytes);
 void objc_disposeClassPair(Class cls);

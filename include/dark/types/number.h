@@ -46,14 +46,14 @@ type (Number) {
     Class isa;
 };
 
-method_proto (Number, ToString,        char*, (const Number* const));
-method_proto (Number, CompareTo,       int, (const Number* const, const Number* const));
-method_proto (Number, IntValue,        int, (const Number* const));
-method_proto (Number, LongValue,       long, (const Number* const));
-method_proto (Number, FloatValue,      float, (const Number* const));
-method_proto (Number, DoubleValue,     double, (const Number* const));
-method_proto (Number, CharValue,       char, (const Number* const));
-method_proto (Number, ShortValue,      short, (const Number* const));
+interface (Number, ToString,        char*, (const Number* const));
+interface (Number, CompareTo,       int, (const Number* const, const Number* const));
+interface (Number, IntValue,        int, (const Number* const));
+interface (Number, LongValue,       long, (const Number* const));
+interface (Number, FloatValue,      float, (const Number* const));
+interface (Number, DoubleValue,     double, (const Number* const));
+interface (Number, CharValue,       char, (const Number* const));
+interface (Number, ShortValue,      short, (const Number* const));
 
 /**
  * Object metaclass
@@ -76,19 +76,29 @@ class (Number) {
     Number* (*Create) ();
 };
 
-class_load( Number ); 
-vtable_virtual( ToString,          (NumberToString)ToString, "$@:v" );
-class_method( Equals,             (ObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,        (ObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,            (ObjectDispose)Dispose, "v@:v" );
-vtable_virtual( CompareTo,         (NumberCompareTo)CompareTo, "i@:@" );
-vtable_virtual( IntValue,          (NumberIntValue)IntValue, "i@:v" );
-vtable_virtual( LongValue,         (NumberLongValue)LongValue, "l@:v" );
-vtable_virtual( FloatValue,        (NumberFloatValue)FloatValue, "f@:v" );
-vtable_virtual( DoubleValue,       (NumberDoubleValue)DoubleValue, "d@:v" );
-vtable_virtual( CharValue,         (NumberCharValue)CharValue, "c@:v" );
-vtable_virtual( ShortValue,        (NumberShortValue)ShortValue, "s@:v" );
-class_fini
+
+function vptr(Number);
+/**
+ * 
+ * Class Loader callback
+ */
+function objc_loadNumber(Class super) 
+{
+    Class cls = createClass(super, Number);
+    addMethod(cls, NumberToString,      ToString);
+    addMethod(cls, ObjectEquals,        Equals);
+    addMethod(cls, ObjectGetHashCode,   GetHashCode);
+    addMethod(cls, ObjectDispose,       Dispose);
+    addMethod(cls, NumberCompareTo,     CompareTo);
+    addMethod(cls, NumberIntValue,      IntValue);
+    addMethod(cls, NumberLongValue,     LongValue);
+    addMethod(cls, NumberFloatValue,    FloatValue);
+    addMethod(cls, NumberDoubleValue,   DoubleValue);
+    addMethod(cls, NumberCharValue,     CharValue);
+    addMethod(cls, NumberShortValue,    ShortValue);
+
+    return cls;
+}
 
 /**
  * Abstract class Number
@@ -111,51 +121,51 @@ function Number* Number_init(Number* const this)
  *         -1 this > other
  */
 method int CompareTo(const Number* this, const Number* const other) {
-    return _vptr(Number)->CompareTo(this, other);
+    return get_vptr(Number)->CompareTo(this, other);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
 method int IntValue(const Number* const this) {
-    return _vptr(Number)->IntValue(this);
+    return get_vptr(Number)->IntValue(this);
 }
 
 /**
  * Returns the value of this value cast as a long
  */
 method long LongValue(const Number* const this) {
-    return _vptr(Number)->LongValue(this);
+    return get_vptr(Number)->LongValue(this);
 }
 
 /**
  * Returns the value of this value cast as a float
  */
 method float FloatValue(const Number* const this) {
-    return _vptr(Number)->FloatValue(this);
+    return get_vptr(Number)->FloatValue(this);
 }
 
 /**
  * Returns the value of this value cast as a double
  */
 method double DoubleValue(const Number* const this) {
-    return _vptr(Number)->DoubleValue(this);
+    return get_vptr(Number)->DoubleValue(this);
 }
 
 /**
  * Returns the value of this value cast as a char
  */
 method char CharValue(const Number* const this) {
-    return _vptr(Number)->CharValue(this);
+    return get_vptr(Number)->CharValue(this);
 }
 
 /**
  * Returns the value of this value cast as a short
  */
 method short ShortValue(const Number* const this) {
-    return _vptr(Number)->ShortValue(this);
+    return get_vptr(Number)->ShortValue(this);
 }
 
 method char* ToString(const Number* const this) {
-    return _vptr(Number)->ToString(this);
+    return get_vptr(Number)->ToString(this);
 }

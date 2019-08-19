@@ -43,28 +43,28 @@ type (String) {
     int length;
 };
 
-method_proto (String, ToString,     char*, (const String* const));
-method_proto (String, Equals,       bool, (const String* const, const String* const));
-method_proto (String, CompareTo,    int, (const String* const this, const String* const other));
-method_proto (String, Compare,      int, (const char* x, const char* y));
-method_proto (String, CompareToIgnoreCase,   int, (const String* this, const String* other));
-method_proto (String, Concat,       String*, (const String* this, const String* str));
-method_proto (String, Concatc,      String*, (const String* this, const char* str));
-method_proto (String, Contains,     bool, (const String* this, const String* str));
-method_proto (String, CopyOf,       String*, (const String* this));
-method_proto (String, EndsWith,     bool, (const String* this, const String* suffix););
-method_proto (String, StartsWith,   bool, (const String* this, const String* prefix, const int offset));
-method_proto (String, GetBytes,     char*, (const String* this));
-method_proto (String, IndexOf,      int, (const String* this, const String* str, const int fromIndex));
-method_proto (String, LastIndexOf,  int, (const String* this, const String* str, const int fromIndex));
-method_proto (String, ToUpperCase,  String*, (const String* this));
-method_proto (String, ToLowerCase,  String*, (const String* this));
-method_proto (String, Trim,         String*, (const String* this));
-method_proto (String, Length,       int, (const String* const));
-method_proto (String, IsEmpty,      bool, (const String* const this));
-method_proto (String, CharAt,       char, (const String* const this, const int index));
-// method_proto (String, Substring,    String*, (const String* const this, const int index));
-method_proto (String, Substring,    String*, (const String* const this, const int index, const int length));
+interface (String, ToString,     char*, (const String* const));
+interface (String, Equals,       bool, (const String* const, const String* const));
+interface (String, CompareTo,    int, (const String* const this, const String* const other));
+interface (String, Compare,      int, (const char* x, const char* y));
+interface (String, CompareToIgnoreCase,   int, (const String* this, const String* other));
+interface (String, Concat,       String*, (const String* this, const String* str));
+interface (String, Concatc,      String*, (const String* this, const char* str));
+interface (String, Contains,     bool, (const String* this, const String* str));
+interface (String, CopyOf,       String*, (const String* this));
+interface (String, EndsWith,     bool, (const String* this, const String* suffix););
+interface (String, StartsWith,   bool, (const String* this, const String* prefix, const int offset));
+interface (String, GetBytes,     char*, (const String* this));
+interface (String, IndexOf,      int, (const String* this, const String* str, const int fromIndex));
+interface (String, LastIndexOf,  int, (const String* this, const String* str, const int fromIndex));
+interface (String, ToUpperCase,  String*, (const String* this));
+interface (String, ToLowerCase,  String*, (const String* this));
+interface (String, Trim,         String*, (const String* this));
+interface (String, Length,       int, (const String* const));
+interface (String, IsEmpty,      bool, (const String* const this));
+interface (String, CharAt,       char, (const String* const this, const int index));
+// interface (String, Substring,    String*, (const String* const this, const int index));
+interface (String, Substring,    String*, (const String* const this, const int index, const int length));
 
 method __attribute__((__format__ (__printf__, 1, 2)))
 String*   Format(const char* format, ...);
@@ -103,35 +103,42 @@ class (String) {
 
 method String* StringJoin(int count, ...);
 
-class_load( String );
-class_override( ToString,           (StringToString)ToString, "$@:v" );
-class_override( Equals,             (StringEquals)Equals, "B@:@@" );
-class_method( GetHashCode,          (ObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,              (ObjectDispose)Dispose, "v@:v" );
-class_override( CompareTo,          (StringCompareTo)CompareTo, "i@:@" );
-class_method( Length,               (StringLength)Length, "i@:v" );
-class_method( IsEmpty,              (StringIsEmpty)IsEmpty, "B@:v" );    
-class_method( CharAt,               (StringCharAt)CharAt, "c@:i" );
-class_method( CompareToIgnoreCase,  (StringCompareToIgnoreCase)CompareToIgnoreCase, "@:" );    
-class_method( Concat,               (StringConcat)Concat, "v@:$" );
-class_method( Concatc,              (StringConcatc)Concatc, "v@:c" );
-class_method( Contains,             (StringContains)Contains, "B@:$" );
-class_method( CopyOf,               (StringCopyOf)CopyOf, "$@:v" );
-class_method( EndsWith,             (StringEndsWith)EndsWith, "B@:$" );
-class_method( StartsWith,           (StringStartsWith)StartsWith, "B@:$" );
-class_method( GetBytes,             (StringGetBytes)GetBytes, "b@:*" );
-class_method( IndexOf,              (StringIndexOf)IndexOf, "i@:$" );
-class_method( LastIndexOf,          (StringLastIndexOf)LastIndexOf, "i@:$" );
-class_method( ToLowerCase,          (StringToLowerCase)ToLowerCase, "$@:v" );
-class_method( ToUpperCase,          (StringToUpperCase)ToUpperCase, "$@:v" );
-class_method( Trim,                 (StringTrim)Trim, "$@:v" );
-class_method( Substring,            (StringSubstring)Substring, "$@:ii" );
-class_member( value,                sizeof( char* ), "*" );
-class_member( length,               sizeof( int ), "i" );
+function vptr(String);
+/**
+ * 
+ * Class Loader callback
+ */
+function objc_loadString(Class super) 
+{
+    Class cls = createClass(super, String);
+    addMethod(cls, StringToString,      ToString);
+    addMethod(cls, StringEquals,        Equals);
+    addMethod(cls, ObjectGetHashCode,   GetHashCode);
+    addMethod(cls, ObjectDispose,       Dispose);
+    addMethod(cls, StringCompareTo,     CompareTo);
+    addMethod(cls, StringLength,        Length);
+    addMethod(cls, StringIsEmpty,       IsEmpty);    
+    addMethod(cls, StringCharAt,        CharAt);
+    addMethod(cls, StringCompareToIgnoreCase, CompareToIgnoreCase);    
+    addMethod(cls, StringConcat,        Concat);
+    addMethod(cls, StringConcatc,       Concatc);
+    addMethod(cls, StringContains,      Contains);
+    addMethod(cls, StringCopyOf,        CopyOf);
+    addMethod(cls, StringEndsWith,      EndsWith);
+    addMethod(cls, StringStartsWith,    StartsWith);
+    addMethod(cls, StringGetBytes,      GetBytes);
+    addMethod(cls, StringIndexOf,       IndexOf);
+    addMethod(cls, StringLastIndexOf,   LastIndexOf);
+    addMethod(cls, StringToLowerCase,   ToLowerCase);
+    addMethod(cls, StringToUpperCase,   ToUpperCase);
+    addMethod(cls, StringTrim,          Trim);
+    addMethod(cls, StringSubstring,     Substring);
 
-$String.Join = StringJoin;
+    $String.Join = StringJoin;
+    
+    return cls;
+}
 
-class_fini
 
 
 // function String* StringJoin(int count, ...);
@@ -215,7 +222,7 @@ method String* Concat(const String* this, const String* other) {
 }
 
 method bool Contains(const String* this, const String* s) {
-    return _vptr(String)->IndexOf(this, s, 0) > -1;
+    return get_vptr(String)->IndexOf(this, s, 0) > -1;
 }
 
 method String* CopyOf(const String* this) {

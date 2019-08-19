@@ -38,30 +38,34 @@ SOFTWARE.
 /**
  * Boolean instance variables
  */
-type (Boolean) {
+type (Boolean) 
+{
     Class isa;
     bool value;
 };
 
-method_proto (Boolean, ToString,     char*, (const Boolean* const));
-method_proto (Boolean, CompareTo,    int, (const Boolean* const, const Boolean* const));
+interface (Boolean, ToString,     char*, (const Boolean* const));
+interface (Boolean, CompareTo,    int, (const Boolean* const, const Boolean* const));
+interface (Boolean, BoolValue,    bool, (const Boolean* const));
 
 /**
  * Boolean vtable
  */
-vtable (Boolean) {
+vtable (Boolean) 
+{
     const BooleanToString       ToString;
     const ObjectEquals          Equals;
     const ObjectGetHashCode     GetHashCode;
     const ObjectDispose         Dispose;
     const BooleanCompareTo      CompareTo;
-    const bool    (*ParseBool)    (const char *const);    
+    // const bool    (*ParseBool)    (const char *const);    
 };
 
 /**
  * Boolean class methods & vars
  */
-class (Boolean) {
+class (Boolean) 
+{
     int (*Compare) (const bool, const bool);
     bool (*ParseBool) (char const*);
     int  Bytes;
@@ -70,43 +74,54 @@ class (Boolean) {
     Boolean* True;
     Boolean* False;
 };
+
 function bool ParseBool(const char * const s);
 method int Compare(bool x, bool y);
-function bool BoolValue(const Boolean*  const this);
+// function bool BoolValue(const Boolean*  const this);
 /**
  * Put it all together
  */
-class_load( Boolean );
-class_override( ToString,   (BooleanToString)ToString, "$@:v" );
-class_method( Equals,       (ObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,  (ObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,      (ObjectDispose)Dispose, "v@:v" );
-class_override( CompareTo,  (BooleanCompareTo)CompareTo, "i@:@" );
-class_method( BoolValue,    BoolValue, "B@:v" );
-class_member( value,        sizeof( int ), "B" );
-
-/** 
- * Static constructor
- * set class properties 
- * 
+function vptr(Boolean);
+/**
+ * Class Loader callback
  */
-static Boolean True;
-True.isa = isa; 
-True.value = true;
+function objc_loadBoolean(Class super) 
+{
+    Class cls = createClass(super, Boolean);
+    addMethod1(cls, Boolean,    ToString);
+    addMethod1(cls, Object,     Equals);
+    addMethod1(cls, Object,     GetHashCode);
+    addMethod1(cls, Object,     Dispose);
+    addMethod1(cls, Boolean,    CompareTo);
+    // addMethod(cls, BooleanToString,     ToString);
+    // addMethod(cls, ObjectEquals,        Equals);
+    // addMethod(cls, ObjectGetHashCode,   GetHashCode);
+    // addMethod(cls, ObjectDispose,       Dispose);
+    // addMethod(cls, BooleanCompareTo,    CompareTo);
+    /** 
+     * Static constructor
+     * set class properties 
+     * 
+     */
+    static Boolean True;
+    True.isa = cls; 
+    True.value = true;
 
-static Boolean False;
-False.isa = isa;
-False.value = false;
+    static Boolean False;
+    False.isa = cls;
+    False.value = false;
 
-$Boolean.Bytes = BOOLEAN_BYTES;
-$Boolean.Size = BOOLEAN_SIZE;
-$Boolean.Type = BOOLEAN_TYPE;
-$Boolean.True = &True;
-$Boolean.False = &False;
-$Boolean.ParseBool = ParseBool;
-$Boolean.Compare = Compare;
-    
-class_fini;
+    $Boolean.Bytes = BOOLEAN_BYTES;
+    $Boolean.Size = BOOLEAN_SIZE;
+    $Boolean.Type = BOOLEAN_TYPE;
+    $Boolean.True = &True;
+    $Boolean.False = &False;
+    $Boolean.ParseBool = ParseBool;
+    $Boolean.Compare = Compare;
+
+    return cls;
+}
+
 
 /**
  * Constructor
@@ -159,7 +174,7 @@ method int CompareTo(const Boolean*  const this, const Boolean*  const other) {
 /**
  * Returns the value of this value cast as an int
  */
-function bool BoolValue(const Boolean*  const this) {
+method bool BoolValue(const Boolean*  const this) {
     return (bool)this->value;
 }
 

@@ -114,7 +114,9 @@ Class objc_initializeClassPair(Class supercls, const char *name, Class cls, Clas
     
     // No ivars. No methods. Empty cache. No protocols. No layout. Empty ext.
     cls->ivars = nil;
+    cls->ivar_count = 0;
     cls->methodLists = nil;
+    cls->method_count = 0;
     // cls->cache = (Cache)&_objc_empty_cache;
     cls->protocols = nil;
 
@@ -128,7 +130,7 @@ Class objc_initializeClassPair(Class supercls, const char *name, Class cls, Clas
 
 
 Class objc_allocateClassPair(Class supercls, const char *name, 
-                             size_t extraBytes)
+                             size_t extraBytes, IMP* extVtable)
 {
     Class cls, meta;
 
@@ -151,6 +153,7 @@ Class objc_allocateClassPair(Class supercls, const char *name,
 
 
     objc_initializeClassPair(supercls, name, cls, meta);
+    cls->vtable = extVtable;
     
     return cls;
 }
@@ -283,11 +286,10 @@ static IMP _class_addMethod(Class cls, SEL name, IMP imp,
         mlist->method_list[0].method_name = strdup(name);
         mlist->method_list[0].method_types = strdup(types);
         mlist->method_list[0].method_imp = imp;
-        
-        // _objc_insertMethods(cls, mlist, nil);
+        _objc_insertMethods(cls, mlist, nil);
         result = nil;
     }
-
+    cls->vtable[cls->method_count++] = imp;
     return result;
 }
 

@@ -45,14 +45,14 @@ type (Char) {
     char value;
 };
 
-method_proto (Char, ToString,        char*, (const Char* const));
-method_proto (Char, CompareTo,       int, (const Char* const, const Char* const));
-method_proto (Char, IntValue,        int, (const Char* const));
-method_proto (Char, LongValue,       long, (const Char* const));
-method_proto (Char, FloatValue,      float, (const Char* const));
-method_proto (Char, DoubleValue,     double, (const Char* const));
-method_proto (Char, CharValue,       char, (const Char* const));
-method_proto (Char, ShortValue,      short, (const Char* const));
+interface (Char, ToString,        char*, (const Char* const));
+interface (Char, CompareTo,       int, (const Char* const, const Char* const));
+interface (Char, IntValue,        int, (const Char* const));
+interface (Char, LongValue,       long, (const Char* const));
+interface (Char, FloatValue,      float, (const Char* const));
+interface (Char, DoubleValue,     double, (const Char* const));
+interface (Char, CharValue,       char, (const Char* const));
+interface (Char, ShortValue,      short, (const Char* const));
 
 /**
  * Char vtable with overrides
@@ -72,21 +72,42 @@ vtable (Char)
     const CharShortValue        ShortValue;
 };
 
-class_load( Char );
-class_override( ToString,       (CharToString)ToString, "$@:v" );
-class_method( Equals,           (ObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,      (ObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,          (ObjectDispose)Dispose, "v@:v" );
-class_override( CompareTo,      (CharCompareTo)CompareTo, "i@:@" );
-class_override( IntValue,       (CharIntValue)IntValue, "i@:v" );
-class_override( LongValue,      (CharLongValue)LongValue, "l@:v" );
-class_override( FloatValue,     (CharFloatValue)FloatValue, "f@:v" );
-class_override( DoubleValue,    (CharDoubleValue)DoubleValue, "d@:v" );
-class_override( CharValue,      (CharCharValue)CharValue, "c@:v" );
-class_override( ShortValue,     (CharShortValue)ShortValue, "s@:v" );
-class_member( value,            sizeof( char ), "c" );
-class_fini;
+function vptr(Char);
+/**
+ * Class Loader callback
+ */
+function objc_loadChar(Class super) 
+{
+    Class cls = createClass(super, Char);
 
+    addMethod1(cls, Char,   ToString);
+    addMethod1(cls, Char,   ToString);
+    addMethod1(cls, Object, Equals);
+    addMethod1(cls, Object, GetHashCode);
+    addMethod1(cls, Object, Dispose);
+    addMethod1(cls, Char,   CompareTo);
+    addMethod1(cls, Char,   IntValue);
+    addMethod1(cls, Char,   LongValue);
+    addMethod1(cls, Char,   FloatValue);
+    addMethod1(cls, Char,   DoubleValue);
+    addMethod1(cls, Char,   CharValue);
+    addMethod1(cls, Char,   ShortValue);
+
+
+    // addMethod(cls, BooleanToString,     ToString);
+    // addMethod(cls, CharToString,        ToString);
+    // addMethod(cls, ObjectEquals,        Equals);
+    // addMethod(cls, ObjectGetHashCode,   GetHashCode);
+    // addMethod(cls, ObjectDispose,       Dispose);
+    // addMethod(cls, CharCompareTo,       CompareTo);
+    // addMethod(cls, CharIntValue,        IntValue);
+    // addMethod(cls, CharLongValue,       LongValue);
+    // addMethod(cls, CharFloatValue,      FloatValue);
+    // addMethod(cls, CharDoubleValue,     DoubleValue);
+    // addMethod(cls, CharCharValue,       CharValue);
+    // addMethod(cls, CharShortValue,      ShortValue);
+    return cls;
+}
 
 
 /**

@@ -68,16 +68,16 @@ type (Map) {
 
 ctor_proto (Map);
 ctor_proto (Map, Class);
-method_proto (Map, ToString,    char*,      (const Map* const) );
-method_proto (Map, Dispose,     void,       (Map* const) );
-method_proto (Map, Length,      int,        (const Map* const) );
-method_proto (Map, HashInt,     uint,       (Map* const, char*) );
-method_proto (Map, Hash,        int,        (Map* const, char*) );
-method_proto (Map, Rehash,      int,        (Map* const) );
-method_proto (Map, Put,         int,        (Map* const, char*, Object*) );
-method_proto (Map, Get,         Object*,    (Map* const, char*) );
-method_proto (Map, ForEach,     int,        (Map* const, Map_Iterator, Object*) );
-method_proto (Map, Remove,      int,        (Map* const, char*) );
+interface (Map, ToString,    char*,      (const Map* const) );
+interface (Map, Dispose,     void,       (Map* const) );
+interface (Map, Length,      int,        (const Map* const) );
+interface (Map, HashInt,     uint,       (Map* const, char*) );
+interface (Map, Hash,        int,        (Map* const, char*) );
+interface (Map, Rehash,      int,        (Map* const) );
+interface (Map, Put,         int,        (Map* const, char*, Object*) );
+interface (Map, Get,         Object*,    (Map* const, char*) );
+interface (Map, ForEach,     int,        (Map* const, Map_Iterator, Object*) );
+interface (Map, Remove,      int,        (Map* const, char*) );
 
 vtable (Map) {
     const MapToString       ToString;
@@ -94,24 +94,29 @@ vtable (Map) {
     const MapRehash         Rehash;
 } ;
 
-class_load(Map)
-class_method(ToString,      (MapToString)ToString, "@@:v");
-class_method(Equals,        (ObjectEquals)Equals, "B@:@@");
-class_method(GetHashCode,   (ObjectGetHashCode)GetHashCode, "l@:v");
-class_method(Dispose,       (MapDispose)Dispose, "v@:v");
-class_method(Length,        (MapLength)Length, "i@:v");
-class_method(Remove,        (MapRemove)Remove, "v@:i");
-class_method(ForEach,       (MapForEach)ForEach, "i@:@@");
-class_method(Put,           (MapPut)Put, "i@:*@");
-class_method(Get,           (MapGet)Get, "@@:*");
-class_method(HashInt,       (MapHashInt)HashInt, "I@:*");
-class_method(Hash,          (MapHash)Hash, "i@:*");
-class_method(Rehash,        (MapRehash)Rehash, "i@:v");
-class_member(typeof,        sizeof(id), "@");
-class_member(length,        sizeof(int), "i");
-class_member(data,          sizeof(id), "^");
-class_member(tableSize,     sizeof(int), "i");
-class_fini;
+function vptr(Map);
+/**
+ * 
+ * Class Loader callback
+ */
+function objc_loadMap(Class super) 
+{
+    Class cls = createClass(super, Map);
+    addMethod(cls, MapToString, ToString);
+    addMethod(cls, ObjectEquals, Equals);
+    addMethod(cls, ObjectGetHashCode, GetHashCode);
+    addMethod(cls, MapDispose, Dispose);
+    addMethod(cls, MapLength, Length);
+    addMethod(cls, MapRemove, Remove);
+    addMethod(cls, MapForEach, ForEach);
+    addMethod(cls, MapPut, Put);
+    addMethod(cls, MapGet, Get);
+    addMethod(cls, MapHashInt, HashInt);
+    addMethod(cls, MapHash, Hash);
+    addMethod(cls, MapRehash, Rehash);
+    
+    return cls;
+}
 
 /* 
  * Generic Hashmap implementation

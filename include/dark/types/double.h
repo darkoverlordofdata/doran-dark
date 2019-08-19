@@ -46,14 +46,14 @@ type (Double)
     double value;
 };
 
-method_proto (Double, ToString,        char*,    (const Double* const));
-method_proto (Double, CompareTo,       int,      (const Double* const, const Double* const));
-method_proto (Double, IntValue,        int,      (const Double* const));
-method_proto (Double, LongValue,       long,     (const Double* const));
-method_proto (Double, FloatValue,      float,    (const Double* const));
-method_proto (Double, DoubleValue,     double,   (const Double* const));
-method_proto (Double, CharValue,       char,     (const Double* const));
-method_proto (Double, ShortValue,      short,    (const Double* const));
+interface (Double, ToString,        char*,    (const Double* const));
+interface (Double, CompareTo,       int,      (const Double* const, const Double* const));
+interface (Double, IntValue,        int,      (const Double* const));
+interface (Double, LongValue,       long,     (const Double* const));
+interface (Double, FloatValue,      float,    (const Double* const));
+interface (Double, DoubleValue,     double,   (const Double* const));
+interface (Double, CharValue,       char,     (const Double* const));
+interface (Double, ShortValue,      short,    (const Double* const));
 
 /**
  * Double vtable with overrides
@@ -73,21 +73,39 @@ vtable (Double)
     const DoubleShortValue          ShortValue;
 };
 
-class_load( Double );
-class_override( ToString,       (DoubleToString)ToString, "$@:v" );
-class_method( Equals,           (ObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,      (ObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,          (ObjectDispose)Dispose, "v@:v" );
-class_override( CompareTo,      (DoubleCompareTo)CompareTo, "i@:@" );
-class_override( IntValue,       (DoubleIntValue)IntValue, "i@:v" );
-class_override( LongValue,      (DoubleLongValue)LongValue, "l@:v" );
-class_override( FloatValue,     (DoubleFloatValue)FloatValue, "f@:v" );
-class_override( DoubleValue,    (DoubleDoubleValue)DoubleValue, "d@:v" );
-class_override( CharValue,      (DoubleCharValue)CharValue, "c@:v" );
-class_override( ShortValue,     (DoubleShortValue)ShortValue, "s@:v" );
-class_member( value,            sizeof( double ), "d" );
-class_fini
+function vptr(Double);
+/**
+ * Class Loader callback
+ */
+function objc_loadDouble(Class super) 
+{
+    Class cls = createClass(super, Double);
+    addMethod1(cls,  Double,     ToString);
+    addMethod1(cls,  Object,       Equals);
+    addMethod1(cls,  Object,  GetHashCode);
+    addMethod1(cls,  Object,      Dispose);
+    addMethod1(cls,  Double,    CompareTo);
+    addMethod1(cls,  Double,     IntValue);
+    addMethod1(cls,  Double,    LongValue);
+    addMethod1(cls,  Double,   FloatValue);
+    addMethod1(cls,  Double,  DoubleValue);
+    addMethod1(cls,  Double,    CharValue);
+    addMethod1(cls,  Double,   ShortValue);
 
+
+    // addMethod(cls,  DoubleToString,     ToString);
+    // addMethod(cls,  ObjectEquals,       Equals);
+    // addMethod(cls,  ObjectGetHashCode,  GetHashCode);
+    // addMethod(cls,  ObjectDispose,      Dispose);
+    // addMethod(cls,  DoubleCompareTo,    CompareTo);
+    // addMethod(cls,  DoubleIntValue,     IntValue);
+    // addMethod(cls,  DoubleLongValue,    LongValue);
+    // addMethod(cls,  DoubleFloatValue,   FloatValue);
+    // addMethod(cls,  DoubleDoubleValue,  DoubleValue);
+    // addMethod(cls,  DoubleCharValue,    CharValue);
+    // addMethod(cls,  DoubleShortValue,   ShortValue);
+    return cls;
+}
 
 /**
  * Constructor

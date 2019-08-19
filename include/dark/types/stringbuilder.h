@@ -78,19 +78,19 @@ type (StringBuilder) {
 	int length;
 };
 
-method_proto (StringBuilder, ToString,        char*, (const StringBuilder* const));
+interface (StringBuilder, ToString,        char*, (const StringBuilder* const));
 
 method 
 __attribute__((__format__ (__printf__, 2, 3)))
 int Appendf(StringBuilder* sb, const char *format, ...);
 typedef int (*StringBuilderAppendf)   (StringBuilder* sb, const char *format, ...);
 
-method_proto (StringBuilder, Appendc, 	int, (StringBuilder* sb, const char c));
-method_proto (StringBuilder, Append,	int, (StringBuilder* sb, const char *str));
-method_proto (StringBuilder, Concat,	String*, (const StringBuilder* sb));
-method_proto (StringBuilder, Reset,		void, (StringBuilder* sb));
-method_proto (StringBuilder, Empty,		int, (const StringBuilder* sb));
-method_proto (StringBuilder, Dispose,	void, (StringBuilder* const));
+interface (StringBuilder, Appendc, 	int, (StringBuilder* sb, const char c));
+interface (StringBuilder, Append,	int, (StringBuilder* sb, const char *str));
+interface (StringBuilder, Concat,	String*, (const StringBuilder* sb));
+interface (StringBuilder, Reset,		void, (StringBuilder* sb));
+interface (StringBuilder, Empty,		int, (const StringBuilder* sb));
+interface (StringBuilder, Dispose,	void, (StringBuilder* const));
 
 /**
  * StringBuilder metaclass
@@ -108,21 +108,28 @@ vtable (StringBuilder) {
     const StringBuilderReset      Reset;
 };
 
-class_load( StringBuilder );
-class_method( ToString, 		(StringBuilderToString)ToString, "$@:v" );
-class_method( Equals,           (ObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,      (ObjectGetHashCode)GetHashCode, "l@:v" );
-class_override( Dispose, 		(StringBuilderDispose)Dispose, "v@:v" );
-class_method( Append,			(StringBuilderAppend)Append, "i@:v" );
-class_method( Appendc, 			(StringBuilderAppendc)Appendc, "i@:c" );
-class_method( Appendf, 			(StringBuilderAppendf)Appendf, "i@:c." );
-class_method( Concat, 			(StringBuilderConcat)Concat, "$@:v" );
-class_method( Empty, 			(StringBuilderEmpty)Empty, "B@:v" );
-class_method( Reset, 			(StringBuilderReset)Reset, "v@:v" );
-class_member( root, 			sizeof( id ), "^" );
-class_member( trunk, 			sizeof( id ), "^" );
-class_member( length, 			sizeof( int ), "i" );
-class_fini
+function vptr(StringBuilder);
+/**
+ * 
+ * Class Loader callback
+ */
+function objc_loadStringBuilder(Class super) 
+{
+    Class cls = createClass(super, StringBuilder);
+	addMethod(cls, StringBuilderToString, 	ToString);
+	addMethod(cls, ObjectEquals, 			Equals);
+	addMethod(cls, ObjectGetHashCode, 		GetHashCode);
+	addMethod(cls, StringBuilderDispose, 	Dispose);
+	addMethod(cls, StringBuilderAppend, 	Append);
+	addMethod(cls, StringBuilderAppendc, 	Appendc);
+	addMethod(cls, StringBuilderAppendf, 	Appendf);
+	addMethod(cls, StringBuilderConcat, 	Concat);
+	addMethod(cls, StringBuilderEmpty, 		Empty);
+	addMethod(cls, StringBuilderReset, 		Reset);
+    
+    return cls;
+}
+
 
 /* 
  * Constructor
@@ -152,7 +159,7 @@ method int Empty(const StringBuilder* this)
 method int Appendc(StringBuilder* this, const char c)
 {
 	char str[2] = { c, 0 };
-	auto x = _vptr(StringBuilder)->Append(this, str);
+	auto x = get_vptr(StringBuilder)->Append(this, str);
 	return x;
 }
 /*

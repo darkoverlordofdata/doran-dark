@@ -35,15 +35,15 @@ type (InputStreamReader) {
 };
 
 ctor_proto (InputStreamReader, InputStream*);
-method_proto (InputStreamReader, ToString, const char*, (const InputStreamReader* const) );
-method_proto (InputStreamReader, ReadOne,         int,    (InputStreamReader*) );
-method_proto (InputStreamReader, Read,            int,    (InputStreamReader*, IOBuff*, int, int) );
-method_proto (InputStreamReader, Skip,            long,   (InputStreamReader*, long) );
-method_proto (InputStreamReader, Close,           void,   (InputStreamReader*) );
-method_proto (InputStreamReader, Mark,            void,   (InputStreamReader*, int) );
-method_proto (InputStreamReader, MarkSupported,   bool,   (InputStreamReader*) );
-method_proto (InputStreamReader, Reset,           void,   (InputStreamReader*) );
-method_proto (InputStreamReader, Ready,           bool,   (InputStreamReader*) );
+interface (InputStreamReader, ToString, const char*, (const InputStreamReader* const) );
+interface (InputStreamReader, ReadOne,         int,    (InputStreamReader*) );
+interface (InputStreamReader, Read,            int,    (InputStreamReader*, IOBuff*, int, int) );
+interface (InputStreamReader, Skip,            long,   (InputStreamReader*, long) );
+interface (InputStreamReader, Close,           void,   (InputStreamReader*) );
+interface (InputStreamReader, Mark,            void,   (InputStreamReader*, int) );
+interface (InputStreamReader, MarkSupported,   bool,   (InputStreamReader*) );
+interface (InputStreamReader, Reset,           void,   (InputStreamReader*) );
+interface (InputStreamReader, Ready,           bool,   (InputStreamReader*) );
 
 vtable (InputStreamReader) {
     const InputStreamReaderToString       ToString;
@@ -60,20 +60,31 @@ vtable (InputStreamReader) {
     const InputStreamReaderReady          Ready;
 };
 
-class_load( InputStreamReader );
-class_override( ToString,        (InputStreamReaderToString)ToString, "$@:v" );
-class_method( Equals,            (ObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,       (ObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,           (ObjectDispose)Dispose, "v@:v" );
-class_method( ReadOne,           (InputStreamReaderReadOne)ReadOne, "i@:v" );
-class_method( Read,              (InputStreamReaderRead)Read, "i@:^ii" );
-class_method( Skip,              (ReaderSkip)Skip, "l@:l" );
-class_method( Close,             (InputStreamReaderClose)Close, "v@:v" );
-class_method( Mark,              (ReaderMark)Mark, "v@:i" );
-class_method( MarkSupported,     (ReaderMarkSupported)MarkSupported, "v@:v" );
-class_method( Reset,             (ReaderReset)Reset, "v@:v" );
-class_method( Ready,             (ReaderReady)Ready, "B@:" );
-class_fini;
+function vptr(InputStreamReader);
+/**
+ * 
+ * Class Loader callback
+ */
+function objc_loadInputStreamReader(Class super) 
+{
+    Class cls = createClass(super, InputStreamReader);
+    addMethod(cls, InputStreamReaderToString, ToString);
+    addMethod(cls, ObjectEquals, Equals);
+    addMethod(cls, ObjectGetHashCode, GetHashCode);
+    addMethod(cls, ObjectDispose, Dispose);
+    addMethod(cls, InputStreamReaderReadOne, ReadOne);
+    addMethod(cls, InputStreamReaderRead, Read);
+    addMethod(cls, ReaderSkip, Skip);
+    addMethod(cls, InputStreamReaderClose, Close);
+    addMethod(cls, ReaderMark, Mark);
+    addMethod(cls, ReaderMarkSupported, MarkSupported);
+    addMethod(cls, ReaderReset, Reset);
+    addMethod(cls, ReaderReady, Ready);
+    
+    return cls;
+}
+
+
 
 method InputStreamReader* InputStreamReader_init(InputStreamReader* this, InputStream* in) {
     Object_init(this);

@@ -12,9 +12,9 @@ list ( APPEND INCLUDE .lib/dark/src/vendor )
 
 
 # C Sources:
-list ( APPEND CSOURCE .lib/dark/src/runtime/hashmap.c )
-list ( APPEND CSOURCE .lib/dark/src/runtime/runtime.c )
-list ( APPEND CSOURCE .lib/dark/src/runtime/objc-class.c )
+list ( APPEND CSOURCE .lib/dark/src/hashmap.c )
+list ( APPEND CSOURCE .lib/dark/src/runtime.c )
+list ( APPEND CSOURCE .lib/dark/src/objc-class.c )
 
 
 # Vala Sources:
@@ -30,7 +30,6 @@ set ( INCLUDES "${INCLUDES}; ${INCLUDE}" PARENT_SCOPE )
 set ( C_SOURCES "${C_SOURCES};${CSOURCE}" PARENT_SCOPE )
 set ( DEPS_LIBRARIES "${DEPS_LIBRARIES};-lgc" PARENT_SCOPE)
 
-set ( CUSTOM_VAPIS "${CUSTOM_VAPIS};${VAPI}" PARENT_SCOPE )
 
 
 

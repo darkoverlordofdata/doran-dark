@@ -56,17 +56,17 @@ ctor_proto(Array, int);
 ctor_proto(Array, Class);
 ctor_proto(Array, Class, int);
 
-method_proto (Array, ToString,  char*,      (const Array* const) );
-method_proto (Array, Dispose,   void,       (Array* const) );
-method_proto (Array, Length,    int,        (const Array* const) );
-method_proto (Array, IsEmpty,   bool,       (Array* const) );
-method_proto (Array, Contains,  bool,       (Array* const, Object*) );
-method_proto (Array, Clear,     void,       (Array* const) );
-method_proto (Array, Add,       Either*,    (Array* const, const Object*) );
-method_proto (Array, Remove,    void,       (Array* const, int) );
-method_proto (Array, Resize,    void,       (Array* const, int) );
-method_proto (Array, Set,       Either*,    (Array* const, int, const Object*) );
-method_proto (Array, Get,       Object*,  (Array* const, int) );
+interface (Array, ToString,  char*,      (const Array* const) );
+interface (Array, Dispose,   void,       (Array* const) );
+interface (Array, Length,    int,        (const Array* const) );
+interface (Array, IsEmpty,   bool,       (Array* const) );
+interface (Array, Contains,  bool,       (Array* const, Object*) );
+interface (Array, Clear,     void,       (Array* const) );
+interface (Array, Add,       Either*,    (Array* const, const Object*) );
+interface (Array, Remove,    void,       (Array* const, int) );
+interface (Array, Resize,    void,       (Array* const, int) );
+interface (Array, Set,       Either*,    (Array* const, int, const Object*) );
+interface (Array, Get,       Object*,  (Array* const, int) );
 
 vtable (Array) {
     const ArrayToString         ToString;
@@ -84,25 +84,30 @@ vtable (Array) {
     const ArrayGet              Get;    
 };
 
-class_load(Array);
-class_method(ToString,      (ArrayToString)ToString, "@@:v");
-class_method(Equals,        (ObjectEquals)Equals, "B@:@@");
-class_method(GetHashCode,   (ObjectGetHashCode)GetHashCode, "l@:v");
-class_method(Dispose,       (ArrayDispose)Dispose, "v@:v");
-class_method(Length,        (ArrayLength)Length, "i@:v");
-class_method(IsEmpty,       (ArrayIsEmpty)IsEmpty, "B@:v");
-class_method(Contains,      (ArrayContains)Contains, "B@:@");
-class_method(Clear,         (ArrayClear)Clear, "v@:v");
-class_method(Add,           (ArrayAdd)Add, "v@:@");
-class_method(Remove,        (ArrayRemove)Remove, "v@:i");
-class_method(Resize,        (ArrayResize)Resize, "v@:i");
-class_method(Set,           (ArraySet)Set, "v@:i@");
-class_method(Get,           (ArrayGet)Get, "@@:i");
-class_member(typeof,        sizeof(id), "@");
-class_member(length,        sizeof(int), "i");
-class_member(data,          sizeof(void*), "^");
-class_member(capacity,      sizeof(int), "i");
-class_fini;
+function vptr(Array);
+/**
+ * 
+ * Class Loader callback
+ */
+function objc_loadArray(Class super) 
+{
+    Class cls = createClass(super, Array);
+    addMethod(cls, ArrayToString, ToString);
+    addMethod(cls, ObjectEquals, Equals);
+    addMethod(cls, ObjectGetHashCode, GetHashCode);
+    addMethod(cls, ArrayDispose, Dispose);
+    addMethod(cls, ArrayLength, Length);
+    addMethod(cls, ArrayIsEmpty, IsEmpty);
+    addMethod(cls, ArrayContains, Contains);
+    addMethod(cls, ArrayClear, Clear);
+    addMethod(cls, ArrayAdd, Add);
+    addMethod(cls, ArrayRemove, Remove);
+    addMethod(cls, ArrayResize, Resize);
+    addMethod(cls, ArraySet, Set);
+    addMethod(cls, ArrayGet, Get);
+    
+    return cls;
+}
 
 
 /**

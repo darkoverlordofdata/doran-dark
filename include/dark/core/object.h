@@ -31,18 +31,19 @@ SOFTWARE.
 /**
  * Object ivar
  */
-type (Object) {
+type (Object) 
+{
     Class isa;
 };
 
-method_proto (Object, ToString,         char*,  (const Object* const) );
-method_proto (Object, Equals,           bool,   (const Object* const, const Object* const) );
-method_proto (Object, GetHashCode,      int,    (const Object* const) );
-method_proto (Object, Dispose,          void,   (Object* const) );
-method_proto (Object, ReferenceEquals,  bool,   (const Object* const, const Object* const) );
-method_proto (Object, InstanceEquals,   bool,   (const Object* const, const Object* const) );
-method_proto (Object, GetClass,         Class,  (const Object* const) );
-method_proto (Object, GetClassName,     char*,  (const Object* const) );
+interface (Object, ToString,         char*,  (const Object* const) );
+interface (Object, Equals,           bool,   (const Object* const, const Object* const) );
+interface (Object, GetHashCode,      int,    (const Object* const) );
+interface (Object, Dispose,          void,   (Object* const) );
+interface (Object, ReferenceEquals,  bool,   (const Object* const, const Object* const) );
+interface (Object, InstanceEquals,   bool,   (const Object* const, const Object* const) );
+interface (Object, GetClass,         Class,  (const Object* const) );
+interface (Object, GetClassName,     char*,  (const Object* const) );
 
 vtable (Object) 
 {
@@ -64,16 +65,48 @@ class (Object)
 };
 
 
-class_load(Object);
-class_method(ToString,           ToString, "$@:v");
-class_method(Equals,             Equals, "B@:@@");
-class_method(GetHashCode,        GetHashCode, "l@:v");
-class_method(Dispose,            Dispose, "v@:v");
-class_method(ReferenceEquals,    ReferenceEquals, "@:v");
-class_method(InstanceEquals,     InstanceEquals, "$@:v");
-$Object.Empty = nullptr;
-class_fini;
+function vptr(Object);
+/**
+ * 
+  
+ * ,\W*\((\w*)\)
+ * , $1,
+ * 
+ * class_method\( \w*,
+ * class_virtual\( \w*,
+ * class_override\( \w*,
+ * addMethod\(cls, 
+ * 
+ * \, \".*\"  
+ * 
 
+ * Class Loader callback
+ */
+function objc_loadObject(Class super) 
+{
+    Class cls = createClass(super, Object);
+    addMethod1(cls, Object, ToString);
+    addMethod1(cls, Object, Equals);
+    addMethod1(cls, Object, GetHashCode);
+    addMethod1(cls, Object, Dispose);
+    addMethod1(cls, Object, ReferenceEquals);
+    addMethod1(cls, Object, InstanceEquals);
+    $Object.Empty = nullptr;
+    return cls;
+}
+
+// function objc_loadObject(Class super) 
+// {
+//     Class cls = createClass(super, Object);
+//     addMethod(cls, ObjectToString,          ToString);
+//     addMethod(cls, ObjectEquals,            Equals);
+//     addMethod(cls, ObjectGetHashCode,       GetHashCode);
+//     addMethod(cls, ObjectDispose,           Dispose);
+//     addMethod(cls, ObjectReferenceEquals,   ReferenceEquals);
+//     addMethod(cls, ObjectInstanceEquals,    InstanceEquals);
+//     $Object.Empty = nullptr;
+//     return cls;
+// }
 //=======================================================================//
 //              I M P L E M E N T A T I O N                              //          
 //=======================================================================//
@@ -117,7 +150,7 @@ method bool InstanceEquals(const Object* const objA, const Object* const objB)
 
 method void Dispose(Object* const this)
 {
-    return _vptr(Object)->Dispose(this);
+    return get_vptr(Object)->Dispose(this);
 }
 /**
  * virtual Dispose method
@@ -130,7 +163,7 @@ function void Object_Dispose(Object* const this){}
  */
 method char* ToString(const Object* const this)
 {
-    return _vptr(Object)->ToString(this);
+    return get_vptr(Object)->ToString(this);
 }
 /**
  * virtual ToString method
@@ -146,7 +179,7 @@ function const char *Object_ToString(const Object* const this)
 method bool Equals(const Object* const this, const Object* const that)
 {
     // return this == that;
-    return _vptr(Object)->Equals(this, that);
+    return get_vptr(Object)->Equals(this, that);
 }
 
 /**
@@ -154,7 +187,7 @@ method bool Equals(const Object* const this, const Object* const that)
  */
 method int GetHashCode(const Object* const this)
 {
-    return _vptr(Object)->GetHashCode(this);
+    return get_vptr(Object)->GetHashCode(this);
 }
 
 method Class GetClass(const Object* const this)

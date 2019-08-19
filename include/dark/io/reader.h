@@ -36,15 +36,15 @@ type (Reader) {
 
 
 ctor_proto (Reader);
-method_proto (Reader, ToString, const char*, (const Reader* const) );
-method_proto (Reader, ReadOne,         int,    (Reader*) );
-method_proto (Reader, Read,            int,    (Reader*, IOBuff*, int, int) );
-method_proto (Reader, Skip,            long,   (Reader*, long) );
-method_proto (Reader, Close,           void,   (Reader*) );
-method_proto (Reader, Mark,            void,   (Reader*, int) );
-method_proto (Reader, MarkSupported,   bool,   (Reader*) );
-method_proto (Reader, Reset,           void,   (Reader*) );
-method_proto (Reader, Ready,           bool,   (Reader*) );
+interface (Reader, ToString, const char*, (const Reader* const) );
+interface (Reader, ReadOne,         int,    (Reader*) );
+interface (Reader, Read,            int,    (Reader*, IOBuff*, int, int) );
+interface (Reader, Skip,            long,   (Reader*, long) );
+interface (Reader, Close,           void,   (Reader*) );
+interface (Reader, Mark,            void,   (Reader*, int) );
+interface (Reader, MarkSupported,   bool,   (Reader*) );
+interface (Reader, Reset,           void,   (Reader*) );
+interface (Reader, Ready,           bool,   (Reader*) );
 
 vtable (Reader) {
     const ReaderToString      ToString;
@@ -61,20 +61,30 @@ vtable (Reader) {
     const ReaderReady         Ready;
 };
 
-class_load( Reader );
-class_override( ToString,        (ReaderToString)ToString, "$@:v" );
-class_method( Equals,            (ObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,       (ObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,           (ObjectDispose)Dispose, "v@:v" );
-class_method( ReadOne,           (ReaderReadOne)ReadOne, "i@:v" );
-class_method( Read,              (ReaderRead)Read, "i@:^ii" );
-class_method( Skip,              (ReaderSkip)Skip, "l@:l" );
-class_method( Close,             (ReaderClose)Close, "v@:v" );
-class_method( Mark,              (ReaderMark)Mark, "v@:i" );
-class_method( MarkSupported,     (ReaderMarkSupported)MarkSupported, "v@:v" );
-class_method( Reset,             (ReaderReset)Reset, "v@:v" );
-class_method( Ready,             (ReaderReady)Ready, "B@:" );
-class_fini;
+function vptr(Reader);
+/**
+ * 
+ * Class Loader callback
+ */
+function objc_loadReader(Class super) 
+{
+    Class cls = createClass(super, Reader);
+    addMethod(cls, ReaderToString, ToString);
+    addMethod(cls, ObjectEquals, Equals);
+    addMethod(cls, ObjectGetHashCode, GetHashCode);
+    addMethod(cls, ObjectDispose, Dispose);
+    addMethod(cls, ReaderReadOne, ReadOne);
+    addMethod(cls, ReaderRead, Read);
+    addMethod(cls, ReaderSkip, Skip);
+    addMethod(cls, ReaderClose, Close);
+    addMethod(cls, ReaderMark, Mark);
+    addMethod(cls, ReaderMarkSupported, MarkSupported);
+    addMethod(cls, ReaderReset, Reset);
+    addMethod(cls, ReaderReady, Ready);
+    
+    return cls;
+}
+
 
 /** Maximum skip-buffer size */
 static const int maxSkipBufferSize = 8192;
@@ -98,7 +108,7 @@ method int ReadOne(Reader* this) {
 }
 
 method int Read(Reader* this, IOBuff* buf, int offset, int len) {
-    return _vptr(Reader)->Read(this, buf, offset, len);
+    return get_vptr(Reader)->Read(this, buf, offset, len);
 }
 
 method long Skip(Reader* this, long n)  {
@@ -135,6 +145,6 @@ method void Reset(Reader* this) {
 }
 
 method void Close(Reader* this) {
-    _vptr(Reader)->Close(this);
+    get_vptr(Reader)->Close(this);
 }
 

@@ -47,14 +47,14 @@ type (Long)
     long value;
 };
 
-method_proto (Long, ToString,        char*, (const Long* const));
-method_proto (Long, CompareTo,       int, (const Long* const, const Long* const));
-method_proto (Long, IntValue,        int, (const Long* const));
-method_proto (Long, LongValue,       long, (const Long* const));
-method_proto (Long, FloatValue,      float, (const Long* const));
-method_proto (Long, DoubleValue,     double, (const Long* const));
-method_proto (Long, CharValue,       char, (const Long* const));
-method_proto (Long, ShortValue,      short, (const Long* const));
+interface (Long, ToString,        char*, (const Long* const));
+interface (Long, CompareTo,       int, (const Long* const, const Long* const));
+interface (Long, IntValue,        int, (const Long* const));
+interface (Long, LongValue,       long, (const Long* const));
+interface (Long, FloatValue,      float, (const Long* const));
+interface (Long, DoubleValue,     double, (const Long* const));
+interface (Long, CharValue,       char, (const Long* const));
+interface (Long, ShortValue,      short, (const Long* const));
 
 
 /**
@@ -75,20 +75,28 @@ vtable (Long)
     const LongShortValue         ShortValue;
 };
 
-class_load( Long );
-class_override( ToString,       (LongToString)ToString, "$@:v" );
-class_method( Equals,           (ObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,      (ObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,          (ObjectDispose)Dispose, "v@:v" );
-class_override( CompareTo,      (LongCompareTo)CompareTo, "i@:@" );
-class_override( IntValue,       (LongIntValue)IntValue, "i@:v" );
-class_override( LongValue,      (LongLongValue)LongValue, "l@:v" );
-class_override( FloatValue,     (LongFloatValue)FloatValue, "f@:v" );
-class_override( DoubleValue,    (LongDoubleValue)DoubleValue, "d@:v" );
-class_override( CharValue,      (LongCharValue)CharValue, "c@:v" );
-class_override( ShortValue,     (LongShortValue)ShortValue, "s@:v" );
-class_member( value,            sizeof( long ), "l" );
-class_fini
+function vptr(Long);
+/** 
+ * 
+ * Class Loader callback
+ */
+function objc_loadLong(Class super) 
+{
+    Class cls = createClass(super, Long);
+    addMethod(cls, LongToString,        ToString);
+    addMethod(cls, ObjectEquals,        Equals);
+    addMethod(cls, ObjectGetHashCode,   GetHashCode);
+    addMethod(cls, ObjectDispose,       Dispose);
+    addMethod(cls, LongCompareTo,       CompareTo);
+    addMethod(cls, LongIntValue,        IntValue);
+    addMethod(cls, LongLongValue,       LongValue);
+    addMethod(cls, LongFloatValue,      FloatValue);
+    addMethod(cls, LongDoubleValue,     DoubleValue);
+    addMethod(cls, LongCharValue,       CharValue);
+    addMethod(cls, LongShortValue,      ShortValue);
+    return cls;
+}
+
 
 /**
  * Constructor

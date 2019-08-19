@@ -33,15 +33,15 @@ type (InputStream) {
     Class isa;
 };
 
-method_proto (InputStream, ToString, const char*, (const InputStream* const) );
-method_proto (InputStream, ReadOne,         int,    (InputStream*) );
-method_proto (InputStream, Read,            int,    (InputStream*, IOBuff*, int, int) );
-method_proto (InputStream, Skip,            long,   (InputStream*, long) );
-method_proto (InputStream, Available,       int,    (InputStream*) );
-method_proto (InputStream, Close,           void,   (InputStream*) );
-method_proto (InputStream, Mark,            void,   (InputStream*, int) );
-method_proto (InputStream, MarkSupported,   bool,   (InputStream*) );
-method_proto (InputStream, Reset,           void,   (InputStream*) );
+interface (InputStream, ToString, const char*, (const InputStream* const) );
+interface (InputStream, ReadOne,         int,    (InputStream*) );
+interface (InputStream, Read,            int,    (InputStream*, IOBuff*, int, int) );
+interface (InputStream, Skip,            long,   (InputStream*, long) );
+interface (InputStream, Available,       int,    (InputStream*) );
+interface (InputStream, Close,           void,   (InputStream*) );
+interface (InputStream, Mark,            void,   (InputStream*, int) );
+interface (InputStream, MarkSupported,   bool,   (InputStream*) );
+interface (InputStream, Reset,           void,   (InputStream*) );
 
 vtable (InputStream) {
     const InputStreamToString     ToString;
@@ -58,20 +58,30 @@ vtable (InputStream) {
     const InputStreamAvailable    Available;
 };
 
-class_load( InputStream );
-class_override( ToString,        (InputStreamToString)ToString, "$@:v" );
-class_method( Equals,            (ObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,       (ObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,           (ObjectDispose)Dispose, "v@:v" );
-class_method( ReadOne,           (InputStreamReadOne)ReadOne, "i@:v" );
-class_method( Read,              (InputStreamRead)Read, "i@:^ii" );
-class_method( Skip,              (InputStreamSkip)Skip, "l@:l" );
-class_method( Close,             (InputStreamClose)Close, "v@:v" );
-class_method( Mark,              (InputStreamMark)Mark, "v@:i" );
-class_method( MarkSupported,     (InputStreamMarkSupported)MarkSupported, "v@:v" );
-class_method( Reset,             (InputStreamReset)Reset, "v@:v" );
-class_method( Available,         (InputStreamAvailable)Available, "B@:" );
-class_fini;
+function vptr(InputStream);
+/**
+ * 
+ * Class Loader callback
+ */
+function objc_loadInputStream(Class super) 
+{
+    Class cls = createClass(super, InputStream);
+    addMethod(cls, InputStreamToString, ToString);
+    addMethod(cls, ObjectEquals, Equals);
+    addMethod(cls, ObjectGetHashCode, GetHashCode);
+    addMethod(cls, ObjectDispose, Dispose);
+    addMethod(cls, InputStreamReadOne, ReadOne);
+    addMethod(cls, InputStreamRead, Read);
+    addMethod(cls, InputStreamSkip, Skip);
+    addMethod(cls, InputStreamClose, Close);
+    addMethod(cls, InputStreamMark, Mark);
+    addMethod(cls, InputStreamMarkSupported, MarkSupported);
+    addMethod(cls, InputStreamReset, Reset);
+    addMethod(cls, InputStreamAvailable, Available);
+    
+    return cls;
+}
+
 
 method InputStream* InputStream_init(InputStream* const this) 
 {
@@ -140,12 +150,12 @@ method int Available(InputStream* this)
 
 method void Close(InputStream* this)
 {
-    _vptr(InputStream)->Close(this);
+    get_vptr(InputStream)->Close(this);
 }
 
 method void Mark(InputStream* this, int readlimit)
 {
-    _vptr(InputStream)->Mark(this, readlimit);
+    get_vptr(InputStream)->Mark(this, readlimit);
 }
 
 method bool MarkSupported(InputStream* this)

@@ -48,16 +48,16 @@ type (BufferedReader) {
 ctor_proto (BufferedReader, Reader*);
 ctor_proto (BufferedReader, Reader*, int);
 
-method_proto (BufferedReader, ToString, const char*, (const BufferedReader* const) );
-method_proto (BufferedReader, ReadOne,         int,    (BufferedReader*) );
-method_proto (BufferedReader, Read,            int,    (BufferedReader*, IOBuff*, int, int) );
-method_proto (BufferedReader, Skip,            long,   (BufferedReader*, long) );
-method_proto (BufferedReader, Close,           void,   (BufferedReader*) );
-method_proto (BufferedReader, Mark,            void,   (BufferedReader*, int) );
-method_proto (BufferedReader, MarkSupported,   bool,   (BufferedReader*) );
-method_proto (BufferedReader, Reset,           void,   (BufferedReader*) );
-method_proto (BufferedReader, Ready,           bool,   (BufferedReader*) );
-method_proto (BufferedReader, ReadLine,        String*, (BufferedReader*, bool) );
+interface (BufferedReader, ToString, const char*, (const BufferedReader* const) );
+interface (BufferedReader, ReadOne,         int,    (BufferedReader*) );
+interface (BufferedReader, Read,            int,    (BufferedReader*, IOBuff*, int, int) );
+interface (BufferedReader, Skip,            long,   (BufferedReader*, long) );
+interface (BufferedReader, Close,           void,   (BufferedReader*) );
+interface (BufferedReader, Mark,            void,   (BufferedReader*, int) );
+interface (BufferedReader, MarkSupported,   bool,   (BufferedReader*) );
+interface (BufferedReader, Reset,           void,   (BufferedReader*) );
+interface (BufferedReader, Ready,           bool,   (BufferedReader*) );
+interface (BufferedReader, ReadLine,        String*, (BufferedReader*, bool) );
 
 vtable (BufferedReader) {
     const BufferedReaderToString      ToString;
@@ -75,21 +75,47 @@ vtable (BufferedReader) {
     const BufferedReaderReadLine      ReadLine;
 };
 
-class_load( BufferedReader );
-class_override( ToString,        (BufferedReaderToString)ToString, "$@:v" );
-class_method( Equals,            (ObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,       (ObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,           (ObjectDispose)Dispose, "v@:v" );
-class_method( ReadOne,           (BufferedReaderReadOne)ReadOne, "i@:v" );
-class_method( Read,              (BufferedReaderRead)Read, "i@:^ii" );
-class_method( Skip,              (BufferedReaderSkip)Skip, "l@:l" );
-class_method( Close,             (BufferedReaderClose)Close, "v@:v" );
-class_method( Mark,              (BufferedReaderMark)Mark, "v@:i" );
-class_method( MarkSupported,     (BufferedReaderMarkSupported)MarkSupported, "v@:v" );
-class_method( Reset,             (BufferedReaderReset)Reset, "v@:v" );
-class_method( Ready,             (BufferedReaderReady)Ready, "B@:" );
-class_method( ReadLine,          (BufferedReaderReadLine)ReadLine, "$@:B" );
-class_fini;
+function vptr(BufferedReader);
+/**
+ * 
+ * Class Loader callback
+ */
+function objc_loadBufferedReader(Class super) 
+{
+    Class cls = createClass(super, BufferedReader);
+    addMethod(cls, BufferedReaderToString, ToString);
+    addMethod(cls, ObjectEquals, Equals);
+    addMethod(cls, ObjectGetHashCode, GetHashCode);
+    addMethod(cls, ObjectDispose, Dispose);
+    addMethod(cls, BufferedReaderReadOne, ReadOne);
+    addMethod(cls, BufferedReaderRead, Read);
+    addMethod(cls, BufferedReaderSkip, Skip);
+    addMethod(cls, BufferedReaderClose, Close);
+    addMethod(cls, BufferedReaderMark, Mark);
+    addMethod(cls, BufferedReaderMarkSupported, MarkSupported);
+    addMethod(cls, BufferedReaderReset, Reset);
+    addMethod(cls, BufferedReaderReady, Ready);
+    addMethod(cls, BufferedReaderReadLine, ReadLine);
+    
+    return cls;
+}
+
+
+// class_load( BufferedReader );
+// class_override( ToString,        (BufferedReaderToString)ToString, "$@:v" );
+// class_method( Equals,            (ObjectEquals)Equals, "B@:@@" );
+// class_method( GetHashCode,       (ObjectGetHashCode)GetHashCode, "l@:v" );
+// class_method( Dispose,           (ObjectDispose)Dispose, "v@:v" );
+// class_method( ReadOne,           (BufferedReaderReadOne)ReadOne, "i@:v" );
+// class_method( Read,              (BufferedReaderRead)Read, "i@:^ii" );
+// class_method( Skip,              (BufferedReaderSkip)Skip, "l@:l" );
+// class_method( Close,             (BufferedReaderClose)Close, "v@:v" );
+// class_method( Mark,              (BufferedReaderMark)Mark, "v@:i" );
+// class_method( MarkSupported,     (BufferedReaderMarkSupported)MarkSupported, "v@:v" );
+// class_method( Reset,             (BufferedReaderReset)Reset, "v@:v" );
+// class_method( Ready,             (BufferedReaderReady)Ready, "B@:" );
+// class_method( ReadLine,          (BufferedReaderReadLine)ReadLine, "$@:B" );
+// class_fini;
 
 method BufferedReader* BufferedReader_init(BufferedReader* const this, Reader* in) {
     BufferedReader_init(this, in, defaultCharBufferSize);

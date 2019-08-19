@@ -70,11 +70,11 @@ SOFTWARE.
 #define method function overload
 
 /**
- *  MACRO method_proto
+ *  MACRO interface
  *      declares the prototype for methods
  * 
  */
-#define method_proto(T, name, type, signature)                          \
+#define interface(T, name, type, signature)                          \
     method type name signature;                                         \
     typedef type (*T##name)signature;
 
@@ -85,6 +85,10 @@ SOFTWARE.
  */
 #define ctor_proto(T, args...)                                          \
     method T* T##_init(T* const, ## args);
+
+// #define constructor(T, args...)                                          \
+//     method T* T##_init(T* const, ## args);
+
 /**
  *  MACRO alloc
  *      Allocate memory for type struct
@@ -121,63 +125,25 @@ SOFTWARE.
  * used to load runtime class definitions
  * and build vtables
  * 
- *  MACRO $implementation
- *      start a class definition- create objects
- *      defines the inline vptr accessor
- *      defines lazy accessors for class size and reference
- * 
  */
-#define _vptr(T) T##_vptr(this)
+#define get_vptr(T) T##_vptr(this)
 
-/**
- * Return the reference to the vtable
- * Load the vtable
- */
-#define class_load(T)                                                   \
-function struct T##_vtable* T##_vptr(T* this) {                         \
-    return (struct T##_vtable*)this->isa->vtable;                       \
-}                                                                       \
-function Class objc_load##T(Class super)                                \
-{                                                                       \
-    int k = 0;                                                          \
-    IMP* vt = &T##_vtable;                                              \
-    char* class_name = #T;                                              \
-    Class isa = objc_allocateClassPair(super, #T, 0);                   \
-    isa->vtable = &vt[0];               
+#define vptr(T)\
+    struct T##_vtable* T##_vptr(T* this) {                           \
+        return (struct T##_vtable*)this->isa->vtable;                   \
+    };                                                                  \
 
-/**
- * Add method address to the vtable
- */
-#define class_method(name, imp, type)                                   \
-    class_addMethod(isa, #name, imp, type);                             \
-    vt[k++] = imp; 
+#define ClassLoader(T)                                                    \
+    struct T##_vtable* T##_vptr(T* this) {                           \
+        return (struct T##_vtable*)this->isa->vtable;                   \
+    };                                                                  \
+    function Class objc_load##T(Class super) 
 
-/**
- * Add method override address to the vtable
- */
-#define class_override(name, imp, type)                                 \
-    class_addMethod(isa, #name, imp, type);                             \
-    vt[k++] = imp; 
 
-/**
- * Add virtual method address to the vtable
- */
-#define vtable_virtual(name, imp, type)                                 \
-    class_addMethod(isa, #name, imp, type);                             \
-    vt[k++] = imp; 
+#define createClass(super, T) objc_allocateClassPair(super, #T, 0, &T##_vtable)
+// #define addMethod(cls, IMP) class_addMethod(cls, #IMP, IMP, "")
+typedef Class* (*objc_LoadClass)(Class super);
 
-/**
- * Add member metadata about type
- */
-#define class_member(name, len, type)                                   \
-    class_addIvar(isa, #name, len, log2(len), type);
+#define addMethod(cls, T, IMP) class_addMethod(cls, #IMP, (T)IMP, "")
 
-/**
- * Add vtable to runtime
- */
-// #define class_fini                                                 \
-//     return methodizeClass(isa);                                         \
-// }
-#define class_fini                                                 \
-    return isa;                                         \
-}
+#define addMethod1(cls, T, IMP) class_addMethod(cls, #IMP, (T##IMP)IMP, "")

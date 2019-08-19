@@ -58,29 +58,44 @@ typedef enum ExceptionType {
 #define AT "in %s method %s at line %d"
 #define Source DSsprintf(AT, __FILENAME__, __func__, __LINE__)
 
-type (Exception) {
+type (Exception) 
+{
     Class isa;
     ExceptionType type;
     const char *msg;
 };
 
 ctor_proto (Exception, ExceptionType, char*);
-method_proto (Exception, ToString, const char*, (const Exception* const) );
+interface (Exception, ToString, const char*, (const Exception* const) );
 
-vtable (Exception) {
+vtable (Exception) 
+{
     const ExceptionToString     ToString;
     const ObjectEquals          Equals;
     const ObjectGetHashCode     GetHashCode;
     const ObjectDispose         Dispose;
 };
 
-class_load(Exception);
-class_override( ToString,         (ExceptionToString)ToString, "$@:v" );
-class_method( Equals,             (ObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,        (ObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,            (ObjectDispose)Dispose, "v@:v" );
-class_fini;
+function vptr(Exception);
 
+function Class objc_loadException(Class super) 
+{
+    Class cls = createClass(super, Exception);
+    addMethod1(cls, Exception,  ToString);
+    addMethod1(cls, Object,     Equals);
+    addMethod1(cls, Object,     GetHashCode);
+    addMethod1(cls, Object,     Dispose);
+    return cls;
+}
+// function Class objc_loadException(Class super) 
+// {
+//     Class cls = createClass(super, Exception);
+//     addMethod(cls, ExceptionToString,   ToString);
+//     addMethod(cls, ObjectEquals,        Equals);
+//     addMethod(cls, ObjectGetHashCode,   GetHashCode);
+//     addMethod(cls, ObjectDispose,       Dispose);
+//     return cls;
+// }
 
 define_exception_type(Exception*);
 

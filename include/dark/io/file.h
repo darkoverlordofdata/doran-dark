@@ -48,26 +48,26 @@ method File* File_init(File* this, const char*);
 method File* File_init(File* this, const char*, const char*);
 method File* File_init(File* this, File*, const char*);
 
-method_proto (File, ToString,           char*,      (const File* const) );
-method_proto (File, CompareTo,          int,        (File* const, File* other) );
-method_proto (File, IsInvalid,          bool,       (File* const) );
-method_proto (File, GetPrefixLength,    int,        (File* const) );
-method_proto (File, GetName,            String*,  (File* const) );
-method_proto (File, GetParent,          String*,  (File* const) );
-method_proto (File, GetParentFile,      File*,    (File* const) );
-method_proto (File, GetPath,            String*,  (File* const) );
-method_proto (File, IsAbsolute,         bool,       (File* const) );
-method_proto (File, GetAbsolutePath,    String*,  (File* const) );
-method_proto (File, GetAbsoluteFile,    File*,    (File* const) );
-method_proto (File, GetCanonicalPath,   String*,  (File* const) );
-method_proto (File, GetCanonicalFile,   File*,    (File* const) );
-method_proto (File, CanRead,            bool,       (File* const) );
-method_proto (File, CanWrite,           bool,       (File* const) );
-method_proto (File, Exists,             bool,       (File* const) );
-method_proto (File, IsDireCTORy,        bool,       (File* const) );
-method_proto (File, IsFile,             bool,       (File* const) );
-method_proto (File, GetLength,          long,       (File* const) );
-// method_proto (File, List,               String**, (File* const) );
+interface (File, ToString,           char*,      (const File* const) );
+interface (File, CompareTo,          int,        (File* const, File* other) );
+interface (File, IsInvalid,          bool,       (File* const) );
+interface (File, GetPrefixLength,    int,        (File* const) );
+interface (File, GetName,            String*,  (File* const) );
+interface (File, GetParent,          String*,  (File* const) );
+interface (File, GetParentFile,      File*,    (File* const) );
+interface (File, GetPath,            String*,  (File* const) );
+interface (File, IsAbsolute,         bool,       (File* const) );
+interface (File, GetAbsolutePath,    String*,  (File* const) );
+interface (File, GetAbsoluteFile,    File*,    (File* const) );
+interface (File, GetCanonicalPath,   String*,  (File* const) );
+interface (File, GetCanonicalFile,   File*,    (File* const) );
+interface (File, CanRead,            bool,       (File* const) );
+interface (File, CanWrite,           bool,       (File* const) );
+interface (File, Exists,             bool,       (File* const) );
+interface (File, IsDireCTORy,        bool,       (File* const) );
+interface (File, IsFile,             bool,       (File* const) );
+interface (File, GetLength,          long,       (File* const) );
+// interface (File, List,               String**, (File* const) );
 
 vtable (File) {
     const FileToString              ToString;
@@ -104,36 +104,45 @@ class (File) {
     char PathSeparator[2];
 };
 
-class_load( File );
-class_override( ToString,        (FileToString)ToString, "$@:v" );
-class_method( Equals,            (ObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,       (ObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,           (ObjectDispose)Dispose, "v@:v" );
-class_override( CompareTo,       (FileCompareTo)CompareTo, "i@:@" );
-class_method( IsInvalid,         (FileIsInvalid)IsInvalid, "B@:v");
-class_method( GetName,           (FileGetName)GetName, "$@:v" );
-class_method( GetParent,         (FileGetParent)GetParent, "$@:v" );
-class_method( GetParentFile,     (FileGetParentFile)GetParentFile, "$@:v" );
-class_method( IsAbsolute,        (FileIsAbsolute)IsAbsolute, "B@:v" );
-class_method( GetAbsolutePath,   (FileGetAbsolutePath)GetAbsolutePath, "$@:v" );
-class_method( GetAbsoluteFile,   (FileGetAbsoluteFile)GetAbsolutePath, "@@:v" );
-class_method( GetCanonicalPath,  (FileGetCanonicalPath)GetCanonicalPath, "$@:v");
-class_method( GetCanonicalFile,  (FileGetCanonicalFile)GetCanonicalFile, "@@:v");
-class_method( CanRead,           (FileCanRead)CanRead, "B@:v");
-class_method( CanWrite,          (FileCanWrite)CanWrite, "B@:v");
-class_method( Exists,            (FileExists)Exists, "B@:v");
-class_method( IsDireCTORy,       (FileIsDireCTORy)IsDireCTORy, "B@:v");
-class_method( IsFile,            (FileIsFile)IsFile, "B@:v");
-class_method( GetLength,         (FileGetLength)GetLength, "l@:v");
+function vptr(File);
+/**
+ * 
+ * Class Loader callback
+ */
+function objc_loadFile(Class super) 
+{
+    Class cls = createClass(super, File);
+    addMethod(cls, FileToString, ToString);
+    addMethod(cls, ObjectEquals, Equals);
+    addMethod(cls, ObjectGetHashCode, GetHashCode);
+    addMethod(cls, ObjectDispose, Dispose);
+    addMethod(cls, FileCompareTo, CompareTo);
+    addMethod(cls, FileIsInvalid, IsInvalid);
+    addMethod(cls, FileGetName, GetName);
+    addMethod(cls, FileGetParent, GetParent);
+    addMethod(cls, FileGetParentFile, GetParentFile);
+    addMethod(cls, FileIsAbsolute, IsAbsolute);
+    addMethod(cls, FileGetAbsolutePath, GetAbsolutePath);
+    addMethod(cls, FileGetAbsoluteFile, GetAbsolutePath);
+    addMethod(cls, FileGetCanonicalPath, GetCanonicalPath);
+    addMethod(cls, FileGetCanonicalFile, GetCanonicalFile);
+    addMethod(cls, FileCanRead, CanRead);
+    addMethod(cls, FileCanWrite, CanWrite);
+    addMethod(cls, FileExists, Exists);
+    addMethod(cls, FileIsDireCTORy, IsDireCTORy);
+    addMethod(cls, FileIsFile, IsFile);
+    addMethod(cls, FileGetLength, GetLength);
 
-$File.SeparatorChar = fs.GetSeparator();
-$File.Separator[0] = $File.SeparatorChar;
-$File.Separator[1] = '\0';
-$File.PathSeparatorChar = fs.GetPathSeparator();
-$File.PathSeparator[0] = $File.PathSeparatorChar;
-$File.PathSeparator[1] =  '\0';
+    $File.SeparatorChar = fs.GetSeparator();
+    $File.Separator[0] = $File.SeparatorChar;
+    $File.Separator[1] = '\0';
+    $File.PathSeparatorChar = fs.GetPathSeparator();
+    $File.PathSeparator[0] = $File.PathSeparatorChar;
+    $File.PathSeparator[1] =  '\0';
 
-class_fini;
+    return cls;
+}
+
 
 method bool IsInvalid(File* this) {
     if (this->status == PS_UNCHECKED) {

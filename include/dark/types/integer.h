@@ -49,14 +49,14 @@ type (Integer)
 };
 
 
-method_proto (Integer, ToString,        char*, (const Integer* const));
-method_proto (Integer, CompareTo,       int, (const Integer* const, const Integer* const));
-method_proto (Integer, IntValue,        int, (const Integer* const));
-method_proto (Integer, LongValue,       long, (const Integer* const));
-method_proto (Integer, FloatValue,      float, (const Integer* const));
-method_proto (Integer, DoubleValue,     double, (const Integer* const));
-method_proto (Integer, CharValue,       char, (const Integer* const));
-method_proto (Integer, ShortValue,      short, (const Integer* const));
+interface (Integer, ToString,        char*, (const Integer* const));
+interface (Integer, CompareTo,       int, (const Integer* const, const Integer* const));
+interface (Integer, IntValue,        int, (const Integer* const));
+interface (Integer, LongValue,       long, (const Integer* const));
+interface (Integer, FloatValue,      float, (const Integer* const));
+interface (Integer, DoubleValue,     double, (const Integer* const));
+interface (Integer, CharValue,       char, (const Integer* const));
+interface (Integer, ShortValue,      short, (const Integer* const));
 
 /**
  * Integer vtable with overrides
@@ -76,20 +76,39 @@ vtable (Integer)
     const IntegerShortValue         ShortValue;
 };
 
-class_load( Integer );
-class_override( ToString,       (IntegerToString)ToString, "$@:v" );
-class_method( Equals,           (ObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,      (ObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,          (ObjectDispose)Dispose, "v@:v" );
-class_override( CompareTo,      (IntegerCompareTo)CompareTo, "i@:@" );
-class_override( IntValue,       (IntegerIntValue)IntValue, "i@:v" );
-class_override( LongValue,      (IntegerLongValue)LongValue, "l@:v" );
-class_override( FloatValue,     (IntegerFloatValue)FloatValue, "f@:v" );
-class_override( DoubleValue,    (IntegerDoubleValue)DoubleValue, "d@:v" );
-class_override( CharValue,      (IntegerCharValue)CharValue, "c@:v" );
-class_override( ShortValue,     (IntegerShortValue)ShortValue, "s@:v" );
-class_member( value,            sizeof( int ), "i" );
-class_fini
+function vptr(Integer);
+/**
+ * Class Loader callback
+ */
+function objc_loadInteger(Class super) 
+{
+    Class cls = createClass(super, Integer);
+    addMethod1(cls, Integer,     ToString);
+    addMethod1(cls, Object,        Equals);
+    addMethod1(cls, Object,   GetHashCode);
+    addMethod1(cls, Object,       Dispose);
+    addMethod1(cls, Integer,    CompareTo);
+    addMethod1(cls, Integer,     IntValue);
+    addMethod1(cls, Integer,    LongValue);
+    addMethod1(cls, Integer,   FloatValue);
+    addMethod1(cls, Integer,  DoubleValue);
+    addMethod1(cls, Integer,    CharValue);
+    addMethod1(cls, Integer,   ShortValue);
+
+
+    // addMethod(cls, IntegerToString,     ToString);
+    // addMethod(cls, ObjectEquals,        Equals);
+    // addMethod(cls, ObjectGetHashCode,   GetHashCode);
+    // addMethod(cls, ObjectDispose,       Dispose);
+    // addMethod(cls, IntegerCompareTo,    CompareTo);
+    // addMethod(cls, IntegerIntValue,     IntValue);
+    // addMethod(cls, IntegerLongValue,    LongValue);
+    // addMethod(cls, IntegerFloatValue,   FloatValue);
+    // addMethod(cls, IntegerDoubleValue,  DoubleValue);
+    // addMethod(cls, IntegerCharValue,    CharValue);
+    // addMethod(cls, IntegerShortValue,   ShortValue);
+    return cls;
+}
 
 /* 
  * Constructor

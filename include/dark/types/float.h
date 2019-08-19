@@ -47,14 +47,14 @@ type (Float)
     float value;
 };
 
-method_proto (Float, ToString,        char*, (const Float* const));
-method_proto (Float, CompareTo,       int, (const Float* const, const Float* const));
-method_proto (Float, IntValue,        int, (const Float* const));
-method_proto (Float, LongValue,       long, (const Float* const));
-method_proto (Float, FloatValue,      float, (const Float* const));
-method_proto (Float, DoubleValue,     double, (const Float* const));
-method_proto (Float, CharValue,       char, (const Float* const));
-method_proto (Float, ShortValue,      short, (const Float* const));
+interface (Float, ToString,        char*, (const Float* const));
+interface (Float, CompareTo,       int, (const Float* const, const Float* const));
+interface (Float, IntValue,        int, (const Float* const));
+interface (Float, LongValue,       long, (const Float* const));
+interface (Float, FloatValue,      float, (const Float* const));
+interface (Float, DoubleValue,     double, (const Float* const));
+interface (Float, CharValue,       char, (const Float* const));
+interface (Float, ShortValue,      short, (const Float* const));
 
 
 /**
@@ -75,20 +75,57 @@ vtable (Float)
     const FloatShortValue       ShortValue;
 };
 
-class_load( Float );
-class_override( ToString,       (FloatToString)ToString, "$@:v" );
-class_method( Equals,           (ObjectEquals)Equals, "B@:@@" );
-class_method( GetHashCode,      (ObjectGetHashCode)GetHashCode, "l@:v" );
-class_method( Dispose,          (ObjectDispose)Dispose, "v@:v" );
-class_override( CompareTo,      (FloatCompareTo)CompareTo, "i@:@" );
-class_override( IntValue,       (FloatIntValue)IntValue, "i@:v" );
-class_override( LongValue,      (FloatLongValue)LongValue, "l@:v" );
-class_override( FloatValue,     (FloatFloatValue)FloatValue, "f@:v" );
-class_override( DoubleValue,    (FloatDoubleValue)DoubleValue, "d@:v" );
-class_override( CharValue,      (FloatCharValue)CharValue, "c@:v" );
-class_override( ShortValue,     (FloatShortValue)ShortValue, "s@:v" );
-class_member( value,            sizeof( float ), "f" );
-class_fini
+function vptr(Float);
+/** 
+ * 
+ * \((\w*)\)
+ * \class_method\( \w*,
+ * \class_virtual\( \w*,
+ * \class_override\( \w*,
+ * \, \"*.\" 
+ * 
+ * Class Loader callback
+ */
+function objc_loadFloat(Class super) 
+{
+    Class cls = createClass(super, Float);
+    addMethod1(cls, Object,        Equals);
+    addMethod1(cls, Object,   GetHashCode);
+    addMethod1(cls, Object,       Dispose);
+    addMethod1(cls, Float,      CompareTo);
+    addMethod1(cls, Float,       IntValue);
+    addMethod1(cls, Float,      LongValue);
+    addMethod1(cls, Float,     FloatValue);
+    addMethod1(cls, Float,    DoubleValue);
+    addMethod1(cls, Float,      CharValue);
+    addMethod1(cls, Float,     ShortValue);
+
+    // addMethod(cls, ObjectEquals,        Equals);
+    // addMethod(cls, ObjectGetHashCode,   GetHashCode);
+    // addMethod(cls, ObjectDispose,       Dispose);
+    // addMethod(cls, FloatCompareTo,      CompareTo);
+    // addMethod(cls, FloatIntValue,       IntValue);
+    // addMethod(cls, FloatLongValue,      LongValue);
+    // addMethod(cls, FloatFloatValue,     FloatValue);
+    // addMethod(cls, FloatDoubleValue,    DoubleValue);
+    // addMethod(cls, FloatCharValue,      CharValue);
+    // addMethod(cls, FloatShortValue,     ShortValue);
+    return cls;
+}
+
+// class_override( ToString,       (FloatToString)ToString, "$@:v" );
+// class_method( Equals,           (ObjectEquals)Equals, "B@:@@" );
+// class_method( GetHashCode,      (ObjectGetHashCode)GetHashCode, "l@:v" );
+// class_method( Dispose,          (ObjectDispose)Dispose, "v@:v" );
+// class_override( CompareTo,      (FloatCompareTo)CompareTo, "i@:@" );
+// class_override( IntValue,       (FloatIntValue)IntValue, "i@:v" );
+// class_override( LongValue,      (FloatLongValue)LongValue, "l@:v" );
+// class_override( FloatValue,     (FloatFloatValue)FloatValue, "f@:v" );
+// class_override( DoubleValue,    (FloatDoubleValue)DoubleValue, "d@:v" );
+// class_override( CharValue,      (FloatCharValue)CharValue, "c@:v" );
+// class_override( ShortValue,     (FloatShortValue)ShortValue, "s@:v" );
+// class_member( value,            sizeof( float ), "f" );
+// class_fini
 
 /**
  * Constructor

@@ -35,18 +35,20 @@ SOFTWARE.
 /**
  * Comparable Class
  */
-type (Comparable) {
+type (Comparable) 
+{
     Class isa;
 };
 
-method_proto (Comparable, ToString,        char*,    (const Comparable* const));
-method_proto (Comparable, CompareTo,       int,      (const Comparable* const, const Comparable* const));
+interface (Comparable, ToString,        char*,    (const Comparable* const));
+interface (Comparable, CompareTo,       int,      (const Comparable* const, const Comparable* const));
 
 
 /**
  * Comparable Vtable
  */
-vtable (Comparable) {
+vtable (Comparable) 
+{
     const ComparableToString      ToString;
     const ObjectEquals            Equals;
     const ObjectGetHashCode       GetHashCode;
@@ -54,19 +56,35 @@ vtable (Comparable) {
     const ComparableCompareTo     CompareTo;
 };
 
+function vptr(Comparable);
 /**
  * Create the class loader
  */
-class_load(Comparable);
-class_method(ToString,           (ComparableToString)ToString, "$@:v");
-class_method(Equals,             (ObjectEquals)Equals, "B@:@@");
-class_method(GetHashCode,        (ObjectGetHashCode)GetHashCode, "l@:v");
-class_method(Dispose,            (ObjectDispose)Dispose, "v@:v");
-class_method(ReferenceEquals,    ReferenceEquals, "@:v");
-class_method(InstanceEquals,     InstanceEquals, "$@:v");
-class_method(CompareTo,          (ComparableCompareTo)CompareTo, "i@:@");
-class_fini;
+function Class objc_loadComparable(Class super) 
+{
+    Class cls = createClass(super, Comparable);
+    addMethod1(cls, Comparable, ToString);
+    addMethod1(cls, Object,     Equals);
+    addMethod1(cls, Object,     GetHashCode);
+    addMethod1(cls, Object,     Dispose);
+    addMethod1(cls, Object,     ReferenceEquals);
+    addMethod1(cls, Object,     InstanceEquals);
+    addMethod1(cls, Comparable, CompareTo);
+    return cls;
+}
 
+// function Class objc_loadComparable(Class super) 
+// {
+//     Class cls = createClass(super, Comparable);
+//     addMethod(cls, ComparableToString,     ToString);
+//     addMethod(cls, ObjectEquals,            Equals);
+//     addMethod(cls, ObjectGetHashCode,       GetHashCode);
+//     addMethod(cls, ObjectDispose,           Dispose);
+//     addMethod(cls, ObjectReferenceEquals,   ReferenceEquals);
+//     addMethod(cls, ObjectInstanceEquals,    InstanceEquals);
+//     addMethod(cls, ComparableCompareTo,     CompareTo);
+//     return cls;
+// }
 //=======================================================================//
 //              I M P L E M E N T A T I O N                              //          
 //=======================================================================//
@@ -79,7 +97,7 @@ function Comparable* Comparable_init(Comparable* const this)
 }
 
 method int CompareTo(const Comparable* const this, const Comparable* const other) {
-    return _vptr(Comparable)->CompareTo(this, other);
+    return get_vptr(Comparable)->CompareTo(this, other);
 }
 
 method char* ToString(const Comparable* const this) {

@@ -49,12 +49,12 @@ type (List) {
 
 ctor_proto (List);
 ctor_proto (List, Class);
-method_proto (List, ToString,   char*,      (const List* const) );
-method_proto (List, Length,     int,        (List* const) );
-method_proto (List, Add,        Either*,    (List* const, Object*) );
-method_proto (List, Remove,     Object*,    (List* const) );
-method_proto (List, Insert,     Either*,    (List* const, Object*, List_Compare) );
-method_proto (List, Iterate,    void,       (List* const, List_Iterator) );
+interface (List, ToString,   char*,      (const List* const) );
+interface (List, Length,     int,        (List* const) );
+interface (List, Add,        Either*,    (List* const, Object*) );
+interface (List, Remove,     Object*,    (List* const) );
+interface (List, Insert,     Either*,    (List* const, Object*, List_Compare) );
+interface (List, Iterate,    void,       (List* const, List_Iterator) );
 
 vtable (List) {
     const ListToString          ToString;
@@ -68,20 +68,26 @@ vtable (List) {
     const ListIterate           Iterate;
 };
 
-class_load(List)
-class_method(ToString,      (ListToString)ToString, "@@:v");
-class_method(Equals,        (ObjectEquals)Equals, "B@:@@");
-class_method(GetHashCode,   (ObjectGetHashCode)GetHashCode, "l@:v");
-class_method(Dispose,       (ObjectDispose)Dispose, "v@:v");
-class_method(Length,        (ListLength)Length, "i@:v");
-class_method(Add,           (ListAdd)Add, "@@:*");
-class_method(Remove,        (ListRemove)Remove, "i@:*");
-class_method(Insert,        (ListInsert)Insert, "i@:*@");
-class_method(Iterate,       (ListIterate)Iterate, "i@:@@");
-class_member(typeof,        sizeof(id), "@");
-class_member(length,        sizeof(int), "i");
-class_member(head,          sizeof(void*), "^");
-class_fini;
+function vptr(List);
+/**
+ * 
+ * Class Loader callback
+ */
+function objc_loadList(Class super) 
+{
+    Class cls = createClass(super, List);
+    addMethod(cls, ListToString, ToString);
+    addMethod(cls, ObjectEquals, Equals);
+    addMethod(cls, ObjectGetHashCode, GetHashCode);
+    addMethod(cls, ObjectDispose, Dispose);
+    addMethod(cls, ListLength, Length);
+    addMethod(cls, ListAdd, Add);
+    addMethod(cls, ListRemove, Remove);
+    addMethod(cls, ListInsert, Insert);
+    addMethod(cls, ListIterate, Iterate);
+    
+    return cls;
+}
 
 method List* List_init(List* const this)
 {

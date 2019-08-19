@@ -22,6 +22,7 @@
  * @APPLE_LICENSE_HEADER_END@
  */
 #include <stdio.h>
+#include <assert.h>
 #include <dark/core/class.h>
 #include <dark/core/object.h>
 #include <dark/core/comparable.h>
@@ -197,7 +198,6 @@ void _objc_insertMethods(Class cls, struct objc_method_list *mlist, struct objc_
     size_t newSize;
 
     if (!cls->methodLists) {
-        
         // cls has no methods - simply use this method list
         cls->methodLists = (struct objc_method_list **)mlist;
         cls->info |= CLS_NO_METHOD_ARRAY;
@@ -213,7 +213,6 @@ void _objc_insertMethods(Class cls, struct objc_method_list *mlist, struct objc_
     ptr = *list;
     while ((*ptr != 0) && (*ptr != END_OF_METHODS_LIST))
         ptr += 1;
-
 
     // If array is full, add to it
     if (*ptr == END_OF_METHODS_LIST)
@@ -256,7 +255,7 @@ Class methodizeClass(Class cls)
     // got thru the methodLists and build the vTable:
 
 	struct objc_method_list **ml = cls->methodLists;
-    // int count = ml[0]->method_count;
+    int count = ml[0]->method_count;
     // _objc_inform("count = %d", count);
     // _objc_inform("method_count = %d", ml[0]->method_count);
     // _objc_inform("len %d", strlen(ml[0]->method_list->method_name));
