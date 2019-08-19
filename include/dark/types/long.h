@@ -83,17 +83,17 @@ function vptr(Long);
 function objc_loadLong(Class super) 
 {
     Class cls = createClass(super, Long);
-    addMethod(cls, LongToString,        ToString);
-    addMethod(cls, ObjectEquals,        Equals);
-    addMethod(cls, ObjectGetHashCode,   GetHashCode);
-    addMethod(cls, ObjectDispose,       Dispose);
-    addMethod(cls, LongCompareTo,       CompareTo);
-    addMethod(cls, LongIntValue,        IntValue);
-    addMethod(cls, LongLongValue,       LongValue);
-    addMethod(cls, LongFloatValue,      FloatValue);
-    addMethod(cls, LongDoubleValue,     DoubleValue);
-    addMethod(cls, LongCharValue,       CharValue);
-    addMethod(cls, LongShortValue,      ShortValue);
+    addMethod(cls, Long,        ToString);
+    addMethod(cls, Object,        Equals);
+    addMethod(cls, Object,   GetHashCode);
+    addMethod(cls, Object,       Dispose);
+    addMethod(cls, Long,       CompareTo);
+    addMethod(cls, Long,        IntValue);
+    addMethod(cls, Long,       LongValue);
+    addMethod(cls, Long,      FloatValue);
+    addMethod(cls, Long,     DoubleValue);
+    addMethod(cls, Long,       CharValue);
+    addMethod(cls, Long,      ShortValue);
     return cls;
 }
 

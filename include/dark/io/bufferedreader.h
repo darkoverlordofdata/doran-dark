@@ -83,19 +83,19 @@ function vptr(BufferedReader);
 function objc_loadBufferedReader(Class super) 
 {
     Class cls = createClass(super, BufferedReader);
-    addMethod(cls, BufferedReaderToString, ToString);
-    addMethod(cls, ObjectEquals, Equals);
-    addMethod(cls, ObjectGetHashCode, GetHashCode);
-    addMethod(cls, ObjectDispose, Dispose);
-    addMethod(cls, BufferedReaderReadOne, ReadOne);
-    addMethod(cls, BufferedReaderRead, Read);
-    addMethod(cls, BufferedReaderSkip, Skip);
-    addMethod(cls, BufferedReaderClose, Close);
-    addMethod(cls, BufferedReaderMark, Mark);
-    addMethod(cls, BufferedReaderMarkSupported, MarkSupported);
-    addMethod(cls, BufferedReaderReset, Reset);
-    addMethod(cls, BufferedReaderReady, Ready);
-    addMethod(cls, BufferedReaderReadLine, ReadLine);
+    addMethod(cls, BufferedReader, ToString);
+    addMethod(cls, Object, Equals);
+    addMethod(cls, Object, GetHashCode);
+    addMethod(cls, Object, Dispose);
+    addMethod(cls, BufferedReader, ReadOne);
+    addMethod(cls, BufferedReader, Read);
+    addMethod(cls, BufferedReader, Skip);
+    addMethod(cls, BufferedReader, Close);
+    addMethod(cls, BufferedReader, Mark);
+    addMethod(cls, BufferedReader, MarkSupported);
+    addMethod(cls, BufferedReader, Reset);
+    addMethod(cls, BufferedReader, Ready);
+    addMethod(cls, BufferedReader, ReadLine);
     
     return cls;
 }

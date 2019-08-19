@@ -92,19 +92,19 @@ function vptr(Array);
 function objc_loadArray(Class super) 
 {
     Class cls = createClass(super, Array);
-    addMethod(cls, ArrayToString, ToString);
-    addMethod(cls, ObjectEquals, Equals);
-    addMethod(cls, ObjectGetHashCode, GetHashCode);
-    addMethod(cls, ArrayDispose, Dispose);
-    addMethod(cls, ArrayLength, Length);
-    addMethod(cls, ArrayIsEmpty, IsEmpty);
-    addMethod(cls, ArrayContains, Contains);
-    addMethod(cls, ArrayClear, Clear);
-    addMethod(cls, ArrayAdd, Add);
-    addMethod(cls, ArrayRemove, Remove);
-    addMethod(cls, ArrayResize, Resize);
-    addMethod(cls, ArraySet, Set);
-    addMethod(cls, ArrayGet, Get);
+    addMethod(cls, Array, ToString);
+    addMethod(cls, Object, Equals);
+    addMethod(cls, Object, GetHashCode);
+    addMethod(cls, Array, Dispose);
+    addMethod(cls, Array, Length);
+    addMethod(cls, Array, IsEmpty);
+    addMethod(cls, Array, Contains);
+    addMethod(cls, Array, Clear);
+    addMethod(cls, Array, Add);
+    addMethod(cls, Array, Remove);
+    addMethod(cls, Array, Resize);
+    addMethod(cls, Array, Set);
+    addMethod(cls, Array, Get);
     
     return cls;
 }

@@ -74,7 +74,7 @@ SOFTWARE.
  *      declares the prototype for methods
  * 
  */
-#define interface(T, name, type, signature)                          \
+#define interface(T, name, type, signature)                             \
     method type name signature;                                         \
     typedef type (*T##name)signature;
 
@@ -85,9 +85,6 @@ SOFTWARE.
  */
 #define ctor_proto(T, args...)                                          \
     method T* T##_init(T* const, ## args);
-
-// #define constructor(T, args...)                                          \
-//     method T* T##_init(T* const, ## args);
 
 /**
  *  MACRO alloc
@@ -120,30 +117,27 @@ SOFTWARE.
 #define of(class) (Class)objc_getClass(#class)
 
 /**
- * These remaining macros are used to 
- * generate the objc_load<DSname> function
- * used to load runtime class definitions
- * and build vtables
- * 
+ * Define function to retrieve vptr
+ */
+#define vptr(T)\
+    struct T##_vtable* T##_vptr(T* this) {                              \
+        return (struct T##_vtable*)this->isa->vtable;                   \
+    };                                                                  \
+
+/**
+ * Get the vptr for T
  */
 #define get_vptr(T) T##_vptr(this)
 
-#define vptr(T)\
-    struct T##_vtable* T##_vptr(T* this) {                           \
-        return (struct T##_vtable*)this->isa->vtable;                   \
-    };                                                                  \
-
-#define ClassLoader(T)                                                    \
-    struct T##_vtable* T##_vptr(T* this) {                           \
-        return (struct T##_vtable*)this->isa->vtable;                   \
-    };                                                                  \
-    function Class objc_load##T(Class super) 
-
-
+/**
+ * 
+ */
 #define createClass(super, T) objc_allocateClassPair(super, #T, 0, &T##_vtable)
-// #define addMethod(cls, IMP) class_addMethod(cls, #IMP, IMP, "")
+
+/**
+ * 
+ */
+#define addMethod(cls, T, IMP) class_addMethod(cls, #IMP, (T##IMP)IMP, "")
+
 typedef Class* (*objc_LoadClass)(Class super);
 
-#define addMethod(cls, T, IMP) class_addMethod(cls, #IMP, (T)IMP, "")
-
-#define addMethod1(cls, T, IMP) class_addMethod(cls, #IMP, (T##IMP)IMP, "")

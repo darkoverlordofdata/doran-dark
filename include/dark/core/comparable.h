@@ -63,28 +63,16 @@ function vptr(Comparable);
 function Class objc_loadComparable(Class super) 
 {
     Class cls = createClass(super, Comparable);
-    addMethod1(cls, Comparable, ToString);
-    addMethod1(cls, Object,     Equals);
-    addMethod1(cls, Object,     GetHashCode);
-    addMethod1(cls, Object,     Dispose);
-    addMethod1(cls, Object,     ReferenceEquals);
-    addMethod1(cls, Object,     InstanceEquals);
-    addMethod1(cls, Comparable, CompareTo);
+    addMethod(cls, Comparable, ToString);
+    addMethod(cls, Object,     Equals);
+    addMethod(cls, Object,     GetHashCode);
+    addMethod(cls, Object,     Dispose);
+    addMethod(cls, Object,     ReferenceEquals);
+    addMethod(cls, Object,     InstanceEquals);
+    addMethod(cls, Comparable, CompareTo);
     return cls;
 }
 
-// function Class objc_loadComparable(Class super) 
-// {
-//     Class cls = createClass(super, Comparable);
-//     addMethod(cls, ComparableToString,     ToString);
-//     addMethod(cls, ObjectEquals,            Equals);
-//     addMethod(cls, ObjectGetHashCode,       GetHashCode);
-//     addMethod(cls, ObjectDispose,           Dispose);
-//     addMethod(cls, ObjectReferenceEquals,   ReferenceEquals);
-//     addMethod(cls, ObjectInstanceEquals,    InstanceEquals);
-//     addMethod(cls, ComparableCompareTo,     CompareTo);
-//     return cls;
-// }
 //=======================================================================//
 //              I M P L E M E N T A T I O N                              //          
 //=======================================================================//

@@ -68,45 +68,21 @@ class (Object)
 function vptr(Object);
 /**
  * 
-  
- * ,\W*\((\w*)\)
- * , $1,
- * 
- * class_method\( \w*,
- * class_virtual\( \w*,
- * class_override\( \w*,
- * addMethod\(cls, 
- * 
- * \, \".*\"  
- * 
-
  * Class Loader callback
  */
 function objc_loadObject(Class super) 
 {
     Class cls = createClass(super, Object);
-    addMethod1(cls, Object, ToString);
-    addMethod1(cls, Object, Equals);
-    addMethod1(cls, Object, GetHashCode);
-    addMethod1(cls, Object, Dispose);
-    addMethod1(cls, Object, ReferenceEquals);
-    addMethod1(cls, Object, InstanceEquals);
+    addMethod(cls, Object, ToString);
+    addMethod(cls, Object, Equals);
+    addMethod(cls, Object, GetHashCode);
+    addMethod(cls, Object, Dispose);
+    addMethod(cls, Object, ReferenceEquals);
+    addMethod(cls, Object, InstanceEquals);
     $Object.Empty = nullptr;
     return cls;
 }
 
-// function objc_loadObject(Class super) 
-// {
-//     Class cls = createClass(super, Object);
-//     addMethod(cls, ObjectToString,          ToString);
-//     addMethod(cls, ObjectEquals,            Equals);
-//     addMethod(cls, ObjectGetHashCode,       GetHashCode);
-//     addMethod(cls, ObjectDispose,           Dispose);
-//     addMethod(cls, ObjectReferenceEquals,   ReferenceEquals);
-//     addMethod(cls, ObjectInstanceEquals,    InstanceEquals);
-//     $Object.Empty = nullptr;
-//     return cls;
-// }
 //=======================================================================//
 //              I M P L E M E N T A T I O N                              //          
 //=======================================================================//

@@ -88,16 +88,11 @@ function vptr(Boolean);
 function objc_loadBoolean(Class super) 
 {
     Class cls = createClass(super, Boolean);
-    addMethod1(cls, Boolean,    ToString);
-    addMethod1(cls, Object,     Equals);
-    addMethod1(cls, Object,     GetHashCode);
-    addMethod1(cls, Object,     Dispose);
-    addMethod1(cls, Boolean,    CompareTo);
-    // addMethod(cls, BooleanToString,     ToString);
-    // addMethod(cls, ObjectEquals,        Equals);
-    // addMethod(cls, ObjectGetHashCode,   GetHashCode);
-    // addMethod(cls, ObjectDispose,       Dispose);
-    // addMethod(cls, BooleanCompareTo,    CompareTo);
+    addMethod(cls, Boolean,    ToString);
+    addMethod(cls, Object,     Equals);
+    addMethod(cls, Object,     GetHashCode);
+    addMethod(cls, Object,     Dispose);
+    addMethod(cls, Boolean,    CompareTo);
     /** 
      * Static constructor
      * set class properties 

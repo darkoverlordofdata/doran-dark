@@ -81,17 +81,17 @@ function vptr(Short);
 function objc_loadShort(Class super) 
 {
     Class cls = createClass(super, Short);
-    addMethod(cls, ShortToString,       ToString);
-    addMethod(cls, ObjectEquals,        Equals);
-    addMethod(cls, ObjectGetHashCode,   GetHashCode);
-    addMethod(cls, ObjectDispose,       Dispose);
-    addMethod(cls, ShortCompareTo,      CompareTo);
-    addMethod(cls, ShortIntValue,       IntValue);
-    addMethod(cls, ShortLongValue,      LongValue);
-    addMethod(cls, ShortFloatValue,     FloatValue);
-    addMethod(cls, ShortDoubleValue,    DoubleValue);
-    addMethod(cls, ShortCharValue,      CharValue);
-    addMethod(cls, ShortShortValue,     ShortValue);
+    addMethod(cls, Short,       ToString);
+    addMethod(cls, Object,        Equals);
+    addMethod(cls, Object,   GetHashCode);
+    addMethod(cls, Object,       Dispose);
+    addMethod(cls, Short,      CompareTo);
+    addMethod(cls, Short,       IntValue);
+    addMethod(cls, Short,      LongValue);
+    addMethod(cls, Short,     FloatValue);
+    addMethod(cls, Short,    DoubleValue);
+    addMethod(cls, Short,      CharValue);
+    addMethod(cls, Short,     ShortValue);
     
     return cls;
 }

@@ -76,15 +76,15 @@ function vptr(List);
 function objc_loadList(Class super) 
 {
     Class cls = createClass(super, List);
-    addMethod(cls, ListToString, ToString);
-    addMethod(cls, ObjectEquals, Equals);
-    addMethod(cls, ObjectGetHashCode, GetHashCode);
-    addMethod(cls, ObjectDispose, Dispose);
-    addMethod(cls, ListLength, Length);
-    addMethod(cls, ListAdd, Add);
-    addMethod(cls, ListRemove, Remove);
-    addMethod(cls, ListInsert, Insert);
-    addMethod(cls, ListIterate, Iterate);
+    addMethod(cls, List, ToString);
+    addMethod(cls, Object, Equals);
+    addMethod(cls, Object, GetHashCode);
+    addMethod(cls, Object, Dispose);
+    addMethod(cls, List, Length);
+    addMethod(cls, List, Add);
+    addMethod(cls, List, Remove);
+    addMethod(cls, List, Insert);
+    addMethod(cls, List, Iterate);
     
     return cls;
 }

@@ -102,18 +102,18 @@ function vptr(Map);
 function objc_loadMap(Class super) 
 {
     Class cls = createClass(super, Map);
-    addMethod(cls, MapToString, ToString);
-    addMethod(cls, ObjectEquals, Equals);
-    addMethod(cls, ObjectGetHashCode, GetHashCode);
-    addMethod(cls, MapDispose, Dispose);
-    addMethod(cls, MapLength, Length);
-    addMethod(cls, MapRemove, Remove);
-    addMethod(cls, MapForEach, ForEach);
-    addMethod(cls, MapPut, Put);
-    addMethod(cls, MapGet, Get);
-    addMethod(cls, MapHashInt, HashInt);
-    addMethod(cls, MapHash, Hash);
-    addMethod(cls, MapRehash, Rehash);
+    addMethod(cls, Map, ToString);
+    addMethod(cls, Object, Equals);
+    addMethod(cls, Object, GetHashCode);
+    addMethod(cls, Map, Dispose);
+    addMethod(cls, Map, Length);
+    addMethod(cls, Map, Remove);
+    addMethod(cls, Map, ForEach);
+    addMethod(cls, Map, Put);
+    addMethod(cls, Map, Get);
+    addMethod(cls, Map, HashInt);
+    addMethod(cls, Map, Hash);
+    addMethod(cls, Map, Rehash);
     
     return cls;
 }

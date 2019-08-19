@@ -80,32 +80,18 @@ function objc_loadChar(Class super)
 {
     Class cls = createClass(super, Char);
 
-    addMethod1(cls, Char,   ToString);
-    addMethod1(cls, Char,   ToString);
-    addMethod1(cls, Object, Equals);
-    addMethod1(cls, Object, GetHashCode);
-    addMethod1(cls, Object, Dispose);
-    addMethod1(cls, Char,   CompareTo);
-    addMethod1(cls, Char,   IntValue);
-    addMethod1(cls, Char,   LongValue);
-    addMethod1(cls, Char,   FloatValue);
-    addMethod1(cls, Char,   DoubleValue);
-    addMethod1(cls, Char,   CharValue);
-    addMethod1(cls, Char,   ShortValue);
-
-
-    // addMethod(cls, BooleanToString,     ToString);
-    // addMethod(cls, CharToString,        ToString);
-    // addMethod(cls, ObjectEquals,        Equals);
-    // addMethod(cls, ObjectGetHashCode,   GetHashCode);
-    // addMethod(cls, ObjectDispose,       Dispose);
-    // addMethod(cls, CharCompareTo,       CompareTo);
-    // addMethod(cls, CharIntValue,        IntValue);
-    // addMethod(cls, CharLongValue,       LongValue);
-    // addMethod(cls, CharFloatValue,      FloatValue);
-    // addMethod(cls, CharDoubleValue,     DoubleValue);
-    // addMethod(cls, CharCharValue,       CharValue);
-    // addMethod(cls, CharShortValue,      ShortValue);
+    addMethod(cls, Char,   ToString);
+    addMethod(cls, Char,   ToString);
+    addMethod(cls, Object, Equals);
+    addMethod(cls, Object, GetHashCode);
+    addMethod(cls, Object, Dispose);
+    addMethod(cls, Char,   CompareTo);
+    addMethod(cls, Char,   IntValue);
+    addMethod(cls, Char,   LongValue);
+    addMethod(cls, Char,   FloatValue);
+    addMethod(cls, Char,   DoubleValue);
+    addMethod(cls, Char,   CharValue);
+    addMethod(cls, Char,   ShortValue);
     return cls;
 }
 

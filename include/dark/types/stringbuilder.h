@@ -116,16 +116,16 @@ function vptr(StringBuilder);
 function objc_loadStringBuilder(Class super) 
 {
     Class cls = createClass(super, StringBuilder);
-	addMethod(cls, StringBuilderToString, 	ToString);
-	addMethod(cls, ObjectEquals, 			Equals);
-	addMethod(cls, ObjectGetHashCode, 		GetHashCode);
-	addMethod(cls, StringBuilderDispose, 	Dispose);
-	addMethod(cls, StringBuilderAppend, 	Append);
-	addMethod(cls, StringBuilderAppendc, 	Appendc);
-	addMethod(cls, StringBuilderAppendf, 	Appendf);
-	addMethod(cls, StringBuilderConcat, 	Concat);
-	addMethod(cls, StringBuilderEmpty, 		Empty);
-	addMethod(cls, StringBuilderReset, 		Reset);
+	addMethod(cls, StringBuilder, 	ToString);
+	addMethod(cls, Object, 			Equals);
+	addMethod(cls, Object, 		GetHashCode);
+	addMethod(cls, StringBuilder, 	Dispose);
+	addMethod(cls, StringBuilder, 	Append);
+	addMethod(cls, StringBuilder, 	Appendc);
+	addMethod(cls, StringBuilder, 	Appendf);
+	addMethod(cls, StringBuilder, 	Concat);
+	addMethod(cls, StringBuilder, 	Empty);
+	addMethod(cls, StringBuilder, 	Reset);
     
     return cls;
 }

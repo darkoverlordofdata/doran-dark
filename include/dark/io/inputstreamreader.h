@@ -68,18 +68,18 @@ function vptr(InputStreamReader);
 function objc_loadInputStreamReader(Class super) 
 {
     Class cls = createClass(super, InputStreamReader);
-    addMethod(cls, InputStreamReaderToString, ToString);
-    addMethod(cls, ObjectEquals, Equals);
-    addMethod(cls, ObjectGetHashCode, GetHashCode);
-    addMethod(cls, ObjectDispose, Dispose);
-    addMethod(cls, InputStreamReaderReadOne, ReadOne);
-    addMethod(cls, InputStreamReaderRead, Read);
-    addMethod(cls, ReaderSkip, Skip);
-    addMethod(cls, InputStreamReaderClose, Close);
-    addMethod(cls, ReaderMark, Mark);
-    addMethod(cls, ReaderMarkSupported, MarkSupported);
-    addMethod(cls, ReaderReset, Reset);
-    addMethod(cls, ReaderReady, Ready);
+    addMethod(cls, InputStreamReader, ToString);
+    addMethod(cls, Object, Equals);
+    addMethod(cls, Object, GetHashCode);
+    addMethod(cls, Object, Dispose);
+    addMethod(cls, InputStreamReader, ReadOne);
+    addMethod(cls, InputStreamReader, Read);
+    addMethod(cls, Reader, Skip);
+    addMethod(cls, InputStreamReader, Close);
+    addMethod(cls, Reader, Mark);
+    addMethod(cls, Reader, MarkSupported);
+    addMethod(cls, Reader, Reset);
+    addMethod(cls, Reader, Ready);
     
     return cls;
 }

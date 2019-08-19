@@ -67,18 +67,18 @@ function vptr(FileInputStream);
 function objc_loadFileInputStream(Class super) 
 {
     Class cls = createClass(super, FileInputStream);
-    addMethod(cls, FileInputStreamToString, ToString);
-    addMethod(cls, ObjectEquals, Equals);
-    addMethod(cls, ObjectGetHashCode, GetHashCode);
-    addMethod(cls, ObjectDispose, Dispose);
-    addMethod(cls, FileInputStreamReadOne, ReadOne);
-    addMethod(cls, FileInputStreamRead, Read);
-    addMethod(cls, FileInputStreamSkip, Skip);
-    addMethod(cls, FileInputStreamClose, Close);
-    addMethod(cls, InputStreamMark, Mark);
-    addMethod(cls, InputStreamMarkSupported, MarkSupported);
-    addMethod(cls, InputStreamReset, Reset);
-    addMethod(cls, FileInputStreamAvailable, Available);
+    addMethod(cls, FileInputStream, ToString);
+    addMethod(cls, Object, Equals);
+    addMethod(cls, Object, GetHashCode);
+    addMethod(cls, Object, Dispose);
+    addMethod(cls, FileInputStream, ReadOne);
+    addMethod(cls, FileInputStream, Read);
+    addMethod(cls, FileInputStream, Skip);
+    addMethod(cls, FileInputStream, Close);
+    addMethod(cls, InputStream, Mark);
+    addMethod(cls, InputStream, MarkSupported);
+    addMethod(cls, InputStream, Reset);
+    addMethod(cls, FileInputStream, Available);
     
     return cls;
 }

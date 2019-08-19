@@ -69,18 +69,18 @@ function vptr(Reader);
 function objc_loadReader(Class super) 
 {
     Class cls = createClass(super, Reader);
-    addMethod(cls, ReaderToString, ToString);
-    addMethod(cls, ObjectEquals, Equals);
-    addMethod(cls, ObjectGetHashCode, GetHashCode);
-    addMethod(cls, ObjectDispose, Dispose);
-    addMethod(cls, ReaderReadOne, ReadOne);
-    addMethod(cls, ReaderRead, Read);
-    addMethod(cls, ReaderSkip, Skip);
-    addMethod(cls, ReaderClose, Close);
-    addMethod(cls, ReaderMark, Mark);
-    addMethod(cls, ReaderMarkSupported, MarkSupported);
-    addMethod(cls, ReaderReset, Reset);
-    addMethod(cls, ReaderReady, Ready);
+    addMethod(cls, Reader, ToString);
+    addMethod(cls, Object, Equals);
+    addMethod(cls, Object, GetHashCode);
+    addMethod(cls, Object, Dispose);
+    addMethod(cls, Reader, ReadOne);
+    addMethod(cls, Reader, Read);
+    addMethod(cls, Reader, Skip);
+    addMethod(cls, Reader, Close);
+    addMethod(cls, Reader, Mark);
+    addMethod(cls, Reader, MarkSupported);
+    addMethod(cls, Reader, Reset);
+    addMethod(cls, Reader, Ready);
     
     return cls;
 }

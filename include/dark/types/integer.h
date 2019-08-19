@@ -83,30 +83,17 @@ function vptr(Integer);
 function objc_loadInteger(Class super) 
 {
     Class cls = createClass(super, Integer);
-    addMethod1(cls, Integer,     ToString);
-    addMethod1(cls, Object,        Equals);
-    addMethod1(cls, Object,   GetHashCode);
-    addMethod1(cls, Object,       Dispose);
-    addMethod1(cls, Integer,    CompareTo);
-    addMethod1(cls, Integer,     IntValue);
-    addMethod1(cls, Integer,    LongValue);
-    addMethod1(cls, Integer,   FloatValue);
-    addMethod1(cls, Integer,  DoubleValue);
-    addMethod1(cls, Integer,    CharValue);
-    addMethod1(cls, Integer,   ShortValue);
-
-
-    // addMethod(cls, IntegerToString,     ToString);
-    // addMethod(cls, ObjectEquals,        Equals);
-    // addMethod(cls, ObjectGetHashCode,   GetHashCode);
-    // addMethod(cls, ObjectDispose,       Dispose);
-    // addMethod(cls, IntegerCompareTo,    CompareTo);
-    // addMethod(cls, IntegerIntValue,     IntValue);
-    // addMethod(cls, IntegerLongValue,    LongValue);
-    // addMethod(cls, IntegerFloatValue,   FloatValue);
-    // addMethod(cls, IntegerDoubleValue,  DoubleValue);
-    // addMethod(cls, IntegerCharValue,    CharValue);
-    // addMethod(cls, IntegerShortValue,   ShortValue);
+    addMethod(cls, Integer,     ToString);
+    addMethod(cls, Object,        Equals);
+    addMethod(cls, Object,   GetHashCode);
+    addMethod(cls, Object,       Dispose);
+    addMethod(cls, Integer,    CompareTo);
+    addMethod(cls, Integer,     IntValue);
+    addMethod(cls, Integer,    LongValue);
+    addMethod(cls, Integer,   FloatValue);
+    addMethod(cls, Integer,  DoubleValue);
+    addMethod(cls, Integer,    CharValue);
+    addMethod(cls, Integer,   ShortValue);
     return cls;
 }
 

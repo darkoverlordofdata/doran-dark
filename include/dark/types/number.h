@@ -85,17 +85,17 @@ function vptr(Number);
 function objc_loadNumber(Class super) 
 {
     Class cls = createClass(super, Number);
-    addMethod(cls, NumberToString,      ToString);
-    addMethod(cls, ObjectEquals,        Equals);
-    addMethod(cls, ObjectGetHashCode,   GetHashCode);
-    addMethod(cls, ObjectDispose,       Dispose);
-    addMethod(cls, NumberCompareTo,     CompareTo);
-    addMethod(cls, NumberIntValue,      IntValue);
-    addMethod(cls, NumberLongValue,     LongValue);
-    addMethod(cls, NumberFloatValue,    FloatValue);
-    addMethod(cls, NumberDoubleValue,   DoubleValue);
-    addMethod(cls, NumberCharValue,     CharValue);
-    addMethod(cls, NumberShortValue,    ShortValue);
+    addMethod(cls, Number,      ToString);
+    addMethod(cls, Object,        Equals);
+    addMethod(cls, Object,   GetHashCode);
+    addMethod(cls, Object,       Dispose);
+    addMethod(cls, Number,     CompareTo);
+    addMethod(cls, Number,      IntValue);
+    addMethod(cls, Number,     LongValue);
+    addMethod(cls, Number,    FloatValue);
+    addMethod(cls, Number,   DoubleValue);
+    addMethod(cls, Number,     CharValue);
+    addMethod(cls, Number,    ShortValue);
 
     return cls;
 }

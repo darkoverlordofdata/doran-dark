@@ -81,21 +81,12 @@ function vptr(Exception);
 function Class objc_loadException(Class super) 
 {
     Class cls = createClass(super, Exception);
-    addMethod1(cls, Exception,  ToString);
-    addMethod1(cls, Object,     Equals);
-    addMethod1(cls, Object,     GetHashCode);
-    addMethod1(cls, Object,     Dispose);
+    addMethod(cls, Exception,  ToString);
+    addMethod(cls, Object,     Equals);
+    addMethod(cls, Object,     GetHashCode);
+    addMethod(cls, Object,     Dispose);
     return cls;
 }
-// function Class objc_loadException(Class super) 
-// {
-//     Class cls = createClass(super, Exception);
-//     addMethod(cls, ExceptionToString,   ToString);
-//     addMethod(cls, ObjectEquals,        Equals);
-//     addMethod(cls, ObjectGetHashCode,   GetHashCode);
-//     addMethod(cls, ObjectDispose,       Dispose);
-//     return cls;
-// }
 
 define_exception_type(Exception*);
 
