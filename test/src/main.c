@@ -1,122 +1,98 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+/*******************************************************************
+** This code is part of Breakout.
+**
+** Breakout is free software: you can redistribute it and/or modify
+** it under the terms of the CC BY 4.0 license as published by
+** Creative Commons, either version 4 of the License, or (at your
+** option) any later version.
+******************************************************************/
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include <dark/Foundation.h>
-#include <dark/unit.h>
+#include <Breakout.h>
 
-void Map_dtor(void* this);
 
-char keys[12][7] = {
-    "key1", "key2", "AbCdEf",
-    "key4", "key5", "key6",
-    "key7", "key8", "key9",
-    "keyA", "keyB", "keyC",
-};
+// GLFW function declerations
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
-int main(int argc, char **argv) {
+// The Width of the screen
+const GLuint SCREEN_WIDTH = 800;
+// The height of the screen
+const GLuint SCREEN_HEIGHT = 600;
 
-    const char* unc = "C:\\Users\\darko\\Documents\\GitHub\\doran-dark\\test\\license.md";
+// Game Breakout(SCREEN_WIDTH, SCREEN_HEIGHT);
+Game* Breakout;
 
-    Log("** DaRKSTEP Test** \n");
+int main(int argc, char *argv[])
+{
 
-    auto l = $(420L);
-    auto m = $(420L); 
-    auto b = $(true); 
-    auto s = $("Frodo");
-    auto c = $('c');
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    auto numArray = new(Array);//, of(Number));
-    auto numList = new(List);//, of(Number));
-    auto numHash = new(Map, of(Number));
-    auto f1 = new(File, unc);
+    GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Breakout", nullptr, nullptr);
+    glfwMakeContextCurrent(window);
 
-    for (int i=0; i<12; i++) {
-        Put(numHash, keys[i], $(i+420));
+    glewExperimental = GL_TRUE;
+    glewInit();
+    glGetError(); // Call it once to catch glewInit() bug, all other errors are now from our application.
+
+    glfwSetKeyCallback(window, key_callback);
+
+    // OpenGL configuration
+    glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    // DeltaTime variables
+    GLfloat deltaTime = 0.0f;
+    GLfloat lastFrame = 0.0f;
+
+    // Initialize game
+    // Breakout = new(Game, SCREEN_WIDTH, SCREEN_HEIGHT);
+    Start(Breakout = new(Game, SCREEN_WIDTH, SCREEN_HEIGHT));
+    SetState(Breakout, GAME_ACTIVE);
+
+    while (!glfwWindowShouldClose(window))
+    {
+        // Calculate delta time
+        GLfloat currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+        glfwPollEvents();
+
+        //deltaTime = 0.001f;
+        // Manage user input
+        ProcessInput(Breakout, deltaTime);
+        // Update Game state
+        Update(Breakout, deltaTime);
+
+        // Render
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        Render(Breakout);
+        glfwSwapBuffers(window);
     }
 
-    Add(numArray, $(0));
-    Add(numArray, $(1));
-    Add(numArray, $(2));
-    Add(numArray, $(3));
-    Add(numArray, $(4));
-    Add(numArray, $(5));
+    glfwTerminate();
+    return 0;
+}
 
-    Add(numList, l);    
-    Add(numList, m);
-
-    Describe("Run Tests", ^{
-
-        It("Should be an error", ^{
-            auto r = Put(numHash, "Frodo", $("Baggins"));
-            Log(ToString(getLeft(r)));
-            Expect(!isRight(r));
-        });
-
-        It("True and True are the same", ^{
-            Expect(CompareTo($Boolean.True, $Boolean.True) == 0);
-        });
-        
-        It("Should be 5", ^{
-            Expect(Length(s) == 5);
-        });
-
-        It("Should be 6", ^{
-            Expect(Length(numArray) == 6);
-        });
-
-        It("Should be 2", ^{
-            Expect(Length(numList) == 2);
-        });
-
-        It("Should equal 420", ^{
-            Expect(LongValue(l) == 420);
-        });
-
-        // It("Should equal another instance", ^{
-        //     Expect(Equals((Object*)l, (Object*)m));
-        // });
-
-        It("Should be a Long", ^{
-            Expect(Equals($("Long"), $(GetClassName(l))));
-        });
-
-        It("Should be a Boolean", ^{
-            Expect(!strcmp("Boolean", GetClassName(b)));
-        });
-
-        It("Should be true", ^{
-            Expect(BoolValue(b) == true);
-        });
-
-        // It("keyB is 430", ^{
-        //     Number* n = Get(numHash,"keyB");
-        //     Expect(LongValue(n) == 430);
-        // });
-
-        It("should be a c", ^{
-            Expect(LongValue(c) == 99);
-        });
-
-        It("File exists", ^{
-            Expect(Exists(f1) == true);
-        });
-
-        It("filename is 'license.md'", ^{
-            Expect(!strcmp(GetName(f1)->value, "license.md"));
-        });
-
-        It("size is 1090 bytes", ^{
-            Expect(GetLength(f1) == 1090);
-        });
-
-        It("canon equals original unc", ^{
-            Expect(!strcmp(GetPath(GetCanonicalFile(f1))->value,unc));
-        });
-        
-
-    });
-    Log("Done");
-
-    return 0; //Summary();
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
+{
+    // When a user presses the escape key, 
+    // we set the WindowShouldClose property to true, closing the application
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+    if (key >= 0 && key < 1024)
+    {
+        if (action == GLFW_PRESS)
+            SetKey(Breakout, key, true);
+        else if (action == GLFW_RELEASE)
+            SetKey(Breakout, key, false);
+    }
 }
 

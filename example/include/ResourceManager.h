@@ -23,17 +23,18 @@
 // and/or shader is also stored for future reference by string
 // handles. 
 
-ivar (ResourceManager) {
+type (ResourceManager) {
     Class isa;
 };
 /**
  * ResourceManager API
  */
-ResourceManager* NewResourceManager();
-ResourceManager* ResourceManager_init(ResourceManager* this);
-ResourceManager* ResourceManager_alloc();
+// ResourceManager* NewResourceManager();
+// ResourceManager* ResourceManager_init(ResourceManager* this);
+// ResourceManager* ResourceManager_alloc();
 
-char*   overload ToString(const ResourceManager* const);
+interface (ResourceManager, ToString,     char*, (const ResourceManager* const));
+
 Shader*     LoadShader(const GLchar*, const GLchar*, char*);
 Shader*     GetShader(char*);
 Texture2D*  LoadTexture(const GLchar*, bool, char*);
@@ -44,19 +45,17 @@ static  char*       rdbuf(FILE* f);
 static  Shader*     loadShaderFromFile(const GLchar*, const GLchar*);
 static  Texture2D*  loadTextureFromFile(const GLchar*, bool);
 
-typedef char*       (*ResourceManagerToString)      (const ResourceManager* const);
-
 
 vtable (ResourceManager) {
     ResourceManagerToString ToString;
-    DSObjectEquals          Equals;
-    DSObjectGetHashCode     GetHashCode;
-    DSObjectDispose         Dispose;
+    ObjectEquals          Equals;
+    ObjectGetHashCode     GetHashCode;
+    ObjectDispose         Dispose;
 };
 
 class (ResourceManager) {
-    DSHashmap* Shaders;
-    DSHashmap* Textures;
+    Map* Shaders;
+    Map* Textures;
     // Loads (and generates) a shader program from file loading vertex, fragment (and geometry) shader's source code. If gShaderFile is not nullptr, it also loads a geometry shader
     Shader*      (*LoadShader)           (const GLchar *vShaderFile, const GLchar *fShaderFile, char* name);
     // Retrieves a stored sader
@@ -72,3 +71,26 @@ class (ResourceManager) {
     // Loads a single texture from file
     Texture2D*   (*loadTextureFromFile)  (const GLchar *file, GLboolean alpha);
 };
+
+/**
+ * Put it all together
+ */
+function vptr(ResourceManager);
+/**
+ * Class Loader callback
+ */
+function objc_loadResourceManager(Class super) 
+{
+    Class cls = createClass(super, ResourceManager);
+
+    $ResourceManager.Shaders = new(Map, ofShader);
+    $ResourceManager.Textures = new(Map, ofTexture2D);
+    $ResourceManager.LoadShader = LoadShader);
+    $ResourceManager.GetShader = GetShader);
+    $ResourceManager.LoadTexture = LoadTexture);
+    $ResourceManager.GetTexture = GetTexture);
+    $ResourceManager.Dtor = Dtor);
+    $ResourceManager.loadShaderFromFile = loadShaderFromFile);
+    $ResourceManager.loadTextureFromFile = loadTextureFromFile);
+    return cls;
+}

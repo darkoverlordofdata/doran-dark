@@ -45,22 +45,88 @@ ivar (GameObject)
 /**
  * GameObject API
  */
-GameObject* GameObject_init(GameObject* const this, char* name, Vec2 Position, Vec2 Size, Texture2D* Sprite, Vec3 Color);
-GameObject* GameObject_alloc();
-GameObject* NewGameObject(char* name, Vec2 Position, Vec2 Size, Texture2D* Sprite, Vec3 Color);
+// GameObject* GameObject_init(GameObject* const this, char* name, Vec2 Position, Vec2 Size, Texture2D* Sprite, Vec3 Color);
+// GameObject* GameObject_alloc();
+// GameObject* NewGameObject(char* name, Vec2 Position, Vec2 Size, Texture2D* Sprite, Vec3 Color);
 
-char*   overload ToString(const GameObject* const);
-void    overload Draw(GameObject*, SpriteRenderer* renderer);
-
-typedef char*   (*GameObjectToString)   (const GameObject* const);
-typedef void    (*GameObjectDraw)       (GameObject* const, SpriteRenderer*);
+interface (GameObject, ToString,    char*, (const GameObject* const));
+interface (GameObject, Draw,        void, (GameObject* const, const SpriteRenderer*);
 
 
 vtable (GameObject)
 {
     GameObjectToString      ToString;
-    DSObjectEquals          Equals;
-    DSObjectGetHashCode     GetHashCode;
-    DSObjectDispose         Dispose;
+    ObjectEquals          Equals;
+    ObjectGetHashCode     GetHashCode;
+    ObjectDispose         Dispose;
     GameObjectDraw          Draw;
 };
+
+/**
+ * Put it all together
+ */
+function vptr(GameObject);
+/**
+ * Class Loader callback
+ */
+function objc_loadGameObject(Class super) 
+{
+    Class cls = createClass(super, GameObject);
+    addMethod(cls, GameObject, ToString);
+    addMethod(cls, Object, Equals);
+    addMethod(cls, Object, GetHashCode);
+    addMethod(cls, Object, Dispose);
+    addMethod(cls, GameObject, Draw);
+    return cls;
+}
+
+/**
+ * Constructor
+ * 
+ * @param Position initial placement
+ * @param Size sprite size
+ * @param Sprite to display
+ * @param Color tiniting color
+ */
+function GameObject* GameObject_init(
+    GameObject* const this, 
+    char* name, 
+    Vec2 Position, 
+    Vec2 Size, 
+    Texture2D* Sprite, 
+    Vec3 Color)
+{
+	Object_init(this);
+    this->isa = getGameObjectIsa();
+    this->IsSolid = false;
+    this->Destroyed = false;
+    this->Position = Position;
+    this->Size = Size;
+    this->Sprite = Sprite;
+    this->Color = Color;
+    this->Name = strdup(name);
+
+    return this;
+}
+
+/**
+ * Draw
+ * 
+ * @param renderer to draw sprite with
+ */
+method void Draw(
+    GameObject* const this, 
+    SpriteRenderer* renderer)
+{
+    Draw(renderer, this->Sprite, this->Position, this->Size, this->Rotation, this->Color);
+}
+
+/**
+ * ToString
+ */
+method char* ToString(const GameObject* const this)
+{
+    return "GameObject";
+} 
+
+

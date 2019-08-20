@@ -17,7 +17,7 @@
 
 // Texture2D is able to store and configure a texture in OpenGL.
 // It also hosts utility functions for easy management.
-ivar (Texture2D)
+type (Texture2D)
 {
     Class isa;
     // Holds the Id of the texture object, used for all texture operations to reference to particlar texture
@@ -38,24 +38,112 @@ ivar (Texture2D)
 /**
  * Texture2D API
  */
-Texture2D* NewTexture2D(int InternalFormat, int ImageFormat, char* path);
-Texture2D* Texture2D_init(Texture2D* const this, int InternalFormat, int ImageFormat, char* path);
-Texture2D* Texture2D_alloc();
+// Texture2D* NewTexture2D(int InternalFormat, int ImageFormat, char* path);
+// Texture2D* Texture2D_init(Texture2D* const this, int InternalFormat, int ImageFormat, char* path);
+// Texture2D* Texture2D_alloc();
 
-char*   overload ToString(const Texture2D* const);
-void    overload Generate(Texture2D* const, const GLuint, const GLuint, const unsigned char*);
-void    overload Bind(Texture2D*);
+interface (Texture2D, ToString,    char*, (const Texture2D* const));
+interface (Texture2D, Generate,    char*, (Texture2D*, const GLuint, const GLuint, const unsigned char*));
+interface (Texture2D, Bind,        char*, (Texture2D*));
 
-typedef char*   (*Texture2DToString)    (const Texture2D* const);
-typedef char*   (*Texture2DGenerate)    (Texture2D*, const GLuint, const GLuint, const unsigned char*);
-typedef char*   (*Texture2DBind)        (Texture2D*);
 
 vtable (Texture2D) {
     Texture2DToString       ToString;
-    DSObjectEquals          Equals;
-    DSObjectGetHashCode     GetHashCode;
-    DSObjectDispose         Dispose;
+    ObjectEquals          Equals;
+    ObjectGetHashCode     GetHashCode;
+    ObjectDispose         Dispose;
     Texture2DGenerate       Generate;
     Texture2DBind           Bind;
 };
+
+/**
+ * Put it all together
+ */
+function vptr(Texture2D);
+/**
+ * Class Loader callback
+ */
+function objc_loadTexture2D(Class super) 
+{
+    Class cls = createClass(super, Texture2D);
+    addMethod(cls, Texture2D, ToString);
+    addMethod(cls, Object, Equals);
+    addMethod(cls, Object, GetHashCode);
+    addMethod(cls, Object, Dispose);
+    addMethod(cls, Texture2D, Generate);
+    addMethod(cls, Texture2D, Bind);
+
+    return cls;
+}
+
+/**
+ * Texture2D
+ * 
+ * @param InternalFormat for binding the image
+ * @param ImageFormat for binding the image
+ * 
+ */
+Texture2D* Texture2D_init(
+    Texture2D* const this,
+    int InternalFormat,
+    int ImageFormat,
+    char* path)
+{
+	DSObject_init(this);
+    this->isa = getTexture2DIsa();
+    this->path = strdup(path);
+    this->Width = 0;
+    this->Height = 0;
+    this->InternalFormat = GL_RGB;
+    this->ImageFormat = GL_RGB;
+    this->WrapS = GL_REPEAT;
+    this->WrapT = GL_REPEAT;
+    this->FilterMin = GL_LINEAR;
+    this->FilterMag = GL_LINEAR;
+    this->InternalFormat = InternalFormat;
+    this->ImageFormat = ImageFormat;
+    glGenTextures(1, &this->Id);
+    return this;
+}
+
+/**
+ * Generate
+ * 
+ * @param width of image to generate
+ * @param height of image to generate
+ * @param data bitmap data
+ * 
+ */
+method void Generate(
+    Texture2D* const this, 
+    const GLuint width, 
+    const GLuint height, 
+    const unsigned char* data)
+{
+    this->Width = width;
+    this->Height = height;
+    // Create Texture
+    glBindTexture(GL_TEXTURE_2D, this->Id);
+    glTexImage2D(GL_TEXTURE_2D, 0, this->InternalFormat, width, height, 0, this->ImageFormat, GL_UNSIGNED_BYTE, data);
+    // Set Texture wrap and filter modes
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, this->WrapS);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, this->WrapT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, this->FilterMin);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, this->FilterMag);
+    // Unbind texture
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+method void Bind(Texture2D*  this)
+{
+    glBindTexture(GL_TEXTURE_2D, this->Id);
+}
+
+/**
+ * ToString
+ */
+method char* ToString(const Texture2D* const this)
+{
+    return "Texture2D";
+}
 

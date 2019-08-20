@@ -28,21 +28,13 @@ endif ()
 #   application source
 #
 
-list ( APPEND C_SOURCES src/BallObject.c )
 list ( APPEND C_SOURCES src/Boot.c )
-list ( APPEND C_SOURCES src/Game.c )
-list ( APPEND C_SOURCES src/GameLevel.c )
-list ( APPEND C_SOURCES src/GameObject.c )
 list ( APPEND C_SOURCES src/main.c )
-list ( APPEND C_SOURCES src/ParticleGenerator.c )
-list ( APPEND C_SOURCES src/ResourceManager.c )
-list ( APPEND C_SOURCES src/Shader.c )
-list ( APPEND C_SOURCES src/SpriteRenderer.c )
-list ( APPEND C_SOURCES src/Texture.c )
 list ( APPEND C_SOURCES src/stb.c )
 #
 #   application includes
 #
+set ( INCLUDES "${INCLUDES};/home/darkoverlordofdata/Documents/GitHub/daran-dark/include" )
 set ( INCLUDES "${INCLUDES};./include" )
 set ( INCLUDES "${INCLUDES};./vendor" )
 
@@ -60,11 +52,14 @@ set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lBlocksRuntime" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lgc" )
 
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fblocks" )
-set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -LC:/msys64/mingw64/bin" )
 
-set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w -std=c99 -O3" )
+set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w -std=c11 -O3" )
+set ( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w -std=c++17 -O3" )
+
 
 # definitions 
+
+# links folders 
 
 include_directories(AFTER ${INCLUDES})
 

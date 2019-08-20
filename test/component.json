@@ -10,22 +10,31 @@
   "description": "doran-dark tdd",
   "license": "MIT",
   "private": true,
+  "dependenciesz": {},
   "dependencies": {
     "dark": "git://github.com/darkoverlordofdata/doran-dark"
   },
   "source": "src",
   "files": [
-    "src/TestTypes.vala",
-    "src/darkunit.c",
+    "src/Boot.c",
     "src/main.c",
-    "src/unit.vala"
+    "src/stb.c",
+    "src/unit.c"
   ],
   "packages": [],
-  "includes": null,
+  "includes": [
+    "./include",
+    "./vendor",
+    "./.lib/dark/include"
+  ],
   "libraries": [
     "m",
     "gc",
-    "BlocksRuntime"
+    "BlocksRuntime",
+    "freetype",
+    "glfw",
+    "GLEW",
+    "GL"
   ],
   "options": {
     "VERSION": "0.0.1",

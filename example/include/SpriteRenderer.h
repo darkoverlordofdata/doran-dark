@@ -19,7 +19,7 @@
                             SpriteRenderer*: (SpriteRenderer *)object,          \
                             default: nullptr)
 
-ivar (SpriteRenderer) {
+type (SpriteRenderer) {
     Class isa;
     Shader* shader; 
     GLuint VAO;
@@ -27,25 +27,39 @@ ivar (SpriteRenderer) {
 /**
  * SpriteRenderer API
  */
-SpriteRenderer*     NewSpriteRenderer(Shader* shader);
-SpriteRenderer*     SpriteRenderer_init(SpriteRenderer* const this, Shader* shader);
-SpriteRenderer*     SpriteRenderer_alloc();
+// SpriteRenderer*     NewSpriteRenderer(Shader* shader);
+// SpriteRenderer*     SpriteRenderer_init(SpriteRenderer* const this, Shader* shader);
+// SpriteRenderer*     SpriteRenderer_alloc();
 
-char*   overload ToString(const SpriteRenderer* const);
-void    overload Draw(SpriteRenderer* , const Texture2D* const, const Vec2, const Vec2, const GLfloat, const Vec3);
-void    overload Dispose(SpriteRenderer* const);
+interface (SpriteRenderer, ToString,    char*, (const SpriteRenderer* const));
+interface (SpriteRenderer, Draw,        void, (SpriteRenderer* const, const SpriteRenderer*));
+inteface  (SpriteRenderer) Dispose,     void, (SpriteRenderer* const));
 
 static void initRenderData(SpriteRenderer* this);
 
-typedef char*   (*SpriteRendererToString)   (const SpriteRenderer* const);
-typedef void    (*SpriteRendererDispose)    (SpriteRenderer* const);
-typedef char*   (*SpriteRendererDraw)       (SpriteRenderer*, const Texture2D* const, const Vec2, const Vec2, const GLfloat, const Vec3);
-
 vtable (SpriteRenderer) {
     SpriteRendererToString  ToString;
-    DSObjectEquals          Equals;
-    DSObjectGetHashCode     GetHashCode;
+    ObjectEquals          Equals;
+    ObjectGetHashCode     GetHashCode;
     SpriteRendererDispose   Dispose;
     SpriteRendererDraw      Draw;
 };
 
+/**
+ * Put it all together
+ */
+function vptr(SpriteRenderer);
+/**
+ * Class Loader callback
+ */
+function objc_loadSpriteRenderer(Class super) 
+{
+    Class cls = createClass(super, SpriteRenderer);
+    addMethod(cls, SpriteRenderer, ToString);
+    addMethod(cls, Object, Equals);
+    addMethod(cls, Object, GetHashCode);
+    addMethod(cls, SpriteRenderer, Dispose);
+    addMethod(cls, SpriteRenderer, Draw);
+
+    return cls;
+}

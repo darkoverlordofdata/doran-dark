@@ -4,10 +4,7 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/include",
-                "${workspaceFolder}/vendor",
-                "${workspaceFolder}/.lib/dark/include",
-                "${workspaceFolder}/.lib/dark/vendor",
-                "C:/msys64/mingw64/include"
+                "${workspaceFolder}/vendor"
             ],
             "browse": {
                 "limitSymbolsToIncludedHeaders": false,
@@ -18,7 +15,7 @@
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "C:/msys64/mingw64/bin/clang.exe",
+            "compilerPath": "/usr/bin/clang",
             "cStandard": "c11",
             "cppStandard": "c++17",
             "intelliSenseMode": "clang-x64",

@@ -24,7 +24,7 @@
 // relevant state data from GameObject. Contains some extra
 // functionality specific to Breakout's ball object that
 // were too specific for within GameObject alone.
-ivar (BallObject) {
+type (BallObject) {
     Class       isa;
     Vec2        Position;
     Vec2        Size;
@@ -42,27 +42,134 @@ ivar (BallObject) {
 /**
  * BallObject API
  */
-BallObject* NewBallObject(Vec2 Position, float Radius, Vec2 Velocity, Texture2D* Sprite);
-BallObject* BallObject_init(BallObject* this, Vec2 Position, float Radius, Vec2 Velocity, Texture2D* Sprite);
-BallObject* BallObject_alloc();
+interface (BallObject, ToString,    char*, (const BallObject* const));
+interface (BallObject, Draw,        void, (BallObject* const, const SpriteRenderer*);
+interface (BallObject, Move         void, (BallObject* const, const GLfloat, const GLuint);
+interface (BallObject, Reset,       void, (BallObject* const, const Vec2, const Vec2);
 
-char*   overload ToString(const BallObject* const);
-void    overload Draw(BallObject* const, const SpriteRenderer*);
-void    overload Move(BallObject* const, const GLfloat, const GLuint);
-void    overload Reset(BallObject* const, const Vec2, const Vec2);
+// BallObject* NewBallObject(Vec2 Position, float Radius, Vec2 Velocity, Texture2D* Sprite);
+// BallObject* BallObject_init(BallObject* this, Vec2 Position, float Radius, Vec2 Velocity, Texture2D* Sprite);
+// BallObject* BallObject_alloc();
 
-typedef char*   (*BallObjectToString)   (const BallObject* const);
-typedef void    (*BallObjectDraw)       (BallObject* const, const SpriteRenderer*);
-typedef void    (*BallObjectMove)       (BallObject* const, const GLfloat, const GLuint);
-typedef void    (*BallObjectReset)      (BallObject* const, const Vec2, const Vec2);
+
 
 vtable (BallObject) {
-    BallObjectToString      ToString;
-    DSObjectEquals          Equals;
-    DSObjectGetHashCode     GetHashCode;
-    DSObjectDispose         Dispose;
-    BallObjectDraw          Draw;
-    BallObjectMove          Move;
-    BallObjectReset         Reset;
+    const BallObjectToString    ToString;
+    const ObjectEquals          Equals;
+    const ObjectGetHashCode     GetHashCode;
+    const ObjectDispose         Dispose;
+    const BallObjectDraw        Draw;
+    const BallObjectMove        Move;
+    const BallObjectReset       Reset;
 };
+
+/**
+ * Put it all together
+ */
+function vptr(BallObject);
+/**
+ * Class Loader callback
+ */
+function objc_loadBallObject(Class super) 
+{
+    Class cls = createClass(super, BallObject);
+    addMethod(cls, BallObject,  ToString);
+    addMethod(cls, Object,      Equals);
+    addMethod(cls, Object,      GetHashCode);
+    addMethod(cls, Object,      Dispose);
+    addMethod(cls, BallObject,  Draw);
+    addMethod(cls, BallObject,  Move);
+    addMethod(cls, BallObject,  Reset);
+    return cls;
+}
+
+
+/**
+ * BallObject
+ * 
+ * @param Position initial placement of ball 
+ * @param Radius size of ball
+ * @param Velocity initial speed of ball
+ * @param Sprite to display
+ */
+function BallObject* BallObject_init(
+    BallObject* this, 
+    Vec2 Position, 
+    float Radius, 
+    Vec2 Velocity, 
+    Texture2D* Sprite)
+{
+    Radius = Radius != 0 ? Radius : 12.5f;
+    GameObject_init(this, "ball", Position, (Vec2){ Radius*2, Radius*2 }, Sprite, (Vec3){ 1, 1, 1 });
+    this->isa = getBallObjectIsa();
+    this->Velocity = Velocity;
+    this->Radius = Radius;
+    return this;
+}
+
+/**
+ * Draw
+ * 
+ * @param renderer to draw sprite with
+ */
+method void Draw(BallObject* const this, const SpriteRenderer* renderer)
+{
+    Draw(renderer, this->Sprite, this->Position, this->Size, this->Rotation, this->Color);
+}
+
+
+/**
+ * Move
+ * 
+ * @param dt delta time
+ * @param window_width
+ * @returns Vec2 new position
+ */
+method void Move(BallObject* const this, const GLfloat dt, const GLuint window_width)
+{
+    // If not stuck to player board
+    if (!this->Stuck)
+    {
+        // Move the ball
+        this->Position += this->Velocity * dt;
+        // Then check if outside window bounds and if so, reverse velocity and restore at correct position
+        if (this->Position.x <= 0.0f)
+        {
+            this->Velocity.x = -this->Velocity.x;
+            this->Position.x = 0.0f;
+        }
+        else if (this->Position.x + this->Size.x >= window_width)
+        {
+            this->Velocity.x = -this->Velocity.x;
+            this->Position.x = window_width - this->Size.x;
+        }
+        if (this->Position.y <= 0.0f)
+        {
+            this->Velocity.y = -this->Velocity.y;
+            this->Position.y = 0.0f;
+        }
+    }
+}
+
+/**
+ * Resets the ball to initial Stuck Position (if ball is outside window bounds)
+ * 
+ * @param position to reset to
+ * @param velocity to reset to
+ * 
+ */
+method void Reset(BallObject* const this, const Vec2 position, const Vec2 velocity)
+{
+    this->Position = position;
+    this->Velocity = velocity;
+    this->Stuck = true;
+}
+
+/**
+ * ToString
+ */
+method char* ToString(const BallObject*  const this)
+{
+    return "BallObject";
+}
 
