@@ -69,7 +69,7 @@ add_executable ( ${PROJECT_NAME} ${C_SOURCES} ${RESOURCES} )
 add_custom_command(TARGET ${PROJECT_NAME} 
                    POST_BUILD COMMAND 
                    ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}> .. )
-target_link_libraries ( ${PROJECT_NAME} m gc BlocksRuntime  glfw GLEW GL  )
+target_link_libraries ( ${PROJECT_NAME} m gc BlocksRuntime glfw GLEW GL  )
 install (TARGETS ${PROJECT_NAME} RUNTIME DESTINATION . )
 
 include (CPack)

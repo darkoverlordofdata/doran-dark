@@ -18,7 +18,6 @@
   "files": [
     "src/Boot.c",
     "src/main.c",
-    "src/stb.c",
     "src/unit.c"
   ],
   "packages": [],

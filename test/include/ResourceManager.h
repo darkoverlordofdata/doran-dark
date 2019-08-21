@@ -107,6 +107,7 @@ function Shader* loadShaderFromFile(
     // Read file's buffer contents into streams
     const GLchar *vShaderCode = rdbuf(vertexShaderFile);
     const GLchar *fShaderCode = rdbuf(fragmentShaderFile);
+
     // close file handlers
     fclose(vertexShaderFile);
     fclose(fragmentShaderFile);
@@ -230,7 +231,7 @@ function char* rdbuf(FILE* f)
     fseek(f, 0L, SEEK_END);
     long s = ftell(f);
     rewind(f);
-    char* buf = (char*)(1, s+1);
+    char* buf = (char*)DScalloc(1, s+1);
     buf[s] = '\0';
 
     if (buf != nullptr)

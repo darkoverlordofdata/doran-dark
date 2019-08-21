@@ -193,6 +193,7 @@ method void SetState(Game* self, GameState state)
  */
 method void Start(Game* self)
 {
+
    // Load shaders
     $ResourceManager.LoadShader("shaders/sprite.vs", "shaders/sprite.frag", "sprite");
     // Configure shaders
