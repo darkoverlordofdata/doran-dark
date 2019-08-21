@@ -167,7 +167,7 @@ struct objc_module {
 
 extern struct hashmap* class_hash;
 extern  struct objc_cache _objc_empty_cache;
-void objc_init();
+void objc_ctor();
 
 id object_copy(id obj, size_t size);
 id object_dispose(id obj);
@@ -397,7 +397,7 @@ static inline UInt64 typeid(id obj) { return (UInt64)obj->isa; }
  *	  _(d, $setObject, anObject, $forKey, $("foo"));
  * 
  */
-// id _(id this, SEL _cmd, ...);
+// id _(id self, SEL _cmd, ...);
 
 /** builtin selectors */
 extern SEL $alloc;

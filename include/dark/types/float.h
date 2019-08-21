@@ -47,14 +47,15 @@ type (Float)
     float value;
 };
 
-interface (Float, ToString,        char*, (const Float* const));
-interface (Float, CompareTo,       int, (const Float* const, const Float* const));
-interface (Float, IntValue,        int, (const Float* const));
-interface (Float, LongValue,       long, (const Float* const));
-interface (Float, FloatValue,      float, (const Float* const));
-interface (Float, DoubleValue,     double, (const Float* const));
-interface (Float, CharValue,       char, (const Float* const));
-interface (Float, ShortValue,      short, (const Float* const));
+delegate (Float, New,           Float*, (Float*, const float));
+delegate (Float, ToString,      char*, (const Float* const));
+delegate (Float, CompareTo,     int, (const Float* const, const Float* const));
+delegate (Float, IntValue,      int, (const Float* const));
+delegate (Float, LongValue,     long, (const Float* const));
+delegate (Float, FloatValue,    float, (const Float* const));
+delegate (Float, DoubleValue,   double, (const Float* const));
+delegate (Float, CharValue,     char, (const Float* const));
+delegate (Float, ShortValue,    short, (const Float* const));
 
 
 /**
@@ -80,7 +81,7 @@ function vptr(Float);
  * 
 ] * Class Loader callback
  */
-function objc_loadFloat(Class super) 
+function Class objc_loadFloat(Class super) 
 {
     Class cls = createClass(super, Float);
     addMethod(cls, Object,        Equals);
@@ -103,16 +104,12 @@ function objc_loadFloat(Class super)
  * @param value of float
  * 
  */
-function Float* Float_init(Float* const this, const float value)
+method Float* New(Float* self, const float value)
 {
-    Number_init(this);
-    this->isa = objc_getClass("Float");
-    this->value = value;
-    return this;
-}
-
-function Float* NewFloat(const float value) { 
-    return Float_init(alloc(Float), value); 
+    extends((Number*)self);
+    self->isa = objc_getClass("Float");
+    self->value = value;
+    return self;
 }
 
 /**
@@ -145,57 +142,57 @@ method int Compare(const float x, const float y) {
  * @param   other  Float to be compared
  * @return same as Float_Compare
  */
-method int CompareTo(const Float* this, const Float* other) {
-    return Compare(this->value, other->value);
+method int CompareTo(const Float* self, const Float* other) {
+    return Compare(self->value, other->value);
 }
 
 /**
- * Returns the value of this value cast as an int
+ * Returns the value of self value cast as an int
  */
-method int IntValue(const Float* const this) {
-    return (int)this->value;
+method int IntValue(const Float* const self) {
+    return (int)self->value;
 }
 
 /**
- * Returns the value of this value cast as a long
+ * Returns the value of self value cast as a long
  */
-method long LongValue(const Float* const this) {
-    return (long)this->value;
+method long LongValue(const Float* const self) {
+    return (long)self->value;
 }
 
 /**
- * Returns the value of this value cast as a double
+ * Returns the value of self value cast as a double
  */
-method double DoubleValue(const Float* const this) {
-    return (double)this->value;
+method double DoubleValue(const Float* const self) {
+    return (double)self->value;
 }
 
 /**
- * Returns the value of this value cast as a float
+ * Returns the value of self value cast as a float
  */
-method float FloatValue(const Float* const this) {
-    return (float)this->value;
+method float FloatValue(const Float* const self) {
+    return (float)self->value;
 }
 
 /**
- * Returns the value of this value cast as a char
+ * Returns the value of self value cast as a char
  */
-method char CharValue(const Float* const this) {
-    return (char)this->value;
+method char CharValue(const Float* const self) {
+    return (char)self->value;
 }
 
 /**
- * Returns the value of this value cast as a short
+ * Returns the value of self value cast as a short
  */
-method short ShortValue(const Float* const this) {
-    return (short)this->value;
+method short ShortValue(const Float* const self) {
+    return (short)self->value;
 }
 
 
-overload char* ToString(const Float* const this)
+overload char* ToString(const Float* const self)
 {
     static char str[20];
-    sprintf(str, "%f", this->value);
+    sprintf(str, "%f", self->value);
     return str;
 }
 

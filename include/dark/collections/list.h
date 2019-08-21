@@ -47,14 +47,13 @@ type (List) {
     ListNode* head;
 };
 
-ctor (List);
-ctor (List, Class);
-interface (List, ToString,   char*,      (const List* const) );
-interface (List, Length,     int,        (List* const) );
-interface (List, Add,        Either*,    (List* const, Object*) );
-interface (List, Remove,     Object*,    (List* const) );
-interface (List, Insert,     Either*,    (List* const, Object*, List_Compare) );
-interface (List, Iterate,    void,       (List* const, List_Iterator) );
+delegate (List, New,        List*,      (List*, Class));
+delegate (List, ToString,   char*,      (const List* const) );
+delegate (List, Length,     int,        (List* const) );
+delegate (List, Add,        Either*,    (List* const, Object*) );
+delegate (List, Remove,     Object*,    (List* const) );
+delegate (List, Insert,     Either*,    (List* const, Object*, List_Compare) );
+delegate (List, Iterate,    void,       (List* const, List_Iterator) );
 
 vtable (List) {
     const ListToString          ToString;
@@ -73,7 +72,7 @@ function vptr(List);
  * 
  * Class Loader callback
  */
-function objc_loadList(Class super) 
+function Class objc_loadList(Class super) 
 {
     Class cls = createClass(super, List);
     addMethod(cls, List, ToString);
@@ -89,20 +88,26 @@ function objc_loadList(Class super)
     return cls;
 }
 
-method List* List_init(List* const this)
+method List* NewEither(List* const self)
 {
-    return List_init(this, nullptr);
+    return New(self, nullptr);
 }
 
-method List* List_init(List* const this, Class typeOf)
+method List* New(List* self, Class typeOf)
 {
-    Object_init(this);
-    this->isa = objc_getClass("List");
-    this->typeOf = typeOf;
-    this->head = nullptr;
+    extends((Object*)self);
+    self->isa = objc_getClass("List");
+    self->typeOf = typeOf;
+    self->head = nullptr;
 
-    return this;
+    return self;
 }
+
+method List* New(List* const self)
+{
+    return New(self, nullptr);
+}
+
 
 /**
  * Create new ListNode
@@ -111,16 +116,16 @@ method List* List_init(List* const this, Class typeOf)
  * @param next node in list
  * 
  */
-function ListNode* ListNode_init(ListNode* const this, Object* data, ListNode* next)
+function ListNode* ListNode_ctor(ListNode* const self, Object* data, ListNode* next)
 {
-    this->data = data;
-    this->next = next;
-    return this;
+    self->data = data;
+    self->next = next;
+    return self;
 }
 
 function ListNode* NewListNode(Object* data, ListNode* next)
 {
-    return ListNode_init(alloc(List), data, next);
+    return ListNode_ctor(alloc(ListNode), data, next);
 }
 
 /**
@@ -130,31 +135,31 @@ function ListNode* NewListNode(Object* data, ListNode* next)
  * @param comp function to compare for insertion
  * 
  */
-method Either* Insert(List* const this, Object* data, List_Compare comp)
+method Either* Insert(List* const self, Object* data, List_Compare comp)
 {
-    if ((this->typeOf) && !InstanceOf(this->typeOf, data)) 
-        return left(NewString("InvalidType"));
+    if ((self->typeOf) && !InstanceOf(self->typeOf, data)) 
+        return left(new(String, "InvalidType"));
 
-    if (this->head == nullptr) {
-        this->head = NewListNode(data, nullptr);
-        return right(NewString(1));
+    if (self->head == nullptr) {
+        self->head = NewListNode(data, nullptr);
+        return right(new(String, "1"));
     }
 
     // Find spot in linked list to insert new node
     ListNode* prev = nullptr;
-    ListNode* curr = this->head;
+    ListNode* curr = self->head;
     while (curr != nullptr && curr->data != nullptr && comp(curr->data, data) < 0) {
         prev = curr;
         curr = curr->next;
     }
 
     if (prev == nullptr) 
-        this->head = NewListNode(data, this->head);
+        self->head = NewListNode(data, self->head);
     else 
         prev->next = NewListNode(data, curr);
 
-    this->length++;
-    return right(NewString(1));
+    self->length++;
+    return right(new(String, "1"));
 }
 
 /**
@@ -163,33 +168,33 @@ method Either* Insert(List* const this, Object* data, List_Compare comp)
  * @param data to insert
  * 
  */
-method Either* Add(List* const this, Object* data)
+method Either* Add(List* const self, Object* data)
 {
-    if ((this->typeOf) && !InstanceOf(this->typeOf, data)) 
-        return left(NewString("InvalidType"));
+    if ((self->typeOf) && !InstanceOf(self->typeOf, data)) 
+        return left(new(String, "InvalidType"));
 
 
-    if (this->head == nullptr) {
-        this->head = NewListNode(data, nullptr);
+    if (self->head == nullptr) {
+        self->head = NewListNode(data, nullptr);
     }
     else { 
-       this->head = NewListNode(data, this->head);
+       self->head = NewListNode(data, self->head);
     }
-    this->length++;
+    self->length++;
 }
 
 /**
  * Remove item at end of list
  */
-method Object* Remove(List* const this)
+method Object* Remove(List* const self)
 {
-    ListNode* head = this->head;
+    ListNode* head = self->head;
 
     Object* popped_data = head->data;
-    this->head = head->next;
+    self->head = head->next;
 
     // delete(head);
-    this->length--;
+    self->length--;
     return popped_data;
 }
 
@@ -199,9 +204,9 @@ method Object* Remove(List* const this)
  * @param iter function to call for each iteration
  * 
  */
-method void Iterate(List* const this, void (^iter)(Object*))
+method void Iterate(List* const self, void (^iter)(Object*))
 {
-    for (ListNode* curr = this->head; curr != nullptr; curr = curr->next) {
+    for (ListNode* curr = self->head; curr != nullptr; curr = curr->next) {
         iter(curr->data);
     }
 }
@@ -209,9 +214,9 @@ method void Iterate(List* const this, void (^iter)(Object*))
 /**
  * Free list
  */
-method void Dispose(List* const this)
+method void Dispose(List* const self)
 {
-    // ListNode curr = this->head;
+    // ListNode curr = self->head;
     // ListNode next;
 
     // while (curr != nullptr) {
@@ -225,15 +230,15 @@ method void Dispose(List* const this)
 /**
  * Number of items in vector
  */
-method int Length(List* const this)
+method int Length(List* const self)
 {
-    return this->length;
+    return self->length;
 }
 
 /**
  * ToString
  */
-method char* ToString(const List* const this)
+method char* ToString(const List* const self)
 {
     return "dark.collections.List";
 }

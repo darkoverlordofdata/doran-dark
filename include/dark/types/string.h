@@ -43,28 +43,29 @@ type (String) {
     int length;
 };
 
-interface (String, ToString,     char*, (const String* const));
-interface (String, Equals,       bool, (const String* const, const String* const));
-interface (String, CompareTo,    int, (const String* const this, const String* const other));
-interface (String, Compare,      int, (const char* x, const char* y));
-interface (String, CompareToIgnoreCase,   int, (const String* this, const String* other));
-interface (String, Concat,       String*, (const String* this, const String* str));
-interface (String, Concatc,      String*, (const String* this, const char* str));
-interface (String, Contains,     bool, (const String* this, const String* str));
-interface (String, CopyOf,       String*, (const String* this));
-interface (String, EndsWith,     bool, (const String* this, const String* suffix););
-interface (String, StartsWith,   bool, (const String* this, const String* prefix, const int offset));
-interface (String, GetBytes,     char*, (const String* this));
-interface (String, IndexOf,      int, (const String* this, const String* str, const int fromIndex));
-interface (String, LastIndexOf,  int, (const String* this, const String* str, const int fromIndex));
-interface (String, ToUpperCase,  String*, (const String* this));
-interface (String, ToLowerCase,  String*, (const String* this));
-interface (String, Trim,         String*, (const String* this));
-interface (String, Length,       int, (const String* const));
-interface (String, IsEmpty,      bool, (const String* const this));
-interface (String, CharAt,       char, (const String* const this, const int index));
-// interface (String, Substring,    String*, (const String* const this, const int index));
-interface (String, Substring,    String*, (const String* const this, const int index, const int length));
+delegate (String, New,          String*, (String*, const char*));
+delegate (String, ToString,     char*, (const String* const));
+delegate (String, Equals,       bool, (const String* const, const String* const));
+delegate (String, CompareTo,    int, (const String* const self, const String* const other));
+delegate (String, Compare,      int, (const char* x, const char* y));
+delegate (String, CompareToIgnoreCase,   int, (const String* self, const String* other));
+delegate (String, Concat,       String*, (const String* self, const String* str));
+delegate (String, Concatc,      String*, (const String* self, const char* str));
+delegate (String, Contains,     bool, (const String* self, const String* str));
+delegate (String, CopyOf,       String*, (const String* self));
+delegate (String, EndsWith,     bool, (const String* self, const String* suffix););
+delegate (String, StartsWith,   bool, (const String* self, const String* prefix, const int offset));
+delegate (String, GetBytes,     char*, (const String* self));
+delegate (String, IndexOf,      int, (const String* self, const String* str, const int fromIndex));
+delegate (String, LastIndexOf,  int, (const String* self, const String* str, const int fromIndex));
+delegate (String, ToUpperCase,  String*, (const String* self));
+delegate (String, ToLowerCase,  String*, (const String* self));
+delegate (String, Trim,         String*, (const String* self));
+delegate (String, Length,       int, (const String* const));
+delegate (String, IsEmpty,      bool, (const String* const self));
+delegate (String, CharAt,       char, (const String* const self, const int index));
+// delegate (String, Substring,    String*, (const String* const self, const int index));
+delegate (String, Substring,    String*, (const String* const self, const int index, const int length));
 
 method __attribute__((__format__ (__printf__, 1, 2)))
 String*   Format(const char* format, ...);
@@ -108,7 +109,7 @@ function vptr(String);
  * 
  * Class Loader callback
  */
-function objc_loadString(Class super) 
+function Class objc_loadString(Class super) 
 {
     Class cls = createClass(super, String);
     addMethod(cls, String,      ToString);
@@ -149,21 +150,17 @@ function objc_loadString(Class super)
  * @param value of long
  * 
  */
-function String* String_init(String* const this, const char* value)
+method String* New(String* self, const char* value)
 {
-    Comparable_init(this);
-    this->isa = objc_getClass("String");
-    this->value = strdup(value);
-    this->length = strlen(value);
-    return this;
+    extends((Comparable*)self);
+    self->isa = objc_getClass("String");
+    self->value = strdup(value);
+    self->length = strlen(value);
+    return self;
 }
 
-function String* NewString(const char* const str) {
-    return String_init(alloc(String), str); 
-}
-
-function void GetChars(const String* this, char* dst, int dstBegin) {
-    memcpy(dst+dstBegin, this->value, this->length);
+function void GetChars(const String* self, char* dst, int dstBegin) {
+    memcpy(dst+dstBegin, self->value, self->length);
 }
 
 /**
@@ -185,133 +182,133 @@ method int Compare(const char* x, const char* y) {
  * @param   other  String to be compared
  * @return same as String_Compare
  */
-method int CompareTo(const String* const this, const String* const other) {
-    return Compare(this->value, other->value);
+method int CompareTo(const String* const self, const String* const other) {
+    return Compare(self->value, other->value);
 }
 
-method bool Equals(const String* const this, const String* const other) {
-    return Compare(this->value, other->value) == 0;
+method bool Equals(const String* const self, const String* const other) {
+    return Compare(self->value, other->value) == 0;
 }
 
-method int CompareToIgnoreCase(const String* this, const String* str) {
-    return strcmpi(this->value, str->value);
+method int CompareToIgnoreCase(const String* self, const String* str) {
+    return strcmpi(self->value, str->value);
 }
 
-method String* Concatc(const String* this, const char* other) {
+method String* Concatc(const String* self, const char* other) {
     int length = strlen(other);
-    if (length == 0) return this;
-    int len = this->length;
+    if (length == 0) return self;
+    int len = self->length;
     char* str = DScalloc((len+length+1), sizeof(char));
-    strncpy(str, this->value, len);
+    strncpy(str, self->value, len);
     strncpy(str+len, other, length);
-    String* result = NewString(str);
+    String* result = new(String, str);
     return result;
 
 }
 
-method String* Concat(const String* this, const String* other) {
+method String* Concat(const String* self, const String* other) {
     if (other->length == 0)
-        return this;
+        return self;
 
-    int len = this->length;
+    int len = self->length;
     char* str = DScalloc((len+other->length+1), sizeof(char));
-    strncpy(str, this->value, len);
+    strncpy(str, self->value, len);
     strncpy(str+len, other->value, other->length);
-    String* result = NewString(str);
+    String* result = new(String, str);
     return result;
 }
 
-method bool Contains(const String* this, const String* s) {
-    return get_vptr(String)->IndexOf(this, s, 0) > -1;
+method bool Contains(const String* self, const String* s) {
+    return get_vptr(String)->IndexOf(self, s, 0) > -1;
 }
 
-method String* CopyOf(const String* this) {
-    return NewString(this->value);
+method String* CopyOf(const String* self) {
+    return new(String, self->value);
 }
 
-method bool EndsWith(const String* this, const String* suffix) {
-    char* offset = this->value + this->length - suffix->length;
+method bool EndsWith(const String* self, const String* suffix) {
+    char* offset = self->value + self->length - suffix->length;
     return !strcmp(offset, suffix);
 }
 
-method bool StartsWith(const String* this, const String* prefix, const int offset) {
-    char* c = strstr(this->value+offset, prefix->value);
-    return c == (this->value+offset) ? true : false;
+method bool StartsWith(const String* self, const String* prefix, const int offset) {
+    char* c = strstr(self->value+offset, prefix->value);
+    return c == (self->value+offset) ? true : false;
 }
 
-method char* GetBytes(const String* this) {
-    return strdup(this->value);
+method char* GetBytes(const String* self) {
+    return strdup(self->value);
 }
 
-method int IndexOf(const String* this, const String* str, const int offset) {
-    char* c = strstr(this->value+offset, str->value);
-    return c == nullptr ? 0 : c - this->value;
+method int IndexOf(const String* self, const String* str, const int offset) {
+    char* c = strstr(self->value+offset, str->value);
+    return c == nullptr ? 0 : c - self->value;
 }
 
-method int LastIndexOf(const String* this, const String* str, const int offset) {
-    char* c = strrstr(this->value+offset, str->value);
-    return c == nullptr ? 0 : c - this->value;
+method int LastIndexOf(const String* self, const String* str, const int offset) {
+    char* c = strrstr(self->value+offset, str->value);
+    return c == nullptr ? 0 : c - self->value;
 }
 
-method String* ToUpperCase(const String* this) {
-    return NewString(strupr(this->value));
+method String* ToUpperCase(const String* self) {
+    return new(String, strupr(self->value));
 }
 
-method String* ToLowerCase(const String* this) {
-    return NewString(strlwr(this->value));
+method String* ToLowerCase(const String* self) {
+    return new(String, strlwr(self->value));
 }
 
-method String* Trim(const String* this) {
-    int len = this->length;
+method String* Trim(const String* self) {
+    int len = self->length;
     int start = 0;
-    while ((start < len) && (this->value[start] <= ' ')) {
+    while ((start < len) && (self->value[start] <= ' ')) {
         start++;
     }
-    while ((start < len) && (this->value[len - 1] <= ' ')) {
+    while ((start < len) && (self->value[len - 1] <= ' ')) {
         len--;
     }
-    return ((start > 0) || (len < this->length)) 
-        ? NewString(strndup(this->value+start, len-start))
-        : this;    
+    return ((start > 0) || (len < self->length)) 
+        ? new(String, strndup(self->value+start, len-start))
+        : self;    
 }
 
-method String* Substring(const String* this, const int index, const int length) {
+method String* Substring(const String* self, const int index, const int length) {
     char* result = DSmalloc(length+1);
-    strncpy(result, this->value+index, length);
+    strncpy(result, self->value+index, length);
     result[length] = '\0';
-    return NewString(result);
+    return new(String, result);
 }
 
-method String* Substring(const String* this, const int index) {
-    int length = this->length - index;
+method String* Substring(const String* self, const int index) {
+    int length = self->length - index;
     char* result = DSmalloc(length+1);
-    strncpy(result, this->value+index, length);
+    strncpy(result, self->value+index, length);
     result[length] = '\0';
-    return NewString(result);
+    return new(String, result);
 }
 
-method int Length(const String* const this) 
+method int Length(const String* const self) 
 {
-    return this->length;
+    return self->length;
 }
 
-method bool IsEmpty(const String* const this)
+method bool IsEmpty(const String* const self)
 {
-    return this->length == 0;
+    return self->length == 0;
 }
 
-method char CharAt(const String* const this, const int index)
+method char CharAt(const String* const self, const int index)
 {
-    // printf("string %d,%d %s\n", index, this->length, this->value);
-    if (index < 0 || index >= this->length)
+    // printf("string %d,%d %s\n", index, self->length, self->value);
+    if (index < 0 || index >= self->length)
         throw DSIndexOutOfBoundsException(index, Source);
-    return this->value[index];
+    return self->value[index];
 }
  
 
-method char* ToString(const String* const this)
+method char* ToString(const String* const self)
 {
-    return this->value;
+    return self->value;
 }
 
 method __attribute__((__format__ (__printf__, 1, 2)))
@@ -324,11 +321,11 @@ String* Format(const char* format, ...) {
 
     int len = vsnprintf(nullptr, 0, format, args1);
     va_end(args1);
-    if (len == 0) return NewString("");
+    if (len == 0) return new(String, "");
     char* str = DScalloc((len+1), sizeof(char));
     len = vsnprintf(str, len+1, format, args2);
     va_end(args2);
-    return NewString(str);
+    return new(String, str);
 }
 
 /**
@@ -365,5 +362,5 @@ method String* StringJoin(int count, ...)
         strcat(result, ToString(str));
     }
     va_end(args2);
-    return NewString(result);
+    return new(String, result);
 }

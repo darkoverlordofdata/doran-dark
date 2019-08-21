@@ -1,5 +1,6 @@
 NSObject looks somewhat like this:
 
+
     object->isa  => class {
         isa => metaclass {
             isa	

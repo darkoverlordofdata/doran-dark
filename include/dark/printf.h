@@ -34,8 +34,7 @@ SOFTWARE.
  * Writes output to stderr, with end of line.
  */
 __attribute__((__format__ (__printf__, 1, 2)))
-static inline void Log (char* format, ...) 
-{
+static inline void Log (char* format, ...) {
 
     va_list args;
     va_start(args, format);
@@ -57,7 +56,7 @@ char* DSsprintf(const char* format, ...)
     int len = DSvsnprintf(nullptr, 0, format, args1);
     va_end(args1);
     if (len == 0) return "";
-    char* str = DScalloc((len+1), sizeof(char));
+    char* str = (char*)DScalloc((len+1), sizeof(char));
     len = DSvsnprintf(str, len+1, format, args2);
     va_end(args2);
     return str;
@@ -73,7 +72,7 @@ static inline void DSvfprintf(FILE* stream, const char* format, va_list _args)
 
     int len = DSvsnprintf(nullptr, 0, format, args1);
     va_end(args1);
-    char* str = DScalloc((len+1), sizeof(char));
+    char* str = (char*)DScalloc((len+1), sizeof(char));
     len = DSvsnprintf(str, len+1, format, args2);
     va_end(args2);
     fputs(str, stream);

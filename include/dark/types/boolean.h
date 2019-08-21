@@ -25,6 +25,7 @@ SOFTWARE.
 ******************************************************************/
 #pragma once
 #include <limits.h>
+#include <stdbool.h>
 #include <dark/core/comparable.h>
 
 #define BOOLEAN_BYTES      (sizeof(char))
@@ -44,9 +45,10 @@ type (Boolean)
     bool value;
 };
 
-interface (Boolean, ToString,     char*, (const Boolean* const));
-interface (Boolean, CompareTo,    int, (const Boolean* const, const Boolean* const));
-interface (Boolean, BoolValue,    bool, (const Boolean* const));
+delegate (Boolean, New,          Boolean*, (Boolean*, const bool));
+delegate (Boolean, ToString,     char*, (const Boolean* const));
+delegate (Boolean, CompareTo,    int, (const Boolean* const, const Boolean* const));
+delegate (Boolean, BoolValue,    bool, (const Boolean* const));
 
 /**
  * Boolean vtable
@@ -76,8 +78,8 @@ class (Boolean)
 };
 
 function bool ParseBool(const char * const s);
-method int Compare(bool x, bool y);
-// function bool BoolValue(const Boolean*  const this);
+method int Compare(const bool x, const bool y);
+// function bool BoolValue(const Boolean*  const self);
 /**
  * Put it all together
  */
@@ -85,7 +87,7 @@ function vptr(Boolean);
 /**
  * Class Loader callback
  */
-function objc_loadBoolean(Class super) 
+function Class objc_loadBoolean(Class super) 
 {
     Class cls = createClass(super, Boolean);
     addMethod(cls, Boolean,    ToString);
@@ -125,15 +127,13 @@ function objc_loadBoolean(Class super)
  * @param value of bool
  * 
  */
-function Boolean* Boolean_init(Boolean* this, const bool value) {
-    Comparable_init(this);
-    this->isa = objc_getClass("Boolean");
-    this->value = value;
-    return this;
+method Boolean* New(Boolean* self, const bool value) {
+    extends((Comparable*)self);
+    self->isa = objc_getClass("Boolean");
+    self->value = value;
+    return self;
 }
 
-function Boolean* NewBoolean(const bool value) { 
-    return Boolean_init(alloc(Boolean), value); }
 
 function bool ParseBool(const char * const s) {
     if (!strcmpi("y", s) 
@@ -152,7 +152,7 @@ function bool ParseBool(const char * const s) {
  *         +1 x is true
  *         -1 y is true
  */
-method int Compare(bool x, bool y) {
+method int Compare(const bool x, const bool y) {
     return (x == y) ? 0 : ( x ? 1 : -1 );
 }
 
@@ -162,21 +162,21 @@ method int Compare(bool x, bool y) {
  * @param   other  Boolean to be compared
  * @return same as Boolean_Compare
  */
-method int CompareTo(const Boolean*  const this, const Boolean*  const other) {
-    return Compare(this->value, other->value);
+method int CompareTo(const Boolean*  const self, const Boolean*  const other) {
+    return Compare(self->value, other->value);
 }
 
 /**
  * Returns the value of this value cast as an int
  */
-method bool BoolValue(const Boolean*  const this) {
-    return (bool)this->value;
+method bool BoolValue(const Boolean*  const self) {
+    return (bool)self->value;
 }
 
 /**
- * Returns the string value of this Boolean
+ * Returns the string value of self Boolean
  */
-method char* ToString(const Boolean* const this) {
-    return this->value ? "true" : "false";
+method char* ToString(const Boolean* const self) {
+    return (char*)(self->value ? "true" : "false");
 }
 

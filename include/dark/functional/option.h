@@ -46,37 +46,37 @@ function Option* NewOption(Object* value) {
         printf("Invalid - Option cannot be null\n");
         raise(SIGSEGV);
     }
-    const auto this = alloc(Option);
-    this->value = value;
-    return this;
+    const auto self = alloc(Option);
+    self->value = value;
+    return self;
 }
 
-method Object* Some(Option* this) {
-    return this->value;
+method Object* Some(Option* self) {
+    return self->value;
 }
 
-method int Length(Option* this) {
-    return this->value != nullptr ? 1 : 0;
+method int Length(Option* self) {
+    return self->value != nullptr ? 1 : 0;
 }
 
-method void ForEach(Option* const this, void (^iter)(Object*)) {
-    iter(this->value);
+method void ForEach(Option* const self, void (^iter)(Object*)) {
+    iter(self->value);
 }
 
-method bool IsEmpty(Option* this) {
-    return this->value == nullptr ? true : false;
+method bool IsEmpty(Option* self) {
+    return self->value == nullptr ? true : false;
 }
  
-method Object* Bind(Option* this, Option* (^func)(Option*)) {
-    return this->value != nullptr ? func(this->value) : None; 
+method Object* Bind(Option* self, Option* (^func)(Option*)) {
+    return self->value != nullptr ? func(self->value) : None; 
 }
 
-method Object* Bind(Option* this, Option* (*func)(Option*)) {
-    return this->value != nullptr ? func(this->value) : None; 
+method Object* Bind(Option* self, Option* (*func)(Option*)) {
+    return self->value != nullptr ? func(self->value) : None; 
 }
 
-function Object* Return(Option* this) {
-    return this->value != nullptr ? NewOption(this->value) : None;
+function Object* Return(Option* self) {
+    return self->value != nullptr ? NewOption(self->value) : None;
 }
 
 static void __attribute__((constructor())) OptionBoot() {

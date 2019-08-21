@@ -38,13 +38,10 @@ type (Texture2D)
 /**
  * Texture2D API
  */
-// Texture2D* NewTexture2D(int InternalFormat, int ImageFormat, char* path);
-// Texture2D* Texture2D_init(Texture2D* const self, int InternalFormat, int ImageFormat, char* path);
-// Texture2D* Texture2D_alloc();
-
-interface (Texture2D, ToString,    char*, (const Texture2D* const));
-interface (Texture2D, Generate,    void, (Texture2D*, const GLuint, const GLuint, const unsigned char*));
-interface (Texture2D, Bind,        void, (const Texture2D* const));
+delegate (Texture2D, New,       Texture2D*, (Texture2D*, int, int, char*));
+delegate (Texture2D, ToString,  char*, (const Texture2D* const));
+delegate (Texture2D, Generate,  void, (Texture2D*, const GLuint, const GLuint, const unsigned char*));
+delegate (Texture2D, Bind,      void, (const Texture2D* const));
 
 
 vtable (Texture2D) {
@@ -83,13 +80,13 @@ function Class objc_loadTexture2D(Class super)
  * @param ImageFormat for binding the image
  * 
  */
-function Texture2D* Texture2D_init(
-    Texture2D* const self,
+method Texture2D* New(
+    Texture2D* self,
     int InternalFormat,
     int ImageFormat,
     char* path)
 {
-	Object_init((Object*)self);
+	extends((Object*)self);
     self->isa = objc_getClass("Texture2D");
     self->path = strdup(path);
     self->Width = 0;

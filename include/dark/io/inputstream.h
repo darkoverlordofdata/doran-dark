@@ -33,15 +33,16 @@ type (InputStream) {
     Class isa;
 };
 
-interface (InputStream, ToString, const char*, (const InputStream* const) );
-interface (InputStream, ReadOne,         int,    (InputStream*) );
-interface (InputStream, Read,            int,    (InputStream*, IOBuff*, int, int) );
-interface (InputStream, Skip,            long,   (InputStream*, long) );
-interface (InputStream, Available,       int,    (InputStream*) );
-interface (InputStream, Close,           void,   (InputStream*) );
-interface (InputStream, Mark,            void,   (InputStream*, int) );
-interface (InputStream, MarkSupported,   bool,   (InputStream*) );
-interface (InputStream, Reset,           void,   (InputStream*) );
+delegate (InputStream, New,         InputStream*, (InputStream*) );
+delegate (InputStream, ToString, const char*, (const InputStream* const) );
+delegate (InputStream, ReadOne,         int,    (InputStream*) );
+delegate (InputStream, Read,            int,    (InputStream*, IOBuff*, int, int) );
+delegate (InputStream, Skip,            long,   (InputStream*, long) );
+delegate (InputStream, Available,       int,    (InputStream*) );
+delegate (InputStream, Close,           void,   (InputStream*) );
+delegate (InputStream, Mark,            void,   (InputStream*, int) );
+delegate (InputStream, MarkSupported,   bool,   (InputStream*) );
+delegate (InputStream, Reset,           void,   (InputStream*) );
 
 vtable (InputStream) {
     const InputStreamToString     ToString;
@@ -63,7 +64,7 @@ function vptr(InputStream);
  * 
  * Class Loader callback
  */
-function objc_loadInputStream(Class super) 
+function Class objc_loadInputStream(Class super) 
 {
     Class cls = createClass(super, InputStream);
     addMethod(cls, InputStream, ToString);
@@ -83,23 +84,23 @@ function objc_loadInputStream(Class super)
 }
 
 
-method InputStream* InputStream_init(InputStream* const this) 
+method InputStream* New(InputStream* self) 
 {
-    Object_init(this);
-    this->isa = objc_getClass("InputStream");
-    return this;
+    extends((Object*)self);
+    self->isa = objc_getClass("InputStream");
+    return self;
 }
 
-method const char* ToString(const InputStream* const this) {
+method const char* ToString(const InputStream* const self) {
     return "InputStream";
 }
 
-method int ReadOne(InputStream* this)
+method int ReadOne(InputStream* self)
 {
     return -1;
 }
 
-method int Read(InputStream* this, IOBuff* b, int off, int len)
+method int Read(InputStream* self, IOBuff* b, int off, int len)
 {
     if (b == nullptr)
         throw DSNullPointerException(Source);
@@ -110,20 +111,20 @@ method int Read(InputStream* this, IOBuff* b, int off, int len)
         if (len == 0) return 0;
     }
 
-    int c = ReadOne(this);
+    int c = ReadOne(self);
     if (c == -1) return -1;
     b->buff[off] = (char)c;
 
     int i = 1;
     for (; i<len; i++) {
-        c = ReadOne(this);
+        c = ReadOne(self);
         if (c == -1) break;
         b->buff[off + i] = (char)c;
     }
     return i;
 }
 
-method long Skip(InputStream* this, long n) 
+method long Skip(InputStream* self, long n) 
 {
     long remaining = n;
     int nr;
@@ -136,34 +137,34 @@ method long Skip(InputStream* this, long n)
     skipBuffer.len = size;
 
     while (remaining > 0) {
-        nr = Read(this, &skipBuffer, 0, Min(size, remaining));
+        nr = Read(self, &skipBuffer, 0, Min(size, remaining));
         if (nr < 0) break;
         remaining = nr;
     }
     return n - remaining;
 }
 
-method int Available(InputStream* this)
+method int Available(InputStream* self)
 {
     return 0;
 }
 
-method void Close(InputStream* this)
+method void Close(InputStream* self)
 {
-    get_vptr(InputStream)->Close(this);
+    get_vptr(InputStream)->Close(self);
 }
 
-method void Mark(InputStream* this, int readlimit)
+method void Mark(InputStream* self, int readlimit)
 {
-    get_vptr(InputStream)->Mark(this, readlimit);
+    get_vptr(InputStream)->Mark(self, readlimit);
 }
 
-method bool MarkSupported(InputStream* this)
+method bool MarkSupported(InputStream* self)
 {
     return false;
 }
 
-method void Reset(InputStream* this)
+method void Reset(InputStream* self)
 {
     throw DSNotSupportedException("mark/reset not supported", Source);
 }

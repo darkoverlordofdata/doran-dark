@@ -33,18 +33,16 @@ type (Reader) {
     IOBuff skipBuffer;
 };
 
-
-
-ctor (Reader);
-interface (Reader, ToString, const char*, (const Reader* const) );
-interface (Reader, ReadOne,         int,    (Reader*) );
-interface (Reader, Read,            int,    (Reader*, IOBuff*, int, int) );
-interface (Reader, Skip,            long,   (Reader*, long) );
-interface (Reader, Close,           void,   (Reader*) );
-interface (Reader, Mark,            void,   (Reader*, int) );
-interface (Reader, MarkSupported,   bool,   (Reader*) );
-interface (Reader, Reset,           void,   (Reader*) );
-interface (Reader, Ready,           bool,   (Reader*) );
+delegate (Reader, New,          Reader*, (Reader*) );
+delegate (Reader, ToString,     const char*, (const Reader* const) );
+delegate (Reader, ReadOne,      int,    (Reader*) );
+delegate (Reader, Read,         int,    (Reader*, IOBuff*, int, int) );
+delegate (Reader, Skip,         long,   (Reader*, long) );
+delegate (Reader, Close,        void,   (Reader*) );
+delegate (Reader, Mark,         void,   (Reader*, int) );
+delegate (Reader, MarkSupported,bool,   (Reader*) );
+delegate (Reader, Reset,        void,   (Reader*) );
+delegate (Reader, Ready,        bool,   (Reader*) );
 
 vtable (Reader) {
     const ReaderToString      ToString;
@@ -66,7 +64,7 @@ function vptr(Reader);
  * 
  * Class Loader callback
  */
-function objc_loadReader(Class super) 
+function Class objc_loadReader(Class super) 
 {
     Class cls = createClass(super, Reader);
     addMethod(cls, Reader, ToString);
@@ -89,38 +87,38 @@ function objc_loadReader(Class super)
 /** Maximum skip-buffer size */
 static const int maxSkipBufferSize = 8192;
 
-method Reader* Reader_init(Reader* this) {
-    Reader_init(this);
-    this->isa = objc_getClass("Reader");
-    return this;
+method Reader* New(Reader* self) {
+    extends((Object*)self);
+    self->isa = objc_getClass("Reader");
+    return self;
 }
 
-method const char* ToString(const Reader* const this) {
+method const char* ToString(const Reader* const self) {
     return "Reader";
 }
 
-method int ReadOne(Reader* this) {
+method int ReadOne(Reader* self) {
     char cb[2];
-    if (Read(this, &cb, 0, 1) == -1)
+    if (Read(self, &cb, 0, 1) == -1)
         return -1;
     else
         return (int)cb[0];
 }
 
-method int Read(Reader* this, IOBuff* buf, int offset, int len) {
-    return get_vptr(Reader)->Read(this, buf, offset, len);
+method int Read(Reader* self, IOBuff* buf, int offset, int len) {
+    return get_vptr(Reader)->Read(self, buf, offset, len);
 }
 
-method long Skip(Reader* this, long n)  {
+method long Skip(Reader* self, long n)  {
 
     if (n < 0L)
         throw DSIllegalArgumentException("skip value is negative", Source);
     int nn = (int)Min(n, maxSkipBufferSize);
-    if ((this->skipBuffer.buff == nullptr) || (this->skipBuffer.len < nn))
-        this->skipBuffer.buff = DScalloc(1, nn);
+    if ((self->skipBuffer.buff == nullptr) || (self->skipBuffer.len < nn))
+        self->skipBuffer.buff = DScalloc(1, nn);
     long r = n;
     while (r > 0) {
-        int nc = Read(this, &this->skipBuffer, 0, (int)Min(r, nn));
+        int nc = Read(self, &self->skipBuffer, 0, (int)Min(r, nn));
         if (nc == -1)
             break;
         r -= nc;
@@ -128,23 +126,23 @@ method long Skip(Reader* this, long n)  {
     return n - r;
 }
 
-method bool Ready(Reader* this) {
+method bool Ready(Reader* self) {
     return false;
 }
 
-method bool MarkSupported(Reader* this) {
+method bool MarkSupported(Reader* self) {
     return false;
 }
 
-method void Mark(Reader* this, int readLimit) {
+method void Mark(Reader* self, int readLimit) {
     throw DSNotSupportedException("Mark not supported", Source);
 }
 
-method void Reset(Reader* this) {
+method void Reset(Reader* self) {
     throw DSNotSupportedException("Reset not supported", Source);
 }
 
-method void Close(Reader* this) {
-    get_vptr(Reader)->Close(this);
+method void Close(Reader* self) {
+    get_vptr(Reader)->Close(self);
 }
 

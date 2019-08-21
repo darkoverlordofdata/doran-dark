@@ -45,27 +45,24 @@ type (Array) {
     Class isa;
     Class typeOf;
     int length;
+    // void **data;
     uchar **data;
     int capacity;
 };
 
 
-ctor(Array);
-ctor(Array, int);
-ctor(Array, Class);
-ctor(Array, Class, int);
-
-interface (Array, ToString,  char*,      (const Array* const) );
-interface (Array, Dispose,   void,       (Array* const) );
-interface (Array, Length,    int,        (const Array* const) );
-interface (Array, IsEmpty,   bool,       (Array* const) );
-interface (Array, Contains,  bool,       (Array* const, Object*) );
-interface (Array, Clear,     void,       (Array* const) );
-interface (Array, Add,       Either*,    (Array* const, const Object*) );
-interface (Array, Remove,    void,       (Array* const, int) );
-interface (Array, Resize,    void,       (Array* const, int) );
-interface (Array, Set,       Either*,    (Array* const, int, const Object*) );
-interface (Array, Get,       Object*,  (Array* const, int) );
+delegate (Array, New,       Array*,     (Array*, Class, int));
+delegate (Array, ToString,  char*,      (const Array* const) );
+delegate (Array, Dispose,   void,       (Array* const) );
+delegate (Array, Length,    int,        (const Array* const) );
+delegate (Array, IsEmpty,   bool,       (Array* const) );
+delegate (Array, Contains,  bool,       (Array* const, Object*) );
+delegate (Array, Clear,     void,       (Array* const) );
+delegate (Array, Add,       Either*,    (Array* const, const Object*) );
+delegate (Array, Remove,    void,       (Array* const, int) );
+delegate (Array, Resize,    void,       (Array* const, int) );
+delegate (Array, Set,       Either*,    (Array* const, int, const Object*) );
+delegate (Array, Get,       Object*,  (Array* const, int) );
 
 vtable (Array) {
     const ArrayToString         ToString;
@@ -88,7 +85,7 @@ function vptr(Array);
  * 
  * Class Loader callback
  */
-function objc_loadArray(Class super) 
+function Class objc_loadArray(Class super) 
 {
     Class cls = createClass(super, Array);
     addMethod(cls, Array, ToString);
@@ -120,16 +117,16 @@ function objc_loadArray(Class super)
  * 
  */
 method Array* ArrayFrom(int count, ...) {
-    Array* this = Array_init(alloc(Array), nullptr, count);
+    Array* self = Array_ctor(alloc(Array), nullptr, count);
     va_list args;
     va_start(args, count);
     for (int i=0; i<count; i++)
-        this->data[i] = va_arg(args, Object*);
-    Object* elem = this->data[0];
-    this->typeOf = elem->isa;
+        self->data[i] = va_arg(args, Object*);
+    Object* elem = self->data[0];
+    self->typeOf = elem->isa;
     va_end(args);
-    this->length = count;
-    return this;
+    self->length = count;
+    return self;
 }
 
 /**
@@ -141,44 +138,48 @@ method Array* ArrayFrom(int count, ...) {
  * @param capacity initial max size of vectorO
  * 
  */
-method Array* Array_init(Array* const this) {
-    return Array_init(this, nullptr);
+method Array* New(Array*  self, int capacity) {
+    return New(self, nullptr, capacity);
 }
 
-method Array* Array_init(Array* const this, int capacity) {
-    return Array_init(this, nullptr, capacity);
+method Array* New(Array* self, Class typeOf) {
+    return New(self, nullptr, 0);
 }
 
-method Array* Array_init(Array* const this, Class typeOf) {
-    return Array_init(this, nullptr, 0);
+method Array* New(Array*  self) {
+    return New(self, nullptr);
 }
+
 /**
  * Default Constructor
  */
-method Array* Array_init(Array* const this, Class typeOf, int capacity) {
-    Object_init(this);
-    this->isa = objc_getClass("Array");
-    this->capacity = capacity == 0 ? ARRAY_INIT_CAPACITY : capacity;
-    this->length = 0;
-    this->data = DScalloc(this->capacity, sizeof(Object*));
-    return this;
+method Array* New(Array* self, Class typeOf, int capacity) {
+    extends((Object*)self);
+    // extends(Object, self);
+
+    self->isa = objc_getClass("Array");
+    self->capacity = capacity == 0 ? ARRAY_INIT_CAPACITY : capacity;
+    self->length = 0;
+    self->data = DScalloc(self->capacity, sizeof(Object*));
+    return self;
 }
+
 
 /**
  * Resize the vector
  * 
  * @param capacity the new size
  */
-method void Resize(Array* const this, int capacity)
+method void Resize(Array* const self, int capacity)
 {
     #ifdef DEBUG_ON
-    printf("vector_resize: %d to %d\n", this->capacity, capacity);
+    printf("vector_resize: %d to %d\n", self->capacity, capacity);
     #endif
 
-    void **data = DSrealloc(this->data, sizeof(Object*) * capacity);
+    void **data = DSrealloc(self->data, sizeof(Object*) * capacity);
     if (data) {
-        this->data = data;
-        this->capacity = capacity;
+        self->data = data;
+        self->capacity = capacity;
     }
 }
 
@@ -187,15 +188,15 @@ method void Resize(Array* const this, int capacity)
  * 
  * @param item the data to add
  */
-method Either* Add(Array* const this, const Object* item)
+method Either* Add(Array* const self, const Object* item)
 {
-    if ((this->typeOf) && !InstanceOf(this->typeOf, item)) 
-        return left(NewString("InvalidType"));
+    if ((self->typeOf) && !InstanceOf(self->typeOf, item)) 
+        return left(new(String, "InvalidType"));
 
-    if (this->capacity == this->length) {
-        Resize(this, this->capacity * 2);
+    if (self->capacity == self->length) {
+        Resize(self, self->capacity * 2);
     }
-    this->data[this->length++] = item;
+    self->data[self->length++] = item;
 }
 
 /**
@@ -204,13 +205,13 @@ method Either* Add(Array* const this, const Object* item)
  * @param index to add at
  * @param item the data to add
  */
-method Either* Set(Array* const this, int index, const Object* item)
+method Either* Set(Array* const self, int index, const Object* item)
 {
-    if ((this->typeOf) && !InstanceOf(this->typeOf, item)) 
-        return left(NewString("InvalidType"));
+    if ((self->typeOf) && !InstanceOf(self->typeOf, item)) 
+        return left(new(String, "InvalidType"));
 
-    if (index >= 0 && index < this->length)
-        this->data[index] = item;
+    if (index >= 0 && index < self->length)
+        self->data[index] = item;
 }
 
 /**
@@ -218,10 +219,10 @@ method Either* Set(Array* const this, int index, const Object* item)
  * 
  * @param index to get
  */
-method Object* Get(Array* const this, int index)
+method Object* Get(Array* const self, int index)
 {
-    if (index >= 0 && index < this->length)
-        return this->data[index];
+    if (index >= 0 && index < self->length)
+        return self->data[index];
     return nullptr;
 }
 
@@ -230,58 +231,58 @@ method Object* Get(Array* const this, int index)
  * 
  * @param index to delete
  */
-method void Remove(Array* const this, int index)
+method void Remove(Array* const self, int index)
 {
-    if (index < 0 || index >= this->length)
+    if (index < 0 || index >= self->length)
         return;
 
-    this->data[index] = nullptr;
+    self->data[index] = nullptr;
 
-    for (int i = index; i < this->length - 1; i++) {
-        this->data[i] = this->data[i + 1];
-        this->data[i + 1] = nullptr;
+    for (int i = index; i < self->length - 1; i++) {
+        self->data[i] = self->data[i + 1];
+        self->data[i + 1] = nullptr;
     }
 
-    this->length--;
+    self->length--;
 
-    if (this->length > 0 && this->length == this->capacity / 4)
-        Resize(this, this->capacity / 2);
+    if (self->length > 0 && self->length == self->capacity / 4)
+        Resize(self, self->capacity / 2);
 }
 
 /**
  * Free the vector
  */
-method void Dispose(Array* const this)
+method void Dispose(Array* const self)
 {
-    // delete(this->data);
+    // delete(self->data);
 }
 
-method void Clear(Array* const this)
+method void Clear(Array* const self)
 {
-    for (int i=0; i < this->length; i++)
-        this->data[i] = nullptr;
-    this->length = 0;
+    for (int i=0; i < self->length; i++)
+        self->data[i] = nullptr;
+    self->length = 0;
 }
 
-method bool IsEmpty(Array* const this)
+method bool IsEmpty(Array* const self)
 {
-    return this->length <= 0;
+    return self->length <= 0;
 }
 
-method bool Contains(Array* const this, Object* item)
+method bool Contains(Array* const self, Object* item)
 {
     return false;   
 }
 
-method int Length(const Array* const this)
+method int Length(const Array* const self)
 {
-    return this->length;
+    return self->length;
 }
 
 /**
  * ToString
  */
-method char* ToString(const Array* const this)
+method char* ToString(const Array* const self)
 {
     return "dark.collections.Array";
 }

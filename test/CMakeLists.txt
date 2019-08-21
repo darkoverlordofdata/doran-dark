@@ -30,7 +30,6 @@ endif ()
 
 list ( APPEND C_SOURCES src/Boot.c )
 list ( APPEND C_SOURCES src/main.c )
-list ( APPEND C_SOURCES src/stb.c )
 # list ( APPEND C_SOURCES src/unit.c )
 #
 #   application includes
@@ -47,7 +46,6 @@ set ( INCLUDES "${INCLUDES};./.lib/dark/include" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lm" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lgc" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lBlocksRuntime" )
-set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lfreetype" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lglfw" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lGLEW" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lGL" )
@@ -71,7 +69,7 @@ add_executable ( ${PROJECT_NAME} ${C_SOURCES} ${RESOURCES} )
 add_custom_command(TARGET ${PROJECT_NAME} 
                    POST_BUILD COMMAND 
                    ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}> .. )
-target_link_libraries ( ${PROJECT_NAME} m gc BlocksRuntime freetype glfw GLEW GL  )
+target_link_libraries ( ${PROJECT_NAME} m gc BlocksRuntime  glfw GLEW GL  )
 install (TARGETS ${PROJECT_NAME} RUNTIME DESTINATION . )
 
 include (CPack)

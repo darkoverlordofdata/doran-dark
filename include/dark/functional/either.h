@@ -47,22 +47,22 @@ type (Either) {
 /**
  * Is it right or left?
  */
-method bool isRight(Either* this) { 
-	return !this->isLeft; 
+method bool isRight(Either* self) { 
+	return !self->isLeft; 
 }
 
 /**
  * get the right member
  */
-method Object* getRight(Either* this) { 
-	return this->right; 
+method Object* getRight(Either* self) { 
+	return self->right; 
 }
 
 /**
  * get the left member
  */
-method Object* getLeft(Either* this) { 
-	return this->left; 
+method Object* getLeft(Either* self) { 
+	return self->left; 
 }
 
 /**
@@ -70,11 +70,11 @@ method Object* getLeft(Either* this) {
  * Only Left & Right are allowed.
  */
 function Either* NewEither(Object* a, Object* b) {
-    const auto this = alloc(Either);
-	this->left = a;
-	this->right = b;
-	this->isLeft = a != nullptr;
-	return this;
+    const var self = alloc(Either);
+	self->left = a;
+	self->right = b;
+	self->isLeft = a != nullptr;
+	return self;
 }
 
 /**
@@ -91,10 +91,10 @@ method Either* right(Object* value) {
 	return NewEither(nullptr, value); 
 }
 
-method Either* map(Either* this, Either* (*func)(Either*)) {
-	if (this->isLeft)
-		return this;
+method Either* map(Either* self, Either* (*func)(Either*)) {
+	if (self->isLeft)
+		return self;
 	else
-		return func(this);
+		return func(self);
 }
 

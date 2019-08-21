@@ -70,21 +70,21 @@ SOFTWARE.
 #define method function overload
 
 /**
- *  MACRO interface
+ *  MACRO delegate
  *      declares the prototype for methods
  * 
  */
-#define interface(T, name, type, signature)                             \
+#define delegate(T, name, type, signature)                             \
     method type name signature;                                         \
     typedef type (*T##name)signature;
 
 /**
- *  MACRO ctor
+ *  MACRO ctor_proto
  *      declares the prototype for constructor
  * 
  */
-#define ctor(T, args...)                                          \
-    method T* T##_init(T* const, ## args);
+// #define ctor_proto(T, args...)                                          \
+//     method T* T##_ctor(T* const, ## args);
 
 /**
  *  MACRO alloc
@@ -92,11 +92,17 @@ SOFTWARE.
  */
 #define alloc(T) (T*)DSmalloc(sizeof(T))
 
+// /**
+//  *  MACRO new
+//  *      Allocate and initialize a new object
+//  */
+#define new(T, args...) New(alloc(T), ## args)
+
+#define extends New
 /**
  *  MACRO new
  *      Allocate and initialize a new object
  */
-#define new(T, args...) T##_init(alloc(T), ## args)
 
 /**
  *  MACRO using
@@ -119,25 +125,25 @@ SOFTWARE.
 /**
  * Define function to retrieve vptr
  */
-#define vptr(T)\
-    struct T##_vtable* T##_vptr(T* this) {                              \
-        return (struct T##_vtable*)this->isa->vtable;                   \
+#define vptr(T)                                                         \
+    struct T##_vtable* T##_vptr(T* self) {                              \
+        return (struct T##_vtable*)self->isa->vtable;                   \
     };                                                                  \
 
 /**
  * Get the vptr for T
  */
-#define get_vptr(T) T##_vptr(this)
+#define get_vptr(T) T##_vptr(self)
 
 /**
  * 
  */
-#define createClass(super, T) objc_allocateClassPair(super, #T, 0, &T##_vtable)
+#define createClass(super, T) objc_allocateClassPair(super, #T, 0, (IMP*)&T##_vtable)
 
 /**
  * 
  */
-#define addMethod(cls, T, IMP) class_addMethod(cls, #IMP, (T##IMP)IMP, "")
+#define addMethod(cls, T, addr) class_addMethod(cls, (SEL)#addr, ((IMP)(T##addr)addr), "")
 
 typedef Class* (*objc_LoadClass)(Class super);
 

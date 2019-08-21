@@ -158,6 +158,7 @@ struct _default_arg_;
 #define YES true
 #define NO false
 
+
 typedef enum 
 {
     TYPE_BOOLEAN,
@@ -202,6 +203,6 @@ static inline char * strrstr(char *str1, char *str2);
 static inline char * strndup (const char *str, size_t size);
 #ifndef _WIN64
 static inline int strcmpi (const char *s1, const char *s2);
-static inline strlwr(char *str);
-static inline strupr(char *str);
+static inline char* strlwr(char *str);
+static inline char* strupr(char *str);
 #endif

@@ -46,14 +46,15 @@ type (Double)
     double value;
 };
 
-interface (Double, ToString,        char*,    (const Double* const));
-interface (Double, CompareTo,       int,      (const Double* const, const Double* const));
-interface (Double, IntValue,        int,      (const Double* const));
-interface (Double, LongValue,       long,     (const Double* const));
-interface (Double, FloatValue,      float,    (const Double* const));
-interface (Double, DoubleValue,     double,   (const Double* const));
-interface (Double, CharValue,       char,     (const Double* const));
-interface (Double, ShortValue,      short,    (const Double* const));
+delegate (Double, New,          Double*,  (Double*, const double));
+delegate (Double, ToString,     char*,    (const Double* const));
+delegate (Double, CompareTo,    int,      (const Double* const, const Double* const));
+delegate (Double, IntValue,     int,      (const Double* const));
+delegate (Double, LongValue,    long,     (const Double* const));
+delegate (Double, FloatValue,   float,    (const Double* const));
+delegate (Double, DoubleValue,  double,   (const Double* const));
+delegate (Double, CharValue,    char,     (const Double* const));
+delegate (Double, ShortValue,   short,    (const Double* const));
 
 /**
  * Double vtable with overrides
@@ -77,7 +78,7 @@ function vptr(Double);
 /**
  * Class Loader callback
  */
-function objc_loadDouble(Class super) 
+function Class objc_loadDouble(Class super) 
 {
     Class cls = createClass(super, Double);
     addMethod(cls,  Double,     ToString);
@@ -101,15 +102,11 @@ function objc_loadDouble(Class super)
  * @param value of double
  * 
  */
-function Double* Double_init(Double* const this, const double value) {
-    Number_init(this);
-    this->isa = objc_getClass("Double");
-    this->value = value;
-    return this;
-}
-
-function Double* NewDouble(const double value) { 
-    return Double_init(alloc(Double), value); 
+method Double* New(Double* self, const double value) {
+    extends((Number*)self);
+    self->isa = objc_getClass("Double");
+    self->value = value;
+    return self;
 }
 
 /**
@@ -147,55 +144,55 @@ method int Compare(const double x, const double y) {
  * @param   other  Double to be compared
  * @return same as Double_Compare
  */
-method int CompareTo(const Double* const this, const Double* const other) {
-    return Compare(this->value, other->value);
+method int CompareTo(const Double* const self, const Double* const other) {
+    return Compare(self->value, other->value);
 }
 
 /**
- * Returns the value of this value cast as an int
+ * Returns the value of self value cast as an int
  */
-method int IntValue(const Double* const this) {
-    return (int)this->value;
+method int IntValue(const Double* const self) {
+    return (int)self->value;
 }
 
 /**
- * Returns the value of this value cast as a long
+ * Returns the value of self value cast as a long
  */
-method long LongValue(const Double* const this) {
-    return (long)this->value;
+method long LongValue(const Double* const self) {
+    return (long)self->value;
 }
 
 /**
- * Returns the value of this value cast as a float
+ * Returns the value of self value cast as a float
  */
-method float FloatValue(const Double* const this) {
-    return (float)this->value;
+method float FloatValue(const Double* const self) {
+    return (float)self->value;
 }
 
 /**
- * Returns the value of this value cast as a double
+ * Returns the value of self value cast as a double
  */
-method double DoubleValue(const Double* const this) {
-    return this->value;
+method double DoubleValue(const Double* const self) {
+    return self->value;
 }
 
 /**
- * Returns the value of this value cast as a char
+ * Returns the value of self value cast as a char
  */
-method char CharValue(const Double* const this) {
-    return (char)this->value;
+method char CharValue(const Double* const self) {
+    return (char)self->value;
 }
 
 /**
- * Returns the value of this value cast as a short
+ * Returns the value of self value cast as a short
  */
-method short ShortValue(const Double* const this) {
-    return (short)this->value;
+method short ShortValue(const Double* const self) {
+    return (short)self->value;
 }
 
-method char* ToString(const Double* const this) {
+method char* ToString(const Double* const self) {
     static char str[20];
-    sprintf(str, "%f", this->value);
+    sprintf(str, "%f", self->value);
     return str;
 }
 

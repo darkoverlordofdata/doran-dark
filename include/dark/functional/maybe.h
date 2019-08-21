@@ -40,11 +40,11 @@ SOFTWARE.
  */
 #define __Maybe__(type, name)                                           \
 method Maybe* Just(type x) {                                            \
-    const auto this = alloc(Maybe);                                     \
-    this->name = x;                                                     \
-    return this;                                                        \
+    const auto self = alloc(Maybe);                                     \
+    self->name = x;                                                     \
+    return self;                                                        \
 }                                                                       \
-type name##Maybe(Maybe* this) { return this->name; }                    \
+type name##Maybe(Maybe* self) { return self->name; }                    \
 method Maybe* ret(type value) { return Just(value); }
 #endif
 
@@ -84,27 +84,27 @@ type (Maybe) {
 #endif
 
 function Maybe* Nothing() {
-    const auto this = alloc(Maybe);
-    this->value = nullptr;
+    const auto self = alloc(Maybe);
+    self->value = nullptr;
 }
 
 function Maybe* Just(Object* x) {
-    const auto this = alloc(Maybe);
-    this->value = x;
-    return this;
+    const auto self = alloc(Maybe);
+    self->value = x;
+    return self;
 }
 
-function Maybe* ret(Object* this) {
-    return Just(this);
+function Maybe* ret(Object* self) {
+    return Just(self);
 }
 
-function Maybe* bind(Maybe* this,  Maybe* (*func)(Maybe*)) {
-    if (this->value == nullptr) 
+function Maybe* bind(Maybe* self,  Maybe* (*func)(Maybe*)) {
+    if (self->value == nullptr) 
         return Nothing();
     else
-        return func(this->value);
+        return func(self->value);
 }
 
-function bool IsNothing(const Maybe* this) {
-    return this->value == nullptr;
+function bool IsNothing(const Maybe* self) {
+    return self->value == nullptr;
 }

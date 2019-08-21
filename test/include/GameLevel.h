@@ -42,20 +42,16 @@ type (GameLevel)
     Class isa;
     Array* Bricks;
 };
-/**
- * GameLevel API
- */
 
-interface (GameLevel, ToString,     char*, (const GameLevel* const));
-interface (GameLevel, Load,         GameLevel* , (GameLevel*, const GLchar*, int, int));
-interface (GameLevel, Draw,         void, (GameLevel* const, SpriteRenderer* renderer));
-interface (GameLevel, IsCompleted,  bool, (GameLevel*));
-interface (GameLevel, init,         void, (GameLevel *const, Array*, GLuint, GLuint));
-method GameLevel* GameLevel_init(
-    GameLevel* const self, 
-    const GLchar *file, 
-    int levelWidth, 
-    int levelHeight);
+/**
+ * GameLevel
+ */
+delegate (GameLevel, New,           GameLevel*, (GameLevel* self, const GLchar *file, const int levelWidth, const int levelHeight));
+delegate (GameLevel, ToString,      char*, (const GameLevel* const));
+delegate (GameLevel, Load,          GameLevel* , (GameLevel*, const GLchar*, int, int));
+delegate (GameLevel, Draw,          void, (GameLevel* const, SpriteRenderer* renderer));
+delegate (GameLevel, IsCompleted,   bool, (GameLevel*));
+delegate (GameLevel, init,          void, (GameLevel *const, Array*, GLuint, GLuint));
 
 
 vtable (GameLevel)
@@ -68,22 +64,6 @@ vtable (GameLevel)
     GameLevelDraw           Draw;
     GameLevelIsCompleted    IsCompleted;
 };
-
-/**
- * GameLevel
- */
-method GameLevel* GameLevel_init(
-    GameLevel* const self, 
-    const GLchar *file, 
-    int levelWidth, 
-    int levelHeight)
-{
-	Object_init((Object*)self);
-    self->isa = objc_getClass("GameLevel");
-    self->Bricks = new(Array, 200);
-    Load(self, file, levelWidth, levelHeight);
-    return self;
-}
 
 /**
  * Put it all together
@@ -107,21 +87,24 @@ function Class objc_loadGameLevel(Class super)
     return cls;
 }
 
-// /**
-//  * GameLevel
-//  */
-// method GameLevel* GameLevel_init(
-//     GameLevel* const self, 
-//     const GLchar *file, 
-//     int levelWidth, 
-//     int levelHeight)
-// {
-// 	Object_init(self);
-//     self->isa = getGameLevelIsa();
-//     self->Bricks = new(Array, 200);
-//     Load(self, file, levelWidth, levelHeight);
-//     return self;
-// }
+/**
+ * GameLevel
+ */
+method GameLevel* New(
+    GameLevel* self, 
+    const GLchar *file, 
+    const int levelWidth, 
+    const int levelHeight)
+{
+	extends((Object*)self);
+    self->isa = objc_getClass("GameLevel");
+    self->Bricks = new(Array, 200);
+    Load(self, file, levelWidth, levelHeight);
+    return self;
+}
+
+
+
 
 /**
  * Load 
@@ -154,7 +137,7 @@ method GameLevel* Load(
     {
         while (fscanf(fstream, "%d%c", &i, &c) != EOF)
         {
-            Add(row, $(i));
+            Add(row, (Object*)new(Integer, i));
             if (c == '\n')
             {
                 Add(tileData, (Object*)row);

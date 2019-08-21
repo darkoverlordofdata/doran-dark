@@ -46,14 +46,15 @@ type (Number) {
     Class isa;
 };
 
-interface (Number, ToString,        char*, (const Number* const));
-interface (Number, CompareTo,       int, (const Number* const, const Number* const));
-interface (Number, IntValue,        int, (const Number* const));
-interface (Number, LongValue,       long, (const Number* const));
-interface (Number, FloatValue,      float, (const Number* const));
-interface (Number, DoubleValue,     double, (const Number* const));
-interface (Number, CharValue,       char, (const Number* const));
-interface (Number, ShortValue,      short, (const Number* const));
+delegate (Number, New,              Number*, (Number*));
+delegate (Number, ToString,        char*, (const Number* const));
+delegate (Number, CompareTo,       int, (const Number* const, const Number* const));
+delegate (Number, IntValue,        int, (const Number* const));
+delegate (Number, LongValue,       long, (const Number* const));
+delegate (Number, FloatValue,      float, (const Number* const));
+delegate (Number, DoubleValue,     double, (const Number* const));
+delegate (Number, CharValue,       char, (const Number* const));
+delegate (Number, ShortValue,      short, (const Number* const));
 
 /**
  * Object metaclass
@@ -82,7 +83,7 @@ function vptr(Number);
  * 
  * Class Loader callback
  */
-function objc_loadNumber(Class super) 
+function Class objc_loadNumber(Class super) 
 {
     Class cls = createClass(super, Number);
     addMethod(cls, Number,      ToString);
@@ -105,67 +106,66 @@ function objc_loadNumber(Class super)
  * Initialize the Number vtable
  * all methods are virtual
  */
-function Number* Number_init(Number* const this)
+method Number* New(Number* self)
 {
-    Comparable_init(this);
-    this->isa = objc_getClass("Number");
-    return this;
+    extends((Comparable*)self);
+    self->isa = objc_getClass("Number");
+    return self;
 }
-
 /**
  * Compares two Number objects.
  *
  * @param   other  Short to be compared
- * @return  0 this == other
- *         +1 this < other
- *         -1 this > other
+ * @return  0 self == other
+ *         +1 self < other
+ *         -1 self > other
  */
-method int CompareTo(const Number* this, const Number* const other) {
-    return get_vptr(Number)->CompareTo(this, other);
+method int CompareTo(const Number* self, const Number* const other) {
+    return get_vptr(Number)->CompareTo(self, other);
 }
 
 /**
- * Returns the value of this value cast as an int
+ * Returns the value of self value cast as an int
  */
-method int IntValue(const Number* const this) {
-    return get_vptr(Number)->IntValue(this);
+method int IntValue(const Number* const self) {
+    return get_vptr(Number)->IntValue(self);
 }
 
 /**
- * Returns the value of this value cast as a long
+ * Returns the value of self value cast as a long
  */
-method long LongValue(const Number* const this) {
-    return get_vptr(Number)->LongValue(this);
+method long LongValue(const Number* const self) {
+    return get_vptr(Number)->LongValue(self);
 }
 
 /**
- * Returns the value of this value cast as a float
+ * Returns the value of self value cast as a float
  */
-method float FloatValue(const Number* const this) {
-    return get_vptr(Number)->FloatValue(this);
+method float FloatValue(const Number* const self) {
+    return get_vptr(Number)->FloatValue(self);
 }
 
 /**
- * Returns the value of this value cast as a double
+ * Returns the value of self value cast as a double
  */
-method double DoubleValue(const Number* const this) {
-    return get_vptr(Number)->DoubleValue(this);
+method double DoubleValue(const Number* const self) {
+    return get_vptr(Number)->DoubleValue(self);
 }
 
 /**
- * Returns the value of this value cast as a char
+ * Returns the value of self value cast as a char
  */
-method char CharValue(const Number* const this) {
-    return get_vptr(Number)->CharValue(this);
+method char CharValue(const Number* const self) {
+    return get_vptr(Number)->CharValue(self);
 }
 
 /**
- * Returns the value of this value cast as a short
+ * Returns the value of self value cast as a short
  */
-method short ShortValue(const Number* const this) {
-    return get_vptr(Number)->ShortValue(this);
+method short ShortValue(const Number* const self) {
+    return get_vptr(Number)->ShortValue(self);
 }
 
-method char* ToString(const Number* const this) {
-    return get_vptr(Number)->ToString(this);
+method char* ToString(const Number* const self) {
+    return get_vptr(Number)->ToString(self);
 }

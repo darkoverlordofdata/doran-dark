@@ -49,14 +49,15 @@ type (Integer)
 };
 
 
-interface (Integer, ToString,        char*, (const Integer* const));
-interface (Integer, CompareTo,       int, (const Integer* const, const Integer* const));
-interface (Integer, IntValue,        int, (const Integer* const));
-interface (Integer, LongValue,       long, (const Integer* const));
-interface (Integer, FloatValue,      float, (const Integer* const));
-interface (Integer, DoubleValue,     double, (const Integer* const));
-interface (Integer, CharValue,       char, (const Integer* const));
-interface (Integer, ShortValue,      short, (const Integer* const));
+delegate (Integer, New,         Integer*, (Integer*, const int));
+delegate (Integer, ToString,    char*, (const Integer* const));
+delegate (Integer, CompareTo,   int, (const Integer* const, const Integer* const));
+delegate (Integer, IntValue,    int, (const Integer* const));
+delegate (Integer, LongValue,   long, (const Integer* const));
+delegate (Integer, FloatValue,  float, (const Integer* const));
+delegate (Integer, DoubleValue, double, (const Integer* const));
+delegate (Integer, CharValue,   char, (const Integer* const));
+delegate (Integer, ShortValue,  short, (const Integer* const));
 
 /**
  * Integer vtable with overrides
@@ -80,7 +81,7 @@ function vptr(Integer);
 /**
  * Class Loader callback
  */
-function objc_loadInteger(Class super) 
+function Class objc_loadInteger(Class super) 
 {
     Class cls = createClass(super, Integer);
     addMethod(cls, Integer,     ToString);
@@ -104,16 +105,12 @@ function objc_loadInteger(Class super)
  * @param value of int
  * 
  */
-function Integer* Integer_init(Integer* const this, const int value)
+method Integer* New(Integer* self, const int value)
 {
-    Number_init(this);
-    this->isa = objc_getClass("Integer");
-    this->value = value;
-    return this;
-}
-
-function Integer* NewInteger(const int value) { 
-    return Integer_init(alloc(Integer), value); 
+    extends((Number*)self);
+    self->isa = objc_getClass("Integer");
+    self->value = value;
+    return self;
 }
 
 /**
@@ -144,56 +141,56 @@ method int Compare(const int x, const int y) {
  * @param   other  Integer to be compared
  * @return same as Integer_Compare
  */
-method int CompareTo(const Integer* this, const Integer* other) {
-    return Compare(this->value, other->value);
+method int CompareTo(const Integer* self, const Integer* other) {
+    return Compare(self->value, other->value);
 }
 
 /**
- * Returns the value of this value cast as an int
+ * Returns the value of self value cast as an int
  */
-method int IntValue(const Integer* const this) {
-    return (int)this->value;
+method int IntValue(const Integer* const self) {
+    return (int)self->value;
 }
 
 /**
- * Returns the value of this value cast as a long
+ * Returns the value of self value cast as a long
  */
-method long LongValue(const Integer* const this) {
-    return (int)this->value;
+method long LongValue(const Integer* const self) {
+    return (int)self->value;
 }
 
 /**
- * Returns the value of this value cast as a float
+ * Returns the value of self value cast as a float
  */
-method float FloatValue(const Integer* const this) {
-    return (float)this->value;
+method float FloatValue(const Integer* const self) {
+    return (float)self->value;
 }
 
 /**
- * Returns the value of this value cast as a double
+ * Returns the value of self value cast as a double
  */
-method double DoubleValue(const Integer* const this) {
-    return (double)this->value;
+method double DoubleValue(const Integer* const self) {
+    return (double)self->value;
 }
 
 /**
- * Returns the value of this value cast as a char
+ * Returns the value of self value cast as a char
  */
-method char CharValue(const Integer* const this) {
-    return (char)this->value;
+method char CharValue(const Integer* const self) {
+    return (char)self->value;
 }
 
 /**
- * Returns the value of this value cast as a short
+ * Returns the value of self value cast as a short
  */
-method short ShortValue(const Integer* const this) {
-    return (short)this->value;
+method short ShortValue(const Integer* const self) {
+    return (short)self->value;
 }
 
 
-method char* ToString(const Integer* const this)
+method char* ToString(const Integer* const self)
 {
     static char str[20];
-    sprintf(str, "%d", this->value);
+    sprintf(str, "%d", self->value);
     return str;
 }

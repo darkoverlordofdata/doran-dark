@@ -78,19 +78,20 @@ type (StringBuilder) {
 	int length;
 };
 
-interface (StringBuilder, ToString,        char*, (const StringBuilder* const));
+delegate (StringBuilder, New,     	StringBuilder*, (StringBuilder*));
+delegate (StringBuilder, ToString,  char*, (const StringBuilder* const));
 
 method 
 __attribute__((__format__ (__printf__, 2, 3)))
 int Appendf(StringBuilder* sb, const char *format, ...);
 typedef int (*StringBuilderAppendf)   (StringBuilder* sb, const char *format, ...);
 
-interface (StringBuilder, Appendc, 	int, (StringBuilder* sb, const char c));
-interface (StringBuilder, Append,	int, (StringBuilder* sb, const char *str));
-interface (StringBuilder, Concat,	String*, (const StringBuilder* sb));
-interface (StringBuilder, Reset,		void, (StringBuilder* sb));
-interface (StringBuilder, Empty,		int, (const StringBuilder* sb));
-interface (StringBuilder, Dispose,	void, (StringBuilder* const));
+delegate (StringBuilder, Appendc, 	int, (StringBuilder* sb, const char c));
+delegate (StringBuilder, Append,	int, (StringBuilder* sb, const char *str));
+delegate (StringBuilder, Concat,	String*, (const StringBuilder* sb));
+delegate (StringBuilder, Reset,		void, (StringBuilder* sb));
+delegate (StringBuilder, Empty,		int, (const StringBuilder* sb));
+delegate (StringBuilder, Dispose,	void, (StringBuilder* const));
 
 /**
  * StringBuilder metaclass
@@ -113,7 +114,7 @@ function vptr(StringBuilder);
  * 
  * Class Loader callback
  */
-function objc_loadStringBuilder(Class super) 
+function Class objc_loadStringBuilder(Class super) 
 {
     Class cls = createClass(super, StringBuilder);
 	addMethod(cls, StringBuilder, 	ToString);
@@ -136,42 +137,38 @@ function objc_loadStringBuilder(Class super)
  * create a new StringBuilder
  * 
  */
-function StringBuilder* StringBuilder_init(StringBuilder* const this)
+method StringBuilder* New(StringBuilder* self)
 {
-    Object_init(this);
-    this->isa = objc_getClass("StringBuilder"); 
-	return this;
-}
-
-function StringBuilder* NewStringBuilder() { 
-	return StringBuilder_init(alloc(StringBuilder)); 
+    extends((Object*)self);
+    self->isa = objc_getClass("StringBuilder"); 
+	return self;
 }
 
 /*
  * sb_empty returns non-zero if the given StringBuilder is empty.
  */
-method int Empty(const StringBuilder* this)
+method int Empty(const StringBuilder* self)
 {
-	return (this->root == nullptr);
+	return (self->root == nullptr);
 }
 
 
-method int Appendc(StringBuilder* this, const char c)
+method int Appendc(StringBuilder* self, const char c)
 {
 	char str[2] = { c, 0 };
-	auto x = get_vptr(StringBuilder)->Append(this, str);
+	auto x = get_vptr(StringBuilder)->Append(self, str);
 	return x;
 }
 /*
  * sb_append adds a copy of the given string to a StringBuilder.
  */
-method int Append(StringBuilder* this, const char *str)
+method int Append(StringBuilder* self, const char *str)
 {
 	int	length = 0;
 	struct StringFragment * frag = nullptr;
 
 	if (nullptr == str || '\0' == *str)
-		return this->length;
+		return self->length;
 
 	length = strlen(str);
 	frag = (StringFragment*) DScalloc(1, sizeof(struct StringFragment));
@@ -182,14 +179,14 @@ method int Append(StringBuilder* this, const char *str)
 	frag->length = length;
 	frag->str = strdup(str);
 
-	this->length += length;
-	if (nullptr == this->root)
-		this->root = frag;
+	self->length += length;
+	if (nullptr == self->root)
+		self->root = frag;
 	else
-		this->trunk->next = frag;
+		self->trunk->next = frag;
 
-	this->trunk = frag;
-	return this->length;
+	self->trunk = frag;
+	return self->length;
 }
 
 /*
@@ -197,7 +194,7 @@ method int Append(StringBuilder* this, const char *str)
  */
 method 
 __attribute__((__format__ (__printf__, 2, 3)))
-int Appendf(StringBuilder* this, const char *format, ...)
+int Appendf(StringBuilder* self, const char *format, ...)
 {
 	const int MAX_FRAG_LENGTH = 4096;
 	int len = 0;
@@ -211,7 +208,7 @@ int Appendf(StringBuilder* this, const char *format, ...)
 	if (0 > len)
 		throw DSOutOfMemoryException("StringBuilder::Append", Source);
 
-	return Append(this, buf);
+	return Append(self, buf);
 }
 
 /*
@@ -219,55 +216,55 @@ int Appendf(StringBuilder* this, const char *format, ...)
  * StringBuilder. It is the callers responsibility to free the returned
  * reference.
  *
- * The StringBuilder is not modified by this function and can therefore continue
+ * The StringBuilder is not modified by self function and can therefore continue
  * to be used.
  */
-method String* Concat(const StringBuilder* this)
+method String* Concat(const StringBuilder* self)
 {
 	char *buf = nullptr;
 	char *c = nullptr;
 	StringFragment* frag = nullptr;
 
-	buf = DScalloc((this->length + 1), sizeof(char));
+	buf = DScalloc((self->length + 1), sizeof(char));
 	if (nullptr == buf)
 		return nullptr;
 
 	c = buf;
-	for (frag = this->root; frag; frag = frag->next) {
+	for (frag = self->root; frag; frag = frag->next) {
 		memcpy(c, frag->str, sizeof(char) * frag->length);
 		c += frag->length;
 	}
 
 	*c = '\0';
-	return NewString(buf);
+	return new(String, buf);
 }
 
 /*
  * sb_reset resets the given StringBuilder, freeing all previously appended
  * strings.
  */
-method void Reset(StringBuilder* this)
+method void Reset(StringBuilder* self)
 {
 	StringFragment* frag = nullptr;
 	StringFragment* next = nullptr;
 
 
-	this->root = nullptr;
-	this->trunk = nullptr;
-	this->length = 0;
+	self->root = nullptr;
+	self->trunk = nullptr;
+	self->length = 0;
 }
 
 /*
  * sb_free frees the given StringBuilder and all of its appended strings.
  */
-method void Dispose(StringBuilder* this)
+method void Dispose(StringBuilder* self)
 {
-	Reset(this);
+	Reset(self);
 }
 
 
-method char* ToString(const StringBuilder* this)
+method char* ToString(const StringBuilder* self)
 {
-	return Concat(this);
+	return Concat(self);
     // return "dark.StringBuilder";
 }

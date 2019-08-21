@@ -34,40 +34,40 @@ typedef enum { PS_UNCHECKED, PS_INVALID, PS_CHECKED } PathStatus;
 
 
 type (File) {
-    Class       isa;
-    String*     path;   
-    PathStatus  status;
-    int         prefixLength;
+    Class isa;
+    String*           path;   
+    PathStatus          status;
+    int                 prefixLength;
 
 };
 
 
-method File* NewFile(const char*);
-method File* NewFile(const char*, const char*);
-method File* File_init(File* this, const char*);
-method File* File_init(File* this, const char*, const char*);
-method File* File_init(File* this, File*, const char*);
+// method File* NewFile(const char*);
+// method File* NewFile(const char*, const char*);
+// method File* File_ctor(File* self, const char*);
+// method File* File_ctor(File* self, const char*, const char*);
+// method File* File_ctor(File* self, File*, const char*);
 
-interface (File, ToString,           char*,      (const File* const) );
-interface (File, CompareTo,          int,        (File* const, File* other) );
-interface (File, IsInvalid,          bool,       (File* const) );
-interface (File, GetPrefixLength,    int,        (File* const) );
-interface (File, GetName,            String*,  (File* const) );
-interface (File, GetParent,          String*,  (File* const) );
-interface (File, GetParentFile,      File*,    (File* const) );
-interface (File, GetPath,            String*,  (File* const) );
-interface (File, IsAbsolute,         bool,       (File* const) );
-interface (File, GetAbsolutePath,    String*,  (File* const) );
-interface (File, GetAbsoluteFile,    File*,    (File* const) );
-interface (File, GetCanonicalPath,   String*,  (File* const) );
-interface (File, GetCanonicalFile,   File*,    (File* const) );
-interface (File, CanRead,            bool,       (File* const) );
-interface (File, CanWrite,           bool,       (File* const) );
-interface (File, Exists,             bool,       (File* const) );
-interface (File, IsDireCTORy,        bool,       (File* const) );
-interface (File, IsFile,             bool,       (File* const) );
-interface (File, GetLength,          long,       (File* const) );
-// interface (File, List,               String**, (File* const) );
+delegate (File, New,                File*,      (File*, const char*) );
+delegate (File, ToString,           char*,      (const File* const) );
+delegate (File, CompareTo,          int,        (File* const, File* other) );
+delegate (File, IsInvalid,          bool,       (File* const) );
+delegate (File, GetPrefixLength,    int,        (File* const) );
+delegate (File, GetName,            String*,  (File* const) );
+delegate (File, GetParent,          String*,  (File* const) );
+delegate (File, GetParentFile,      File*,    (File* const) );
+delegate (File, GetPath,            String*,  (File* const) );
+delegate (File, IsAbsolute,         bool,       (File* const) );
+delegate (File, GetAbsolutePath,    String*,  (File* const) );
+delegate (File, GetAbsoluteFile,    File*,    (File* const) );
+delegate (File, GetCanonicalPath,   String*,  (File* const) );
+delegate (File, GetCanonicalFile,   File*,    (File* const) );
+delegate (File, CanRead,            bool,       (File* const) );
+delegate (File, CanWrite,           bool,       (File* const) );
+delegate (File, Exists,             bool,       (File* const) );
+delegate (File, IsDireCTORy,        bool,       (File* const) );
+delegate (File, IsFile,             bool,       (File* const) );
+delegate (File, GetLength,          long,       (File* const) );
 
 vtable (File) {
     const FileToString              ToString;
@@ -92,12 +92,10 @@ vtable (File) {
     const FileIsDireCTORy           IsDireCTORy;
     const FileIsFile                IsFile;
     const FileGetLength             GetLength;
-    // const FileList                  List;
 };
 
 class (File) {
     File*(*Create) (const char*);
-    // FileSystem* fs;
     char SeparatorChar;
     char Separator[2];
     char PathSeparatorChar;
@@ -109,7 +107,7 @@ function vptr(File);
  * 
  * Class Loader callback
  */
-function objc_loadFile(Class super) 
+function Class objc_loadFile(Class super) 
 {
     Class cls = createClass(super, File);
     addMethod(cls, File, ToString);
@@ -144,104 +142,104 @@ function objc_loadFile(Class super)
 }
 
 
-method bool IsInvalid(File* this) {
-    if (this->status == PS_UNCHECKED) {
-        this->status = (this->path == nullptr || !strcmp(this->path, ""))
+method bool IsInvalid(File* self) {
+    if (self->status == PS_UNCHECKED) {
+        self->status = (self->path == nullptr || !strcmp(self->path->value, ""))
             ? PS_INVALID 
             : PS_CHECKED;
     }
-    return this->status == PS_INVALID;
+    return self->status == PS_INVALID;
 
 }
 
-method String* GetName(File* this) {
-    int index = LastIndexOf(this->path, $($File.Separator), 0);
-    if (index < this->prefixLength) return Substring(this->path, this->prefixLength);
-    return Substring(this->path, index+1);    
+method String* GetName(File* self) {
+    int index = LastIndexOf(self->path, new(String, $File.Separator), 0);
+    if (index < self->prefixLength) return Substring(self->path, self->prefixLength);
+    return Substring(self->path, index+1);    
 }
 
-method String* GetParent(File* this) {
-    int index = LastIndexOf(this->path, $($File.Separator), 0);
-    if (index < this->prefixLength) {
-        if ((this->prefixLength > 0) && (this->path->length > this->prefixLength))
-            return Substring(this->path, 0, this->prefixLength);
+method String* GetParent(File* self) {
+    int index = LastIndexOf(self->path, new(String, $File.Separator), 0);
+    if (index < self->prefixLength) {
+        if ((self->prefixLength > 0) && (self->path->length > self->prefixLength))
+            return Substring(self->path, 0, self->prefixLength);
         return nullptr;
     } 
-    return Substring(this->path, 0, index);
+    return Substring(self->path, 0, index);
 }
 
 function File* FileWithLength(String* pathname, int prefixLength) {
-    File* this = alloc(File);
-    this->isa = objc_getClass("File");
-    this->path = CopyOf(pathname);
-    this->prefixLength = prefixLength;
-    return this;
+    File* self = alloc(File);
+    self->isa = objc_getClass("File");
+    self->path = CopyOf(pathname);
+    self->prefixLength = prefixLength;
+    return self;
 }
 
-method File* GetParentFile(File* this) {
-    auto p = GetParent(this);
+method File* GetParentFile(File* self) {
+    auto p = GetParent(self);
     if (p == nullptr) return nullptr;
-    return FileWithLength(p, this->prefixLength);
+    return FileWithLength(p, self->prefixLength);
 }
 
-method bool IsAbsolute(File* this) {
-    return fs.IsAbsolute(this);
+method bool IsAbsolute(File* self) {
+    return fs.IsAbsolute(self);
 }
 
-method String* GetAbsolutePath(File* this) {
-    return fs.ResolveFile(this);
+method String* GetAbsolutePath(File* self) {
+    return fs.ResolveFile(self);
 }
 
-method File* GetAbsoluteFile(File* this) {
-    auto absPath = fs.ResolveFile(this);
+method File* GetAbsoluteFile(File* self) {
+    auto absPath = fs.ResolveFile(self);
     return FileWithLength(absPath, fs.PrefixLength(absPath));
 }
 
-method String* GetCanonicalPath(File* this) {
+method String* GetCanonicalPath(File* self) {
     // if (IsInvalid()) {
     //     throw new IOException.Exception("Invalid file path");
     // }
-    return fs.Canonicalize(fs.ResolveFile(this));
+    return fs.Canonicalize(fs.ResolveFile(self));
 }
 
-method File* GetCanonicalFile(File* this) {
-    auto canonPath = GetCanonicalPath(this);
+method File* GetCanonicalFile(File* self) {
+    auto canonPath = GetCanonicalPath(self);
     return FileWithLength(canonPath, fs.PrefixLength(canonPath));
 }
 
-method bool CanWrite(File* this) {
-    if (IsInvalid(this)) return false;
-    return fs.CheckAccess(this, ACCESS_WRITE);
+method bool CanWrite(File* self) {
+    if (IsInvalid(self)) return false;
+    return fs.CheckAccess(self, ACCESS_WRITE);
 }
  
-method bool CanRead(File* this) {
-    if (IsInvalid(this)) return false;
-    return fs.CheckAccess(this, ACCESS_READ);
+method bool CanRead(File* self) {
+    if (IsInvalid(self)) return false;
+    return fs.CheckAccess(self, ACCESS_READ);
 }
 
-method bool Exists(File* this) {
-    if (IsInvalid(this)) return false;
-    return ((fs.GetBooleanAttributes(this) & BA_EXISTS) != 0);
+method bool Exists(File* self) {
+    if (IsInvalid(self)) return false;
+    return ((fs.GetBooleanAttributes(self) & BA_EXISTS) != 0);
 }
 
-method bool IsDireCTORy(File* this) {
-    if (IsInvalid(this)) return false;
-    return ((fs.GetBooleanAttributes(this) & BA_DIRECTORY) != 0);
+method bool IsDireCTORy(File* self) {
+    if (IsInvalid(self)) return false;
+    return ((fs.GetBooleanAttributes(self) & BA_DIRECTORY) != 0);
 }
 
-method bool IsFile(File* this) {
-    if (IsInvalid(this)) return false;
-    return ((fs.GetBooleanAttributes(this) & BA_REGULAR) != 0);
+method bool IsFile(File* self) {
+    if (IsInvalid(self)) return false;
+    return ((fs.GetBooleanAttributes(self) & BA_REGULAR) != 0);
 }
 
-method long GetLength(File* this) {
-    if (IsInvalid(this)) return 0L;
-	return fs.GetLength(this);
+method long GetLength(File* self) {
+    if (IsInvalid(self)) return 0L;
+	return fs.GetLength(self);
 }
 
-// method String** List(File* this) {
-//     if (IsInvalid(this)) return nullptr;
-// 	return fs.List(this);
+// method String** List(File* self) {
+//     if (IsInvalid(self)) return nullptr;
+// 	return fs.List(self);
 // }
 
     // const FileList                  List;
@@ -262,75 +260,74 @@ function bool isLetter(char c) {
 //     else return p;
 // }
 
-method int GetPrefixLength(File* const this) {
-    return this->prefixLength;
+method int GetPrefixLength(File* const self) {
+    return self->prefixLength;
 }
 
-method String* GetPath(File* const this) {
-    return this->path;
+method String* GetPath(File* const self) {
+    return self->path;
 }
 
-method char* ToString(const File* const this) {
-    // return this->name;
+method char* ToString(const File* const self) {
+    // return self->name;
     return "";
 }
 
-method int CompareTo(File* const this, File* other) {
-    return fs.Compare(this, other);
+method int CompareTo(File* const self, File* other) {
+    return fs.Compare(self, other);
 }
 
 /**
  * Initialize a new File
  */
-method File* File_init(File* const this, const char* path) {
-    Comparable_init(this);
-    this->isa = objc_getClass("File");
-    this->path = fs.Normalize($(path));
-    this->prefixLength = fs.PrefixLength(this->path);
-    return this;
+method File* NewFloat(File* self, const char* path) {
+    extends((Comparable*)self);
+    self->isa = objc_getClass("File");
+    self->path = fs.Normalize(new(String, path));
+    self->prefixLength = fs.PrefixLength(self->path);
+    return self;
 }
 
-method File* File_init(File* const this, const char* parent, const char* child) {
-    Comparable_init(this);
-    this->isa = objc_getClass("File");
+method File* New(File* self, const char* parent, const char* child) {
+    extends((Comparable*)self);
+    self->isa = objc_getClass("File");
     if (!strcmp("", parent)) {
-        this->path = fs.Resolve(fs.GetDefaultParent(), 
+        self->path = fs.Resolve(fs.GetDefaultParent(), 
                         fs.Normalize(child));
     } else {
-        this->path = fs.Resolve(fs.Normalize(parent), 
+        self->path = fs.Resolve(fs.Normalize(parent), 
                         fs.Normalize(child));
     }
-    this->prefixLength = fs.PrefixLength(this->path);
-    return this;
+    self->prefixLength = fs.PrefixLength(self->path);
+    return self;
 }
 
-method File* File_init(File* const this, File* parent, const char* child) {
-    Comparable_init(this);
-    this->isa = objc_getClass("File");
+method File* New(File* self, File* parent, const char* child) {
+    extends((Comparable*)self);
+    self->isa = objc_getClass("File");
     if (parent->path != nullptr) {
         if (!strcmp("", parent->path)) {
-        this->path = fs.Resolve(fs.GetDefaultParent(), 
+        self->path = fs.Resolve(fs.GetDefaultParent(), 
                         fs.Normalize(child));
         } else {
-        this->path = fs.Resolve(parent->path, 
+        self->path = fs.Resolve(parent->path, 
                         fs.Normalize(child));
         }
     } else {
-        this->path = fs.Normalize(child);
+        self->path = fs.Normalize(child);
     }
-    this->prefixLength = fs.PrefixLength(this->path);
-    return this;
+    self->prefixLength = fs.PrefixLength(self->path);
+    return self;
 }
-
 /**
  * new File
  * 
  * 
  */
-method File* NewFile(const char* path) {
-    return File_init(alloc(File), path);
-}
+// method File* NewFile(const char* path) {
+//     return File_ctor(alloc(File), path);
+// }
 
-method File* NewFile(const char* parent, const char* child) {
-    return File_init(alloc(File), parent, child);
-}
+// method File* NewFile(const char* parent, const char* child) {
+//     return File_ctor(alloc(File), parent, child);
+// }

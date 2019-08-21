@@ -64,7 +64,7 @@ static inline char * strndup (const char *str, size_t size)
 {
   size_t len = strlen(str);
   len = size < len ? size : len;
-  char *result = DScalloc(len + 1, sizeof(char));
+  char *result = (char*)DScalloc(len + 1, sizeof(char));
   return strncpy(result, str, len);
 }
 
@@ -92,7 +92,7 @@ static inline char* STR_JOIN(int count, ...)
         size += strlen(str);
     }
     va_end(args1);
-    char* result = DScalloc((size+1),  sizeof(char));
+    char* result = (char*)DScalloc((size+1),  sizeof(char));
 
     /**
      * Now build the result string
@@ -130,7 +130,7 @@ static inline int strcmpi (const char *s1, const char *s2)
 
 
 #ifndef _WIN64
-static inline strlwr(char *str)
+static inline char* strlwr(char *str)
 {
   char *s;
 
@@ -141,7 +141,7 @@ static inline strlwr(char *str)
 #endif
 
 #ifndef _WIN64
-static inline strupr(char *str)
+static inline char* strupr(char *str)
 {
   char *s;
 

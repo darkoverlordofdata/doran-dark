@@ -31,7 +31,6 @@
     "m",
     "gc",
     "BlocksRuntime",
-    "freetype",
     "glfw",
     "GLEW",
     "GL"

@@ -23,37 +23,27 @@
 // and/or shader is also stored for future reference by string
 // handles. 
 
-type (ResourceManager) {
+type (ResourceManager) 
+{
     Class isa;
 };
-/**
- * ResourceManager API
- */
-// ResourceManager* NewResourceManager();
-// ResourceManager* ResourceManager_init(ResourceManager* self);
-// ResourceManager* ResourceManager_alloc();
-
-interface (ResourceManager, ToString,     char*, (const ResourceManager* const));
-
-// Shader*     LoadShader(const GLchar*, const GLchar*, char*);
-// Shader*     GetShader(char*);
-// Texture2D*  LoadTexture(const GLchar*, bool, char*);
-// Texture2D*  GetTexture(char*);
-// void        Dtor(ResourceManager*);
+delegate (ResourceManager, New,      ResourceManager*, (ResourceManager*));
+delegate (ResourceManager, ToString, char*, (const ResourceManager* const));
 
 static  char*       rdbuf(FILE* f);
 static  Shader*     loadShaderFromFile(const GLchar*, const GLchar*);
 static  Texture2D*  loadTextureFromFile(const GLchar*, bool);
 
-
-vtable (ResourceManager) {
+vtable (ResourceManager) 
+{
     ResourceManagerToString ToString;
     ObjectEquals          Equals;
     ObjectGetHashCode     GetHashCode;
     ObjectDispose         Dispose;
 };
 
-class (ResourceManager) {
+class (ResourceManager) 
+{
     Map* Shaders;
     Map* Textures;
     // Loads (and generates) a shader program from file loading vertex, fragment (and geometry) shader's source code. If gShaderFile is not nullptr, it also loads a geometry shader
@@ -83,9 +73,9 @@ function vptr(ResourceManager);
 /**
  * ResourceManager
  */
-function ResourceManager* ResourceManager_init(ResourceManager* self) {
-    DSObject_init(self); 
-    self->isa = getResourceManagerIsa();
+function ResourceManager* ResourceManager_ctor(ResourceManager* self) {
+    New((Object*)self); 
+    self->isa = objc_getClass("ResourceManager");
     return self;
 }
 
@@ -162,8 +152,8 @@ function Texture2D* loadTextureFromFile(const GLchar *file, bool alpha)
  */
 function Shader* LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, char* name)
 {
-    Put($ResourceManager.Shaders, name, loadShaderFromFile(vShaderFile, fShaderFile));
-    return Get($ResourceManager.Shaders, name);
+    Put($ResourceManager.Shaders, name, (Object*)loadShaderFromFile(vShaderFile, fShaderFile));
+    return (Shader*)Get($ResourceManager.Shaders, name);
     // return s;
 }
 
@@ -176,7 +166,7 @@ function Shader* LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile
  */
 function Shader* GetShader(char* name)
 {
-    return Get($ResourceManager.Shaders, name);
+    return (Shader*)Get($ResourceManager.Shaders, name);
 }
 
 /**
@@ -191,7 +181,7 @@ function Shader* GetShader(char* name)
 function Texture2D* LoadTexture(const GLchar *file, bool alpha, char* name)
 {
     Texture2D* tex = loadTextureFromFile(file, alpha);
-    Put($ResourceManager.Textures, name, tex);
+    Put($ResourceManager.Textures, name, (Object*)tex);
     return tex;
 }
 
@@ -204,7 +194,7 @@ function Texture2D* LoadTexture(const GLchar *file, bool alpha, char* name)
  */
 function Texture2D* GetTexture(char* name)
 {
-    Texture2D* tex = Get($ResourceManager.Textures, name);
+    Texture2D* tex = (Texture2D*)Get($ResourceManager.Textures, name);
     return tex;
 }
 
@@ -240,7 +230,7 @@ function char* rdbuf(FILE* f)
     fseek(f, 0L, SEEK_END);
     long s = ftell(f);
     rewind(f);
-    char* buf = DScalloc(1, s+1);
+    char* buf = (char*)(1, s+1);
     buf[s] = '\0';
 
     if (buf != nullptr)
@@ -265,6 +255,7 @@ method char* ToString(const ResourceManager* const self)
 function Class objc_loadResourceManager(Class super) 
 {
     Class cls = createClass(super, ResourceManager);
+    addMethod(cls, ResourceManager,  ToString);
 
     $ResourceManager.Shaders = new(Map, of(Shader));
     $ResourceManager.Textures = new(Map, of(Texture2D));

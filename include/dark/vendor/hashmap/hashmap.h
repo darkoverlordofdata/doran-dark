@@ -130,7 +130,7 @@ struct hashmap {
  *
  * Returns 0 on success and -errno on failure.
  */
-int hashmap_init(struct hashmap *map, size_t (*hash_func)(const void *),
+int hashmap_ctor(struct hashmap *map, size_t (*hash_func)(const void *),
     int (*key_compare_func)(const void *, const void *),
     size_t initial_size);
 
@@ -220,7 +220,7 @@ void hashmap_iter_set_data(const struct hashmap_iter *iter, void *data);
 
 /*
  * Invoke func for each entry in the hashmap.  Unlike the hashmap_iter_*()
- * interface, this function supports calls to hashmap_remove() during iteration.
+ * delegate, this function supports calls to hashmap_remove() during iteration.
  * However, it is an error to put or remove an entry other than the current one,
  * and doing so will immediately halt iteration and return an error.
  * Iteration is stopped if func returns non-zero.  Returns func's return

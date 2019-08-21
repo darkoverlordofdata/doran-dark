@@ -27,8 +27,8 @@ type (IOBuff) {
 
 typedef struct File File;
 
-method int GetPrefixLength(File* const this);
-method String* GetPath(File* const this);
+method int GetPrefixLength(File* const self);
+method String* GetPath(File* const self);
 
 function bool fsIsSlash(char c);
 function bool fsIsLetter(char c);
@@ -138,14 +138,14 @@ function String* fsSlashify(String* p) {
 }
 
 function String* fsGetUserPath() {
-    String* user = $(".");
+    String* user = new(String, ".");
     String* result = fsNormalize(user);
     return result;
 }
 
 function String* fsGetDrive(String* path) {
     int p1 = fsPrefixLength(path);
-    return (p1 == 3) ? $(strndup(path->value, 2)) : nullptr;
+    return (p1 == 3) ? new(String, strndup(path->value, 2)) : nullptr;
 }
 
 function int fsDriveIndex(char d) {
@@ -313,7 +313,7 @@ function String* fsResolve(String* parent, String* child) {
         }
         if (cn == childStart) {
             if (CharAt(parent, pn - 1) == fsSlash)
-                return $(strndup(parent->value, pn-1));
+                return new(String, strndup(parent->value, pn-1));
             return parent;
         }
     }
@@ -333,11 +333,11 @@ function String* fsResolve(String* parent, String* child) {
         memcpy(theChars+parentEnd, child->value+childStart, cn);
     }
 
-    return $(theChars);
+    return new(String, theChars);
 }
 
 function String* fsGetDefaultParent() {
-    return $(fsSlashString);
+    return new(String, fsSlashString);
 }
 
 function String* fsFromURIPath(String* path) {
@@ -352,7 +352,7 @@ function String* fsFromURIPath(String* path) {
         length--;
     }
     p[length-1] = 0;
-    String* result = $(p);
+    String* result = new(String, p);
     return result;
 }
 
@@ -387,14 +387,14 @@ function String* fsResolveFile(File* f) {
         String* up = fsGetUserPath();
         String* ud = fsGetDrive(up);
         if ((ud != nullptr) && StartsWith(path, ud, 0)) {
-            String* temp = $(strndup(path->value, 2));
+            String* temp = new(String, strndup(path->value, 2));
             String* dir = fsSlashify(temp);
             String* result = Concat(up, dir);
             return result;
         }
         char drive = path->value[0];
         String* dir = fsGetDriveDireCTORy(drive);
-        String* temp = $(strndup(path->value, 2));
+        String* temp = new(String, strndup(path->value, 2));
         StringBuilder* sb = new(StringBuilder);
         Appendc(sb, drive);
         Appendc(sb, ':');
@@ -416,7 +416,7 @@ function String* fsCanonicalize(String* path) {
             if ((c >= 'A') && (c <= 'Z'))
                 return path;
             char p[2] = { CharAt(path, 0)-32, 0 };
-            return $(join(p, &path->value[1]));
+            return new(String, join(p, &path->value[1]));
 
         } else if ((len == 3) &&
         (fsIsLetter(CharAt(path, 0))) &&
@@ -427,7 +427,7 @@ function String* fsCanonicalize(String* path) {
             if ((c >= 'A') && (c <= 'Z'))
                 return path;
             char p[2] = { CharAt(path, 0)-32, 0 };
-            return $(join(p, &path->value[1]));
+            return new(String, join(p, &path->value[1]));
         }
     }
     if (!fs.UseCanonCaches) {

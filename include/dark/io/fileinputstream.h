@@ -34,15 +34,13 @@ type (FileInputStream) {
     bool closed;
 };
 
-ctor (FileInputStream, char*);
-ctor (FileInputStream, File*);
-
-interface (FileInputStream, ToString, const char*, (const FileInputStream* const) );
-interface (FileInputStream, ReadOne,         int,    (FileInputStream*) );
-interface (FileInputStream, Read,            int,    (FileInputStream*, IOBuff*, int, int) );
-interface (FileInputStream, Skip,            long,   (FileInputStream*, long) );
-interface (FileInputStream, Available,       int,    (FileInputStream*) );
-interface (FileInputStream, Close,           void,   (FileInputStream*) );
+delegate (FileInputStream, New,         const FileInputStream*, (FileInputStream*, const char*) );
+delegate (FileInputStream, ToString,    const char*, (const FileInputStream* const) );
+delegate (FileInputStream, ReadOne,     int,    (FileInputStream*) );
+delegate (FileInputStream, Read,        int,    (FileInputStream*, IOBuff*, int, int) );
+delegate (FileInputStream, Skip,        long,   (FileInputStream*, long) );
+delegate (FileInputStream, Available,   int,    (FileInputStream*) );
+delegate (FileInputStream, Close,       void,   (FileInputStream*) );
 
 vtable (FileInputStream) {
     const FileInputStreamToString     ToString;
@@ -64,7 +62,7 @@ function vptr(FileInputStream);
  * 
  * Class Loader callback
  */
-function objc_loadFileInputStream(Class super) 
+function Class objc_loadFileInputStream(Class super) 
 {
     Class cls = createClass(super, FileInputStream);
     addMethod(cls, FileInputStream, ToString);
@@ -84,36 +82,37 @@ function objc_loadFileInputStream(Class super)
 }
 
 
-method FileInputStream* FileInputStream_init(FileInputStream* const this, char* name) {
-    return FileInputStream_init(this, (name != nullptr ? NewFile(name) : nullptr));
-}
-
-method FileInputStream* FileInputStream_init(FileInputStream* const this, File* file) 
+method FileInputStream* New(FileInputStream* self, File* file) 
 {
-    Object_init(this);
-    this->isa = objc_getClass("FileInputStream");
+    extends((Object*)self);
+    self->isa = objc_getClass("FileInputStream");
     auto name = file != nullptr ? GetPath(file) : nullptr;
     if (name == nullptr)
         throw DSNullPointerException(Source);
     if (IsInvalid(file))
         throw DSFileNotFoundException(name, Source);
-    this->fd = fopen(name, "r");
-    if (this->fd == nullptr) {
+    self->fd = fopen(name, "r");
+    if (self->fd == nullptr) {
         Log("FileInputStream.FromFile Unable to Open %s\n", name);
         throw DSFileNotFoundException(name, Source);
     }
-    return this;
+    return self;
 }
 
-method const char* ToString(const FileInputStream* const this) {
+// method FileInputStream* New(FileInputStream* self, char* name) {
+//     return New(self, (name != nullptr ? new(File(name)) : nullptr));
+// }
+
+
+method const char* ToString(const FileInputStream* const self) {
     return "FileInputStream";
 }
 
-method int ReadOne(FileInputStream* this) {
-    return fgetc(this->fd);
+method int ReadOne(FileInputStream* self) {
+    return fgetc(self->fd);
 }
 
-method int Read(FileInputStream* this, IOBuff* buf, int offset, int len) {
+method int Read(FileInputStream* self, IOBuff* buf, int offset, int len) {
     if (len <= 0)
         len = buf->len;
     if (buf->len <= 0 && len <= 0) 
@@ -121,8 +120,8 @@ method int Read(FileInputStream* this, IOBuff* buf, int offset, int len) {
     if (offset < 0 || buf->len - offset < len) 
         throw DSIndexOutOfBoundsException(offset, Source);
 
-    char* bytes = DScalloc(1, len-offset);
-    int nread = fread(bytes, 1, len-offset, this->fd);
+    char* bytes = (char*)DScalloc(1, len-offset);
+    int nread = fread(bytes, 1, len-offset, self->fd);
     if (nread < 0) 
         nread = -1;
     else
@@ -130,18 +129,18 @@ method int Read(FileInputStream* this, IOBuff* buf, int offset, int len) {
     return nread;
 }
 
-method long Skip(FileInputStream* this, long n)  {
+method long Skip(FileInputStream* self, long n)  {
     long i=0;
     for (; i<n; i++)
-        if (ReadOne(this) < 0)
+        if (ReadOne(self) < 0)
             return -1;
     return i;
 }
 
-method int Available(FileInputStream* this) {
+method int Available(FileInputStream* self) {
     return 1;
 }
 
-method void Close(FileInputStream* this) {
-    this->fd = nullptr;
+method void Close(FileInputStream* self) {
+    self->fd = nullptr;
 }

@@ -64,20 +64,17 @@ type (Game) {
 /**
  * Game API
  */
-// Game* NewGame(int Width, int Height);
-// Game* Game_alloc();
-// Game* Game_init(Game* const self, int, int);
-
-interface (Game, ToString,      char*, (const Game* const));
-interface (Game, Start,         void, (Game* const));
-interface (Game, ProcessInput,  void, (Game* const, GLfloat dt));
-interface (Game, Update,        void, (Game* const, GLfloat dt));
-interface (Game, Render,        void, (Game* const));
-interface (Game, DoCollisions,  void, (Game* const));
-interface (Game, ResetLevel,    void, (Game* const));
-interface (Game, ResetPlayer,   void, (Game* const));
-interface (Game, SetKey,        void, (Game* const, int key, bool value));
-interface (Game, SetState,      void, (Game* const, GameState state));
+delegate (Game, New,            Game*, (Game*, const int, const int));
+delegate (Game, ToString,       char*, (const Game* const));
+delegate (Game, Start,          void, (Game* const));
+delegate (Game, ProcessInput,   void, (Game* const, GLfloat dt));
+delegate (Game, Update,         void, (Game* const, GLfloat dt));
+delegate (Game, Render,         void, (Game* const));
+delegate (Game, DoCollisions,   void, (Game* const));
+delegate (Game, ResetLevel,     void, (Game* const));
+delegate (Game, ResetPlayer,    void, (Game* const));
+delegate (Game, SetKey,         void, (Game* const, int key, bool value));
+delegate (Game, SetState,       void, (Game* const, GameState state));
 
 
 /**
@@ -143,7 +140,7 @@ type (Collision)
  */
 function Collision* CollisionTuple(bool isTrue, Direction dir, Vec2 vec)
 {
-    Collision* self = (Collision*)DSmalloc(sizeof(Collision));
+    var self = alloc(Collision);
     self->first = isTrue;
     self->second = dir;
     self->third = vec;
@@ -157,11 +154,12 @@ function Collision* CollisionTuple(bool isTrue, Direction dir, Vec2 vec)
  * @param Height of screen
  * 
  */
-function Game* Game_init(
-    Game* const self, 
-    int Width, 
-    int Height)
+method Game* New(
+    Game* self, 
+    const int Width, 
+    const int Height)
 {
+    extends((Object*)self);
     self->isa = objc_getClass("Game");
     self->Levels = new(Array, 4);
     self->Level = 0;
@@ -206,15 +204,15 @@ method void Start(Game* self)
 
     // Load textures
     $ResourceManager.LoadTexture("textures/block.png", false, "block");
-    // $ResourceManager.LoadTexture("textures/block.png", false, "paddle");
     $ResourceManager.LoadTexture("textures/paddle.png", false, "paddle");
     $ResourceManager.LoadTexture("textures/block.png", false, "block");
     $ResourceManager.LoadTexture("textures/block_solid.png", false, "block_solid");
-    $ResourceManager.LoadTexture("textures/awesomeface.png", false, "face");
-    $ResourceManager.LoadTexture("textures/background.png", false, "background");
+    $ResourceManager.LoadTexture("textures/awesomeface.png", true, "face");
+    $ResourceManager.LoadTexture("textures/background.jpg", false, "background");
     // Set render-specific controls
     Renderer = new(SpriteRenderer, $ResourceManager.GetShader("sprite"));
     // Load levels
+
     Add(self->Levels, (Object*)new (GameLevel, "levels/one.lvl", self->Width, (self->Height * 0.5)));
     Add(self->Levels, (Object*)new (GameLevel, "levels/two.lvl", self->Width, self->Height * 0.5));
     Add(self->Levels, (Object*)new (GameLevel, "levels/three.lvl", self->Width, self->Height * 0.5));

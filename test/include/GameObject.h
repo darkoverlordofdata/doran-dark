@@ -46,12 +46,9 @@ type (GameObject)
 /**
  * GameObject API
  */
-// GameObject* GameObject_init(GameObject* const self, char* name, Vec2 Position, Vec2 Size, Texture2D* Sprite, Vec3 Color);
-// GameObject* GameObject_alloc();
-// GameObject* NewGameObject(char* name, Vec2 Position, Vec2 Size, Texture2D* Sprite, Vec3 Color);
-
-interface (GameObject, ToString,    char*, (const GameObject* const));
-interface (GameObject, Draw,        void, (GameObject* const, const SpriteRenderer*));
+delegate (GameObject, New,      GameObject*, (GameObject*, char*, Vec2, Vec2, Texture2D*, Vec3));
+delegate (GameObject, ToString, char*, (const GameObject* const));
+delegate (GameObject, Draw,     void, (GameObject* const, const SpriteRenderer*));
 
 
 vtable (GameObject)
@@ -89,15 +86,15 @@ function Class objc_loadGameObject(Class super)
  * @param Sprite to display
  * @param Color tiniting color
  */
-function GameObject* GameObject_init(
-    GameObject* const self, 
+method GameObject* New(
+    GameObject* self, 
     char* name, 
     Vec2 Position, 
     Vec2 Size, 
     Texture2D* Sprite, 
     Vec3 Color)
 {
-	Object_init((Object*)self);
+	New((Object*)self);
     self->isa = objc_getClass("GameObject");
     self->IsSolid = false;
     self->Destroyed = false;

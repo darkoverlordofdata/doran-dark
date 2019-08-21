@@ -26,7 +26,8 @@
 // relevant state data from GameObject. Contains some extra
 // functionality specific to Breakout's ball object that
 // were too specific for within GameObject alone.
-type (BallObject) {
+type (BallObject)  // extends GameObject
+{
     Class       isa;
     Vec2        Position;
     Vec2        Size;
@@ -44,18 +45,15 @@ type (BallObject) {
 /**
  * BallObject API
  */
-interface (BallObject, ToString,    char*, (const BallObject* const));
-interface (BallObject, Draw,        void, (BallObject* const, const SpriteRenderer*));
-interface (BallObject, Move,        void, (BallObject* const, const GLfloat, const GLuint));
-interface (BallObject, Reset,       void, (BallObject* const, const Vec2, const Vec2));
-
-// BallObject* NewBallObject(Vec2 Position, float Radius, Vec2 Velocity, Texture2D* Sprite);
-function BallObject* BallObject_init(BallObject* self, Vec2 Position, float Radius, Vec2 Velocity, Texture2D* Sprite);
-// BallObject* BallObject_alloc();
+delegate (BallObject, New,      BallObject*, (BallObject* self, Vec2 Position, float Radius, Vec2 Velocity, Texture2D* Sprite));
+delegate (BallObject, ToString, char*, (const BallObject* const));
+delegate (BallObject, Draw,     void, (BallObject* const, const SpriteRenderer*));
+delegate (BallObject, Move,     void, (BallObject* const, const GLfloat, const GLuint));
+delegate (BallObject, Reset,    void, (BallObject* const, const Vec2, const Vec2));
 
 
-
-vtable (BallObject) {
+vtable (BallObject) 
+{
     const BallObjectToString    ToString;
     const ObjectEquals          Equals;
     const ObjectGetHashCode     GetHashCode;
@@ -85,7 +83,6 @@ function Class objc_loadBallObject(Class super)
     return cls;
 }
 
-
 /**
  * BallObject
  * 
@@ -94,7 +91,7 @@ function Class objc_loadBallObject(Class super)
  * @param Velocity initial speed of ball
  * @param Sprite to display
  */
-function BallObject* BallObject_init(
+method BallObject* New(
     BallObject* const self, 
     Vec2 Position, 
     float Radius, 
@@ -102,13 +99,12 @@ function BallObject* BallObject_init(
     Texture2D* Sprite)
 {
     Radius = Radius != 0 ? Radius : 12.5f;
-    GameObject_init((GameObject*)self, "ball", Position, (Vec2){ Radius*2, Radius*2 }, Sprite, (Vec3){ 1, 1, 1 });
+    extends((GameObject*)self, "ball", Position, (Vec2){ Radius*2, Radius*2 }, Sprite, (Vec3){ 1, 1, 1 });
     self->isa = objc_getClass("BallObject");
     self->Velocity = Velocity;
     self->Radius = Radius;
     return self;
 }
-
 /**
  * Draw
  * 

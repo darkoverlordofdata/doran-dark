@@ -47,14 +47,15 @@ type (Long)
     long value;
 };
 
-interface (Long, ToString,        char*, (const Long* const));
-interface (Long, CompareTo,       int, (const Long* const, const Long* const));
-interface (Long, IntValue,        int, (const Long* const));
-interface (Long, LongValue,       long, (const Long* const));
-interface (Long, FloatValue,      float, (const Long* const));
-interface (Long, DoubleValue,     double, (const Long* const));
-interface (Long, CharValue,       char, (const Long* const));
-interface (Long, ShortValue,      short, (const Long* const));
+delegate (Long, New,        Long*, (Long*, const long));
+delegate (Long, ToString,   char*, (const Long* const));
+delegate (Long, CompareTo,  int, (const Long* const, const Long* const));
+delegate (Long, IntValue,   int, (const Long* const));
+delegate (Long, LongValue,  long, (const Long* const));
+delegate (Long, FloatValue, float, (const Long* const));
+delegate (Long, DoubleValue,double, (const Long* const));
+delegate (Long, CharValue,  char, (const Long* const));
+delegate (Long, ShortValue, short, (const Long* const));
 
 
 /**
@@ -80,7 +81,7 @@ function vptr(Long);
  * 
  * Class Loader callback
  */
-function objc_loadLong(Class super) 
+function Class objc_loadLong(Class super) 
 {
     Class cls = createClass(super, Long);
     addMethod(cls, Long,        ToString);
@@ -105,16 +106,12 @@ function objc_loadLong(Class super)
  * @param value of long
  * 
  */
-function Long* Long_init(Long* const this, const long value)
+method Long* New(Long* self, const long value)
 {
-    Number_init(this);
-    this->isa = objc_getClass("Long");
-    this->value = value;
-    return this;
-}
-
-function Long* NewLong(const long value) { 
-    return Long_init(alloc(Long), value); 
+    extends((Number*)self);
+    self->isa = objc_getClass("Long");
+    self->value = value;
+    return self;
 }
 
 /**
@@ -153,60 +150,60 @@ method int Compare(const long x, const long y) {
  * @param   other  Long to be compared
  * @return same as Long_Compare
  */
-method int CompareTo(const Long* const this, const Long* const other) {
-    return Compare(this->value, other->value);
+method int CompareTo(const Long* const self, const Long* const other) {
+    return Compare(self->value, other->value);
 }
 
 /**
- * Returns the value of this value cast as an int
+ * Returns the value of self value cast as an int
  */
-method int IntValue(const Long* const this) {
-    return (int)this->value;
+method int IntValue(const Long* const self) {
+    return (int)self->value;
 }
 
 /**
- * Returns the value of this value cast as a long
+ * Returns the value of self value cast as a long
  */
-method long LongValue(const Long* const this) {
-    return (long)this->value;
+method long LongValue(const Long* const self) {
+    return (long)self->value;
 }
 
 /**
- * Returns the value of this value cast as a float
+ * Returns the value of self value cast as a float
  */
-method float FloatValue(const Long* const this) {
-    return (float)this->value;
+method float FloatValue(const Long* const self) {
+    return (float)self->value;
 }
 
 /**
- * Returns the value of this value cast as a double
+ * Returns the value of self value cast as a double
  */
-method double DoubleValue(const Long* const this) {
-    return (double)this->value;
+method double DoubleValue(const Long* const self) {
+    return (double)self->value;
 }
 
 /**
- * Returns the value of this value cast as a char
+ * Returns the value of self value cast as a char
  */
-method char CharValue(const Long* const this) {
-    return (char)this->value;
+method char CharValue(const Long* const self) {
+    return (char)self->value;
 }
 
 /**
- * Returns the value of this value cast as a short
+ * Returns the value of self value cast as a short
  */
-method short ShortValue(const Long* const this) {
-    return (short)this->value;
+method short ShortValue(const Long* const self) {
+    return (short)self->value;
 }
 
-method bool Equals(const Long* const this, const Long* const other)
+method bool Equals(const Long* const self, const Long* const other)
 {
-    return this->value == other->value;
+    return self->value == other->value;
 }
 
-method char* ToString(const Long* const this)
+method char* ToString(const Long* const self)
 {
     static char str[20];
-    sprintf(str, "%d", this->value);
+    sprintf(str, "%d", self->value);
     return str;
 }

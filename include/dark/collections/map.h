@@ -66,18 +66,17 @@ type (Map) {
 	int tableSize;
 }; 
 
-ctor (Map);
-ctor (Map, Class);
-interface (Map, ToString,    char*,      (const Map* const) );
-interface (Map, Dispose,     void,       (Map* const) );
-interface (Map, Length,      int,        (const Map* const) );
-interface (Map, HashInt,     uint,       (Map* const, char*) );
-interface (Map, Hash,        int,        (Map* const, char*) );
-interface (Map, Rehash,      int,        (Map* const) );
-interface (Map, Put,         int,        (Map* const, char*, Object*) );
-interface (Map, Get,         Object*,    (Map* const, char*) );
-interface (Map, ForEach,     int,        (Map* const, Map_Iterator, Object*) );
-interface (Map, Remove,      int,        (Map* const, char*) );
+delegate (Map, New,         Map*,       (Map*, Class) );
+delegate (Map, ToString,    char*,      (const Map* const) );
+delegate (Map, Dispose,     void,       (Map* const) );
+delegate (Map, Length,      int,        (const Map* const) );
+delegate (Map, HashInt,     uint,       (Map* const, char*) );
+delegate (Map, Hash,        int,        (Map* const, char*) );
+delegate (Map, Rehash,      int,        (Map* const) );
+delegate (Map, Put,         int,        (Map* const, char*, Object*) );
+delegate (Map, Get,         Object*,    (Map* const, char*) );
+delegate (Map, ForEach,     int,        (Map* const, Map_Iterator, Object*) );
+delegate (Map, Remove,      int,        (Map* const, char*) );
 
 vtable (Map) {
     const MapToString       ToString;
@@ -99,7 +98,7 @@ function vptr(Map);
  * 
  * Class Loader callback
  */
-function objc_loadMap(Class super) 
+function Class objc_loadMap(Class super) 
 {
     Class cls = createClass(super, Map);
     addMethod(cls, Map, ToString);
@@ -133,7 +132,7 @@ function objc_loadMap(Class super)
 
 /* The implementation here was originally done by Gary S. Brown.  I have
    borrowed the tables directly, and made some minor changes to the
-   crc32-function (including changing the interface). //ylo */
+   crc32-function (including changing the delegate). //ylo */
 
   /* ============================================================= */
   /*  COPYRIGHT (C) 1986 Gary S. Brown.  You may use this program, or       */
@@ -242,7 +241,7 @@ function unsigned long crc32(const unsigned char *s, unsigned int len)
 /*
  * Hashing function for a string
  */
-method unsigned int HashInt(Map* const this, char* keystring)
+method unsigned int HashInt(Map* const self, char* keystring)
 {
     unsigned long key = crc32((unsigned char*)(keystring), strlen(keystring));
 
@@ -259,48 +258,49 @@ method unsigned int HashInt(Map* const this, char* keystring)
 	/* Knuth's Multiplicative Method */
 	key = (key >> 3) * 2654435761;
 
-	return key % this->tableSize;
+	return key % self->tableSize;
 }
 
 
-method Map* Map_init(Map* const this)
+method Map* New(Map* const self, Class typeOf)
 {
-    return Map_init(this, nullptr);
+    extends((Object*)self);
+
+    self->isa = objc_getClass("Map");
+    self->typeOf = typeOf;
+    self->data = (MapNode*)DScalloc(INITIAL_SIZE, sizeof(MapNode));
+	self->tableSize = INITIAL_SIZE;
+	self->length = 0;
+
+    return self;
 }
 
-method Map* Map_init(Map* const this, Class typeOf)
+method Map* New(Map* const self)
 {
-    Object_init(this);
-
-    this->isa = objc_getClass("Map");
-    this->typeOf = typeOf;
-    this->data = DScalloc(INITIAL_SIZE, sizeof(MapNode));
-	this->tableSize = INITIAL_SIZE;
-	this->length = 0;
-
-    return this;
+    return New(self, nullptr);
 }
+
 
 /*
  * Return the integer of the location in data
  * to store the point to the item, or MAP_FULL.
  */
-method int Hash(Map* const this, char* key)
+method int Hash(Map* const self, char* key)
 {
 	/* If full, return immediately */
-	if (this->length >= (this->tableSize/2)) return MAP_FULL;
+	if (self->length >= (self->tableSize/2)) return MAP_FULL;
 	/* Find the best index */
-	int curr = HashInt(this, key);
+	int curr = HashInt(self, key);
 	/* Linear probing */
 	for (int i = 0; i< MAX_CHAIN_LENGTH; i++)
     {
-		if (this->data[curr].inUse == 0)
+		if (self->data[curr].inUse == 0)
 			return curr;
 
-		if (this->data[curr].inUse == 1 && (strcmp(this->data[curr].key, key) == 0))
+		if (self->data[curr].inUse == 1 && (strcmp(self->data[curr].key, key) == 0))
 			return curr;
 
-		curr = (curr + 1) % this->tableSize;
+		curr = (curr + 1) % self->tableSize;
 	}
 	return MAP_FULL;
 }
@@ -308,21 +308,21 @@ method int Hash(Map* const this, char* key)
 /*
  * Doubles the size of the hashmap, and rehashes all the elements
  */
-method int Rehash(Map* const this)
+method int Rehash(Map* const self)
 {
-    MapNode* temp = DScalloc(2 * this->tableSize, sizeof(MapNode));
-    //  allocate(HashmapNode, 2 * this->tableSize);
+    MapNode* temp = (MapNode*)DScalloc(2 * self->tableSize, sizeof(MapNode));
+    //  allocate(HashmapNode, 2 * self->tableSize);
 
 	if (!temp) return MAP_OMEM;
 
 	/* Update the array */
-	MapNode* curr = this->data;
-	this->data = temp;
+	MapNode* curr = self->data;
+	self->data = temp;
 
 	/* Update the size */
-	int old_size = this->tableSize;
-	this->tableSize = 2 * this->tableSize;
-	this->length = 0;
+	int old_size = self->tableSize;
+	self->tableSize = 2 * self->tableSize;
+	self->length = 0;
 
 	/* Rehash the elements */
 	for (int i = 0; i < old_size; i++)
@@ -330,7 +330,7 @@ method int Rehash(Map* const this)
         if (curr[i].inUse == 0)
             continue;
             
-		int status = Put(this, curr[i].key, curr[i].data);
+		int status = Put(self, curr[i].key, curr[i].data);
 		if (status != MAP_OK)
 			return status;
 	}
@@ -342,27 +342,27 @@ method int Rehash(Map* const this)
 /*
  * Add a pointer to the hashmap with some key
  */
-method int Put(Map* const this, char* key, Object* value)
+method int Put(Map* const self, char* key, Object* value)
 {
-    if ((this->typeOf) && !InstanceOf(this->typeOf, value))  {
-        return left(DSInvalidTypeException(this->typeOf->name, Source));
+    if ((self->typeOf) && !InstanceOf(self->typeOf, value))  {
+        return left(DSInvalidTypeException(self->typeOf->name, Source));
     }
 	/* Find a place to put our value */
-	int index = Hash(this, key);
+	int index = Hash(self, key);
 	while (index == MAP_FULL)
     {
-		if (Rehash(this) == MAP_OMEM) 
+		if (Rehash(self) == MAP_OMEM) 
         {
 			return MAP_OMEM;
 		}
-		index = Hash(this, key);
+		index = Hash(self, key);
 	}
 
 	/* Set the data */
-	this->data[index].data = value;
-	this->data[index].key = key;
-	this->data[index].inUse = 1;
-	this->length++; 
+	self->data[index].data = value;
+	self->data[index].key = key;
+	self->data[index].inUse = 1;
+	self->length++; 
 
     return MAP_OK;
 
@@ -374,47 +374,47 @@ method int Put(Map* const this, char* key, Object* value)
 /*
  * Get your pointer out of the hashmap with a key
  */
-method Object* Get(Map* const this, char* key)
+method Object* Get(Map* const self, char* key)
 {
     Object* result;
 	/* Find data location */
-	int curr = HashInt(this, key);
+	int curr = HashInt(self, key);
 
 	/* Linear probing, if necessary */
 	for (int i = 0; i<MAX_CHAIN_LENGTH; i++)
     {
-        int inUse = this->data[curr].inUse;
+        int inUse = self->data[curr].inUse;
         if (inUse == 1)
         {
-            if (strcmp(this->data[curr].key,key) == 0)
+            if (strcmp(self->data[curr].key,key) == 0)
             {
-                result = (this->data[curr].data);
+                result = (self->data[curr].data);
                 return result;
             }
 		}
-		curr = (curr + 1) % this->tableSize;
+		curr = (curr + 1) % self->tableSize;
 	}
 	result = nullptr;
     return result;
 }
 
 /*
- * Iterate the function parameter over each element this the hashmap.  The
+ * Iterate the function parameter over each element self the hashmap.  The
  * additional Object* argument is passed to the function as its first
  * argument and the hashmap element is the second.
  */
-method int ForEach(Map* const this, Map_Iterator f, Object* item) 
+method int ForEach(Map* const self, Map_Iterator f, Object* item) 
 {
 	/* On empty hashmap, return immediately */
-	if (Length(this) <= 0)
+	if (Length(self) <= 0)
 		return MAP_MISSING;	
 
 	/* Linear probing */
-	for (int i = 0; i< this->tableSize; i++)
+	for (int i = 0; i< self->tableSize; i++)
     {
-		if (this->data[i].inUse != 0) 
+		if (self->data[i].inUse != 0) 
         {
-			Object* data = (Object*) (this->data[i].data);
+			Object* data = (Object*) (self->data[i].data);
 			int status = f(item, data);
 			if (status != MAP_OK) 
             {
@@ -429,53 +429,53 @@ method int ForEach(Map* const this, Map_Iterator f, Object* item)
  * Remove an element with that key from the map
  * Return MAP_OK or MAP_MISSING.
  */
-method int Remove(Map* const this, char* key)
+method int Remove(Map* const self, char* key)
 {
 	/* Find key */
-	int curr = HashInt(this, key);
+	int curr = HashInt(self, key);
 
 	/* Linear probing, if necessary */
 	for (int i = 0; i<MAX_CHAIN_LENGTH; i++)
     {
-        int inUse = this->data[curr].inUse;
+        int inUse = self->data[curr].inUse;
         if (inUse == 1)
         {
-            if (strcmp(this->data[curr].key, key) == 0)
+            if (strcmp(self->data[curr].key, key) == 0)
             {
                 /* Blank out the fields */
-                this->data[curr].inUse = 0;
-                this->data[curr].data = nullptr;
-                this->data[curr].key = nullptr;
+                self->data[curr].inUse = 0;
+                self->data[curr].data = nullptr;
+                self->data[curr].key = nullptr;
 
                 /* Reduce the size */
-                this->length--;
+                self->length--;
                 return MAP_OK;
             }
 		}
-		curr = (curr + 1) % this->tableSize;
+		curr = (curr + 1) % self->tableSize;
 	}
 
 	/* Data not found */
 	return MAP_MISSING;
 }
 
-function void Map_dtor(void* this) {
-    Dispose((Map*)this);
+function void Map_dtor(void* self) {
+    Dispose((Map*)self);
 }
 /* Deallocate the hashmap */
-method void Dispose(Map* const this)
+method void Dispose(Map* const self)
 {
     printf("WTF - dispose?\n");
-	// delete(this->data);
+	// delete(self->data);
 }
 
 /* Return the length of the hashmap */
-method int Length(const Map* const this)
+method int Length(const Map* const self)
 {
-    return this->length;
+    return self->length;
 }
 
-method char* ToString(const Map* const this)
+method char* ToString(const Map* const self)
 {
     return "dark.collections.Hashmap";
 }

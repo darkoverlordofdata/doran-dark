@@ -45,14 +45,15 @@ type (Char) {
     char value;
 };
 
-interface (Char, ToString,        char*, (const Char* const));
-interface (Char, CompareTo,       int, (const Char* const, const Char* const));
-interface (Char, IntValue,        int, (const Char* const));
-interface (Char, LongValue,       long, (const Char* const));
-interface (Char, FloatValue,      float, (const Char* const));
-interface (Char, DoubleValue,     double, (const Char* const));
-interface (Char, CharValue,       char, (const Char* const));
-interface (Char, ShortValue,      short, (const Char* const));
+delegate (Char, New,            Char*, (Char*, const char value));
+delegate (Char, ToString,       char*, (const Char* const));
+delegate (Char, CompareTo,      int, (const Char* const, const Char* const));
+delegate (Char, IntValue,       int, (const Char* const));
+delegate (Char, LongValue,      long, (const Char* const));
+delegate (Char, FloatValue,     float, (const Char* const));
+delegate (Char, DoubleValue,    double, (const Char* const));
+delegate (Char, CharValue,      char, (const Char* const));
+delegate (Char, ShortValue,     short, (const Char* const));
 
 /**
  * Char vtable with overrides
@@ -76,7 +77,7 @@ function vptr(Char);
 /**
  * Class Loader callback
  */
-function objc_loadChar(Class super) 
+function Class objc_loadChar(Class super) 
 {
     Class cls = createClass(super, Char);
 
@@ -103,16 +104,12 @@ function objc_loadChar(Class super)
  * @param value of char
  * 
  */
-function Char* Char_init(Char* const this, const char value)
+method Char* New(Char* self, const char value)
 {
-    Number_init(this);
-    this->isa = objc_getClass("Char");
-    this->value = value;
-    return this;
-}
-
-function Char* NewChar(const char value) { 
-    return Char_init(alloc(Char), value); 
+    extends((Number*)self);
+    self->isa = objc_getClass("Char");
+    self->value = value;
+    return self;
 }
 
 /**
@@ -133,60 +130,60 @@ method int Compare(const char x, const char y) {
  * @param   other  Char to be compared
  * @return same as Char_Compare
  */
-method int CompareTo(const Char* const this, const Char* const other) {
-    return Compare(this->value, other->value);
+method int CompareTo(const Char* const self, const Char* const other) {
+    return Compare(self->value, other->value);
 }
 
 /**
- * Returns the value of this value cast as an int
+ * Returns the value of self value cast as an int
  */
-method int IntValue(const Char* const this) {
-    return (int)this->value;
+method int IntValue(const Char* const self) {
+    return (int)self->value;
 }
 
 /**
- * Returns the value of this value cast as a long
+ * Returns the value of self value cast as a long
  */
-method long LongValue(const Char* const this) {
-    return (long)this->value;
+method long LongValue(const Char* const self) {
+    return (long)self->value;
 }
 
 /**
- * Returns the value of this value cast as a float
+ * Returns the value of self value cast as a float
  */
-method float FloatValue(const Char* const this) {
-    return (float)this->value;
+method float FloatValue(const Char* const self) {
+    return (float)self->value;
 }
 
 /**
- * Returns the value of this value cast as a double
+ * Returns the value of self value cast as a double
  */
-method double DoubleValue(const Char* const this) {
-    return (double)this->value;
+method double DoubleValue(const Char* const self) {
+    return (double)self->value;
 }
 
 /**
- * Returns the value of this value cast as a char
+ * Returns the value of self value cast as a char
  */
-method char CharValue(const Char* const this) {
-    return (char)this->value;
+method char CharValue(const Char* const self) {
+    return (char)self->value;
 }
 
 /**
- * Returns the value of this value cast as a short
+ * Returns the value of self value cast as a short
  */
-method short ShortValue(const Char* const this) {
-    return (short)this->value;
+method short ShortValue(const Char* const self) {
+    return (short)self->value;
 }
 
 
 /**
- * Returns the string value of this Char
+ * Returns the string value of self Char
  */
-method char* ToString(const Char* const this)
+method char* ToString(const Char* const self)
 {
     static char str[2];
-    sprintf(str, "%c", this->value);
+    sprintf(str, "%c", self->value);
     return str;
 }
 

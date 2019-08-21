@@ -45,14 +45,15 @@ type (Short) {
     short value;
 };
 
-interface (Short, ToString,        char*, (const Short* const));
-interface (Short, CompareTo,       int, (const Short* const, const Short* const));
-interface (Short, IntValue,        int, (const Short* const));
-interface (Short, LongValue,       long, (const Short* const));
-interface (Short, FloatValue,      float, (const Short* const));
-interface (Short, DoubleValue,     double, (const Short* const));
-interface (Short, CharValue,       char, (const Short* const));
-interface (Short, ShortValue,      short, (const Short* const));
+delegate (Short, New,           Short*, (Short*, const short));
+delegate (Short, ToString,      char*, (const Short* const));
+delegate (Short, CompareTo,     int, (const Short* const, const Short* const));
+delegate (Short, IntValue,      int, (const Short* const));
+delegate (Short, LongValue,     long, (const Short* const));
+delegate (Short, FloatValue,    float, (const Short* const));
+delegate (Short, DoubleValue,   double, (const Short* const));
+delegate (Short, CharValue,     char, (const Short* const));
+delegate (Short, ShortValue,    short, (const Short* const));
 
 
 /**
@@ -78,7 +79,7 @@ function vptr(Short);
  *
  * Class Loader callback
  */
-function objc_loadShort(Class super) 
+function Class objc_loadShort(Class super) 
 {
     Class cls = createClass(super, Short);
     addMethod(cls, Short,       ToString);
@@ -103,16 +104,12 @@ function objc_loadShort(Class super)
  * @param value of short
  * 
  */
-function Short* Short_init(Short* const this, const short value)
+method Short* New(Short* self, const short value)
 {
-    Number_init(this);
-    this->isa = objc_getClass("Short");
-    this->value = value;
-    return this;
-}
-
-function Short* NewShort(const short value) { 
-    return Short_init(alloc(Short), value); 
+    extends((Number*)self);
+    self->isa = objc_getClass("Short");
+    self->value = value;
+    return self;
 }
 
 /**
@@ -144,57 +141,57 @@ method int Compare(const short x, const short y) {
  * @param   other  Short to be compared
  * @return same as Short_Compare
  */
-method int CompareTo(const Short* this, const Short* other) {
-    return Compare(this->value, other->value);
+method int CompareTo(const Short* self, const Short* other) {
+    return Compare(self->value, other->value);
 }
 
 /**
- * Returns the value of this value cast as an int
+ * Returns the value of self value cast as an int
  */
-method int IntValue(const Short* const this) {
-    return (int)this->value;
+method int IntValue(const Short* const self) {
+    return (int)self->value;
 }
 
 /**
- * Returns the value of this value cast as a long
+ * Returns the value of self value cast as a long
  */
-method long LongValue(const Short* const this) {
-    return (long)this->value;
+method long LongValue(const Short* const self) {
+    return (long)self->value;
 }
 
 /**
- * Returns the value of this value cast as a float
+ * Returns the value of self value cast as a float
  */
-method float FloatValue(const Short* const this) {
-    return (float)this->value;
+method float FloatValue(const Short* const self) {
+    return (float)self->value;
 }
 
 /**
- * Returns the value of this value cast as a double
+ * Returns the value of self value cast as a double
  */
-method double DoubleValue(const Short* const this) {
-    return (double)this->value;
+method double DoubleValue(const Short* const self) {
+    return (double)self->value;
 }
 
 /**
- * Returns the value of this value cast as a char
+ * Returns the value of self value cast as a char
  */
-method char CharValue(const Short* const this) {
-    return (char)this->value;
+method char CharValue(const Short* const self) {
+    return (char)self->value;
 }
 
 /**
- * Returns the value of this value cast as a short
+ * Returns the value of self value cast as a short
  */
-method short ShortValue(const Short* const this) {
-    return (short)this->value;
+method short ShortValue(const Short* const self) {
+    return (short)self->value;
 }
 
 
-method char* ToString(const Short* const this)
+method char* ToString(const Short* const self)
 {
     static char str[20];
-    sprintf(str, "%d", this->value);
+    sprintf(str, "%d", self->value);
     return str;
 }
 

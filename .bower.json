@@ -1,0 +1,63 @@
+{
+  "!": "doran package manager v0.0.3",
+  "name": "dark",
+  "template": "package",
+  "vala": "0.26",
+  "authors": [
+    "Bruce Davidson <darkoverlordofdata@gmail.com>"
+  ],
+  "homepage": "https://github.com/darkoverlordofdata/doran-dark",
+  "description": "Dark Framework",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {},
+  "main": "CMakeLists.txt",
+  "source": "src",
+  "files": [
+    "src/dark.vapi",
+    "src/gc.c",
+    "src/string.c",
+    "src/DSClass.c",
+    "src/DSComparable.c",
+    "src/DSObject.c",
+    "src/collections/DSArray.c",
+    "src/collections/DSHashmap.c",
+    "src/collections/DSList.c",
+    "src/io/DSFileSystem.c",
+    "src/io/DSFile.c",
+    "src/types/DSBoolean.c",
+    "src/types/DSChar.c",
+    "src/types/DSDouble.c",
+    "src/types/DSFloat.c",
+    "src/types/DSInteger.c",
+    "src/types/DsLong.c",
+    "src/types/DSNumber.c",
+    "src/types/DSShort.c",
+    "src/types/DSString.c",
+    "src/types/DSStringBuilder.c"
+  ],
+  "packages": null,
+  "includes": [
+    ".lib/dark/include"
+  ],
+  "libraries": [
+    "gc"
+  ],
+  "options": {
+    "VERSION": "0.0.1",
+    "RELEASE_NAME": "dark"
+  },
+  "definitions": [],
+  "copy": null,
+  "vapidir": null,
+  "console": false,
+  "_release": "0c60f12374",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "0c60f12374ee7668a3e0086f5bd68d510a960a5c"
+  },
+  "_source": "git://github.com/darkoverlordofdata/doran-dark.git",
+  "_target": "*",
+  "_originalSource": "git://github.com/darkoverlordofdata/doran-dark"
+}

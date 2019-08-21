@@ -34,16 +34,16 @@ type (InputStreamReader) {
     InputStream* in;
 };
 
-ctor (InputStreamReader, InputStream*);
-interface (InputStreamReader, ToString, const char*, (const InputStreamReader* const) );
-interface (InputStreamReader, ReadOne,         int,    (InputStreamReader*) );
-interface (InputStreamReader, Read,            int,    (InputStreamReader*, IOBuff*, int, int) );
-interface (InputStreamReader, Skip,            long,   (InputStreamReader*, long) );
-interface (InputStreamReader, Close,           void,   (InputStreamReader*) );
-interface (InputStreamReader, Mark,            void,   (InputStreamReader*, int) );
-interface (InputStreamReader, MarkSupported,   bool,   (InputStreamReader*) );
-interface (InputStreamReader, Reset,           void,   (InputStreamReader*) );
-interface (InputStreamReader, Ready,           bool,   (InputStreamReader*) );
+delegate (InputStreamReader, New,           InputStreamReader*, (InputStreamReader*, const InputStream*) );
+delegate (InputStreamReader, ToString,      const char*, (const InputStreamReader* const) );
+delegate (InputStreamReader, ReadOne,       int,    (InputStreamReader*) );
+delegate (InputStreamReader, Read,          int,    (InputStreamReader*, IOBuff*, int, int) );
+delegate (InputStreamReader, Skip,          long,   (InputStreamReader*, long) );
+delegate (InputStreamReader, Close,         void,   (InputStreamReader*) );
+delegate (InputStreamReader, Mark,          void,   (InputStreamReader*, int) );
+delegate (InputStreamReader, MarkSupported, bool,   (InputStreamReader*) );
+delegate (InputStreamReader, Reset,         void,   (InputStreamReader*) );
+delegate (InputStreamReader, Ready,         bool,   (InputStreamReader*) );
 
 vtable (InputStreamReader) {
     const InputStreamReaderToString       ToString;
@@ -65,7 +65,7 @@ function vptr(InputStreamReader);
  * 
  * Class Loader callback
  */
-function objc_loadInputStreamReader(Class super) 
+function Class objc_loadInputStreamReader(Class super) 
 {
     Class cls = createClass(super, InputStreamReader);
     addMethod(cls, InputStreamReader, ToString);
@@ -85,48 +85,48 @@ function objc_loadInputStreamReader(Class super)
 }
 
 
-
-method InputStreamReader* InputStreamReader_init(InputStreamReader* this, InputStream* in) {
-    Object_init(this);
-    this->isa = objc_getClass("InputStreamReader");
-    this->in = in;
-    return this;
+method InputStreamReader* New(InputStreamReader* self, InputStream* in) {
+    extends((Object*)self);
+    self->isa = objc_getClass("InputStreamReader");
+    self->in = in;
+    return self;
 }
 
-method const char* ToString(const InputStreamReader* const this) {
+
+method const char* ToString(const InputStreamReader* const self) {
     return "InputStreamReader";
 }
 
-method int ReadOne(InputStreamReader* this) {
-    return ReadOne(this->in);
+method int ReadOne(InputStreamReader* self) {
+    return ReadOne(self->in);
 }
 
-method int Read(InputStreamReader* this, IOBuff* cbuf, int offset, int length) {
-    return Read(this->in, cbuf, offset, length);
+method int Read(InputStreamReader* self, IOBuff* cbuf, int offset, int length) {
+    return Read(self->in, cbuf, offset, length);
 }
 
-method long Skip(InputStreamReader* this, long n) {
-    return Skip((Reader*)this, n);
+method long Skip(InputStreamReader* self, long n) {
+    return Skip((Reader*)self, n);
 } 
 
-method void Close(InputStreamReader* this) {
-    Close(this->in);
+method void Close(InputStreamReader* self) {
+    Close(self->in);
 }
 
-method void Mark(InputStreamReader* this, int readLimit) {
-    Mark((Reader*)this, readLimit);
+method void Mark(InputStreamReader* self, int readLimit) {
+    Mark((Reader*)self, readLimit);
 } 
 
-method bool MarkSupported(InputStreamReader* this) {
-    return MarkSupported((Reader*)this);
+method bool MarkSupported(InputStreamReader* self) {
+    return MarkSupported((Reader*)self);
 }
 
-method void Reset(InputStreamReader* this) {
-    Reset((Reader*)this);
+method void Reset(InputStreamReader* self) {
+    Reset((Reader*)self);
 }
 
-method bool Ready(InputStreamReader* this) {
-    return Ready((Reader*)this);
+method bool Ready(InputStreamReader* self) {
+    return Ready((Reader*)self);
 }
 
 

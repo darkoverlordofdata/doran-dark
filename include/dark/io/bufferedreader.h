@@ -45,19 +45,17 @@ type (BufferedReader) {
     bool markedSkipLF;
 };
 
-ctor (BufferedReader, Reader*);
-ctor (BufferedReader, Reader*, int);
-
-interface (BufferedReader, ToString, const char*, (const BufferedReader* const) );
-interface (BufferedReader, ReadOne,         int,    (BufferedReader*) );
-interface (BufferedReader, Read,            int,    (BufferedReader*, IOBuff*, int, int) );
-interface (BufferedReader, Skip,            long,   (BufferedReader*, long) );
-interface (BufferedReader, Close,           void,   (BufferedReader*) );
-interface (BufferedReader, Mark,            void,   (BufferedReader*, int) );
-interface (BufferedReader, MarkSupported,   bool,   (BufferedReader*) );
-interface (BufferedReader, Reset,           void,   (BufferedReader*) );
-interface (BufferedReader, Ready,           bool,   (BufferedReader*) );
-interface (BufferedReader, ReadLine,        String*, (BufferedReader*, bool) );
+delegate (BufferedReader, New,          BufferedReader*, (BufferedReader*, Reader*, int));
+delegate (BufferedReader, ToString,     const char*, (const BufferedReader* const) );
+delegate (BufferedReader, ReadOne,      int,    (BufferedReader*) );
+delegate (BufferedReader, Read,         int,    (BufferedReader*, IOBuff*, int, int) );
+delegate (BufferedReader, Skip,         long,   (BufferedReader*, long) );
+delegate (BufferedReader, Close,        void,   (BufferedReader*) );
+delegate (BufferedReader, Mark,         void,   (BufferedReader*, int) );
+delegate (BufferedReader, MarkSupported,bool,   (BufferedReader*) );
+delegate (BufferedReader, Reset,        void,   (BufferedReader*) );
+delegate (BufferedReader, Ready,        bool,   (BufferedReader*) );
+delegate (BufferedReader, ReadLine,     String*, (BufferedReader*, bool) );
 
 vtable (BufferedReader) {
     const BufferedReaderToString      ToString;
@@ -80,7 +78,7 @@ function vptr(BufferedReader);
  * 
  * Class Loader callback
  */
-function objc_loadBufferedReader(Class super) 
+function Class objc_loadBufferedReader(Class super) 
 {
     Class cls = createClass(super, BufferedReader);
     addMethod(cls, BufferedReader, ToString);
@@ -101,139 +99,125 @@ function objc_loadBufferedReader(Class super)
 }
 
 
-// class_load( BufferedReader );
-// class_override( ToString,        (BufferedReaderToString)ToString, "$@:v" );
-// class_method( Equals,            (ObjectEquals)Equals, "B@:@@" );
-// class_method( GetHashCode,       (ObjectGetHashCode)GetHashCode, "l@:v" );
-// class_method( Dispose,           (ObjectDispose)Dispose, "v@:v" );
-// class_method( ReadOne,           (BufferedReaderReadOne)ReadOne, "i@:v" );
-// class_method( Read,              (BufferedReaderRead)Read, "i@:^ii" );
-// class_method( Skip,              (BufferedReaderSkip)Skip, "l@:l" );
-// class_method( Close,             (BufferedReaderClose)Close, "v@:v" );
-// class_method( Mark,              (BufferedReaderMark)Mark, "v@:i" );
-// class_method( MarkSupported,     (BufferedReaderMarkSupported)MarkSupported, "v@:v" );
-// class_method( Reset,             (BufferedReaderReset)Reset, "v@:v" );
-// class_method( Ready,             (BufferedReaderReady)Ready, "B@:" );
-// class_method( ReadLine,          (BufferedReaderReadLine)ReadLine, "$@:B" );
-// class_fini;
 
-method BufferedReader* BufferedReader_init(BufferedReader* const this, Reader* in) {
-    BufferedReader_init(this, in, defaultCharBufferSize);
-}
-
-method BufferedReader* BufferedReader_init(BufferedReader* const this, Reader* in, int sz) {
-    Reader_init(this);
-    this->isa = objc_getClass("BufferedReader");
-    this->markedChar = UNMARKED;
-    this->readAheadLimit = 0;
-    this->skipLF = false;
-    this->markedSkipLF = false;
+method BufferedReader* New(BufferedReader* self, Reader* in, int sz) {
+    extends((Reader*)self);
+    self->isa = objc_getClass("BufferedReader");
+    self->markedChar = UNMARKED;
+    self->readAheadLimit = 0;
+    self->skipLF = false;
+    self->markedSkipLF = false;
     if (sz <= 0) throw DSIllegalArgumentException("Buffer size <= 0", Source);
-    this->in = in;
-    this->cb.buff = DScalloc(1, sz);
-    this->cb.len = sz;
-    this->nextChar = 0;
-    this->nChars = 0;
-    return this;
+    self->in = in;
+    self->cb.buff = DScalloc(1, sz);
+    self->cb.len = sz;
+    self->nextChar = 0;
+    self->nChars = 0;
+    return self;
 }
 
-function void EnsureOpen(const BufferedReader* const this) {
-    if (this->in == nullptr) throw DSIllegalArgumentException("Stream closed", Source);
+method BufferedReader* New(BufferedReader* self, Reader* in) {
+    New(self, in, defaultCharBufferSize);
 }
 
-function void Fill(BufferedReader* const this) {
+
+function void EnsureOpen(const BufferedReader* const self) {
+    if (self->in == nullptr) throw DSIllegalArgumentException("Stream closed", Source);
+}
+
+function void Fill(BufferedReader* const self) {
     int dst;
-    if (this->markedChar <= UNMARKED) {
+    if (self->markedChar <= UNMARKED) {
         dst = 0;
     } else {
-        int delta = this->nextChar - this->markedChar;
-        if (delta >= this->readAheadLimit) {
+        int delta = self->nextChar - self->markedChar;
+        if (delta >= self->readAheadLimit) {
             /* Gone past read-ahead limit: Invalidate mark */
-            this->markedChar = INVALIDATED;
-            this->readAheadLimit = 0;
+            self->markedChar = INVALIDATED;
+            self->readAheadLimit = 0;
             dst = 0;
         } else {
-            if (this->readAheadLimit <= this->cb.len) {
-                memcpy(&this->cb, &this->cb+this->markedChar, delta);
-                this->markedChar = 0;
+            if (self->readAheadLimit <= self->cb.len) {
+                memcpy(&self->cb, &self->cb+self->markedChar, delta);
+                self->markedChar = 0;
                 dst = delta;
             } else {
-                char* ncb = DScalloc(1, this->readAheadLimit);
-                memcpy(ncb, &this->cb+this->markedChar, delta);
-                this->cb.buff = ncb;
-                this->markedChar = 0;
+                char* ncb = DScalloc(1, self->readAheadLimit);
+                memcpy(ncb, &self->cb+self->markedChar, delta);
+                self->cb.buff = ncb;
+                self->markedChar = 0;
                 dst = delta;
             }
-            this->nextChar = this->nChars = delta;
+            self->nextChar = self->nChars = delta;
         }
 
     }
     int n = 0;
     do {
-        n = Read(this->in, &this->cb, dst, this->cb.len - dst);
+        n = Read(self->in, &self->cb, dst, self->cb.len - dst);
     } while (n == 0);
     if (n > 0) {
-        this->nChars = dst + n;
-        this->nextChar = dst;
+        self->nChars = dst + n;
+        self->nextChar = dst;
     }
  }
 
-method const char* ToString(const BufferedReader* const this) {
+method const char* ToString(const BufferedReader* const self) {
     return "BufferedReader";
 }
 
-method int ReadOne(BufferedReader* this) {
-    EnsureOpen(this);
+method int ReadOne(BufferedReader* self) {
+    EnsureOpen(self);
     for (;;) {
-        if (this->nextChar >= this->nChars) {
-            Fill(this);
-            if (this->nextChar >= this->nChars)
+        if (self->nextChar >= self->nChars) {
+            Fill(self);
+            if (self->nextChar >= self->nChars)
                 return -1;
         }
-        if (this->skipLF) {
-            this->skipLF = false;
-            if (this->cb.buff[this->nextChar] == '\n') {
-                this->nextChar++;
+        if (self->skipLF) {
+            self->skipLF = false;
+            if (self->cb.buff[self->nextChar] == '\n') {
+                self->nextChar++;
                 continue;
             }
         }
-        return this->cb.buff[this->nextChar++];
+        return self->cb.buff[self->nextChar++];
     }
 }
 
-method static int Read1(BufferedReader* this, IOBuff* cbuf, int off, int len) {
-    if (this->nextChar >= this->nChars) {
+method static int Read1(BufferedReader* self, IOBuff* cbuf, int off, int len) {
+    if (self->nextChar >= self->nChars) {
         /* If the requested length is at least as large as the buffer, and
             if there is no mark/reset activity, and if line feeds are not
             being skipped, do not bother to copy the characters into the
-            local buffer.  In this way buffered streams will cascade
+            local buffer.  In self way buffered streams will cascade
             harmlessly. */
-        if (len >= this->cb.len && this->markedChar <= UNMARKED && !this->skipLF) {
-            return Read(this->in, &cbuf, off, len);
+        if (len >= self->cb.len && self->markedChar <= UNMARKED && !self->skipLF) {
+            return Read(self->in, &cbuf, off, len);
         }
-        Fill(this);
+        Fill(self);
     }
-    if (this->nextChar >= this->nChars) return -1;
-    if (this->skipLF) {
-        this->skipLF = false;
-        if (this->cb.buff[this->nextChar] == '\n') {
-            this->nextChar++;
-            if (this->nextChar >= this->nChars)
-                Fill(this);
-            if (this->nextChar >= this->nChars)
+    if (self->nextChar >= self->nChars) return -1;
+    if (self->skipLF) {
+        self->skipLF = false;
+        if (self->cb.buff[self->nextChar] == '\n') {
+            self->nextChar++;
+            if (self->nextChar >= self->nChars)
+                Fill(self);
+            if (self->nextChar >= self->nChars)
                 return -1;
         }
     }
-    int n = (int)Min(len, this->nChars - this->nextChar);
-    memcpy(&cbuf+off, &this->cb+this->nextChar, n);
-    this->nextChar += n;
+    int n = (int)Min(len, self->nChars - self->nextChar);
+    memcpy(&cbuf+off, &self->cb+self->nextChar, n);
+    self->nextChar += n;
     return n;
 
 }
 
-method int Read(BufferedReader* this, IOBuff* cbuf, int off, int len) {
+method int Read(BufferedReader* self, IOBuff* cbuf, int off, int len) {
     if (len==0) len = cbuf->len-off;
-    EnsureOpen(this);
+    EnsureOpen(self);
     if ((off < 0) || (off > cbuf->len) || (len < 0) ||
         ((off + len) > cbuf->len) || ((off + len) < 0)) {
         throw DSIndexOutOfBoundsException(off, Source);
@@ -241,32 +225,32 @@ method int Read(BufferedReader* this, IOBuff* cbuf, int off, int len) {
         return 0;
     }
 
-    int n = Read1(this, cbuf, off, len);
+    int n = Read1(self, cbuf, off, len);
     if (n <= 0) return n;
-    while ((n < len) && Ready(this->in)) {
-        int n1 = Read1(this, cbuf, off + n, len - n);
+    while ((n < len) && Ready(self->in)) {
+        int n1 = Read1(self, cbuf, off + n, len - n);
         if (n1 <= 0) break;
         n += n1;
     }
     return n;
 }
 
-method String* ReadLine(BufferedReader* this) {
-    ReadLine(this, false);
+method String* ReadLine(BufferedReader* self) {
+    ReadLine(self, false);
 }
 
-method String* ReadLine(BufferedReader* this, bool ignoreLF) {
+method String* ReadLine(BufferedReader* self, bool ignoreLF) {
     StringBuilder* s = nullptr;
     int startChar;
 
-    EnsureOpen(this);
-    bool omitLF = ignoreLF || this->skipLF;
+    EnsureOpen(self);
+    bool omitLF = ignoreLF || self->skipLF;
 
     for (;;) {
 
-        if (this->nextChar >= this->nChars)
-            Fill(this);
-        if (this->nextChar >= this->nChars) { /* EOF */
+        if (self->nextChar >= self->nChars)
+            Fill(self);
+        if (self->nextChar >= self->nChars) { /* EOF */
             if (s != nullptr && s->length > 0)
                 return Concat(s);
             else
@@ -277,129 +261,129 @@ method String* ReadLine(BufferedReader* this, bool ignoreLF) {
         int i;
 
         /* Skip a leftover '\n', if necessary */
-        if (omitLF && (this->cb.buff[this->nextChar] == '\n'))
-            this->nextChar++;
-        this->skipLF = false;
+        if (omitLF && (self->cb.buff[self->nextChar] == '\n'))
+            self->nextChar++;
+        self->skipLF = false;
         omitLF = false;
 
     // charLoop:
-        for (i = this->nextChar; i < this->nChars; i++) {
-            c = this->cb.buff[i];
+        for (i = self->nextChar; i < self->nChars; i++) {
+            c = self->cb.buff[i];
             if ((c == '\n') || (c == '\r')) {
                 eol = true;
                 break; // charLoop;
             }
         }
 
-        startChar = this->nextChar;
-        this->nextChar = i;
+        startChar = self->nextChar;
+        self->nextChar = i;
 
         if (eol) {
             String* str;
             if (s == nullptr) {
-                str = $(strndup(&this->cb.buff[startChar], i-startChar));
+                str = new(String, strndup(&self->cb.buff[startChar], i-startChar));
             } else {
-                Append(s, strndup(&this->cb.buff[startChar], i-startChar));
+                Append(s, strndup(&self->cb.buff[startChar], i-startChar));
                 str = Concat(s);
             }
-            this->nextChar++;
+            self->nextChar++;
             if (c == '\r') {
-                this->skipLF = true;
+                self->skipLF = true;
             }
             return str;
         }
 
         if (s == nullptr)
             s = new (StringBuilder);
-        Append(s, strndup(&this->cb.buff[startChar], i-startChar));
+        Append(s, strndup(&self->cb.buff[startChar], i-startChar));
     }
 }
 
-method long Skip(BufferedReader* this, long n)  {
+method long Skip(BufferedReader* self, long n)  {
     if (n < 0L) {
         throw DSIllegalArgumentException("skip value is negative", Source);
     }
-    EnsureOpen(this);
+    EnsureOpen(self);
     long r = n;
     while (r > 0) {
-        if (this->nextChar >= this->nChars)
-            Fill(this);
-        if (this->nextChar >= this->nChars) /* EOF */
+        if (self->nextChar >= self->nChars)
+            Fill(self);
+        if (self->nextChar >= self->nChars) /* EOF */
             break;
-        if (this->skipLF) {
-            this->skipLF = false;
-            if (this->cb.buff[this->nextChar] == '\n') {
-                this->nextChar++;
+        if (self->skipLF) {
+            self->skipLF = false;
+            if (self->cb.buff[self->nextChar] == '\n') {
+                self->nextChar++;
             }
         }
-        long d = this->nChars - this->nextChar;
+        long d = self->nChars - self->nextChar;
         if (r <= d) {
-            this->nextChar += (int)r;
+            self->nextChar += (int)r;
             r = 0;
             break;
         }
         else {
             r -= d;
-            this->nextChar = this->nChars;
+            self->nextChar = self->nChars;
         }
     }
     return n - r;
 }
 
-method bool Ready(BufferedReader* this) {
-    EnsureOpen(this);
+method bool Ready(BufferedReader* self) {
+    EnsureOpen(self);
 
     /*
         * If newline needs to be skipped and the next char to be read
         * is a newline character, then just skip it right away.
         */
-    if (this->skipLF) {
+    if (self->skipLF) {
         /* Note that in.ready() will return true if and only if the next
             * read on the stream will not block.
             */
-        if (this->nextChar >= this->nChars && Ready(this->in)) {
-            Fill(this);
+        if (self->nextChar >= self->nChars && Ready(self->in)) {
+            Fill(self);
         }
-        if (this->nextChar < this->nChars) {
-            if (this->cb.buff[this->nextChar] == '\n')
-                this->nextChar++;
-            this->skipLF = false;
+        if (self->nextChar < self->nChars) {
+            if (self->cb.buff[self->nextChar] == '\n')
+                self->nextChar++;
+            self->skipLF = false;
         }
     }
-    return (this->nextChar < this->nChars) || Ready(this->in);
+    return (self->nextChar < self->nChars) || Ready(self->in);
 }
 
-method bool MarkSupported(BufferedReader* this) {
+method bool MarkSupported(BufferedReader* self) {
     return true;
 }
 
-method void Mark(BufferedReader* this, int readAheadLimit) {
+method void Mark(BufferedReader* self, int readAheadLimit) {
     if (readAheadLimit < 0) {
         throw DSIllegalArgumentException("Read-ahead limit < 0", Source);
     }
-    EnsureOpen(this);
-    this->readAheadLimit = readAheadLimit;
-    this->markedChar = this->nextChar;
-    this->markedSkipLF = this->skipLF;
+    EnsureOpen(self);
+    self->readAheadLimit = readAheadLimit;
+    self->markedChar = self->nextChar;
+    self->markedSkipLF = self->skipLF;
 }
 
-method void Reset(BufferedReader* this) {
-    EnsureOpen(this);
-    if (this->markedChar < 0)
-        throw DSIllegalArgumentException((this->markedChar == INVALIDATED)
+method void Reset(BufferedReader* self) {
+    EnsureOpen(self);
+    if (self->markedChar < 0)
+        throw DSIllegalArgumentException((self->markedChar == INVALIDATED)
                                 ? "Mark invalid"
                                 : "Stream not marked", Source);
-    this->nextChar = this->markedChar;
-    this->skipLF = this->markedSkipLF;
+    self->nextChar = self->markedChar;
+    self->skipLF = self->markedSkipLF;
 }
 
-method void Close(BufferedReader* this) {
-    if (this->in == nullptr)
+method void Close(BufferedReader* self) {
+    if (self->in == nullptr)
         return;
     try {
-        Close(this->in);
+        Close(self->in);
     } finally {
-        this->in = nullptr;
-        this->cb.buff = nullptr;
+        self->in = nullptr;
+        self->cb.buff = nullptr;
     }
 }

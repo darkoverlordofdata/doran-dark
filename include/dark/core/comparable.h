@@ -40,8 +40,9 @@ type (Comparable)
     Class isa;
 };
 
-interface (Comparable, ToString,        char*,    (const Comparable* const));
-interface (Comparable, CompareTo,       int,      (const Comparable* const, const Comparable* const));
+delegate (Comparable, New,             Comparable*, (Comparable*));
+delegate (Comparable, ToString,        char*,    (const Comparable* const));
+delegate (Comparable, CompareTo,       int,      (const Comparable* const, const Comparable* const));
 
 
 /**
@@ -77,18 +78,18 @@ function Class objc_loadComparable(Class super)
 //              I M P L E M E N T A T I O N                              //          
 //=======================================================================//
 
-function Comparable* Comparable_init(Comparable* const this)
+method Comparable* New(Comparable* const self)
 {
-    Object_init(this);
-    this->isa = objc_getClass("Comparable");
-    return this;
+    extends((Object*)self);
+    self->isa = objc_getClass("Comparable");
+    return self;
 }
 
-method int CompareTo(const Comparable* const this, const Comparable* const other) {
-    return get_vptr(Comparable)->CompareTo(this, other);
+method int CompareTo(const Comparable* const self, const Comparable* const other) {
+    return get_vptr(Comparable)->CompareTo(self, other);
 }
 
-method char* ToString(const Comparable* const this) {
+method char* ToString(const Comparable* const self) {
     return "dark.Comparable";
 }
 

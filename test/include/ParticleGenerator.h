@@ -47,27 +47,22 @@ type (ParticleGenerator) {
 /**
  * ParticleGenerator API
  */
-// ParticleGenerator* NewParticleGenerator(Shader* shader, Texture2D* texture, int amount);
-// ParticleGenerator* ParticleGenerator_alloc();
-// ParticleGenerator* ParticleGenerator_init(ParticleGenerator* const self, Shader* shader, Texture2D* texture, int amount);
-
-interface (ParticleGenerator, ToString,     char*, (const ParticleGenerator* const));
-interface (ParticleGenerator, Update,       void, (ParticleGenerator*, GLfloat, GameObject*, GLuint, Vec2));
-interface (ParticleGenerator, Draw,         void, (ParticleGenerator*));
+delegate (ParticleGenerator, New,           ParticleGenerator*, (ParticleGenerator*, Shader*, Texture2D*, int));
+delegate (ParticleGenerator, ToString,     char*, (const ParticleGenerator* const));
+delegate (ParticleGenerator, Update,       void, (ParticleGenerator*, GLfloat, GameObject*, GLuint, Vec2));
+delegate (ParticleGenerator, Draw,         void, (ParticleGenerator*));
+delegate (ParticleGenerator, init,         void, (ParticleGenerator*));
+delegate (ParticleGenerator, firstUnused,  GLuint, (ParticleGenerator*));
+delegate (ParticleGenerator, respawn,      void, (ParticleGenerator*, struct Particle, GameObject*, Vec2));
 
 vtable (ParticleGenerator) {
     ParticleGeneratorToString   ToString;
-    ObjectEquals              Equals;
-    ObjectGetHashCode         GetHashCode;
-    ObjectDispose             Dispose;
+    ObjectEquals                Equals;
+    ObjectGetHashCode           GetHashCode;
+    ObjectDispose               Dispose;
     ParticleGeneratorUpdate     Update;
     ParticleGeneratorDraw       Draw;
 };
-
-/** private */
-method  void    init(ParticleGenerator*);
-function  GLuint  firstUnusedParticle(ParticleGenerator*);
-function  void    respawnParticle(ParticleGenerator*, struct Particle, GameObject*, Vec2);
 
 /**
  * Put it all together
@@ -96,13 +91,13 @@ function Class objc_loadParticleGenerator(Class super)
  * @param amount number of particles to generate
  * 
  */
-function ParticleGenerator* ParticleGenerator_init(
-    ParticleGenerator* const self, 
+method ParticleGenerator* New(
+    ParticleGenerator* self, 
     Shader* shader, 
     Texture2D* texture, 
     int amount)
 {
-	Object_init((Object*)self);
+	extends((Object*)self);
     self->isa = objc_getClass("ParticleGenerator");
     self->shader = shader;
     self->texture = texture;
@@ -110,7 +105,6 @@ function ParticleGenerator* ParticleGenerator_init(
     init(self);
     return self;
 }
-
 /**
  * Update
  * 
@@ -130,8 +124,8 @@ method void Update(
     // Add new particles 
     for (GLuint i = 0; i < newParticles; ++i)
     {
-        int unusedParticle = firstUnusedParticle(self);
-        respawnParticle(self, self->particles[unusedParticle], object, offset);
+        int unusedParticle = firstUnused(self);
+        respawn(self, self->particles[unusedParticle], object, offset);
     }
     // Update all particles
     for (GLuint i = 0; i < self->amount; ++i)
@@ -204,7 +198,7 @@ method void init(ParticleGenerator* self)
 
 // Stores the index of the last particle used (for quick access to next dead particle)
 static GLuint lastUsedParticle = 0;
-function GLuint firstUnusedParticle(ParticleGenerator* self)
+method GLuint firstUnused(ParticleGenerator* self)
 {
     // First search from last used particle, self will usually return almost instantly
     for (GLuint i = lastUsedParticle; i < self->amount; ++i){
@@ -225,7 +219,7 @@ function GLuint firstUnusedParticle(ParticleGenerator* self)
     return 0;
 }
 
-function void respawnParticle(
+method void respawn(
     ParticleGenerator* self, 
     struct Particle particle, 
     GameObject* object, 

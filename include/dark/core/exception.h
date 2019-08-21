@@ -65,8 +65,8 @@ type (Exception)
     const char *msg;
 };
 
-ctor (Exception, ExceptionType, char*);
-interface (Exception, ToString, const char*, (const Exception* const) );
+delegate (Exception, New,       Exception*, (Exception*, ExceptionType, char*));
+delegate (Exception, ToString,  const char*, (const Exception* const) );
 
 vtable (Exception) 
 {
@@ -98,24 +98,23 @@ struct exception_context the_exception_context[1];
 /**
  * Returns the string value of this Exception
  */
-method const char* ToString(const Exception* const this) {
-    return this->msg;
+method const char* ToString(const Exception* const self) {
+    return self->msg;
 }
 
 function Exception* NewException(ExceptionType type, char* msg) {
-    Exception* this = alloc(Exception);
-    return Exception_init(this, type, msg);
+    Exception* self = (Exception*)alloc(Exception);
+    return New(self, type, msg);
 }
 
-method Exception* Exception_init(Exception* this, ExceptionType type, char* msg) {
-    Object_init(this);
-    this->isa = objc_getClass("Exception");
-    this->type = type;
-    this->msg = msg;
-    return this;
+method Exception* New(Exception* self, ExceptionType type, char* msg) {
+    extends((Object*)self);
+    self->isa = objc_getClass("Exception");
+    self->type = type;
+    self->msg = msg;
+    return self;
 }
 
-// extern struct exception_context the_exception_context[1];
 /** 
  * Builtin Exceptions
  * 

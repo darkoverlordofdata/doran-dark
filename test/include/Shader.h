@@ -28,23 +28,20 @@ type (Shader) {
 /**
  * Shader API
  */
-// Shader* Shader_init(Shader* const self);
-// Shader* Shader_alloc();
-// Shader* NewShader();
-
-interface (Shader, ToString,    char*, (const Shader* const));
-interface (Shader, Use,         Shader*, (Shader*));
-interface (Shader, Compile,     void, (Shader* const, const GLchar*, const GLchar*));
-interface (Shader, SetFloat,    Shader*, (Shader*, const GLchar*, const GLfloat));
-interface (Shader, SetInteger,  Shader*, (Shader*, const GLchar*, const GLint));
-interface (Shader, SetArray2f,  Shader*, (Shader*, const GLchar*, const GLfloat, const GLfloat));
-interface (Shader, SetArray2,   Shader*, (Shader*, const GLchar*, const GLfloat*));
-interface (Shader, SetArray3f,  Shader*, (Shader*, const GLchar*, const GLfloat, const GLfloat, const GLfloat));
-interface (Shader, SetArray3,   Shader*, (Shader*, const GLchar*, const GLfloat*));
-interface (Shader, SetArray4f,  Shader*, (Shader*, const GLchar*, const GLfloat, const GLfloat, const GLfloat, const GLfloat));
-interface (Shader, SetArray4,   Shader*, (Shader*, const GLchar*, const GLfloat*));
-interface (Shader, SetMatrix,   Shader*, (Shader*, const GLchar*, const GLfloat*));
-interface (Shader, SetMatrix4,  Shader*, (Shader*, const GLchar*, const GLfloat*));
+delegate (Shader, New,          Shader*, (Shader*));
+delegate (Shader, ToString,    char*, (const Shader* const));
+delegate (Shader, Use,         Shader*, (Shader*));
+delegate (Shader, Compile,     void, (Shader* const, const GLchar*, const GLchar*));
+delegate (Shader, SetFloat,    Shader*, (Shader*, const GLchar*, const GLfloat));
+delegate (Shader, SetInteger,  Shader*, (Shader*, const GLchar*, const GLint));
+delegate (Shader, SetArray2f,  Shader*, (Shader*, const GLchar*, const GLfloat, const GLfloat));
+delegate (Shader, SetArray2,   Shader*, (Shader*, const GLchar*, const GLfloat*));
+delegate (Shader, SetArray3f,  Shader*, (Shader*, const GLchar*, const GLfloat, const GLfloat, const GLfloat));
+delegate (Shader, SetArray3,   Shader*, (Shader*, const GLchar*, const GLfloat*));
+delegate (Shader, SetArray4f,  Shader*, (Shader*, const GLchar*, const GLfloat, const GLfloat, const GLfloat, const GLfloat));
+delegate (Shader, SetArray4,   Shader*, (Shader*, const GLchar*, const GLfloat*));
+delegate (Shader, SetMatrix,   Shader*, (Shader*, const GLchar*, const GLfloat*));
+delegate (Shader, SetMatrix4,  Shader*, (Shader*, const GLchar*, const GLfloat*));
 
 function void checkCompileErrors(Shader* const, const GLuint, const char*);
 
@@ -101,9 +98,9 @@ function Class objc_loadShader(Class super)
 /**
  * Shader
  */
-function Shader* Shader_init(Shader* const self)
+method Shader* New(Shader* self)
 {
-	Object_init((Object*)self);
+	extends((Object*)self);
     self->isa = objc_getClass("Shader");
     return self;
 }

@@ -27,13 +27,10 @@ type (SpriteRenderer) {
 /**
  * SpriteRenderer API
  */
-// SpriteRenderer*     NewSpriteRenderer(Shader* shader);
-// SpriteRenderer*     SpriteRenderer_init(SpriteRenderer* const self, Shader* shader);
-// SpriteRenderer*     SpriteRenderer_alloc();
-
-interface (SpriteRenderer, ToString,    char*, (const SpriteRenderer* const));
-interface (SpriteRenderer, Draw,        void, (const SpriteRenderer*, const Texture2D* const, const Vec2, const Vec2, const GLfloat, const Vec3));
-interface (SpriteRenderer, Dispose,     void, (SpriteRenderer* const));
+delegate (SpriteRenderer, New,          SpriteRenderer*, (SpriteRenderer*, Shader*));
+delegate (SpriteRenderer, ToString,    char*, (const SpriteRenderer* const));
+delegate (SpriteRenderer, Draw,        void, (const SpriteRenderer*, const Texture2D* const, const Vec2, const Vec2, const GLfloat, const Vec3));
+delegate (SpriteRenderer, Dispose,     void, (SpriteRenderer* const));
 
 static void initRenderData(SpriteRenderer* self);
 
@@ -70,17 +67,16 @@ function Class objc_loadSpriteRenderer(Class super)
  * @param shader to use for rendering
  * 
  */
-function SpriteRenderer*  SpriteRenderer_init(
-    SpriteRenderer* const self, 
+method SpriteRenderer*  New(
+    SpriteRenderer* self, 
     Shader* shader)
 {
-	Object_init((Object*)self);
+	extends((Object*)self);
     self->isa = objc_getClass("SpriteRenderer");
     self->shader = shader;
     initRenderData(self);
     return self;
 }
-
 /**
  * Draw
  * 

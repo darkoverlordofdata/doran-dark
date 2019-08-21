@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ******************************************************************/
 #pragma once
-#include <dark/core/class.h>
+#include "class.h"
 
 #define OBJECT_TYPE       (TYPE_OBJECT)
 
@@ -36,14 +36,15 @@ type (Object)
     Class isa;
 };
 
-interface (Object, ToString,         char*,  (const Object* const) );
-interface (Object, Equals,           bool,   (const Object* const, const Object* const) );
-interface (Object, GetHashCode,      int,    (const Object* const) );
-interface (Object, Dispose,          void,   (Object* const) );
-interface (Object, ReferenceEquals,  bool,   (const Object* const, const Object* const) );
-interface (Object, InstanceEquals,   bool,   (const Object* const, const Object* const) );
-interface (Object, GetClass,         Class,  (const Object* const) );
-interface (Object, GetClassName,     char*,  (const Object* const) );
+delegate (Object, New,              Object*,  (Object*) );
+delegate (Object, ToString,         char*,  (const Object* const) );
+delegate (Object, Equals,           bool,   (const Object* const, const Object* const) );
+delegate (Object, GetHashCode,      int,    (const Object* const) );
+delegate (Object, Dispose,          void,   (Object* const) );
+delegate (Object, ReferenceEquals,  bool,   (const Object* const, const Object* const) );
+delegate (Object, InstanceEquals,   bool,   (const Object* const, const Object* const) );
+delegate (Object, GetClass,         Class,  (const Object* const) );
+delegate (Object, GetClassName,     char*,  (const Object* const) );
 
 vtable (Object) 
 {
@@ -70,7 +71,7 @@ function vptr(Object);
  * 
  * Class Loader callback
  */
-function objc_loadObject(Class super) 
+function Class objc_loadObject(Class super) 
 {
     Class cls = createClass(super, Object);
     addMethod(cls, Object, ToString);
@@ -88,10 +89,10 @@ function objc_loadObject(Class super)
 //=======================================================================//
 // bool InstanceOf(Class class, Object* obj);
 
-function bool InstanceOf(Class class, Object* obj) {
+function bool InstanceOf(Class klass, Object* obj) {
     Class isa = obj->isa; 
     
-    while (isa != class) {
+    while (isa != klass) {
         isa = isa->super_class;
         if (isa == nullptr) return false;
     }
@@ -101,9 +102,9 @@ function bool InstanceOf(Class class, Object* obj) {
 /**
  * Object constructor
  */
-function Object* Object_init(Object* this) {
-    this->isa = objc_getClass("Object");
-    return this;
+method Object* New(Object* self) {
+    self->isa = objc_getClass("Object");
+    return self;
 }
 
 method bool ReferenceEquals(const Object* const objA, const Object* const objB)
@@ -124,27 +125,27 @@ method bool InstanceEquals(const Object* const objA, const Object* const objB)
     return Equals(objA, objB);    
 }
 
-method void Dispose(Object* const this)
+method void Dispose(Object* const self)
 {
-    return get_vptr(Object)->Dispose(this);
+    return get_vptr(Object)->Dispose(self);
 }
 /**
  * virtual Dispose method
  */
-function void Object_Dispose(Object* const this){}
+function void Object_Dispose(Object* const self){}
 
 /**
- * Returns the string value of this Object. The default for 
+ * Returns the string value of self Object. The default for 
  * a Object is to return the fully qualified name of the class.
  */
-method char* ToString(const Object* const this)
+method char* ToString(const Object* const self)
 {
-    return get_vptr(Object)->ToString(this);
+    return get_vptr(Object)->ToString(self);
 }
 /**
  * virtual ToString method
  */
-function const char *Object_ToString(const Object* const this)
+function const char *Object_ToString(const Object* const self)
 {
     return "Object";
 }
@@ -152,27 +153,27 @@ function const char *Object_ToString(const Object* const this)
 /**
  * Compare to another object
  */
-method bool Equals(const Object* const this, const Object* const that)
+method bool Equals(const Object* const self, const Object* const that)
 {
-    // return this == that;
-    return get_vptr(Object)->Equals(this, that);
+    // return self == that;
+    return get_vptr(Object)->Equals(self, that);
 }
 
 /**
- * Get's the hashcode for this object. Default is the object's address in memory,
+ * Get's the hashcode for self object. Default is the object's address in memory,
  */
-method int GetHashCode(const Object* const this)
+method int GetHashCode(const Object* const self)
 {
-    return get_vptr(Object)->GetHashCode(this);
+    return get_vptr(Object)->GetHashCode(self);
 }
 
-method Class GetClass(const Object* const this)
+method Class GetClass(const Object* const self)
 {
-    return &this->isa;
+    return &self->isa;
 }
 
-method char* GetClassName(const Object* const this)
+method char* GetClassName(const Object* const self)
 {
-    return this->isa->name;
+    return self->isa->name;
 }
 
