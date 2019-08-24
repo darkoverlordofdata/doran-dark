@@ -85,9 +85,9 @@ static inline vptr(Array);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadArray(Class super) 
+static inline Class objc_loadArray(Class base) 
 {
-    Class cls = createClass(super, Array);
+    Class cls = createClass(base, Array);
     addMethod(cls, Array, ToString);
     addMethod(cls, Object, Equals);
     addMethod(cls, Object, GetHashCode);

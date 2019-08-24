@@ -45,9 +45,9 @@ static inline vptr(Texture2D);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadTexture2D(Class super) 
+static inline Class objc_loadTexture2D(Class base) 
 {
-    Class cls = createClass(super, Texture2D);
+    Class cls = createClass(base, Texture2D);
     addMethod(cls, Texture2D, ToString);
     addMethod(cls, Object, Equals);
     addMethod(cls, Object, GetHashCode);

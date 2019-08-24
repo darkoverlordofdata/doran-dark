@@ -112,9 +112,9 @@ static inline vptr(String);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadString(Class super) 
+static inline Class objc_loadString(Class base) 
 {
-    Class cls = createClass(super, String);
+    Class cls = createClass(base, String);
     addMethod(cls, String,      ToString);
     addMethod(cls, String,        Equals);
     addMethod(cls, Object,   GetHashCode);

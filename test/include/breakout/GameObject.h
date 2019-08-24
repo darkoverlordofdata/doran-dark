@@ -67,9 +67,9 @@ static inline vptr(GameObject);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadGameObject(Class super) 
+static inline Class objc_loadGameObject(Class base) 
 {
-    Class cls = createClass(super, GameObject);
+    Class cls = createClass(base, GameObject);
     addMethod(cls, GameObject, ToString);
     addMethod(cls, Object, Equals);
     addMethod(cls, Object, GetHashCode);

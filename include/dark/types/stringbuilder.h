@@ -114,9 +114,9 @@ static inline vptr(StringBuilder);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadStringBuilder(Class super) 
+static inline Class objc_loadStringBuilder(Class base) 
 {
-    Class cls = createClass(super, StringBuilder);
+    Class cls = createClass(base, StringBuilder);
 	addMethod(cls, StringBuilder, 	ToString);
 	addMethod(cls, Object, 			Equals);
 	addMethod(cls, Object, 		GetHashCode);

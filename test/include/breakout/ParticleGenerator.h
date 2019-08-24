@@ -71,9 +71,9 @@ static inline vptr(ParticleGenerator);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadParticleGenerator(Class super) 
+static inline Class objc_loadParticleGenerator(Class base) 
 {
-    Class cls = createClass(super, ParticleGenerator);
+    Class cls = createClass(base, ParticleGenerator);
     addMethod(cls, ParticleGenerator, ToString);
     addMethod(cls, Object, Equals);
     addMethod(cls, Object, GetHashCode);

@@ -83,9 +83,9 @@ static inline vptr(Number);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadNumber(Class super) 
+static inline Class objc_loadNumber(Class base) 
 {
-    Class cls = createClass(super, Number);
+    Class cls = createClass(base, Number);
     addMethod(cls, Number,      ToString);
     addMethod(cls, Object,        Equals);
     addMethod(cls, Object,   GetHashCode);

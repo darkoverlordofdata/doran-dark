@@ -78,9 +78,9 @@ vtable (Exception)
 
 static inline vptr(Exception);
 
-static inline Class objc_loadException(Class super) 
+static inline Class objc_loadException(Class base) 
 {
-    Class cls = createClass(super, Exception);
+    Class cls = createClass(base, Exception);
     addMethod(cls, Exception,  ToString);
     addMethod(cls, Object,     Equals);
     addMethod(cls, Object,     GetHashCode);

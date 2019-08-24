@@ -108,9 +108,10 @@ SOFTWARE.
 /**
  *  MACRO base
  *      call the base version of the method
+ *      SUPER is redefined per class
+ *      warning: don't do this at home
  */
-#define base(T, method) method((T*)self)
-
+#define super(method) method((SUPER*)self)
 
 /**
  *  MACRO using
@@ -134,6 +135,7 @@ SOFTWARE.
  * Define function to retrieve vptr
  */
 #define vptr(T)                                                         \
+    struct T##_vtable* T##_vptr(T* self);                               \
     struct T##_vtable* T##_vptr(T* self) {                              \
         return (struct T##_vtable*)self->isa->vtable;                   \
     };                                                                  \
@@ -146,12 +148,12 @@ SOFTWARE.
 /**
  * 
  */
-#define createClass(super, T) objc_allocateClassPair(super, #T, 0, (IMP*)&T##_vtable)
+#define createClass(base, T) objc_allocateClassPair(base, #T, 0, (IMP*)&T##_vtable)
 
 /**
  * 
  */
 #define addMethod(cls, T, addr) class_addMethod(cls, (SEL)#addr, ((IMP)(T##addr)addr), "")
 
-typedef Class* (*objc_LoadClass)(Class super);
+typedef Class* (*objc_LoadClass)(Class base);
 

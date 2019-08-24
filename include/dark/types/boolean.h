@@ -87,9 +87,9 @@ static inline vptr(Boolean);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadBoolean(Class super) 
+static inline Class objc_loadBoolean(Class base) 
 {
-    Class cls = createClass(super, Boolean);
+    Class cls = createClass(base, Boolean);
     addMethod(cls, Boolean,    ToString);
     addMethod(cls, Object,     Equals);
     addMethod(cls, Object,     GetHashCode);

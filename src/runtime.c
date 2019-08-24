@@ -273,7 +273,6 @@ void __attribute__((constructor(101))) __objc_load()
 {
     GC_INIT();
     GC_enable_incremental();
-    _objc_inform("Load dark framework");
     objc_loadFramework();
 }
 

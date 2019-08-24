@@ -38,9 +38,9 @@ static inline vptr(ResourceManager);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadResourceManager(Class super) 
+static inline Class objc_loadResourceManager(Class base) 
 {
-    Class cls = createClass(super, ResourceManager);
+    Class cls = createClass(base, ResourceManager);
     addMethod(cls, ResourceManager,     ToString);
     addMethod(cls, Object,              Equals);
     addMethod(cls, Object,              GetHashCode);

@@ -16,23 +16,11 @@
 void __attribute__((constructor(200))) GameLoader() 
 {
 
-    _objc_inform("Load game classes");
     Class obj = objc_getClass("Object");
-    assert(obj != nullptr);
-    Class gameClass;
-
-    Log("gameClass = objc_loadGame(obj)");
-    gameClass = objc_loadGame(obj);
-    assert(gameClass != nullptr);
+    Class gameClass = objc_loadGame(obj);
 
     objc_registerClassPair(gameClass);
-    Log("schmupwarzClass objc_loadShmupwarz");
-    Class schmupwarzClass = objc_loadShmupwarz(gameClass);
-    assert(schmupwarzClass != nullptr);
-
-    objc_registerClassPair(schmupwarzClass);
-
-
+    objc_registerClassPair(objc_loadShmupwarz(gameClass));
 }
 
 int main(int argc, char *argv[])
@@ -45,6 +33,7 @@ int main(int argc, char *argv[])
     // Dispose(game);
 
     Shmupwarz* game = new(Shmupwarz, 600, 480);
+    Log("Game %s", ToString(game));
     
     Run(game);
     Dispose(game);

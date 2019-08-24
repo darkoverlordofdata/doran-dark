@@ -61,9 +61,9 @@ static inline vptr(Comparable);
 /**
  * Create the class loader
  */
-static inline Class objc_loadComparable(Class super) 
+static inline Class objc_loadComparable(Class base) 
 {
-    Class cls = createClass(super, Comparable);
+    Class cls = createClass(base, Comparable);
     addMethod(cls, Comparable, ToString);
     addMethod(cls, Object,     Equals);
     addMethod(cls, Object,     GetHashCode);

@@ -77,9 +77,9 @@ static inline vptr(Char);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadChar(Class super) 
+static inline Class objc_loadChar(Class base) 
 {
-    Class cls = createClass(super, Char);
+    Class cls = createClass(base, Char);
 
     addMethod(cls, Char,   ToString);
     addMethod(cls, Char,   ToString);

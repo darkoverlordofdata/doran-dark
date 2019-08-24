@@ -78,9 +78,9 @@ static inline vptr(BufferedReader);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadBufferedReader(Class super) 
+static inline Class objc_loadBufferedReader(Class base) 
 {
-    Class cls = createClass(super, BufferedReader);
+    Class cls = createClass(base, BufferedReader);
     addMethod(cls, BufferedReader, ToString);
     addMethod(cls, Object, Equals);
     addMethod(cls, Object, GetHashCode);

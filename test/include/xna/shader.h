@@ -59,9 +59,9 @@ static inline vptr(Shader);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadShader(Class super) 
+static inline Class objc_loadShader(Class base) 
 {
-    Class cls = createClass(super, Shader);
+    Class cls = createClass(base, Shader);
     addMethod(cls, Shader,  ToString);
     addMethod(cls, Object,  Equals);
     addMethod(cls, Object,  GetHashCode);

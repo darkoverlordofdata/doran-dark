@@ -107,9 +107,9 @@ static inline vptr(File);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadFile(Class super) 
+static inline Class objc_loadFile(Class base) 
 {
-    Class cls = createClass(super, File);
+    Class cls = createClass(base, File);
     addMethod(cls, File, ToString);
     addMethod(cls, Object, Equals);
     addMethod(cls, Object, GetHashCode);

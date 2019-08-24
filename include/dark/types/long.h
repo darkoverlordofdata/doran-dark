@@ -81,9 +81,9 @@ static inline vptr(Long);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadLong(Class super) 
+static inline Class objc_loadLong(Class base) 
 {
-    Class cls = createClass(super, Long);
+    Class cls = createClass(base, Long);
     addMethod(cls, Long,        ToString);
     addMethod(cls, Object,        Equals);
     addMethod(cls, Object,   GetHashCode);

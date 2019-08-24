@@ -76,9 +76,9 @@ static inline vptr(Object);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadObject(Class super) 
+static inline Class objc_loadObject(Class base) 
 {
-    Class cls = createClass(super, Object);
+    Class cls = createClass(base, Object);
     cls->id = ObjectTypeID;
 
     addMethod(cls, Object, ToString);
@@ -134,6 +134,7 @@ method bool InstanceEquals(const Object* const objA, const Object* const objB)
 
 method void Dispose(Object* const self)
 {
+    Log("Object dispose");
     if (virtual(Object)->Dispose == Dispose) {
         // if (!_objc_use_gc) free(self);
     } else {

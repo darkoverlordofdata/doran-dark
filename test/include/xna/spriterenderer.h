@@ -36,9 +36,9 @@ static inline vptr(SpriteRenderer);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadSpriteRenderer(Class super) 
+static inline Class objc_loadSpriteRenderer(Class base) 
 {
-    Class cls = createClass(super, SpriteRenderer);
+    Class cls = createClass(base, SpriteRenderer);
     addMethod(cls, SpriteRenderer, ToString);
     addMethod(cls, Object, Equals);
     addMethod(cls, Object, GetHashCode);

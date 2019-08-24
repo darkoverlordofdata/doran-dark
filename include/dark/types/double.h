@@ -78,9 +78,9 @@ static inline vptr(Double);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadDouble(Class super) 
+static inline Class objc_loadDouble(Class base) 
 {
-    Class cls = createClass(super, Double);
+    Class cls = createClass(base, Double);
     addMethod(cls,  Double,     ToString);
     addMethod(cls,  Object,       Equals);
     addMethod(cls,  Object,  GetHashCode);

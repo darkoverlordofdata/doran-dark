@@ -98,9 +98,9 @@ static inline vptr(Map);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadMap(Class super) 
+static inline Class objc_loadMap(Class base) 
 {
-    Class cls = createClass(super, Map);
+    Class cls = createClass(base, Map);
     addMethod(cls, Map, ToString);
     addMethod(cls, Object, Equals);
     addMethod(cls, Object, GetHashCode);

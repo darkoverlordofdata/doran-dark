@@ -72,9 +72,9 @@ static inline vptr(List);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadList(Class super) 
+static inline Class objc_loadList(Class base) 
 {
-    Class cls = createClass(super, List);
+    Class cls = createClass(base, List);
     addMethod(cls, List, ToString);
     addMethod(cls, Object, Equals);
     addMethod(cls, Object, GetHashCode);

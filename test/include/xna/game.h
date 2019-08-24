@@ -31,15 +31,11 @@
 #endif
 // #include "tglm.h"
 
-
-// 100,149,237,255
-#define bgd_r 0.392156f
-#define bgd_g 0.584313f
-#define bgd_b 0.929411f
-
 /**
  * The game type
  */
+#undef SUPER
+#define SUPER Object
 type (Game)
 {
     Class isa;
@@ -112,9 +108,9 @@ static inline vptr(Game);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadGame(Class super) 
+static inline Class objc_loadGame(Class base) 
 {
-    Class cls = createClass(super, Game);
+    Class cls = createClass(base, Game);
     addMethod(cls, Game,    ToString);
     addMethod(cls, Object,  Equals);
     addMethod(cls, Object,  GetHashCode);
@@ -141,18 +137,32 @@ static inline uint64_t GetTicks() {
 
 static inline void LogSDLError(const char* msg)
 {
-    printf("%s error: %s", msg, SDL_GetError());
+    Log("%s error: %s", msg, SDL_GetError());
 }
+
 
 method char* ToString(const Game* const self)
 {
-    return "Game { }";
+    static char* toStringCache;
+
+    if (!toStringCache)
+        toStringCache = DSsprintf("title { %s }", self->title);
+
+    return toStringCache;
+
 }
 
 
-// #define inherit(T, Base, args...) = New((Base*)self ## args) 
 /**
- * alloc Game
+ * New Base Game
+ * 
+ * @param self
+ * @paran title
+ * @param x
+ * @param y
+ * @param width
+ * @param height
+ * @param SDL flags
  */
 method Game* New(Game* self, char* title, int x, int y, int width, int height, int flags)
 {
@@ -247,12 +257,12 @@ method Game* New(Game* self, char* title, int x, int y, int width, int height, i
 
 
 /**
- * Update
+ * Game::Update
  */
 method void Update(Game* const self){ }
 
 /**
- * Render
+ * Game::Draw
  */
 method void Draw(Game* const self) 
 {
@@ -260,7 +270,7 @@ method void Draw(Game* const self)
 }
 
 /**
- * HandleEvents
+ * Game::HandleEvents
  */
 method void HandleEvents(Game* const self) 
 {
@@ -294,14 +304,16 @@ method void HandleEvents(Game* const self)
 }
 
 
+/**
+ * Game::Start
+ */
 method void Start(Game* const self) 
 {
-    printf("Game::Start\n");
     self->isRunning = true;
-
 }
+
 /**
- * Tick
+ * Game::Tick
  */
 method void Tick(Game* const self) 
 {
@@ -394,7 +406,7 @@ method void Tick(Game* const self)
 }
 
 /**
- * Dispose
+ * Game::Dispose
  */
 method void Dispose(Game* const self) 
 {
@@ -405,9 +417,13 @@ method void Dispose(Game* const self)
     }
     IMG_Quit();
     SDL_Quit();
-    Dispose((Object*)self);
+    Log("Game dispose");
+    super(Dispose);
 }
 
+/**
+ * Game::RunLoop
+ */
 method void RunLoop(Game* const self)
 {
     HandleEvents(self);
@@ -418,7 +434,7 @@ method void RunLoop(Game* const self)
 }
 
 /**
- * GameLoop
+ * Game::Run
  */
 method void Run(Game* const self) 
 {

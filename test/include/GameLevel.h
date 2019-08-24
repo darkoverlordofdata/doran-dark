@@ -72,9 +72,9 @@ static inline vptr(GameLevel);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadGameLevel(Class super) 
+static inline Class objc_loadGameLevel(Class base) 
 {
-    Class cls = createClass(super, GameLevel);
+    Class cls = createClass(base, GameLevel);
 
     addMethod(cls, GameLevel, ToString);
     addMethod(cls, Object, Equals);

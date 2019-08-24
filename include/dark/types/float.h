@@ -81,9 +81,9 @@ static inline vptr(Float);
  * 
 ] * Class Loader callback
  */
-static inline Class objc_loadFloat(Class super) 
+static inline Class objc_loadFloat(Class base) 
 {
-    Class cls = createClass(super, Float);
+    Class cls = createClass(base, Float);
     addMethod(cls, Object,        Equals);
     addMethod(cls, Object,   GetHashCode);
     addMethod(cls, Object,       Dispose);

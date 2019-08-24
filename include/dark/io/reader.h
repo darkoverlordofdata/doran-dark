@@ -64,9 +64,9 @@ static inline vptr(Reader);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadReader(Class super) 
+static inline Class objc_loadReader(Class base) 
 {
-    Class cls = createClass(super, Reader);
+    Class cls = createClass(base, Reader);
     addMethod(cls, Reader, ToString);
     addMethod(cls, Object, Equals);
     addMethod(cls, Object, GetHashCode);

@@ -3,6 +3,13 @@
 #include <xna/xna.h>
 #include <assert.h>
 
+// 100,149,237,255
+#define bgd_r 0.392156f
+#define bgd_g 0.584313f
+#define bgd_b 0.929411f
+
+#undef SUPER
+#define SUPER Game
 type (Shmupwarz)
 {
     Class isa;
@@ -78,9 +85,9 @@ static inline vptr(Shmupwarz);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadShmupwarz(Class super) 
+static inline Class objc_loadShmupwarz(Class base) 
 {
-    Class cls = createClass(super, Shmupwarz);
+    Class cls = createClass(base, Shmupwarz);
     addMethod(cls, Shmupwarz,   ToString);
     addMethod(cls, Object,      Equals);
     addMethod(cls, Object,      GetHashCode);
@@ -95,7 +102,13 @@ static inline Class objc_loadShmupwarz(Class super)
     return cls;
 }
 
-
+/**
+ * New Shmupwarz game
+ * 
+ * @param self
+ * @param width
+ * @param height
+ */
 method Shmupwarz* New(Shmupwarz* self, int width, int height)
 {
 	extends(Game, "Shmupwarz", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
@@ -104,52 +117,86 @@ method Shmupwarz* New(Shmupwarz* self, int width, int height)
     return self;
 }
 
+/**
+ * Shmupwarz::ToString
+ */
 method char* ToString(const Shmupwarz* const self)
 {
-    return "Shmupwarz { }";
+    return super(ToString);
 }
 
+/**
+ * Shmupwarz::Dispose
+ * 
+ */
 method void Dispose(const Shmupwarz* const self)
 {
-    Dispose((Game*)self);
+    Log("Shmuwarz dispose");
+    super(Dispose);
 }
 
+/**
+ * Shmupwarz::Start
+ * 
+ */
 method void Start(const Shmupwarz* const self)
 {
-    Start((Game*)self);
+    super(Start);
 }
+
+/**
+ * Shmupwarz::Run
+ * 
+ */
 method void Run(const Shmupwarz* const self)
 {
-    Run((Game*)self);
+    super(Run);
 }
 
+/**
+ * Shmupwarz::Tick
+ * 
+ */
 method void Tick(const Shmupwarz* const self)
 {
-    Tick((Game*)self);
+    super(Tick);
 }
 
+/**
+ * Shmupwarz::HandleEvents
+ * 
+ */
 method void HandleEvents(const Shmupwarz* const self)
 {
-    HandleEvents((Game*)self);
+    super(HandleEvents);
 }
 
+/**
+ * Shmupwarz::RunLoop
+ * 
+ */
 method void RunLoop(const Shmupwarz* const self)
 {
-    RunLoop((Game*)self);
+    super(RunLoop);
 }
 
-#define base(T, func) func((T*)self)
 
+/**
+ * Shmupwarz::Draw
+ * 
+ */
 method void Draw(const Shmupwarz* const self)
 {
     glClearColor(bgd_r, bgd_g, bgd_b, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    base(Game, Draw);
-    // Draw((Game*)self);
+    super(Draw);
 }
 
+/**
+ * Shmupwarz::Update
+ * 
+ */
 method void Update(const Shmupwarz* const self)
 {
-    base(Game, Update);
-    // Update((Game*)self);
+    super(Update);
 }

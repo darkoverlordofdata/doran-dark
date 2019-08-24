@@ -34,9 +34,9 @@ static inline vptr(Rectangle);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadRectangle(Class super) 
+static inline Class objc_loadRectangle(Class base) 
 {
-    Class cls = createClass(super, Rectangle);
+    Class cls = createClass(base, Rectangle);
     addMethod(cls, Rectangle,   ToString);
     addMethod(cls, Object,      Equals);
     addMethod(cls, Object,      GetHashCode);

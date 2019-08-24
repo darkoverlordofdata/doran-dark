@@ -65,9 +65,9 @@ static inline vptr(InputStreamReader);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadInputStreamReader(Class super) 
+static inline Class objc_loadInputStreamReader(Class base) 
 {
-    Class cls = createClass(super, InputStreamReader);
+    Class cls = createClass(base, InputStreamReader);
     addMethod(cls, InputStreamReader, ToString);
     addMethod(cls, Object, Equals);
     addMethod(cls, Object, GetHashCode);

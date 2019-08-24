@@ -253,9 +253,9 @@ method char* ToString(const ResourceManager* const self)
 /**
  * Class Loader callback0
  */
-static inline Class objc_loadResourceManager(Class super) 
+static inline Class objc_loadResourceManager(Class base) 
 {
-    Class cls = createClass(super, ResourceManager);
+    Class cls = createClass(base, ResourceManager);
     addMethod(cls, ResourceManager,  ToString);
 
     $ResourceManager.Shaders = new(Map, of(Shader));

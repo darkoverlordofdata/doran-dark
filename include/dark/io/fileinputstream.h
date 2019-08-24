@@ -62,9 +62,9 @@ static inline vptr(FileInputStream);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadFileInputStream(Class super) 
+static inline Class objc_loadFileInputStream(Class base) 
 {
-    Class cls = createClass(super, FileInputStream);
+    Class cls = createClass(base, FileInputStream);
     addMethod(cls, FileInputStream, ToString);
     addMethod(cls, Object, Equals);
     addMethod(cls, Object, GetHashCode);

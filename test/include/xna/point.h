@@ -30,9 +30,9 @@ static inline vptr(Point);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadPoint(Class super) 
+static inline Class objc_loadPoint(Class base) 
 {
-    Class cls = createClass(super, Point);
+    Class cls = createClass(base, Point);
     addMethod(cls, Point,       ToString);
     addMethod(cls, Object,      Equals);
     addMethod(cls, Object,      GetHashCode);

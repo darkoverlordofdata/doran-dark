@@ -69,9 +69,9 @@ static inline vptr(BallObject);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadBallObject(Class super) 
+static inline Class objc_loadBallObject(Class base) 
 {
-    Class cls = createClass(super, BallObject);
+    Class cls = createClass(base, BallObject);
     addMethod(cls, BallObject,  ToString);
     addMethod(cls, Object,      Equals);
     addMethod(cls, Object,      GetHashCode);

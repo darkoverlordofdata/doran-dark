@@ -81,9 +81,9 @@ static inline vptr(Integer);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadInteger(Class super) 
+static inline Class objc_loadInteger(Class base) 
 {
-    Class cls = createClass(super, Integer);
+    Class cls = createClass(base, Integer);
     addMethod(cls, Integer,     ToString);
     addMethod(cls, Object,        Equals);
     addMethod(cls, Object,   GetHashCode);
