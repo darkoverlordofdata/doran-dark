@@ -73,12 +73,12 @@ vtable (BufferedReader) {
     const BufferedReaderReadLine      ReadLine;
 };
 
-function vptr(BufferedReader);
+static inline vptr(BufferedReader);
 /**
  * 
  * Class Loader callback
  */
-function Class objc_loadBufferedReader(Class super) 
+static inline Class objc_loadBufferedReader(Class super) 
 {
     Class cls = createClass(super, BufferedReader);
     addMethod(cls, BufferedReader, ToString);
@@ -101,7 +101,7 @@ function Class objc_loadBufferedReader(Class super)
 
 
 method BufferedReader* New(BufferedReader* self, Reader* in, int sz) {
-    extends((Reader*)self);
+    extends(Reader);
     self->isa = objc_getClass("BufferedReader");
     self->markedChar = UNMARKED;
     self->readAheadLimit = 0;
@@ -121,11 +121,11 @@ method BufferedReader* New(BufferedReader* self, Reader* in) {
 }
 
 
-function void EnsureOpen(const BufferedReader* const self) {
+static inline void EnsureOpen(const BufferedReader* const self) {
     if (self->in == nullptr) throw DSIllegalArgumentException("Stream closed", Source);
 }
 
-function void Fill(BufferedReader* const self) {
+static inline void Fill(BufferedReader* const self) {
     int dst;
     if (self->markedChar <= UNMARKED) {
         dst = 0;

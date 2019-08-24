@@ -66,8 +66,10 @@ SOFTWARE.
 #define overload __attribute__((overloadable))
 
 #define DSfree(ptr) GC_FREE(ptr)
+// #define DSfree(ptr) free(ptr)
 #define DSmalloc(size) GC_MALLOC(size)
 #define DSrealloc(old, new_size) GC_REALLOC(old, new_size)
+// #define DSrealloc(old, new_size) realloc(old, new_size)
 #define DScalloc(num, size) GC_MALLOC(num * size)
 #define DScollect() GC_gcollect()
 

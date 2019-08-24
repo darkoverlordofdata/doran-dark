@@ -15,12 +15,9 @@
 
 #include <dark/vendor/hashmap/hashmap.h>
 
-void* DSMalloc(size_t);
-void* DSRealloc(void*, size_t);
-void* DSCalloc(size_t, size_t);
-void DSFree(void*);
-void DSCollect();
 
+// #define DSfree(m) free(m)
+#define DSfree(m) GC_FREE(m)
 
 #ifndef HASHMAP_NOASSERT
 #include <assert.h>
@@ -230,12 +227,12 @@ static int hashmap_rehash(struct hashmap *map, size_t new_size)
         new_entry->key = entry->key;
         new_entry->data = entry->data;
     }
-    GC_FREE(old_table);
+    DSfree(old_table);
     return 0;
 revert:
     map->table_size = old_size;
     map->table = old_table;
-    GC_FREE(new_table);
+    DSfree(new_table);
     return -EINVAL;
 }
 
@@ -311,7 +308,7 @@ void hashmap_destroy(struct hashmap *map)
         return;
     }
     hashmap_free_keys(map);
-    GC_FREE(map->table);
+    DSfree(map->table);
     memset(map, 0, sizeof(*map));
 }
 
@@ -628,7 +625,7 @@ int hashmap_compare_string(const void *a, const void *b)
 }
 
 /*
- * Default key allocation function for string keys.  Use GC_FREE() for the
+ * Default key allocation function for string keys.  Use DSfree() for the
  * key_free_func.
  */
 void *hashmap_alloc_key_string(const void *key)

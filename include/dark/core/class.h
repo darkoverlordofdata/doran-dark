@@ -62,12 +62,12 @@ SOFTWARE.
 /**
  * All functions are static inlined
  */
-#define function static inline
+// #define proc static inline
 
 /**
  * Multi-methods are overloadable functions
  */
-#define method function overload
+#define method static inline overload
 
 /**
  *  MACRO delegate
@@ -92,17 +92,25 @@ SOFTWARE.
  */
 #define alloc(T) (T*)DSmalloc(sizeof(T))
 
-// /**
-//  *  MACRO new
-//  *      Allocate and initialize a new object
-//  */
-#define new(T, args...) New(alloc(T), ## args)
-
-#define extends New
 /**
  *  MACRO new
  *      Allocate and initialize a new object
  */
+#define new(T, args...) New(alloc(T), ## args)
+
+/**
+ *  MACRO extends
+ *      extends base class by calling it's constructor
+ */
+#define extends(T, args...) New((T*)self, ## args) 
+
+
+/**
+ *  MACRO base
+ *      call the base version of the method
+ */
+#define base(T, method) method((T*)self)
+
 
 /**
  *  MACRO using
@@ -131,9 +139,9 @@ SOFTWARE.
     };                                                                  \
 
 /**
- * Get the vptr for T
+ * Get the most derived vptr for T
  */
-#define get_vptr(T) T##_vptr(self)
+#define virtual(T) T##_vptr(self)
 
 /**
  * 

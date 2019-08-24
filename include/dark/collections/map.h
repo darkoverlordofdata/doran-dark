@@ -93,12 +93,12 @@ vtable (Map) {
     const MapRehash         Rehash;
 } ;
 
-function vptr(Map);
+static inline vptr(Map);
 /**
  * 
  * Class Loader callback
  */
-function Class objc_loadMap(Class super) 
+static inline Class objc_loadMap(Class super) 
 {
     Class cls = createClass(super, Map);
     addMethod(cls, Map, ToString);
@@ -230,7 +230,7 @@ static unsigned long crc32_tab[] = {
    };
 
 /* Return a 32-bit CRC of the contents of the buffer. */
-function unsigned long crc32(const unsigned char *s, unsigned int len)
+static inline unsigned long crc32(const unsigned char *s, unsigned int len)
 {
     unsigned long crc32val = 0;
     for (unsigned int i = 0;  i < len;  i ++)
@@ -264,7 +264,7 @@ method unsigned int HashInt(Map* const self, char* keystring)
 
 method Map* New(Map* const self, Class typeOf)
 {
-    extends((Object*)self);
+    extends(Object);
 
     self->isa = objc_getClass("Map");
     self->typeOf = typeOf;
@@ -459,7 +459,7 @@ method int Remove(Map* const self, char* key)
 	return MAP_MISSING;
 }
 
-function void Map_dtor(void* self) {
+static inline void Map_dtor(void* self) {
     Dispose((Map*)self);
 }
 /* Deallocate the hashmap */

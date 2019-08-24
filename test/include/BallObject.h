@@ -21,12 +21,11 @@
                             BallObject*: (BallObject *)object,          \
                             default: nullptr)
 
-
 // BallObject holds the state of the Ball object inheriting
 // relevant state data from GameObject. Contains some extra
 // functionality specific to Breakout's ball object that
 // were too specific for within GameObject alone.
-type (BallObject)  // extends GameObject
+type (BallObject)  // extend GameObject
 {
     Class       isa;
     Vec2        Position;
@@ -66,11 +65,11 @@ vtable (BallObject)
 /**
  * Put it all together
  */
-function vptr(BallObject);
+static inline vptr(BallObject);
 /**
  * Class Loader callback
  */
-function Class objc_loadBallObject(Class super) 
+static inline Class objc_loadBallObject(Class super) 
 {
     Class cls = createClass(super, BallObject);
     addMethod(cls, BallObject,  ToString);
@@ -99,7 +98,8 @@ method BallObject* New(
     Texture2D* Sprite)
 {
     Radius = Radius != 0 ? Radius : 12.5f;
-    extends((GameObject*)self, "ball", Position, (Vec2){ Radius*2, Radius*2 }, Sprite, (Vec3){ 1, 1, 1 });
+
+    extends(GameObject, "ball", Position, (Vec2){ Radius*2, Radius*2 }, Sprite, (Vec3){ 1, 1, 1 });
     self->isa = objc_getClass("BallObject");
     self->Velocity = Velocity;
     self->Radius = Radius;

@@ -80,12 +80,12 @@ vtable (Array) {
     const ArrayGet              Get;    
 };
 
-function vptr(Array);
+static inline vptr(Array);
 /**
  * 
  * Class Loader callback
  */
-function Class objc_loadArray(Class super) 
+static inline Class objc_loadArray(Class super) 
 {
     Class cls = createClass(super, Array);
     addMethod(cls, Array, ToString);
@@ -154,8 +154,8 @@ method Array* New(Array*  self) {
  * Default Constructor
  */
 method Array* New(Array* self, Class typeOf, int capacity) {
-    extends((Object*)self);
-    // extends(Object, self);
+    extends(Object);
+    // extend(Object, self);
 
     self->isa = objc_getClass("Array");
     self->capacity = capacity == 0 ? ARRAY_INIT_CAPACITY : capacity;

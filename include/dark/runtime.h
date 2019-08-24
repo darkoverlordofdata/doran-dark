@@ -27,9 +27,8 @@
 #define nil (id)0
 #define Nil (Class)0
 
-static __inline void bcopy(const void *src, void *dst, size_t size) { memcpy(dst, src, size); }
-static __inline void bzero(void *dst, size_t size) { memset(dst, 0, size); }
-
+// static __inline void bcopy(const void *src, void *dst, size_t size) { memcpy(dst, src, size); }
+// static __inline void bzero(void *dst, size_t size) { memset(dst, 0, size); }
 /**
  * _objc_inform
  * 
@@ -52,6 +51,8 @@ static inline void _objc_inform(const char *fmt, ...)
 	#endif
 }
 
+static bool _objc_use_gc = true;
+static int _objc_id = 1;
 
 /** NX_hashmap interface for Class objects */
 HASHMAP_FUNCS_DECLARE(NX, const char, struct objc_class)
@@ -86,6 +87,7 @@ struct objc_class {
 	Class isa;
 	Class super_class;
 	char* name;
+	long id;
 	long version;
 	long info;
 	long instance_size;

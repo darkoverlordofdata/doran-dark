@@ -109,12 +109,12 @@ vtable (StringBuilder) {
     const StringBuilderReset      Reset;
 };
 
-function vptr(StringBuilder);
+static inline vptr(StringBuilder);
 /**
  * 
  * Class Loader callback
  */
-function Class objc_loadStringBuilder(Class super) 
+static inline Class objc_loadStringBuilder(Class super) 
 {
     Class cls = createClass(super, StringBuilder);
 	addMethod(cls, StringBuilder, 	ToString);
@@ -139,7 +139,7 @@ function Class objc_loadStringBuilder(Class super)
  */
 method StringBuilder* New(StringBuilder* self)
 {
-    extends((Object*)self);
+    extends(Object);
     self->isa = objc_getClass("StringBuilder"); 
 	return self;
 }
@@ -156,7 +156,7 @@ method int Empty(const StringBuilder* self)
 method int Appendc(StringBuilder* self, const char c)
 {
 	char str[2] = { c, 0 };
-	auto x = get_vptr(StringBuilder)->Append(self, str);
+	auto x = virtual(StringBuilder)->Append(self, str);
 	return x;
 }
 /*

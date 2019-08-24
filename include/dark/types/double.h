@@ -74,11 +74,11 @@ vtable (Double)
     const DoubleShortValue          ShortValue;
 };
 
-function vptr(Double);
+static inline vptr(Double);
 /**
  * Class Loader callback
  */
-function Class objc_loadDouble(Class super) 
+static inline Class objc_loadDouble(Class super) 
 {
     Class cls = createClass(super, Double);
     addMethod(cls,  Double,     ToString);
@@ -103,7 +103,7 @@ function Class objc_loadDouble(Class super)
  * 
  */
 method Double* New(Double* self, const double value) {
-    extends((Number*)self);
+    extends(Number);
     self->isa = objc_getClass("Double");
     self->value = value;
     return self;
@@ -112,7 +112,7 @@ method Double* New(Double* self, const double value) {
 /**
  * Returns a primitive double value parsed from input string. 
  */
-function double DSParseDouble(char const *const s) {
+static inline double DSParseDouble(char const *const s) {
     errno = 0;
     char* endptr;
     double result = strtod(s, endptr);

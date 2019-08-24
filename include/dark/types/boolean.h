@@ -77,17 +77,17 @@ class (Boolean)
     Boolean* False;
 };
 
-function bool ParseBool(const char * const s);
+static inline bool ParseBool(const char * const s);
 method int Compare(const bool x, const bool y);
-// function bool BoolValue(const Boolean*  const self);
+// static inline bool BoolValue(const Boolean*  const self);
 /**
  * Put it all together
  */
-function vptr(Boolean);
+static inline vptr(Boolean);
 /**
  * Class Loader callback
  */
-function Class objc_loadBoolean(Class super) 
+static inline Class objc_loadBoolean(Class super) 
 {
     Class cls = createClass(super, Boolean);
     addMethod(cls, Boolean,    ToString);
@@ -128,14 +128,14 @@ function Class objc_loadBoolean(Class super)
  * 
  */
 method Boolean* New(Boolean* self, const bool value) {
-    extends((Comparable*)self);
+    extends(Comparable);
     self->isa = objc_getClass("Boolean");
     self->value = value;
     return self;
 }
 
 
-function bool ParseBool(const char * const s) {
+static inline bool ParseBool(const char * const s) {
     if (!strcmpi("y", s) 
     ||  !strcmpi("yes", s) 
     ||  !strcmpi("t", s) 

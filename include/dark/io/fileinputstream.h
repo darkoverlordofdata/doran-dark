@@ -57,12 +57,12 @@ vtable (FileInputStream) {
     const FileInputStreamAvailable    Available;
 };
 
-function vptr(FileInputStream);
+static inline vptr(FileInputStream);
 /**
  * 
  * Class Loader callback
  */
-function Class objc_loadFileInputStream(Class super) 
+static inline Class objc_loadFileInputStream(Class super) 
 {
     Class cls = createClass(super, FileInputStream);
     addMethod(cls, FileInputStream, ToString);
@@ -84,7 +84,7 @@ function Class objc_loadFileInputStream(Class super)
 
 method FileInputStream* New(FileInputStream* self, File* file) 
 {
-    extends((Object*)self);
+    extends(Object);
     self->isa = objc_getClass("FileInputStream");
     auto name = file != nullptr ? GetPath(file) : nullptr;
     if (name == nullptr)

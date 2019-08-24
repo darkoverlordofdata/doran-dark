@@ -65,7 +65,7 @@ class (ResourceManager)
 /**
  * Put it all together
  */
-function vptr(ResourceManager);
+static inline vptr(ResourceManager);
 /**
  * Class Loader callback0
  */
@@ -73,7 +73,7 @@ function vptr(ResourceManager);
 /**
  * ResourceManager
  */
-function ResourceManager* ResourceManager_ctor(ResourceManager* self) {
+static inline ResourceManager* ResourceManager_ctor(ResourceManager* self) {
     New((Object*)self); 
     self->isa = objc_getClass("ResourceManager");
     return self;
@@ -87,7 +87,7 @@ function ResourceManager* ResourceManager_ctor(ResourceManager* self) {
  * @returns loaded, compiled and linked shader program
  * 
  */
-function Shader* loadShaderFromFile(
+static inline Shader* loadShaderFromFile(
     const GLchar *vShaderFile, 
     const GLchar *fShaderFile)
 {
@@ -126,7 +126,7 @@ function Shader* loadShaderFromFile(
  * @returns Texture
  * 
  */
-function Texture2D* loadTextureFromFile(const GLchar *file, bool alpha)
+static inline Texture2D* loadTextureFromFile(const GLchar *file, bool alpha)
 {
     // Create Texture object
     int format = alpha ? GL_RGBA : GL_RGB;
@@ -151,7 +151,7 @@ function Texture2D* loadTextureFromFile(const GLchar *file, bool alpha)
  * @param name to cache as
  * @returns loaded, compiled and linked shader program
  */
-function Shader* LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, char* name)
+static inline Shader* LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile, char* name)
 {
     Put($ResourceManager.Shaders, name, (Object*)loadShaderFromFile(vShaderFile, fShaderFile));
     return (Shader*)Get($ResourceManager.Shaders, name);
@@ -165,7 +165,7 @@ function Shader* LoadShader(const GLchar *vShaderFile, const GLchar *fShaderFile
  * @returns loaded, compiled and linked shader program
  * 
  */
-function Shader* GetShader(char* name)
+static inline Shader* GetShader(char* name)
 {
     return (Shader*)Get($ResourceManager.Shaders, name);
 }
@@ -179,7 +179,7 @@ function Shader* GetShader(char* name)
  * @returns Texture
  * 
  */
-function Texture2D* LoadTexture(const GLchar *file, bool alpha, char* name)
+static inline Texture2D* LoadTexture(const GLchar *file, bool alpha, char* name)
 {
     Texture2D* tex = loadTextureFromFile(file, alpha);
     Put($ResourceManager.Textures, name, (Object*)tex);
@@ -193,7 +193,7 @@ function Texture2D* LoadTexture(const GLchar *file, bool alpha, char* name)
  * @returns Texture
  * 
  */
-function Texture2D* GetTexture(char* name)
+static inline Texture2D* GetTexture(char* name)
 {
     Texture2D* tex = (Texture2D*)Get($ResourceManager.Textures, name);
     return tex;
@@ -226,7 +226,7 @@ method void Dtor(struct ResourceManager * self)
  * @returns string with file contents
  * 
  */
-function char* rdbuf(FILE* f)
+static inline char* rdbuf(FILE* f)
 {
     fseek(f, 0L, SEEK_END);
     long s = ftell(f);
@@ -253,7 +253,7 @@ method char* ToString(const ResourceManager* const self)
 /**
  * Class Loader callback0
  */
-function Class objc_loadResourceManager(Class super) 
+static inline Class objc_loadResourceManager(Class super) 
 {
     Class cls = createClass(super, ResourceManager);
     addMethod(cls, ResourceManager,  ToString);

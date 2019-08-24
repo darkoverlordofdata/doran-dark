@@ -76,12 +76,12 @@ vtable (Long)
     const LongShortValue         ShortValue;
 };
 
-function vptr(Long);
+static inline vptr(Long);
 /** 
  * 
  * Class Loader callback
  */
-function Class objc_loadLong(Class super) 
+static inline Class objc_loadLong(Class super) 
 {
     Class cls = createClass(super, Long);
     addMethod(cls, Long,        ToString);
@@ -108,7 +108,7 @@ function Class objc_loadLong(Class super)
  */
 method Long* New(Long* self, const long value)
 {
-    extends((Number*)self);
+    extends(Number);
     self->isa = objc_getClass("Long");
     self->value = value;
     return self;
@@ -117,7 +117,7 @@ method Long* New(Long* self, const long value)
 /**
  * Returns a primitive long value parsed from input string. 
  */
-function long DSParseLong(const char* const s, const int radix)
+static inline long DSParseLong(const char* const s, const int radix)
 {
     errno = 0;
     char* endptr;

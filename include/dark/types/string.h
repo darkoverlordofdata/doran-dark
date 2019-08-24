@@ -45,6 +45,7 @@ type (String) {
 
 delegate (String, New,          String*, (String*, const char*));
 delegate (String, ToString,     char*, (const String* const));
+delegate (String, Dispose,      void, (const String* const));
 delegate (String, Equals,       bool, (const String* const, const String* const));
 delegate (String, CompareTo,    int, (const String* const self, const String* const other));
 delegate (String, Compare,      int, (const char* x, const char* y));
@@ -77,7 +78,7 @@ vtable (String) {
     const StringToString              ToString;
     const StringEquals                Equals;
     const ObjectGetHashCode           GetHashCode;
-    const ObjectDispose               Dispose;
+    const StringDispose               Dispose;
     const StringCompareTo             CompareTo;
     const StringLength                Length;
     const StringIsEmpty               IsEmpty;
@@ -104,12 +105,14 @@ class (String) {
 
 method String* StringJoin(int count, ...);
 
-function vptr(String);
+
+static inline vptr(String);
+
 /**
  * 
  * Class Loader callback
  */
-function Class objc_loadString(Class super) 
+static inline Class objc_loadString(Class super) 
 {
     Class cls = createClass(super, String);
     addMethod(cls, String,      ToString);
@@ -136,13 +139,12 @@ function Class objc_loadString(Class super)
     addMethod(cls, String,     Substring);
 
     $String.Join = StringJoin;
-    
     return cls;
 }
 
 
 
-// function String* StringJoin(int count, ...);
+// static inline String* StringJoin(int count, ...);
 /**
  * Constructor
  * create a new long
@@ -152,14 +154,18 @@ function Class objc_loadString(Class super)
  */
 method String* New(String* self, const char* value)
 {
-    extends((Comparable*)self);
+    extends(Comparable);
     self->isa = objc_getClass("String");
     self->value = strdup(value);
     self->length = strlen(value);
     return self;
 }
 
-function void GetChars(const String* self, char* dst, int dstBegin) {
+
+method void Dispose(String* self) {
+    Dispose((Object*)self);
+}
+static inline void GetChars(const String* self, char* dst, int dstBegin) {
     memcpy(dst+dstBegin, self->value, self->length);
 }
 
@@ -219,7 +225,7 @@ method String* Concat(const String* self, const String* other) {
 }
 
 method bool Contains(const String* self, const String* s) {
-    return get_vptr(String)->IndexOf(self, s, 0) > -1;
+    return virtual(String)->IndexOf(self, s, 0) > -1;
 }
 
 method String* CopyOf(const String* self) {

@@ -67,12 +67,12 @@ vtable (List) {
     const ListIterate           Iterate;
 };
 
-function vptr(List);
+static inline vptr(List);
 /**
  * 
  * Class Loader callback
  */
-function Class objc_loadList(Class super) 
+static inline Class objc_loadList(Class super) 
 {
     Class cls = createClass(super, List);
     addMethod(cls, List, ToString);
@@ -95,7 +95,7 @@ method List* NewEither(List* const self)
 
 method List* New(List* self, Class typeOf)
 {
-    extends((Object*)self);
+    extends(Object);
     self->isa = objc_getClass("List");
     self->typeOf = typeOf;
     self->head = nullptr;
@@ -116,14 +116,14 @@ method List* New(List* const self)
  * @param next node in list
  * 
  */
-function ListNode* ListNode_ctor(ListNode* const self, Object* data, ListNode* next)
+static inline ListNode* ListNode_ctor(ListNode* const self, Object* data, ListNode* next)
 {
     self->data = data;
     self->next = next;
     return self;
 }
 
-function ListNode* NewListNode(Object* data, ListNode* next)
+static inline ListNode* NewListNode(Object* data, ListNode* next)
 {
     return ListNode_ctor(alloc(ListNode), data, next);
 }

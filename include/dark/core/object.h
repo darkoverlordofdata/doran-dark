@@ -25,9 +25,14 @@ SOFTWARE.
 ******************************************************************/
 #pragma once
 #include "class.h"
-
+#include <string.h>
 #define OBJECT_TYPE       (TYPE_OBJECT)
+#define IsObject(object) _Generic((object), Object*: true, default: false)
+#define AsObject(object) _Generic((object),                   \
+                            Object*: (Object *)object,  \
+                            default: nullptr)
 
+static const long ObjectTypeID = -1;
 /**
  * Object ivar
  */
@@ -66,14 +71,16 @@ class (Object)
 };
 
 
-function vptr(Object);
+static inline vptr(Object);
 /**
  * 
  * Class Loader callback
  */
-function Class objc_loadObject(Class super) 
+static inline Class objc_loadObject(Class super) 
 {
     Class cls = createClass(super, Object);
+    cls->id = ObjectTypeID;
+
     addMethod(cls, Object, ToString);
     addMethod(cls, Object, Equals);
     addMethod(cls, Object, GetHashCode);
@@ -89,7 +96,7 @@ function Class objc_loadObject(Class super)
 //=======================================================================//
 // bool InstanceOf(Class class, Object* obj);
 
-function bool InstanceOf(Class klass, Object* obj) {
+static inline bool InstanceOf(Class klass, Object* obj) {
     Class isa = obj->isa; 
     
     while (isa != klass) {
@@ -127,12 +134,18 @@ method bool InstanceEquals(const Object* const objA, const Object* const objB)
 
 method void Dispose(Object* const self)
 {
-    return get_vptr(Object)->Dispose(self);
+    if (virtual(Object)->Dispose == Dispose) {
+        // if (!_objc_use_gc) free(self);
+    } else {
+        // return virtual(Object)->Dispose(self);
+    }
 }
 /**
  * virtual Dispose method
  */
-function void Object_Dispose(Object* const self){}
+// static inline void Object_Dispose(Object* const self){
+//     if (!_objc_use_gc) free(self);
+// }
 
 /**
  * Returns the string value of self Object. The default for 
@@ -140,12 +153,12 @@ function void Object_Dispose(Object* const self){}
  */
 method char* ToString(const Object* const self)
 {
-    return get_vptr(Object)->ToString(self);
+    return virtual(Object)->ToString(self);
 }
 /**
  * virtual ToString method
  */
-function const char *Object_ToString(const Object* const self)
+static inline const char *Object_ToString(const Object* const self)
 {
     return "Object";
 }
@@ -156,7 +169,7 @@ function const char *Object_ToString(const Object* const self)
 method bool Equals(const Object* const self, const Object* const that)
 {
     // return self == that;
-    return get_vptr(Object)->Equals(self, that);
+    return virtual(Object)->Equals(self, that);
 }
 
 /**
@@ -164,7 +177,7 @@ method bool Equals(const Object* const self, const Object* const that)
  */
 method int GetHashCode(const Object* const self)
 {
-    return get_vptr(Object)->GetHashCode(self);
+    return virtual(Object)->GetHashCode(self);
 }
 
 method Class GetClass(const Object* const self)

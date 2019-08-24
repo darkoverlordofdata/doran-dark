@@ -28,8 +28,9 @@ endif ()
 #   application source
 #
 
-list ( APPEND C_SOURCES src/Boot.c )
+# list ( APPEND C_SOURCES src/Boot.c )
 list ( APPEND C_SOURCES src/main.c )
+# list ( APPEND C_SOURCES src/tinygc.c )
 # list ( APPEND C_SOURCES src/unit.c )
 #
 #   application includes
@@ -46,7 +47,13 @@ set ( INCLUDES "${INCLUDES};./.lib/dark/include" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lm" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lgc" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lBlocksRuntime" )
-set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lglfw" )
+# set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lglfw" )
+# set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lGLEW" )
+# set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lGL" )
+set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lSDL2" )
+set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lSDL2_image" )
+set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lSDL2_mixer" )
+set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lSDL2_ttf" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lGLEW" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lGL" )
 
@@ -69,7 +76,9 @@ add_executable ( ${PROJECT_NAME} ${C_SOURCES} ${RESOURCES} )
 add_custom_command(TARGET ${PROJECT_NAME} 
                    POST_BUILD COMMAND 
                    ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}> .. )
-target_link_libraries ( ${PROJECT_NAME} m gc BlocksRuntime glfw GLEW GL  )
+# target_link_libraries ( ${PROJECT_NAME} m gc BlocksRuntime glfw GLEW GL  )
+target_link_libraries ( ${PROJECT_NAME} m BlocksRuntime SDL2 SDL2_image SDL2_mixer SDL2_ttf GLEW GL  )
+
 install (TARGETS ${PROJECT_NAME} RUNTIME DESTINATION . )
 
 include (CPack)

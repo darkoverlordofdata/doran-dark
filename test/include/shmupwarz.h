@@ -1,0 +1,1 @@
+#include "shmupwarz/shmupwarz.h"

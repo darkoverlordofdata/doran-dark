@@ -100,11 +100,11 @@ vtable (Game) {
 /**
  * Put it all together
  */
-function vptr(Game);
+static inline vptr(Game);
 /**
  * Class Loader callback
  */
-function Class objc_loadGame(Class super) 
+static inline Class objc_loadGame(Class super) 
 {
     Class cls = createClass(super, Game);
     addMethod(cls, Game, ToString);
@@ -138,7 +138,7 @@ type (Collision)
  * @param dir direction from
  * @param Vec2 difference point
  */
-function Collision* CollisionTuple(bool isTrue, Direction dir, Vec2 vec)
+static inline Collision* CollisionTuple(bool isTrue, Direction dir, Vec2 vec)
 {
     var self = alloc(Collision);
     self->first = isTrue;
@@ -159,7 +159,7 @@ method Game* New(
     const int Width, 
     const int Height)
 {
-    extends((Object*)self);
+    extends(Object);
     self->isa = objc_getClass("Game");
     self->Levels = new(Array, 4);
     self->Level = 0;
@@ -353,7 +353,7 @@ method void Dispose(Game* self)
  * Calculates which direction a vector is facing (N,E,S or W)
  * 
  */
-function Direction ArrayDirection(Vec2 target)
+static inline Direction ArrayDirection(Vec2 target)
 {
     Vec2 compass[4] = {
         { 0.0f, 1.0f },	    // up
@@ -383,7 +383,7 @@ function Direction ArrayDirection(Vec2 target)
  * @param two second game object to check
  * 
  */
-function GLboolean CheckCollision2(Game* self, GameObject* one, GameObject* two) // AABB - AABB collision
+static inline GLboolean CheckCollision2(Game* self, GameObject* one, GameObject* two) // AABB - AABB collision
 {
     // Collision x-axis?
     bool collisionX = one->Position.x + one->Size.x >= two->Position.x &&
@@ -402,7 +402,7 @@ function GLboolean CheckCollision2(Game* self, GameObject* one, GameObject* two)
  * @param two second game object to check
  * 
  */
-function Collision* CheckCollision(
+static inline Collision* CheckCollision(
     Game* self, 
     BallObject* one, 
     GameObject* two) // AABB - Circle collision

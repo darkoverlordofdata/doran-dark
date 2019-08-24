@@ -59,12 +59,12 @@ vtable (InputStream) {
     const InputStreamAvailable    Available;
 };
 
-function vptr(InputStream);
+static inline vptr(InputStream);
 /**
  * 
  * Class Loader callback
  */
-function Class objc_loadInputStream(Class super) 
+static inline Class objc_loadInputStream(Class super) 
 {
     Class cls = createClass(super, InputStream);
     addMethod(cls, InputStream, ToString);
@@ -86,7 +86,7 @@ function Class objc_loadInputStream(Class super)
 
 method InputStream* New(InputStream* self) 
 {
-    extends((Object*)self);
+    extends(Object);
     self->isa = objc_getClass("InputStream");
     return self;
 }
@@ -151,12 +151,12 @@ method int Available(InputStream* self)
 
 method void Close(InputStream* self)
 {
-    get_vptr(InputStream)->Close(self);
+    virtual(InputStream)->Close(self);
 }
 
 method void Mark(InputStream* self, int readlimit)
 {
-    get_vptr(InputStream)->Mark(self, readlimit);
+    virtual(InputStream)->Mark(self, readlimit);
 }
 
 method bool MarkSupported(InputStream* self)

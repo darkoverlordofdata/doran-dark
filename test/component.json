@@ -18,6 +18,7 @@
   "files": [
     "src/Boot.c",
     "src/main.c",
+    "src/tinygc.c",
     "src/unit.c"
   ],
   "packages": [],

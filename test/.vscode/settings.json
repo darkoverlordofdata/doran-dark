@@ -14,7 +14,10 @@
         "string_view": "cpp",
         "typeinfo": "cpp",
         "chrono": "cpp",
-        "cstdarg": "cpp"
+        "cstdarg": "cpp",
+        "functional": "cpp",
+        "tuple": "cpp",
+        "utility": "cpp"
     },
     "C_Cpp.configurationWarnings": "Disabled"
 }

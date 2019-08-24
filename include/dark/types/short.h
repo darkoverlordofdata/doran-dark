@@ -74,12 +74,12 @@ vtable (Short)
     const ShortShortValue       ShortValue;
 };
 
-function vptr(Short);
+static inline vptr(Short);
 /*
  *
  * Class Loader callback
  */
-function Class objc_loadShort(Class super) 
+static inline Class objc_loadShort(Class super) 
 {
     Class cls = createClass(super, Short);
     addMethod(cls, Short,       ToString);
@@ -106,7 +106,7 @@ function Class objc_loadShort(Class super)
  */
 method Short* New(Short* self, const short value)
 {
-    extends((Number*)self);
+    extends(Number);
     self->isa = objc_getClass("Short");
     self->value = value;
     return self;
@@ -115,7 +115,7 @@ method Short* New(Short* self, const short value)
 /**
  * Returns a primitive short value parsed from input string. 
  */
-function short DSParseShort(char const *const s, int const radix)
+static inline short DSParseShort(char const *const s, int const radix)
 {
     long i = DSParseLong(s, radix);
     if (i < SHORT_MIN_VALUE || i > SHORT_MAX_VALUE)

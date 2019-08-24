@@ -43,7 +43,7 @@ delegate (Shader, SetArray4,   Shader*, (Shader*, const GLchar*, const GLfloat*)
 delegate (Shader, SetMatrix,   Shader*, (Shader*, const GLchar*, const GLfloat*));
 delegate (Shader, SetMatrix4,  Shader*, (Shader*, const GLchar*, const GLfloat*));
 
-function void checkCompileErrors(Shader* const, const GLuint, const char*);
+static inline void checkCompileErrors(Shader* const, const GLuint, const char*);
 
 
 vtable (Shader) {
@@ -68,11 +68,11 @@ vtable (Shader) {
 /**
  * Put it all together
  */
-function vptr(Shader);
+static inline vptr(Shader);
 /**
  * Class Loader callback
  */
-function Class objc_loadShader(Class super) 
+static inline Class objc_loadShader(Class super) 
 {
     Class cls = createClass(super, Shader);
     addMethod(cls, Shader,  ToString);
@@ -100,7 +100,7 @@ function Class objc_loadShader(Class super)
  */
 method Shader* New(Shader* self)
 {
-	extends((Object*)self);
+	extends(Object);
     self->isa = objc_getClass("Shader");
     return self;
 }
@@ -244,7 +244,7 @@ method Shader* SetMatrix4(
     return self;
 }
 
-function void checkCompileErrors(
+static inline void checkCompileErrors(
     Shader* const self, 
     const GLuint object, 
     const char* type) {

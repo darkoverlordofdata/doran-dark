@@ -78,12 +78,12 @@ class (Number) {
 };
 
 
-function vptr(Number);
+static inline vptr(Number);
 /**
  * 
  * Class Loader callback
  */
-function Class objc_loadNumber(Class super) 
+static inline Class objc_loadNumber(Class super) 
 {
     Class cls = createClass(super, Number);
     addMethod(cls, Number,      ToString);
@@ -108,7 +108,7 @@ function Class objc_loadNumber(Class super)
  */
 method Number* New(Number* self)
 {
-    extends((Comparable*)self);
+    extends(Comparable);
     self->isa = objc_getClass("Number");
     return self;
 }
@@ -121,51 +121,51 @@ method Number* New(Number* self)
  *         -1 self > other
  */
 method int CompareTo(const Number* self, const Number* const other) {
-    return get_vptr(Number)->CompareTo(self, other);
+    return virtual(Number)->CompareTo(self, other);
 }
 
 /**
  * Returns the value of self value cast as an int
  */
 method int IntValue(const Number* const self) {
-    return get_vptr(Number)->IntValue(self);
+    return virtual(Number)->IntValue(self);
 }
 
 /**
  * Returns the value of self value cast as a long
  */
 method long LongValue(const Number* const self) {
-    return get_vptr(Number)->LongValue(self);
+    return virtual(Number)->LongValue(self);
 }
 
 /**
  * Returns the value of self value cast as a float
  */
 method float FloatValue(const Number* const self) {
-    return get_vptr(Number)->FloatValue(self);
+    return virtual(Number)->FloatValue(self);
 }
 
 /**
  * Returns the value of self value cast as a double
  */
 method double DoubleValue(const Number* const self) {
-    return get_vptr(Number)->DoubleValue(self);
+    return virtual(Number)->DoubleValue(self);
 }
 
 /**
  * Returns the value of self value cast as a char
  */
 method char CharValue(const Number* const self) {
-    return get_vptr(Number)->CharValue(self);
+    return virtual(Number)->CharValue(self);
 }
 
 /**
  * Returns the value of self value cast as a short
  */
 method short ShortValue(const Number* const self) {
-    return get_vptr(Number)->ShortValue(self);
+    return virtual(Number)->ShortValue(self);
 }
 
 method char* ToString(const Number* const self) {
-    return get_vptr(Number)->ToString(self);
+    return virtual(Number)->ToString(self);
 }

@@ -73,11 +73,11 @@ vtable (Char)
     const CharShortValue        ShortValue;
 };
 
-function vptr(Char);
+static inline vptr(Char);
 /**
  * Class Loader callback
  */
-function Class objc_loadChar(Class super) 
+static inline Class objc_loadChar(Class super) 
 {
     Class cls = createClass(super, Char);
 
@@ -106,7 +106,7 @@ function Class objc_loadChar(Class super)
  */
 method Char* New(Char* self, const char value)
 {
-    extends((Number*)self);
+    extends(Number);
     self->isa = objc_getClass("Char");
     self->value = value;
     return self;

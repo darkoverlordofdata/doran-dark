@@ -75,6 +75,36 @@ static const int BuildVersion = 1;
 #include <dark/types/integer.h>
 #include <dark/types/long.h>
 #include <dark/types/short.h>
+
+static inline Boolean* NewBoolean(bool const value){
+    return new(Boolean, value);
+}
+static inline Char* NewChar(char const value) {
+    return new(Char, value);
+}
+static inline String* NewString(char* const value) {
+    return new(String, value);
+}
+
+static inline Short* NewShort(short const value) {
+    return new(Short, value);
+}
+
+static inline Integer* NewInteger(int const value) {
+    return new(Integer, value);
+}
+
+static inline Long* NewLong(long const value) {
+    return new(Long, value);
+}
+
+static inline Float* NewFloat(float const value) {
+    return new(Float, value);
+}
+
+static inline Double* NewDouble(double const value) {
+    return new(Double, value);
+}
 /**
  *  MACRO $
  *      Wrap a primitive type in a Object*

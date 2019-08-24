@@ -76,9 +76,9 @@ vtable (Exception)
     const ObjectDispose         Dispose;
 };
 
-function vptr(Exception);
+static inline vptr(Exception);
 
-function Class objc_loadException(Class super) 
+static inline Class objc_loadException(Class super) 
 {
     Class cls = createClass(super, Exception);
     addMethod(cls, Exception,  ToString);
@@ -102,13 +102,13 @@ method const char* ToString(const Exception* const self) {
     return self->msg;
 }
 
-function Exception* NewException(ExceptionType type, char* msg) {
+static inline Exception* NewException(ExceptionType type, char* msg) {
     Exception* self = (Exception*)alloc(Exception);
     return New(self, type, msg);
 }
 
 method Exception* New(Exception* self, ExceptionType type, char* msg) {
-    extends((Object*)self);
+    extends(Object);
     self->isa = objc_getClass("Exception");
     self->type = type;
     self->msg = msg;

@@ -13,7 +13,7 @@ char keys[12][7] = {
     "keyA", "keyB", "keyC",
 };
 
-int main(int argc, char **argv) {
+int test(int argc, char **argv) {
 
     const char* unc = "C:\\Users\\darko\\Documents\\GitHub\\doran-dark\\test\\license.md";
 

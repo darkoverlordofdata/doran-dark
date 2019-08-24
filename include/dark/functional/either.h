@@ -69,7 +69,7 @@ method Object* getLeft(Either* self) {
  * Private constructor
  * Only Left & Right are allowed.
  */
-function Either* NewEither(Object* a, Object* b) {
+static inline Either* NewEither(Object* a, Object* b) {
     const var self = alloc(Either);
 	self->left = a;
 	self->right = b;

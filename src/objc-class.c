@@ -23,6 +23,7 @@
  */
 #include <dark/core/class.h>
 #include <dark/runtime.h>
+#include <assert.h>
 
 #define WORD_SHIFT 3UL
 #define WORD_MASK 7UL
@@ -31,6 +32,7 @@
 
 Class _calloc_class(size_t size)
 {
+    // return (Class)GC_MALLOC_UNCOLLECTABLE(size);
     return (Class) DScalloc(1, size);
 }
 
@@ -134,11 +136,15 @@ Class objc_allocateClassPair(Class supercls, const char *name,
 {
     Class cls, meta;
 
-    if (objc_getClass(name)) return nil;
+    if (objc_getClass(name)) {
+        _objc_inform("objc-class.c:140 - objc_allocateClassPair failed objc_getClass(%s)", name);
+        return nil;
+    }
     // fixme reserve class name against simultaneous allocation
 
     if (supercls  &&  (supercls->info & CLS_CONSTRUCTING)) {
         // Can't make subclass of an in-construction class
+        _objc_inform("Can't make subclass of an in-construction class for %s", name);
         return nil;
     }
 
@@ -154,7 +160,6 @@ Class objc_allocateClassPair(Class supercls, const char *name,
 
     objc_initializeClassPair(supercls, name, cls, meta);
     cls->vtable = extVtable;
-    
     return cls;
 }
 

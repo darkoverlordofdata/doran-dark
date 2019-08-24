@@ -57,11 +57,11 @@ vtable (Comparable)
     const ComparableCompareTo     CompareTo;
 };
 
-function vptr(Comparable);
+static inline vptr(Comparable);
 /**
  * Create the class loader
  */
-function Class objc_loadComparable(Class super) 
+static inline Class objc_loadComparable(Class super) 
 {
     Class cls = createClass(super, Comparable);
     addMethod(cls, Comparable, ToString);
@@ -80,13 +80,13 @@ function Class objc_loadComparable(Class super)
 
 method Comparable* New(Comparable* const self)
 {
-    extends((Object*)self);
+    extends(Object);
     self->isa = objc_getClass("Comparable");
     return self;
 }
 
 method int CompareTo(const Comparable* const self, const Comparable* const other) {
-    return get_vptr(Comparable)->CompareTo(self, other);
+    return virtual(Comparable)->CompareTo(self, other);
 }
 
 method char* ToString(const Comparable* const self) {

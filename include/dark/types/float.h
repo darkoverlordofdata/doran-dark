@@ -76,12 +76,12 @@ vtable (Float)
     const FloatShortValue       ShortValue;
 };
 
-function vptr(Float);
+static inline vptr(Float);
 /** 
  * 
 ] * Class Loader callback
  */
-function Class objc_loadFloat(Class super) 
+static inline Class objc_loadFloat(Class super) 
 {
     Class cls = createClass(super, Float);
     addMethod(cls, Object,        Equals);
@@ -106,7 +106,7 @@ function Class objc_loadFloat(Class super)
  */
 method Float* New(Float* self, const float value)
 {
-    extends((Number*)self);
+    extends(Number);
     self->isa = objc_getClass("Float");
     self->value = value;
     return self;
@@ -115,7 +115,7 @@ method Float* New(Float* self, const float value)
 /**
  * Returns a primitive float value parsed from input string. 
  */
-function float DSParseFloat(const char* s)
+static inline float DSParseFloat(const char* s)
 {
     
     double d = DSParseDouble(s);

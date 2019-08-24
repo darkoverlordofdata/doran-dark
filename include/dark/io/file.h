@@ -102,12 +102,12 @@ class (File) {
     char PathSeparator[2];
 };
 
-function vptr(File);
+static inline vptr(File);
 /**
  * 
  * Class Loader callback
  */
-function Class objc_loadFile(Class super) 
+static inline Class objc_loadFile(Class super) 
 {
     Class cls = createClass(super, File);
     addMethod(cls, File, ToString);
@@ -168,7 +168,7 @@ method String* GetParent(File* self) {
     return Substring(self->path, 0, index);
 }
 
-function File* FileWithLength(String* pathname, int prefixLength) {
+static inline File* FileWithLength(String* pathname, int prefixLength) {
     File* self = alloc(File);
     self->isa = objc_getClass("File");
     self->path = CopyOf(pathname);
@@ -248,7 +248,7 @@ method long GetLength(File* self) {
 //     return (c == slash) || (c == altSlash);
 // }
 
-function bool isLetter(char c) {
+static inline bool isLetter(char c) {
     return ((c >= 'a') && (c <= 'z')) || ((c >= 'A') && (c <= 'Z'));
 }
 
@@ -280,8 +280,8 @@ method int CompareTo(File* const self, File* other) {
 /**
  * Initialize a new File
  */
-method File* NewFloat(File* self, const char* path) {
-    extends((Comparable*)self);
+method File* New(File* self, const char* path) {
+    extends(Comparable);
     self->isa = objc_getClass("File");
     self->path = fs.Normalize(new(String, path));
     self->prefixLength = fs.PrefixLength(self->path);
@@ -289,7 +289,7 @@ method File* NewFloat(File* self, const char* path) {
 }
 
 method File* New(File* self, const char* parent, const char* child) {
-    extends((Comparable*)self);
+    extends(Comparable);
     self->isa = objc_getClass("File");
     if (!strcmp("", parent)) {
         self->path = fs.Resolve(fs.GetDefaultParent(), 
@@ -303,7 +303,7 @@ method File* New(File* self, const char* parent, const char* child) {
 }
 
 method File* New(File* self, File* parent, const char* child) {
-    extends((Comparable*)self);
+    extends(Comparable);
     self->isa = objc_getClass("File");
     if (parent->path != nullptr) {
         if (!strcmp("", parent->path)) {

@@ -56,11 +56,11 @@ vtable (Texture2D) {
 /**
  * Put it all together
  */
-function vptr(Texture2D);
+static inline vptr(Texture2D);
 /**
  * Class Loader callback
  */
-function Class objc_loadTexture2D(Class super) 
+static inline Class objc_loadTexture2D(Class super) 
 {
     Class cls = createClass(super, Texture2D);
     addMethod(cls, Texture2D, ToString);
@@ -86,7 +86,7 @@ method Texture2D* New(
     int ImageFormat,
     char* path)
 {
-	extends((Object*)self);
+	extends(Object);
     self->isa = objc_getClass("Texture2D");
     self->path = strdup(path);
     self->Width = 0;

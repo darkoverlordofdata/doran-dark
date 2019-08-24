@@ -60,12 +60,12 @@ vtable (InputStreamReader) {
     const InputStreamReaderReady          Ready;
 };
 
-function vptr(InputStreamReader);
+static inline vptr(InputStreamReader);
 /**
  * 
  * Class Loader callback
  */
-function Class objc_loadInputStreamReader(Class super) 
+static inline Class objc_loadInputStreamReader(Class super) 
 {
     Class cls = createClass(super, InputStreamReader);
     addMethod(cls, InputStreamReader, ToString);
@@ -86,7 +86,7 @@ function Class objc_loadInputStreamReader(Class super)
 
 
 method InputStreamReader* New(InputStreamReader* self, InputStream* in) {
-    extends((Object*)self);
+    extends(Object);
     self->isa = objc_getClass("InputStreamReader");
     self->in = in;
     return self;

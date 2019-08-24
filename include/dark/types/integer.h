@@ -77,11 +77,11 @@ vtable (Integer)
     const IntegerShortValue         ShortValue;
 };
 
-function vptr(Integer);
+static inline vptr(Integer);
 /**
  * Class Loader callback
  */
-function Class objc_loadInteger(Class super) 
+static inline Class objc_loadInteger(Class super) 
 {
     Class cls = createClass(super, Integer);
     addMethod(cls, Integer,     ToString);
@@ -107,7 +107,7 @@ function Class objc_loadInteger(Class super)
  */
 method Integer* New(Integer* self, const int value)
 {
-    extends((Number*)self);
+    extends(Number);
     self->isa = objc_getClass("Integer");
     self->value = value;
     return self;
@@ -116,7 +116,7 @@ method Integer* New(Integer* self, const int value)
 /**
  * Returns a primitive integer value parsed from input string. 
  */
-function int DSParseInt(const char* const s, const int radix) {
+static inline int DSParseInt(const char* const s, const int radix) {
     long i = DSParseLong(s, radix);
     if (i < INTEGER_MIN_VALUE || i > INTEGER_MAX_VALUE)
         throw DSNumberFormatException(s, radix, Source);

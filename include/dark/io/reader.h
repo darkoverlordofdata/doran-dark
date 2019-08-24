@@ -59,12 +59,12 @@ vtable (Reader) {
     const ReaderReady         Ready;
 };
 
-function vptr(Reader);
+static inline vptr(Reader);
 /**
  * 
  * Class Loader callback
  */
-function Class objc_loadReader(Class super) 
+static inline Class objc_loadReader(Class super) 
 {
     Class cls = createClass(super, Reader);
     addMethod(cls, Reader, ToString);
@@ -88,7 +88,7 @@ function Class objc_loadReader(Class super)
 static const int maxSkipBufferSize = 8192;
 
 method Reader* New(Reader* self) {
-    extends((Object*)self);
+    extends(Object);
     self->isa = objc_getClass("Reader");
     return self;
 }
@@ -106,7 +106,7 @@ method int ReadOne(Reader* self) {
 }
 
 method int Read(Reader* self, IOBuff* buf, int offset, int len) {
-    return get_vptr(Reader)->Read(self, buf, offset, len);
+    return virtual(Reader)->Read(self, buf, offset, len);
 }
 
 method long Skip(Reader* self, long n)  {
@@ -143,6 +143,6 @@ method void Reset(Reader* self) {
 }
 
 method void Close(Reader* self) {
-    get_vptr(Reader)->Close(self);
+    virtual(Reader)->Close(self);
 }
 

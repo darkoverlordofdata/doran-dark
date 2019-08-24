@@ -41,7 +41,7 @@ static Option* None;
  * A container/collection that can hold either 0 or 1 object
  * 
  */
-function Option* NewOption(Object* value) {
+static inline Option* NewOption(Object* value) {
     if (value == nullptr) {
         printf("Invalid - Option cannot be null\n");
         raise(SIGSEGV);
@@ -75,7 +75,7 @@ method Object* Bind(Option* self, Option* (*func)(Option*)) {
     return self->value != nullptr ? func(self->value) : None; 
 }
 
-function Object* Return(Option* self) {
+static inline Object* Return(Option* self) {
     return self->value != nullptr ? NewOption(self->value) : None;
 }
 

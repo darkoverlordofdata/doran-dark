@@ -30,40 +30,40 @@ typedef struct File File;
 method int GetPrefixLength(File* const self);
 method String* GetPath(File* const self);
 
-function bool fsIsSlash(char c);
-function bool fsIsLetter(char c);
-function String* fsSlashify(String* p);
-function String* fsGetUserPath();
-function String* fsGetDrive(String* path);
-function int fsDriveIndex(char d);
-function String* fsGetDriveDireCTORy(char drive);
-function char fsGetSeparator();
-function char fsGetPathSeparator();
-function int fsNormalizePrefix(String* path, int len, StringBuilder* sb);
-function String* fsNormalize2(String* path, int len, int off);
-function String* fsNormalize(String* path);
-function int fsPrefixLength(String* path);
-function String* fsResolve(String* parent, String* child);
-function String* fsGetDefaultParent();
-function String* fsFromURIPath(String* path);
-function bool fsIsAbsolute(File* f);
-function String* fsResolveFile(File* f);
-function String* fsCanonicalize(String* path);
-function int GetBooleanAttributes(File* f);
-function bool fsCheckAccess(File* f, int access);
-function bool fsSetPermission(File* f, int access, bool enable, bool owneronly);
-function long fsGetLastModifiedTime(File* f);
-function long fsGetLength(File* f);
-function bool fsCreateFileExclusively(String* path);
-function bool fsDelete(File* f);
-function String** fsList(File* f);
-function bool fsCreateDireCTORy(File* f);
-function bool fsRename(File* f1, File* f2);
-function bool fsSetLastModifiedTime(File* f, long time);
-function String* fsSetReadOnly(File* f);
-function File** fsListRoots();
-function int fsCompare(File* f1, File* f2);
-function int fsHashCode(File* f);
+static inline bool fsIsSlash(char c);
+static inline bool fsIsLetter(char c);
+static inline String* fsSlashify(String* p);
+static inline String* fsGetUserPath();
+static inline String* fsGetDrive(String* path);
+static inline int fsDriveIndex(char d);
+static inline String* fsGetDriveDireCTORy(char drive);
+static inline char fsGetSeparator();
+static inline char fsGetPathSeparator();
+static inline int fsNormalizePrefix(String* path, int len, StringBuilder* sb);
+static inline String* fsNormalize2(String* path, int len, int off);
+static inline String* fsNormalize(String* path);
+static inline int fsPrefixLength(String* path);
+static inline String* fsResolve(String* parent, String* child);
+static inline String* fsGetDefaultParent();
+static inline String* fsFromURIPath(String* path);
+static inline bool fsIsAbsolute(File* f);
+static inline String* fsResolveFile(File* f);
+static inline String* fsCanonicalize(String* path);
+static inline int GetBooleanAttributes(File* f);
+static inline bool fsCheckAccess(File* f, int access);
+static inline bool fsSetPermission(File* f, int access, bool enable, bool owneronly);
+static inline long fsGetLastModifiedTime(File* f);
+static inline long fsGetLength(File* f);
+static inline bool fsCreateFileExclusively(String* path);
+static inline bool fsDelete(File* f);
+static inline String** fsList(File* f);
+static inline bool fsCreateDireCTORy(File* f);
+static inline bool fsRename(File* f1, File* f2);
+static inline bool fsSetLastModifiedTime(File* f, long time);
+static inline String* fsSetReadOnly(File* f);
+static inline File** fsListRoots();
+static inline int fsCompare(File* f1, File* f2);
+static inline int fsHashCode(File* f);
 
 typedef struct FileSystem FileSystem;
 const FileSystem fs;
@@ -120,41 +120,41 @@ static char fsSlashString[2];
 static char fsSemicolonString[2];
 static char fsAltSlashString[2];
 
-function bool fsIsSlash(char c) {
+static inline bool fsIsSlash(char c) {
     return (c == '\\') || (c == '/');
 }
 
-function bool fsIsLetter(char c) {
+static inline bool fsIsLetter(char c) {
     return ((c >= 'a') && (c <= 'z')) || ((c >= 'A') && (c <= 'Z'));
 }
 
 /**
  * prepend a shash onto a string
  */
-function String* fsSlashify(String* p) {
+static inline String* fsSlashify(String* p) {
     if ((Length(p)>0) && CharAt(p, 0) != fsSlash) 
         return Concatc(p, fsSlashString);    
     else return p;
 }
 
-function String* fsGetUserPath() {
+static inline String* fsGetUserPath() {
     String* user = new(String, ".");
     String* result = fsNormalize(user);
     return result;
 }
 
-function String* fsGetDrive(String* path) {
+static inline String* fsGetDrive(String* path) {
     int p1 = fsPrefixLength(path);
     return (p1 == 3) ? new(String, strndup(path->value, 2)) : nullptr;
 }
 
-function int fsDriveIndex(char d) {
+static inline int fsDriveIndex(char d) {
     if ((d >= 'a') && (d <= 'z')) return d - 'a';
     if ((d >= 'A') && (d <= 'Z')) return d - 'A';
     return -1;
 }
 
-function String* fsGetDriveDireCTORy(char drive) {
+static inline String* fsGetDriveDireCTORy(char drive) {
     int i = fsDriveIndex(drive);
     if (i < 0) return nullptr;
     return nullptr;
@@ -166,15 +166,15 @@ function String* fsGetDriveDireCTORy(char drive) {
 }
 
 
-function char fsGetSeparator() {
+static inline char fsGetSeparator() {
     return fsSlash;
 }
 
-function char fsGetPathSeparator() {
+static inline char fsGetPathSeparator() {
     return fsSemicolon;
 }
 
-function int fsNormalizePrefix(String* path, int len, StringBuilder* sb) {
+static inline int fsNormalizePrefix(String* path, int len, StringBuilder* sb) {
     int src = 0;
     while ((src < len) && fsIsSlash(path->value[src])) src++;
     char c = 0;
@@ -200,7 +200,7 @@ function int fsNormalizePrefix(String* path, int len, StringBuilder* sb) {
 /**
  * Normalize a chunk of the pathname
  */
-function String* fsNormalize2(String* path, int len, int off) {
+static inline String* fsNormalize2(String* path, int len, int off) {
     if (len == 0) return path;
     if (off < 3) off = 0;
     int src;
@@ -248,7 +248,7 @@ function String* fsNormalize2(String* path, int len, int off) {
 /**
  * Normalize path
  */
-function String* fsNormalize(String* path) {
+static inline String* fsNormalize(String* path) {
 
     // if (path->isa != getStringIsa()) return nullptr;
 
@@ -272,7 +272,7 @@ function String* fsNormalize(String* path) {
     return path;
 }
 
-function int fsPrefixLength(String* path) {
+static inline int fsPrefixLength(String* path) {
     int n = path->length;
     if (n == 0) return 0;
     int c0 = CharAt(path, 0);
@@ -295,7 +295,7 @@ function int fsPrefixLength(String* path) {
     return 0;
 }
 
-function String* fsResolve(String* parent, String* child) {
+static inline String* fsResolve(String* parent, String* child) {
     int pn = parent->length;
     if (pn == 0) return child;
     int cn = child->length;
@@ -336,11 +336,11 @@ function String* fsResolve(String* parent, String* child) {
     return new(String, theChars);
 }
 
-function String* fsGetDefaultParent() {
+static inline String* fsGetDefaultParent() {
     return new(String, fsSlashString);
 }
 
-function String* fsFromURIPath(String* path) {
+static inline String* fsFromURIPath(String* path) {
     int length = path->length;
     char* p = strndup(path->value, length);
     if ((length > 2) && (p[2] == ':')) {
@@ -356,13 +356,13 @@ function String* fsFromURIPath(String* path) {
     return result;
 }
 
-function bool fsIsAbsolute(File* f) {
+static inline bool fsIsAbsolute(File* f) {
     int p1 = GetPrefixLength(f);
     return  (((p1 == 2) && (GetPath(f)->value[0] == fsSlash))
             || p1 == 3);
 }
 
-function String* fsResolveFile(File* f) {
+static inline String* fsResolveFile(File* f) {
     String* path = GetPath(f);
     int p1 = GetPrefixLength(f);
     if ((p1 == 2) && path->value[0] == fsSlash)
@@ -406,7 +406,7 @@ function String* fsResolveFile(File* f) {
     return nullptr; //InternalIOErrorException("Unresolvable path: %s", path->value);
 }
 
-function String* fsCanonicalize(String* path) {
+static inline String* fsCanonicalize(String* path) {
     int len = Length(path);
     if (len == 2) {
         if (fsIsLetter(CharAt(path, 0)) &&
@@ -438,76 +438,76 @@ function String* fsCanonicalize(String* path) {
 
 }
 
-function int fsGetBooleanAttributes(File* f) {
+static inline int fsGetBooleanAttributes(File* f) {
     struct stat sbuf;
     if (stat(ToString(GetPath(f)), &sbuf) < 0) return 0;
     return sbuf.st_mode;
 }
 
-function bool fsCheckAccess(File* f, int access) {
+static inline bool fsCheckAccess(File* f, int access) {
     struct stat sbuf;
     if (stat(ToString(GetPath(f)), &sbuf) < 0) return 0;
     return ((sbuf.st_size & access) != 0);
 }
 
-function bool fsSetPermission(File* f, int access, bool enable, bool owneronly) {
+static inline bool fsSetPermission(File* f, int access, bool enable, bool owneronly) {
 
 }
 
-function long fsGetLastModifiedTime(File* f) {
+static inline long fsGetLastModifiedTime(File* f) {
 
 }
 
-function long fsGetLength(File* f) {
+static inline long fsGetLength(File* f) {
     struct stat sbuf;
     if (stat(ToString(GetPath(f)), &sbuf) < 0) return 0;
     return sbuf.st_size;
 }
 
-function bool fsCreateFileExclusively(String* path) {
+static inline bool fsCreateFileExclusively(String* path) {
 
 }
 
-function bool fsDelete(File* f) {
+static inline bool fsDelete(File* f) {
 
 }
 
-function String** fsList(File* f) {
+static inline String** fsList(File* f) {
 
 }
 
-function bool fsCreateDireCTORy(File* f) {
+static inline bool fsCreateDireCTORy(File* f) {
 
 }
 
-function bool fsRename(File* f1, File* f2) {
+static inline bool fsRename(File* f1, File* f2) {
 
 }
 
-function bool fsSetLastModifiedTime(File* f, long time) {
+static inline bool fsSetLastModifiedTime(File* f, long time) {
 
 }
 
-function String* fsSetReadOnly(File* f) {
+static inline String* fsSetReadOnly(File* f) {
 
 }
 
-function File** fsListRoots() {
+static inline File** fsListRoots() {
 
 }
 
-function int fsCompare(File* f1, File* f2) {
+static inline int fsCompare(File* f1, File* f2) {
     return CompareTo(GetPath(f1), GetPath(f2));
     return 0;
 }
 
-function int fsHashCode(File* f) {
+static inline int fsHashCode(File* f) {
 
 }
 
 // void __attribute__((construCTOR())) 
 
-function void FileSystemInit()
+static inline void FileSystemInit()
 {
     fsSlash = '\\';
     fsSemicolon = ';';

@@ -83,28 +83,28 @@ type (Maybe) {
 };
 #endif
 
-function Maybe* Nothing() {
+static inline Maybe* Nothing() {
     const auto self = alloc(Maybe);
     self->value = nullptr;
 }
 
-function Maybe* Just(Object* x) {
+static inline Maybe* Just(Object* x) {
     const auto self = alloc(Maybe);
     self->value = x;
     return self;
 }
 
-function Maybe* ret(Object* self) {
+static inline Maybe* ret(Object* self) {
     return Just(self);
 }
 
-function Maybe* bind(Maybe* self,  Maybe* (*func)(Maybe*)) {
+static inline Maybe* bind(Maybe* self,  Maybe* (*func)(Maybe*)) {
     if (self->value == nullptr) 
         return Nothing();
     else
         return func(self->value);
 }
 
-function bool IsNothing(const Maybe* self) {
+static inline bool IsNothing(const Maybe* self) {
     return self->value == nullptr;
 }

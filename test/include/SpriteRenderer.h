@@ -45,11 +45,11 @@ vtable (SpriteRenderer) {
 /**
  * Put it all together
  */
-function vptr(SpriteRenderer);
+static inline vptr(SpriteRenderer);
 /**
  * Class Loader callback
  */
-function Class objc_loadSpriteRenderer(Class super) 
+static inline Class objc_loadSpriteRenderer(Class super) 
 {
     Class cls = createClass(super, SpriteRenderer);
     addMethod(cls, SpriteRenderer, ToString);
@@ -71,7 +71,7 @@ method SpriteRenderer*  New(
     SpriteRenderer* self, 
     Shader* shader)
 {
-	extends((Object*)self);
+	extends(Object);
     self->isa = objc_getClass("SpriteRenderer");
     self->shader = shader;
     initRenderData(self);
