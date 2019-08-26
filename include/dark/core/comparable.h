@@ -61,7 +61,7 @@ static inline vptr(Comparable);
 /**
  * Create the class loader
  */
-static inline Class objc_loadComparable(Class base) 
+static inline Class ClassLoadComparable(Class base) 
 {
     Class cls = createClass(base, Comparable);
     addMethod(cls, Comparable, ToString);
@@ -81,7 +81,7 @@ static inline Class objc_loadComparable(Class base)
 method Comparable* New(Comparable* const self)
 {
     extends(Object);
-    self->isa = objc_getClass("Comparable");
+    set_isa(Comparable);
     return self;
 }
 

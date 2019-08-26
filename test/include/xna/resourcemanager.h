@@ -38,7 +38,7 @@ static inline vptr(ResourceManager);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadResourceManager(Class base) 
+static inline Class ClassLoadResourceManager(Class base) 
 {
     Class cls = createClass(base, ResourceManager);
     addMethod(cls, ResourceManager,     ToString);
@@ -59,7 +59,7 @@ method void Init(ResourceManager* self)
 method ResourceManager* New(ResourceManager* self)
 {
 	extends(Object);
-    self->isa = objc_getClass("ResourceManager");
+    set_isa(ResourceManager);
     Init(self);
     return self;
 }
@@ -68,7 +68,7 @@ method void Dispose(ResourceManager* self)
 {
     Dispose(self->Shaders);
     Dispose(self->Textures);
-    if (!_objc_use_gc) {
+    if (!_use_gc) {
         free(self);
     }
 }

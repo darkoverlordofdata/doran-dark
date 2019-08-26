@@ -107,7 +107,7 @@ static inline vptr(File);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadFile(Class base) 
+static inline Class ClassLoadFile(Class base) 
 {
     Class cls = createClass(base, File);
     addMethod(cls, File, ToString);
@@ -170,7 +170,7 @@ method String* GetParent(File* self) {
 
 static inline File* FileWithLength(String* pathname, int prefixLength) {
     File* self = alloc(File);
-    self->isa = objc_getClass("File");
+    set_isa(File);
     self->path = CopyOf(pathname);
     self->prefixLength = prefixLength;
     return self;
@@ -282,7 +282,7 @@ method int CompareTo(File* const self, File* other) {
  */
 method File* New(File* self, const char* path) {
     extends(Comparable);
-    self->isa = objc_getClass("File");
+    set_isa(File);
     self->path = fs.Normalize(new(String, path));
     self->prefixLength = fs.PrefixLength(self->path);
     return self;
@@ -290,7 +290,7 @@ method File* New(File* self, const char* path) {
 
 method File* New(File* self, const char* parent, const char* child) {
     extends(Comparable);
-    self->isa = objc_getClass("File");
+    set_isa(File);
     if (!strcmp("", parent)) {
         self->path = fs.Resolve(fs.GetDefaultParent(), 
                         fs.Normalize(child));
@@ -304,7 +304,7 @@ method File* New(File* self, const char* parent, const char* child) {
 
 method File* New(File* self, File* parent, const char* child) {
     extends(Comparable);
-    self->isa = objc_getClass("File");
+    set_isa(File);
     if (parent->path != nullptr) {
         if (!strcmp("", parent->path)) {
         self->path = fs.Resolve(fs.GetDefaultParent(), 

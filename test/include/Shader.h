@@ -72,7 +72,7 @@ static inline vptr(Shader);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadShader(Class base) 
+static inline Class ClassLoadShader(Class base) 
 {
     Class cls = createClass(base, Shader);
     addMethod(cls, Shader,  ToString);
@@ -101,7 +101,7 @@ static inline Class objc_loadShader(Class base)
 method Shader* New(Shader* self)
 {
 	extends(Object);
-    self->isa = objc_getClass("Shader");
+    set_isa(Shader);
     return self;
 }
 

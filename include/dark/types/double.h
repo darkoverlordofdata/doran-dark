@@ -78,7 +78,7 @@ static inline vptr(Double);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadDouble(Class base) 
+static inline Class ClassLoadDouble(Class base) 
 {
     Class cls = createClass(base, Double);
     addMethod(cls,  Double,     ToString);
@@ -104,7 +104,7 @@ static inline Class objc_loadDouble(Class base)
  */
 method Double* New(Double* self, const double value) {
     extends(Number);
-    self->isa = objc_getClass("Double");
+    set_isa(Double);
     self->value = value;
     return self;
 }

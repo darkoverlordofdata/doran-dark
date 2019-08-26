@@ -75,7 +75,7 @@ static inline vptr(ResourceManager);
  */
 static inline ResourceManager* ResourceManager_ctor(ResourceManager* self) {
     New((Object*)self); 
-    self->isa = objc_getClass("ResourceManager");
+    set_isa(ResourceManager);
     return self;
 }
 
@@ -253,7 +253,7 @@ method char* ToString(const ResourceManager* const self)
 /**
  * Class Loader callback0
  */
-static inline Class objc_loadResourceManager(Class base) 
+static inline Class ClassLoadResourceManager(Class base) 
 {
     Class cls = createClass(base, ResourceManager);
     addMethod(cls, ResourceManager,  ToString);

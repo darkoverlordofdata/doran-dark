@@ -72,7 +72,7 @@ static inline vptr(GameLevel);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadGameLevel(Class base) 
+static inline Class ClassLoadGameLevel(Class base) 
 {
     Class cls = createClass(base, GameLevel);
 
@@ -97,7 +97,7 @@ method GameLevel* New(
     const int levelHeight)
 {
 	extends(Object);
-    self->isa = objc_getClass("GameLevel");
+    set_isa(GameLevel);
     self->Bricks = new(Array, 200);
     Load(self, file, levelWidth, levelHeight);
     return self;

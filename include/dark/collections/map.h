@@ -98,7 +98,7 @@ static inline vptr(Map);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadMap(Class base) 
+static inline Class ClassLoadMap(Class base) 
 {
     Class cls = createClass(base, Map);
     addMethod(cls, Map, ToString);
@@ -147,7 +147,7 @@ static inline Class objc_loadMap(Class base)
   /*  X^31 term, etc.  The X^0 term (usually shown as "+1") results in      */
   /*  the MSB being 1.                                                      */
   /*                                                                        */
-  /*  Note that the usual hardware shift DSMetaClass implementation, which     */
+  /*  Note that the usual hardware shift register implementation, which     */
   /*  is what we're using (we're merely optimizing it by doing eight-bit    */
   /*  chunks at a time) shifts bits into the lowest-order term.  In our     */
   /*  implementation, that means shifting towards the right.  Why do we     */
@@ -164,7 +164,7 @@ static inline Class objc_loadMap(Class base)
   /*      The table can be generated at runtime if desired; code to do so   */
   /*      is shown later.  It might not be obvious, but the feedback        */
   /*      terms simply represent the results of eight shift/xor opera-      */
-  /*      tions for all combinations of data and CRC DSMetaClass values.       */
+  /*      tions for all combinations of data and CRC register values.       */
   /*                                                                        */
   /*      The values must be right-shifted by eight bits by the "updcrc"    */
   /*      logic; the shift must be unsigned (bring in zeroes).  On some     */
@@ -266,7 +266,7 @@ method Map* New(Map* const self, Class typeOf)
 {
     extends(Object);
 
-    self->isa = objc_getClass("Map");
+    set_isa(Map);
     self->typeOf = typeOf;
     self->data = (MapNode*)DScalloc(INITIAL_SIZE, sizeof(MapNode));
 	self->tableSize = INITIAL_SIZE;

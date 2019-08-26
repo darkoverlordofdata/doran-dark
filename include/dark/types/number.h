@@ -83,7 +83,7 @@ static inline vptr(Number);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadNumber(Class base) 
+static inline Class ClassLoadNumber(Class base) 
 {
     Class cls = createClass(base, Number);
     addMethod(cls, Number,      ToString);
@@ -109,7 +109,7 @@ static inline Class objc_loadNumber(Class base)
 method Number* New(Number* self)
 {
     extends(Comparable);
-    self->isa = objc_getClass("Number");
+    set_isa(Number);
     return self;
 }
 /**

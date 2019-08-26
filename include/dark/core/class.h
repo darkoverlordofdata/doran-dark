@@ -28,15 +28,42 @@ SOFTWARE.
 #include <dark/runtime.h>
 /**
 ****
-****    All macros used to define DaRKSTEP classes and objects
+****    macros used as a dsl to define DaRKSTEP classes and objects
 ****
 **/
 
 /**
+ * The base Class object is defined in runtime.h, and is based on NSClass
+ * 
  * 3 global tuples are created for each Class:
- *  type    DSOject         - Instance Variables
+ *  type    Object        - Instance Variables
  *  vtable  ObjectVTable  - Instance Methods
- *  class   $Object       - Class Methods/Variables
+ *  class   $Object       - Optional, Class Methods/Variables
+ * 
+ * A method is on overrideable function where a type* is the first argument. These
+ * are used as mulimethods. Subclasses consist of type punning and vtables. The
+ * subclass type must be aranged identially to its base class.
+ * The vtable is used with subclassing to allow calling the
+ * most derived subclass first. The optional class object is a singleton struct
+ * and not malloc'd.
+ * Classes are created dynamically at runtine, and the vtable is linked to the most
+ * derived class implementation. Call base classes by downcasting to the appropriate 
+ * base type*.
+ * 
+ * 
+ * A full class definition consists of:
+ * 
+ * a type.
+ * a list of delegate signatures defining object methods.
+ * a vtable struct
+ * Optional class struct
+ * a class loader
+ * the method implemtations
+ * 
+ */
+
+/**
+ * type: Instance Variables
  * 
  * A type whose 1st member is an 'isa' is a class of that isa type,
  * and it becomes the object definition for a DaRKSTEP object. 
@@ -46,23 +73,22 @@ SOFTWARE.
     struct T
 
 /**
- * Singleton vtable object per Class
+ * vtable: Instance Methods
+ * 
+ * A singleton vtable object per Class
  */
 #define vtable(T)                                                       \
     struct T##_vtable T##_vtable;                                       \
     struct T##_vtable
 
 /**
- * Singleton class object per Class
+ * class: Class Methods/Variables
+ * 
+ * A singleton class object per Class
  */
 #define class(T)                                                        \
     struct $##T $##T;                                                   \
     struct $##T
-
-/**
- * All functions are static inlined
- */
-// #define proc static inline
 
 /**
  * Multi-methods are overloadable functions
@@ -70,43 +96,35 @@ SOFTWARE.
 #define method static inline overload
 
 /**
- *  MACRO delegate
+ *  delegate
  *      declares the prototype for methods
  * 
  */
-#define delegate(T, name, type, signature)                             \
+#define delegate(T, name, type, signature)                              \
     method type name signature;                                         \
     typedef type (*T##name)signature;
 
 /**
- *  MACRO ctor_proto
- *      declares the prototype for constructor
- * 
- */
-// #define ctor_proto(T, args...)                                          \
-//     method T* T##_ctor(T* const, ## args);
-
-/**
- *  MACRO alloc
+ *  alloc
  *      Allocate memory for type struct
  */
 #define alloc(T) (T*)DSmalloc(sizeof(T))
 
 /**
- *  MACRO new
- *      Allocate and initialize a new object
+ *  new
+ *      Allocate and construct a new object
  */
 #define new(T, args...) New(alloc(T), ## args)
 
 /**
- *  MACRO extends
+ *  extends
  *      extends base class by calling it's constructor
  */
 #define extends(T, args...) New((T*)self, ## args) 
 
 
 /**
- *  MACRO base
+ *  super
  *      call the base version of the method
  *      SUPER is redefined per class
  *      warning: don't do this at home
@@ -114,24 +132,26 @@ SOFTWARE.
 #define super(method) method((SUPER*)self)
 
 /**
- *  MACRO using
+ *  using
  *      call a destrutor when this object goes out of scope
  */
 #define using(class) class* __attribute__((cleanup(class##_dtor)))
 
 /**
- *  MACRO instanceof
- *      Check of an object is an instance of a class
+ *  instanceof
+ *      Check if an object is an instance of a class
  */
-#define instanceof(class, obj) InstanceOf(objc_getClass(#class), obj)
+#define instanceof(class, obj) InstanceOf(GetClass(#class), obj)
 
 /**
- *  MACRO of
+ *  of
  *      type constraint
  */
-#define of(class) (Class)objc_getClass(#class)
+#define of(class) (Class)GetClass(#class)
 
 /**
+ * vptr
+ * 
  * Define function to retrieve vptr
  */
 #define vptr(T)                                                         \
@@ -141,19 +161,43 @@ SOFTWARE.
     };                                                                  \
 
 /**
+ * virtual
+ * 
  * Get the most derived vptr for T
  */
 #define virtual(T) T##_vptr(self)
 
 /**
+ * createClass
  * 
+ * Initialize Class Definition
  */
-#define createClass(base, T) objc_allocateClassPair(base, #T, 0, (IMP*)&T##_vtable)
+#define createClass(base, T) CreateClass(base, #T, (IMP*)&T##_vtable)
 
 /**
+ * addMethod
  * 
+ * Add method to Class vtable
  */
-#define addMethod(cls, T, addr) class_addMethod(cls, (SEL)#addr, ((IMP)(T##addr)addr), "")
+#define addMethod(cls, T, addr) Add(cls, (char*)#addr, ((IMP)(T##addr)addr))
 
-typedef Class* (*objc_LoadClass)(Class base);
+/**
+ * Class loader signature
+ */
+typedef Class* (*ClassLoadClass)(Class base);
+
+// #define GetIsa(T)  \
+//         static Class isa_cache; \
+//         isa_cache = (isa_cache == 0) ? GetClass(#T) : isa_cache; \
+//         self->isa = isa_cache; 
+
+
+/**
+ * Cache and set the isa value for class
+ * GetClass is only called the first time a class is instantiated.
+ */
+#define set_isa(T)  \
+        static Class isa_cache = 0; \
+        self->isa = (isa_cache = ((isa_cache != 0) ? isa_cache : GetClass(#T)))
+
 

@@ -17,7 +17,8 @@
         "cstdarg": "cpp",
         "functional": "cpp",
         "tuple": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "initializer_list": "cpp"
     },
     "C_Cpp.configurationWarnings": "Disabled"
 }

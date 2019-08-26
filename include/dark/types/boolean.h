@@ -87,7 +87,7 @@ static inline vptr(Boolean);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadBoolean(Class base) 
+static inline Class ClassLoadBoolean(Class base) 
 {
     Class cls = createClass(base, Boolean);
     addMethod(cls, Boolean,    ToString);
@@ -129,7 +129,7 @@ static inline Class objc_loadBoolean(Class base)
  */
 method Boolean* New(Boolean* self, const bool value) {
     extends(Comparable);
-    self->isa = objc_getClass("Boolean");
+    set_isa(Boolean);
     self->value = value;
     return self;
 }

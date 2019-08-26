@@ -78,7 +78,7 @@ vtable (Exception)
 
 static inline vptr(Exception);
 
-static inline Class objc_loadException(Class base) 
+static inline Class ClassLoadException(Class base) 
 {
     Class cls = createClass(base, Exception);
     addMethod(cls, Exception,  ToString);
@@ -109,7 +109,7 @@ static inline Exception* NewException(ExceptionType type, char* msg) {
 
 method Exception* New(Exception* self, ExceptionType type, char* msg) {
     extends(Object);
-    self->isa = objc_getClass("Exception");
+    set_isa(Exception);
     self->type = type;
     self->msg = msg;
     return self;

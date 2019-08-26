@@ -85,7 +85,7 @@ static inline vptr(Array);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadArray(Class base) 
+static inline Class ClassLoadArray(Class base) 
 {
     Class cls = createClass(base, Array);
     addMethod(cls, Array, ToString);
@@ -157,7 +157,7 @@ method Array* New(Array* self, Class typeOf, int capacity) {
     extends(Object);
     // extend(Object, self);
 
-    self->isa = objc_getClass("Array");
+    set_isa(Array);
     self->capacity = capacity == 0 ? ARRAY_INIT_CAPACITY : capacity;
     self->length = 0;
     self->data = DScalloc(self->capacity, sizeof(Object*));

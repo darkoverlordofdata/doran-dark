@@ -76,10 +76,9 @@ static inline vptr(Object);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadObject(Class base) 
+static inline Class ClassLoadObject(Class base) 
 {
     Class cls = createClass(base, Object);
-    cls->id = ObjectTypeID;
 
     addMethod(cls, Object, ToString);
     addMethod(cls, Object, Equals);
@@ -110,7 +109,7 @@ static inline bool InstanceOf(Class klass, Object* obj) {
  * Object constructor
  */
 method Object* New(Object* self) {
-    self->isa = objc_getClass("Object");
+    set_isa(Object);
     return self;
 }
 
@@ -136,7 +135,7 @@ method void Dispose(Object* const self)
 {
     Log("Object dispose");
     if (virtual(Object)->Dispose == Dispose) {
-        // if (!_objc_use_gc) free(self);
+        // if (!_use_gc) free(self);
     } else {
         // return virtual(Object)->Dispose(self);
     }
@@ -145,7 +144,7 @@ method void Dispose(Object* const self)
  * virtual Dispose method
  */
 // static inline void Object_Dispose(Object* const self){
-//     if (!_objc_use_gc) free(self);
+//     if (!_use_gc) free(self);
 // }
 
 /**

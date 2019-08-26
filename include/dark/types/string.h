@@ -112,7 +112,7 @@ static inline vptr(String);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadString(Class base) 
+static inline Class ClassLoadString(Class base) 
 {
     Class cls = createClass(base, String);
     addMethod(cls, String,      ToString);
@@ -155,7 +155,7 @@ static inline Class objc_loadString(Class base)
 method String* New(String* self, const char* value)
 {
     extends(Comparable);
-    self->isa = objc_getClass("String");
+    set_isa(String);
     self->value = strdup(value);
     self->length = strlen(value);
     return self;

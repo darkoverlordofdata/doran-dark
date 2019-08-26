@@ -16,15 +16,24 @@
 void __attribute__((constructor(200))) GameLoader() 
 {
 
-    Class obj = objc_getClass("Object");
-    Class gameClass = objc_loadGame(obj);
+    Class obj = GetClass("Object");
+    Class gameClass = ClassLoadGame(obj);
 
-    objc_registerClassPair(gameClass);
-    objc_registerClassPair(objc_loadShmupwarz(gameClass));
+    RegisterClass(gameClass);
+    RegisterClass(ClassLoadShmupwarz(gameClass));
 }
 
 int main(int argc, char *argv[])
 {
+
+
+    var zz = new(Boolean, true);
+    Class cc = Get(GetClasses(), "Object");
+    assert(cc != nullptr);
+    Log("Name = %s", cc->name);
+    Class bb = Get(GetClasses(), "Boolean");
+    Log("Name = %s", bb->name);
+
 
     // Game* game = new(Game, "SdL Demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
     //                     600, 480, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL );
@@ -37,6 +46,8 @@ int main(int argc, char *argv[])
     
     Run(game);
     Dispose(game);
+
+    Dispose(GetClasses());
 
     return 0;
 }

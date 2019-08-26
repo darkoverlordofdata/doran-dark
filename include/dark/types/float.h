@@ -81,7 +81,7 @@ static inline vptr(Float);
  * 
 ] * Class Loader callback
  */
-static inline Class objc_loadFloat(Class base) 
+static inline Class ClassLoadFloat(Class base) 
 {
     Class cls = createClass(base, Float);
     addMethod(cls, Object,        Equals);
@@ -107,7 +107,7 @@ static inline Class objc_loadFloat(Class base)
 method Float* New(Float* self, const float value)
 {
     extends(Number);
-    self->isa = objc_getClass("Float");
+    set_isa(Float);
     self->value = value;
     return self;
 }

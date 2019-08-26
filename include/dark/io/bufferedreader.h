@@ -78,7 +78,7 @@ static inline vptr(BufferedReader);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadBufferedReader(Class base) 
+static inline Class ClassLoadBufferedReader(Class base) 
 {
     Class cls = createClass(base, BufferedReader);
     addMethod(cls, BufferedReader, ToString);
@@ -102,7 +102,7 @@ static inline Class objc_loadBufferedReader(Class base)
 
 method BufferedReader* New(BufferedReader* self, Reader* in, int sz) {
     extends(Reader);
-    self->isa = objc_getClass("BufferedReader");
+    set_isa(BufferedReader);
     self->markedChar = UNMARKED;
     self->readAheadLimit = 0;
     self->skipLF = false;

@@ -65,7 +65,7 @@ static inline vptr(InputStreamReader);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadInputStreamReader(Class base) 
+static inline Class ClassLoadInputStreamReader(Class base) 
 {
     Class cls = createClass(base, InputStreamReader);
     addMethod(cls, InputStreamReader, ToString);
@@ -87,7 +87,7 @@ static inline Class objc_loadInputStreamReader(Class base)
 
 method InputStreamReader* New(InputStreamReader* self, InputStream* in) {
     extends(Object);
-    self->isa = objc_getClass("InputStreamReader");
+    set_isa(InputStreamReader);
     self->in = in;
     return self;
 }

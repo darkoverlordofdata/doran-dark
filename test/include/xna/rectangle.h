@@ -34,7 +34,7 @@ static inline vptr(Rectangle);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadRectangle(Class base) 
+static inline Class ClassLoadRectangle(Class base) 
 {
     Class cls = createClass(base, Rectangle);
     addMethod(cls, Rectangle,   ToString);
@@ -49,7 +49,7 @@ static inline Class objc_loadRectangle(Class base)
 method Rectangle* New(Rectangle* self, int x, int y, int width, int height)
 {
     extends(Object);
-    self->isa = objc_getClass("Game");
+    set_isa(Game);
     self->x = x;
     self->y = y;
     self->width = width;

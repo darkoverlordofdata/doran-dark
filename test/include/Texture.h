@@ -60,7 +60,7 @@ static inline vptr(Texture2D);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadTexture2D(Class base) 
+static inline Class ClassLoadTexture2D(Class base) 
 {
     Class cls = createClass(base, Texture2D);
     addMethod(cls, Texture2D, ToString);
@@ -87,7 +87,7 @@ method Texture2D* New(
     char* path)
 {
 	extends(Object);
-    self->isa = objc_getClass("Texture2D");
+    set_isa(Texture2D);
     self->path = strdup(path);
     self->Width = 0;
     self->Height = 0;

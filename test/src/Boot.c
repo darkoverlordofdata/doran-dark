@@ -34,16 +34,16 @@ SOFTWARE.
 void __attribute__((constructor)) ApplicationLoader() 
 {
 
-    Class obj = objc_getClass("Object");
+    Class obj = GetClass("Object");
     Class gameObj;
 
-    objc_registerClassPair(gameObj = objc_loadGameObject(obj));
-    objc_registerClassPair(objc_loadBallObject(gameObj));
-    objc_registerClassPair(objc_loadGame(obj));
-    objc_registerClassPair(objc_loadGameLevel(obj));
-    objc_registerClassPair(objc_loadParticleGenerator(obj));
-    objc_registerClassPair(objc_loadShader(obj));
-    objc_registerClassPair(objc_loadSpriteRenderer(obj));
-    objc_registerClassPair(objc_loadTexture2D(obj));
-    objc_registerClassPair(objc_loadResourceManager(obj));
+    RegisterClass(gameObj = ClassLoadGameObject(obj));
+    RegisterClass(ClassLoadBallObject(gameObj));
+    RegisterClass(ClassLoadGame(obj));
+    RegisterClass(ClassLoadGameLevel(obj));
+    RegisterClass(ClassLoadParticleGenerator(obj));
+    RegisterClass(ClassLoadShader(obj));
+    RegisterClass(ClassLoadSpriteRenderer(obj));
+    RegisterClass(ClassLoadTexture2D(obj));
+    RegisterClass(ClassLoadResourceManager(obj));
 }

@@ -104,7 +104,7 @@ static inline vptr(Game);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadGame(Class base) 
+static inline Class ClassLoadGame(Class base) 
 {
     Class cls = createClass(base, Game);
     addMethod(cls, Game, ToString);
@@ -160,7 +160,7 @@ method Game* New(
     const int Height)
 {
     extends(Object);
-    self->isa = objc_getClass("Game");
+    set_isa(Game);
     self->Levels = new(Array, 4);
     self->Level = 0;
     self->State = GAME_ACTIVE;

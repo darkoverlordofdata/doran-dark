@@ -81,7 +81,7 @@ static inline vptr(Long);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadLong(Class base) 
+static inline Class ClassLoadLong(Class base) 
 {
     Class cls = createClass(base, Long);
     addMethod(cls, Long,        ToString);
@@ -109,7 +109,7 @@ static inline Class objc_loadLong(Class base)
 method Long* New(Long* self, const long value)
 {
     extends(Number);
-    self->isa = objc_getClass("Long");
+    set_isa(Long);
     self->value = value;
     return self;
 }

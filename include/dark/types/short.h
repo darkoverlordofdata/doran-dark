@@ -79,7 +79,7 @@ static inline vptr(Short);
  *
  * Class Loader callback
  */
-static inline Class objc_loadShort(Class base) 
+static inline Class ClassLoadShort(Class base) 
 {
     Class cls = createClass(base, Short);
     addMethod(cls, Short,       ToString);
@@ -107,7 +107,7 @@ static inline Class objc_loadShort(Class base)
 method Short* New(Short* self, const short value)
 {
     extends(Number);
-    self->isa = objc_getClass("Short");
+    set_isa(Short);
     self->value = value;
     return self;
 }

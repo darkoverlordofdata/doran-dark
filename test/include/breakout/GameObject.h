@@ -67,7 +67,7 @@ static inline vptr(GameObject);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadGameObject(Class base) 
+static inline Class ClassLoadGameObject(Class base) 
 {
     Class cls = createClass(base, GameObject);
     addMethod(cls, GameObject, ToString);
@@ -95,7 +95,7 @@ method GameObject* New(
     Vec3 Color)
 {
 	New((Object*)self);
-    self->isa = objc_getClass("GameObject");
+    set_isa(GameObject);
     self->IsSolid = false;
     self->Destroyed = false;
     self->Position = Position;

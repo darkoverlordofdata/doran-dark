@@ -64,7 +64,7 @@ static inline vptr(InputStream);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadInputStream(Class base) 
+static inline Class ClassLoadInputStream(Class base) 
 {
     Class cls = createClass(base, InputStream);
     addMethod(cls, InputStream, ToString);
@@ -87,7 +87,7 @@ static inline Class objc_loadInputStream(Class base)
 method InputStream* New(InputStream* self) 
 {
     extends(Object);
-    self->isa = objc_getClass("InputStream");
+    set_isa(InputStream);
     return self;
 }
 

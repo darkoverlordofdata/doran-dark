@@ -77,7 +77,7 @@ static inline vptr(Char);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadChar(Class base) 
+static inline Class ClassLoadChar(Class base) 
 {
     Class cls = createClass(base, Char);
 
@@ -107,7 +107,7 @@ static inline Class objc_loadChar(Class base)
 method Char* New(Char* self, const char value)
 {
     extends(Number);
-    self->isa = objc_getClass("Char");
+    set_isa(Char);
     self->value = value;
     return self;
 }

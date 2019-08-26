@@ -36,7 +36,7 @@ static inline vptr(SpriteRenderer);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadSpriteRenderer(Class base) 
+static inline Class ClassLoadSpriteRenderer(Class base) 
 {
     Class cls = createClass(base, SpriteRenderer);
     addMethod(cls, SpriteRenderer, ToString);
@@ -59,7 +59,7 @@ method SpriteRenderer*  New(
     Shader* shader)
 {
 	extends(Object);
-    self->isa = objc_getClass("SpriteRenderer");
+    set_isa(SpriteRenderer);
     self->shader = shader;
     initRenderData(self);
     return self;
@@ -146,7 +146,7 @@ method void InitRenderData(SpriteRenderer* self)
 method void Dispose(SpriteRenderer* self)
 {
     glDeleteVertexArrays(1, &self->quadVAO);
-    if (!_objc_use_gc) {
+    if (!_use_gc) {
         free(self);
     }
 }

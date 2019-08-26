@@ -72,7 +72,7 @@ static inline vptr(List);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadList(Class base) 
+static inline Class ClassLoadList(Class base) 
 {
     Class cls = createClass(base, List);
     addMethod(cls, List, ToString);
@@ -96,7 +96,7 @@ method List* NewEither(List* const self)
 method List* New(List* self, Class typeOf)
 {
     extends(Object);
-    self->isa = objc_getClass("List");
+    set_isa(List);
     self->typeOf = typeOf;
     self->head = nullptr;
 

@@ -71,7 +71,7 @@ static inline vptr(ParticleGenerator);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadParticleGenerator(Class base) 
+static inline Class ClassLoadParticleGenerator(Class base) 
 {
     Class cls = createClass(base, ParticleGenerator);
     addMethod(cls, ParticleGenerator, ToString);
@@ -98,7 +98,7 @@ method ParticleGenerator* New(
     int amount)
 {
 	extends(Object);
-    self->isa = objc_getClass("ParticleGenerator");
+    set_isa(ParticleGenerator);
     self->shader = shader;
     self->texture = texture;
     self->amount = amount;

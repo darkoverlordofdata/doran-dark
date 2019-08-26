@@ -49,7 +49,7 @@ static inline vptr(SpriteRenderer);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadSpriteRenderer(Class base) 
+static inline Class ClassLoadSpriteRenderer(Class base) 
 {
     Class cls = createClass(base, SpriteRenderer);
     addMethod(cls, SpriteRenderer, ToString);
@@ -72,7 +72,7 @@ method SpriteRenderer*  New(
     Shader* shader)
 {
 	extends(Object);
-    self->isa = objc_getClass("SpriteRenderer");
+    set_isa(SpriteRenderer);
     self->shader = shader;
     initRenderData(self);
     return self;

@@ -64,7 +64,7 @@ static inline vptr(Reader);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadReader(Class base) 
+static inline Class ClassLoadReader(Class base) 
 {
     Class cls = createClass(base, Reader);
     addMethod(cls, Reader, ToString);
@@ -89,7 +89,7 @@ static const int maxSkipBufferSize = 8192;
 
 method Reader* New(Reader* self) {
     extends(Object);
-    self->isa = objc_getClass("Reader");
+    set_isa(Reader);
     return self;
 }
 

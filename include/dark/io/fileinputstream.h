@@ -62,7 +62,7 @@ static inline vptr(FileInputStream);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadFileInputStream(Class base) 
+static inline Class ClassLoadFileInputStream(Class base) 
 {
     Class cls = createClass(base, FileInputStream);
     addMethod(cls, FileInputStream, ToString);
@@ -85,7 +85,7 @@ static inline Class objc_loadFileInputStream(Class base)
 method FileInputStream* New(FileInputStream* self, File* file) 
 {
     extends(Object);
-    self->isa = objc_getClass("FileInputStream");
+    set_isa(FileInputStream);
     auto name = file != nullptr ? GetPath(file) : nullptr;
     if (name == nullptr)
         throw DSNullPointerException(Source);

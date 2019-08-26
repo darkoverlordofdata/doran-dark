@@ -41,10 +41,10 @@ static const int BuildVersion = 1;
  */
 #include <dark/core.h>
 #include <dark/polyfill.h>
-#include <dark/vendor/hashmap/hashmap.h>
 #include <dark/core/class.h>
 #include <dark/core/object.h>
 #include <dark/printf.h>
+#include <dark/classes.h>
 /**
  * functional objects
  * 

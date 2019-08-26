@@ -85,7 +85,7 @@ static inline vptr(Shmupwarz);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadShmupwarz(Class base) 
+static inline Class ClassLoadShmupwarz(Class base) 
 {
     Class cls = createClass(base, Shmupwarz);
     addMethod(cls, Shmupwarz,   ToString);
@@ -113,7 +113,7 @@ method Shmupwarz* New(Shmupwarz* self, int width, int height)
 {
 	extends(Game, "Shmupwarz", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
                         width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
-    self->isa = objc_getClass("Shmupwarz");
+    set_isa(Shmupwarz);
     return self;
 }
 

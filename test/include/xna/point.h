@@ -30,7 +30,7 @@ static inline vptr(Point);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadPoint(Class base) 
+static inline Class ClassLoadPoint(Class base) 
 {
     Class cls = createClass(base, Point);
     addMethod(cls, Point,       ToString);
@@ -44,7 +44,7 @@ static inline Class objc_loadPoint(Class base)
 method Point* New(Point* self, int x, int y)
 {
 	extends(Object);
-    self->isa = objc_getClass("Point");
+    set_isa(Point);
     self->x = x;
     self->y = y;
     return self;

@@ -108,7 +108,7 @@ static inline vptr(Game);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadGame(Class base) 
+static inline Class ClassLoadGame(Class base) 
 {
     Class cls = createClass(base, Game);
     addMethod(cls, Game,    ToString);
@@ -167,7 +167,7 @@ method char* ToString(const Game* const self)
 method Game* New(Game* self, char* title, int x, int y, int width, int height, int flags)
 {
 	extends(Object);
-    self->isa = objc_getClass("Game");
+    set_isa(Game);
     self->title = strdup(title);
     self->x = x;
     self->y = y;
@@ -411,7 +411,7 @@ method void Tick(Game* const self)
 method void Dispose(Game* const self) 
 {
     SDL_DestroyWindow(self->window);
-    if (!_objc_use_gc) {
+    if (!_use_gc) {
         free(self->title);
         free(self->keys);
     }

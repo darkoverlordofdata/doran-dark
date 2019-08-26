@@ -59,7 +59,7 @@ static inline vptr(Shader);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadShader(Class base) 
+static inline Class ClassLoadShader(Class base) 
 {
     Class cls = createClass(base, Shader);
     addMethod(cls, Shader,  ToString);
@@ -92,7 +92,7 @@ static const char* HEADER = "#\n"
 method Shader* New(Shader* self)
 {
 	extends(Object);
-    self->isa = objc_getClass("Shader");
+    set_isa(Shader);
     return self;
 }
 
@@ -369,7 +369,7 @@ method void SetMatrix(
  */
 method void Dispose(Shader* self)
 {
-    if (!_objc_use_gc) {
+    if (!_use_gc) {
         free(self);
     }
 }

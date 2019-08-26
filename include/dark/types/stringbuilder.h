@@ -114,7 +114,7 @@ static inline vptr(StringBuilder);
  * 
  * Class Loader callback
  */
-static inline Class objc_loadStringBuilder(Class base) 
+static inline Class ClassLoadStringBuilder(Class base) 
 {
     Class cls = createClass(base, StringBuilder);
 	addMethod(cls, StringBuilder, 	ToString);
@@ -140,7 +140,7 @@ static inline Class objc_loadStringBuilder(Class base)
 method StringBuilder* New(StringBuilder* self)
 {
     extends(Object);
-    self->isa = objc_getClass("StringBuilder"); 
+    set_isa(StringBuilder); 
 	return self;
 }
 

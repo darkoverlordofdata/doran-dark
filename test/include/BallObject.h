@@ -69,7 +69,7 @@ static inline vptr(BallObject);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadBallObject(Class base) 
+static inline Class ClassLoadBallObject(Class base) 
 {
     Class cls = createClass(base, BallObject);
     addMethod(cls, BallObject,  ToString);
@@ -100,7 +100,7 @@ method BallObject* New(
     Radius = Radius != 0 ? Radius : 12.5f;
 
     extends(GameObject, "ball", Position, (Vec2){ Radius*2, Radius*2 }, Sprite, (Vec3){ 1, 1, 1 });
-    self->isa = objc_getClass("BallObject");
+    set_isa(BallObject);
     self->Velocity = Velocity;
     self->Radius = Radius;
     return self;

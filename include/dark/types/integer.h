@@ -81,7 +81,7 @@ static inline vptr(Integer);
 /**
  * Class Loader callback
  */
-static inline Class objc_loadInteger(Class base) 
+static inline Class ClassLoadInteger(Class base) 
 {
     Class cls = createClass(base, Integer);
     addMethod(cls, Integer,     ToString);
@@ -108,7 +108,7 @@ static inline Class objc_loadInteger(Class base)
 method Integer* New(Integer* self, const int value)
 {
     extends(Number);
-    self->isa = objc_getClass("Integer");
+    set_isa(Integer);
     self->value = value;
     return self;
 }

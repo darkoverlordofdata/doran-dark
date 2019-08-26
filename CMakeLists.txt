@@ -12,10 +12,6 @@ list ( APPEND INCLUDE .lib/dark/src/vendor )
 
 
 # C Sources:
-list ( APPEND CSOURCE .lib/dark/src/hashmap.c )
-list ( APPEND CSOURCE .lib/dark/src/runtime.c )
-list ( APPEND CSOURCE .lib/dark/src/objc-class.c )
-
 
 # Vala Sources:
 
