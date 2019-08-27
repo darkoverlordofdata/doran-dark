@@ -109,7 +109,7 @@ static inline Exception* NewException(ExceptionType type, char* msg) {
 
 method Exception* New(Exception* self, ExceptionType type, char* msg) {
     extends(Object);
-    set_isa(Exception);
+    self->isa = isa(Exception);
     self->type = type;
     self->msg = msg;
     return self;

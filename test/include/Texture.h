@@ -87,7 +87,7 @@ method Texture2D* New(
     char* path)
 {
 	extends(Object);
-    set_isa(Texture2D);
+    self->isa = isa(Texture2D);
     self->path = strdup(path);
     self->Width = 0;
     self->Height = 0;

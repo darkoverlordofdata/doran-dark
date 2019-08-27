@@ -98,7 +98,7 @@ method ParticleGenerator* New(
     int amount)
 {
 	extends(Object);
-    set_isa(ParticleGenerator);
+    self->isa = isa(ParticleGenerator);
     self->shader = shader;
     self->texture = texture;
     self->amount = amount;

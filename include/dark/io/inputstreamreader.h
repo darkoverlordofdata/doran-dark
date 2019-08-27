@@ -87,7 +87,7 @@ static inline Class ClassLoadInputStreamReader(Class base)
 
 method InputStreamReader* New(InputStreamReader* self, InputStream* in) {
     extends(Object);
-    set_isa(InputStreamReader);
+    self->isa = isa(InputStreamReader);
     self->in = in;
     return self;
 }

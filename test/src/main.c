@@ -10,6 +10,7 @@
 #include <shmupwarz.h>
 #include <assert.h>
 
+
 /**
  * Class loader
  */
@@ -25,8 +26,6 @@ void __attribute__((constructor(200))) GameLoader()
 
 int main(int argc, char *argv[])
 {
-
-
     var zz = new(Boolean, true);
     Class cc = Get(GetClasses(), "Object");
     assert(cc != nullptr);
@@ -42,7 +41,7 @@ int main(int argc, char *argv[])
     // Dispose(game);
 
     Shmupwarz* game = new(Shmupwarz, 600, 480);
-    Log("Game %s", ToString(game));
+    Log(ToString(game));
     
     Run(game);
     Dispose(game);

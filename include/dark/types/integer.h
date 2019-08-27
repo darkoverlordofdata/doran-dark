@@ -108,7 +108,7 @@ static inline Class ClassLoadInteger(Class base)
 method Integer* New(Integer* self, const int value)
 {
     extends(Number);
-    set_isa(Integer);
+    self->isa = isa(Integer);
     self->value = value;
     return self;
 }

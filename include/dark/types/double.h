@@ -104,7 +104,7 @@ static inline Class ClassLoadDouble(Class base)
  */
 method Double* New(Double* self, const double value) {
     extends(Number);
-    set_isa(Double);
+    self->isa = isa(Double);
     self->value = value;
     return self;
 }

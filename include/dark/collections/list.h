@@ -96,7 +96,7 @@ method List* NewEither(List* const self)
 method List* New(List* self, Class typeOf)
 {
     extends(Object);
-    set_isa(List);
+    self->isa = isa(List);
     self->typeOf = typeOf;
     self->head = nullptr;
 

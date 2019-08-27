@@ -31,6 +31,10 @@
 #endif
 // #include "tglm.h"
 
+#define bgd_r 0.392156f
+#define bgd_g 0.584313f
+#define bgd_b 0.929411f
+
 /**
  * The game type
  */
@@ -72,7 +76,7 @@ type (Game)
     bool suppressDraw;
     double factor;
     bool *keys;
-    ResourceManager resource;
+    ResourceManager* resource;
 };
 
 delegate (Game, New,            Game*, (Game* self, char* title, int x, int y, int width, int height, int flags));
@@ -85,6 +89,8 @@ delegate (Game, HandleEvents,   void, (Game* const));
 delegate (Game, RunLoop,        void, (Game* const));
 delegate (Game, Draw,           void, (Game* const));
 delegate (Game, Update,         void, (Game* const));
+delegate (Game, Initialize,     void, (Game* const));
+delegate (Game, LoadContent,    void, (Game* const));
 
 vtable (Game) 
 {
@@ -99,6 +105,8 @@ vtable (Game)
     const GameRunLoop       RunLoop;
     const GameDraw          Draw;
     const GameUpdate        Update;
+    const GameInitialize    Initialize;
+    const GameLoadContent   LoadContent;
 };
 
 /**
@@ -122,6 +130,8 @@ static inline Class ClassLoadGame(Class base)
     addMethod(cls, Game,    RunLoop);
     addMethod(cls, Game,    Draw);
     addMethod(cls, Game,    Update);
+    addMethod(cls, Game,    Initialize);
+    addMethod(cls, Game,    LoadContent);
     return cls;
 }
 
@@ -167,7 +177,7 @@ method char* ToString(const Game* const self)
 method Game* New(Game* self, char* title, int x, int y, int width, int height, int flags)
 {
 	extends(Object);
-    set_isa(Game);
+    self->isa = isa(Game);
     self->title = strdup(title);
     self->x = x;
     self->y = y;
@@ -206,7 +216,6 @@ method Game* New(Game* self, char* title, int x, int y, int width, int height, i
     #else
     self->gl_minor_version = 3;
     #endif
-    //Init(); //&self->resource);
 
     /* Request opengl 3.3 context.*/
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, self->gl_major_version);
@@ -257,15 +266,40 @@ method Game* New(Game* self, char* title, int x, int y, int width, int height, i
 
 
 /**
+ * Game::Initialize
+ */
+method void Initialize(Game* const self)
+{ 
+    virtual(Game)->Initialize(self);
+}
+/**
+ * Game::LoadContent
+ */
+method void LoadContent(Game* const self)
+{ 
+    Log("Load Content");
+    self->resource = new(ResourceManager);
+    virtual(Game)->LoadContent(self);
+}
+
+/**
  * Game::Update
  */
-method void Update(Game* const self){ }
+method void Update(Game* const self)
+{ 
+    virtual(Game)->Update(self);
+}
 
 /**
  * Game::Draw
  */
 method void Draw(Game* const self) 
 {
+    glClearColor(bgd_r, bgd_g, bgd_b, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+            
+    virtual(Game)->Draw(self);
+
     SDL_GL_SwapWindow(self->window);
 }
 
@@ -310,6 +344,7 @@ method void HandleEvents(Game* const self)
 method void Start(Game* const self) 
 {
     self->isRunning = true;
+    virtual(Game)->Start(self);
 }
 
 /**
@@ -358,7 +393,8 @@ method void Tick(Game* const self)
             self->accumulatedElapsedTime -= self->targetElapsedTime;
             ++stepCount;
             self->delta = (double)self->elapsedGameTime * SecondsPerTick;
-            virtual(Game)->Update(self);
+            Update(self);
+            // virtual(Game)->Update(self);
         }
         //Every update after the first accumulates lag
         self->updateFrameLag += Max(0, stepCount - 1);
@@ -390,14 +426,16 @@ method void Tick(Game* const self)
         self->accumulatedElapsedTime = 0;
         
         self->delta = (double)self->elapsedGameTime * SecondsPerTick;
-        virtual(Game)->Update(self);
+        Update(self);
+        // virtual(Game)->Update(self);
     }
     // Draw unless the update suppressed it.
     if (self->suppressDraw)
         self->suppressDraw = false;
     else
     {
-        virtual(Game)->Draw(self);
+        Draw(self);
+        // virtual(Game)->Draw(self);
     }
 
     if (self->shouldExit) 
@@ -438,8 +476,8 @@ method void RunLoop(Game* const self)
  */
 method void Run(Game* const self) 
 {
-    // self->Initialize(self);
-    // self->LoadContent(self);
+    Initialize(self);
+    LoadContent(self);
     Start(self);
 #if __EMSCRIPTEN__
     emscripten_set_main_loop_arg((em_arg_callback_func)RunLoop, (void*)self, -1, 1);

@@ -140,7 +140,7 @@ static inline Class ClassLoadStringBuilder(Class base)
 method StringBuilder* New(StringBuilder* self)
 {
     extends(Object);
-    set_isa(StringBuilder); 
+    self->isa = isa(StringBuilder); 
 	return self;
 }
 

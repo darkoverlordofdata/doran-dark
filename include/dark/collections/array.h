@@ -157,7 +157,7 @@ method Array* New(Array* self, Class typeOf, int capacity) {
     extends(Object);
     // extend(Object, self);
 
-    set_isa(Array);
+    self->isa = isa(Array);
     self->capacity = capacity == 0 ? ARRAY_INIT_CAPACITY : capacity;
     self->length = 0;
     self->data = DScalloc(self->capacity, sizeof(Object*));

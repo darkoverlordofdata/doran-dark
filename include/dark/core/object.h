@@ -109,7 +109,7 @@ static inline bool InstanceOf(Class klass, Object* obj) {
  * Object constructor
  */
 method Object* New(Object* self) {
-    set_isa(Object);
+    self->isa = isa(Object);
     return self;
 }
 

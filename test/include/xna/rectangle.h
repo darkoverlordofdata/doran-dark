@@ -49,7 +49,7 @@ static inline Class ClassLoadRectangle(Class base)
 method Rectangle* New(Rectangle* self, int x, int y, int width, int height)
 {
     extends(Object);
-    set_isa(Game);
+    self->isa = isa(Rectangle);
     self->x = x;
     self->y = y;
     self->width = width;

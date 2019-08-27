@@ -170,7 +170,7 @@ method String* GetParent(File* self) {
 
 static inline File* FileWithLength(String* pathname, int prefixLength) {
     File* self = alloc(File);
-    set_isa(File);
+    self->isa = isa(File);
     self->path = CopyOf(pathname);
     self->prefixLength = prefixLength;
     return self;
@@ -282,7 +282,7 @@ method int CompareTo(File* const self, File* other) {
  */
 method File* New(File* self, const char* path) {
     extends(Comparable);
-    set_isa(File);
+    self->isa = isa(File);
     self->path = fs.Normalize(new(String, path));
     self->prefixLength = fs.PrefixLength(self->path);
     return self;
@@ -290,7 +290,7 @@ method File* New(File* self, const char* path) {
 
 method File* New(File* self, const char* parent, const char* child) {
     extends(Comparable);
-    set_isa(File);
+    self->isa = isa(File);
     if (!strcmp("", parent)) {
         self->path = fs.Resolve(fs.GetDefaultParent(), 
                         fs.Normalize(child));
@@ -304,7 +304,7 @@ method File* New(File* self, const char* parent, const char* child) {
 
 method File* New(File* self, File* parent, const char* child) {
     extends(Comparable);
-    set_isa(File);
+    self->isa = isa(File);
     if (parent->path != nullptr) {
         if (!strcmp("", parent->path)) {
         self->path = fs.Resolve(fs.GetDefaultParent(), 

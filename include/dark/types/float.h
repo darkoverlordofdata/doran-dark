@@ -107,7 +107,7 @@ static inline Class ClassLoadFloat(Class base)
 method Float* New(Float* self, const float value)
 {
     extends(Number);
-    set_isa(Float);
+    self->isa = isa(Float);
     self->value = value;
     return self;
 }

@@ -87,7 +87,7 @@ static inline Class ClassLoadInputStream(Class base)
 method InputStream* New(InputStream* self) 
 {
     extends(Object);
-    set_isa(InputStream);
+    self->isa = isa(InputStream);
     return self;
 }
 

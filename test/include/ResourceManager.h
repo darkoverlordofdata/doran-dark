@@ -75,7 +75,7 @@ static inline vptr(ResourceManager);
  */
 static inline ResourceManager* ResourceManager_ctor(ResourceManager* self) {
     New((Object*)self); 
-    set_isa(ResourceManager);
+    self->isa = isa(ResourceManager);
     return self;
 }
 

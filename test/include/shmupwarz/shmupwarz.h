@@ -2,11 +2,12 @@
 #include <dark/Foundation.h>
 #include <xna/xna.h>
 #include <assert.h>
+#include <tglm/tglm.h>
 
 // 100,149,237,255
-#define bgd_r 0.392156f
-#define bgd_g 0.584313f
-#define bgd_b 0.929411f
+// #define bgd_r 0.392156f
+// #define bgd_g 0.584313f
+// #define bgd_b 0.929411f
 
 #undef SUPER
 #define SUPER Game
@@ -46,7 +47,18 @@ type (Shmupwarz)
     bool suppressDraw;
     double factor;
     bool *keys;
-    ResourceManager resource;
+    ResourceManager* resource;
+    SpriteRenderer* spriteBatch;
+
+    List* Bullets;
+    List* Enenmies1;
+    List* Enenmies2;
+    List* Enenmies3;
+    List* Explosions;
+    List* Bangs;
+    List* Particles;
+    Array* Entities;
+
 };
 
 delegate (Shmupwarz, New,           Shmupwarz*, (Shmupwarz*, int, int));
@@ -59,6 +71,8 @@ delegate (Shmupwarz, HandleEvents,  void, (const Shmupwarz* const));
 delegate (Shmupwarz, RunLoop,       void, (const Shmupwarz* const));
 delegate (Shmupwarz, Draw,          void, (const Shmupwarz* const));
 delegate (Shmupwarz, Update,        void, (const Shmupwarz* const));
+delegate (Shmupwarz, Initialize,    void, (const Shmupwarz* const));
+delegate (Shmupwarz, LoadContent,   void, (Shmupwarz* const));
 
 /**
  * Shmupwarz vtable
@@ -76,6 +90,8 @@ vtable (Shmupwarz)
     const ShmupwarzRunLoop      RunLoop;
     const ShmupwarzDraw         Draw;
     const ShmupwarzUpdate       Update;
+    const ShmupwarzInitialize   Initialize;
+    const ShmupwarzLoadContent  LoadContent;
 };
 
 /**
@@ -99,6 +115,8 @@ static inline Class ClassLoadShmupwarz(Class base)
     addMethod(cls, Shmupwarz,   RunLoop);
     addMethod(cls, Shmupwarz,   Draw);
     addMethod(cls, Shmupwarz,   Update);
+    addMethod(cls, Shmupwarz,   Initialize);
+    addMethod(cls, Shmupwarz,   LoadContent);
     return cls;
 }
 
@@ -113,7 +131,7 @@ method Shmupwarz* New(Shmupwarz* self, int width, int height)
 {
 	extends(Game, "Shmupwarz", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
                         width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
-    set_isa(Shmupwarz);
+    self->isa = isa(Shmupwarz);
     return self;
 }
 
@@ -122,7 +140,13 @@ method Shmupwarz* New(Shmupwarz* self, int width, int height)
  */
 method char* ToString(const Shmupwarz* const self)
 {
-    return super(ToString);
+    static char* toStringCache;
+
+    if (!toStringCache)
+        toStringCache = DSsprintf("{ title: %s, width: %d. height: %d }", 
+                                    self->title, self->width, self->height);
+
+    return toStringCache;
 }
 
 /**
@@ -141,9 +165,69 @@ method void Dispose(const Shmupwarz* const self)
  */
 method void Start(const Shmupwarz* const self)
 {
-    super(Start);
 }
 
+/**
+ * Shmupwarz::Draw
+ * 
+ */
+method void Draw(const Shmupwarz* const self)
+{
+    var sprite = GetTexture(self->resource, "background");
+    Draw(self->spriteBatch, sprite, 
+        (Vec2){ 0, 0 }, (Vec2){ sprite->Width, sprite->Height }, 0, (Vec3){ 1, 1, 1 });
+}
+
+/**
+ * Shmupwarz::Update
+ * 
+ */
+method void Update(const Shmupwarz* const self)
+{
+}
+
+/**
+ * Shmupwarz::Update
+ * 
+ */
+method void Initialize(const Shmupwarz* const self)
+{
+    Log("Initialize");
+}
+/**
+ * Shmupwarz::Update
+ * 
+ */
+method void LoadContent(Shmupwarz* const self)
+{
+    // Load shaders
+    LoadShader(self->resource, "assets/shaders/sprite.vs", "assets/shaders/sprite.frag", "sprite");
+    LoadShader(self->resource, "assets/shaders/particle.vs", "assets/shaders/particle.frag", "particle");
+
+    // Configure shaders
+    Mat projection = glm_ortho(0.0f, self->width, self->height, 0.0f, -1.0f, 1.0f);
+
+    SetInteger(GetShader(self->resource, "sprite"), "sprite", 0, true);
+    SetMatrix(GetShader(self->resource, "sprite"), "projection", &projection, true);
+
+    SetInteger(GetShader(self->resource, "particle"), "sprite", 0, true);
+    SetMatrix(GetShader(self->resource, "particle"), "projection", &projection, true);
+
+    // Load textures
+    LoadTexture(self->resource, "assets/images/background.png", GL_TRUE, "background");
+    // self->resources.LoadTexture("assets/images/bang.png", GL_TRUE, "bang");
+    // self->resources.LoadTexture("assets/images/bullet.png", GL_TRUE, "bullet");
+    // self->resources.LoadTexture("assets/images/enemy1.png", GL_TRUE, "enemy1");
+    // self->resources.LoadTexture("assets/images/enemy2.png", GL_TRUE, "enemy2");
+    // self->resources.LoadTexture("assets/images/enemy3.png", GL_TRUE, "enemy3");
+    // self->resources.LoadTexture("assets/images/explosion.png", GL_TRUE, "explosion");
+    // self->resources.LoadTexture("assets/images/particle.png", GL_TRUE, "particle");
+    // self->resources.LoadTexture("assets/images/spaceshipspr.png", GL_TRUE, "spaceshipspr");
+    // self->resources.LoadTexture("assets/images/star.png", GL_TRUE, "star");
+
+    self->spriteBatch = new(SpriteRenderer, GetShader(self->resource, "sprite"));
+
+}
 /**
  * Shmupwarz::Run
  * 
@@ -181,22 +265,3 @@ method void RunLoop(const Shmupwarz* const self)
 }
 
 
-/**
- * Shmupwarz::Draw
- * 
- */
-method void Draw(const Shmupwarz* const self)
-{
-    glClearColor(bgd_r, bgd_g, bgd_b, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-    super(Draw);
-}
-
-/**
- * Shmupwarz::Update
- * 
- */
-method void Update(const Shmupwarz* const self)
-{
-    super(Update);
-}

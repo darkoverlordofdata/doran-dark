@@ -50,16 +50,40 @@ static inline Class ClassLoadResourceManager(Class base)
     return cls;
 }
 
+/**
+ * ReadTextFile
+ * 
+ * @param path path to file
+ * @returns string with file contents
+ * 
+ */
+static inline char* ReadTextFile(FILE* f)
+{
+    fseek(f, 0L, SEEK_END);
+    long s = ftell(f);
+    rewind(f);
+    char* buf = (char*)DScalloc(1, s+1);
+    buf[s] = '\0';
+
+    if (buf != nullptr)
+    {
+        fread(buf, s, 1, f);
+        return buf;
+    }
+    return buf;
+}
+
+
 method void Init(ResourceManager* self)
 {
-    self->Shaders = new(Map);
-    self->Textures = new(Map);
+    self->Shaders = new(Map, of(Shader));
+    self->Textures = new(Map, of(Texture2D));
 }
 
 method ResourceManager* New(ResourceManager* self)
 {
 	extends(Object);
-    set_isa(ResourceManager);
+    self->isa = isa(ResourceManager);
     Init(self);
     return self;
 }
@@ -161,14 +185,11 @@ method Shader* LoadShaderFromFile(
     const GLchar *vShaderFile, 
     const GLchar *fShaderFile)
 {
-    char* vFile = Join("assets/", vShaderFile);
-    char* fFile = Join("assets/", fShaderFile);
+    FILE* vertexShaderFile = fopen(vShaderFile, "r");
+    FILE* fragmentShaderFile = fopen(fShaderFile, "r");
 
-    FILE* vertexShaderFile = fopen(vFile, "r");
-    FILE* fragmentShaderFile = fopen(fFile, "r");
-
-    if (!vertexShaderFile) SDL_Log("Unable to open %s", vShaderFile);
-    if (!fragmentShaderFile) SDL_Log("Unable to open %s", fShaderFile);
+    if (!vertexShaderFile) Log("Unable to open %s", vShaderFile);
+    if (!fragmentShaderFile) Log("Unable to open %s", fShaderFile);
 
     // Read file's buffer contents into streams
     const GLchar *vShaderCode = ReadTextFile(vertexShaderFile);

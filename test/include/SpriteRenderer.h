@@ -72,7 +72,7 @@ method SpriteRenderer*  New(
     Shader* shader)
 {
 	extends(Object);
-    set_isa(SpriteRenderer);
+    self->isa = isa(SpriteRenderer);
     self->shader = shader;
     initRenderData(self);
     return self;

@@ -109,7 +109,7 @@ static inline Class ClassLoadLong(Class base)
 method Long* New(Long* self, const long value)
 {
     extends(Number);
-    set_isa(Long);
+    self->isa = isa(Long);
     self->value = value;
     return self;
 }

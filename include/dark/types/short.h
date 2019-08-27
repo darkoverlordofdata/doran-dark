@@ -107,7 +107,7 @@ static inline Class ClassLoadShort(Class base)
 method Short* New(Short* self, const short value)
 {
     extends(Number);
-    set_isa(Short);
+    self->isa = isa(Short);
     self->value = value;
     return self;
 }

@@ -101,7 +101,7 @@ static inline Class ClassLoadShader(Class base)
 method Shader* New(Shader* self)
 {
 	extends(Object);
-    set_isa(Shader);
+    self->isa = isa(Shader);
     return self;
 }
 

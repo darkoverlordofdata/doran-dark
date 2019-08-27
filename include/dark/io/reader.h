@@ -89,7 +89,7 @@ static const int maxSkipBufferSize = 8192;
 
 method Reader* New(Reader* self) {
     extends(Object);
-    set_isa(Reader);
+    self->isa = isa(Reader);
     return self;
 }
 

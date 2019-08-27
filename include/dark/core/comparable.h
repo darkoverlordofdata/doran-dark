@@ -81,7 +81,7 @@ static inline Class ClassLoadComparable(Class base)
 method Comparable* New(Comparable* const self)
 {
     extends(Object);
-    set_isa(Comparable);
+    self->isa = isa(Comparable);
     return self;
 }
 

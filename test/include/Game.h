@@ -49,10 +49,9 @@ static const Vec2 INITIAL_BALL_VELOCITY = { 100.0f, -350.0f };
 // Radius of the ball object
 static const GLfloat BALL_RADIUS = 12.5f;
 
-// Game holds all game-related state and functionality.
-// Combines all game-related data into a single class for
-// easy access to each of the components and manageability.
-type (Game) {
+
+type (Game) 
+{
     Class isa;
     GameState State;	
     bool Keys[1024];
@@ -61,11 +60,17 @@ type (Game) {
     Array* Levels; 
     GLuint Level;    
 };    
+
+
+
 /**
  * Game API
  */
 delegate (Game, New,            Game*, (Game*, const int, const int));
 delegate (Game, ToString,       char*, (const Game* const));
+delegate (Object, Equals,       Game*, (const Game* const, const Game* const));
+delegate (Object, GetHashCode,  int, (const Game* const));
+delegate (Object, Dispose,      void, (Game* const));
 delegate (Game, Start,          void, (Game* const));
 delegate (Game, ProcessInput,   void, (Game* const, GLfloat dt));
 delegate (Game, Update,         void, (Game* const, GLfloat dt));
@@ -81,7 +86,8 @@ delegate (Game, SetState,       void, (Game* const, GameState state));
  * Metadata for the Game class:
  * attributes, vtable, class members
  */
-vtable (Game) {
+vtable (Game) 
+{
     GameToString            ToString;
     ObjectEquals            Equals;
     ObjectGetHashCode       GetHashCode;
@@ -147,6 +153,9 @@ static inline Collision* CollisionTuple(bool isTrue, Direction dir, Vec2 vec)
     return self;
 }
 
+static Class isa_cache_Game = Nil; 
+// static Class Game_isa_cache = Nil; 
+
 /**
  * Create Game instance
  * 
@@ -160,7 +169,7 @@ method Game* New(
     const int Height)
 {
     extends(Object);
-    set_isa(Game);
+    self->isa = isa(Game);;
     self->Levels = new(Array, 4);
     self->Level = 0;
     self->State = GAME_ACTIVE;

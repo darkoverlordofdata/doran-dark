@@ -155,7 +155,7 @@ static inline Class ClassLoadString(Class base)
 method String* New(String* self, const char* value)
 {
     extends(Comparable);
-    set_isa(String);
+    self->isa = isa(String);
     self->value = strdup(value);
     self->length = strlen(value);
     return self;

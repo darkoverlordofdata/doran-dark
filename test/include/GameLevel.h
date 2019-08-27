@@ -97,7 +97,7 @@ method GameLevel* New(
     const int levelHeight)
 {
 	extends(Object);
-    set_isa(GameLevel);
+    self->isa = isa(GameLevel);
     self->Bricks = new(Array, 200);
     Load(self, file, levelWidth, levelHeight);
     return self;

@@ -109,7 +109,7 @@ static inline Class ClassLoadNumber(Class base)
 method Number* New(Number* self)
 {
     extends(Comparable);
-    set_isa(Number);
+    self->isa = isa(Number);
     return self;
 }
 /**

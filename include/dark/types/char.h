@@ -107,7 +107,7 @@ static inline Class ClassLoadChar(Class base)
 method Char* New(Char* self, const char value)
 {
     extends(Number);
-    set_isa(Char);
+    self->isa = isa(Char);
     self->value = value;
     return self;
 }

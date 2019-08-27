@@ -44,7 +44,7 @@ static inline Class ClassLoadPoint(Class base)
 method Point* New(Point* self, int x, int y)
 {
 	extends(Object);
-    set_isa(Point);
+    self->isa = isa(Point);
     self->x = x;
     self->y = y;
     return self;

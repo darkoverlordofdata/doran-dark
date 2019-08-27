@@ -129,7 +129,7 @@ static inline Class ClassLoadBoolean(Class base)
  */
 method Boolean* New(Boolean* self, const bool value) {
     extends(Comparable);
-    set_isa(Boolean);
+    self->isa = isa(Boolean);
     self->value = value;
     return self;
 }

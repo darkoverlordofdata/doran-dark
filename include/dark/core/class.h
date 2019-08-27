@@ -77,6 +77,7 @@ SOFTWARE.
  * 
  * A singleton vtable object per Class
  */
+
 #define vtable(T)                                                       \
     struct T##_vtable T##_vtable;                                       \
     struct T##_vtable
@@ -153,10 +154,12 @@ SOFTWARE.
  * vptr
  * 
  * Define function to retrieve vptr
+ * Declare cache value for isa
  */
 #define vptr(T)                                                         \
     struct T##_vtable* T##_vptr(T* self);                               \
-    struct T##_vtable* T##_vptr(T* self) {                              \
+    static Class T##_isa_cache = Nil;                                   \
+    static inline struct T##_vtable* T##_vptr(T* self) {                \
         return (struct T##_vtable*)self->isa->vtable;                   \
     };                                                                  \
 
@@ -186,18 +189,8 @@ SOFTWARE.
  */
 typedef Class* (*ClassLoadClass)(Class base);
 
-// #define GetIsa(T)  \
-//         static Class isa_cache; \
-//         isa_cache = (isa_cache == 0) ? GetClass(#T) : isa_cache; \
-//         self->isa = isa_cache; 
-
 
 /**
- * Cache and set the isa value for class
- * GetClass is only called the first time a class is instantiated.
+ * Gets a chached version of GetClass(T) used to speed up class construction
  */
-#define set_isa(T)  \
-        static Class isa_cache = 0; \
-        self->isa = (isa_cache = ((isa_cache != 0) ? isa_cache : GetClass(#T)))
-
-
+#define isa(T) (T##_isa_cache = ((T##_isa_cache != Nil) ? T##_isa_cache : GetClass(#T)))

@@ -100,7 +100,7 @@ method BallObject* New(
     Radius = Radius != 0 ? Radius : 12.5f;
 
     extends(GameObject, "ball", Position, (Vec2){ Radius*2, Radius*2 }, Sprite, (Vec3){ 1, 1, 1 });
-    set_isa(BallObject);
+    self->isa = isa(BallObject);
     self->Velocity = Velocity;
     self->Radius = Radius;
     return self;

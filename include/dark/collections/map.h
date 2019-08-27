@@ -266,7 +266,7 @@ method Map* New(Map* const self, Class typeOf)
 {
     extends(Object);
 
-    set_isa(Map);
+    self->isa = isa(Map);
     self->typeOf = typeOf;
     self->data = (MapNode*)DScalloc(INITIAL_SIZE, sizeof(MapNode));
 	self->tableSize = INITIAL_SIZE;

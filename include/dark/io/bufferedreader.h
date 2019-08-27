@@ -102,7 +102,7 @@ static inline Class ClassLoadBufferedReader(Class base)
 
 method BufferedReader* New(BufferedReader* self, Reader* in, int sz) {
     extends(Reader);
-    set_isa(BufferedReader);
+    self->isa = isa(BufferedReader);
     self->markedChar = UNMARKED;
     self->readAheadLimit = 0;
     self->skipLF = false;

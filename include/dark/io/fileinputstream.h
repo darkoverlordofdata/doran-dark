@@ -85,7 +85,7 @@ static inline Class ClassLoadFileInputStream(Class base)
 method FileInputStream* New(FileInputStream* self, File* file) 
 {
     extends(Object);
-    set_isa(FileInputStream);
+    self->isa = isa(FileInputStream);
     auto name = file != nullptr ? GetPath(file) : nullptr;
     if (name == nullptr)
         throw DSNullPointerException(Source);

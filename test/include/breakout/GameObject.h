@@ -95,7 +95,7 @@ method GameObject* New(
     Vec3 Color)
 {
 	New((Object*)self);
-    set_isa(GameObject);
+    self->isa = isa(GameObject);
     self->IsSolid = false;
     self->Destroyed = false;
     self->Position = Position;
