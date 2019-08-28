@@ -4,62 +4,19 @@
 #include <assert.h>
 #include <tglm/tglm.h>
 
+#include "types.h"
+#include "components.h"
+#include "entities.h"
+#include "systems.h"
+
 // 100,149,237,255
 // #define bgd_r 0.392156f
 // #define bgd_g 0.584313f
 // #define bgd_b 0.929411f
 
-#undef SUPER
-#define SUPER Game
-type (Shmupwarz)
-{
-    Class isa;
-    SDL_Window *window;
-    SDL_GLContext context;
-    char* title;
-    int x;
-    int y;
-    int width;
-    int height;
-    uint32_t flags;
-    int mouseX;
-    int mouseY;
-    bool mouseDown;
-    double delta;
-    int sdlVersion;
-    int frameSkip;
-    int gl_major_version;
-    int gl_minor_version;
-    bool isRunning;
-    int ticks;
-    int fps;
-    bool isFixedTimeStep;
-    bool isRunningSlowly;
-    uint64_t targetElapsedTime;
-    uint64_t accumulatedElapsedTime;
-    uint64_t maxElapsedTime;
-    uint64_t totalGameTime;
-    uint64_t elapsedGameTime;
-    uint64_t currentTime;
-    long previousTicks;
-    int updateFrameLag;
-    bool shouldExit;
-    bool suppressDraw;
-    double factor;
-    bool *keys;
-    ResourceManager* resource;
-    SpriteRenderer* spriteBatch;
+typedef struct EntityManager EntityManager;
+typedef struct GameSystems GameSystems;
 
-    List* Bullets;
-    List* Enenmies1;
-    List* Enenmies2;
-    List* Enenmies3;
-    List* Explosions;
-    List* Bangs;
-    List* Particles;
-    Array* Entities;
-
-};
 
 delegate (Shmupwarz, New,           Shmupwarz*, (Shmupwarz*, int, int));
 delegate (Shmupwarz, ToString,      char*, (const Shmupwarz* const));
@@ -71,7 +28,7 @@ delegate (Shmupwarz, HandleEvents,  void, (const Shmupwarz* const));
 delegate (Shmupwarz, RunLoop,       void, (const Shmupwarz* const));
 delegate (Shmupwarz, Draw,          void, (const Shmupwarz* const));
 delegate (Shmupwarz, Update,        void, (const Shmupwarz* const));
-delegate (Shmupwarz, Initialize,    void, (const Shmupwarz* const));
+delegate (Shmupwarz, Initialize,    void, (Shmupwarz* const));
 delegate (Shmupwarz, LoadContent,   void, (Shmupwarz* const));
 
 /**
@@ -156,7 +113,7 @@ method char* ToString(const Shmupwarz* const self)
 method void Dispose(const Shmupwarz* const self)
 {
     Log("Shmuwarz dispose");
-    super(Dispose);
+    Dispose((Game*)self);
 }
 
 /**
@@ -170,12 +127,36 @@ method void Start(const Shmupwarz* const self)
 /**
  * Shmupwarz::Draw
  * 
+ *  Draw an entity
+ */
+method void Draw(const Shmupwarz* const self, Entity* entity)
+{
+    if (!entity->Active) return;
+    Vec3 color = (Vec3) { 1, 1, 1 };
+    if (entity->Optional & OPTION_TINT)
+    {
+        color[0] = (float)entity->Tint.R/255.0;
+        color[1] = (float)entity->Tint.G/255.0;
+        color[2] = (float)entity->Tint.B/255.0;
+    }
+
+    Draw(self->spriteBatch, 
+        entity->Sprite.Texture,
+        (Vec2) { entity->Bounds.x, entity->Bounds.y },      
+        (Vec2) { entity->Bounds.w, entity->Bounds.h },
+        0.0f, color);
+
+}
+
+/**
+ * Shmupwarz::Draw
+ * 
+ *  Draw all entities
  */
 method void Draw(const Shmupwarz* const self)
 {
-    var sprite = GetTexture(self->resource, "background");
-    Draw(self->spriteBatch, sprite, 
-        (Vec2){ 0, 0 }, (Vec2){ sprite->Width, sprite->Height }, 0, (Vec3){ 1, 1, 1 });
+    for (int i=0; i<self->em->count; i++) 
+        Draw(self, &self->em->entities[i]);
 }
 
 /**
@@ -184,13 +165,22 @@ method void Draw(const Shmupwarz* const self)
  */
 method void Update(const Shmupwarz* const self)
 {
+    return;
+    SpawnSystem(self->sys, self->player);
+    for (int i=0; i<self->em->count; i++) CollisionSystem(self->sys, &self->em->entities[i]);
+    for (int i=0; i<self->em->count; i++) EntitySystem(self->sys, &self->em->entities[i]);
+    InputSystem(self->sys, self->player);
+    for (int i=0; i<self->em->count; i++) PhysicsSystem(self->sys, &self->em->entities[i]);
+    for (int i=0; i<self->em->count; i++) ExpireSystem(self->sys, &self->em->entities[i]);
+    for (int i=0; i<self->em->count; i++) TweenSystem(self->sys, &self->em->entities[i]);
+    for (int i=0; i<self->em->count; i++) RemoveSystem(self->sys, &self->em->entities[i]);
 }
 
 /**
  * Shmupwarz::Update
  * 
  */
-method void Initialize(const Shmupwarz* const self)
+method void Initialize(Shmupwarz* const self)
 {
     Log("Initialize");
 }
@@ -200,6 +190,9 @@ method void Initialize(const Shmupwarz* const self)
  */
 method void LoadContent(Shmupwarz* const self)
 {
+    self->sys = new(GameSystems, self);
+    self->em = new(EntityManager, self, self->resource);
+
     // Load shaders
     LoadShader(self->resource, "assets/shaders/sprite.vs", "assets/shaders/sprite.frag", "sprite");
     LoadShader(self->resource, "assets/shaders/particle.vs", "assets/shaders/particle.frag", "particle");
@@ -215,15 +208,26 @@ method void LoadContent(Shmupwarz* const self)
 
     // Load textures
     LoadTexture(self->resource, "assets/images/background.png", GL_TRUE, "background");
-    // self->resources.LoadTexture("assets/images/bang.png", GL_TRUE, "bang");
-    // self->resources.LoadTexture("assets/images/bullet.png", GL_TRUE, "bullet");
-    // self->resources.LoadTexture("assets/images/enemy1.png", GL_TRUE, "enemy1");
-    // self->resources.LoadTexture("assets/images/enemy2.png", GL_TRUE, "enemy2");
-    // self->resources.LoadTexture("assets/images/enemy3.png", GL_TRUE, "enemy3");
-    // self->resources.LoadTexture("assets/images/explosion.png", GL_TRUE, "explosion");
-    // self->resources.LoadTexture("assets/images/particle.png", GL_TRUE, "particle");
-    // self->resources.LoadTexture("assets/images/spaceshipspr.png", GL_TRUE, "spaceshipspr");
-    // self->resources.LoadTexture("assets/images/star.png", GL_TRUE, "star");
+    LoadTexture(self->resource, "assets/images/bang.png", GL_TRUE, "bang");
+    LoadTexture(self->resource, "assets/images/bullet.png", GL_TRUE, "bullet");
+    LoadTexture(self->resource, "assets/images/enemy1.png", GL_TRUE, "enemy1");
+    LoadTexture(self->resource, "assets/images/enemy2.png", GL_TRUE, "enemy2");
+    LoadTexture(self->resource, "assets/images/enemy3.png", GL_TRUE, "enemy3");
+    LoadTexture(self->resource, "assets/images/explosion.png", GL_TRUE, "explosion");
+    LoadTexture(self->resource, "assets/images/particle.png", GL_TRUE, "particle");
+    LoadTexture(self->resource, "assets/images/spaceshipspr.png", GL_TRUE, "spaceshipspr");
+    LoadTexture(self->resource, "assets/images/star.png", GL_TRUE, "star");
+
+    CreateBackground(self->em);
+    for (int i=0; i<BULLET_MAX; i++)    CreateBullet(self->em);
+    for (int i=0; i<ENEMY1_MAX; i++)    CreateEnemy1(self->em);
+    for (int i=0; i<ENEMY2_MAX; i++)    CreateEnemy2(self->em);
+    for (int i=0; i<ENEMY3_MAX; i++)    CreateEnemy3(self->em);
+    for (int i=0; i<EXPLOSION_MAX; i++) CreateExplosion(self->em);
+    for (int i=0; i<BANG_MAX; i++)      CreateBang(self->em);
+    for (int i=0; i<PARTICLE_MAX; i++)  CreateParticle(self->em);
+    
+    self->player = CreatePlayer(self->em);
 
     self->spriteBatch = new(SpriteRenderer, GetShader(self->resource, "sprite"));
 
@@ -234,7 +238,7 @@ method void LoadContent(Shmupwarz* const self)
  */
 method void Run(const Shmupwarz* const self)
 {
-    super(Run);
+    Run((Game*)self);
 }
 
 /**
@@ -243,7 +247,7 @@ method void Run(const Shmupwarz* const self)
  */
 method void Tick(const Shmupwarz* const self)
 {
-    super(Tick);
+    Tick((Game*)self);
 }
 
 /**
@@ -252,7 +256,7 @@ method void Tick(const Shmupwarz* const self)
  */
 method void HandleEvents(const Shmupwarz* const self)
 {
-    super(HandleEvents);
+    HandleEvents((Game*)self);
 }
 
 /**
@@ -261,7 +265,7 @@ method void HandleEvents(const Shmupwarz* const self)
  */
 method void RunLoop(const Shmupwarz* const self)
 {
-    super(RunLoop);
+    RunLoop((Game*)self);
 }
 
 

@@ -279,6 +279,7 @@ method void LoadContent(Game* const self)
 { 
     Log("Load Content");
     self->resource = new(ResourceManager);
+    assert(self->resource != nullptr);
     virtual(Game)->LoadContent(self);
 }
 
