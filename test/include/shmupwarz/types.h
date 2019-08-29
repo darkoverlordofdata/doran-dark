@@ -5,7 +5,8 @@
 #include <tglm/tglm.h>
 #include "components.h"
 
-#define ENTITY_MAX 141
+// #define ENTITY_MAX 2
+// #define ENTITY_MAX 170
 #define BULLET_MAX 12
 #define ENEMY1_MAX 15
 #define ENEMY2_MAX 5
@@ -14,6 +15,8 @@
 #define BANG_MAX 12
 #define PARTICLE_MAX 100
 
+#define ENTITY_MAX (2+BULLET_MAX+ENEMY1_MAX+ENEMY2_MAX+ENEMY3_MAX + \
+                     EXPLOSION_MAX+BANG_MAX+PARTICLE_MAX)
 
 typedef struct Shmupwarz Shmupwarz;
 typedef struct ResourceManager ResourceManager;
@@ -28,7 +31,18 @@ type (Shmupwarz)
     Class isa;
     SDL_Window *window;
     SDL_GLContext context;
+    ResourceManager* resource;
     char* title;
+    bool *keys;
+    double delta;
+    double factor;
+    uint64_t targetElapsedTime;
+    uint64_t accumulatedElapsedTime;
+    uint64_t maxElapsedTime;
+    uint64_t totalGameTime;
+    uint64_t elapsedGameTime;
+    uint64_t currentTime;
+    long previousTicks;
     int x;
     int y;
     int width;
@@ -37,7 +51,6 @@ type (Shmupwarz)
     int mouseX;
     int mouseY;
     bool mouseDown;
-    double delta;
     int sdlVersion;
     int frameSkip;
     int gl_major_version;
@@ -47,19 +60,10 @@ type (Shmupwarz)
     int fps;
     bool isFixedTimeStep;
     bool isRunningSlowly;
-    uint64_t targetElapsedTime;
-    uint64_t accumulatedElapsedTime;
-    uint64_t maxElapsedTime;
-    uint64_t totalGameTime;
-    uint64_t elapsedGameTime;
-    uint64_t currentTime;
-    long previousTicks;
     int updateFrameLag;
     bool shouldExit;
     bool suppressDraw;
-    double factor;
-    bool *keys;
-    ResourceManager* resource;
+    
     SpriteRenderer* spriteBatch;
     EntityManager* em;
     GameSystems* sys;
@@ -71,8 +75,9 @@ type (EntityManager)
     Class isa;
     Shmupwarz* game;
     ResourceManager* resource;
-    Entity entities[ENTITY_MAX];
     long count;
+    long _;
+    Entity entities[ENTITY_MAX];
 };
 
 type (GameSystems)
@@ -95,6 +100,7 @@ type (GameSystems)
     long explosionCount;
     long bangCount;
     long particleCount;
+    long _;
     Vec2 Bullets[BULLET_MAX];
     Vec2 Enemies1[ENEMY1_MAX];
     Vec2 Enemies2[ENEMY2_MAX];

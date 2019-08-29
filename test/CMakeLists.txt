@@ -45,11 +45,7 @@ set ( INCLUDES "${INCLUDES};./.lib/dark/include" )
 #
 # Libs: 
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lm" )
-set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lgc" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lBlocksRuntime" )
-# set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lglfw" )
-# set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lGLEW" )
-# set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lGL" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lSDL2" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lSDL2_image" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lSDL2_mixer" )
@@ -58,6 +54,8 @@ set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lGLEW" )
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lGL" )
 
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fblocks" )
+
+# set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DUSE_GC" )
 
 set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w -std=c11 -O3" )
 set ( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w -std=c++17 -O3" )

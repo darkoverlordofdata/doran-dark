@@ -27,7 +27,11 @@ static inline void println(const char *fmt, ...)
 	#endif
 }
 
+#ifdef USE_GC
 static bool _use_gc = true;
+#else
+static bool _use_gc = false;
+#endif
 static int _id = 1;
 
 /** NX_hashmap interface for Class objects */

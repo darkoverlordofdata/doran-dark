@@ -62,8 +62,11 @@ static void LoadDarkFX()
 
 static inline void __attribute__((constructor(101))) darkfx_load()
 {
+    #ifdef USE_GC
+    Log("Using boeme garbage collection");
     GC_INIT();
     GC_enable_incremental();
+    #endif
     LoadDarkFX();
 }
 

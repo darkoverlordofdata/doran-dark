@@ -89,6 +89,7 @@ method Shmupwarz* New(Shmupwarz* self, int width, int height)
 	extends(Game, "Shmupwarz", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
                         width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
     self->isa = isa(Shmupwarz);
+    Log("%d", ENTITY_MAX);
     return self;
 }
 
@@ -133,18 +134,13 @@ method void Draw(const Shmupwarz* const self, Entity* entity)
 {
     if (!entity->Active) return;
     Vec3 color = (Vec3) { 1, 1, 1 };
-    if (entity->Optional & OPTION_TINT)
-    {
+    if (entity->Optional & OPTION_TINT) {
         color[0] = (float)entity->Tint.R/255.0;
         color[1] = (float)entity->Tint.G/255.0;
         color[2] = (float)entity->Tint.B/255.0;
     }
 
-    Draw(self->spriteBatch, 
-        entity->Sprite.Texture,
-        (Vec2) { entity->Bounds.x, entity->Bounds.y },      
-        (Vec2) { entity->Bounds.w, entity->Bounds.h },
-        0.0f, color);
+    Draw(self->spriteBatch, entity->Sprite.Texture, &entity->Bounds, 0.0f, color);
 
 }
 
@@ -165,7 +161,6 @@ method void Draw(const Shmupwarz* const self)
  */
 method void Update(const Shmupwarz* const self)
 {
-    return;
     SpawnSystem(self->sys, self->player);
     for (int i=0; i<self->em->count; i++) CollisionSystem(self->sys, &self->em->entities[i]);
     for (int i=0; i<self->em->count; i++) EntitySystem(self->sys, &self->em->entities[i]);
@@ -219,6 +214,7 @@ method void LoadContent(Shmupwarz* const self)
     LoadTexture(self->resource, "assets/images/star.png", GL_TRUE, "star");
 
     CreateBackground(self->em);
+    self->player = CreatePlayer(self->em);
     for (int i=0; i<BULLET_MAX; i++)    CreateBullet(self->em);
     for (int i=0; i<ENEMY1_MAX; i++)    CreateEnemy1(self->em);
     for (int i=0; i<ENEMY2_MAX; i++)    CreateEnemy2(self->em);
@@ -227,8 +223,6 @@ method void LoadContent(Shmupwarz* const self)
     for (int i=0; i<BANG_MAX; i++)      CreateBang(self->em);
     for (int i=0; i<PARTICLE_MAX; i++)  CreateParticle(self->em);
     
-    self->player = CreatePlayer(self->em);
-
     self->spriteBatch = new(SpriteRenderer, GetShader(self->resource, "sprite"));
 
 }

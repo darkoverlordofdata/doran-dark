@@ -45,7 +45,18 @@ type (Game)
     Class isa;
     SDL_Window *window;
     SDL_GLContext context;
+    ResourceManager* resource;
     char* title;
+    bool *keys;
+    double delta;
+    double factor;
+    uint64_t targetElapsedTime;
+    uint64_t accumulatedElapsedTime;
+    uint64_t maxElapsedTime;
+    uint64_t totalGameTime;
+    uint64_t elapsedGameTime;
+    uint64_t currentTime;
+    long previousTicks;
     int x;
     int y;
     int width;
@@ -54,7 +65,6 @@ type (Game)
     int mouseX;
     int mouseY;
     bool mouseDown;
-    double delta;
     int sdlVersion;
     int frameSkip;
     int gl_major_version;
@@ -64,19 +74,45 @@ type (Game)
     int fps;
     bool isFixedTimeStep;
     bool isRunningSlowly;
-    uint64_t targetElapsedTime;
-    uint64_t accumulatedElapsedTime;
-    uint64_t maxElapsedTime;
-    uint64_t totalGameTime;
-    uint64_t elapsedGameTime;
-    uint64_t currentTime;
-    long previousTicks;
     int updateFrameLag;
     bool shouldExit;
     bool suppressDraw;
-    double factor;
-    bool *keys;
-    ResourceManager* resource;
+
+    // Class isa;
+    // SDL_Window *window;
+    // SDL_GLContext context;
+    // char* title;
+    // int x;
+    // int y;
+    // int width;
+    // int height;
+    // uint32_t flags;
+    // int mouseX;
+    // int mouseY;
+    // bool mouseDown;
+    // double delta;
+    // int sdlVersion;
+    // int frameSkip;
+    // int gl_major_version;
+    // int gl_minor_version;
+    // bool isRunning;
+    // int ticks;
+    // int fps;
+    // bool isFixedTimeStep;
+    // bool isRunningSlowly;
+    // uint64_t targetElapsedTime;
+    // uint64_t accumulatedElapsedTime;
+    // uint64_t maxElapsedTime;
+    // uint64_t totalGameTime;
+    // uint64_t elapsedGameTime;
+    // uint64_t currentTime;
+    // long previousTicks;
+    // int updateFrameLag;
+    // bool shouldExit;
+    // bool suppressDraw;
+    // double factor;
+    // bool *keys;
+    // ResourceManager* resource;
 };
 
 delegate (Game, New,            Game*, (Game* self, char* title, int x, int y, int width, int height, int flags));
@@ -310,7 +346,8 @@ method void Draw(Game* const self)
 method void HandleEvents(Game* const self) 
 {
     SDL_Event event;
-    if (SDL_PollEvent(&event)) 
+    // if (SDL_PollEvent(&event)) 
+    while (SDL_PollEvent(&event) != 0) 
     {
         switch (event.type) 
         {
@@ -369,6 +406,7 @@ method void Tick(Game* const self)
             // NOTE: While sleep can be inaccurate in general it is 
             // accurate enough for frame limiting purposes if some
             // fluctuation is an acceptable result.
+            
             #ifndef usleep
             SDL_Delay(sleepTime);
             #else

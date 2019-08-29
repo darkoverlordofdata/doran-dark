@@ -40,6 +40,8 @@ int main(int argc, char *argv[])
     // Run(game);
     // Dispose(game);
 
+    srand(time(nullptr));
+
     Shmupwarz* game = new(Shmupwarz, 600, 480);
     Log(ToString(game));
     
@@ -47,6 +49,10 @@ int main(int argc, char *argv[])
     Dispose(game);
 
     Dispose(GetClasses());
+
+    Log("Shmupwarz = %d", sizeof(Shmupwarz));
+    Log("EntityManager = %d", sizeof(EntityManager));
+    Log("GameSystems = %d", sizeof(GameSystems));
 
     return 0;
 }

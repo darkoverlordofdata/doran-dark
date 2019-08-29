@@ -65,6 +65,10 @@ SOFTWARE.
  */
 #define overload __attribute__((overloadable))
 
+#ifdef USE_GC
+/** 
+ * Use boeme gc
+*/
 #define DSfree(ptr) GC_FREE(ptr)
 // #define DSfree(ptr) free(ptr)
 #define DSmalloc(size) GC_MALLOC(size)
@@ -72,7 +76,18 @@ SOFTWARE.
 // #define DSrealloc(old, new_size) realloc(old, new_size)
 #define DScalloc(num, size) GC_MALLOC(num * size)
 #define DScollect() GC_gcollect()
+#else
 
+/** 
+ * no gc
+*/
+#define DSfree(ptr) free(ptr)
+// #define DSfree(ptr) free(ptr)
+#define DSmalloc(size) malloc(size)
+#define DSrealloc(old, new_size) realloc(old, new_size)
+// #define DSrealloc(old, new_size) realloc(old, new_size)
+#define DScalloc(num, size) calloc(num, size)
+#endif
 
 #ifndef nullptr
 #define nullptr NULL

@@ -12,6 +12,7 @@
 typedef struct Shmupwarz Shmupwarz;
 typedef struct EntityManager EntityManager;
 
+#define Keys_z  122
 
 delegate (GameSystems, New,             GameSystems*, (GameSystems*, Shmupwarz*));
 delegate (GameSystems, ToString,        char*, (GameSystems*));
@@ -55,9 +56,14 @@ method GameSystems* New(GameSystems* self, Shmupwarz* game)
 
 method void InputSystem(GameSystems* self, Entity* entity) 
 {
+
     entity->Position.x = self->game->mouseX;
     entity->Position.y = self->game->mouseY;
-    if (self->game->keys[122] || self->game->mouseDown)
+
+    // entity->Bounds.x = entity->Position.x - entity->Bounds.w / 2;
+    // entity->Bounds.y = entity->Position.y - entity->Bounds.h / 2;
+
+    if (self->game->keys[Keys_z] || self->game->mouseDown)
     {
         self->TimeToFire -= self->game->delta;
         if (self->TimeToFire < 0.0) {
@@ -121,6 +127,7 @@ method void ExpireSystem(GameSystems* self, Entity* entity)
     if (entity->Active && (entity->Optional & OPTION_EXPIRES)) 
     {
         auto exp = entity->Expires - self->game->delta;
+
         entity->Expires = exp;
         if (entity->Expires < 0) {
             entity->Active = false;
@@ -148,10 +155,7 @@ method void TweenSystem(GameSystems* self, Entity* entity)
         }
         entity->Scale.x = x; 
         entity->Scale.y = y; 
-        entity->Tween = (Tween) { entity->Tween.Min, 
-                                    entity->Tween.Max, 
-                                    entity->Tween.Speed, 
-                                    entity->Tween.Repeat, Active };
+        entity->Tween.Active = Active;
     }
 }
 
@@ -185,12 +189,15 @@ method double SpawnEnemy(GameSystems* self, double delta, double t, int enemy)
         switch(enemy) 
         {
             case 1:
+                assert(self->enemy1Count < ENEMY1_MAX);
                 self->Enemies1[++self->enemy1Count] = (Vec2){ (rand() % (self->game->width-70))+35, 35 };
                 return 1.0;
             case 2:
+                assert(self->enemy2Count < ENEMY2_MAX);
                 self->Enemies2[++self->enemy2Count] = (Vec2){ (rand() % (self->game->width-170))+85, 85 };
                 return 4.0;
             case 3:
+                assert(self->enemy3Count < ENEMY3_MAX);
                 self->Enemies3[++self->enemy3Count] = (Vec2){ (rand() % (self->game->width-320))+160, 160 };
                 return 6.0;
             default:
@@ -264,14 +271,19 @@ method void EntitySystem(GameSystems* self, Entity* entity)
 
 method void HandleCollision(GameSystems* self, Entity* a, Entity* b) 
 {
+    assert(self->bangCount < BANG_MAX);
     self->Bangs[++self->bangCount] = (Vec2) { b->Bounds.x, b->Bounds.y };
     b->Active = false;
-    for (int i=0; i<3; i++) 
+    for (int i=0; i<3; i++) {
+        assert(self->particleCount < PARTICLE_MAX);
         self->Particles[++self->particleCount] = (Vec2) { b->Bounds.x, b->Bounds.y };
+
+    }
     if (a->Optional & OPTION_HEALTH) 
     {
         auto h = a->Health.Current - 2;
         if (h < 0) {
+            assert(self->explosionCount < EXPLOSION_MAX);
             self->Explosions[++self->explosionCount] = (Vec2) { a->Position.x, a->Position.y };
             a->Active = false;
         } else {

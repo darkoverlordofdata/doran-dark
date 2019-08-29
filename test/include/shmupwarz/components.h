@@ -86,21 +86,21 @@ typedef enum OPTION_MASK
 type (Entity)
 {
     int Id;
-    char* Name;
     bool Active;
     TYPE_Component Type;
     CATEGORY_Component Category;
-    Vec2 Position;
-    SDL_Rect Bounds;
-    Vec2 Scale;
-    Sprite Sprite;
-
     OPTION_MASK Optional;
     EFFECT_Component Sound;
-    Color Tint;
+    char* Name;
+    Sprite Sprite;
+
     double Expires;
+    Color Tint;
     Health Health;
+    SDL_Rect Bounds;
     Tween Tween;
     Vec2 Velocity;
+    Vec2 Position;
+    Vec2 Scale;
 };
 
