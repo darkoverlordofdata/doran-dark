@@ -263,7 +263,7 @@ method Entity* ResetBullet(Entity* entity, int x, int y)
     entity->Expires = 1.0;
     entity->Sound = EFFECT_PEW;
     entity->Health = (Health) { 2, 2 };
-    entity->Tint = (Color) { 0xd2, 0xfa, 0x00, 0xffa };
+    entity->Tint = new(ColorComponent, 0xd2, 0xfa, 0x00, 0xffa );
     entity->Velocity = (Vec2) { 0, -800 };
     entity->Active = true;
     return entity;
@@ -305,7 +305,7 @@ method Entity* ResetExplosion(Entity* entity, int x, int y)
     entity->Scale = (Vec2) { scale, scale };
     entity->Sound = EFFECT_ASPLODE;
     entity->Tween = (Tween) { scale/100.0, scale, -3, false, true };
-    entity->Tint = (Color)  { 0xd2, 0xfa, 0xd2, 0xfa };
+    entity->Tint = new(ColorComponent, 0xd2, 0xfa, 0xd2, 0xfa );
     entity->Expires = 0.2;
     entity->Active = true;
     return entity;
@@ -320,7 +320,7 @@ method Entity* ResetBang(Entity* entity, int x, int y)
     entity->Scale - (Vec2) { scale, scale };
     entity->Sound = EFFECT_SMALLASPLODE;
     entity->Tween = (Tween) { scale/100.0, scale, -3, false, true };
-    entity->Tint = (Color) { 0xd2, 0xfa, 0xd2, 0xfa };
+    entity->Tint = new(ColorComponent, 0xd2, 0xfa, 0xd2, 0xfa );
     entity->Expires = 0.2;
     entity->Active = true;
     return entity;
@@ -345,7 +345,7 @@ method Entity* ResetParticle(Entity* entity, int x, int y)
     entity->Scale.y = scale;
     entity->Velocity.x = velocityX;
     entity->Velocity.y = velocityY;
-    entity->Tint = (Color) { 0xfa, 0xfa, 0xd2, 0xff };
+    entity->Tint = new(ColorComponent, 0xfa, 0xfa, 0xd2, 0xff );
     entity->Expires = 0.75;
     entity->Active = true;
     return entity;

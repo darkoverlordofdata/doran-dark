@@ -4,6 +4,15 @@
 #include <assert.h>
 #include <tglm/tglm.h>
 #include "types.h"
+#include "components/sprite.h"
+#include "components/color.h"
+#include "components/health.h"
+#include "components/tween.h"
+#include "components/bounds.h"
+#include "components/position.h"
+#include "components/velocity.h"
+#include "components/scale.h"
+#include "components/expire.h"
 
 
 typedef enum TYPE_Component {
@@ -92,10 +101,10 @@ type (Entity)
     OPTION_MASK Optional;
     EFFECT_Component Sound;
     char* Name;
-    Sprite Sprite;
 
+    Sprite Sprite;
     double Expires;
-    Color Tint;
+    ColorComponent* Tint;
     Health Health;
     SDL_Rect Bounds;
     Tween Tween;

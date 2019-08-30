@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 
     srand(time(nullptr));
 
-    Shmupwarz* game = new(Shmupwarz, 600, 480);
+    Shmupwarz* game = new(Shmupwarz, 900, 600);
     Log(ToString(game));
     
     Run(game);

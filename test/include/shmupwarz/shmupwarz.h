@@ -135,9 +135,9 @@ method void Draw(const Shmupwarz* const self, Entity* entity)
     if (!entity->Active) return;
     Vec3 color = (Vec3) { 1, 1, 1 };
     if (entity->Optional & OPTION_TINT) {
-        color[0] = (float)entity->Tint.R/255.0;
-        color[1] = (float)entity->Tint.G/255.0;
-        color[2] = (float)entity->Tint.B/255.0;
+        color[0] = (float)entity->Tint->R/255.0;
+        color[1] = (float)entity->Tint->G/255.0;
+        color[2] = (float)entity->Tint->B/255.0;
     }
 
     Draw(self->spriteBatch, entity->Sprite.Texture, &entity->Bounds, 0.0f, color);
