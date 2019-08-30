@@ -103,13 +103,14 @@ type (Entity)
     char* Name;
 
     Sprite Sprite;
-    double Expires;
-    ColorComponent* Tint;
-    Health Health;
     SDL_Rect Bounds;
-    Tween Tween;
     Vec2 Velocity;
     Vec2 Position;
     Vec2 Scale;
+
+    TweenComponent* Tween;
+    ColorComponent* Tint;
+    ExpireComponent* Expires;
+    HealthComponent* Health;
 };
 

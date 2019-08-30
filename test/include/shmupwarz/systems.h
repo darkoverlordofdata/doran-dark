@@ -124,12 +124,12 @@ method void PhysicsSystem(GameSystems* self, Entity* entity)
 
 method void ExpireSystem(GameSystems* self, Entity* entity) 
 {
-    if (entity->Active && (entity->Optional & OPTION_EXPIRES)) 
+    if (entity->Active && entity->Expires) 
     {
-        auto exp = entity->Expires - self->game->delta;
+        auto exp = entity->Expires->Value - self->game->delta;
 
-        entity->Expires = exp;
-        if (entity->Expires < 0) {
+        entity->Expires->Value = exp;
+        if (entity->Expires->Value < 0) {
             entity->Active = false;
         }
     }
@@ -137,25 +137,25 @@ method void ExpireSystem(GameSystems* self, Entity* entity)
 
 method void TweenSystem(GameSystems* self, Entity* entity) 
 {
-    if (entity->Active && (entity->Optional & OPTION_TWEEN)) 
+    if (entity->Active && entity->Tween) 
     {
-        auto x = entity->Scale.x + (entity->Tween.Speed * self->game->delta);
-        auto y = entity->Scale.y + (entity->Tween.Speed * self->game->delta);
-        auto Active = entity->Tween.Active;
+        auto x = entity->Scale.x + (entity->Tween->Speed * self->game->delta);
+        auto y = entity->Scale.y + (entity->Tween->Speed * self->game->delta);
+        auto Active = entity->Tween->Active;
 
 
-        if (x > entity->Tween.Max) {
-            x = entity->Tween.Max;
-            y = entity->Tween.Max;
+        if (x > entity->Tween->Max) {
+            x = entity->Tween->Max;
+            y = entity->Tween->Max;
             Active = false;
-        } else if (x < entity->Tween.Min) {
-            x = entity->Tween.Min;
-            y = entity->Tween.Min;
+        } else if (x < entity->Tween->Min) {
+            x = entity->Tween->Min;
+            y = entity->Tween->Min;
             Active = false;
         }
         entity->Scale.x = x; 
         entity->Scale.y = y; 
-        entity->Tween.Active = Active;
+        entity->Tween->Active = Active;
     }
 }
 
@@ -279,15 +279,15 @@ method void HandleCollision(GameSystems* self, Entity* a, Entity* b)
         self->Particles[++self->particleCount] = (Vec2) { b->Bounds.x, b->Bounds.y };
 
     }
-    if (a->Optional & OPTION_HEALTH) 
+    if (a->Health) 
     {
-        auto h = a->Health.Current - 2;
+        auto h = a->Health->Current - 2;
         if (h < 0) {
             assert(self->explosionCount < EXPLOSION_MAX);
             self->Explosions[++self->explosionCount] = (Vec2) { a->Position.x, a->Position.y };
             a->Active = false;
         } else {
-            a->Health = (Health) { h, a->Health.Maximum };
+            a->Health->Current = h;
         }   
     }
 }
