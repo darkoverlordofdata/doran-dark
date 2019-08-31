@@ -26,12 +26,12 @@ void __attribute__((constructor(200))) GameLoader()
 
 int main(int argc, char *argv[])
 {
-    var zz = new(Boolean, true);
-    Class cc = Get(GetClasses(), "Object");
-    assert(cc != nullptr);
-    Log("Name = %s", cc->name);
-    Class bb = Get(GetClasses(), "Boolean");
-    Log("Name = %s", bb->name);
+    // var zz = new(Boolean, true);
+    // Class cc = Get(GetClasses(), "Object");
+    // assert(cc != nullptr);
+    // Log("Name = %s", cc->name);
+    // Class bb = Get(GetClasses(), "Boolean");
+    // Log("Name = %s", bb->name);
 
 
     // Game* game = new(Game, "SdL Demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
@@ -50,9 +50,9 @@ int main(int argc, char *argv[])
 
     Dispose(GetClasses());
 
-    Log("Shmupwarz = %d", sizeof(Shmupwarz));
-    Log("EntityManager = %d", sizeof(EntityManager));
-    Log("GameSystems = %d", sizeof(GameSystems));
+    // Log("Shmupwarz = %d", sizeof(Shmupwarz));
+    // Log("EntityManager = %d", sizeof(EntityManager));
+    // Log("GameSystems = %d", sizeof(GameSystems));
 
     return 0;
 }

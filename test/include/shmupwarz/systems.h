@@ -57,19 +57,19 @@ method GameSystems* New(GameSystems* self, Shmupwarz* game)
 method void InputSystem(GameSystems* self, Entity* entity) 
 {
 
-    entity->Position.x = self->game->mouseX;
-    entity->Position.y = self->game->mouseY;
+    entity->Transform->Pos.x = self->game->mouseX;
+    entity->Transform->Pos.y = self->game->mouseY;
 
-    // entity->Bounds.x = entity->Position.x - entity->Bounds.w / 2;
-    // entity->Bounds.y = entity->Position.y - entity->Bounds.h / 2;
+    // entity->Transform->Bounds.x = entity->Transform->Pos.x - entity->Transform->Bounds.w / 2;
+    // entity->Transform->Bounds.y = entity->Transform->Pos.y - entity->Transform->Bounds.h / 2;
 
     if (self->game->keys[Keys_z] || self->game->mouseDown)
     {
         self->TimeToFire -= self->game->delta;
         if (self->TimeToFire < 0.0) {
             assert(self->bulletCount < BULLET_MAX);
-            self->Bullets[++self->bulletCount] = (Vec2) { entity->Position.x - 27, entity->Position.y + 2 };
-            self->Bullets[++self->bulletCount] = (Vec2) { entity->Position.x + 27, entity->Position.y + 2 };
+            self->Bullets[++self->bulletCount] = (Vec2) { entity->Transform->Pos.x - 27, entity->Transform->Pos.y + 2 };
+            self->Bullets[++self->bulletCount] = (Vec2) { entity->Transform->Pos.x + 27, entity->Transform->Pos.y + 2 };
             self->TimeToFire = self->FireRate;
         }
     }
@@ -77,19 +77,19 @@ method void InputSystem(GameSystems* self, Entity* entity)
 
 method void SoundSystem(GameSystems* self, Entity* entity)  
 {
-    if (entity->Active && (entity->Optional & OPTION_SOUND)) 
+    if (entity->Active && (entity->Sound)) 
     {
-        switch(entity->Sound) 
+        switch(entity->Sound->Effect) 
         {
-            case EFFECT_PEW: 
+            case SoundEffectPew: 
                 Mix_PlayChannelTimed(-1, self->Pew, 0, 0);
                 break;
 
-            case EFFECT_ASPLODE: 
+            case SoundEffectAsplode: 
                 Mix_PlayChannelTimed(-1, self->Asplode, 0, 0);
                 break;
 
-            case EFFECT_SMALLASPLODE: 
+            case SoundEffectSmallAsplode: 
                 Mix_PlayChannelTimed(-1, self->Smallasplode, 0, 0);
                 break;
         }
@@ -101,23 +101,25 @@ method void PhysicsSystem(GameSystems* self, Entity* entity)
     if (entity->Active)
     {
         // Move entity?
-        if (entity->Optional & OPTION_VELOCITY)
+        if (entity->Velocity)
         {
-            entity->Position.x += entity->Velocity.x * self->game->delta;
-            entity->Position.y += entity->Velocity.y * self->game->delta;
+            entity->Transform->Pos.x += entity->Velocity->X * self->game->delta;
+            entity->Transform->Pos.y += entity->Velocity->Y * self->game->delta;
         }
         // Set new bounding box
         if (entity->Category == CATEGORY_BACKGROUND) 
         {
-            entity->Bounds.w = self->game->width;
-            entity->Bounds.h = self->game->height;
-            entity->Bounds.x = 0; 
-            entity->Bounds.y = 0; 
+            entity->Transform->Bounds.w = self->game->width;
+            entity->Transform->Bounds.h = self->game->height;
+            entity->Transform->Bounds.x = 0; 
+            entity->Transform->Bounds.y = 0; 
         } else {
-            entity->Bounds.w = entity->Sprite.Width * entity->Scale.x;
-            entity->Bounds.h = entity->Sprite.Height * entity->Scale.y;
-            entity->Bounds.x = entity->Position.x - entity->Bounds.w / 2;
-            entity->Bounds.y = entity->Position.y - entity->Bounds.h / 2;
+            entity->Transform->Bounds.w = entity->Transform->Texture->Width * entity->Transform->Scale.x;
+            entity->Transform->Bounds.h = entity->Transform->Texture->Height * entity->Transform->Scale.y;
+            entity->Transform->Bounds.x = entity->Transform->Pos.x - entity->Transform->Bounds.w / 2;
+            entity->Transform->Bounds.y = entity->Transform->Pos.y - entity->Transform->Bounds.h / 2;
+
+
         }
     }
 }
@@ -139,8 +141,8 @@ method void TweenSystem(GameSystems* self, Entity* entity)
 {
     if (entity->Active && entity->Tween) 
     {
-        auto x = entity->Scale.x + (entity->Tween->Speed * self->game->delta);
-        auto y = entity->Scale.y + (entity->Tween->Speed * self->game->delta);
+        auto x = entity->Transform->Scale.x + (entity->Tween->Speed * self->game->delta);
+        auto y = entity->Transform->Scale.y + (entity->Tween->Speed * self->game->delta);
         auto Active = entity->Tween->Active;
 
 
@@ -153,8 +155,8 @@ method void TweenSystem(GameSystems* self, Entity* entity)
             y = entity->Tween->Min;
             Active = false;
         }
-        entity->Scale.x = x; 
-        entity->Scale.y = y; 
+        entity->Transform->Scale.x = x; 
+        entity->Transform->Scale.y = y; 
         entity->Tween->Active = Active;
     }
 }
@@ -166,12 +168,12 @@ method void RemoveSystem(GameSystems* self, Entity* entity)
         switch(entity->Category) 
         {
             case CATEGORY_ENEMY:
-                if (entity->Position.y > self->game->height) {
+                if (entity->Transform->Pos.y > self->game->height) {
                     entity->Active = false;
                 }
                 break;
             case CATEGORY_BULLET:
-                if (entity->Position.y < 0) {
+                if (entity->Transform->Pos.y < 0) {
                     entity->Active = false;
                 }
                 break;
@@ -272,19 +274,18 @@ method void EntitySystem(GameSystems* self, Entity* entity)
 method void HandleCollision(GameSystems* self, Entity* a, Entity* b) 
 {
     assert(self->bangCount < BANG_MAX);
-    self->Bangs[++self->bangCount] = (Vec2) { b->Bounds.x, b->Bounds.y };
+    self->Bangs[++self->bangCount] = (Vec2) { b->Transform->Bounds.x, b->Transform->Bounds.y };
     b->Active = false;
     for (int i=0; i<3; i++) {
         assert(self->particleCount < PARTICLE_MAX);
-        self->Particles[++self->particleCount] = (Vec2) { b->Bounds.x, b->Bounds.y };
-
+        self->Particles[++self->particleCount] = (Vec2) { b->Transform->Bounds.x, b->Transform->Bounds.y };
     }
     if (a->Health) 
     {
         auto h = a->Health->Current - 2;
         if (h < 0) {
             assert(self->explosionCount < EXPLOSION_MAX);
-            self->Explosions[++self->explosionCount] = (Vec2) { a->Position.x, a->Position.y };
+            self->Explosions[++self->explosionCount] = (Vec2) { a->Transform->Pos.x, a->Transform->Pos.y };
             a->Active = false;
         } else {
             a->Health->Current = h;
@@ -295,10 +296,10 @@ method void HandleCollision(GameSystems* self, Entity* a, Entity* b)
 method void CollisionSystem(GameSystems* self, Entity* entity) 
 {
     if (entity->Active && entity->Category == CATEGORY_ENEMY) {
-        for (int i=0; i<self->game->em->count; i++) {
-            auto bullet = &self->game->em->entities[i];
+        for (int i=0; i<self->game->em->Count; i++) {
+            auto bullet = &self->game->em->Entities[i];
             if (bullet->Active && bullet->Category == CATEGORY_BULLET) {
-                if (SDL_HasIntersection(&entity->Bounds, &bullet->Bounds)) {
+                if (Collides(entity, bullet)) {
                     if (entity->Active && bullet->Active) HandleCollision(self, entity, bullet);
                     return;
                 }

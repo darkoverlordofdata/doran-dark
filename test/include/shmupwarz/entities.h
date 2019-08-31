@@ -7,13 +7,6 @@
 #include "types.h"
 #include "shmupwarz.h"
 
-#define BACKGROUND_MASK 0;
-#define PLAYER_MASK 0;
-#define BULLET_MASK OPTION_EXPIRES | OPTION_SOUND | OPTION_HEALTH | OPTION_TINT | OPTION_VELOCITY;
-#define ENEMY_MASK OPTION_HEALTH | OPTION_VELOCITY;
-#define EXPLOSION_MASK OPTION_EXPIRES | OPTION_SOUND | OPTION_TWEEN | OPTION_TINT;
-#define BANG_MASK OPTION_EXPIRES | OPTION_SOUND | OPTION_TWEEN | OPTION_TINT;
-#define PARTICLE_MASK OPTION_EXPIRES | OPTION_TINT | OPTION_VELOCITY;
 
 // #define ENTITY_MAX 141
 
@@ -34,18 +27,6 @@ delegate (EntityManager, CreateExplosion,   Entity*, (EntityManager*));
 delegate (EntityManager, CreateBang,        Entity*, (EntityManager*));
 delegate (EntityManager, CreateParticle,    Entity*, (EntityManager*));
 
-delegate (EntityManager, InitBackground,    Entity*, (EntityManager*, Entity* entity));
-delegate (EntityManager, InitPlayer,        Entity*, (EntityManager*, Entity* entity));
-delegate (EntityManager, InitBullet,        Entity*, (EntityManager*, Entity* entity));
-delegate (EntityManager, InitEnemy1,        Entity*, (EntityManager*, Entity* entity));
-delegate (EntityManager, InitEnemy2,        Entity*, (EntityManager*, Entity* entity));
-delegate (EntityManager, InitEnemy3,        Entity*, (EntityManager*, Entity* entity));
-delegate (EntityManager, InitExplosion,     Entity*, (EntityManager*, Entity* entity));
-delegate (EntityManager, InitBang,          Entity*, (EntityManager*, Entity* entity));
-delegate (EntityManager, InitParticle,      Entity*, (EntityManager*, Entity* entity));
-
-// delegate (EntityManager, ResetBackground, Entity*, (EntityManager*, Entity* entity, int x, int y));
-// delegate (EntityManager, ResetPlayer,     Entity*, (EntityManager*, Entity* entity, int x, int y));
 delegate (EntityManager, ResetBullet,       Entity*, (EntityManager*, Entity* entity, int x, int y));
 delegate (EntityManager, ResetEnemy1,       Entity*, (EntityManager*, Entity* entity, int x, int y));
 delegate (EntityManager, ResetEnemy2,       Entity*, (EntityManager*, Entity* entity, int x, int y));
@@ -55,8 +36,6 @@ delegate (EntityManager, ResetBang,         Entity*, (EntityManager*, Entity* en
 delegate (EntityManager, ResetParticle,     Entity*, (EntityManager*, Entity* entity, int x, int y));
 
 
-static int UniqueId = 0;
-
 static inline vptr(EntityManager);
 
 method EntityManager* New(EntityManager* self, Shmupwarz* game, ResourceManager* resource)
@@ -64,265 +43,185 @@ method EntityManager* New(EntityManager* self, Shmupwarz* game, ResourceManager*
     extends(Object);
     self->isa = isa(EntityManager);
     self->game = game;
-    self->resource = resource;
+    self->Resource = resource;
     return self;
 }
 
-
-static inline SDL_Surface* GetResource(char* name) {
-    const char* path = join("assets/images/", name);
-    return IMG_Load(path);
+/**
+ * CreateEntity
+ * 
+ * allocates an entity from the pool
+ * 
+ */
+method Entity* CreateEntity(EntityManager* self, char* name, float scale) {
+    self->Count = self->UniqueId+1;
+    Entity* entity = &self->Entities[self->UniqueId];
+    self->UniqueId += 1;
+    entity->Name = strdup(name);
+    entity->Transform = new(Transform, GetTexture(self->Resource, name), scale);
+    return entity;
 }
 
-method Entity* CreateEntity(EntityManager* self) {
-    self->count = UniqueId+1;
-    return  &self->entities[UniqueId++];
+method Entity* CreateEntity(EntityManager* self, char* name) {
+    return CreateEntity(self, name, 1.0);
 }
 
 method Entity* CreateBackground(EntityManager* self) {
-    return InitBackground(self, CreateEntity(self));
-}
-
-method Entity* CreatePlayer(EntityManager* self) {
-    return InitPlayer(self, CreateEntity(self));
-}
-
-method Entity* CreateBullet(EntityManager* self) {
-    return InitBullet(self, CreateEntity(self));
-}
-
-method Entity* CreateEnemy1(EntityManager* self) {
-    return InitEnemy1(self, CreateEntity(self));
-}
-
-method Entity* CreateEnemy2(EntityManager* self) {
-    return InitEnemy2(self, CreateEntity(self));
-}
-method Entity* CreateEnemy3(EntityManager* self) {
-    return InitEnemy3(self, CreateEntity(self));
-}
-method Entity* CreateExplosion(EntityManager* self) {
-    return InitExplosion(self, CreateEntity(self));
-}
-method Entity* CreateBang(EntityManager* self) {
-    return InitBang(self, CreateEntity(self));
-}
-method Entity* CreateParticle(EntityManager* self) {
-    return InitParticle(self, CreateEntity(self));
-}
-
-method Entity* InitBackground(EntityManager* self, Entity* entity) 
-{
-    const auto scale = 2.0;
+    Entity* entity = CreateEntity(self, "background", 2.0f);
     entity->Active = true;
     entity->Type = TYPE_BACKGROUND;
     entity->Category = CATEGORY_BACKGROUND;
-    entity->Optional = BACKGROUND_MASK;
-    entity->Sprite.Texture = GetTexture(self->resource, "background");
-    entity->Sprite.Width = entity->Sprite.Texture->Width*scale;
-    entity->Sprite.Height = entity->Sprite.Texture->Height*scale;
-    entity->Bounds.w = entity->Sprite.Texture->Width*scale; 
-    entity->Bounds.h = entity->Sprite.Texture->Height*scale; 
-    entity->Scale.x = scale;
-    entity->Scale.y = scale;
     return entity;
 }
 
-method Entity* InitPlayer(EntityManager* self, Entity* entity) 
-{
+method Entity* CreatePlayer(EntityManager* self) {
+    Entity* entity = CreateEntity(self, "spaceshipspr");
     entity->Active = true;
-    auto scale = 1.0;
     entity->Type = TYPE_PLAYER;
     entity->Category = CATEGORY_PLAYER;
-    entity->Optional = PLAYER_MASK;
-    entity->Sprite.Texture = GetTexture(self->resource, "spaceshipspr");
-    entity->Sprite.Width = entity->Sprite.Texture->Width*scale;
-    entity->Sprite.Height = entity->Sprite.Texture->Height*scale;
-    entity->Bounds.w = entity->Sprite.Texture->Width*scale; 
-    entity->Bounds.h = entity->Sprite.Texture->Height*scale; 
-    entity->Scale.x = scale;
-    entity->Scale.y = scale;
     return entity;
 }
 
-method Entity* InitBullet(EntityManager* self, Entity* entity) 
-{
-    auto scale = 1.0;
+method Entity* CreateBullet(EntityManager* self) {
+    Entity* entity = CreateEntity(self, "bullet");
     entity->Type = TYPE_BULLET;
     entity->Category = CATEGORY_BULLET;
-    entity->Optional = BULLET_MASK;
-    entity->Sprite.Texture = GetTexture(self->resource, "bullet");
-    entity->Sprite.Width = entity->Sprite.Texture->Width*scale;
-    entity->Sprite.Height = entity->Sprite.Texture->Height*scale;
-    entity->Bounds.w = entity->Sprite.Texture->Width*scale; 
-    entity->Bounds.h = entity->Sprite.Texture->Height*scale; 
-    entity->Scale.x = scale;
-    entity->Scale.y = scale;
+    entity->Velocity = new(VelocityComponent, 0, 0);
+    entity->Expires = new(ExpireComponent, 1.0);
+    entity->Sound = new(SoundComponent, SoundEffectPew);
+    entity->Health = new(HealthComponent, 2, 2);
+    entity->Tint = new(ColorComponent, 0xd2, 0xfa, 0x00, 0xffa );
     return entity;
 }
 
-method Entity* InitEnemy1(EntityManager* self, Entity* entity) 
-{
-    auto scale = 1.0;
+method Entity* CreateEnemy1(EntityManager* self) {
+    Entity* entity = CreateEntity(self, "enemy1");
     entity->Type = TYPE_ENEMY1;
     entity->Category = CATEGORY_ENEMY;
-    entity->Optional = ENEMY_MASK;
-    entity->Sprite.Texture = GetTexture(self->resource, "enemy1");
-    entity->Sprite.Width = entity->Sprite.Texture->Width*scale;
-    entity->Sprite.Height = entity->Sprite.Texture->Height*scale;
-    entity->Bounds.w = entity->Sprite.Texture->Width*scale; 
-    entity->Bounds.h = entity->Sprite.Texture->Height*scale; 
-    entity->Scale.x = scale;
-    entity->Scale.y = scale;
+    entity->Health = new(HealthComponent, 10, 10);
+    entity->Velocity = new(VelocityComponent, 0, 0);
     return entity;
 }
-method Entity* InitEnemy2(EntityManager* self, Entity* entity) 
-{
-    auto scale = 1.0;
+
+method Entity* CreateEnemy2(EntityManager* self) {
+    Entity* entity = CreateEntity(self, "enemy2");
     entity->Type = TYPE_ENEMY2;
     entity->Category = CATEGORY_ENEMY;
-    entity->Optional = ENEMY_MASK;
-    entity->Sprite.Texture = GetTexture(self->resource, "enemy2");
-    entity->Sprite.Width = entity->Sprite.Texture->Width*scale;
-    entity->Sprite.Height = entity->Sprite.Texture->Height*scale;
-    entity->Bounds.w = entity->Sprite.Texture->Width*scale; 
-    entity->Bounds.h = entity->Sprite.Texture->Height*scale; 
-    entity->Scale.x = scale;
-    entity->Scale.y = scale;
+    entity->Health = new(HealthComponent, 20, 20);
+    entity->Velocity = new(VelocityComponent, 0, 0);
     return entity;
 }
-
-method Entity* InitEnemy3(EntityManager* self, Entity* entity) 
-{
-    auto scale = 1.0;
+method Entity* CreateEnemy3(EntityManager* self) {
+    Entity* entity = CreateEntity(self, "enemy3");
     entity->Type = TYPE_ENEMY3;
     entity->Category = CATEGORY_ENEMY;
-    entity->Optional = ENEMY_MASK;
-    entity->Sprite.Texture = GetTexture(self->resource, "enemy3");
-    entity->Sprite.Width = entity->Sprite.Texture->Width*scale;
-    entity->Sprite.Height = entity->Sprite.Texture->Height*scale;
-    entity->Bounds.w = entity->Sprite.Texture->Width*scale; 
-    entity->Bounds.h = entity->Sprite.Texture->Height*scale; 
-    entity->Scale.x = scale;
-    entity->Scale.y = scale;
+    entity->Health = new(HealthComponent, 60, 60);
+    entity->Velocity = new(VelocityComponent, 0, 0);
     return entity;
 }
-
-method Entity* InitExplosion(EntityManager* self, Entity* entity) 
-{
-    auto scale = 0.6;
+method Entity* CreateExplosion(EntityManager* self) {
+    var scale = 0.6;
+    Entity* entity = CreateEntity(self, "explosion", scale);
     entity->Type = TYPE_EXPLOSION;
     entity->Category = CATEGORY_EXPLOSION;
-    entity->Optional = EXPLOSION_MASK;
-    entity->Sprite.Texture = GetTexture(self->resource, "explosion");
-    entity->Sprite.Width = entity->Sprite.Texture->Width*scale;
-    entity->Sprite.Height = entity->Sprite.Texture->Height*scale;
-    entity->Bounds.w = entity->Sprite.Texture->Width*scale; 
-    entity->Bounds.h = entity->Sprite.Texture->Height*scale; 
-    entity->Scale.x = scale;
-    entity->Scale.y = scale;
+    entity->Sound = new(SoundComponent, SoundEffectAsplode);
+    entity->Tween = new(TweenComponent, scale/100.0, scale, -3, false, true);
+    entity->Tint = new(ColorComponent, 0xd2, 0xfa, 0xd2, 0xfa);
+    entity->Expires = new(ExpireComponent, 0.2);
     return entity;
 }
-
-method Entity* InitBang(EntityManager* self, Entity* entity) 
-{
-    auto scale = 0.4;
+method Entity* CreateBang(EntityManager* self) {
+    var scale = 0.4;
+    Entity* entity = CreateEntity(self, "explosion", scale);
     entity->Type = TYPE_BANG;
     entity->Category = CATEGORY_EXPLOSION;
-    entity->Optional = BANG_MASK;
-    entity->Sprite.Texture = GetTexture(self->resource, "explosion");
-    entity->Sprite.Width = entity->Sprite.Texture->Width*scale;
-    entity->Sprite.Height = entity->Sprite.Texture->Height*scale;
-    entity->Bounds.w = entity->Sprite.Texture->Width*scale; 
-    entity->Bounds.h = entity->Sprite.Texture->Height*scale; 
-    entity->Scale.x = scale;
-    entity->Scale.y = scale;
+    entity->Sound = new(SoundComponent, SoundEffectSmallAsplode);
+    entity->Tween = new(TweenComponent, scale/100.0, scale, -3, false, true);
+    entity->Tint = new(ColorComponent, 0xd2, 0xfa, 0xd2, 0xfa );
+    entity->Expires = new(ExpireComponent, 0.2);
+    return entity;
+}
+method Entity* CreateParticle(EntityManager* self) {
+    Entity* entity = CreateEntity(self, "star");
+    entity->Type = TYPE_PARTICLE;
+    entity->Category = CATEGORY_PARTICLE;
+    entity->Velocity = new(VelocityComponent, 0, 0);
+    entity->Tint = new(ColorComponent, 0xd2, 0xfa, 0xd2, 0xfa );
+    entity->Expires = new(ExpireComponent, 0.75);
     return entity;
 }
 
-method Entity* InitParticle(EntityManager* self, Entity* entity) 
-{
-    auto scale = 1.0;
-    entity->Type = TYPE_PARTICLE;
-    entity->Category = CATEGORY_PARTICLE;
-    entity->Optional = PARTICLE_MASK;
-    entity->Sprite.Texture = GetTexture(self->resource, "star");
-    entity->Sprite.Width = entity->Sprite.Texture->Width*scale;
-    entity->Sprite.Height = entity->Sprite.Texture->Height*scale;
-    entity->Bounds.w = entity->Sprite.Texture->Width*scale; 
-    entity->Bounds.h = entity->Sprite.Texture->Height*scale; 
-    entity->Scale.x = scale;
-    entity->Scale.y = scale;
-    return entity;
-}
 
 
 method Entity* ResetBullet(Entity* entity, int x, int y) 
 {
-    entity->Position = (Vec2) { x, y };
-    entity->Expires = new(ExpireComponent, 1.0);
-    entity->Sound = EFFECT_PEW;
-    entity->Health = new(HealthComponent, 2, 2);
-    entity->Tint = new(ColorComponent, 0xd2, 0xfa, 0x00, 0xffa );
-    entity->Velocity = (Vec2) { 0, -800 };
     entity->Active = true;
+    entity->Transform->Pos.x = x;
+    entity->Transform->Pos.y = y;
+    entity->Velocity->X = 0;
+    entity->Velocity->Y = -800;
+    entity->Expires->Value = 1.0;
+    entity->Health->Current = 2;
     return entity;
 }
 
 method Entity* ResetEnemy1(Entity* entity, int x, int y) 
 {
-    entity->Position = (Vec2) { x, y };
-    entity->Health = new(HealthComponent, 10, 10);
-    entity->Velocity = (Vec2) { 0, 40 };
     entity->Active = true;
+    entity->Transform->Pos.x = x;
+    entity->Transform->Pos.y = y;
+    entity->Velocity->X = 0;
+    entity->Velocity->Y = 40;
+    entity->Health->Current = 10;
     return entity;
 }
 
 method Entity* ResetEnemy2(Entity* entity, int x, int y) 
 {
-    entity->Position = (Vec2) { x, y };
-    entity->Health = new(HealthComponent, 20, 20);
-    entity->Velocity = (Vec2) { 0, 30 };
     entity->Active = true;
+    entity->Transform->Pos.x = x;
+    entity->Transform->Pos.y = y;
+    entity->Velocity->X = 0;
+    entity->Velocity->Y = 30;
+    entity->Health->Current = 20;
     return entity;
 }
 
 method Entity* ResetEnemy3(Entity* entity, int x, int y) 
 {
-    entity->Position = (Vec2) { x, y };
-    entity->Health = new(HealthComponent, 60, 60);
-    entity->Velocity = (Vec2) { 0, 20 };
     entity->Active = true;
+    entity->Transform->Pos.x = x;
+    entity->Transform->Pos.y = y;
+    entity->Velocity->X = 0;
+    entity->Velocity->Y = 20;
+    entity->Health->Current = 60;
     return entity;
 }
 
 method Entity* ResetExplosion(Entity* entity, int x, int y) 
 {
     auto scale = 0.6;
-    entity->Position = (Vec2) { x, y };
-    entity->Bounds.x = x; 
-    entity->Bounds.y = y; 
-    entity->Scale = (Vec2) { scale, scale };
-    entity->Sound = EFFECT_ASPLODE;
-    entity->Tween = new(TweenComponent, scale/100.0, scale, -3, false, true);
-    entity->Tint = new(ColorComponent, 0xd2, 0xfa, 0xd2, 0xfa);
-    entity->Expires = new(ExpireComponent, 0.2);
     entity->Active = true;
+    entity->Transform->Pos.x = x;
+    entity->Transform->Pos.y = y;
+    entity->Transform->Scale.x = scale;
+    entity->Transform->Scale.y = scale;
+    entity->Tween->Active = true;
+    entity->Tween = new(TweenComponent, scale/100.0, scale, -3, false, true);
+    entity->Expires->Value =  0.2;
     return entity;
 }
 
 method Entity* ResetBang(Entity* entity, int x, int y) 
 {
     auto scale = 0.4;
-    entity->Position = (Vec2) { x, y };
-    entity->Bounds.x = x; 
-    entity->Bounds.y = y; 
-    entity->Scale - (Vec2) { scale, scale };
-    entity->Sound = EFFECT_SMALLASPLODE;
-    entity->Tween = new(TweenComponent, scale/100.0, scale, -3, false, true);
-    entity->Tint = new(ColorComponent, 0xd2, 0xfa, 0xd2, 0xfa );
-    entity->Expires = new(ExpireComponent, 0.2);
     entity->Active = true;
+    entity->Transform->Pos.x = x;
+    entity->Transform->Pos.y = y;
+    entity->Transform->Scale.x = scale;
+    entity->Transform->Scale.y = scale;
+    entity->Tween->Active = true;
+    entity->Tween = new(TweenComponent, scale/100.0, scale, -3, false, true);    entity->Expires->Value = 0.2;
     return entity;
 }
 
@@ -336,18 +235,16 @@ method Entity* ResetParticle(Entity* entity, int x, int y)
     double velocityY = magnitude * sin(radians);
     double scale = (double)(rand() % 10) / 10.0;
 
-    // Log("%f %f %f %d %f %f", r1, radians, magnitude, velocityX, velocityY, scale);
-    entity->Position.x = x;
-    entity->Position.y = y;
-    entity->Bounds.x = x; 
-    entity->Bounds.y = y; 
-    entity->Scale.x = scale;
-    entity->Scale.y = scale;
-    entity->Velocity.x = velocityX;
-    entity->Velocity.y = velocityY;
-    entity->Tint = new(ColorComponent, 0xfa, 0xfa, 0xd2, 0xff );
-    entity->Expires = new(ExpireComponent, 0.75);
     entity->Active = true;
+    entity->Transform->Pos.x = x;
+    entity->Transform->Pos.y = y;
+    entity->Transform->Bounds.x = x; 
+    entity->Transform->Bounds.y = y; 
+    entity->Transform->Scale.x = scale;
+    entity->Transform->Scale.y = scale;
+    entity->Velocity->X = velocityX;
+    entity->Velocity->Y = velocityY;
+    entity->Expires->Value = 0.75;
     return entity;
 }
 

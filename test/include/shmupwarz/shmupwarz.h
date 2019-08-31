@@ -134,13 +134,13 @@ method void Draw(const Shmupwarz* const self, Entity* entity)
 {
     if (!entity->Active) return;
     Vec3 color = (Vec3) { 1, 1, 1 };
-    if (entity->Optional & OPTION_TINT) {
+    if (entity->Tint) {
         color[0] = (float)entity->Tint->R/255.0;
         color[1] = (float)entity->Tint->G/255.0;
         color[2] = (float)entity->Tint->B/255.0;
     }
 
-    Draw(self->spriteBatch, entity->Sprite.Texture, &entity->Bounds, 0.0f, color);
+    Draw(self->spriteBatch, entity->Transform->Texture, &entity->Transform->Bounds, 0.0f, color);
 
 }
 
@@ -151,8 +151,8 @@ method void Draw(const Shmupwarz* const self, Entity* entity)
  */
 method void Draw(const Shmupwarz* const self)
 {
-    for (int i=0; i<self->em->count; i++) 
-        Draw(self, &self->em->entities[i]);
+    for (int i=0; i<self->em->Count; i++) 
+        Draw(self, &self->em->Entities[i]);
 }
 
 /**
@@ -162,13 +162,13 @@ method void Draw(const Shmupwarz* const self)
 method void Update(const Shmupwarz* const self)
 {
     SpawnSystem(self->sys, self->player);
-    for (int i=0; i<self->em->count; i++) CollisionSystem(self->sys, &self->em->entities[i]);
-    for (int i=0; i<self->em->count; i++) EntitySystem(self->sys, &self->em->entities[i]);
+    for (int i=0; i<self->em->Count; i++) CollisionSystem(self->sys, &self->em->Entities[i]);
+    for (int i=0; i<self->em->Count; i++) EntitySystem(self->sys, &self->em->Entities[i]);
     InputSystem(self->sys, self->player);
-    for (int i=0; i<self->em->count; i++) PhysicsSystem(self->sys, &self->em->entities[i]);
-    for (int i=0; i<self->em->count; i++) ExpireSystem(self->sys, &self->em->entities[i]);
-    for (int i=0; i<self->em->count; i++) TweenSystem(self->sys, &self->em->entities[i]);
-    for (int i=0; i<self->em->count; i++) RemoveSystem(self->sys, &self->em->entities[i]);
+    for (int i=0; i<self->em->Count; i++) PhysicsSystem(self->sys, &self->em->Entities[i]);
+    for (int i=0; i<self->em->Count; i++) ExpireSystem(self->sys, &self->em->Entities[i]);
+    for (int i=0; i<self->em->Count; i++) TweenSystem(self->sys, &self->em->Entities[i]);
+    for (int i=0; i<self->em->Count; i++) RemoveSystem(self->sys, &self->em->Entities[i]);
 }
 
 /**

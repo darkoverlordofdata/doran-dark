@@ -74,10 +74,10 @@ type (EntityManager)
 {
     Class isa;
     Shmupwarz* game;
-    ResourceManager* resource;
-    long count;
-    long _;
-    Entity entities[ENTITY_MAX];
+    ResourceManager* Resource;
+    long Count;
+    long UniqueId;
+    Entity Entities[ENTITY_MAX];
 };
 
 type (GameSystems)
@@ -92,7 +92,7 @@ type (GameSystems)
     Mix_Chunk* Pew;
     Mix_Chunk* Asplode;
     Mix_Chunk* Smallasplode;
-    /** event stacks */
+    /** entity queues */
     long bulletCount;
     long enemy1Count;
     long enemy2Count;

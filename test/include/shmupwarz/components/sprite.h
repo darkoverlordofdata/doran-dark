@@ -9,8 +9,12 @@
 type (SpriteComponent)
 {
     Texture2D* Texture;
+    SDL_Rect Bounds;
+    Vec2 Position;
+    Vec2 Scale;
     int Width;
     int Height;
+
 };
 
 
