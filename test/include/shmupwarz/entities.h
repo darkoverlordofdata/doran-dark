@@ -13,30 +13,6 @@
 typedef struct Shmupwarz Shmupwarz;
 typedef struct ResourceManager ResourceManager;
 
-delegate (EntityManager, New,           EntityManager*, (EntityManager*, Shmupwarz*, ResourceManager*));
-delegate (EntityManager, ToString,      char*, (EntityManager*));
-delegate (EntityManager, Dispose,       void, (EntityManager*));
-
-delegate (EntityManager, CreateBackground,  Entity*, (EntityManager*));
-delegate (EntityManager, CreatePlayer,      Entity*, (EntityManager*));
-delegate (EntityManager, CreateBullet,      Entity*, (EntityManager*));
-delegate (EntityManager, CreateEnemy1,      Entity*, (EntityManager*));
-delegate (EntityManager, CreateEnemy2,      Entity*, (EntityManager*));
-delegate (EntityManager, CreateEnemy3,      Entity*, (EntityManager*));
-delegate (EntityManager, CreateExplosion,   Entity*, (EntityManager*));
-delegate (EntityManager, CreateBang,        Entity*, (EntityManager*));
-delegate (EntityManager, CreateParticle,    Entity*, (EntityManager*));
-
-delegate (EntityManager, ResetBullet,       Entity*, (EntityManager*, Entity* entity, int x, int y));
-delegate (EntityManager, ResetEnemy1,       Entity*, (EntityManager*, Entity* entity, int x, int y));
-delegate (EntityManager, ResetEnemy2,       Entity*, (EntityManager*, Entity* entity, int x, int y));
-delegate (EntityManager, ResetEnemy3,       Entity*, (EntityManager*, Entity* entity, int x, int y));
-delegate (EntityManager, ResetExplosion,    Entity*, (EntityManager*, Entity* entity, int x, int y));
-delegate (EntityManager, ResetBang,         Entity*, (EntityManager*, Entity* entity, int x, int y));
-delegate (EntityManager, ResetParticle,     Entity*, (EntityManager*, Entity* entity, int x, int y));
-
-
-static inline vptr(EntityManager);
 
 method EntityManager* New(EntityManager* self, Shmupwarz* game, ResourceManager* resource)
 {
@@ -69,85 +45,88 @@ method Entity* CreateEntity(EntityManager* self, char* name) {
 method Entity* CreateBackground(EntityManager* self) {
     Entity* entity = CreateEntity(self, "background", 2.0f);
     entity->Active = true;
-    entity->Type = TYPE_BACKGROUND;
-    entity->Category = CATEGORY_BACKGROUND;
+
+    AddTaxonomyComponent (entity, TypeBackground, SubtypeBackground);
     return entity;
 }
 
 method Entity* CreatePlayer(EntityManager* self) {
     Entity* entity = CreateEntity(self, "spaceshipspr");
     entity->Active = true;
-    entity->Type = TYPE_PLAYER;
-    entity->Category = CATEGORY_PLAYER;
+
+    AddTaxonomyComponent (entity, TypePlayer, SubtypePlayer);
     return entity;
 }
 
 method Entity* CreateBullet(EntityManager* self) {
     Entity* entity = CreateEntity(self, "bullet");
-    entity->Type = TYPE_BULLET;
-    entity->Category = CATEGORY_BULLET;
-    entity->Velocity = new(VelocityComponent, 0, 0);
-    entity->Expires = new(ExpireComponent, 1.0);
-    entity->Sound = new(SoundComponent, SoundEffectPew);
-    entity->Health = new(HealthComponent, 2, 2);
-    entity->Tint = new(ColorComponent, 0xd2, 0xfa, 0x00, 0xffa );
+
+    AddTaxonomyComponent (entity, TypeBullet, SubtypeBullet);
+    AddVelocityComponent (entity, 0, -800);
+    AddExpireComponent (entity, 1.0);
+    AddSoundComponent (entity, SoundEffectPew);
+    AddHealthComponent (entity, 2, 2);
+    AddColorComponent (entity, 0xd2, 0xfa, 0x00, 0xffa);
     return entity;
 }
 
 method Entity* CreateEnemy1(EntityManager* self) {
     Entity* entity = CreateEntity(self, "enemy1");
-    entity->Type = TYPE_ENEMY1;
-    entity->Category = CATEGORY_ENEMY;
-    entity->Health = new(HealthComponent, 10, 10);
-    entity->Velocity = new(VelocityComponent, 0, 0);
+
+    AddTaxonomyComponent (entity, TypeEnemy, SubtypeEnemy1);
+    AddHealthComponent (entity, 10, 10);
+    AddVelocityComponent (entity, 0, 40);
     return entity;
 }
 
 method Entity* CreateEnemy2(EntityManager* self) {
     Entity* entity = CreateEntity(self, "enemy2");
-    entity->Type = TYPE_ENEMY2;
-    entity->Category = CATEGORY_ENEMY;
-    entity->Health = new(HealthComponent, 20, 20);
-    entity->Velocity = new(VelocityComponent, 0, 0);
+
+    AddTaxonomyComponent (entity, TypeEnemy, SubtypeEnemy2);
+    AddHealthComponent (entity, 20, 20);
+    AddVelocityComponent (entity, 0, 30);
     return entity;
 }
 method Entity* CreateEnemy3(EntityManager* self) {
     Entity* entity = CreateEntity(self, "enemy3");
-    entity->Type = TYPE_ENEMY3;
-    entity->Category = CATEGORY_ENEMY;
-    entity->Health = new(HealthComponent, 60, 60);
-    entity->Velocity = new(VelocityComponent, 0, 0);
+
+    AddTaxonomyComponent (entity, TypeEnemy, SubtypeEnemy3);
+    AddHealthComponent (entity, 60, 60);
+    AddVelocityComponent (entity, 0, 20);
     return entity;
 }
-method Entity* CreateExplosion(EntityManager* self) {
+
+method Entity* CreateExplosion(EntityManager* self) {   
     var scale = 0.6;
     Entity* entity = CreateEntity(self, "explosion", scale);
-    entity->Type = TYPE_EXPLOSION;
-    entity->Category = CATEGORY_EXPLOSION;
-    entity->Sound = new(SoundComponent, SoundEffectAsplode);
-    entity->Tween = new(TweenComponent, scale/100.0, scale, -3, false, true);
-    entity->Tint = new(ColorComponent, 0xd2, 0xfa, 0xd2, 0xfa);
-    entity->Expires = new(ExpireComponent, 0.2);
+
+    AddTaxonomyComponent (entity, TypeExplosion, SubtypeExplosion1);
+    AddSoundComponent (entity, SoundEffectAsplode);
+    AddTweenComponent (entity, scale/100.0, scale, -3, false, true);
+    AddColorComponent (entity, 0xd2, 0xfa, 0xd2, 0xfa);
+    AddExpireComponent (entity,0.2);
     return entity;
 }
+
 method Entity* CreateBang(EntityManager* self) {
     var scale = 0.4;
     Entity* entity = CreateEntity(self, "explosion", scale);
-    entity->Type = TYPE_BANG;
-    entity->Category = CATEGORY_EXPLOSION;
-    entity->Sound = new(SoundComponent, SoundEffectSmallAsplode);
-    entity->Tween = new(TweenComponent, scale/100.0, scale, -3, false, true);
-    entity->Tint = new(ColorComponent, 0xd2, 0xfa, 0xd2, 0xfa );
-    entity->Expires = new(ExpireComponent, 0.2);
+
+    AddTaxonomyComponent (entity, TypeExplosion, SubtypeExplosion2);
+    AddSoundComponent (entity, SoundEffectSmallAsplode);
+    AddTweenComponent (entity, scale/100.0, scale, -3, false, true);
+    AddColorComponent (entity, 0xd2, 0xfa, 0xd2, 0xfa);
+    AddExpireComponent (entity,0.2);
     return entity;
 }
+
 method Entity* CreateParticle(EntityManager* self) {
     Entity* entity = CreateEntity(self, "star");
-    entity->Type = TYPE_PARTICLE;
-    entity->Category = CATEGORY_PARTICLE;
-    entity->Velocity = new(VelocityComponent, 0, 0);
-    entity->Tint = new(ColorComponent, 0xd2, 0xfa, 0xd2, 0xfa );
-    entity->Expires = new(ExpireComponent, 0.75);
+
+    AddTaxonomyComponent (entity, TypeParticle, SubtypeParticle);
+    AddVelocityComponent (entity, 0, 0);
+    AddColorComponent (entity, 0xfa, 0xfa, 0xd2, 0xfa);
+    AddExpireComponent (entity,0.75);
     return entity;
 }
 
@@ -158,10 +137,10 @@ method Entity* ResetBullet(Entity* entity, int x, int y)
     entity->Active = true;
     entity->Transform->Pos.x = x;
     entity->Transform->Pos.y = y;
-    entity->Velocity->X = 0;
-    entity->Velocity->Y = -800;
-    entity->Expires->Value = 1.0;
-    entity->Health->Current = 2;
+
+    GetVelocityComponent (entity)->Y = -800;
+    GetExpireComponent (entity)->Value = 1.0;
+    GetHealthComponent (entity)->Current = 2;
     return entity;
 }
 
@@ -170,9 +149,9 @@ method Entity* ResetEnemy1(Entity* entity, int x, int y)
     entity->Active = true;
     entity->Transform->Pos.x = x;
     entity->Transform->Pos.y = y;
-    entity->Velocity->X = 0;
-    entity->Velocity->Y = 40;
-    entity->Health->Current = 10;
+
+    GetVelocityComponent (entity)->Y = 40;
+    GetHealthComponent (entity)->Current = 10;
     return entity;
 }
 
@@ -181,9 +160,9 @@ method Entity* ResetEnemy2(Entity* entity, int x, int y)
     entity->Active = true;
     entity->Transform->Pos.x = x;
     entity->Transform->Pos.y = y;
-    entity->Velocity->X = 0;
-    entity->Velocity->Y = 30;
-    entity->Health->Current = 20;
+
+    GetVelocityComponent (entity)->Y = 30;
+    GetHealthComponent (entity)->Current = 20;
     return entity;
 }
 
@@ -192,9 +171,9 @@ method Entity* ResetEnemy3(Entity* entity, int x, int y)
     entity->Active = true;
     entity->Transform->Pos.x = x;
     entity->Transform->Pos.y = y;
-    entity->Velocity->X = 0;
-    entity->Velocity->Y = 20;
-    entity->Health->Current = 60;
+
+    GetVelocityComponent (entity)->Y = 20;
+    GetHealthComponent (entity)->Current = 60;
     return entity;
 }
 
@@ -206,9 +185,9 @@ method Entity* ResetExplosion(Entity* entity, int x, int y)
     entity->Transform->Pos.y = y;
     entity->Transform->Scale.x = scale;
     entity->Transform->Scale.y = scale;
-    entity->Tween->Active = true;
-    entity->Tween = new(TweenComponent, scale/100.0, scale, -3, false, true);
-    entity->Expires->Value =  0.2;
+
+    GetTweenComponent (entity)->Active = true;
+    GetExpireComponent (entity)->Value = 0.2;
     return entity;
 }
 
@@ -220,8 +199,9 @@ method Entity* ResetBang(Entity* entity, int x, int y)
     entity->Transform->Pos.y = y;
     entity->Transform->Scale.x = scale;
     entity->Transform->Scale.y = scale;
-    entity->Tween->Active = true;
-    entity->Tween = new(TweenComponent, scale/100.0, scale, -3, false, true);    entity->Expires->Value = 0.2;
+
+    GetTweenComponent (entity)->Active = true;
+    GetExpireComponent (entity)->Value = 0.2;
     return entity;
 }
 
@@ -242,9 +222,10 @@ method Entity* ResetParticle(Entity* entity, int x, int y)
     entity->Transform->Bounds.y = y; 
     entity->Transform->Scale.x = scale;
     entity->Transform->Scale.y = scale;
-    entity->Velocity->X = velocityX;
-    entity->Velocity->Y = velocityY;
-    entity->Expires->Value = 0.75;
+
+    GetVelocityComponent (entity)->X = velocityX;
+    GetVelocityComponent (entity)->Y = velocityY;
+    GetExpireComponent (entity)->Value = 0.75;
     return entity;
 }
 

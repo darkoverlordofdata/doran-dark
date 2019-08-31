@@ -14,23 +14,6 @@ typedef struct EntityManager EntityManager;
 
 #define Keys_z  122
 
-delegate (GameSystems, New,             GameSystems*, (GameSystems*, Shmupwarz*));
-delegate (GameSystems, ToString,        char*, (GameSystems*));
-delegate (GameSystems, Dispose,         void, (GameSystems*));
-delegate (GameSystems, InputSystem,     void, (GameSystems*, Entity* entity));
-delegate (GameSystems, SoundSystem,     void, (GameSystems*, Entity* entity));
-delegate (GameSystems, InputSystem,     void, (GameSystems*, Entity* entity));
-delegate (GameSystems, PhysicsSystem,   void, (GameSystems*, Entity* entity));
-delegate (GameSystems, ExpireSystem,    void, (GameSystems*, Entity* entity));
-delegate (GameSystems, TweenSystem,     void, (GameSystems*, Entity* entity));
-delegate (GameSystems, RemoveSystem,    void, (GameSystems*, Entity* entity));
-delegate (GameSystems, SpawnSystem,     void, (GameSystems*, Entity* entity));
-delegate (GameSystems, EntitySystem,    void, (GameSystems*, Entity* entity));
-delegate (GameSystems, CollisionSystem, void, (GameSystems*, Entity* entity));
-
-
-static inline vptr(GameSystems);
-
 method GameSystems* New(GameSystems* self, Shmupwarz* game)
 {
     extends(Object);
@@ -48,8 +31,6 @@ method GameSystems* New(GameSystems* self, Shmupwarz* game)
     self->explosionCount = -1;
     self->bangCount = -1;
     self->particleCount = -1;
-
-
     return self;
 }
 
@@ -59,9 +40,6 @@ method void InputSystem(GameSystems* self, Entity* entity)
 
     entity->Transform->Pos.x = self->game->mouseX;
     entity->Transform->Pos.y = self->game->mouseY;
-
-    // entity->Transform->Bounds.x = entity->Transform->Pos.x - entity->Transform->Bounds.w / 2;
-    // entity->Transform->Bounds.y = entity->Transform->Pos.y - entity->Transform->Bounds.h / 2;
 
     if (self->game->keys[Keys_z] || self->game->mouseDown)
     {
@@ -77,9 +55,11 @@ method void InputSystem(GameSystems* self, Entity* entity)
 
 method void SoundSystem(GameSystems* self, Entity* entity)  
 {
-    if (entity->Active && (entity->Sound)) 
+    SoundComponent* sound = GetSoundComponent(entity);
+
+    if (entity->Active && sound) 
     {
-        switch(entity->Sound->Effect) 
+        switch(sound->Effect) 
         {
             case SoundEffectPew: 
                 Mix_PlayChannelTimed(-1, self->Pew, 0, 0);
@@ -100,14 +80,17 @@ method void PhysicsSystem(GameSystems* self, Entity* entity)
 {
     if (entity->Active)
     {
+
+        VelocityComponent* velocity = GetVelocityComponent(entity);
+
         // Move entity?
-        if (entity->Velocity)
+        if (velocity)
         {
-            entity->Transform->Pos.x += entity->Velocity->X * self->game->delta;
-            entity->Transform->Pos.y += entity->Velocity->Y * self->game->delta;
+            entity->Transform->Pos.x += velocity->X * self->game->delta;
+            entity->Transform->Pos.y += velocity->Y * self->game->delta;
         }
         // Set new bounding box
-        if (entity->Category == CATEGORY_BACKGROUND) 
+        if (GetTaxonomyComponent(entity)->Type == TypeBackground) 
         {
             entity->Transform->Bounds.w = self->game->width;
             entity->Transform->Bounds.h = self->game->height;
@@ -126,12 +109,15 @@ method void PhysicsSystem(GameSystems* self, Entity* entity)
 
 method void ExpireSystem(GameSystems* self, Entity* entity) 
 {
-    if (entity->Active && entity->Expires) 
-    {
-        auto exp = entity->Expires->Value - self->game->delta;
 
-        entity->Expires->Value = exp;
-        if (entity->Expires->Value < 0) {
+    ExpireComponent* expire = GetExpireComponent(entity);
+
+    if (entity->Active && expire) 
+    {
+        auto exp = expire->Value - self->game->delta;
+
+        expire->Value = exp;
+        if (expire->Value < 0) {
             entity->Active = false;
         }
     }
@@ -139,25 +125,27 @@ method void ExpireSystem(GameSystems* self, Entity* entity)
 
 method void TweenSystem(GameSystems* self, Entity* entity) 
 {
-    if (entity->Active && entity->Tween) 
+    TweenComponent* tween = GetTweenComponent(entity);
+
+    if (entity->Active && tween) 
     {
-        auto x = entity->Transform->Scale.x + (entity->Tween->Speed * self->game->delta);
-        auto y = entity->Transform->Scale.y + (entity->Tween->Speed * self->game->delta);
-        auto Active = entity->Tween->Active;
+        auto x = entity->Transform->Scale.x + (tween->Speed * self->game->delta);
+        auto y = entity->Transform->Scale.y + (tween->Speed * self->game->delta);
+        auto Active = tween->Active;
 
 
-        if (x > entity->Tween->Max) {
-            x = entity->Tween->Max;
-            y = entity->Tween->Max;
+        if (x > tween->Max) {
+            x = tween->Max;
+            y = tween->Max;
             Active = false;
-        } else if (x < entity->Tween->Min) {
-            x = entity->Tween->Min;
-            y = entity->Tween->Min;
+        } else if (x < tween->Min) {
+            x = tween->Min;
+            y = tween->Min;
             Active = false;
         }
         entity->Transform->Scale.x = x; 
         entity->Transform->Scale.y = y; 
-        entity->Tween->Active = Active;
+        tween->Active = Active;
     }
 }
 
@@ -165,14 +153,15 @@ method void RemoveSystem(GameSystems* self, Entity* entity)
 {
     if (entity->Active) 
     {
-        switch(entity->Category) 
+
+        switch (GetTaxonomyComponent(entity)->Type) 
         {
-            case CATEGORY_ENEMY:
+            case TypeEnemy:
                 if (entity->Transform->Pos.y > self->game->height) {
                     entity->Active = false;
                 }
                 break;
-            case CATEGORY_BULLET:
+            case TypeBullet:
                 if (entity->Transform->Pos.y < 0) {
                     entity->Active = false;
                 }
@@ -220,45 +209,45 @@ method void SpawnSystem(GameSystems* self, Entity* entity)
 method void EntitySystem(GameSystems* self, Entity* entity) 
 {
     if (!entity->Active) {
-        switch(entity->Type) {
+        switch(GetTaxonomyComponent(entity)->Subtype) {
 
-            case TYPE_BULLET: 
+            case SubtypeBullet: 
                 if (self->bulletCount < 0) break;
                 ResetBullet(entity, self->Bullets[self->bulletCount].x, self->Bullets[self->bulletCount].y);
                 self->bulletCount--;
                 break;
 
-            case TYPE_ENEMY1:
+            case SubtypeEnemy1:
                 if (self->enemy1Count < 0) break;
                 ResetEnemy1(entity, self->Enemies1[self->enemy1Count].x, self->Enemies1[self->enemy1Count].y);
                 self->enemy1Count--;
                 break;
 
-            case TYPE_ENEMY2:
+            case SubtypeEnemy2:
                 if (self->enemy2Count < 0) break;
                 ResetEnemy2(entity, self->Enemies2[self->enemy2Count].x, self->Enemies2[self->enemy2Count].y);
                 self->enemy2Count--;
                 break;
 
-            case TYPE_ENEMY3:
+            case SubtypeEnemy3:
                 if (self->enemy3Count < 0) break;
                 ResetEnemy3(entity, self->Enemies3[self->enemy3Count].x, self->Enemies3[self->enemy3Count].y);
                 self->enemy3Count--;
                 break;
 
-            case TYPE_EXPLOSION:  
+            case SubtypeExplosion1:  
                 if (self->explosionCount < 0) break;
                 ResetExplosion(entity, self->Explosions[self->explosionCount].x, self->Explosions[self->explosionCount].y);
                 self->explosionCount--;
                 break;
 
-            case TYPE_BANG:
+            case SubtypeExplosion2:
                 if (self->bangCount < 0) break;
                 ResetBang(entity, self->Bangs[self->bangCount].x, self->Bangs[self->bangCount].y);
                 self->bangCount--;
                 break;
 
-            case TYPE_PARTICLE:
+            case SubtypeParticle:
                 if (self->particleCount < 0) break;
                 ResetParticle(entity, self->Particles[self->particleCount].x, self->Particles[self->particleCount].y);
                 self->particleCount--;
@@ -280,25 +269,29 @@ method void HandleCollision(GameSystems* self, Entity* a, Entity* b)
         assert(self->particleCount < PARTICLE_MAX);
         self->Particles[++self->particleCount] = (Vec2) { b->Transform->Bounds.x, b->Transform->Bounds.y };
     }
-    if (a->Health) 
+
+
+    HealthComponent* health = GetHealthComponent(a);
+    if (health) 
     {
-        auto h = a->Health->Current - 2;
+        auto h = health->Current - 2;
         if (h < 0) {
             assert(self->explosionCount < EXPLOSION_MAX);
             self->Explosions[++self->explosionCount] = (Vec2) { a->Transform->Pos.x, a->Transform->Pos.y };
             a->Active = false;
         } else {
-            a->Health->Current = h;
+            health->Current = h;
         }   
     }
 }
 
+
 method void CollisionSystem(GameSystems* self, Entity* entity) 
 {
-    if (entity->Active && entity->Category == CATEGORY_ENEMY) {
+    if (entity->Active && GetTaxonomyComponent(entity)->Type == TypeEnemy) {
         for (int i=0; i<self->game->em->Count; i++) {
             auto bullet = &self->game->em->Entities[i];
-            if (bullet->Active && bullet->Category == CATEGORY_BULLET) {
+            if (bullet->Active && GetTaxonomyComponent(bullet)->Type == TypeBullet) {
                 if (Collides(entity, bullet)) {
                     if (entity->Active && bullet->Active) HandleCollision(self, entity, bullet);
                     return;

@@ -3,7 +3,6 @@
 #include <xna/xna.h>
 #include <assert.h>
 #include <tglm/tglm.h>
-#include "../types.h"
 
 type (ExpireComponent)
 {
@@ -16,8 +15,4 @@ method ExpireComponent* New(ExpireComponent* self, double value)
     return self; 
 }
 
-static inline ExpireComponent* AsExpireComponent(void* object)
-{
-    return (ExpireComponent*)object;
-}
 

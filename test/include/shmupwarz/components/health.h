@@ -3,7 +3,6 @@
 #include <xna/xna.h>
 #include <assert.h>
 #include <tglm/tglm.h>
-#include "../types.h"
 
 type (HealthComponent)
 {
@@ -16,10 +15,5 @@ method HealthComponent* New(HealthComponent* self, int current, int maximum)
     self->Current = current;
     self->Maximum = maximum;
     return self; 
-}
-
-static inline HealthComponent* AsHealthComponent(void* object)
-{
-    return (HealthComponent*)object;
 }
 

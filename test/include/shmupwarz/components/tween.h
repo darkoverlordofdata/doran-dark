@@ -3,7 +3,6 @@
 #include <xna/xna.h>
 #include <assert.h>
 #include <tglm/tglm.h>
-#include "../types.h"
 
 type (TweenComponent)
 {
@@ -24,7 +23,3 @@ method TweenComponent* New(TweenComponent* self, double min, double max, double 
     return self;
 }
 
-static inline TweenComponent* AsTweenComponent(void* object)
-{
-    return (TweenComponent*)object;
-}

@@ -22,6 +22,15 @@ void __attribute__((constructor(200))) GameLoader()
 
     RegisterClass(gameClass);
     RegisterClass(ClassLoadShmupwarz(gameClass));
+
+    /* Register lightweight components */
+    RegisterClass(CreateComponent(ColorComponent));
+    RegisterClass(CreateComponent(ExpireComponent));
+    RegisterClass(CreateComponent(HealthComponent));
+    RegisterClass(CreateComponent(SoundComponent));
+    RegisterClass(CreateComponent(TweenComponent));
+    RegisterClass(CreateComponent(VelocityComponent));
+
 }
 
 int main(int argc, char *argv[])
@@ -50,9 +59,11 @@ int main(int argc, char *argv[])
 
     Dispose(GetClasses());
 
-    // Log("Shmupwarz = %d", sizeof(Shmupwarz));
-    // Log("EntityManager = %d", sizeof(EntityManager));
-    // Log("GameSystems = %d", sizeof(GameSystems));
+
+    Class IsaColorComponent = isa(ColorComponent);
+
+    Log("IsaColorComponent = %x", IsaColorComponent);
+    Log("name %s", IsaColorComponent->name);
 
     return 0;
 }

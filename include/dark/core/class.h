@@ -70,8 +70,12 @@ SOFTWARE.
  */
 #define type(T)                                                         \
     typedef struct T T;                                                 \
+    static Class T##_isa_cache = Nil;                                   \
     struct T
 
+// #define type(T)                                                         \
+//     typedef struct T T;                                                 \
+//     struct T
 /**
  * vtable: Instance Methods
  * 
@@ -158,10 +162,17 @@ SOFTWARE.
  */
 #define vptr(T)                                                         \
     struct T##_vtable* T##_vptr(T* self);                               \
-    static Class T##_isa_cache = Nil;                                   \
     static inline struct T##_vtable* T##_vptr(T* self) {                \
         return (struct T##_vtable*)self->isa->vtable;                   \
     };                                                                  \
+
+// #define vptr(T)                                                         \
+//     struct T##_vtable* T##_vptr(T* self);                               \
+//     static Class T##_isa_cache = Nil;                                   \
+//     static inline struct T##_vtable* T##_vptr(T* self) {                \
+//         return (struct T##_vtable*)self->isa->vtable;                   \
+//     };                                                                  \
+
 
 /**
  * virtual
@@ -177,12 +188,15 @@ SOFTWARE.
  */
 #define createClass(base, T) CreateClass(base, #T, (IMP*)&T##_vtable)
 
+#define CreateComponent(T) CreateClass(nullptr, #T, nullptr)
 /**
  * addMethod
  * 
  * Add method to Class vtable
  */
 #define addMethod(cls, T, addr) Add(cls, (char*)#addr, ((IMP)(T##addr)addr))
+
+
 
 /**
  * Class loader signature

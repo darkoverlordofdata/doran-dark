@@ -3,7 +3,6 @@
 #include <xna/xna.h>
 #include <assert.h>
 #include <tglm/tglm.h>
-#include "../types.h"
 
 /**
  * Transform

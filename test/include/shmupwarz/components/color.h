@@ -3,8 +3,7 @@
 #include <xna/xna.h>
 #include <assert.h>
 #include <tglm/tglm.h>
-#include "../types.h"
-
+#include "../components.h"
 
 type (ColorComponent)
 {
@@ -24,7 +23,3 @@ method ColorComponent* New(ColorComponent* self, int r, int g, int b, int a)
     return self;
 }
 
-static inline ColorComponent* AsColorComponent(void* object)
-{
-    return (ColorComponent*)object;
-}

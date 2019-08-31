@@ -3,7 +3,6 @@
 #include <xna/xna.h>
 #include <assert.h>
 #include <tglm/tglm.h>
-#include "../types.h"
 
 type (VelocityComponent)
 {
@@ -18,8 +17,4 @@ method VelocityComponent* New(VelocityComponent* self, float x, float y)
     return self;
 }
 
-static inline VelocityComponent* AsVelocityComponent(void* object)
-{
-    return (VelocityComponent*)object;
-}
 

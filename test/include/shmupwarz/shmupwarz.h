@@ -133,11 +133,14 @@ method void Start(const Shmupwarz* const self)
 method void Draw(const Shmupwarz* const self, Entity* entity)
 {
     if (!entity->Active) return;
+
+    ColorComponent* tint = GetColorComponent(entity);
+
     Vec3 color = (Vec3) { 1, 1, 1 };
-    if (entity->Tint) {
-        color[0] = (float)entity->Tint->R/255.0;
-        color[1] = (float)entity->Tint->G/255.0;
-        color[2] = (float)entity->Tint->B/255.0;
+    if (tint) {
+        color[0] = (float)tint->R/255.0;
+        color[1] = (float)tint->G/255.0;
+        color[2] = (float)tint->B/255.0;
     }
 
     Draw(self->spriteBatch, entity->Transform->Texture, &entity->Transform->Bounds, 0.0f, color);
