@@ -14,11 +14,13 @@ typedef enum SoundEffect {
 
 type (SoundComponent)
 {
+    Class isa;
     SoundEffect Effect;
 };
 
 method SoundComponent* New(SoundComponent* self, SoundEffect effect)
 {
+    self->isa = isa(SoundComponent);
     self->Effect = effect;
     return self;
 }

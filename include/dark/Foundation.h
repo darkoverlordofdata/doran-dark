@@ -47,6 +47,7 @@
 #include <dark/io/reader.h>
 #include <dark/io/inputstreamreader.h>
 #include <dark/io/bufferedreader.h>
+#include <dark/util/bitset.h>
 
 /**
  * class loader comes last

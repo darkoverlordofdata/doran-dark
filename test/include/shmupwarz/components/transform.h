@@ -3,6 +3,7 @@
 #include <xna/xna.h>
 #include <assert.h>
 #include <tglm/tglm.h>
+#include "../types.h"
 
 /**
  * Transform
@@ -11,6 +12,7 @@
  */
 type (Transform)
 {
+    Class isa;
     Texture2D* Texture;
     SDL_Rect Bounds;
     Vec2 Pos;
@@ -27,6 +29,7 @@ type (Transform)
  */
 method Transform* New(Transform* self, Texture2D* texture, float scale)
 {
+    self->isa = isa(Transform);
     self->Texture = texture;
     self->Bounds.x = 0;
     self->Bounds.y = 0;

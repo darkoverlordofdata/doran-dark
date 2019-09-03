@@ -10,11 +10,9 @@ clang c11, using extensions:
 * __attribute__((cleaup(destructor)))
 
 ## Why?
-'I want a new C' - catchy. Maybe I'll write a song. C is simple. It compiles fast. I didn't like Borland C++ 2.0 when it came out - too 'gimicky'. It's gotten better, but I still think it has a noisy syntax. 
+'I want a new C' - catchy. Maybe I'll write a song. C is simple. It compiles fast. I didn't like Borland C++ 2.0 when it came out - too 'gimicky'. It's gotten better, but I still think it has a noisy syntax.
 
 This library is adequate for non-critical use. Probably 1/2 the internet runs or did run on hacks that emulate classes in javascript.
-
-The initial idea was to replace GLib - I like vala as a language, but the more I look at GLib and GPL, the less I like it. But it works great standalone. So I can see using it along side vala. Perhaps I'll return to replacing GLib at some point.
 
 > "C makes it easy to shoot yourself in the foot; C++ makes it harder, but when you do it blows your whole leg off" -- Bjarne Stroustrup
 
@@ -44,11 +42,10 @@ a port of the breakout game from learnopengl.com
 ## example
 ```c
 #include <dark/Foundation.h>
-#include <Block.h>
 /**
- * Extend the DSList class with an iterator
+ * Extend the List class with an iterator
  */
-void overload ForEach(DSList* const this, void (^iter)(DSString*))
+void overload ForEach(List* const this, void (^iter)(String*))
 {
     for (var curr = this->head; curr != nullptr; curr = curr->next) {
         iter(curr->data);
@@ -57,28 +54,26 @@ void overload ForEach(DSList* const this, void (^iter)(DSString*))
 
 int main(int argc, char **argv) {
 
-    DSLog("Hello World");
+    Log("Hello World");
     /**
      * $ wraps primitive values with corresponding Type
      */
     var pi = $(3.1415f);
-    DSLog("pi = %$", pi);
-    DSLog("typeof(pi) = %s", typeof(pi));
+    Log("pi = %$", pi);
+    Log("typeof(pi) = %s", typeof(pi));
 
-    DSList* ls = new(DSList);
+    List* ls = new(List);
     Add(ls, $("first"));
     Add(ls, $("second"));
-    ForEach(ls, ^(DSString* s) {
-        DSLog("item = %d) %$", Length(s), s);
+    ForEach(ls, ^(String* s) {
+        Log("item = %d) %$", Length(s), s);
     });
 
-    DSLog("this string %$", $(20.0f));
+    Log("this string %$", $(20.0f));
 
     var s = $Join($("the "), $("answer "), $("is "), $(42));
-    DSLog("%$", s);
-    DSLog(ToString(s));
-
-    // DSString** ss = Split(s, " ");
+    Log("%$", s);
+    Log(ToString(s));
 
     return 0;
 }
@@ -86,30 +81,3 @@ int main(int argc, char **argv) {
 
 ```
 
-## example
-Some contrived error handling
-
-```c
-Either* Try(DSObject* (^lambda)(void)) {
-    DSException* e;
-    try {
-        return Right(lambda());
-    } catch (e) {
-        return Left($(e->msg));
-    }
-}
-
-...
-    auto answer = Try(^{
-         return (DSObject*)$(DSParseDouble("frodo")); 
-    });
-
-    if (IsRight(answer)) {
-        DSLog("answer = %$", GetRight(answer));
-    } else {
-        DSLog("error is %$", GetLeft(answer));
-    }
-
-```
-
-> error is NumberFormatException Invalid input. Value:"frodo"

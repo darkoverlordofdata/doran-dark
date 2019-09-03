@@ -92,9 +92,8 @@ method void Dispose(ResourceManager* self)
 {
     Dispose(self->Shaders);
     Dispose(self->Textures);
-    if (!_use_gc) {
-        free(self);
-    }
+    if (_use_gc) return;
+    free(self);
 }
 
 /**

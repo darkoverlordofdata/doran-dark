@@ -290,7 +290,7 @@ method void CollisionSystem(GameSystems* self, Entity* entity)
 {
     if (entity->Active && GetTaxonomyComponent(entity)->Type == TypeEnemy) {
         for (int i=0; i<self->game->em->Count; i++) {
-            auto bullet = &self->game->em->Entities[i];
+            auto bullet = self->game->em->Entities[i];
             if (bullet->Active && GetTaxonomyComponent(bullet)->Type == TypeBullet) {
                 if (Collides(entity, bullet)) {
                     if (entity->Active && bullet->Active) HandleCollision(self, entity, bullet);

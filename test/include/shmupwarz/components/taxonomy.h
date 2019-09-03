@@ -33,6 +33,7 @@ typedef enum ComponentSubtype {
 
 type (TaxonomyComponent)
 {
+    Class isa;
     ComponentType Type;
     ComponentSubtype Subtype;
 };
@@ -40,6 +41,7 @@ type (TaxonomyComponent)
 
 method TaxonomyComponent* New(TaxonomyComponent* self, ComponentType type, ComponentSubtype subtype)
 {
+    self->isa = isa(TaxonomyComponent);
     self->Type = type;
     self->Subtype = subtype;
     return self;

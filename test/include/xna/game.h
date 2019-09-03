@@ -43,6 +43,7 @@
 type (Game)
 {
     Class isa;
+    Object* base;
     SDL_Window *window;
     SDL_GLContext context;
     ResourceManager* resource;
@@ -212,7 +213,7 @@ method char* ToString(const Game* const self)
  */
 method Game* New(Game* self, char* title, int x, int y, int width, int height, int flags)
 {
-	extends(Object);
+	self->base = extends(Object);
     self->isa = isa(Game);
     self->title = strdup(title);
     self->x = x;

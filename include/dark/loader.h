@@ -56,6 +56,8 @@ static void LoadDarkFX()
     FileSystemInit();
     // RegisterClass(ClassLoadDSFileSystem(obj));
     RegisterClass(ClassLoadFile(cmp));
+
+    RegisterClass(ClassLoadBitSet(obj));
 }
 
 

@@ -6,11 +6,13 @@
 
 type (ExpireComponent)
 {
+    Class isa;
     double Value;
 };
 
 method ExpireComponent* New(ExpireComponent* self, double value)
 {
+    self->isa = isa(ExpireComponent);
     self->Value = value;
     return self; 
 }

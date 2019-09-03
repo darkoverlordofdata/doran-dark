@@ -28,8 +28,10 @@ void __attribute__((constructor(200))) GameLoader()
     RegisterClass(CreateComponent(ExpireComponent));
     RegisterClass(CreateComponent(HealthComponent));
     RegisterClass(CreateComponent(SoundComponent));
+    RegisterClass(CreateComponent(TaxonomyComponent));
     RegisterClass(CreateComponent(TweenComponent));
     RegisterClass(CreateComponent(VelocityComponent));
+    RegisterClass(CreateComponent(Entity));
 
 }
 

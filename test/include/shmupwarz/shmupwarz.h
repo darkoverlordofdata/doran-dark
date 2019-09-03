@@ -86,10 +86,9 @@ static inline Class ClassLoadShmupwarz(Class base)
  */
 method Shmupwarz* New(Shmupwarz* self, int width, int height)
 {
-	extends(Game, "Shmupwarz", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
+	self->base = extends(Game, "Shmupwarz", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
                         width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
     self->isa = isa(Shmupwarz);
-    Log("%d", ENTITY_MAX);
     return self;
 }
 
@@ -155,7 +154,7 @@ method void Draw(const Shmupwarz* const self, Entity* entity)
 method void Draw(const Shmupwarz* const self)
 {
     for (int i=0; i<self->em->Count; i++) 
-        Draw(self, &self->em->Entities[i]);
+        Draw(self, self->em->Entities[i]);
 }
 
 /**
@@ -165,13 +164,13 @@ method void Draw(const Shmupwarz* const self)
 method void Update(const Shmupwarz* const self)
 {
     SpawnSystem(self->sys, self->player);
-    for (int i=0; i<self->em->Count; i++) CollisionSystem(self->sys, &self->em->Entities[i]);
-    for (int i=0; i<self->em->Count; i++) EntitySystem(self->sys, &self->em->Entities[i]);
+    for (int i=0; i<self->em->Count; i++) CollisionSystem(self->sys, self->em->Entities[i]);
+    for (int i=0; i<self->em->Count; i++) EntitySystem(self->sys, self->em->Entities[i]);
     InputSystem(self->sys, self->player);
-    for (int i=0; i<self->em->Count; i++) PhysicsSystem(self->sys, &self->em->Entities[i]);
-    for (int i=0; i<self->em->Count; i++) ExpireSystem(self->sys, &self->em->Entities[i]);
-    for (int i=0; i<self->em->Count; i++) TweenSystem(self->sys, &self->em->Entities[i]);
-    for (int i=0; i<self->em->Count; i++) RemoveSystem(self->sys, &self->em->Entities[i]);
+    for (int i=0; i<self->em->Count; i++) PhysicsSystem(self->sys, self->em->Entities[i]);
+    for (int i=0; i<self->em->Count; i++) ExpireSystem(self->sys, self->em->Entities[i]);
+    for (int i=0; i<self->em->Count; i++) TweenSystem(self->sys, self->em->Entities[i]);
+    for (int i=0; i<self->em->Count; i++) RemoveSystem(self->sys, self->em->Entities[i]);
 }
 
 /**
@@ -189,7 +188,7 @@ method void Initialize(Shmupwarz* const self)
 method void LoadContent(Shmupwarz* const self)
 {
     self->sys = new(GameSystems, self);
-    self->em = new(EntityManager, self, self->resource);
+    self->em = new(EntityManager, self->resource);
 
     // Load shaders
     LoadShader(self->resource, "assets/shaders/sprite.vs", "assets/shaders/sprite.frag", "sprite");
@@ -216,6 +215,7 @@ method void LoadContent(Shmupwarz* const self)
     LoadTexture(self->resource, "assets/images/spaceshipspr.png", GL_TRUE, "spaceshipspr");
     LoadTexture(self->resource, "assets/images/star.png", GL_TRUE, "star");
 
+    // Create Entities
     CreateBackground(self->em);
     self->player = CreatePlayer(self->em);
     for (int i=0; i<BULLET_MAX; i++)    CreateBullet(self->em);
@@ -235,7 +235,7 @@ method void LoadContent(Shmupwarz* const self)
  */
 method void Run(const Shmupwarz* const self)
 {
-    Run((Game*)self);
+    Run(self->base);
 }
 
 /**
@@ -244,7 +244,7 @@ method void Run(const Shmupwarz* const self)
  */
 method void Tick(const Shmupwarz* const self)
 {
-    Tick((Game*)self);
+    Tick(self->base);
 }
 
 /**
@@ -253,7 +253,7 @@ method void Tick(const Shmupwarz* const self)
  */
 method void HandleEvents(const Shmupwarz* const self)
 {
-    HandleEvents((Game*)self);
+    HandleEvents(self->base);
 }
 
 /**
@@ -262,7 +262,7 @@ method void HandleEvents(const Shmupwarz* const self)
  */
 method void RunLoop(const Shmupwarz* const self)
 {
-    RunLoop((Game*)self);
+    RunLoop(self->base);
 }
 
 

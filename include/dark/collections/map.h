@@ -80,8 +80,8 @@ delegate (Map, Remove,      int,        (Map* const, char*) );
 
 vtable (Map) {
     const MapToString       ToString;
-    const ObjectEquals          Equals;
-    const ObjectGetHashCode     GetHashCode;
+    const ObjectEquals      Equals;
+    const ObjectGetHashCode GetHashCode;
     const MapDispose        Dispose;
     const MapLength         Length;
     const MapRemove         Remove;

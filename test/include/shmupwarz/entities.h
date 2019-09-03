@@ -3,26 +3,42 @@
 #include <dark/Foundation.h>
 #include <xna/xna.h>
 #include <assert.h>
+#include <string.h>
 #include <tglm/tglm.h>
 #include "types.h"
 #include "shmupwarz.h"
 
-
-// #define ENTITY_MAX 141
-
 typedef struct Shmupwarz Shmupwarz;
 typedef struct ResourceManager ResourceManager;
 
-
-method EntityManager* New(EntityManager* self, Shmupwarz* game, ResourceManager* resource)
+method EntityManager* New(EntityManager* self, ResourceManager* resource)
 {
-    extends(Object);
+    var base = extends(Object);
     self->isa = isa(EntityManager);
-    self->game = game;
     self->Resource = resource;
+
+    self->EntityPool = new(MemoryPool, sizeof(Entity), ENTITY_MAX);
+    self->Entities = malloc(sizeof(Entity*)*ENTITY_MAX);
+    self->ColorPool = new(MemoryPool, sizeof(ColorComponent), ENTITY_MAX);
+    self->ExpirePool = new(MemoryPool, sizeof(ExpireComponent), ENTITY_MAX);
+    self->HealthPool = new(MemoryPool, sizeof(HealthComponent), ENTITY_MAX);
+    self->SoundPool = new(MemoryPool, sizeof(SoundComponent), ENTITY_MAX);
+    self->TaxonomyPool = new(MemoryPool, sizeof(TaxonomyComponent), ENTITY_MAX);
+    self->TweenPool = new(MemoryPool, sizeof(TweenComponent), ENTITY_MAX);
+    self->VelocityPool = new(MemoryPool, sizeof(VelocityComponent), ENTITY_MAX);
+
+    self->Count = 0;
     return self;
 }
 
+method void Dispose(EntityManager* self)
+{
+    Dispose(self->Resource);
+    Dispose(self->EntityPool);
+    if (_use_gc) return;
+    free(self);
+    free(self->Entities);
+}
 /**
  * CreateEntity
  * 
@@ -30,11 +46,12 @@ method EntityManager* New(EntityManager* self, Shmupwarz* game, ResourceManager*
  * 
  */
 method Entity* CreateEntity(EntityManager* self, char* name, float scale) {
-    self->Count = self->UniqueId+1;
-    Entity* entity = &self->Entities[self->UniqueId];
-    self->UniqueId += 1;
+    Entity* entity = Alloc(self->EntityPool);
+    self->Entities[self->Count] = entity;
     entity->Name = strdup(name);
+    entity->Id = self->Count;
     entity->Transform = new(Transform, GetTexture(self->Resource, name), scale);
+    self->Count +=1;
     return entity;
 }
 
@@ -45,88 +62,79 @@ method Entity* CreateEntity(EntityManager* self, char* name) {
 method Entity* CreateBackground(EntityManager* self) {
     Entity* entity = CreateEntity(self, "background", 2.0f);
     entity->Active = true;
-
-    AddTaxonomyComponent (entity, TypeBackground, SubtypeBackground);
+    AddTaxonomyComponent (entity, self->TaxonomyPool, TypeBackground, SubtypeBackground);
     return entity;
 }
 
 method Entity* CreatePlayer(EntityManager* self) {
     Entity* entity = CreateEntity(self, "spaceshipspr");
     entity->Active = true;
-
-    AddTaxonomyComponent (entity, TypePlayer, SubtypePlayer);
+    AddTaxonomyComponent (entity, self->TaxonomyPool, TypePlayer, SubtypePlayer);
     return entity;
 }
 
 method Entity* CreateBullet(EntityManager* self) {
     Entity* entity = CreateEntity(self, "bullet");
-
-    AddTaxonomyComponent (entity, TypeBullet, SubtypeBullet);
-    AddVelocityComponent (entity, 0, -800);
-    AddExpireComponent (entity, 1.0);
-    AddSoundComponent (entity, SoundEffectPew);
-    AddHealthComponent (entity, 2, 2);
-    AddColorComponent (entity, 0xd2, 0xfa, 0x00, 0xffa);
+    AddTaxonomyComponent (entity, self->TaxonomyPool, TypeBullet, SubtypeBullet);
+    AddVelocityComponent (entity, self->VelocityPool, 0, -800);
+    AddExpireComponent (entity, self->ExpirePool, 1.0);
+    AddSoundComponent (entity, self->SoundPool, SoundEffectPew);
+    AddHealthComponent (entity, self->HealthPool, 2, 2);
+    AddColorComponent (entity, self->ColorPool, 0xd2, 0xfa, 0x00, 0xffa);
     return entity;
 }
 
 method Entity* CreateEnemy1(EntityManager* self) {
     Entity* entity = CreateEntity(self, "enemy1");
-
-    AddTaxonomyComponent (entity, TypeEnemy, SubtypeEnemy1);
-    AddHealthComponent (entity, 10, 10);
-    AddVelocityComponent (entity, 0, 40);
+    AddTaxonomyComponent (entity, self->TaxonomyPool, TypeEnemy, SubtypeEnemy1);
+    AddHealthComponent (entity, self->HealthPool, 10, 10);
+    AddVelocityComponent (entity, self->VelocityPool, 0, 40);
     return entity;
 }
 
 method Entity* CreateEnemy2(EntityManager* self) {
     Entity* entity = CreateEntity(self, "enemy2");
-
-    AddTaxonomyComponent (entity, TypeEnemy, SubtypeEnemy2);
-    AddHealthComponent (entity, 20, 20);
-    AddVelocityComponent (entity, 0, 30);
+    AddTaxonomyComponent (entity, self->TaxonomyPool, TypeEnemy, SubtypeEnemy2);
+    AddHealthComponent (entity, self->HealthPool, 20, 20);
+    AddVelocityComponent (entity, self->VelocityPool, 0, 30);
     return entity;
 }
 method Entity* CreateEnemy3(EntityManager* self) {
     Entity* entity = CreateEntity(self, "enemy3");
-
-    AddTaxonomyComponent (entity, TypeEnemy, SubtypeEnemy3);
-    AddHealthComponent (entity, 60, 60);
-    AddVelocityComponent (entity, 0, 20);
+    AddTaxonomyComponent (entity, self->TaxonomyPool, TypeEnemy, SubtypeEnemy3);
+    AddHealthComponent (entity, self->HealthPool, 60, 60);
+    AddVelocityComponent (entity, self->VelocityPool, 0, 20);
     return entity;
 }
 
 method Entity* CreateExplosion(EntityManager* self) {   
     var scale = 0.6;
     Entity* entity = CreateEntity(self, "explosion", scale);
-
-    AddTaxonomyComponent (entity, TypeExplosion, SubtypeExplosion1);
-    AddSoundComponent (entity, SoundEffectAsplode);
-    AddTweenComponent (entity, scale/100.0, scale, -3, false, true);
-    AddColorComponent (entity, 0xd2, 0xfa, 0xd2, 0xfa);
-    AddExpireComponent (entity,0.2);
+    AddTaxonomyComponent (entity, self->TaxonomyPool, TypeExplosion, SubtypeExplosion1);
+    AddSoundComponent (entity, self->SoundPool, SoundEffectAsplode);
+    AddTweenComponent (entity, self->TweenPool, scale/100.0, scale, -3, false, true);
+    AddColorComponent (entity, self->ColorPool, 0xd2, 0xfa, 0xd2, 0xfa);
+    AddExpireComponent (entity, self->ExpirePool, 0.2);
     return entity;
 }
 
 method Entity* CreateBang(EntityManager* self) {
     var scale = 0.4;
     Entity* entity = CreateEntity(self, "explosion", scale);
-
-    AddTaxonomyComponent (entity, TypeExplosion, SubtypeExplosion2);
-    AddSoundComponent (entity, SoundEffectSmallAsplode);
-    AddTweenComponent (entity, scale/100.0, scale, -3, false, true);
-    AddColorComponent (entity, 0xd2, 0xfa, 0xd2, 0xfa);
-    AddExpireComponent (entity,0.2);
+    AddTaxonomyComponent (entity, self->TaxonomyPool, TypeExplosion, SubtypeExplosion2);
+    AddSoundComponent (entity, self->SoundPool, SoundEffectSmallAsplode);
+    AddTweenComponent (entity, self->TweenPool, scale/100.0, scale, -3, false, true);
+    AddColorComponent (entity, self->ColorPool, 0xd2, 0xfa, 0xd2, 0xfa);
+    AddExpireComponent (entity, self->ExpirePool, 0.2);
     return entity;
 }
 
 method Entity* CreateParticle(EntityManager* self) {
     Entity* entity = CreateEntity(self, "star");
-
-    AddTaxonomyComponent (entity, TypeParticle, SubtypeParticle);
-    AddVelocityComponent (entity, 0, 0);
-    AddColorComponent (entity, 0xfa, 0xfa, 0xd2, 0xfa);
-    AddExpireComponent (entity,0.75);
+    AddTaxonomyComponent (entity, self->TaxonomyPool, TypeParticle, SubtypeParticle);
+    AddVelocityComponent (entity, self->VelocityPool, 0, 0);
+    AddColorComponent (entity, self->ColorPool, 0xfa, 0xfa, 0xd2, 0xfa);
+    AddExpireComponent (entity, self->ExpirePool, 0.75);
     return entity;
 }
 

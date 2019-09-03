@@ -2,6 +2,7 @@
 #include <dark/Foundation.h>
 #include <xna/xna.h>
 #include <assert.h>
+#include <string.h>
 #include <tglm/tglm.h>
 #include "components.h"
 
@@ -18,22 +19,27 @@
 #define ENTITY_MAX (2+BULLET_MAX+ENEMY1_MAX+ENEMY2_MAX+ENEMY3_MAX + \
                      EXPLOSION_MAX+BANG_MAX+PARTICLE_MAX)
 
+#define COMPONENT_MAX = 100
+
+
 typedef struct Shmupwarz Shmupwarz;
 typedef struct ResourceManager ResourceManager;
 typedef struct EntityManager EntityManager;
 typedef struct GameSystems GameSystems;
-
+typedef struct World World;
+typedef struct Systems Systems;
 /**
  * We need to forward declare all types up front 
  */
 type (Shmupwarz)
 {
     Class isa;
-    SDL_Window *window;
+    Game* base;
+    SDL_Window* window;
     SDL_GLContext context;
     ResourceManager* resource;
     char* title;
-    bool *keys;
+    bool* keys;
     double delta;
     double factor;
     uint64_t targetElapsedTime;
@@ -64,20 +70,41 @@ type (Shmupwarz)
     bool shouldExit;
     bool suppressDraw;
     
+    /** */
+    World* world;
     SpriteRenderer* spriteBatch;
     EntityManager* em;
     GameSystems* sys;
     Entity* player;
 };
 
+type (Systems)
+{
+    Class isa;
+
+};
+type (World) 
+{
+    Class isa;
+
+};
 type (EntityManager)
 {
     Class isa;
-    Shmupwarz* game;
+    Object* base;
     ResourceManager* Resource;
     long Count;
-    long UniqueId;
-    Entity Entities[ENTITY_MAX];
+    long _;    
+    Entity** Entities; 
+    MemoryPool* EntityPool;
+    MemoryPool* ColorPool;
+    MemoryPool* ExpirePool;
+    MemoryPool* HealthPool;
+    MemoryPool* SoundPool;
+    MemoryPool* TaxonomyPool;
+    MemoryPool* TweenPool;
+    MemoryPool* VelocityPool;
+
 };
 
 type (GameSystems)

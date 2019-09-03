@@ -23,6 +23,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ****************************************************************************** */
 #pragma once
+#include "memorypool.h"
 #include "rectangle.h"
 #include "point.h"
 #include "game.h"
