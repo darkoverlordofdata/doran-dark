@@ -3,6 +3,7 @@
 #include <xna/xna.h>
 #include <assert.h>
 
+/** complete - phase I */
 
 /**
  * An Aspects is used by systems as a matcher against entities, to check if a system is
@@ -92,7 +93,7 @@ method EcsAspect* All(EcsAspect* self, int count, va_list _args)
     va_copy(args, _args);
     for (int i = 0; i < count; ++i) 
     {
-        Object* t = va_arg(args, Object*);
+        EcsComponent* t = va_arg(args, EcsComponent*);
         auto index = GetIndexFor($EcsAspect.TypeFactory, t);
         Set(self->AllSet, index, true);
     }
@@ -114,7 +115,7 @@ method EcsAspect* Exclude(EcsAspect* self, int count, va_list _args)
     va_copy(args, _args);
     for (int i = 0; i < count; ++i) 
     {
-        Object* t = va_arg(args, Object*);
+        EcsComponent* t = va_arg(args, EcsComponent*);
         auto index = GetIndexFor($EcsAspect.TypeFactory, t);
         Set(self->ExclusionSet, index, true);
     }
@@ -134,7 +135,7 @@ method EcsAspect* One(EcsAspect* self, int count, va_list _args)
     va_copy(args, _args);
     for (int i = 0; i < count; ++i) 
     {
-        Object* t = va_arg(args, Object*);
+        EcsComponent* t = va_arg(args, Object*);
         auto index = GetIndexFor($EcsAspect.TypeFactory, t);
         Set(self->OneSet, index, true);
     }

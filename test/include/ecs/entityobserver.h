@@ -2,6 +2,7 @@
 #include <dark/Foundation.h>
 #include <xna/xna.h>
 #include <assert.h>
+/** complete - phase I */
 
 
 type (EcsEntityObserver)

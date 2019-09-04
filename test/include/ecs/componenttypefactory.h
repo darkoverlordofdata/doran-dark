@@ -3,6 +3,7 @@
 #include <xna/xna.h>
 #include <assert.h>
 
+/** complete - phase I */
 
 
 type (EcsComponentTypeFactory)
@@ -17,7 +18,7 @@ type (EcsComponentTypeFactory)
  * Contains all generated component types, newly generated component types
  * will be stored here.
  */
-method EcsComponentTypeFactory* New(EcsComponentTypeFactory* self, Class type)
+method EcsComponentTypeFactory* New(EcsComponentTypeFactory* self)
 {
     extends(Object);
     self->isa = isa(EcsComponentTypeFactory);

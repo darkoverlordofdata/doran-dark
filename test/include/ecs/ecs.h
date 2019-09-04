@@ -27,6 +27,7 @@ SOFTWARE.
  * Artemis inspired ECS library
  * 
  */
+typedef struct EcsComponent EcsComponent;
 typedef struct EcsAspect EcsAspect;
 typedef struct EcsEntityObserver EcsEntityObserver;
 typedef struct EcsManager EcsManager;
@@ -38,12 +39,36 @@ typedef struct EcsEntityManager EcsEntityManager;
 typedef struct EcsEntitySystem EcsEntitySystem;
 typedef struct EcsWorld EcsWorld;
 
+method bool Contains(Array* self, Object* e)
+{
+    for (auto i=0; i<self->length; i++)
+    {
+        if (e == self->data[i])
+            return true;
+    }
+    return false;
+}
+
+method bool Remove(Array* self, Object* e)
+{
+    for (auto i=0; i<self->length; i++)
+    {
+        auto e2 = self->data[i];
+        if (e == e2) {
+            Remove(self, i);
+            return true;
+        }
+    }
+    return false;
+}
+
+#include "component.h"
 #include "aspect.h"
 #include "entityobserver.h"
 #include "manager.h"
-#include "componentmanager.h"
 #include "componenttype.h"
 #include "componenttypefactory.h"
+#include "componentmanager.h"
 #include "entity.h"
 #include "entitymanager.h"
 #include "entitysystem.h"

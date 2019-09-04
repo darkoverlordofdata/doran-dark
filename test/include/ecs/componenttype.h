@@ -3,6 +3,8 @@
 #include <xna/xna.h>
 #include <assert.h>
 
+/** complete - phase I */
+
 static int EcsUniqueComponentIndex = 0;
 
 
