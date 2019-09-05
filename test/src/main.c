@@ -17,11 +17,15 @@
 void __attribute__((constructor(200))) GameLoader() 
 {
 
-    Class obj = GetClass("Object");
-    Class gameClass = ClassLoadGame(obj);
+    // Class obj = GetClass("Object");
+    // Class gameClass = ClassLoadGame(obj);
 
-    RegisterClass(gameClass);
-    RegisterClass(ClassLoadShmupwarz(gameClass));
+    // RegisterClass(gameClass);
+    // RegisterClass(ClassLoadShmupwarz(gameClass));
+
+    Class GameClass = GetClass("Game");
+    RegisterClass(ClassLoadShmupwarz(GameClass));
+
 
     /* Register lightweight components */
     RegisterClass(CreateComponent(ColorComponent));
@@ -62,10 +66,10 @@ int main(int argc, char *argv[])
     Dispose(GetClasses());
 
 
-    Class IsaColorComponent = isa(ColorComponent);
+    // Class IsaColorComponent = isa(ColorComponent);
 
-    Log("IsaColorComponent = %x", IsaColorComponent);
-    Log("name %s", IsaColorComponent->name);
+    // Log("IsaColorComponent = %x", IsaColorComponent);
+    // Log("name %s", IsaColorComponent->name);
 
     return 0;
 }

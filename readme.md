@@ -45,9 +45,9 @@ a port of the breakout game from learnopengl.com
 /**
  * Extend the List class with an iterator
  */
-void overload ForEach(List* const this, void (^iter)(String*))
+method void ForEach(List* this, void (^iter)(String*))
 {
-    for (var curr = this->head; curr != nullptr; curr = curr->next) {
+    for (auto curr = this->head; curr != nullptr; curr = curr->next) {
         iter(curr->data);
     }
 }
@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
     /**
      * $ wraps primitive values with corresponding Type
      */
-    var pi = $(3.1415f);
+    auto pi = $(3.1415f);
     Log("pi = %$", pi);
     Log("typeof(pi) = %s", typeof(pi));
 
@@ -71,7 +71,7 @@ int main(int argc, char **argv) {
 
     Log("this string %$", $(20.0f));
 
-    var s = $Join($("the "), $("answer "), $("is "), $(42));
+    auto s = $Join($("the "), $("answer "), $("is "), $(42));
     Log("%$", s);
     Log(ToString(s));
 

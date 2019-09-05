@@ -3,7 +3,8 @@
 #include <xna/xna.h>
 #include <assert.h>
 
-/** complete - phase I */
+method BitSet* GetComponentBits(EcsEntity* self);
+method int GetId(EcsEntity* self);
 
 
 type (EcsComponentManager)
@@ -11,7 +12,7 @@ type (EcsComponentManager)
     Class isa;
     EcsManager* base;
     EcsWorld* World;
-    Array* ComponentsByType;
+    Array* ComponentsByType; // Array of Array
     Array* Deleted;
     EcsComponentTypeFactory* TypeFactory;
 };
@@ -52,7 +53,7 @@ static inline vptr(EcsComponentManager);
 static inline Class ClassLoadEcsComponentManager(Class base) 
 {
     Class cls = createClass(base, EcsComponentManager);
-    addMethod(cls, EcsComponentManager, ToString);
+    addMethod(cls, Object,              ToString);
     addMethod(cls, Object,              Equals);
     addMethod(cls, Object,              GetHashCode);
     addMethod(cls, Object,              Dispose);
@@ -76,6 +77,10 @@ method EcsComponentManager* New(EcsComponentManager* self)
     self->TypeFactory = new(EcsComponentTypeFactory);
 }
 
+method EcsComponentTypeFactory* GetTypeFactory(EcsComponentManager* self)
+{
+    return self->TypeFactory;
+}
 /**
  * Removes all components from the entity associated in this manager.
  *
@@ -84,10 +89,10 @@ method EcsComponentManager* New(EcsComponentManager* self)
  */
 method void RemoveComponentsOfEntity(EcsComponentManager* self, EcsEntity* e)
 {
-    auto componentBits = e->ComponentBits;
+    auto componentBits = GetComponentBits(e);
     for (auto index = NextSetBit(componentBits, 0); index >= 0; NextSetBit(componentBits, index+1)) {
         auto components = Get(self->ComponentsByType, index);
-        Put(components, e->Id, nullptr);
+        Put(components, GetId(e), nullptr);
     }
 }
 
@@ -112,8 +117,8 @@ method void AddComponent(EcsComponentManager* self, EcsEntity* e, EcsComponentTy
         components = new(Array, of(EcsComponent));
         Put(self->ComponentsByType, GetIndex(type), components);
     }
-    Put(self->Components, GetId(e), components);
-    Put(self->ComponentBits, GetIndex(type), true);
+    Put(components, GetId(e), component);
+    Set(GetComponentBits(e), GetIndex(type), true);
 }
 
 
@@ -129,7 +134,7 @@ method void RemoveComponent(EcsComponentManager* self, EcsEntity* e, EcsComponen
 {
     auto index = GetIndex(type);
     Put(self->ComponentsByType, index, nullptr);
-    Clear(e->ComponentBits, GetIndex(type));
+    Clear(GetComponentBits(e), GetIndex(type));
 
 }
 
@@ -143,7 +148,7 @@ method void RemoveComponent(EcsComponentManager* self, EcsEntity* e, EcsComponen
 method Array* GetComponentsByType(EcsComponentManager* self, EcsComponentType* type)
 {
     Array* components = Get(self->ComponentsByType, GetIndex(type));
-    if(components == nullptr) components = new(Array, of(EcsComponent))
+    if(components == nullptr) components = new(Array, of(EcsComponent));
     return components;
 
 }
@@ -160,7 +165,7 @@ method EcsComponent* GetComponent(EcsComponentManager* self, EcsEntity* e, EcsCo
 {
     Array* components = Get(self->ComponentsByType, GetIndex(type));
     if (components != nullptr)
-        return Get(components, e->Id);
+        return Get(components, GetId(e));
     return nullptr;
 }
 
@@ -175,11 +180,11 @@ method EcsComponent* GetComponent(EcsComponentManager* self, EcsEntity* e, EcsCo
  */
 method Array* GetComponentsFor(EcsComponentManager* self, EcsEntity* e, Array* fillBag)
 {
-    auto componentBits = e->ComponentBits;
+    auto componentBits = GetComponentBits(e);
 
     for (auto i = NextSetBit(componentBits, 0); i >= 0; i = NextSetBit(componentBits, i+1)) {
-        auto components = Get(self->ComponentsByType, index);
-        Add(components, e->Id);
+        Array* components = Get(self->ComponentsByType, i);
+        Add(components, (Object*)GetId(e));
     }
     return fillBag;
 }
@@ -199,3 +204,12 @@ method void Clean(EcsComponentManager* self)
         Clear(self->Deleted);
     }   
 }
+
+method void Added(EcsComponentManager* self, EcsEntity* entity) { }
+
+method void Changed(EcsComponentManager* self, EcsEntity* entity) { }
+
+
+method void Disabled(EcsComponentManager* self, EcsEntity* entity) { }
+
+method void Enabled(EcsComponentManager* self, EcsEntity* entity) { }

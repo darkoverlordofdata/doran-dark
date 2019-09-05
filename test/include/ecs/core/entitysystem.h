@@ -3,8 +3,8 @@
 #include <xna/xna.h>
 #include <assert.h>
 
-/** complete - phase I */
 
+// method bool CheckProcessing(EcsEntitySystem* self);
 /**
  * Used to generate a unique bit for each system.
  * Only used internally in EntitySystem.
@@ -29,11 +29,11 @@ method int GetIndexFor(Class es)
     if (Get(EcsSystemIndexManager.Indices, es->name) == nullptr)
     {
         index = EcsSystemIndexManager.Index++;
-        Put(EcsSystemIndexManager.Indices, es->name, new(Integer(index)));
+        Put(EcsSystemIndexManager.Indices, es->name, new(Integer, index));
     }
     else
     {
-        index = IntValue(Get(EcsSystemIndexManager.Indices, es->name));
+        index = IntValue((Number*)Get(EcsSystemIndexManager.Indices, es->name));
     }
     return index;
 }
@@ -42,7 +42,7 @@ type (EcsEntitySystem)
 {
     Class isa;
     EcsEntityObserver* base;
-    EcsWorld World;
+    EcsWorld* World;
     int SystemIndex;
     Array* Actives;
     EcsAspect* Aspect;
@@ -64,7 +64,7 @@ delegate (EcsEntitySystem, Begin,               void, (EcsEntitySystem*));
 delegate (EcsEntitySystem, End,                 void, (EcsEntitySystem*));
 delegate (EcsEntitySystem, Process,             void, (EcsEntitySystem*));
 delegate (EcsEntitySystem, ProcessEntities,     void, (EcsEntitySystem*, Array*));
-delegate (EcsEntitySystem, CheckProcesing,      bool, (EcsEntitySystem*));
+delegate (EcsEntitySystem, CheckProcessing,      bool, (EcsEntitySystem*));
 delegate (EcsEntitySystem, Initialize,          void, (EcsEntitySystem*));
 delegate (EcsEntitySystem, Inserted,            void, (EcsEntitySystem*, EcsEntity*));
 delegate (EcsEntitySystem, Removed,             void, (EcsEntitySystem*, EcsEntity*));
@@ -77,9 +77,9 @@ delegate (EcsEntitySystem, Deleted,             void, (EcsEntitySystem*, EcsEnti
 delegate (EcsEntitySystem, Disabled,            void, (EcsEntitySystem*, EcsEntity*));
 delegate (EcsEntitySystem, Enabled,             void, (EcsEntitySystem*, EcsEntity*));
 delegate (EcsEntitySystem, SetWorld,            void, (EcsEntitySystem*, EcsWorld*));
-delegate (EcsEntitySystem, IsPassive,           void, (EcsEntitySystem*));
+delegate (EcsEntitySystem, IsPassive,           bool, (EcsEntitySystem*));
 delegate (EcsEntitySystem, SetPassive,          void, (EcsEntitySystem*, bool));
-delegate (EcsEntitySystem, GetActive,           void, (EcsEntitySystem*, ));
+delegate (EcsEntitySystem, GetActive,           Array*, (EcsEntitySystem*));
 
 
 /**
@@ -100,18 +100,13 @@ vtable (EcsEntitySystem)
     const EcsEntitySystemBegin              End;
     const EcsEntitySystemProcess            Process;
     const EcsEntitySystemProcessEntities    ProcessEntities;
-    const EcsEntitySystemCheckProcesing     CheckProcesing;
+    const EcsEntitySystemCheckProcessing     CheckProcessing;
     const EcsEntitySystemInitialize         Initialize;
     const EcsEntitySystemInserted           Inserted;
     const EcsEntitySystemRemoved            Removed;
     const EcsEntitySystemCheck              Check;
     const EcsEntitySystemRemoveFromSystem   RemoveFromSystem;
     const EcsEntitySystemInsertToSystem     InsertToSystem;
-    const EcsEntitySystemAdded              Added;
-    const EcsEntitySystemChanged            Changed;
-    const EcsEntitySystemDeleted            Deleted;
-    const EcsEntitySystemDisabled           Disabled;
-    const EcsEntitySystemEnabled            Enabled;
     const EcsEntitySystemSetWorld           SetWorld;
     const EcsEntitySystemIsPassive          IsPassive;
     const EcsEntitySystemSetPassive         SetPassive;
@@ -126,7 +121,7 @@ static inline vptr(EcsEntitySystem);
 static inline Class ClassLoadEcsEntitySystem(Class base) 
 {
     Class cls = createClass(base, EcsEntitySystem);
-    addMethod(cls, EcsEntitySystem, ToString);
+    addMethod(cls, Object,          ToString);
     addMethod(cls, Object,          Equals);
     addMethod(cls, Object,          GetHashCode);
     addMethod(cls, Object,          Dispose);
@@ -139,18 +134,13 @@ static inline Class ClassLoadEcsEntitySystem(Class base)
     addMethod(cls, EcsEntitySystem, End);
     addMethod(cls, EcsEntitySystem, Process);
     addMethod(cls, EcsEntitySystem, ProcessEntities);
-    addMethod(cls, EcsEntitySystem, CheckProcesing)
+    addMethod(cls, EcsEntitySystem, CheckProcessing);
     addMethod(cls, EcsEntitySystem, Initialize);
     addMethod(cls, EcsEntitySystem, Inserted);
     addMethod(cls, EcsEntitySystem, Removed);
     addMethod(cls, EcsEntitySystem, Check);
     addMethod(cls, EcsEntitySystem, RemoveFromSystem);
     addMethod(cls, EcsEntitySystem, InsertToSystem);
-    addMethod(cls, EcsEntitySystem, Added);
-    addMethod(cls, EcsEntitySystem, Changed);
-    addMethod(cls, EcsEntitySystem, Deleted);
-    addMethod(cls, EcsEntitySystem, Disabled);
-    addMethod(cls, EcsEntitySystem, Enabled);
     addMethod(cls, EcsEntitySystem, SetWorld);
     addMethod(cls, EcsEntitySystem, IsPassive);
     addMethod(cls, EcsEntitySystem, SetPassive);
@@ -162,15 +152,15 @@ static inline Class ClassLoadEcsEntitySystem(Class base)
  * Creates an entity system that uses the specified aspect as a matcher against entities.
  * @param aspect to match against entities
  */
-method EcsEntitySystem* New(EcsEntitySystem* self, EcsAspect aspect)
+method EcsEntitySystem* New(EcsEntitySystem* self, EcsAspect* aspect)
 {
     self->Actives = new(Array, of(EcsEntity));
     self->Aspect = aspect;
-    self->SystemIndex = EcsSystemIndexManager.GetIndexFor(self->isa);
+    self->SystemIndex = GetIndexFor(self->isa);
     self->AllSet = GetAllSet(self->Aspect);
     self->AllSet = GetExclusionSet(self->Aspect);
     self->AllSet = GetOneSet(self->Aspect);
-    self->IsDummy = IsEmpty(self->AllSet) && IsEmpty(self->OneSet)
+    self->IsDummy = IsEmpty(self->AllSet) && IsEmpty(self->OneSet);
     return self;
 }
 
@@ -241,7 +231,7 @@ method void Removed(EcsEntitySystem* self, EcsEntity* e) {
 method void Check(EcsEntitySystem* self, EcsEntity* e) { 
     if (self->IsDummy) return;
 
-    auto contains = Get(e->SystemBit, self->SystemIndex);
+    auto contains = Get(GetSystemBits(e), self->SystemIndex);
     auto interested = true; // possibly interested, let's try to prove it wrong.
 
     auto componentBits = e->ComponentBits;
@@ -285,22 +275,24 @@ method void RemoveFromSystem(EcsEntitySystem* self, EcsEntity* e)
 method void InsertToSystem(EcsEntitySystem* self, EcsEntity* e) 
 {
     Add(self->Actives, e);
-    Put(e->SystemBits, self->SystemIndex, true);
+    Set(GetSystemBits(e), self->SystemIndex, true);
     Inserted(self, e);
 }
+
+method void Added(EcsEntitySystem* self, EcsEntity* entity) { }
 
 method void Changed(EcsEntitySystem* self, EcsEntity* e) {
     Check(self, e);
 }
 
 method void Deleted(EcsEntitySystem* self, EcsEntity* e) {
-    if (Get(e->SystemBits, self->SystemIndex]) {
+    if (Get(GetSystemBits(e), self->SystemIndex)) {
         RemoveFromSystem(self, e);
     }
 }
 
 method void Disabled(EcsEntitySystem* self, EcsEntity* e) {
-    if (Get(e->SystemBits, self->SystemIndex) {
+    if (Get(GetSystemBits(e), self->SystemIndex)) {
         RemoveFromSystem(self, e);
     }
 }

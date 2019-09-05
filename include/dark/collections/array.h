@@ -62,7 +62,8 @@ delegate (Array, Add,       Either*,    (Array* const, const Object*) );
 delegate (Array, Remove,    void,       (Array* const, int) );
 delegate (Array, Resize,    void,       (Array* const, int) );
 delegate (Array, Set,       Either*,    (Array* const, int, const Object*) );
-delegate (Array, Get,       Object*,  (Array* const, int) );
+delegate (Array, Get,       Object*,    (Array* const, int) );
+delegate (Array, Put,       Either*,    (Array* const, int, const Object*) );
 
 vtable (Array) {
     const ArrayToString         ToString;
@@ -78,6 +79,7 @@ vtable (Array) {
     const ArrayResize           Resize;
     const ArraySet              Set;
     const ArrayGet              Get;    
+    const ArrayPut              Put;    
 };
 
 static inline vptr(Array);
@@ -101,6 +103,7 @@ static inline Class ClassLoadArray(Class base)
     addMethod(cls, Array, Resize);
     addMethod(cls, Array, Set);
     addMethod(cls, Array, Get);
+    addMethod(cls, Array, Put);
     
     return cls;
 }
@@ -212,6 +215,19 @@ method Either* Set(Array* const self, int index, const Object* item)
 
     if (index >= 0 && index < self->length)
         self->data[index] = item;
+    return right(item);
+}
+
+method Either* Put(Array* const self, int index, const Object* item)
+{
+    if ((self->typeOf) && !InstanceOf(self->typeOf, item)) 
+        return left(new(String, "InvalidType"));
+    if (index < 0)
+        return left(new(String, "NegativeIndex"));
+    if (index > self->length)
+        Resize(self, Max(self->capacity * 2, index));
+    self->data[index] = item;
+    return right(item);
 }
 
 /**
@@ -271,7 +287,12 @@ method bool IsEmpty(Array* const self)
 
 method bool Contains(Array* const self, Object* item)
 {
-    return false;   
+    for (auto i=0; i<self->length; i++)
+    {
+        if (item == self->data[i])
+            return true;
+    }
+    return false;
 }
 
 method int Length(const Array* const self)

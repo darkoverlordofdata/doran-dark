@@ -13,7 +13,7 @@ type (Rectangle)
 
 delegate (Rectangle, New,          Rectangle*, (Rectangle*, int, int, int, int));
 delegate (Rectangle, ToString,     char*, (const Rectangle* const));
-delegate (Rectangle, Contains,     char*, (const Rectangle* const, const Rectangle* const));
+delegate (Rectangle, Contains,     bool, (Rectangle* const, Rectangle* const));
 
 /**
  * Rectangle vtable

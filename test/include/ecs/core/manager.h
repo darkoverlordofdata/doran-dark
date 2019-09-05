@@ -3,7 +3,7 @@
 #include <xna/xna.h>
 #include <assert.h>
 
-/** complete - phase I */
+
 
 type (EcsManager)
 {
@@ -14,6 +14,7 @@ type (EcsManager)
 
 delegate (EcsManager, New,          EcsManager*, (EcsManager*));
 delegate (EcsManager, ToString,     char*,    (const EcsManager* const));
+delegate (EcsManager, Initialize,   void, (EcsManager*));
 delegate (EcsManager, GetWorld,     EcsWorld*, (EcsManager*));
 delegate (EcsManager, SetWorld,     void, (EcsManager*, EcsWorld*));
 delegate (EcsManager, Added,        void, (EcsManager*, EcsEntity*));
@@ -32,6 +33,7 @@ vtable (EcsManager)
     const ObjectEquals          Equals;
     const ObjectGetHashCode     GetHashCode;
     const ObjectDispose         Dispose;
+    const EcsManagerToString    Initialize;
     const EcsManagerGetWorld    GetWorld;
     const EcsManagerSetWorld    SetWorld;
     const EcsManagerAdded       Added;
@@ -48,18 +50,19 @@ static inline vptr(EcsManager);
 static inline Class ClassLoadEcsManager(Class base) 
 {
     Class cls = createClass(base, EcsManager);
-    addMethod(cls, EcsManager, ToString);
-    addMethod(cls, Object,     Equals);
-    addMethod(cls, Object,     GetHashCode);
-    addMethod(cls, Object,     Dispose);
-    addMethod(cls, EcsManager, GetWorld);
-    addMethod(cls, EcsManager, SetWorld);
-    addMethod(cls, EcsManager, Added);
-    addMethod(cls, EcsManager, Changed);
-    addMethod(cls, EcsManager, Deleted);
-    addMethod(cls, EcsManager, Disabled);
-    addMethod(cls, EcsManager, Enabled);
-    return cls;
+    addMethod(cls, Object,      ToString);
+    addMethod(cls, Object,      Equals);
+    addMethod(cls, Object,      GetHashCode);
+    addMethod(cls, Object,      Dispose);
+    addMethod(cls, EcsManager,  Initialize);
+    addMethod(cls, EcsManager,  GetWorld);
+    addMethod(cls, EcsManager,  SetWorld);
+    addMethod(cls, EcsManager,  Added);
+    addMethod(cls, EcsManager,  Changed);
+    addMethod(cls, EcsManager,  Deleted);
+    addMethod(cls, EcsManager,  Disabled);
+    addMethod(cls, EcsManager,  Enabled);
+    return cls; 
 }
 
 method EcsManager* New(EcsManager* self)
@@ -68,6 +71,8 @@ method EcsManager* New(EcsManager* self)
     self->isa = isa(EcsManager);
     return self;
 }
+
+method void Initialize(EcsManager* self) { virtual(EcsManager)->Initialize(self); }
 
 method void SetWorld(EcsManager* self, EcsWorld* world)
 {
@@ -79,23 +84,12 @@ method EcsWorld* GetWorld(EcsManager* self)
     return self->World;
 }
 
-method void Added(EcsManager* self, EcsEntity* entity)
-{
-    virtual(EcsManager)->Added(self, entity);
-}
-method void Changed(EcsManager* self, EcsEntity* entity)
-{
-    virtual(EcsManager)->Changed(self, entity);
-}
-method void Deleted(EcsManager* self, EcsEntity* entity)
-{
-    virtual(EcsManager)->Deleted(self, entity);
-}
-method void Disabled(EcsManager* self, EcsEntity* entity)
-{
-    virtual(EcsManager)->Disabled(self, entity);
-}
-method void Enabled(EcsManager* self, EcsEntity* entity)
-{
-    virtual(EcsManager)->Enabled(self, entity);
-}
+method void Added(EcsManager* self, EcsEntity* entity) { virtual(EcsManager)->Added(self, entity); }
+
+method void Changed(EcsManager* self, EcsEntity* entity) { virtual(EcsManager)->Changed(self, entity); }
+
+method void Deleted(EcsManager* self, EcsEntity* entity) { virtual(EcsManager)->Deleted(self, entity); }
+
+method void Disabled(EcsManager* self, EcsEntity* entity) { virtual(EcsManager)->Disabled(self, entity); }
+
+method void Enabled(EcsManager* self, EcsEntity* entity) { virtual(EcsManager)->Enabled(self, entity); }

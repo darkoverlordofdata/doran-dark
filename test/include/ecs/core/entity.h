@@ -2,7 +2,18 @@
 #include <dark/Foundation.h>
 #include <xna/xna.h>
 #include <assert.h>
-/** complete - phase I */
+
+
+method bool IsActive(EcsEntityManager* self, int entityId);
+method bool IsEnabled(EcsEntityManager* self, int entityId);
+method void Enable(EcsWorld* self, EcsEntity* e);
+method void Disable(EcsWorld* self, EcsEntity* e);
+method EcsEntityManager* GetEntityManager(EcsWorld* self);
+method EcsComponentManager* GetComponentManager(EcsWorld* self);
+method void AddEntity(EcsWorld* self, EcsEntity* e);
+method void ChangedEntity(EcsWorld* self, EcsEntity* e);
+method void DeleteEntity(EcsWorld* self, EcsEntity* e);
+method EcsEntity* CreateEntity(EcsWorld* self, char* name);
 
 /**
  * The entity class. Cannot be instantiated outside the framework, you must
@@ -20,8 +31,10 @@ type (EcsEntity)
     BitSet* SystemBits;
     EcsWorld* World;
     EcsEntityManager* EntityManager;
-    EcsComponentManager* ComponenetManager;
+    EcsComponentManager* ComponentManager;
 };
+
+method void Reset(EcsEntity* self);
 
 method EcsEntity* New(EcsEntity* self, EcsWorld* world, int id, char* name)
 {
@@ -30,13 +43,23 @@ method EcsEntity* New(EcsEntity* self, EcsWorld* world, int id, char* name)
     self->Id = id;
     self->Name = strdup(name);
     self->EntityManager = GetEntityManager(world);
-    self->ComponenetManager = GetComponenetManager(world);
+    self->ComponentManager = GetComponentManager(world);
     self->ComponentBits = new(BitSet);
     self->SystemBits = new(BitSet);
     Reset(self);
     return self;
 }
 
+
+method BitSet* GetComponentBits(EcsEntity* self) {
+    return self->ComponentBits;
+}
+method BitSet* GetSystemBits(EcsEntity* self) {
+    return self->SystemBits;
+}
+method int GetId(EcsEntity* self) {
+    return self->Id;
+}
 
 /**
  * Make entity ready for re-use.
@@ -60,8 +83,8 @@ method void Reset(EcsEntity* self)
 method EcsEntity* AddComponent(EcsEntity* self, EcsComponent* component)
 {
     auto type = component->isa;
-    auto tf = GetComponentManager(self->World)->TypeFactory;
-    auto componentType = GetTypeFor(tf);
+    auto tf = GetTypeFactory(GetComponentManager(self->World));
+    auto componentType = GetTypeFor(self, tf);
     Set(self->ComponentBits, GetIndex(componentType), true);
     AddComponent(self->ComponentManager, self, componentType, component);
     return self;
@@ -69,9 +92,10 @@ method EcsEntity* AddComponent(EcsEntity* self, EcsComponent* component)
 
 method EcsComponentType* GetTypeFor(EcsEntity* self, Class c)
 {
-    return GetTypeFor(GetComponentManager(self->World)->TypeFactory, c);
+    return GetTypeFor(GetTypeFactory(GetComponentManager(self->World)), c);
 }
 
+method EcsEntity* RemoveComponent(EcsEntity* self, EcsComponentType* type);
 /**
  * Removes the component from this entity.
  * 
@@ -81,7 +105,8 @@ method EcsComponentType* GetTypeFor(EcsEntity* self, Class c)
  */
 method EcsEntity* RemoveComponentInstance(EcsEntity* self, EcsComponent* component)
 {
-    RemoveComponent(self, GetTypeFor(self, component->isa));
+    EcsComponentType* type = GetTypeFor(self, component->isa);
+    RemoveComponent(self, type);
     return self;
 }
 
@@ -92,7 +117,7 @@ method EcsEntity* RemoveComponentInstance(EcsEntity* self, EcsComponent* compone
  * 
  * @return this entity for chaining.
  */
-method EcsEntity* RemoveCompoent(EcsEntity* self, EcsComponentType type)
+method EcsEntity* RemoveComponent(EcsEntity* self, EcsComponentType* type)
 {
     RemoveComponent(self->ComponentManager, self, type);
     return self;
@@ -104,7 +129,7 @@ method EcsEntity* RemoveCompoent(EcsEntity* self, EcsComponentType type)
  * 
  * @return this entity for chaining.
  */
-method EcsEntity* RemoveComponentByType(EcsComponent* self, Class type)
+method EcsEntity* RemoveComponentByType(EcsEntity* self, Class type)
 {
     RemoveComponent(self, GetTypeFor(self, type));
     return self;
@@ -118,7 +143,7 @@ method EcsEntity* RemoveComponentByType(EcsComponent* self, Class type)
  */
 method bool IsActive(EcsEntity* self)
 {
-    return IsActive(self->EntityManager, self->id);
+    return IsActive(self->EntityManager, self->Id);
 }
 
 /**
@@ -130,7 +155,7 @@ method bool IsActive(EcsEntity* self)
  */
 method bool IsEnabled(EcsEntity* self)
 {
-    return IsEnabled(self->EntityManager, self->id)
+    return IsEnabled(self->EntityManager, self->Id);
 }
 
 
@@ -162,7 +187,7 @@ method EcsComponent* GetComponent(EcsEntity* self, EcsComponentType* type)
  *            the expected return component type.
  * @return component that matches, or null if none is found.
  */
-method EcsComponent* GetComponentByType(Class type)
+method EcsComponent* GetComponentByType(EcsEntity* self, Class type)
 {
     return GetCompoment(self->ComponentManager, self, GetTypeFor(self, type));
 }

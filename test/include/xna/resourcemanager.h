@@ -15,15 +15,15 @@ type (ResourceManager)
 };
 
 delegate (ResourceManager, New,                 ResourceManager*, (ResourceManager* self));
-delegate (ResourceManager, ToString,            char*, (const ResourceManager* const));
-delegate (ResourceManager, Dispose,             void, (const ResourceManager* const));
+// delegate (ResourceManager, ToString,            char*, (const ResourceManager* const));
+delegate (ResourceManager, Dispose,             void, (ResourceManager*));
 delegate (ResourceManager, LoadShaderFromFile,  Shader*, (ResourceManager* self, const GLchar *vShaderFile, const GLchar *fShaderFile));
 delegate (ResourceManager, LoadTextureFromFile, Texture2D*, (ResourceManager* self, const GLchar *file, GLboolean alpha));
 
 
 vtable (ResourceManager) 
 {
-    const ResourceManagerToString               ToString;
+    const ObjectToString                        ToString;
     const ObjectEquals                          Equals;
     const ObjectGetHashCode                     GetHashCode;
     const ResourceManagerDispose                Dispose;
@@ -41,7 +41,7 @@ static inline vptr(ResourceManager);
 static inline Class ClassLoadResourceManager(Class base) 
 {
     Class cls = createClass(base, ResourceManager);
-    addMethod(cls, ResourceManager,     ToString);
+    addMethod(cls, Object,              ToString);
     addMethod(cls, Object,              Equals);
     addMethod(cls, Object,              GetHashCode);
     addMethod(cls, ResourceManager,     Dispose);
@@ -199,7 +199,7 @@ method Shader* LoadShaderFromFile(
 
     // 2. Now create shader object from source code
     Shader* shader = new(Shader);
-    Compile(shader, vShaderCode, fShaderCode, nullptr);
+    Compile(shader, vShaderCode, fShaderCode);
     return shader;
 
 }

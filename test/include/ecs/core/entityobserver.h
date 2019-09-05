@@ -2,7 +2,7 @@
 #include <dark/Foundation.h>
 #include <xna/xna.h>
 #include <assert.h>
-/** complete - phase I */
+
 
 
 type (EcsEntityObserver)
@@ -43,10 +43,10 @@ static inline vptr(EcsEntityObserver);
 static inline Class ClassLoadEcsEntityObserver(Class base) 
 {
     Class cls = createClass(base, EcsEntityObserver);
-    addMethod(cls, EcsEntityObserver, ToString);
-    addMethod(cls, Object,     Equals);
-    addMethod(cls, Object,     GetHashCode);
-    addMethod(cls, Object,     Dispose);
+    addMethod(cls, Object,      ToString);
+    addMethod(cls, Object,      Equals);
+    addMethod(cls, Object,      GetHashCode);
+    addMethod(cls, Object,      Dispose);
     addMethod(cls, EcsEntityObserver, Added);
     addMethod(cls, EcsEntityObserver, Changed);
     addMethod(cls, EcsEntityObserver, Deleted);

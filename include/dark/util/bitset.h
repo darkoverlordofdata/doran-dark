@@ -232,6 +232,10 @@ method void Clear(BitSet* self, int bitIndex)
     self->words[wordIndex] &= ~(1 << bitIndex);
 }
 
+method void Clear(BitSet* self)  
+{
+    Clear(self, -1);
+}
 
 /**
  * Returns the string value of self BitSet

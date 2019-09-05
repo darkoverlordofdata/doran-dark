@@ -39,15 +39,6 @@ typedef struct EcsEntityManager EcsEntityManager;
 typedef struct EcsEntitySystem EcsEntitySystem;
 typedef struct EcsWorld EcsWorld;
 
-method bool Contains(Array* self, Object* e)
-{
-    for (auto i=0; i<self->length; i++)
-    {
-        if (e == self->data[i])
-            return true;
-    }
-    return false;
-}
 
 method bool Remove(Array* self, Object* e)
 {
@@ -62,14 +53,48 @@ method bool Remove(Array* self, Object* e)
     return false;
 }
 
-#include "component.h"
-#include "aspect.h"
-#include "entityobserver.h"
-#include "manager.h"
-#include "componenttype.h"
-#include "componenttypefactory.h"
-#include "componentmanager.h"
-#include "entity.h"
-#include "entitymanager.h"
-#include "entitysystem.h"
-#include "world.h"
+
+
+#include "core/component.h"
+#include "core/aspect.h"
+#include "core/entityobserver.h"
+#include "core/manager.h"
+#include "core/componenttype.h"
+#include "core/componenttypefactory.h"
+#include "core/componentmanager.h"
+#include "core/entity.h"
+#include "core/entitymanager.h"
+#include "core/entitysystem.h"
+#include "core/world.h"
+
+void __attribute__((constructor(102))) EcsLoader() 
+{
+
+    Class ObjectClass = GetClass("Object");
+    RegisterClass(CreateComponent(EcsComponent));
+    RegisterClass(CreateComponent(EcsEntity));
+    RegisterClass(CreateComponent(EcsWorld));
+    RegisterClass(CreateComponent(EcsAspect));
+    RegisterClass(CreateComponent(EcsComponentType));
+    RegisterClass(CreateComponent(EcsComponentTypeFactory));
+    // RegisterClass(ClassLoadEcsEntity(ObjectClass));
+    // RegisterClass(ClassLoadEcsWorld(ObjectClass));
+    // RegisterClass(ClassLoadEcsAspect(ObjectClass));
+    // RegisterClass(ClassLoadEcsComponentType(ObjectClass));
+    // RegisterClass(ClassLoadEcsComponentFactory(ObjectClass));
+
+    Class EcsEntityObserverClass = ClassLoadEcsEntityObserver(ObjectClass);
+    RegisterClass(EcsEntityObserverClass);
+
+    Class EcsEntitySystemClass = ClassLoadEcsEntitySystem(EcsEntityObserverClass);
+    RegisterClass(EcsEntitySystemClass);
+
+    Class EcsManagerClass = ClassLoadEcsManager(EcsEntityObserverClass);
+    RegisterClass(EcsManagerClass);
+ 
+    Class EcsComponentManagerClass = ClassLoadEcsComponentManager(EcsManagerClass);
+    RegisterClass(EcsComponentManagerClass);
+    
+    Class EcsEntityManagerClass = ClassLoadEcsEntityManager(EcsManagerClass);
+    RegisterClass(EcsEntityManagerClass);
+}

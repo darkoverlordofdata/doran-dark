@@ -3,7 +3,7 @@
 #include <xna/xna.h>
 #include <assert.h>
 
-/** complete - phase I */
+
 
 
 type (EcsComponentTypeFactory)

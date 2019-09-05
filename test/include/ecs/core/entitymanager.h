@@ -3,7 +3,7 @@
 #include <xna/xna.h>
 #include <assert.h>
 
-/** complete - phase I */
+
 
 /*
  * Used only internally to generate distinct ids for entities and reuse them.
@@ -13,7 +13,7 @@ type (EcsIdentifierPool)
     Array* Ids;
     int NextAvailableId;
 
-}
+};
 method EcsIdentifierPool* New(EcsIdentifierPool* self)
 {
     self->Ids = new(Array);
@@ -23,14 +23,14 @@ method EcsIdentifierPool* New(EcsIdentifierPool* self)
 
 method void CheckIn(EcsIdentifierPool* self, int id)
 {
-    Add(self->Ids, id);
+    Add(self->Ids, new(Integer, id));
 }
 
 method int CheckOut(EcsIdentifierPool* self)
 {
     auto length = Length(self->Ids);
     if (length > 0) {
-        int retval = Get(self->Ids, length);
+        int retval = IntValue((Number*)Get(self->Ids, length));
         Remove(self->Ids, length);
         return retval;
     }
@@ -42,13 +42,14 @@ type (EcsEntityManager)
 {
     Class isa;
     EcsManager* base;
+    EcsWorld* World;
     Array* Entities;
     BitSet* Disabled;
     int Active;
     int Added;
     int Created;
     int Deleted;
-    EcsIdentifierPool IdentifierPool;
+    EcsIdentifierPool* IdentifierPool;
 };
 
 delegate (EcsEntityManager, New,          EcsEntityManager*, (EcsEntityManager*));
@@ -87,7 +88,7 @@ static inline vptr(EcsEntityManager);
 static inline Class ClassLoadEcsEntityManager(Class base) 
 {
     Class cls = createClass(base, EcsEntityManager);
-    addMethod(cls, EcsEntityManager,    ToString);
+    addMethod(cls, Object,              ToString);
     addMethod(cls, Object,              Equals);
     addMethod(cls, Object,              GetHashCode);
     addMethod(cls, Object,              Dispose);
@@ -108,8 +109,8 @@ method EcsEntityManager* New(EcsEntityManager* self)
     self->base = extends(EcsManager);
     self->isa = isa(EcsEntityManager);
     self->Entities = new(Array, of(EcsEntity));
-    self->Disab;ed = new(BitSet);
-    self.IdentifierPool = new(EcsIdentifierPool);
+    self->Disabled = new(BitSet);
+    self->IdentifierPool = new(EcsIdentifierPool);
     self->Active = 0;
     self->Added = 0;
     self->Created = 0;
@@ -122,12 +123,12 @@ method void SetWorld(EcsEntityManager* self, EcsWorld* world)
 
 method EcsWorld* GetWorld(EcsEntityManager* self)
 {
-    return GetWorld(self->base, world);
+    return GetWorld(self->base);
 }
 
 method EcsEntity* CreateEntityInstance(EcsEntityManager* self, char* name)
 {
-    auto e = new(EcsEntity(self->World, CheckOut(self->IdentifierPool), name));
+    auto e = new(EcsEntity, self->World, CheckOut(self->IdentifierPool), name);
     self->Created += 1;
     return e;
 }
@@ -136,9 +137,11 @@ method EcsEntity* CreateEntityInstance(EcsEntityManager* self, char* name)
 method void Added(EcsEntityManager* self, EcsEntity* entity)
 {
     self->Active += 1;
-    self->Addded += 1;
+    self->Added += 1;
     Put(self->Entities, entity->Id, entity);
 }
+
+method void Changed(EcsEntityManager* self, EcsEntity* entity) {  }
 
 method void Enabled(EcsEntityManager* self, EcsEntity* entity)
 {
@@ -147,7 +150,7 @@ method void Enabled(EcsEntityManager* self, EcsEntity* entity)
 
 method void Disabled(EcsEntityManager* self, EcsEntity* entity)
 {
-    Put(self->Disabled, entity->Id, true);
+    Set(self->Disabled, entity->Id, true);
 }
 
 method void Deleted(EcsEntityManager* self, EcsEntity* entity)

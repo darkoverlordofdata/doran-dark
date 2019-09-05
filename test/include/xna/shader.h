@@ -14,10 +14,10 @@ type (Shader)
 
 delegate (Shader, New,                  Shader*, (Shader* self));
 delegate (Shader, ToString,             char*, (const Shader* const));
-delegate (Shader, Dispose,              void, (const Shader* const));
-delegate (Shader, Use,                  void, (const Shader* const));
-delegate (Shader, Compile,              void, (Shader* const, const GLchar*, const GLchar*));
-delegate (Shader, CheckCompileErrors,   void, (const Shader* const, GLuint object, char* type));
+delegate (Shader, Dispose,              void, (Shader*));
+delegate (Shader, Use,                  Shader*, (Shader* const));
+delegate (Shader, Compile,              void, (Shader*, const GLchar*, const GLchar*));
+delegate (Shader, CheckCompileErrors,   void, (Shader*, GLuint object, char* type));
 delegate (Shader, SetFloat,             void, (Shader*, const GLchar*, const GLfloat));
 delegate (Shader, SetInteger,           void, (Shader*, const GLchar*, const GLint));
 delegate (Shader, SetArray2f,           void, (Shader*, const GLchar*, const GLfloat, const GLfloat));
@@ -62,7 +62,7 @@ static inline vptr(Shader);
 static inline Class ClassLoadShader(Class base) 
 {
     Class cls = createClass(base, Shader);
-    addMethod(cls, Shader,  ToString);
+    addMethod(cls, Object,  ToString);
     addMethod(cls, Object,  Equals);
     addMethod(cls, Object,  GetHashCode);
     addMethod(cls, Shader,  Dispose);
@@ -149,8 +149,8 @@ method void CheckCompileErrors(
 method void Compile(
     Shader* self, 
     const GLchar* vertexSource, 
-    const GLchar* fragmentSource, 
-    const GLchar* geometrySource)
+    const GLchar* fragmentSource)
+    // const GLchar* geometrySource)
 {
     GLuint sVertex, sFragment, gShader;
     // Vertex Shader
@@ -167,15 +167,15 @@ method void Compile(
     self->Id = glCreateProgram();
     glAttachShader(self->Id, sVertex);
     glAttachShader(self->Id, sFragment);
-    if (geometrySource != nullptr)
-        glAttachShader(self->Id, gShader);
+    // if (geometrySource != nullptr)
+    //     glAttachShader(self->Id, gShader);
     glLinkProgram(self->Id);
     CheckCompileErrors(self, self->Id, "PROGRAM");
     // Delete the shaders as they're linked into our program now and no longer necessery
     glDeleteShader(sVertex);
     glDeleteShader(sFragment);
-    if (geometrySource != nullptr)
-        glDeleteShader(gShader);
+    // if (geometrySource != nullptr)
+    //     glDeleteShader(gShader);
 
 } 
 
@@ -232,8 +232,8 @@ method void SetVector2(
 method void SetVector2(
     Shader* self, 
     const GLchar *name, 
-    GLfloat x, 
-    GLfloat y)
+    const GLfloat x, 
+    const GLfloat y)
 {
     SetVector2(self, name, x, y, true);
 }
