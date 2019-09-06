@@ -7,6 +7,7 @@
 ** option) any later version.
 ******************************************************************/
 #include <xna/xna.h>
+#include <ecs/ecs.h>
 #include <shmupwarz.h>
 #include <assert.h>
 
@@ -17,17 +18,9 @@
 void __attribute__((constructor(200))) GameLoader() 
 {
 
-    // Class obj = GetClass("Object");
-    // Class gameClass = ClassLoadGame(obj);
-
-    // RegisterClass(gameClass);
-    // RegisterClass(ClassLoadShmupwarz(gameClass));
-
     Class GameClass = GetClass("Game");
     RegisterClass(ClassLoadShmupwarz(GameClass));
 
-
-    /* Register lightweight components */
     RegisterClass(CreateComponent(ColorComponent));
     RegisterClass(CreateComponent(ExpireComponent));
     RegisterClass(CreateComponent(HealthComponent));
@@ -41,21 +34,9 @@ void __attribute__((constructor(200))) GameLoader()
 
 int main(int argc, char *argv[])
 {
-    // var zz = new(Boolean, true);
-    // Class cc = Get(GetClasses(), "Object");
-    // assert(cc != nullptr);
-    // Log("Name = %s", cc->name);
-    // Class bb = Get(GetClasses(), "Boolean");
-    // Log("Name = %s", bb->name);
-
-
-    // Game* game = new(Game, "SdL Demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
-    //                     600, 480, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL );
-
-    // Run(game);
-    // Dispose(game);
-
     srand(time(nullptr));
+
+    auto w = new(EcsWorld);
 
     Shmupwarz* game = new(Shmupwarz, 900, 600);
     Log(ToString(game));
@@ -65,11 +46,6 @@ int main(int argc, char *argv[])
 
     Dispose(GetClasses());
 
-
-    // Class IsaColorComponent = isa(ColorComponent);
-
-    // Log("IsaColorComponent = %x", IsaColorComponent);
-    // Log("name %s", IsaColorComponent->name);
 
     return 0;
 }

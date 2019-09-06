@@ -3,8 +3,8 @@
 
 ### Wrap a primitive value
 ```c
-    DSString* Hobbit = $("Frodo");
-    DSFloat* pi = $(3.1415f);
+    String* Hobbit = $("Frodo");
+    Float* pi = $(3.1415f);
     auto count = $(0L);
 ```
 
@@ -12,7 +12,7 @@
 ### Join string objects
 ```c
     auto s = $Join($("the "), $("answer "), $("is "), $(42));
-    DSLog("%$", s);
+    Log("%$", s);
 ```
 
 ### New object
@@ -32,39 +32,39 @@
 
 ### Generic hashtable 
 ```c
-    auto hsh = new(DSHashmap);
+    auto hsh = new(Map);
 ```
 
 ### Typed generic hashtable (runtime constraint)
 ```c
-    auto hsh = new(DSHashmap, of(DSNumber));
+    auto hsh = new(Map, of(Number));
 ```
 
 ### Exceptions - no lngjmp
 ```c
     Either* result = Put(zhsh, "test", $(430L));
-    if (IsRight(result)) {
-        DSLog("Put Succeeded");
+    if (isRight(result)) {
+        Log("Put Succeeded");
     } else {
-        DSLog("Error: %$", GetLeft(result));
+        Log("Error: %$", getLeft(result));
     }
 
 ```
 ### Exceptions - uses lngjmp
 ```c
-    DSException* e;
+    Exception* e;
     try {
         ...
     }
     catch (e)  {
-        DSLog(e->msg);
+        Log(e->msg);
     }
 ```
 
 
 ### Extend a class with an iterator
  ```c
-void overload ForEach(DSList* const this, void (^iter)(DSString*))
+method void ForEach(List* const this, void (^iter)(String*))
 {
     for (auto curr = this->head; curr != nullptr; curr = curr->next) {
         iter(curr->data);

@@ -154,6 +154,8 @@ static inline Class ClassLoadEcsEntitySystem(Class base)
  */
 method EcsEntitySystem* New(EcsEntitySystem* self, EcsAspect* aspect)
 {
+    self->base = extends(EcsEntityObserver);
+    self->isa = isa(EcsEntitySystem);
     self->Actives = new(Array, of(EcsEntity));
     self->Aspect = aspect;
     self->SystemIndex = GetIndexFor(self->isa);

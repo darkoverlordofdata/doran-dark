@@ -11,41 +11,6 @@ type (Rectangle)
     int height;
 };
 
-delegate (Rectangle, New,          Rectangle*, (Rectangle*, int, int, int, int));
-delegate (Rectangle, ToString,     char*, (const Rectangle* const));
-delegate (Rectangle, Contains,     bool, (Rectangle* const, Rectangle* const));
-
-/**
- * Rectangle vtable
- */
-vtable (Rectangle) 
-{
-    const RectangleToString         ToString;
-    const ObjectEquals              Equals;
-    const ObjectGetHashCode         GetHashCode;
-    const ObjectDispose             Dispose;
-    const RectangleContains         Contains;
-};
-
-/**
- * Put it all together
- */
-static inline vptr(Rectangle);
-/**
- * Class Loader callback
- */
-static inline Class ClassLoadRectangle(Class base) 
-{
-    Class cls = createClass(base, Rectangle);
-    addMethod(cls, Rectangle,   ToString);
-    addMethod(cls, Object,      Equals);
-    addMethod(cls, Object,      GetHashCode);
-    addMethod(cls, Object,      Dispose);
-    addMethod(cls, Rectangle,   Contains);
-    return cls;
-}
-
-
 method Rectangle* New(Rectangle* self, int x, int y, int width, int height)
 {
     extends(Object);

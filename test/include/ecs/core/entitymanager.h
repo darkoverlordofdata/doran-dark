@@ -115,6 +115,7 @@ method EcsEntityManager* New(EcsEntityManager* self)
     self->Added = 0;
     self->Created = 0;
     self->Deleted = 0;
+    return self;
 }
 method void SetWorld(EcsEntityManager* self, EcsWorld* world)
 {

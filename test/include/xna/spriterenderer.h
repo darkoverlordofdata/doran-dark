@@ -14,39 +14,8 @@ type (SpriteRenderer)
     GLuint quadVAO;
 };
 
-delegate (SpriteRenderer, New,          SpriteRenderer*, (SpriteRenderer*, Shader*));
-delegate (SpriteRenderer, ToString,    char*, (const SpriteRenderer* const));
-delegate (SpriteRenderer, Draw,        void, (const SpriteRenderer*, const Texture2D* const, const Vec2, const Vec2, const GLfloat, const Vec3));
-delegate (SpriteRenderer, Dispose,     void, (SpriteRenderer* const));
-
 method void InitRenderData(SpriteRenderer* self);
 
-vtable (SpriteRenderer) {
-    SpriteRendererToString  ToString;
-    ObjectEquals          Equals;
-    ObjectGetHashCode     GetHashCode;
-    SpriteRendererDispose   Dispose;
-    SpriteRendererDraw      Draw;
-};
-
-/**
- * Put it all together
- */
-static inline vptr(SpriteRenderer);
-/**
- * Class Loader callback
- */
-static inline Class ClassLoadSpriteRenderer(Class base) 
-{
-    Class cls = createClass(base, SpriteRenderer);
-    addMethod(cls, SpriteRenderer, ToString);
-    addMethod(cls, Object, Equals);
-    addMethod(cls, Object, GetHashCode);
-    addMethod(cls, SpriteRenderer, Dispose);
-    addMethod(cls, SpriteRenderer, Draw);
-
-    return cls;
-}
 
 /**
  * SpriteRenderer

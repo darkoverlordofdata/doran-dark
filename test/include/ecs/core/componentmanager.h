@@ -75,6 +75,7 @@ method EcsComponentManager* New(EcsComponentManager* self)
     self->ComponentsByType = new(Array, of(Array));
     self->Deleted = new(Array, of(EcsEntity));
     self->TypeFactory = new(EcsComponentTypeFactory);
+    return self;
 }
 
 method EcsComponentTypeFactory* GetTypeFactory(EcsComponentManager* self)

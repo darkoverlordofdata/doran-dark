@@ -23,40 +23,6 @@ type (Texture2D)
     char* path;
 };
 
-delegate (Texture2D, New,       Texture2D*, (Texture2D*, int, int, char*));
-delegate (Texture2D, ToString,  char*, (const Texture2D* const));
-delegate (Texture2D, Generate,  void, (Texture2D*, const GLuint, const GLuint, const unsigned char*));
-delegate (Texture2D, Bind,      void, (const Texture2D* const));
-
-
-vtable (Texture2D) {
-    Texture2DToString       ToString;
-    ObjectEquals            Equals;
-    ObjectGetHashCode       GetHashCode;
-    ObjectDispose           Dispose;
-    Texture2DGenerate       Generate;
-    Texture2DBind           Bind;
-};
-
-/**
- * Put it all together
- */
-static inline vptr(Texture2D);
-/**
- * Class Loader callback
- */
-static inline Class ClassLoadTexture2D(Class base) 
-{
-    Class cls = createClass(base, Texture2D);
-    addMethod(cls, Texture2D, ToString);
-    addMethod(cls, Object, Equals);
-    addMethod(cls, Object, GetHashCode);
-    addMethod(cls, Object, Dispose);
-    addMethod(cls, Texture2D, Generate);
-    addMethod(cls, Texture2D, Bind);
-
-    return cls;
-}
 
 /**
  * Texture2D

@@ -49,29 +49,14 @@ void __attribute__((constructor(102))) XnaLoader()
 
     Class ObjectClass = GetClass("Object");
 
-    RegisterClass(CreateComponent(MemoryPool));
-
     Class GameClass = ClassLoadGame(ObjectClass);
     RegisterClass(GameClass);
 
-    Class PointClass = ClassLoadPoint(ObjectClass);
-    RegisterClass(PointClass);
-
-    Class RectangleClass = ClassLoadRectangle(ObjectClass);
-    RegisterClass(RectangleClass);
-
-    Class ResourceManagerClass = ClassLoadResourceManager(ObjectClass);
-    RegisterClass(ResourceManagerClass);
-
-   //  Class ShaderClass = ClassLoadShader(ObjectClass);
-   //  RegisterClass(ShaderClass);
+    RegisterClass(CreateComponent(MemoryPool));
+    RegisterClass(CreateComponent(Point));
+    RegisterClass(CreateComponent(Rectangle));
+    RegisterClass(CreateComponent(ResourceManager));
     RegisterClass(CreateComponent(Shader));
-
-   //  Class SpriteRendererClass = ClassLoadSpriteRenderer(ObjectClass);
-   //  RegisterClass(SpriteRendererClass);
     RegisterClass(CreateComponent(SpriteRenderer));
-
-   //  Class Texture2DClass = ClassLoadTexture2D(ObjectClass);
-   //  RegisterClass(Texture2DClass);
     RegisterClass(CreateComponent(Texture2D));
 }

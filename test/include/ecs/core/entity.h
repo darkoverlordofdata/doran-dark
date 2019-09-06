@@ -4,17 +4,6 @@
 #include <assert.h>
 
 
-method bool IsActive(EcsEntityManager* self, int entityId);
-method bool IsEnabled(EcsEntityManager* self, int entityId);
-method void Enable(EcsWorld* self, EcsEntity* e);
-method void Disable(EcsWorld* self, EcsEntity* e);
-method EcsEntityManager* GetEntityManager(EcsWorld* self);
-method EcsComponentManager* GetComponentManager(EcsWorld* self);
-method void AddEntity(EcsWorld* self, EcsEntity* e);
-method void ChangedEntity(EcsWorld* self, EcsEntity* e);
-method void DeleteEntity(EcsWorld* self, EcsEntity* e);
-method EcsEntity* CreateEntity(EcsWorld* self, char* name);
-
 /**
  * The entity class. Cannot be instantiated outside the framework, you must
  * create new entities using World.
@@ -35,6 +24,18 @@ type (EcsEntity)
 };
 
 method void Reset(EcsEntity* self);
+method bool IsActive(EcsEntityManager* self, int entityId);
+method bool IsEnabled(EcsEntityManager* self, int entityId);
+method void Enable(EcsWorld* self, EcsEntity* e);
+method void Disable(EcsWorld* self, EcsEntity* e);
+method EcsEntityManager* GetEntityManager(EcsWorld* self);
+method EcsComponentManager* GetComponentManager(EcsWorld* self);
+method void AddEntity(EcsWorld* self, EcsEntity* e);
+method void ChangedEntity(EcsWorld* self, EcsEntity* e);
+method void DeleteEntity(EcsWorld* self, EcsEntity* e);
+method EcsEntity* CreateEntity(EcsWorld* self, char* name);
+method EcsEntity* RemoveComponent(EcsEntity* self, EcsComponentType* type);
+
 
 method EcsEntity* New(EcsEntity* self, EcsWorld* world, int id, char* name)
 {
@@ -95,7 +96,6 @@ method EcsComponentType* GetTypeFor(EcsEntity* self, Class c)
     return GetTypeFor(GetTypeFactory(GetComponentManager(self->World)), c);
 }
 
-method EcsEntity* RemoveComponent(EcsEntity* self, EcsComponentType* type);
 /**
  * Removes the component from this entity.
  * 

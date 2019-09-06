@@ -14,41 +14,9 @@ type (ResourceManager)
     Map* Textures;
 };
 
-delegate (ResourceManager, New,                 ResourceManager*, (ResourceManager* self));
-// delegate (ResourceManager, ToString,            char*, (const ResourceManager* const));
-delegate (ResourceManager, Dispose,             void, (ResourceManager*));
-delegate (ResourceManager, LoadShaderFromFile,  Shader*, (ResourceManager* self, const GLchar *vShaderFile, const GLchar *fShaderFile));
-delegate (ResourceManager, LoadTextureFromFile, Texture2D*, (ResourceManager* self, const GLchar *file, GLboolean alpha));
+method Shader* LoadShaderFromFile(ResourceManager* self, const GLchar *vShaderFile, const GLchar *fShaderFile);
+method Texture2D* LoadTextureFromFile(ResourceManager* self, const GLchar *file, GLboolean alpha);
 
-
-vtable (ResourceManager) 
-{
-    const ObjectToString                        ToString;
-    const ObjectEquals                          Equals;
-    const ObjectGetHashCode                     GetHashCode;
-    const ResourceManagerDispose                Dispose;
-    const ResourceManagerLoadShaderFromFile     LoadShaderFromFile;
-    const ResourceManagerLoadTextureFromFile    LoadTextureFromFile;
-};
-
-/**
- * Put it all together
- */
-static inline vptr(ResourceManager);
-/**
- * Class Loader callback
- */
-static inline Class ClassLoadResourceManager(Class base) 
-{
-    Class cls = createClass(base, ResourceManager);
-    addMethod(cls, Object,              ToString);
-    addMethod(cls, Object,              Equals);
-    addMethod(cls, Object,              GetHashCode);
-    addMethod(cls, ResourceManager,     Dispose);
-    addMethod(cls, ResourceManager,     LoadShaderFromFile);
-    addMethod(cls, ResourceManager,     LoadTextureFromFile);
-    return cls;
-}
 
 /**
  * ReadTextFile

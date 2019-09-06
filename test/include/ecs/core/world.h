@@ -51,6 +51,8 @@ method EcsWorld* New(EcsWorld* self)
     self->Disable = new(Array, of(EcsEntity));
 
     self->Cm = new(EcsComponentManager);
+    assert(self != nullptr);
+    assert(self->Cm != nullptr);
     SetManager(self, self->Cm);
     
     self->Em = new(EcsEntityManager);
@@ -347,11 +349,6 @@ method void Update(EcsWorld* self)
     Check(self, self->Disable, Disabled);
     Check(self, self->Enable,  Enabled);
     Check(self, self->Deleted, Deleted);
-    // Check(self, self->Added,   ^(observer, e) { Added(observer, e) });
-    // Check(self, self->Changed, ^(observer, e) { Changed(observer, e) });
-    // Check(self, self->disable, ^(observer, e) { Disabled(observer, e) });
-    // Check(self, self->Enable,  ^(observer, e) { Enabled(observer, e) });
-    // Check(self, self->Deleted, ^(observer, e) { Deleted(observer, e) });
     
     Clearn(self->Cm);
 

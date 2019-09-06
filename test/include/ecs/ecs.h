@@ -53,8 +53,11 @@ method bool Remove(Array* self, Object* e)
     return false;
 }
 
-
-
+#include "blackboard/blackboard.h"
+#include "blackboard/blackboard.h"
+#include "blackboard/trigger.h"
+#include "blackboard/triggermulticondition.h"
+#include "blackboard/triggerstatetype.h"
 #include "core/component.h"
 #include "core/aspect.h"
 #include "core/entityobserver.h"
@@ -66,6 +69,16 @@ method bool Remove(Array* self, Object* e)
 #include "core/entitymanager.h"
 #include "core/entitysystem.h"
 #include "core/world.h"
+#include "managers/groupmanager.h"
+#include "managers/playermanager.h"
+#include "managers/tagmanager.h"
+#include "managers/teammanager.h"
+#include "systems/delayedentityprocessingsystem.h"
+#include "systems/entityprocessingsystem.h"
+#include "systems/intervalentityprocessingsystem.h"
+#include "systems/intervalentitysystem.h"
+#include "systems/voidentitysystem.h"
+
 
 void __attribute__((constructor(102))) EcsLoader() 
 {
@@ -77,11 +90,6 @@ void __attribute__((constructor(102))) EcsLoader()
     RegisterClass(CreateComponent(EcsAspect));
     RegisterClass(CreateComponent(EcsComponentType));
     RegisterClass(CreateComponent(EcsComponentTypeFactory));
-    // RegisterClass(ClassLoadEcsEntity(ObjectClass));
-    // RegisterClass(ClassLoadEcsWorld(ObjectClass));
-    // RegisterClass(ClassLoadEcsAspect(ObjectClass));
-    // RegisterClass(ClassLoadEcsComponentType(ObjectClass));
-    // RegisterClass(ClassLoadEcsComponentFactory(ObjectClass));
 
     Class EcsEntityObserverClass = ClassLoadEcsEntityObserver(ObjectClass);
     RegisterClass(EcsEntityObserverClass);
@@ -97,4 +105,8 @@ void __attribute__((constructor(102))) EcsLoader()
     
     Class EcsEntityManagerClass = ClassLoadEcsEntityManager(EcsManagerClass);
     RegisterClass(EcsEntityManagerClass);
+
+    Class EcsEntityProcessingSystemClass = ClassLoadEcsEntityProcessingSystem(EcsEntitySystemClass);
+    RegisterClass(EcsEntityProcessingSystemClass);
+
 }
