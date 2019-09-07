@@ -26,7 +26,7 @@ type (EcsEntityProcessingSystem)
     bool IsDummy;
 };
 
-delegate (EcsEntityProcessingSystem, New,                 EcsEntityProcessingSystem*, (EcsEntityProcessingSystem*));
+delegate (EcsEntityProcessingSystem, New,                 EcsEntityProcessingSystem*, (EcsEntityProcessingSystem*, EcsAspect*));
 delegate (EcsEntityProcessingSystem, ToString,            char*,    (const EcsEntityProcessingSystem* const));
 delegate (EcsEntityProcessingSystem, Added,               void, (EcsEntityProcessingSystem*, EcsEntity*));
 delegate (EcsEntityProcessingSystem, Changed,             void, (EcsEntityProcessingSystem*, EcsEntity*));
@@ -53,6 +53,7 @@ delegate (EcsEntityProcessingSystem, SetWorld,            void, (EcsEntityProces
 delegate (EcsEntityProcessingSystem, IsPassive,           bool, (EcsEntityProcessingSystem*));
 delegate (EcsEntityProcessingSystem, SetPassive,          void, (EcsEntityProcessingSystem*, bool));
 delegate (EcsEntityProcessingSystem, GetActive,           Array*, (EcsEntityProcessingSystem*));
+delegate (EcsEntityProcessingSystem, ProcessEach, void, (EcsEntityProcessingSystem* self, EcsEntity* e));
 
 
 /**
@@ -84,6 +85,7 @@ vtable (EcsEntityProcessingSystem)
     const EcsEntityProcessingSystemIsPassive          IsPassive;
     const EcsEntityProcessingSystemSetPassive         SetPassive;
     const EcsEntityProcessingSystemGetActive          GetActive;
+    const EcsEntityProcessingSystemProcessEach       ProcessEach;
 };
 
 
@@ -118,6 +120,7 @@ static inline Class ClassLoadEcsEntityProcessingSystem(Class base)
     addMethod(cls, EcsEntityProcessingSystem, IsPassive);
     addMethod(cls, EcsEntityProcessingSystem, SetPassive);
     addMethod(cls, EcsEntityProcessingSystem, GetActive);
+    addMethod(cls, EcsEntityProcessingSystem, ProcessEach);
     return cls;
 }
 
@@ -130,14 +133,6 @@ method EcsEntityProcessingSystem* New(EcsEntityProcessingSystem* self, EcsAspect
     self->base = extends(EcsEntitySystem, aspect);
     self->isa = isa(EcsEntityProcessingSystem                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       );
     return self;
-}
-
-/**
- * Process a entity this system is interested in.
- * @param e the entity to process.
- */
-method void ProcessEach(EcsEntityProcessingSystem* self, EcsEntity* e) { 
-    virtual(EcsEntityProcessingSystem)->Begin(self); 
 }
 
 /**
@@ -250,5 +245,13 @@ method void SetPassive(EcsEntityProcessingSystem* self, bool passive) {
 
 method Array* GetActive(EcsEntityProcessingSystem* self) {
     return GetActive(self->base);
+}
+
+/**
+ * Process a entity this system is interested in.
+ * @param e the entity to process.
+ */
+method void ProcessEach(EcsEntityProcessingSystem* self, EcsEntity* e) { 
+    virtual(EcsEntityProcessingSystem)->Begin(self); 
 }
 

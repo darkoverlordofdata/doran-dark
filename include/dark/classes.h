@@ -33,7 +33,7 @@ SOFTWARE.
  * dedicated hashmap for class definitions
  * this is a simple hastable. 
  * Size is kept large, and collisions are a linked list.
- * as long as the collision rate stays low, this is sufficient and simple.
+ * as long as the collision rate stays low, this is suficient and simple.
  * 
  * 
  * special requirements -
@@ -207,7 +207,7 @@ static inline Class InitializeClass(Class supercls, const char *name, Class cls,
  * @returns a new class
  * 
  */
-static inline Class CreateClass(Class supercls, const char *name, IMP* vtable)
+static inline Class CreateClass(Class supercls, const char *name, const int size, IMP* vtable)
 {
     Class cls, meta;
 
@@ -226,6 +226,7 @@ static inline Class CreateClass(Class supercls, const char *name, IMP* vtable)
 
     InitializeClass(supercls, name, cls, meta);
     cls->vtable = vtable;
+    cls->size = size;
     _id += 1;
     cls->id = _id;
 

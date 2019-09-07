@@ -36,9 +36,11 @@ int main(int argc, char *argv[])
 {
     srand(time(nullptr));
 
-    auto w = new(EcsWorld);
-
     Shmupwarz* game = new(Shmupwarz, 900, 600);
+
+    uint64_t h = GetHashCode(game);
+    Log("Hash Code = %x", h);
+
     Log(ToString(game));
     
     Run(game);

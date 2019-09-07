@@ -186,9 +186,9 @@ SOFTWARE.
  * 
  * Initialize Class Definition
  */
-#define createClass(base, T) CreateClass(base, #T, (IMP*)&T##_vtable)
+#define createClass(base, T) CreateClass(base, #T, sizeof(T), (IMP*)&T##_vtable)
 
-#define CreateComponent(T) CreateClass(nullptr, #T, nullptr)
+#define CreateComponent(T) CreateClass(nullptr, #T, sizeof(T), nullptr)
 /**
  * addMethod
  * 

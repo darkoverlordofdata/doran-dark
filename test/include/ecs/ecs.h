@@ -39,6 +39,17 @@ typedef struct EcsEntityManager EcsEntityManager;
 typedef struct EcsEntitySystem EcsEntitySystem;
 typedef struct EcsWorld EcsWorld;
 
+typedef struct EcsGroupManager;
+typedef struct EcsPlayerManager;
+typedef struct EcsTagManager;
+typedef struct EcsTeamManager;
+
+typedef struct EcsDelayedEntityProcessingSystem;
+typedef struct EcsEntityProcessingSystem;
+typedef struct EcsIntervalEntityProcessingSystem;
+typedef struct EcsIntervalEntitySystem;
+typedef struct EcsVoidEntitySystem;
+
 
 method bool Remove(Array* self, Object* e)
 {
@@ -75,11 +86,22 @@ method bool Remove(Array* self, Object* e)
 #include "managers/teammanager.h"
 #include "systems/delayedentityprocessingsystem.h"
 #include "systems/entityprocessingsystem.h"
-#include "systems/intervalentityprocessingsystem.h"
 #include "systems/intervalentitysystem.h"
 #include "systems/voidentitysystem.h"
+#include "systems/intervalentityprocessingsystem.h"
+
+/*
+
+method (\w*) (\w*)\((\w*)(.*)\;
+
+delegate ($3, $2, $1, ($3$4);
+
+    const $3$2       $2;
+
+    addMethod(cls, $3, $2);
 
 
+*/
 void __attribute__((constructor(102))) EcsLoader() 
 {
 

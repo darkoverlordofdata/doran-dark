@@ -53,7 +53,7 @@ type (EcsEntitySystem)
     bool IsDummy;
 };
 
-delegate (EcsEntitySystem, New,                 EcsEntitySystem*, (EcsEntitySystem*));
+delegate (EcsEntitySystem, New,                 EcsEntitySystem*, (EcsEntitySystem*, EcsAspect*));
 delegate (EcsEntitySystem, ToString,            char*,    (const EcsEntitySystem* const));
 delegate (EcsEntitySystem, Added,               void, (EcsEntitySystem*, EcsEntity*));
 delegate (EcsEntitySystem, Changed,             void, (EcsEntitySystem*, EcsEntity*));

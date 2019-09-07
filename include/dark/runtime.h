@@ -63,7 +63,7 @@ struct _class {
 extern struct hashmap* class_hash;
 
 static inline Class GetClass(const char *name);
-static inline Class CreateClass(Class superclass, const char *name, IMP* extVtable);
+static inline Class CreateClass(Class superclass, const char *name, const int size, IMP* extVtable);
 static inline void RegisterClass(Class cls);
 static inline overload bool Add(Class cls, char* name, IMP imp);
 

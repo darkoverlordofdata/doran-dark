@@ -38,6 +38,8 @@ method EcsManager* SetManager(EcsWorld* self, EcsManager* manager);
 
 method EcsWorld* New(EcsWorld* self)
 {
+    extends(Object);
+    self->isa = isa(EcsWorld);
     self->Managers = new(Map, of(EcsManager));
     self->ManagersBag = new(Array, of(Manage));
     
@@ -57,6 +59,7 @@ method EcsWorld* New(EcsWorld* self)
     
     self->Em = new(EcsEntityManager);
     SetManager(self, self->Em);
+    return self;
 
 }
 

@@ -261,6 +261,27 @@ method unsigned int HashInt(Map* const self, char* keystring)
 	return key % self->tableSize;
 }
 
+method unsigned int HashInt(Map* const self, Object* keyObject)
+{
+    // unsigned long key = crc32((unsigned char*)(keystring), strlen(keystring));
+    unsigned long key = GetHashCode(keyObject);
+
+	/* Robert Jenkins' 32 bit Mix Function */
+	key += (key << 12);
+	key ^= (key >> 22);
+	key += (key << 4);
+	key ^= (key >> 9);
+	key += (key << 10);
+	key ^= (key >> 2);
+	key += (key << 7);
+	key ^= (key >> 12);
+
+	/* Knuth's Multiplicative Method */
+	key = (key >> 3) * 2654435761;
+
+	return key % self->tableSize;
+}
+
 
 method Map* New(Map* const self, Class typeOf)
 {
@@ -286,6 +307,26 @@ method Map* New(Map* const self)
  * to store the point to the item, or MAP_FULL.
  */
 method int Hash(Map* const self, char* key)
+{
+	/* If full, return immediately */
+	if (self->length >= (self->tableSize/2)) return MAP_FULL;
+	/* Find the best index */
+	int curr = HashInt(self, key);
+	/* Linear probing */
+	for (int i = 0; i< MAX_CHAIN_LENGTH; i++)
+    {
+		if (self->data[curr].inUse == 0)
+			return curr;
+
+		if (self->data[curr].inUse == 1 && (strcmp(self->data[curr].key, key) == 0))
+			return curr;
+
+		curr = (curr + 1) % self->tableSize;
+	}
+	return MAP_FULL;
+}
+
+method int Hash(Map* const self, Object* key)
 {
 	/* If full, return immediately */
 	if (self->length >= (self->tableSize/2)) return MAP_FULL;

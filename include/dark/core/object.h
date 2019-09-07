@@ -87,6 +87,10 @@ static inline Class ClassLoadObject(Class base)
     addMethod(cls, Object, ReferenceEquals);
     addMethod(cls, Object, InstanceEquals);
     $Object.Empty = nullptr;
+
+    Log("=====================================");
+    Log("Object %x %x", cls, cls->vtable);
+    Log("=====================================");
     return cls;
 }
 
@@ -177,7 +181,14 @@ method bool Equals(const Object* const self, const Object* const that)
  */
 method int GetHashCode(const Object* const self)
 {
-    return virtual(Object)->GetHashCode(self);
+    if (virtual(Object)->GetHashCode == GetHashCode) {
+        return (uint64_t)self;
+    }
+    else 
+    {
+        return virtual(Object)->GetHashCode(self);
+    }
+    return self;
 }
 
 method Class GetClass(const Object* const self)
