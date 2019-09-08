@@ -34,13 +34,7 @@ void __attribute__((constructor(200))) GameLoader()
 
 int main(int argc, char *argv[])
 {
-    srand(time(nullptr));
-
-    Shmupwarz* game = new(Shmupwarz, 900, 600);
-
-    uint64_t h = GetHashCode(game);
-    Log("Hash Code = %x", h);
-
+    auto game = new(Shmupwarz, 900, 600);
     Log(ToString(game));
     
     Run(game);

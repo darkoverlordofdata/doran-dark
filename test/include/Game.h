@@ -168,7 +168,7 @@ method Game* New(
     const int Width, 
     const int Height)
 {
-    extends(Object);
+    self->base = extends(Object);
     self->isa = isa(Game);;
     self->Levels = new(Array, 4);
     self->Level = 0;

@@ -33,6 +33,7 @@ method int GetIndexFor(EcsComponentTypeFactory*, Class);
 type (EcsAspect)
 {
     Class isa;
+    Object* base;
     BitSet* AllSet;
     BitSet* ExclusionSet;
     BitSet* OneSet;
@@ -40,10 +41,71 @@ type (EcsAspect)
 
 };
 
+method void SetWorld(EcsAspect* self, EcsWorld* world);
+method BitSet* GetAllSet(EcsAspect* self);
+method BitSet* GetExclusionSet(EcsAspect* self);
+method BitSet* GetOneSet(EcsAspect* self);
+method EcsAspect* All(EcsAspect* self, int count, va_list _args);
+method EcsAspect* Exclude(EcsAspect* self, int count, va_list _args);
+method EcsAspect* One(EcsAspect* self, int count, va_list _args);
+
+
 class (EcsAspect)
 {
     EcsComponentTypeFactory* TypeFactory;
 };
+
+
+delegate (EcsAspect, SetWorld, void, (EcsAspect* self, EcsWorld* world));
+delegate (EcsAspect, GetAllSet, BitSet*, (EcsAspect* self));
+delegate (EcsAspect, GetExclusionSet, BitSet*, (EcsAspect* self));
+delegate (EcsAspect, GetOneSet, BitSet*, (EcsAspect* self));
+delegate (EcsAspect, All, EcsAspect*, (EcsAspect* self, int count, va_list _args));
+delegate (EcsAspect, Exclude, EcsAspect*, (EcsAspect* self, int count, va_list _args));
+delegate (EcsAspect, One, EcsAspect*, (EcsAspect* self, int count, va_list _args));
+
+
+/**
+ * EcsAspect Vtable
+ */
+vtable (EcsAspect) 
+{
+    const ObjectToString        ToString;
+    const ObjectEquals          Equals;
+    const ObjectGetHashCode     GetHashCode;
+    const ObjectDispose         Dispose;
+    const EcsAspectSetWorld     SetWorld;
+    const EcsAspectGetAllSet    GetAllSet;
+    const EcsAspectGetExclusionSet       GetExclusionSet;
+    const EcsAspectGetOneSet    GetOneSet;
+    const EcsAspectAll          All;
+    const EcsAspectExclude      Exclude;
+    const EcsAspectOne          One;
+
+};
+
+static inline vptr(EcsAspect);
+/**
+ * Create the class loader
+ */
+static inline Class ClassLoadEcsAspect(Class base) 
+{
+    Class cls = createClass(base, EcsAspect);
+    addMethod(cls, Object, ToString);
+    addMethod(cls, Object, Equals);
+    addMethod(cls, Object, GetHashCode);
+    addMethod(cls, Object, Dispose);
+    addMethod(cls, EcsAspect, SetWorld);
+    addMethod(cls, EcsAspect, GetAllSet);
+    addMethod(cls, EcsAspect, GetExclusionSet);
+    addMethod(cls, EcsAspect, GetOneSet);
+    addMethod(cls, EcsAspect, All);
+    addMethod(cls, EcsAspect, Exclude);
+    addMethod(cls, EcsAspect, One);
+    return cls; 
+}
+
+
 
 method void SetTypeFactory(EcsComponentTypeFactory* typeFactory)
 {
@@ -52,7 +114,7 @@ method void SetTypeFactory(EcsComponentTypeFactory* typeFactory)
 
 method EcsAspect* New(EcsAspect* self)
 {
-    extends(Object);
+    self->base = extends(Object);
     self->isa = isa(EcsAspect);
     self->AllSet = new(BitSet);
     self->ExclusionSet = new(BitSet);

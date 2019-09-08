@@ -9,10 +9,50 @@
 type (EcsComponentTypeFactory)
 {
     Class isa;
+    Object* base;
     Map* ComponentTypes;
     int ComponentTypeCount;
     Array* Types;
 };
+
+method EcsComponentType* GetTypeFor(EcsComponentTypeFactory* self, Class c);
+method int GetIndexFor(EcsComponentTypeFactory* self, Class c);
+
+
+delegate (EcsComponentTypeFactory, GetTypeFor, EcsComponentType*, (EcsComponentTypeFactory* self, Class c));
+delegate (EcsComponentTypeFactory, GetIndexFor, int, (EcsComponentTypeFactory* self, Class c));
+
+
+/**
+ * EcsComponentTypeFactory Vtable
+ */
+vtable (EcsComponentTypeFactory) 
+{
+    const ObjectToString        ToString;
+    const ObjectEquals          Equals;
+    const ObjectGetHashCode     GetHashCode;
+    const ObjectDispose         Dispose;
+    const EcsComponentTypeFactoryGetTypeFor       GetTypeFor;
+    const EcsComponentTypeFactoryGetIndexFor       GetIndexFor;
+};
+
+static inline vptr(EcsComponentTypeFactory);
+/**
+ * Create the class loader
+ */
+static inline Class ClassLoadEcsComponentTypeFactory(Class base) 
+{
+    Class cls = createClass(base, EcsComponentTypeFactory);
+    addMethod(cls, Object, ToString);
+    addMethod(cls, Object, Equals);
+    addMethod(cls, Object, GetHashCode);
+    addMethod(cls, Object, Dispose);
+    addMethod(cls, EcsComponentTypeFactory, GetTypeFor);
+    addMethod(cls, EcsComponentTypeFactory, GetIndexFor);
+    return cls; 
+}
+
+
 
 /**
  * Contains all generated component types, newly generated component types
@@ -20,7 +60,7 @@ type (EcsComponentTypeFactory)
  */
 method EcsComponentTypeFactory* New(EcsComponentTypeFactory* self)
 {
-    extends(Object);
+    self->base = extends(Object);
     self->isa = isa(EcsComponentTypeFactory);
     self->ComponentTypes = new(Map, of(EcsComponentType));
     self->Types = new(Array, of(ComponentType));

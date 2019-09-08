@@ -181,6 +181,9 @@ method bool Equals(const Object* const self, const Object* const that)
  */
 method int GetHashCode(const Object* const self)
 {
+    if (self->isa->vtable == nullptr)
+        return (uint64_t)self;
+
     if (virtual(Object)->GetHashCode == GetHashCode) {
         return (uint64_t)self;
     }

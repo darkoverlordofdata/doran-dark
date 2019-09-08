@@ -221,6 +221,8 @@ method Game* New(Game* self, char* title, int x, int y, int width, int height, i
     self->width = width;
     self->height = height;
     self->flags = flags;
+    
+    srand(time(nullptr));
 
     if (SDL_Init( SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_TIMER | SDL_INIT_AUDIO ) < 0) {
         LogSDLError("Unable to initialize SDL2");

@@ -3,7 +3,6 @@
 #include <xna/xna.h>
 #include <assert.h>
 
-
 /**
  * The primary instance for the framework. It contains all the managers.
  * 
@@ -17,6 +16,7 @@
 type (EcsWorld)
 {
     Class isa;
+    Object* base;
     EcsEntityManager* Em;
     EcsComponentManager* Cm;
     float Delta;
@@ -33,12 +33,135 @@ type (EcsWorld)
 };
 
 typedef void (*EcsPerformer)(EcsEntityObserver* observer, EcsEntity* e);
+
+method EcsWorld* New(EcsWorld* self);
+method void Initialize(EcsWorld* self);
+method EcsEntityManager* GetEntityManager(EcsWorld* self);
+method EcsComponentManager* GetComponentManager(EcsWorld* self);
 method EcsManager* SetManager(EcsWorld* self, EcsManager* manager);
+method EcsManager* GetManager(EcsWorld* self, Class type);
+method void DeleteManager(EcsWorld* self, EcsManager* manager);
+method float GetDelta(EcsWorld* self);
+method void SetDelta(EcsWorld* self, float delta);
+method void AddEntity(EcsWorld* self, EcsEntity* e);
+method void ChangedEntity(EcsWorld* self, EcsEntity* e);
+method void DeleteEntity(EcsWorld* self, EcsEntity* e);
+method void Enable(EcsWorld* self, EcsEntity* e);
+method void Disable(EcsWorld* self, EcsEntity* e);
+method EcsEntity* CreateEntity(EcsWorld* self, char* name);
+method EcsEntity* GetEntity(EcsWorld* self, int entityId);
+method Array* GetSystems(EcsWorld* self);
+method EcsEntitySystem* SetSystem(EcsWorld* self, EcsEntitySystem* system, bool passive);
+method void DeleteSystem(EcsWorld* self, EcsEntitySystem* system);
+method void NotifySystems(EcsWorld* self, EcsPerformer perform, EcsEntity* e);
+method void NotifyManagers(EcsWorld* self, EcsPerformer perform, EcsEntity* e); 
+method EcsEntitySystem* GetSystem(EcsWorld* self, Class type);
+method void Check(EcsWorld* self, Array* entities, EcsPerformer perform);
+method void Update(EcsWorld* self);
+method void Draw(EcsWorld* self);
+
+delegate (EcsWorld, New, EcsWorld*, (EcsWorld* self));
+delegate (EcsWorld, Initialize, void, (EcsWorld* self));
+delegate (EcsWorld, GetEntityManager, EcsEntityManager*, (EcsWorld* self));
+delegate (EcsWorld, GetComponentManager, EcsComponentManager*, (EcsWorld* self));
+delegate (EcsWorld, SetManager, EcsManager*, (EcsWorld* self, EcsManager* manager));
+delegate (EcsWorld, GetManager, EcsManager*, (EcsWorld* self, Class type));
+delegate (EcsWorld, DeleteManager, void, (EcsWorld* self, EcsManager* manager));
+delegate (EcsWorld, GetDelta, float, (EcsWorld* self));
+delegate (EcsWorld, SetDelta, void, (EcsWorld* self, float delta));
+delegate (EcsWorld, AddEntity, void, (EcsWorld* self, EcsEntity* e));
+delegate (EcsWorld, ChangedEntity, void, (EcsWorld* self, EcsEntity* e));
+delegate (EcsWorld, DeleteEntity, void, (EcsWorld* self, EcsEntity* e));
+delegate (EcsWorld, Enable, void, (EcsWorld* self, EcsEntity* e));
+delegate (EcsWorld, Disable, void, (EcsWorld* self, EcsEntity* e));
+delegate (EcsWorld, CreateEntity, EcsEntity*, (EcsWorld* self, char* name));
+delegate (EcsWorld, GetEntity, EcsEntity*, (EcsWorld* self, int entityId));
+delegate (EcsWorld, GetSystems, Array*, (EcsWorld* self));
+delegate (EcsWorld, SetSystem, EcsEntitySystem*, (EcsWorld* self, EcsEntitySystem* system, bool passive));
+delegate (EcsWorld, DeleteSystem, void, (EcsWorld* self, EcsEntitySystem* system));
+delegate (EcsWorld, NotifySystems, void, (EcsWorld* self, EcsPerformer perform, EcsEntity* e));
+delegate (EcsWorld, NotifyManagers, void, (EcsWorld* self, EcsPerformer perform, EcsEntity* e)); 
+delegate (EcsWorld, GetSystem, EcsEntitySystem*, (EcsWorld* self, Class type));
+delegate (EcsWorld, Check, void, (EcsWorld* self, Array* entities, EcsPerformer perform));
+delegate (EcsWorld, Update, void, (EcsWorld* self));
+delegate (EcsWorld, Draw, void, (EcsWorld* self));
+/**
+ * EcsWorld Vtable
+ */
+vtable (EcsWorld) 
+{
+    const ObjectToString            ToString;
+    const ObjectEquals              Equals;
+    const ObjectGetHashCode         GetHashCode;
+    const ObjectDispose             Dispose;
+    const EcsWorldInitialize        Initialize;
+    const EcsWorldGetEntityManager  GetEntityManager;
+    const EcsWorldGetComponentManager       GetComponentManager;
+    const EcsWorldSetManager        SetManager;
+    const EcsWorldGetManager        GetManager;
+    const EcsWorldDeleteManager     DeleteManager;
+    const EcsWorldGetDelta          GetDelta;
+    const EcsWorldSetDelta          SetDelta;
+    const EcsWorldAddEntity         AddEntity;
+    const EcsWorldChangedEntity     ChangedEntity;
+    const EcsWorldDeleteEntity      DeleteEntity;
+    const EcsWorldEnable            Enable;
+    const EcsWorldDisable           Disable;
+    const EcsWorldCreateEntity      CreateEntity;
+    const EcsWorldGetEntity         GetEntity;
+    const EcsWorldGetSystems        GetSystems;
+    const EcsWorldSetSystem         SetSystem;
+    const EcsWorldDeleteSystem      DeleteSystem;
+    const EcsWorldNotifySystems     NotifySystems;
+    const EcsWorldNotifyManagers    NotifyManagers; 
+    const EcsWorldGetSystem         GetSystem;
+    const EcsWorldCheck             Check;
+    const EcsWorldUpdate            Update;
+    const EcsWorldDraw              Draw;
+};
+
+static inline vptr(EcsWorld);
+/**
+ * Create the class loader
+ */
+static inline Class ClassLoadEcsWorld(Class base) 
+{
+    Class cls = createClass(base, EcsWorld);
+    addMethod(cls, Object, ToString);
+    addMethod(cls, Object, Equals);
+    addMethod(cls, Object, GetHashCode);
+    addMethod(cls, Object, Dispose);
+    addMethod(cls, EcsWorld, Initialize);
+    addMethod(cls, EcsWorld, GetEntityManager);
+    addMethod(cls, EcsWorld, GetComponentManager);
+    addMethod(cls, EcsWorld, SetManager);
+    addMethod(cls, EcsWorld, GetManager);
+    addMethod(cls, EcsWorld, DeleteManager);
+    addMethod(cls, EcsWorld, GetDelta);
+    addMethod(cls, EcsWorld, SetDelta);
+    addMethod(cls, EcsWorld, AddEntity);
+    addMethod(cls, EcsWorld, ChangedEntity);
+    addMethod(cls, EcsWorld, DeleteEntity);
+    addMethod(cls, EcsWorld, Enable);
+    addMethod(cls, EcsWorld, Disable);
+    addMethod(cls, EcsWorld, CreateEntity);
+    addMethod(cls, EcsWorld, GetEntity);
+    addMethod(cls, EcsWorld, GetSystems);
+    addMethod(cls, EcsWorld, SetSystem);
+    addMethod(cls, EcsWorld, DeleteSystem);
+    addMethod(cls, EcsWorld, NotifySystems);
+    addMethod(cls, EcsWorld, NotifyManagers); 
+    addMethod(cls, EcsWorld, GetSystem);
+    addMethod(cls, EcsWorld, Check);
+    addMethod(cls, EcsWorld, Update);
+    addMethod(cls, EcsWorld, Draw);
+    return cls; 
+}
 
 
 method EcsWorld* New(EcsWorld* self)
 {
-    extends(Object);
+    self->base = extends(Object);
     self->isa = isa(EcsWorld);
     self->Managers = new(Map, of(EcsManager));
     self->ManagersBag = new(Array, of(Manage));
@@ -353,7 +476,7 @@ method void Update(EcsWorld* self)
     Check(self, self->Enable,  Enabled);
     Check(self, self->Deleted, Deleted);
     
-    Clearn(self->Cm);
+    Clean(self->Cm);
 
     for (auto i = 0; i<self->SystemsBag->length; i++)
     {
@@ -364,7 +487,6 @@ method void Update(EcsWorld* self)
     }
 }
 
-/** -- **/
 method void Draw(EcsWorld* self)
 {
     for (auto i = 0; i<self->SystemsBag->length; i++)

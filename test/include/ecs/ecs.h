@@ -90,28 +90,24 @@ method bool Remove(Array* self, Object* e)
 #include "systems/voidentitysystem.h"
 #include "systems/intervalentityprocessingsystem.h"
 
-/*
-
-method (\w*) (\w*)\((\w*)(.*)\;
-
-delegate ($3, $2, $1, ($3$4);
-
-    const $3$2       $2;
-
-    addMethod(cls, $3, $2);
-
-
-*/
 void __attribute__((constructor(102))) EcsLoader() 
 {
 
     Class ObjectClass = GetClass("Object");
     RegisterClass(CreateComponent(EcsComponent));
     RegisterClass(CreateComponent(EcsEntity));
-    RegisterClass(CreateComponent(EcsWorld));
-    RegisterClass(CreateComponent(EcsAspect));
-    RegisterClass(CreateComponent(EcsComponentType));
-    RegisterClass(CreateComponent(EcsComponentTypeFactory));
+
+    Class EcsWorld = ClassLoadEcsWorld(ObjectClass);
+    RegisterClass(EcsWorld);
+
+    Class EcsAspect = ClassLoadEcsAspect(ObjectClass);
+    RegisterClass(EcsAspect);
+
+    Class EcsComponentType = ClassLoadEcsComponentType(ObjectClass);
+    RegisterClass(EcsComponentType);
+
+    Class EcsComponentTypeFactory = ClassLoadEcsComponentTypeFactory(ObjectClass);
+    RegisterClass(EcsComponentTypeFactory);
 
     Class EcsEntityObserverClass = ClassLoadEcsEntityObserver(ObjectClass);
     RegisterClass(EcsEntityObserverClass);
@@ -128,7 +124,30 @@ void __attribute__((constructor(102))) EcsLoader()
     Class EcsEntityManagerClass = ClassLoadEcsEntityManager(EcsManagerClass);
     RegisterClass(EcsEntityManagerClass);
 
+    Class EcsGroupManagerClass = ClassLoadEcsGroupManager(EcsManagerClass);
+    RegisterClass(EcsGroupManagerClass);
+ 
+    Class EcsPlayerManagerClass = ClassLoadEcsPlayerManager(EcsManagerClass);
+    RegisterClass(EcsPlayerManagerClass);
+ 
+    Class EcsTagManagerClass = ClassLoadEcsTagManager(EcsManagerClass);
+    RegisterClass(EcsTagManagerClass);
+ 
+    Class EcsTeamManagerClass = ClassLoadEcsTeamManager(EcsManagerClass);
+    RegisterClass(EcsTeamManagerClass);
+ 
     Class EcsEntityProcessingSystemClass = ClassLoadEcsEntityProcessingSystem(EcsEntitySystemClass);
     RegisterClass(EcsEntityProcessingSystemClass);
 
+    Class EcsDelayedEntityProcessingSystemClass = ClassLoadEcsDelayedEntityProcessingSystem(EcsEntitySystemClass);
+    RegisterClass(EcsDelayedEntityProcessingSystemClass);
+
+    Class EcsIntervalEntitySystemClass = ClassLoadEcsIntervalEntitySystem(EcsEntitySystemClass);
+    RegisterClass(EcsIntervalEntitySystemClass);
+
+    Class EcsVoidEntitySystemClass = ClassLoadEcsVoidEntitySystem(EcsEntitySystemClass);
+    RegisterClass(EcsVoidEntitySystemClass);
+
+    Class EcsIntervalEntityProcessingSystemClass = ClassLoadEcsIntervalEntityProcessingSystem(EcsIntervalEntitySystemClass);
+    RegisterClass(EcsIntervalEntityProcessingSystemClass);
 }

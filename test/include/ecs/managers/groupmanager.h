@@ -10,6 +10,8 @@ type (EcsGroupManager)
     Class isa;
     EcsManager* base;
     EcsWorld* World;
+    Map* EntitiesByGroup;
+    Map* GroupsByEntity;
 };
 
 delegate (EcsGroupManager, New,          EcsGroupManager*, (EcsGroupManager*));
@@ -29,18 +31,18 @@ delegate (EcsGroupManager, Enabled,      void, (EcsGroupManager*, EcsEntity*));
  */
 vtable (EcsGroupManager) 
 {
-    const EcsGroupManagerToString    ToString;
-    const ObjectEquals          Equals;
-    const ObjectGetHashCode     GetHashCode;
-    const ObjectDispose         Dispose;
-    const EcsGroupManagerToString    Initialize;
-    const EcsGroupManagerGetWorld    GetWorld;
-    const EcsGroupManagerSetWorld    SetWorld;
-    const EcsGroupManagerAdded       Added;
-    const EcsGroupManagerChanged     Changed;
-    const EcsGroupManagerDeleted     Deleted;
-    const EcsGroupManagerDisabled    Disabled;
-    const EcsGroupManagerEnabled     Enabled;
+    const EcsGroupManagerToString   ToString;
+    const ObjectEquals              Equals;
+    const ObjectGetHashCode         GetHashCode;
+    const ObjectDispose             Dispose;
+    const EcsGroupManagerToString   Initialize;
+    const EcsGroupManagerGetWorld   GetWorld;
+    const EcsGroupManagerSetWorld   SetWorld;
+    const EcsGroupManagerAdded      Added;
+    const EcsGroupManagerChanged    Changed;
+    const EcsGroupManagerDeleted    Deleted;
+    const EcsGroupManagerDisabled   Disabled;
+    const EcsGroupManagerEnabled    Enabled;
 };
 
 static inline vptr(EcsGroupManager);
@@ -69,6 +71,8 @@ method EcsGroupManager* New(EcsGroupManager* self)
 {
     self->base = extends(EcsManager);
     self->isa = isa(EcsGroupManager);
+    self->EntitiesByGroup = new(Map, of(Array));
+    self->GroupsByEntity = new(Map, of(Array));
     return self;
 }
 
