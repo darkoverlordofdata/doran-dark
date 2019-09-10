@@ -379,7 +379,6 @@ method int Rehash(Map* const self)
 	return MAP_OK;
 }
 
-
 /*
  * Add a pointer to the hashmap with some key
  */
@@ -411,7 +410,6 @@ method int Put(Map* const self, char* key, Object* value)
 }
 
 
-
 /*
  * Get your pointer out of the hashmap with a key
  */
@@ -438,6 +436,7 @@ method Object* Get(Map* const self, char* key)
 	result = nullptr;
     return result;
 }
+
 
 /*
  * Iterate the function parameter over each element self the hashmap.  The

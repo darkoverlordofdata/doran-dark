@@ -16,6 +16,7 @@ type (EcsEntity)
     Class isa;
     char* Name;
     int Id;
+    UUID* uuid;
     BitSet* ComponentBits;
     BitSet* SystemBits;
     EcsWorld* World;
@@ -42,6 +43,7 @@ method EcsEntity* New(EcsEntity* self, EcsWorld* world, int id, char* name)
     self->isa = isa(EcsEntity);
     self->World = world;
     self->Id = id;
+    self->uuid = new(UUID);
     self->Name = strdup(name);
     self->EntityManager = GetEntityManager(world);
     self->ComponentManager = GetComponentManager(world);
@@ -60,6 +62,9 @@ method BitSet* GetSystemBits(EcsEntity* self) {
 }
 method int GetId(EcsEntity* self) {
     return self->Id;
+}
+method int GetUUID(EcsEntity* self) {
+    return self->uuid;
 }
 
 /**
