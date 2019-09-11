@@ -10,7 +10,15 @@ type (EcsTagManager)
     Class isa;
     EcsManager* base;
     EcsWorld* World;
+    Map* EntitiesByTag;
+    Map* TagsByEntity;
 };
+
+method void Register(EcsTagManager* self, char* tag, EcsEntity* e);
+method void Unregister(EcsTagManager* self, char* tag);
+method bool IsRegistered(EcsTagManager* self, char* tag);
+method EcsEntity* GetEntity(EcsTagManager* self, char* tag);
+method Array* GetRegisteredTags(EcsTagManager* self);
 
 delegate (EcsTagManager, New,          EcsTagManager*, (EcsTagManager*));
 delegate (EcsTagManager, ToString,     char*,    (const EcsTagManager* const));
@@ -69,6 +77,8 @@ method EcsTagManager* New(EcsTagManager* self)
 {
     self->base = extends(EcsManager);
     self->isa = isa(EcsTagManager);
+    self->EntitiesByTag = new(Map, of(Entity));
+    self->TagsByEntity = new(Map, of(String));
     return self;
 }
 
@@ -88,8 +98,38 @@ method void Added(EcsTagManager* self, EcsEntity* entity) { virtual(EcsTagManage
 
 method void Changed(EcsTagManager* self, EcsEntity* entity) { virtual(EcsTagManager)->Changed(self, entity); }
 
-method void Deleted(EcsTagManager* self, EcsEntity* entity) { virtual(EcsTagManager)->Deleted(self, entity); }
+method void Deleted(EcsTagManager* self, EcsEntity* entity) 
+{ 
+    Remove(self->EntitiesByTag, (char*)Get(self->TagsByEntity, entity->key));
+}
 
 method void Disabled(EcsTagManager* self, EcsEntity* entity) { virtual(EcsTagManager)->Disabled(self, entity); }
 
 method void Enabled(EcsTagManager* self, EcsEntity* entity) { virtual(EcsTagManager)->Enabled(self, entity); }
+
+method void Register(EcsTagManager* self, char* tag, EcsEntity* e) {
+    Put(self->EntitiesByTag, tag, e);
+    Put(self->TagsByEntity, e->key, tag);
+}
+
+method void Unregister(EcsTagManager* self, char* tag) {
+    Remove(self->TagsByEntity, ((EcsEntity*)(Get(self->EntitiesByTag, tag)))->key);
+    Remove(self->EntitiesByTag, tag);
+}
+
+method bool IsRegistered(EcsTagManager* self, char* tag) {
+    return Get(self->EntitiesByTag, tag) != nullptr;
+}
+
+method EcsEntity* GetEntity(EcsTagManager* self, char* tag) {
+    return Get(self->EntitiesByTag, tag);
+}
+
+method Array* GetRegisteredTags(EcsTagManager* self) {
+
+    Array* res = new(Array);
+    ForEach(self->TagsByEntity, ^(Object* s) {
+        Add(res, s);
+    });
+    return res;
+}

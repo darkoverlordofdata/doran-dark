@@ -28,6 +28,10 @@ SOFTWARE.
 #include <stdbool.h>
 
 
+/**
+ * Generate an RFC 4122 compliant type 4 uuid
+ * 
+ */
 type (UUID)
 {
     Class isa;
@@ -50,23 +54,19 @@ method UUID* New(UUID* self)
     auto d2 = NextLong();
     auto d3 = NextLong();
 
-    self->uuid[0] = (unsigned char)((int)d0&0xff); 
-    self->uuid[1] = (unsigned char)((int)d0>>8&0xff); 
-    self->uuid[2] = (unsigned char)((int)d0>>16&0xff);
-    self->uuid[3] = (unsigned char)((int)d0>>24&0xff);
-    self->uuid[4] = (unsigned char)((int)d1&0xff);
-    self->uuid[5] = (unsigned char)((int)d1>>8&0xff);
-    self->uuid[6] = (unsigned char)((int)d1>>16&0x0f|0x40);
-    self->uuid[7] = (unsigned char)((int)d1>>24&0xff);
-    self->uuid[8] = (unsigned char)((int)d2&0x3f|0x80);
-    self->uuid[9] = (unsigned char)((int)d2>>8&0xff);
-    self->uuid[10] = (unsigned char)((int)d2>>16&0xff);
-    self->uuid[11] = (unsigned char)((int)d2>>24&0xff);
-    self->uuid[12] = (unsigned char)((int)d3&0xff);
-    self->uuid[13] = (unsigned char)((int)d3>>8&0xff);
-    self->uuid[14] = (unsigned char)((int)d3>>16&0xff);
-    self->uuid[15] = (unsigned char)((int)d3>>24&0xff);
-    
+    memcpy(&self->uuid[0], &d0, 8);
+    memcpy(&self->uuid[4], &d1, 8);
+    memcpy(&self->uuid[8], &d2, 8);
+    memcpy(&self->uuid[12], &d3, 8);
+
+    self->uuid[6] = self->uuid[6]&0x0f|0x40;
+    self->uuid[8] = self->uuid[8]&0x3f|0x80;
+
+    /**
+     * 
+     * todo: verify that its not a duplicate
+     */
+
     return self;            
 }
 
@@ -90,12 +90,13 @@ method char* GetToStringFormat(char format)
 }
 method char* ToString(UUID* self, char format) 
 {
-    sprintf(self->to_string_cache, 
-        GetToStringFormat(format),
-        self->uuid[0], self->uuid[1], self->uuid[2], self->uuid[3], 
-        self->uuid[4], self->uuid[5], self->uuid[6], self->uuid[7],
-        self->uuid[8], self->uuid[9], self->uuid[10], self->uuid[11], 
-        self->uuid[12], self->uuid[13], self->uuid[14], self->uuid[15]);
+    // if (self->to_string_cache[0] == 0)
+        sprintf(self->to_string_cache, 
+            GetToStringFormat(format),
+            self->uuid[0], self->uuid[1], self->uuid[2], self->uuid[3], 
+            self->uuid[4], self->uuid[5], self->uuid[6], self->uuid[7],
+            self->uuid[8], self->uuid[9], self->uuid[10], self->uuid[11], 
+            self->uuid[12], self->uuid[13], self->uuid[14], self->uuid[15]);
     
     return self->to_string_cache;
 

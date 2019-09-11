@@ -10,7 +10,14 @@ type (EcsTeamManager)
     Class isa;
     EcsManager* base;
     EcsWorld* World;
+    Map* PlayersByTeam;
+    Map* TeamByPlayer;
 };
+
+method char* GetTeam(EcsTeamManager* self, char* player);
+method void SetTeam(EcsTeamManager* self, char* player, char* team);
+method Array* GetPlayers(EcsTeamManager* self, char* team);
+method void RemoveFromTeam(EcsTeamManager* self, char* player);
 
 delegate (EcsTeamManager, New,          EcsTeamManager*, (EcsTeamManager*));
 delegate (EcsTeamManager, ToString,     char*,    (const EcsTeamManager* const));
@@ -69,6 +76,8 @@ method EcsTeamManager* New(EcsTeamManager* self)
 {
     self->base = extends(EcsManager);
     self->isa = isa(EcsTeamManager);
+    self->PlayersByTeam = new(Map, of(Array));
+    self->TeamByPlayer = new(Map);
     return self;
 }
 
@@ -93,3 +102,34 @@ method void Deleted(EcsTeamManager* self, EcsEntity* entity) { virtual(EcsTeamMa
 method void Disabled(EcsTeamManager* self, EcsEntity* entity) { virtual(EcsTeamManager)->Disabled(self, entity); }
 
 method void Enabled(EcsTeamManager* self, EcsEntity* entity) { virtual(EcsTeamManager)->Enabled(self, entity); }
+
+method char* GetTeam(EcsTeamManager* self, char* player) {
+    return Get(self->TeamByPlayer, player);
+}
+
+method void SetTeam(EcsTeamManager* self, char* player, char* team) {
+    RemoveFromTeam(self, player);
+
+    Put(self->TeamByPlayer, player, team);
+
+    Array* players = Get(self->PlayersByTeam, team);
+    if(players == nullptr) {
+        players = new(Array);
+        Put(self->PlayersByTeam, team, players);
+    }
+    Add(players, player);
+}
+
+method Array* GetPlayers(EcsTeamManager* self, char* team)  {
+    return Get(self->PlayersByTeam, team);
+}
+
+method void RemoveFromTeam(EcsTeamManager* self, char* player) {
+    char* team = Get(self->TeamByPlayer, player);
+    if (Remove(self->TeamByPlayer, player)) {
+        Array* players = Get(self->PlayersByTeam, team);
+        if (players != nullptr) {
+            Remove(players, (Object*)player);
+        }
+    }
+}
