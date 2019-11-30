@@ -85,6 +85,7 @@ method void Draw(
     // model = glm_translate(model, (Vec3){ -0.5f * size.x, -0.5f * size.y, 0.0f }); // Move origin back
     // model = glm_scale(model, (Vec3){ size.x, size.y, 1.0f }); // Last scale
 
+
     SetMatrix(self->shader, "model", &model);
 
     // Render textured quad

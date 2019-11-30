@@ -60,6 +60,24 @@ static inline char * strrstr(char *str1, char *str2)
  * @param size of the new string
  * @return ptr to the new string
  */
+#ifndef strdup
+proc char* strdup(const char* s) {
+    size_t len = strlen(s)+1;
+    void* new = malloc(len);
+    if (new == nullptr) return nullptr;
+    return (char*)memcpy(new, s, len);
+}
+#endif
+
+/**
+ * strndup - Returns a pointer to a null-terminated byte string, which 
+ * is a duplicate of the string pointed to by str1. The returned pointer 
+ * must be passed to free to avoid a memory leak.
+ * 
+ * @param str string to duplicate
+ * @param size of the new string
+ * @return ptr to the new string
+ */
 static inline char * strndup (const char *str, size_t size)
 {
   size_t len = strlen(str);
